@@ -18,7 +18,7 @@ orocrm:
                 email:            Email
                 phone:            Phone
                 group:            Group
-                channel:          Channel
+                channel:          Integration
                 website:          Website
                 name:             Name
                 sku:              Sku
@@ -72,8 +72,8 @@ orocrm:
                 label: Order connector
 
         customer:
-            entity_label:        Customer
-            entity_plural_label: Customers
+            entity_label:        Web Customer
+            entity_plural_label: Web Customers
             entity_description:  Represent Magento customer
             create_order:        Create Order
             sales.label:         Sales
@@ -97,7 +97,8 @@ orocrm:
             account.label:       Account
             addresses.label:     Adresses
             carts.label:         Carts
-            channel.label:       Channel
+            channel.label:       Integration
+            data_channel.label:  Channel
             name.label:          Name
             orders.label:        Customer orders
             lifetime.label:      Lifetime value
@@ -110,7 +111,7 @@ orocrm:
             name.label:          Name
             id.label:            Id
             origin_id.label:     Origin Id
-            channel.label:       Channel
+            channel.label:       Integration
 
         cart:
             entity_label:         Shopping Cart
@@ -149,7 +150,8 @@ orocrm:
             store.label:               Store
             shipping_address.label:    Shipping address
             billing_address.label:     Billing address
-            channel.label:             Channel
+            channel.label:             Integration
+            data_channel.label:        Channel
             opportunity.label:         Opportunity
             notes.label:               Additional comments
             b2c_flow_abandoned_shopping_cart.step.label: Step
@@ -229,6 +231,7 @@ orocrm:
             website_id.label:             Website
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
+            check_connection.label:       Check connection
 
         order:
             entity_label:        Order
@@ -267,7 +270,8 @@ orocrm:
             items.label:            Order items
             is_virtual.label:       Is virtual
             is_guest.label:         Is guest
-            channel.label:          Channel
+            channel.label:          Integration
+            data_channel.label:     Channel
             notes.label:            Additional comments
             feedback.label:         Feedback
             b2c_flow_order_follow_up.step.label: Step
@@ -293,7 +297,7 @@ orocrm:
             price.label:          Price
             cost.label:           Cost
             websites.label:       Websites
-            channel.label:        Channel
+            channel.label:        Integration
 
         address:
             entity_label:          Magento Customer Address
@@ -349,7 +353,6 @@ orocrm:
             country.label:       Country
             region.label:        State
             phone.label:         Phone
-
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code
             country_iso3_code.label: Country ISO3 Code
@@ -391,7 +394,7 @@ orocrm:
             origin_id.label:     Origin Id
             code.label:          Code
             name.label:          Name
-            channel.label:       Channel
+            channel.label:       Integration
             website.label:       Website
 
         website:
@@ -402,7 +405,7 @@ orocrm:
             origin_id.label:     Origin Id
             code.label:          Code
             name.label:          Name
-            channel.label:       Channel
+            channel.label:       Integration
 
         account:
             no_customers_exist: No customers exist
@@ -412,9 +415,8 @@ orocrm:
             choose_customer: Choose a customer...
             choose_cart: Choose a cart...
 
-        menu.web_customers: Web Customers
         controller:
-            transport_not_configure:       Unable to handle your request. Invalid channel configuration detected.
+            transport_not_configure:       Unable to handle your request. Invalid Integration configuration detected.
             extension_required:            Unable to perform this operation, Oro Bridge extension not found.
             synchronization_error:         Unable to synchronize from remote.
             sync_error_with_magento:       Synchronization with remote server failed and orders should be re-synced. If the problem persists, please contact your Administrator.

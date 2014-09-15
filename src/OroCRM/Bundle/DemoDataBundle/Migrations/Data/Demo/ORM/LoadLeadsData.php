@@ -1,7 +1,6 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -9,41 +8,36 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
-
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\UserBundle\Entity\User;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
 
     /** @var  EntityManager */
@@ -65,7 +59,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadSourceData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
     }
 
@@ -85,9 +80,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->initSupportingEntities($manager);
         $this->loadLeads();
-        $this->loadSources();
+        $this->loadSources($manager);
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -99,18 +97,18 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $this->organization = $this->getReference('default_organization');
     }
 
-    public function loadSources()
+    /**
+     * @param ObjectManager $manager
+     */
+    public function loadSources(ObjectManager $manager)
     {
-        /** @var ConfigManager $configManager */
-        $configManager = $this->container->get('oro_entity_config.config_manager');
+        $className = ExtendHelper::buildEnumValueClassName('lead_source');
 
-        $leadSourceConfigFieldModel = $configManager->getConfigFieldModel(
-            'OroCRM\Bundle\SalesBundle\Entity\Lead',
-            'extend_source'
-        );
+        /** @var EnumValueRepository $enumRepo */
+        $enumRepo = $manager->getRepository($className);
 
-        /** @var OptionSet[] $sources */
-        $sources = $leadSourceConfigFieldModel->getOptions()->toArray();
+        /** @var AbstractEnumValue[] $sources */
+        $sources = $enumRepo->findAll();
         $randomSource = count($sources)-1;
 
         $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
@@ -118,16 +116,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         foreach ($leads as $lead) {
             /** @var Lead $lead */
             $source = $sources[mt_rand(0, $randomSource)];
-            $optionSetRelation = new OptionSetRelation();
-            $optionSetRelation->setData(
-                null,
-                $lead->getId(),
-                $leadSourceConfigFieldModel,
-                $source
-            );
-            $this->persist($this->em, $optionSetRelation);
+            $lead->setSource($source);
+            $manager->persist($lead);
         }
-        $this->flush($this->em);
+        $manager->flush();
     }
 
     public function loadLeads()
@@ -190,6 +182,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setOrganization($this->organization);
+        $lead->setDataChannel($this->getReference('default_channel'));
+
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');

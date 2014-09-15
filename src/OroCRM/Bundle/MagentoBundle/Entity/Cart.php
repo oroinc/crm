@@ -18,6 +18,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -62,9 +64,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
  *      }
  * )
  */
-class Cart extends ExtendCart
+class Cart extends ExtendCart implements ChannelAwareInterface
 {
-    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait;
+    use IntegrationEntityTrait, OriginTrait, NamesAwareTrait, ChannelEntityTrait;
 
     /**
      * @var CartItem[]|Collection

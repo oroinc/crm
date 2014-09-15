@@ -1120,7 +1120,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     {
         if ($this->hasEmail($email)) {
             $email->setPrimary(true);
-            foreach ($this->getPhones() as $otherEmail) {
+            foreach ($this->getEmails() as $otherEmail) {
                 if (!$email->isEqual($otherEmail)) {
                     $otherEmail->setPrimary(false);
                 }

@@ -1,0 +1,496 @@
+<?php
+
+namespace OroCRM\Bundle\SalesBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+
+/**
+ * @ORM\Entity()
+ * @ORM\Table(name="orocrm_sales_b2bcustomer")
+ * @ORM\HasLifecycleCallbacks()
+ * @Config(
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-user-md"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
+ *         "form"={
+ *             "form_type"="orocrm_sales_b2bcustomer_select"
+ *         }
+ *      }
+ * )
+ */
+class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface
+{
+    use ChannelEntityTrait;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "order"=0
+     *      }
+     *  }
+     * )
+     */
+    protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "identity"=true,
+     *              "order"=10
+     *          }
+     *      }
+     * )
+     */
+    protected $name;
+
+    /**
+     * @var Address $shippingAddress
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="shipping_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=20
+     *          }
+     *      }
+     * )
+     */
+    protected $shippingAddress;
+
+    /**
+     * @var Address $billingAddress
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="billing_address_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=30
+     *          }
+     *      }
+     * )
+     */
+    protected $billingAddress;
+
+    /**
+     * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=40,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $account;
+
+    /**
+     * @var Contact
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=50,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $contact;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"all"})
+     */
+    protected $leads;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", mappedBy="customer", cascade={"all"})
+     */
+    protected $opportunities;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "dataaudit"={"auditable"=true},
+     *      "importexport"={
+     *          "order"=70,
+     *          "short"=true
+     *      }
+     *  }
+     * )
+     */
+    protected $owner;
+
+    /**
+     * @var ArrayCollection $tags
+     */
+    protected $tags;
+
+    /**
+     * @var \DateTime $created
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime $updated
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          },
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->leads         = new ArrayCollection();
+        $this->opportunities = new ArrayCollection();
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getShippingAddress()
+    {
+        return $this->shippingAddress;
+    }
+
+    /**
+     * @param Address $shippingAddress
+     */
+    public function setShippingAddress(Address $shippingAddress)
+    {
+        $this->shippingAddress = $shippingAddress;
+    }
+
+    /**
+     * @return Address
+     */
+    public function getBillingAddress()
+    {
+        return $this->billingAddress;
+    }
+
+    /**
+     * @param Address $billingAddress
+     */
+    public function setBillingAddress(Address $billingAddress)
+    {
+        $this->billingAddress = $billingAddress;
+    }
+
+    /**
+     * @return Account
+     */
+    public function getAccount()
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param Account $account
+     */
+    public function setAccount(Account $account)
+    {
+        $this->account = $account;
+    }
+
+    /**
+     * @return Contact
+     */
+    public function getContact()
+    {
+        return $this->contact;
+    }
+
+    /**
+     * @param Contact $contact
+     */
+    public function setContact(Contact $contact)
+    {
+        $this->contact = $contact;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getLeads()
+    {
+        return $this->leads;
+    }
+
+    /**
+     * @param ArrayCollection $leads
+     */
+    public function setLeads(ArrayCollection $leads)
+    {
+        $this->leads = $leads;
+    }
+
+    /**
+     * @param Lead $lead
+     */
+    public function addLead(Lead $lead)
+    {
+        if (!$this->getLeads()->contains($lead)) {
+
+            $this->getLeads()->add($lead);
+            $lead->setCustomer($this);
+        }
+    }
+
+    /**
+     * @param Lead $lead
+     */
+    public function removeLead(Lead $lead)
+    {
+        if ($this->getLeads()->contains($lead)) {
+            $this->getLeads()->removeElement($lead);
+            $lead->removeCustomer();
+        }
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getOpportunities()
+    {
+        return $this->opportunities;
+    }
+
+    /**
+     * @param ArrayCollection $opportunities
+     */
+    public function setOpportunities(ArrayCollection $opportunities)
+    {
+        $this->opportunities = $opportunities;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     */
+    public function addOpportunity(Opportunity $opportunity)
+    {
+        if (!$this->getOpportunities()->contains($opportunity)) {
+
+            $this->getOpportunities()->add($opportunity);
+            $opportunity->setCustomer($this);
+        }
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     */
+    public function removeOpportunity(Opportunity $opportunity)
+    {
+        if ($this->getOpportunities()->contains($opportunity)) {
+            $this->getOpportunities()->removeElement($opportunity);
+            $opportunity->removeCustomer();
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     */
+    public function setOwner(User $owner)
+    {
+        $this->owner = $owner;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt(\DateTime $updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * Pre persist event listener
+     *
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Pre update event handler
+     *
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
+}

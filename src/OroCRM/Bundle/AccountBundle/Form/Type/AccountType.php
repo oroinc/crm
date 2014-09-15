@@ -97,25 +97,6 @@ class AccountType extends AbstractType
                 )
             );
         }
-
-        // addresses
-        $builder
-            ->add(
-                'shippingAddress',
-                'oro_address',
-                array(
-                    'cascade_validation' => true,
-                    'required' => false
-                )
-            )
-            ->add(
-                'billingAddress',
-                'oro_address',
-                array(
-                    'cascade_validation' => true,
-                    'required' => false
-                )
-            );
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -12,9 +13,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
 class CartTest extends AbstractEntityTestCase
 {
-    /**
-     * @var Cart
-     */
+    /** @var Cart */
     protected $entity;
 
     /**

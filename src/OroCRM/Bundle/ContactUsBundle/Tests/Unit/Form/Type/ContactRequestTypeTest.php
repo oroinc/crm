@@ -16,62 +16,12 @@ class ContactRequestTypeTest extends TypeTestCase
 
     protected function setUp()
     {
-        parent::setUp();
         $this->formType = new ContactRequestType();
     }
 
     protected function tearDown()
     {
-        parent::tearDown();
         unset($this->formType);
-    }
-
-    protected function getExtensions()
-    {
-        $mockEntityManager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
-
-        $mockMetadata = $this->getMockBuilder('Doctrine\Common\Persistence\Mapping\ClassMetadata')
-            ->disableOriginalConstructor()->getMock();
-
-        $mockEntityManager->expects($this->any())->method('getClassMetadata')
-            ->will($this->returnValue($mockMetadata));
-
-        $mockRegistry = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
-            ->disableOriginalConstructor()
-            ->setMethods(['getManagerForClass'])
-            ->getMock();
-
-        $mockRegistry->expects($this->any())->method('getManagerForClass')
-            ->will($this->returnValue($mockEntityManager));
-
-        $mockEntityType = $this->getMockBuilder('Symfony\Bridge\Doctrine\Form\Type\EntityType')
-            ->setMethods(['getName', 'buildForm'])
-            ->setConstructorArgs([$mockRegistry])
-            ->getMock();
-
-        $mockEntityType->expects($this->any())->method('getName')
-            ->will($this->returnValue('entity'));
-
-        $mockRepo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $mockEntityManager->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($mockRepo));
-
-        $mockRepo->expects($this->any())->method('findAll')
-            ->will($this->returnValue([]));
-
-        return [
-            new PreloadedExtension(
-                array(
-                    $mockEntityType->getName() => $mockEntityType
-                ),
-                array()
-            )
-        ];
     }
 
     public function testHasName()
@@ -100,23 +50,35 @@ class ContactRequestTypeTest extends TypeTestCase
 
     public function testBuildForm()
     {
-        $form = $this->factory->create($this->formType, null);
+        $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()->getMock();
+
+        $fields = [];
+        $builder->expects($this->exactly(7))
+            ->method('add')
+            ->will(
+                $this->returnCallback(
+                    function ($fieldName, $fieldType) use (&$fields) {
+                        $fields[$fieldName] = $fieldType;
+
+                        return new \PHPUnit_Framework_MockObject_Stub_ReturnSelf();
+                    }
+                )
+            );
+
+        $this->formType->buildForm($builder, ['dataChannelField' => true]);
 
         $this->assertSame(
-            'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest',
-            $form->getConfig()->getOption('data_class')
+            [
+                'dataChannel'  => 'orocrm_channel_select_type',
+                'firstName'    => 'text',
+                'lastName'     => 'text',
+                'emailAddress' => 'text',
+                'phone'        => 'text',
+                'comment'      => 'textarea',
+                'submit'       => 'submit',
+            ],
+            $fields
         );
-
-        $fields = [
-            'firstName',
-            'lastName',
-            'emailAddress',
-            'phone',
-            'comment',
-            'submit'
-        ];
-        foreach ($fields as $field) {
-            $this->assertTrue($form->has($field), sprintf('Form should have: %s child', $field));
-        }
     }
 }

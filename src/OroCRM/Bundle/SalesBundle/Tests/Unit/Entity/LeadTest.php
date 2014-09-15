@@ -17,35 +17,39 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, call_user_func_array(array($obj, 'get' . ucfirst($property)), array()));
     }
 
+    /**
+     * @return array
+     */
     public function getSetDataProvider()
     {
-        $now = new \DateTime('now');
-        $user = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $address = $this->getMockBuilder('Oro\Bundle\AddressBundle\Entity\Address')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $now          = new \DateTime('now');
+        $user         = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $customer     = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
-        return array(
-            'namePrefix' => array('namePrefix', 'test', 'test'),
-            'firstName' => array('firstName', 'test', 'test'),
-            'middleName' => array('middleName', 'test', 'test'),
-            'lastName' => array('lastName', 'test', 'test'),
-            'nameSuffix' => array('nameSuffix', 'test', 'test'),
-            'numberOfEmployees' => array('numberOfEmployees', 10, 10),
-            'website' => array('website', 'test', 'test'),
-            'companyName' => array('companyName', 'test', 'test'),
-            'email' => array('email', 'test', 'test'),
-            'phoneNumber' => array('phoneNumber', 'test', 'test'),
-            'jobTitle' => array('jobTitle', 'test', 'test'),
-            'industry' => array('nameSuffix', 'test', 'test'),
-            'address' => array('owner', $address, $address),
-            'owner' => array('owner', $user, $user),
-            'createdAt' => array('createdAt', $now, $now),
-            'updatedAt' => array('updatedAt', $now, $now),
-            'notes' => array('notes', 'test', 'test'),
-            'organization' => array('organization', $organization, $organization)
-        );
+
+        return [
+            'namePrefix'        => ['namePrefix', 'test', 'test'],
+            'firstName'         => ['firstName', 'test', 'test'],
+            'middleName'        => ['middleName', 'test', 'test'],
+            'lastName'          => ['lastName', 'test', 'test'],
+            'nameSuffix'        => ['nameSuffix', 'test', 'test'],
+            'numberOfEmployees' => ['numberOfEmployees', 10, 10],
+            'website'           => ['website', 'test', 'test'],
+            'companyName'       => ['companyName', 'test', 'test'],
+            'email'             => ['email', 'test', 'test'],
+            'phoneNumber'       => ['phoneNumber', 'test', 'test'],
+            'jobTitle'          => ['jobTitle', 'test', 'test'],
+            'industry'          => ['nameSuffix', 'test', 'test'],
+            'address'           => ['owner', $address, $address],
+            'owner'             => ['owner', $user, $user],
+            'createdAt'         => ['createdAt', $now, $now],
+            'updatedAt'         => ['updatedAt', $now, $now],
+            'notes'             => ['notes', 'test', 'test'],
+            'customer'          => ['customer', $customer, $customer],
+            'dataChannel'       => ['dataChannel', $channel, $channel],
+            'organization'      => array('organization', $organization, $organization)
+        ];
     }
 }

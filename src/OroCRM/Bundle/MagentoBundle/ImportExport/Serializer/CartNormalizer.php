@@ -6,24 +6,28 @@ use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
+use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 
 class CartNormalizer extends ConfigurableEntityNormalizer
 {
-    /**
-     * @var ImportHelper
-     */
+    /** @var ImportHelper */
     protected $importHelper;
 
+    /** @var ChannelHelper */
+    protected $channelImportHelper;
+
     /**
-     * @param FieldHelper  $fieldHelper
-     * @param ImportHelper $contextHelper
+     * @param FieldHelper   $fieldHelper
+     * @param ImportHelper  $importHelper
+     * @param ChannelHelper $channelHelper
      */
-    public function __construct(FieldHelper $fieldHelper, ImportHelper $contextHelper)
+    public function __construct(FieldHelper $fieldHelper, ImportHelper $importHelper, ChannelHelper $channelHelper)
     {
         parent::__construct($fieldHelper);
-        $this->importHelper = $contextHelper;
+        $this->importHelper        = $importHelper;
+        $this->channelImportHelper = $channelHelper;
     }
 
     /**
@@ -54,10 +58,11 @@ class CartNormalizer extends ConfigurableEntityNormalizer
         /** @var Cart $cart */
         $cart = parent::denormalize($data, $class, $format, $context);
 
-        $channel = $this->importHelper->getChannelFromContext($context);
-        $cart->setChannel($channel);
+        $integration = $this->importHelper->getIntegrationFromContext($context);
+        $cart->setChannel($integration);
+        $cart->setDataChannel($this->channelImportHelper->getChannel($integration));
         if ($cart->getStore()) {
-            $cart->getStore()->setChannel($channel);
+            $cart->getStore()->setChannel($integration);
         }
 
         if (!empty($data['email'])) {

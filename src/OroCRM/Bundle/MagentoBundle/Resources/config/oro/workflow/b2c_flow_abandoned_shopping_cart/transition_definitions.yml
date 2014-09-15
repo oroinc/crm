@@ -97,7 +97,9 @@ workflows:
 
             convert_to_opportunity_definition:
                 pre_conditions:
-                    @equal: [$cart.status.name, 'open']
+                    @and:
+                        - @equal: [$cart.status.name, 'open']
+                        - @channel_entity_availiable: [$cart.dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
                 conditions:
                     @and:
                         - @not_empty:
@@ -106,9 +108,6 @@ workflows:
                         - @not_empty:
                             parameters: $opportunity_owner
                             message: 'Owner must be set'
-                        - @not_empty:
-                            parameters: $account
-                            message: 'Account must be set'
                 post_actions:
                     - @find_entity: # Set cart status to converted_to_opportunity
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
@@ -126,9 +125,9 @@ workflows:
                             owner: $opportunity_owner
                             budgetAmount: $opportunity_budget
                             contact: $cart.customer.contact
-                            account: $account
                             status: $.result.opportunity_status
                             notes: $notes
+                            dataChannel: $cart.dataChannel
 
             abandon_definition:
                 pre_conditions:

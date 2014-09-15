@@ -8,12 +8,17 @@ orocrm:
         created_at.label:    Created At
         name.label:          Name
         owner.label:         Owner
+        segment.label:       Segment
+
+        marketing_list_items.label:              Marketing List Items
+        marketing_list_removed_items.label:      Marketing List Removed Items
+        marketing_list_unsubscribed_items.label: Marketing List Unsubscribed Items
 
         controller:
             unsubscribed: %entityName% unsubscribed
             subscribed: %entityName% subscribed
             removed: %entityName% removed from list
-            unremoved: %entityName% unremoved from list
+            unremoved: Undo was successful
 
         segment: Marketing List %name% segment
 
@@ -31,17 +36,19 @@ orocrm:
 
         form:
             choose_marketing_list_type:    Choose marketing list type
+            choose_marketing_list:         Choose marketing list
             importance: Important
             columns_notice: At least one column with contact information must be selected. Available contact information fields
 
         datagrid:
             subscribed: Subscribed
-            update: Update
-            delete: Delete
-            view: View
-            contactedTimes: Number of times contacted
+            contactedTimes: Total contacted
             lastContactedAt: Last contacted at
             refreshedOn: Refreshed on
+            actions:
+                update.label: Update
+                delete.label: Delete
+                view.label: View
 
         entity_config:
             choices:

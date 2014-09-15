@@ -12,6 +12,9 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+
 /**
  * @ORM\Table(
  *      name="orocrm_sales_funnel",
@@ -45,8 +48,9 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
  *      }
  * )
  */
-class SalesFunnel
+class SalesFunnel implements ChannelAwareInterface
 {
+    use ChannelEntityTrait;
     /**
      * @var integer
      *
@@ -151,7 +155,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param  \DateTime   $createdAt
      * @return SalesFunnel
      */
     public function setCreatedAt($createdAt)
@@ -170,7 +174,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \OroCRM\Bundle\SalesBundle\Entity\Lead $lead
+     * @param  \OroCRM\Bundle\SalesBundle\Entity\Lead $lead
      * @return SalesFunnel
      */
     public function setLead($lead)
@@ -189,7 +193,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \OroCRM\Bundle\SalesBundle\Entity\Opportunity $opportunity
+     * @param  \OroCRM\Bundle\SalesBundle\Entity\Opportunity $opportunity
      * @return SalesFunnel
      */
     public function setOpportunity($opportunity)
@@ -208,7 +212,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \Oro\Bundle\UserBundle\Entity\User $owner
+     * @param  \Oro\Bundle\UserBundle\Entity\User $owner
      * @return SalesFunnel
      */
     public function setOwner($owner)
@@ -227,7 +231,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param  \DateTime   $startDate
      * @return SalesFunnel
      */
     public function setStartDate($startDate)
@@ -246,7 +250,7 @@ class SalesFunnel
     }
 
     /**
-     * @param \DateTime $updatedAt
+     * @param  \DateTime   $updatedAt
      * @return SalesFunnel
      */
     public function setUpdatedAt($updatedAt)
@@ -265,7 +269,7 @@ class SalesFunnel
     }
 
     /**
-     * @param WorkflowItem $workflowItem
+     * @param  WorkflowItem $workflowItem
      * @return SalesFunnel
      */
     public function setWorkflowItem($workflowItem)
@@ -284,7 +288,7 @@ class SalesFunnel
     }
 
     /**
-     * @param WorkflowItem $workflowStep
+     * @param  WorkflowItem $workflowStep
      * @return SalesFunnel
      */
     public function setWorkflowStep($workflowStep)

@@ -18,6 +18,7 @@ datagrid:
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
                     - email.email as primaryEmail
+                    - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
@@ -25,10 +26,13 @@ datagrid:
                         - { join: o.contact , alias: contact }
                         - { join: o.status, alias: status }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: o.dataChannel, alias: channel }
                 where:
                     and:
                       - o.organization = @oro_security.security_facade->getOrganizationId
         columns:
+            channelName:
+                label:         orocrm.sales.opportunity.data_channel.label
             name:
                 label:         orocrm.sales.opportunity.name.label
             createdAt:
@@ -65,6 +69,8 @@ datagrid:
                 params:     [ id ]
         sorters:
             columns:
+                channelName:
+                    data_name: channelName
                 name:
                     data_name: o.name
                 createdAt:
@@ -85,6 +91,13 @@ datagrid:
                 createdAt: DESC
         filters:
             columns:
+                channelName:
+                    type: entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
                 name:
                     type: string
                     data_name: o.name
@@ -161,6 +174,7 @@ datagrid:
                               ELSE region.name
                             END, ''
                         ) as regionLabel
+                    - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
@@ -169,12 +183,15 @@ datagrid:
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                        - { join: l.dataChannel, alias: channel }
                 where:
                     and:
                       - l.organization = @oro_security.security_facade->getOrganizationId
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
+            channelName:
+                label:         orocrm.sales.lead.data_channel.label
             name:
                 label:         orocrm.sales.lead.name.label
             statusLabel:
@@ -190,6 +207,7 @@ datagrid:
                 label:         orocrm.sales.lead.email.label
             phoneNumber:
                 label:         orocrm.sales.lead.phone_number.label
+                frontend_type: phone
             countryName:
                 label:         orocrm.sales.lead.datagrid.country
             regionLabel:
@@ -212,6 +230,8 @@ datagrid:
                 params:     [ id ]
         sorters:
             columns:
+                channelName:
+                    data_name: channelName
                 name:
                     data_name: l.name
                 statusLabel:
@@ -259,6 +279,13 @@ datagrid:
                  name:
                     type: string
                     data_name: l.name
+                 channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
                  statusLabel:
                     type: entity
                     data_name: status.name
@@ -314,6 +341,7 @@ datagrid:
                     - opportunity.closeRevenue as opportunityRevenue
                     - opportunity.probability as opportunityProbability
                     - step.label as stepLabel
+                    - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
@@ -321,12 +349,15 @@ datagrid:
                         - { join: salesFunnel.workflowStep, alias: step }
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
+                        - { join: salesFunnel.dataChannel, alias: channel }
                 where:
                     and:
                       - salesFunnel.organization = @oro_security.security_facade->getOrganizationId
         columns:
             id:
                 label: orocrm.sales.salesfunnel.id.label
+            channelName:
+                label: orocrm.sales.salesfunnel.data_channel.label
             startDate:
                 label: orocrm.sales.salesfunnel.start_date.label
                 frontend_type: date
@@ -362,6 +393,8 @@ datagrid:
             columns:
                 id:
                     data_name: salesFunnel.id
+                channelName:
+                    data_name: channelName
                 startDate:
                     data_name: salesFunnel.startDate
                 leadName:
@@ -404,6 +437,13 @@ datagrid:
                     type: string
                     data_name: salesFunnel.id
                     type: number
+                channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -479,6 +519,7 @@ datagrid:
                 label: orocrm.sales.lead.email.label
             phoneNumber:
                 label: orocrm.sales.lead.phone_number.label
+                frontend_type: phone
             countryName:
                 label: orocrm.sales.lead.datagrid.country
             regionLabel:
@@ -619,14 +660,461 @@ datagrid:
         extends: sales-lead-grid
         source:
             query:
+                join:
+                    inner:
+                        - { join: l.customer, alias: c }
                 where:
                       and:
-                        - l.account = :accountId
+                        - c.account = :accountId
 
     sales-account-opportunity-grid:
         extends: sales-opportunity-grid
         source:
              query:
-                 where:
+                join:
+                    inner:
+                        - { join: o.customer, alias: c }
+                where:
+                      and:
+                        - c.account = :accountId
+
+    orocrm-sales-b2bcustomers-grid:
+        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        source:
+            type: orm
+            acl_resource: orocrm_sales_b2bcustomer_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - c.createdAt
+                    - channel.name as channelName
+                from:
+                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                join:
+                    left:
+                        - { join: c.dataChannel, alias: channel }
+        columns:
+            channelName:
+                label:          orocrm.sales.b2bcustomer.data_channel.label
+            name:
+                label:          orocrm.sales.b2bcustomer.name.label
+            createdAt:
+                label:          oro.ui.created_at
+                frontend_type:  datetime
+        sorters:
+            columns:
+                channelName: { data_name: channelName }
+                name:        { data_name: c.name }
+                createdAt:   { data_name: c.createdAt }
+            default:
+                name: ASC
+        filters:
+            columns:
+                 channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                 name:
+                    type:      string
+                    data_name: c.name
+        properties:
+            id: ~
+            view_link:
+                type:   url
+                route:  orocrm_sales_b2bcustomer_view
+                params: [ id ]
+            update_link:
+                type:   url
+                route:  orocrm_sales_b2bcustomer_update
+                params: [ id ]
+            delete_link:
+                type:   url
+                route:  oro_api_delete_b2bcustomer
+                params: [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_b2bcustomer_view
+                label:         orocrm.sales.b2bcustomer.datagrid.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_b2bcustomer_update
+                label:         Update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_b2bcustomer_delete
+                label:         Delete
+                icon:          trash
+                link:          delete_link
+
+    base-sales-b2bcustomer-leads-grid:
+        extended_entity_name: %orocrm_sales.lead.entity.class%
+        source:
+            type: orm
+            acl_resource: orocrm_sales_lead_view
+            query:
+                select:
+                    - l.id
+                    - l.name
+                    - l.firstName
+                    - l.lastName
+                    - l.createdAt
+                    - l.email
+                    - l.phoneNumber
+                    - status.label as statusLabel
+                    - country.name as countryName
+                    - address.postalCode as addressPostalCode
+                    - >
+                        CONCAT(
+                            CASE WHEN address.regionText IS NOT NULL
+                              THEN address.regionText
+                              ELSE region.name
+                            END, ''
+                        ) as regionLabel
+
+                from:
+                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                join:
+                    left:
+                        - { join: l.status, alias: status }
+                        - { join: l.address, alias: address }
+                        - { join: address.country, alias: country }
+                        - { join: address.region, alias: region }
+        filters:
+            columns:
+                 name:
+                    type: string
+                    data_name: l.name
+                 statusLabel:
+                    type: entity
+                    data_name: status.name
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroCRMSalesBundle:LeadStatus
+                          property: label
+                 firstName:
+                    type: string
+                    data_name: l.firstName
+                 lastName:
+                    type: string
+                    data_name: l.lastName
+                 email:
+                    type: string
+                    data_name: l.email
+                 phoneNumber:
+                    type: string
+                    data_name: l.phoneNumber
+
+    sales-b2bcustomer-leads-grid:
+        extends: base-sales-b2bcustomer-leads-grid
+        source:
+            query:
+                where:
                     and:
-                        - o.account = :accountId
+                        - l.customer = :customerId
+        columns:
+            name:
+                label:         orocrm.sales.lead.name.label
+            statusLabel:
+                label:         orocrm.sales.lead.status.label
+            firstName:
+                label:         orocrm.sales.lead.first_name.label
+            lastName:
+                label:         orocrm.sales.lead.last_name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            email:
+                label:         orocrm.sales.lead.email.label
+            phoneNumber:
+                label:         orocrm.sales.lead.phone_number.label
+            countryName:
+                label:         orocrm.sales.lead.datagrid.country
+            regionLabel:
+                label:         orocrm.sales.lead.datagrid.region
+            addressPostalCode:
+                label:         orocrm.sales.lead.datagrid.postal_code
+        sorters:
+            columns:
+                name:
+                    data_name: l.name
+                statusLabel:
+                    data_name: statusLabel
+                firstName:
+                    data_name: l.firstName
+                lastName:
+                    data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
+                email:
+                    data_name: l.email
+                phoneNumber:
+                    data_name: l.phoneNumber
+                countryName:
+                    data_name: address.country
+                regionLabel:
+                    data_name: regionLabel
+                addressPostalCode:
+                    data_name: addressPostalCode
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                 countryName:
+                    type: entity
+                    data_name: address.country
+                    enabled: false
+                    options:
+                        field_options:
+                          class: OroAddressBundle:Country
+                          property: name
+                          query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                 regionLabel:
+                    type: string
+                    data_name: regionLabel
+                    enabled: false
+                 addressPostalCode:
+                    type: string
+                    data_name: addressPostalCode
+                    enabled: false
+
+    base-sales-b2bcustomer-opportunities-grid:
+        extended_entity_name: %orocrm_sales.opportunity.class%
+        source:
+            type: orm
+            acl_resource: orocrm_sales_opportunity_view
+            query:
+                select:
+                    - o.id as id
+                    - o.name
+                    - o.createdAt
+                    - o.closeDate
+                    - o.probability
+                    - o.budgetAmount
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - status.label as statusLabel
+                    - email.email as primaryEmail
+                from:
+                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.contact , alias: contact }
+                        - { join: o.status, alias: status }
+                        - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: o.name
+                createdAt:
+                    type: datetime
+                    data_name: o.createdAt
+                closeDate:
+                    type: date
+                    data_name: o.closeDate
+                budgetAmount:
+                    type: number
+                    data_name: o.budgetAmount
+                probability:
+                    type: percent
+                    data_name: o.probability
+                statusLabel:
+                    type: entity
+                    data_name: status.name
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:OpportunityStatus
+                            property: label
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+
+    sales-b2bcustomer-opportunities-grid:
+        extends: base-sales-b2bcustomer-opportunities-grid
+        source:
+            query:
+                where:
+                    and:
+                        - o.customer = :customerId
+        columns:
+            name:
+                label:         orocrm.sales.opportunity.name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            closeDate:
+                label:         orocrm.sales.opportunity.close_date.label
+                frontend_type: date
+            budgetAmount:
+                label:         orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            probability:
+                label:         orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            statusLabel:
+                label:         orocrm.sales.opportunity.status.label
+            primaryEmail:
+                label:         orocrm.contact.email.label
+        sorters:
+            columns:
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                statusLabel:
+                    data_name: status.label
+                primaryEmail:
+                    data_name: email.email
+            default:
+                createdAt: DESC
+
+    sales-b2bcustomer-lead-grid:
+        extends: base-sales-b2bcustomer-leads-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:customer IS NOT NULL) THEN
+                          CASE WHEN (l.customer = :customer OR l.id IN (:data_in)) AND l.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN l.id IN (:data_in) AND l.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END)  as hasLeads
+        columns:
+            hasLeads:
+                label:         orocrm.sales.lead.assigned.label
+                editable: true
+                frontend_type: boolean
+            name:
+                label:         orocrm.sales.lead.name.label
+            statusLabel:
+                label:         orocrm.sales.lead.status.label
+            firstName:
+                label:         orocrm.sales.lead.first_name.label
+            lastName:
+                label:         orocrm.sales.lead.last_name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            email:
+                label:         orocrm.sales.lead.email.label
+            phoneNumber:
+                label:         orocrm.sales.lead.phone_number.label
+        sorters:
+            columns:
+                hasLeads:
+                    data_name: hasLeads
+                name:
+                    data_name: l.name
+                statusLabel:
+                    data_name: statusLabel
+                firstName:
+                    data_name: l.firstName
+                lastName:
+                    data_name: l.lastName
+                createdAt:
+                    data_name: l.createdAt
+                email:
+                    data_name: l.email
+                phoneNumber:
+                    data_name: l.phoneNumber
+            default:
+                hasLeads:  DESC
+        properties:
+            id: ~
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - orodatagrid/js/datagrid/listener/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasLeads
+                selectors:
+                    included: '#appendLeads'
+                    excluded: '#removeLeads'
+
+    sales-b2bcustomer-opportunity-grid:
+        extends: base-sales-b2bcustomer-opportunities-grid
+        source:
+            query:
+                select:
+                    - >
+                        (CASE WHEN (:customer IS NOT NULL) THEN
+                          CASE WHEN (o.customer = :customer OR o.id IN (:data_in)) AND o.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        ELSE
+                          CASE WHEN o.id IN (:data_in) AND o.id NOT IN (:data_not_in)
+                          THEN true ELSE false END
+                        END)  as hasOpportunities
+        columns:
+            hasOpportunities:
+                label:         orocrm.sales.opportunity.assigned.label
+                editable:      true
+                frontend_type: boolean
+            name:
+                label:         orocrm.sales.opportunity.name.label
+            createdAt:
+                label:         oro.ui.created_at
+                frontend_type: datetime
+            closeDate:
+                label:         orocrm.sales.opportunity.close_date.label
+                frontend_type: date
+            budgetAmount:
+                label:         orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            probability:
+                label:         orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            statusLabel:
+                label:         orocrm.sales.opportunity.status.label
+            primaryEmail:
+                label:         orocrm.contact.email.label
+        sorters:
+            columns:
+                hasOpportunities:
+                    data_name: hasOpportunities
+                name:
+                    data_name: o.name
+                createdAt:
+                    data_name: o.createdAt
+                closeDate:
+                    data_name: o.closeDate
+                budgetAmount:
+                    data_name: o.budgetAmount
+                probability:
+                    data_name: o.probability
+                statusLabel:
+                    data_name: status.label
+                primaryEmail:
+                    data_name: email.email
+            default:
+                hasOpportunities: DESC
+        properties:
+            id: ~
+        options:
+            routerEnabled: false
+            requireJSModules:
+              - orodatagrid/js/datagrid/listener/column-form-listener
+            columnListener:
+                dataField: id
+                columnName: hasOpportunities
+                selectors:
+                    included: '#appendOpportunities'
+                    excluded: '#removeOpportunities'

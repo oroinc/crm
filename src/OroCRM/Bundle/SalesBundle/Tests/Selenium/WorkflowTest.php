@@ -7,9 +7,7 @@ use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnel;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Workflow;
 
 /**
  * Class WorkflowTest
@@ -229,7 +227,7 @@ class WorkflowTest extends Selenium2TestCase
     }
 
     /**
-     * @param Login $login
+     * @param  Login  $login
      * @return string
      */
     protected function createLead(Login $login)
@@ -256,7 +254,7 @@ class WorkflowTest extends Selenium2TestCase
     }
 
     /**
-     * @param Login $login
+     * @param  Login  $login
      * @return string
      */
     protected function createOpportunity(Login $login)
@@ -285,7 +283,7 @@ class WorkflowTest extends Selenium2TestCase
     }
 
     /**
-     * @param Login $login
+     * @param  Login  $login
      * @return string
      */
     protected function createAccount(Login $login)

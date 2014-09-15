@@ -21,11 +21,11 @@ class SalesFunnelRepository extends EntityRepository
     ];
 
     /**
-     * @param \DateTime $dateFrom
-     * @param \DateTime $dateTo
-     * @param Workflow $workflow
-     * @param array $customStepCalculations
-     * @param AclHelper $aclHelper
+     * @param  \DateTime $dateFrom
+     * @param  \DateTime $dateTo
+     * @param  Workflow  $workflow
+     * @param  array     $customStepCalculations
+     * @param  AclHelper $aclHelper
      * @return array
      */
     public function getFunnelChartData(
@@ -77,11 +77,11 @@ class SalesFunnelRepository extends EntityRepository
     }
 
     /**
-     * @param array $steps
-     * @param \DateTime $dateFrom
-     * @param \DateTime $dateTo
-     * @param array $customStepCalculations
-     * @param AclHelper $aclHelper
+     * @param  array     $steps
+     * @param  \DateTime $dateFrom
+     * @param  \DateTime $dateTo
+     * @param  array     $customStepCalculations
+     * @param  AclHelper $aclHelper
      * @return array
      */
     protected function getStepData(
@@ -104,7 +104,7 @@ class SalesFunnelRepository extends EntityRepository
         $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);
 
         foreach ($budgetAmountQuery->getArrayResult() as $record) {
-            $stepData[$record['workflowStepName']] = $record['budgetAmount'] ? (float)$record['budgetAmount'] : 0;
+            $stepData[$record['workflowStepName']] = $record['budgetAmount'] ? (float) $record['budgetAmount'] : 0;
         }
 
         foreach ($customStepCalculations as $step => $field) {
@@ -121,7 +121,7 @@ class SalesFunnelRepository extends EntityRepository
             $customStepQuery = $this->getQuery($customStepQueryBuilder, $aclHelper);
 
             foreach ($customStepQuery->getArrayResult() as $record) {
-                $stepData[$record['workflowStepName']] = $record['value'] ? (float)$record['value'] : 0;
+                $stepData[$record['workflowStepName']] = $record['value'] ? (float) $record['value'] : 0;
             }
         }
 
@@ -129,8 +129,8 @@ class SalesFunnelRepository extends EntityRepository
     }
 
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param AclHelper $aclHelper
+     * @param  QueryBuilder $queryBuilder
+     * @param  AclHelper    $aclHelper
      * @return Query
      */
     protected function getQuery(QueryBuilder $queryBuilder, AclHelper $aclHelper = null)
@@ -139,8 +139,8 @@ class SalesFunnelRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime $dateFrom
-     * @param \DateTime $dataTo
+     * @param  \DateTime    $dateFrom
+     * @param  \DateTime    $dataTo
      * @return QueryBuilder
      */
     protected function getTemplateQueryBuilder(\DateTime $dateFrom = null, \DateTime $dataTo = null)

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
+use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -26,14 +27,35 @@ class DashboardController extends Controller
         /** @var TranslatorInterface $translator */
         $translator = $this->get('translator');
 
+        /** @var EnumExtension $enumValueTranslator */
+        $enumValueTranslator = $this->get('oro_entity_extend.twig.extension.enum');
+
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
 
-        foreach ($data as &$sourceData) {
-            if (!empty($sourceData['label'])) {
-                $sourceData['label'] = $translator->trans($sourceData['label']);
+        // prepare chart data
+        if (empty($data)) {
+            $data[] = ['label' => $translator->trans('orocrm.sales.lead.source.none')];
+        } else {
+            // translate sources
+            foreach ($data as &$item) {
+                if ($item['source'] === null) {
+                    $item['label'] = $translator->trans('orocrm.sales.lead.source.unclassified');
+                } elseif (empty($item['source'])) {
+                    $item['label'] = $translator->trans('orocrm.sales.lead.source.others');
+                } else {
+                    $item['label'] = $enumValueTranslator->transEnum($item['source'], 'lead_source');
+                }
+                unset($item['source']);
             }
+            // sort alphabetically by label
+            usort(
+                $data,
+                function ($a, $b) {
+                    return strcasecmp($a['label'], $b['label']);
+                }
+            );
         }
 
         $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);

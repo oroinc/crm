@@ -22,12 +22,14 @@ datagrid:
                             join: Oro\Bundle\NavigationBundle\Entity\NavigationHistoryItem
                             alias: history
                             conditionType: WITH
-                            condition: "CONCAT(a.id, '') = substring(history.url, locate('/', history.url, locate('/account/', history.url) + 9) + 1)"
+                            condition: "a.id=history.entityId AND history.route='orocrm_account_view'"
                 where:
                     and:
-                      - locate('/account/', history.url) <> 0
                       - history.user = @oro_security.security_facade->getLoggedUserId
                 groupBy:  a.id, a.name, contactEmail, contactPhone
+                orderBy:
+                    - column: visitDate
+                      dir: desc
         sorters:
             visitDate: { history.: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         columns:
@@ -40,6 +42,7 @@ datagrid:
                 label: orocrm.contact.contactemail.email.label
             contactPhone:
                 label: orocrm.contact.contactphone.phone.label
+                frontend_type: phone
         options:
             entityHint: account
             toolbarOptions:
@@ -94,6 +97,7 @@ datagrid:
                 label:         orocrm.account.contact.email
             contactPhone:
                 label:         orocrm.account.contact.phone
+                frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
             createdAt:
@@ -246,6 +250,7 @@ datagrid:
                 label: orocrm.contact.email.label
             primaryPhone:
                 label: orocrm.contact.contactphone.phone.label
+                frontend_type: phone
             countryName:
                 label: orocrm.contact.contactaddress.country.label
             regionLabel:
@@ -336,6 +341,7 @@ datagrid:
                 label:   orocrm.account.contact.email
             contactPhone:
                 label:   orocrm.account.contact.phone
+                frontend_type: phone
             ownerName:
                 label:   orocrm.account.owner.label
         sorters:

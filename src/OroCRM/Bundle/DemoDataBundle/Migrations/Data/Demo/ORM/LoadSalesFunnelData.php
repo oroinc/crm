@@ -10,22 +10,24 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
+
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     const FLUSH_MAX = 50;
 
+    /** @var array */
     protected $probabilities = array (0.2, 0.5, 0.8);
-    /**
-     * @var ContainerInterface
-     */
+
+    /** @var ContainerInterface */
     protected $container;
 
     /** @var  User[] */
@@ -43,9 +45,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var  EntityManager */
     protected $em;
 
-    /**
-     * @var Organization
-     */
+    /** @var Organization */
     protected $organization;
 
     /**
@@ -73,11 +73,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $this->getReference('default_organization');
         $this->initSupportingEntities($manager);
         $this->loadFlows();
     }
 
+    /**
+     * @param ObjectManager $manager
+     */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
         if ($manager) {
@@ -125,14 +128,17 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $parameters = array('opportunity' => $entity);
         }
 
-        $parameters = array_merge(array(
+        $parameters = array_merge(
+            array(
             'sales_funnel' => null,
             'sales_funnel_owner' => $owner,
             'sales_funnel_start_date' => new \DateTime('now'),
-        ), $parameters);
+            ),
+            $parameters
+        );
 
         $salesFunnel = new SalesFunnel();
-
+        $salesFunnel->setDataChannel($this->getReference('default_channel'));
         if (!$this->workflowManager->isStartTransitionAvailable(
             'b2b_flow_sales_funnel',
             $step,
@@ -218,7 +224,12 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->organization
+        );
         $securityContext->setToken($token);
     }
 

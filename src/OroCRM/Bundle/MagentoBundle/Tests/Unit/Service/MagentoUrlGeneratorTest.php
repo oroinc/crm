@@ -203,7 +203,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $successUrl = 'http://localhost/magento/success';
         $errorUrl = 'http://localhost/magento/error';
         $flowName = 'flowName';
-        $origin = 'cusomer';
+        $origin = 'customer';
         $exception = new ExtensionRequiredException;
 
         return [
