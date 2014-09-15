@@ -44,6 +44,7 @@ services:
     # Account API
     orocrm_account.account.manager.api:
         class:                                      %orocrm_account.account.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_account.account.entity.class%
             - @doctrine.orm.entity_manager

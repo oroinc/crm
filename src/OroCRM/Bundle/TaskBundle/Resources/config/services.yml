@@ -46,6 +46,7 @@ services:
 
     orocrm_task.manager.api:
         class: %orocrm_task.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_task.entity.class%
             - @doctrine.orm.entity_manager
