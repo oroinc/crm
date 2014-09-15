@@ -35,18 +35,21 @@ services:
 
     orocrm_marketing_list.marketing_list.manager.api:
         class: %orocrm_marketing_list.marketing_list.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_marketing_list.marketing_list_removed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_removed_item.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.removed_item.class%
             - @doctrine.orm.entity_manager
 
     orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.unsubscribed_item.class%
             - @doctrine.orm.entity_manager

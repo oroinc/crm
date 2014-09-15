@@ -21,6 +21,7 @@ services:
 
     orocrm_sales.lead.manager.api:
         class: %orocrm_sales.lead.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
