@@ -24,3 +24,30 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - NotBlank: ~
         reportPeriod:
             - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100
+        senderEmail:
+            - Email: ~
+            - Length:
+                max: 100
+        senderName:
+            - Length:
+                max: 100
+        scheduledFor:
+            - DateTime: ~
+        marketingList:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+        transport:
+            - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings:
+    properties:
+        template:
+            - NotBlank: ~

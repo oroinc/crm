@@ -31,7 +31,12 @@ class MarketingListController extends Controller
 
     /**
      * @Route("/view/{id}", name="orocrm_marketing_list_view", requirements={"id"="\d+"}, defaults={"id"=0})
-     * @AclAncestor("orocrm_marketing_list_view")
+     * @Acl(
+     *      id="orocrm_marketing_list_view",
+     *      type="entity",
+     *      permission="VIEW",
+     *      class="OroCRMMarketingListBundle:MarketingList"
+     * )
      * @Template
      *
      * @param MarketingList $entity

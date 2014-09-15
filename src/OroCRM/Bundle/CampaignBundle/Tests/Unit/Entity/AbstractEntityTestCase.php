@@ -2,17 +2,25 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Entity;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
 {
     /** @var Object */
     protected $entity;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $name         = $this->getEntityFQCN();
         $this->entity = new $name();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function tearDown()
     {
         unset($this->entity);
@@ -27,11 +35,16 @@ abstract class AbstractEntityTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testSetGet($property, $value = null, $expected = null)
     {
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
         if ($value !== null) {
-            call_user_func_array(array($this->entity, 'set' . ucfirst($property)), array($value));
+            $propertyAccessor->setValue($this->entity, $property, $value);
         }
 
-        $this->assertEquals($expected, call_user_func_array(array($this->entity, 'get' . ucfirst($property)), array()));
+        $this->assertEquals(
+            $expected,
+            $propertyAccessor->getValue($this->entity, $property)
+        );
     }
 
     /**
