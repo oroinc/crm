@@ -107,13 +107,13 @@ class TransportSettingsListener implements EventSubscriberInterface
         }
 
         if ($selectedTransport) {
-            $this->addTransportSettingsForm($selectedTransport, $event->getForm());
+            $this->addTransportSettingsForm($selectedTransport, $form);
             $formData->setTransport($selectedTransport->getName());
             $form->get('transport')->setData($selectedTransport->getName());
         }
 
-        if ($event->getForm()->has('transportSettings')) {
-            $parentData = $event->getData();
+        if ($form->has('transportSettings')) {
+            $parentData = $data;
             unset($parentData['transportSettings']);
             $data['transportSettings']['parentData'] = $parentData;
         }
