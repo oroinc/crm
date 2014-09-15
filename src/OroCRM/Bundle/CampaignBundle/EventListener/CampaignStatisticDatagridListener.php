@@ -68,17 +68,21 @@ class CampaignStatisticDatagridListener
     public function onBuildAfter(BuildAfter $event)
     {
         $datagrid   = $event->getDatagrid();
-        $datasource = $datagrid->getDatasource();
         $parameters = $datagrid->getParameters();
 
         if (!$this->isApplicable($datagrid->getName(), $parameters)) {
             return;
         }
 
+        if (!$emailCampaign = $parameters->get('emailCampaign', false)) {
+            throw new \InvalidArgumentException('Parameter "emailCampaign" is missing');
+        }
+
+        $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
             $datasource
                 ->getQueryBuilder()
-                ->setParameter('emailCampaign', $parameters->get('emailCampaign'));
+                ->setParameter('emailCampaign', $emailCampaign);
         }
     }
 
