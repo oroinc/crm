@@ -1,0 +1,103 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+
+{% set entityId = form.vars.value.id %}
+{% oro_title_set({params : {"%entity.name%": entity.name, "%entityName%": 'orocrm.campaign.emailcampaign.entity_label'|trans }}) %}
+{% set formAction = entityId ? path('orocrm_email_campaign_update', { 'id': entityId}) : path('orocrm_email_campaign_create') %}
+
+{% block navButtons %}
+    {% if resource_granted('DELETE', entity) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_emailcampaign', {'id': entity.id}),
+            'dataRedirect': path('orocrm_email_campaign_index'),
+            'aCss': 'no-hash remove-button',
+            'dataId': entity.id,
+            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+        }) }}
+    {% endif %}
+    {{ UI.cancelButton(path('orocrm_email_campaign_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if form.vars.value.id or resource_granted('orocrm_email_campaign_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock navButtons %}
+
+{% block pageHeader %}
+    {% if entityId %}
+        {% set breadcrumbs = {
+            'entity':      form.vars.value,
+            'indexPath':   path('orocrm_email_campaign_index'),
+            'indexLabel': 'orocrm.campaign.emailcampaign.entity_plural_label'|trans,
+            'entityTitle': form.vars.value.name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.campaign.emailcampaign.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block content_data %}
+    {% set id = 'orocrm_email_campaign_form-profile' %}
+
+    {% set transportFormData = [form_row(form.transport)] %}
+    {% if form.transportSettings is defined %}
+        {% set transportFormData = transportFormData|merge([form_widget(form.transportSettings)]) %}
+    {% endif %}
+
+    {% set hideScheduleFor = '' %}
+    {% if form.vars.value.schedule != constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED') %}
+        {% set hideScheduleFor = 'hide' %}
+    {% endif %}
+
+    {% set dataBlocks = [
+        {
+            'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': [
+                        form_row(form.name),
+                        form_row(form.marketingList),
+                        form_row(form.schedule),
+                        form_row(form.scheduledFor, {'attr': {'class': hideScheduleFor ~ ' scheduledFor'}}),
+                        form_row(form.senderEmail),
+                        form_row(form.senderName),
+                        form_row(form.campaign),
+                        form_row(form.description),
+                    ]
+                }
+            ]
+        },
+        {
+            'title': 'orocrm.campaign.emailcampaign.block.email_settings'|trans,
+            'subblocks': [
+                {
+                    'title': '',
+                    'data': transportFormData
+                }
+            ]
+        }
+    ] %}
+
+    {% set data =
+        {
+            'formErrors': form_errors(form)? form_errors(form) : null,
+            'dataBlocks': dataBlocks
+        }
+    %}
+
+    {% set componentOptions = {
+        scheduleEl: '#' ~ form.schedule.vars.id,
+        scheduledForEl: '.scheduledFor',
+        transportEl: '#' ~ form.transport.vars.id,
+        hideOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_MANUAL')],
+        showOn: [constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED')]
+    } %}
+    <div data-page-component-module="orocrmcampaign/js/app/components/email-campaign-form"
+         data-page-component-options="{{ componentOptions|json_encode }}">
+        {{ parent() }}
+    </div>
+{% endblock content_data %}
