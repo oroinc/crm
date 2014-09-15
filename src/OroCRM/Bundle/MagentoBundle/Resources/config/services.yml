@@ -197,6 +197,7 @@ services:
     # Customer API
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
+        parent: oro_soap.managet.entity_manager.abstract
         arguments:
             - OroCRM\Bundle\MagentoBundle\Entity\Customer
             - @doctrine.orm.entity_manager
