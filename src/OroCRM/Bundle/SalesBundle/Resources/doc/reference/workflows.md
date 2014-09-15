@@ -31,16 +31,16 @@ Examples:
 * **Lead** - lead object that encapsulates following properties:
     * _status_ - used to find allowed transitions (can be "New", "Cancelled" or "Qualified");
     * _name_ - used as default opportunity name;
-    * _account_ - used as default opportunity account;
-    * _companyName_ - used to find default account if account is not specified;
-    * _contact_ - used as default opportunity contact, if no account is set new contact will be created based
+    * _customer_ - used as default opportunity customer;
+    * _companyName_ - used to find default customer if customer is not specified;
+    * _contact_ - used as default opportunity contact, if no customer is set new contact will be created based
 on contact information properties;
     * _contact information properties_ - list of properties used to create new contact
 (first name, last name, email, phone, address etc).
 * **Opportunity Name** - name of created opportunity, default value set from lead name;
-* **Account** - entity that encapsulates business information, f.e. company data;
+* **Customer** - entity that encapsulates business information, f.e. company data;
 * **Company Name** - name of a company, use lead company name as default value, used to automatically
-find account by its name (account name is a company name).
+find customer by its name (customer name is a company name).
 
 ### Diagram
 
@@ -50,17 +50,17 @@ find account by its name (account name is a company name).
 
 * **New** - lead was just created or reactivated, and it has fresh data;
 * **Cancelled** - lead was disqualified (cancelled), and can't be qualified (f.e. contact was lost);
-* **Qualified** - lead was qualified and promoted to opportunity and, optionally, new contact and account were created.
+* **Qualified** - lead was qualified and promoted to opportunity and, optionally, new contact and customer were created.
 
 ### Transitions
 
 * **Qualify** - lead must have status "New" to allow this transition:
-    * open form with attributes "Opportunity name", "Account" and "Company name";
+    * open form with attributes "Opportunity name", "Customer" and "Company name";
     * change lead status to "Qualified";
     * if lead has no contact then create a new one with address, email and phone based on lead data;
-    * if lead has no account then try to find it based on company name, if account not found -
+    * if lead has no customer then try to find it based on company name, if customer not found -
 create a new one based on lead data;
-    * create new opportunity with specified name, contact and account, and set opportunity status to "In progress";
+    * create new opportunity with specified name, contact and customer, and set opportunity status to "In progress";
     * start new B2B Sales Flow using "Qualify" transition and redirect to it.
 * **Disapprove** - lead must have status "New" to allow this transition:
     * changes lead status to "Cancelled".
@@ -87,7 +87,7 @@ of the process.
 ### Definitions
 
 * The CRM Opportunity signals the kickoff of your company’s sales process with a potential or existing client.
-* The history of Open, Won or Lost Opportunities can always be found in the related Account or Contact record.
+* The history of Open, Won or Lost Opportunities can always be found in the related Customer or Contact record.
 * All metrics related to the opportunity are measured here, such as:
     * Estimated Revenue.
     * Percent Probability of Closing.
@@ -101,7 +101,7 @@ of the process.
     * _status_ - used to find allowed transitions (can be "In progress", "Won" or "Lost");
     * _name_ - name of current entity, required data;
     * _contact_ - related contact entity;
-    * _account_ - related account entity, required data;
+    * _customer_ - related customer entity, required data;
     * _budgetAmount_ - amount of budget for current entity;
     * _probability_ - probability of winning, set to 0 for lost and 100 for won opportunity;
     * _customerNeed_ - string representation of required customer need;
@@ -110,7 +110,7 @@ of the process.
     * _closeRevenue_ - close revenue of opportunity, sets to 0 if opportunity was lost;
     * _closeDate_ - date when opportunity was closed;
 * **Contact** - this and all following attributes are represent appropriate opportunity properties;
-* **Account**;
+* **Customer**;
 * **Probability**;
 * **Budget amount**;
 * **Customer need**;
@@ -127,7 +127,7 @@ of the process.
 
 * **Qualify** - opportunity was created, edited or reactivated, and only optional attribute
 that can be selected is Contact;
-* **Develop** - opportunity was developed, user entered Proposed solution Contact, Account, Budget amount,
+* **Develop** - opportunity was developed, user entered Proposed solution Contact, Customer, Budget amount,
 Probability, Customer need and Proposed solution attribute values;
 * **Close** - opportunity was close either as won or as lost, user entered Close reason, Close revenue and Close date.
 
@@ -137,7 +137,7 @@ Probability, Customer need and Proposed solution attribute values;
     * start transition that used as entry point from Sales Lead Flow;
     * set opportunity properties to appropriate attributes.
 * **Develop** - opportunity must have status "In progress" to allow this transition:
-    * has form that allows user to enter attributes Contact, Account, Budget amount, Probability, Customer need and Proposed solution;
+    * has form that allows user to enter attributes Contact, Customer, Budget amount, Probability, Customer need and Proposed solution;
     * set entered data to opportunity.
 * **Close as won** - opportunity must have status "In progress" to allow this transition:
     * has form with attributes Close revenue and Close date;

@@ -16,6 +16,17 @@ class LeadType extends AbstractType
     {
         $builder
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.name.label'))
+            ->add(
+                'dataChannel',
+                'orocrm_channel_select_type',
+                array(
+                    'required' => true,
+                    'label' => 'orocrm.sales.lead.data_channel.label',
+                    'entities' => [
+                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead'
+                    ],
+                )
+            )
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_prefix.label'))
             ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.first_name.label'))
             ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.middle_name.label'))
@@ -33,12 +44,9 @@ class LeadType extends AbstractType
             ->add('phoneNumber', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.phone_number.label'))
             ->add('email', 'email', array('required' => false, 'label' => 'orocrm.sales.lead.email.label'))
             ->add(
-                'account',
-                'orocrm_account_select',
-                array(
-                    'required' => false,
-                    'label' => 'orocrm.sales.lead.account.label'
-                )
+                'customer',
+                'orocrm_sales_b2bcustomer_select',
+                array('required' => false, 'label' => 'orocrm.sales.lead.customer.label')
             )
             ->add('companyName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.company_name.label'))
             ->add('website', 'url', array('required' => false, 'label' => 'orocrm.sales.lead.website.label'))

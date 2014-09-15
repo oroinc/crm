@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_2;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 

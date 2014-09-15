@@ -1,8 +1,8 @@
-{% block _oro_integration_channel_form_transport_check_widget %}
+{% block orocrm_magento_soap_transport_check_button_widget %}
     {% set modificationAreAllowed = form.parent.websiteId.vars.disabled is not defined or form.parent.websiteId.vars.disabled == false %}
     <div class="control-group">
         <div class="controls">
-            {{ form_widget(form, {attr: {class: 'btn btn-primary' }}) }}
+            <button type="{{ type|default('button') }}" {{ block('button_attributes') }}>{{ label|trans({}, translation_domain) }}</button>
             <script type="text/javascript">
                 require(['orocrm/magento/soap-checker'], function (SoapChecker) {
                     "use strict";
@@ -23,7 +23,11 @@
     </div>
 {% endblock %}
 
-{% block _oro_integration_channel_form_transport_websiteId_row %}
+{% block orocrm_magento_soap_transport_check_button_row %}
+    {{ block('button_row') }}
+{% endblock %}
+
+{% block orocrm_magento_website_select_row %}
     {% spaceless %}
         <div class="control-group{% if attr.class is defined %} {{ attr.class }}{% endif %}">
             {% if label is not sameas(false) %}

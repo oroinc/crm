@@ -1,11 +1,14 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
+
+            {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
 
             {%- if entity.contact and resource_granted('VIEW', entity.contact) -%}
                 {% set contactView = ui.renderUrl(path('orocrm_contact_view', {'id': entity.contact.id}), entity.contact|oro_format_name) %}
@@ -15,13 +18,13 @@
 
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.contact.label'|trans, contactView) }}
 
-            {% if entity.account and resource_granted('VIEW', entity.account) %}
-                {% set accountView = ui.renderUrl(path('orocrm_account_view', {'id': entity.account.id}), entity.account) %}
-            {% else %}
-                {% set accountView = entity.account ? entity.account|escape : '' %}
-            {% endif %}
+            {%- if resource_granted('orocrm_sales_b2bcustomer_view') and entity.customer -%}
+                {% set customerView = '<a href="' ~ path('orocrm_sales_b2bcustomer_view', {'id': entity.customer.id}) ~ '">' ~ entity.customer|escape ~ '</a>' %}
+            {%- else -%}
+                {% set customerView = entity.customer ? entity.customer|escape : '' %}
+            {%- endif -%}
 
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.account.label'|trans, accountView) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.probability.label'|trans, entity.probability|length ? entity.probability|oro_format_percent : '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.budget_amount.label'|trans, entity.budgetAmount|length ? entity.budgetAmount|oro_format_currency, '') }}
 

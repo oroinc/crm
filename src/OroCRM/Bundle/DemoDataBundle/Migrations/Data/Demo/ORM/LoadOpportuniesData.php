@@ -1,43 +1,26 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\ORM\EntityRepository;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ObjectManager;
-
-use Doctrine\ORM\EntityManager;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\UserBundle\Entity\User;
+
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
+class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    const FLUSH_MAX = 50;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * @var User[]
-     */
-    protected $users;
-
-    /**
-     * @var Contact[]
-     */
+    /** @var Contact[] */
     protected $contacts;
 
-    /** @var  EntityManager */
-    protected $em;
+    /** @var  B2bCustomer[] */
+    protected $b2bCustomers;
 
     /**
      * {@inheritdoc}
@@ -46,16 +29,10 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     {
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadLeadsData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadB2bCustomerData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadChannelData'
         ];
-    }
-
-     /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**
@@ -63,39 +40,30 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->initSupportingEntities($manager);
+        $this->initSupportingEntities();
         $this->loadOpportunities();
     }
 
-    protected function initSupportingEntities(ObjectManager $manager = null)
+    protected function initSupportingEntities()
     {
-        if ($manager) {
-            $this->em = $manager;
-        }
-
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         /** @var EntityRepository $repo */
-        $repo = $this->em->getRepository('OroCRMContactBundle:Contact');
-        $this->contacts = $repo->createQueryBuilder('contact')
-            ->innerJoin('contact.accounts', 'account')
-            ->getQuery()
-            ->execute();
+        $this->contacts     = $this->em->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $this->b2bCustomers = $this->em->getRepository('OroCRMSalesBundle:B2bCustomer')->findAll();
     }
 
     public function loadOpportunities()
     {
-        $randomUser = count($this->users) - 1;
         for ($i = 0; $i < 50; $i++) {
-            $user = $this->users[mt_rand(0, $randomUser)];
+            $user = $this->getRandomUserReference();
+
             $this->setSecurityContext($user);
-            $contact = $this->contacts[array_rand($this->contacts)];
-            $opportunity = $this->createOpportunity($contact, $user);
-            $this->persist($this->em, $opportunity);
-            if ($i % self::FLUSH_MAX == 0) {
-                $this->flush($this->em);
-            }
+            $contact     = $this->contacts[array_rand($this->contacts)];
+            $customer    = $this->b2bCustomers[array_rand($this->b2bCustomers)];
+            $opportunity = $this->createOpportunity($contact, $customer, $user);
+            $this->em->persist($opportunity);
         }
-        $this->flush($this->em);
+
+        $this->em->flush();
     }
 
     /**
@@ -104,47 +72,27 @@ class LoadOpportunitiesData extends AbstractFixture implements ContainerAwareInt
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token           = new UsernamePasswordToken($user, uniqid('username'), 'main');
         $securityContext->setToken($token);
     }
 
     /**
-     * @param Contact $contact
-     * @param User $user
+     * @param Contact     $contact
+     * @param B2bCustomer $customer
+     * @param User        $user
      *
      * @return Opportunity
      */
-    protected function createOpportunity($contact, $user)
+    protected function createOpportunity($contact, $customer, $user)
     {
-        /** @var Account $account */
-        $account = $contact->getAccounts()->first();
         $opportunity = new Opportunity();
-        $opportunity->setName($account->getName());
+        $dataChannel = $this->getReference('default_channel');
+        $opportunity->setName($contact->getFirstName() . ' ' . $contact->getLastName());
         $opportunity->setContact($contact);
-        $opportunity->setAccount($account);
         $opportunity->setOwner($user);
+        $opportunity->setCustomer($customer);
+        $opportunity->setDataChannel($dataChannel);
 
         return $opportunity;
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 }

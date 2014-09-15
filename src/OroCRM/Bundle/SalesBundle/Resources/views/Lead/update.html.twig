@@ -55,7 +55,7 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="status-enabled pull-left">
+    <div class="pull-left">
         {% if entity.status.name != 'canceled' %}
             <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
         {% else %}
@@ -71,8 +71,10 @@
     {% if form.owner is defined %}
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
+
     {% set formFields = formFields|merge([
         form_row(form.name),
+        form_row(form.dataChannel),
         form_row(form.namePrefix),
         form_row(form.firstName),
         form_row(form.middleName),
@@ -82,7 +84,7 @@
         form_row(form.jobTitle),
         form_row(form.phoneNumber),
         form_row(form.email),
-        form_row(form.account),
+        form_row(form.customer),
         form_row(form.companyName),
         form_row(form.website),
         form_row(form.numberOfEmployees),

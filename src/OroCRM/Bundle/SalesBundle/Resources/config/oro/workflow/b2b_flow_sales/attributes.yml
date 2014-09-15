@@ -7,8 +7,10 @@ workflows:
                 property_path: opportunity.notes
             contact:
                 property_path: opportunity.contact
-            account:
-                property_path: opportunity.account
+            b2bcustomer:
+                property_path: opportunity.customer
+            dataChannel:
+                property_path: opportunity.dataChannel
             probability:
                 property_path: opportunity.probability
             budget_amount:

@@ -42,7 +42,7 @@ class ChannelOwnerSetListenerTest extends WebTestCase
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
         /** @var Channel $channel */
-        $channel = $this->getReference('channel');
+        $channel = $this->getReference('integration');
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
         /** @var Order $customer */

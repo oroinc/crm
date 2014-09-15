@@ -16,6 +16,8 @@ use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * Class Customer
@@ -50,9 +52,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
  * )
  * @Oro\Loggable
  */
-class Customer extends ExtendCustomer
+class Customer extends ExtendCustomer implements ChannelAwareInterface
 {
-    use IntegrationEntityTrait, OriginTrait;
+    use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
