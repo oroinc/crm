@@ -39,31 +39,41 @@ class OpportunityRepository extends EntityRepository
      */
     protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
     {
+        // select statuses
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $withSuffix = '';
-        if ($dateStart && $dateEnd) {
-            $withSuffix = ' AND ' . $qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo');
-            $qb->setParameter('dateFrom', $dateStart)
-                ->setParameter('dateTo', $dateEnd);
-        }
-        $qb->select('status.name', 'status.label', 'SUM(opportunity.budgetAmount) as budget')
+        $qb->select('status.name, status.label')
             ->from('OroCRMSalesBundle:OpportunityStatus', 'status')
-            ->leftJoin(
-                'OroCRMSalesBundle:Opportunity',
-                'opportunity',
-                'WITH',
-                'status.name = opportunity.status' . $withSuffix
-            )
-            ->groupBy('status.name')
             ->orderBy('status.name', 'ASC');
-        $groupedData = $aclHelper->apply($qb)->getArrayResult();
 
         $resultData = array();
+        foreach ($qb->getQuery()->getArrayResult() as $status) {
+            $name = $status['name'];
+            $label = $status['label'];
+            $resultData[$name] = array(
+                'name' => $name,
+                'label' => $label,
+                'budget' => 0,
+            );
+        }
+
+        // select opportunity data
+        $qb = $this->createQueryBuilder('opportunity');
+        $qb->select('IDENTITY(opportunity.status) as name, SUM(opportunity.budgetAmount) as budget')
+            ->groupBy('opportunity.status');
+
+        if ($dateStart && $dateEnd) {
+            $qb->where($qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo'))
+                ->setParameter('dateFrom', $dateStart)
+                ->setParameter('dateTo', $dateEnd);
+        }
+        $groupedData = $aclHelper->apply($qb)->getArrayResult();
+
         foreach ($groupedData as $statusData) {
-            if (!$statusData['budget']) {
-                $statusData['budget'] = 0;
+            $status = $statusData['name'];
+            $budget = (float)$statusData['budget'];
+            if ($budget) {
+                $resultData[$status]['budget'] = $budget;
             }
-            $resultData[] = $statusData;
         }
 
         return $resultData;
