@@ -4,6 +4,7 @@ parameters:
     orocrm_marketing_list.form.type.marketing_list_unsubscribed_item.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListTypeUnsubscribedItemType
     orocrm_marketing_list.form.handler.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler
     orocrm_marketing_list.form.type.entity_choice.class: OroCRM\Bundle\MarketingListBundle\Form\Type\ContactInformationEntityChoiceType
+    orocrm_marketing_list.form.type.marketing_list_select.class: OroCRM\Bundle\MarketingListBundle\Form\Type\MarketingListSelectType
 
 services:
     # MarketingList
@@ -90,3 +91,8 @@ services:
             - @orocrm_marketing_list.entity_provider.contact_information
         tags:
             - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }
+
+    orocrm_marketing_list.form.type.marketing_list_select:
+        class: %orocrm_marketing_list.form.type.marketing_list_select.class%
+        tags:
+            - { name: form.type, alias: "orocrm_marketing_list_select" }
