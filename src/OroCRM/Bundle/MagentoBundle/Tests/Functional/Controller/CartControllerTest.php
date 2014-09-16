@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 /**
  * @outputBuffering enabled
  * @dbIsolation
@@ -42,8 +44,16 @@ class CartControllerTest extends AbstractController
         $this->assertContains('Send email', $result->getContent());
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
+
+        /** @var Organization $organization */
+        $organization = $this->client
+            ->getContainer()
+            ->get('doctrine')
+            ->getRepository('OroOrganizationBundle:Organization')
+            ->getFirst();
+
         $this->assertContains(
-            'John Doe OroCRM street CITY AZ US 123456',
+            'John Doe ' . $organization->getName() . ' street CITY AZ US 123456',
             preg_replace('#\s+#', ' ', $filteredHtml)
         );
     }
