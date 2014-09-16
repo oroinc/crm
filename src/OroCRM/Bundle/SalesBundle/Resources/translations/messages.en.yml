@@ -197,6 +197,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             data_channel.label:   Channel
+            organization.label:   Organization
 
             hint: 'Sales Process #%id%'
 
