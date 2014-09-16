@@ -64,7 +64,7 @@ class CartTest extends AbstractEntityTestCase
             'cartItems'         => ['cartItems', $testItemsCollection, $testItemsCollection],
             'store'             => ['store', $testStore, $testStore],
             'statusMessage'     => ['statusMessage', 'some message', 'some message'],
-            'owner'             => ['owner', $owner, $owner]
+            'owner'             => ['owner', $owner, $owner],
         ];
     }
 }

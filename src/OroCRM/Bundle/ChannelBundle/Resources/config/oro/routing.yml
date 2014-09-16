@@ -1,0 +1,14 @@
+orocrm_channel_bundle:
+    resource: "@OroCRMChannelBundle/Controller"
+    type:     annotation
+    prefix:   /channel
+
+orocrm_channel_bundle_api:
+    resource: "@OroCRMChannelBundle/Controller/Api/Rest/ChannelController.php"
+    type:     rest
+    prefix:   api/rest/{version}/
+    requirements:
+        version:  latest|v1
+        _format:  json
+    defaults:
+        version: latest

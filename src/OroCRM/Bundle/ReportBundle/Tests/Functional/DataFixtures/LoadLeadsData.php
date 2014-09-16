@@ -20,14 +20,15 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSet;
-use Oro\Bundle\EntityConfigBundle\Entity\OptionSetRelation;
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -57,14 +58,24 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
+    /** @var BuilderFactory */
+    protected $channelBuilderFactory;
+
+    /** @var Channel */
+    protected $channel;
+
+    /** @var AbstractEnumValue[] */
+    protected $sources;
+
     /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container = $container;
-        $this->workflowManager = $container->get('oro_workflow.manager');
-        $this->configManager = $container->get('oro_entity_config.config_manager');
+        $this->container             = $container;
+        $this->workflowManager       = $container->get('oro_workflow.manager');
+        $this->configManager         = $container->get('oro_entity_config.config_manager');
+        $this->channelBuilderFactory = $container->get('orocrm_channel.builder.factory');
     }
 
     /**
@@ -74,7 +85,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->initSupportingEntities($manager);
         $this->loadLeads();
-        $this->loadSources();
     }
 
     protected function initSupportingEntities(ObjectManager $manager = null)
@@ -83,43 +93,21 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $this->em = $manager;
         }
 
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->users     = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
-    }
 
-    public function loadSources()
-    {
-        // TODO: Use cache manager instead of manual entity extracting (see git history)
-        // TODO: https://magecore.atlassian.net/browse/BAP-2706
-        $entityConfigModel = $this->em->getRepository(EntityConfigModel::ENTITY_NAME)->findOneBy(
-            array('className' => 'OroCRM\Bundle\SalesBundle\Entity\Lead')
-        );
-        $configFieldModel = $this->em->getRepository(FieldConfigModel::ENTITY_NAME)->findOneBy(
-            array(
-                'entity'    => $entityConfigModel,
-                'fieldName' => 'extend_source'
-            )
-        );
+        $className     = ExtendHelper::buildEnumValueClassName('lead_source');
+        $enumRepo      = $manager->getRepository($className);
+        $this->sources = $enumRepo->findAll();
 
-        /** @var OptionSet[] $sources */
-        $sources = $configFieldModel->getOptions()->toArray();
-        $randomSource = count($sources)-1;
+        $builder = $this->channelBuilderFactory->createBuilder();
+        $builder->setChannelType('b2b');
+        $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setEntities();
+        $this->channel = $builder->getChannel();
 
-        $leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
-
-        foreach ($leads as $lead) {
-            /** @var Lead $lead */
-            $source = $sources[mt_rand(0, $randomSource)];
-            $optionSetRelation = new OptionSetRelation();
-            $optionSetRelation->setData(
-                null,
-                $lead->getId(),
-                $configFieldModel,
-                $source
-            );
-            $this->persist($this->em, $optionSetRelation);
-        }
-        $this->flush($this->em);
+        $manager->persist($this->channel);
+        $manager->flush($this->channel);
     }
 
     public function loadLeads()
@@ -140,17 +128,17 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $data = array_combine($headers, array_values($data));
 
                 $lead = $this->createLead($data, $user);
-                $this->persist($this->em, $lead);
+                $this->em->persist($lead);
 
                 $this->loadSalesFlows($lead);
 
                 $i++;
                 if ($i % self::FLUSH_MAX == 0) {
-                    $this->flush($this->em);
+                    $this->em->flush();
                 }
             }
 
-            $this->flush($this->em);
+            $this->em->flush();
             fclose($handle);
         }
     }
@@ -167,7 +155,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             array(
                 'opportunity_name' => $lead->getName(),
                 'company_name' => $lead->getCompanyName(),
-                'account' => $lead->getAccount(),
             )
         );
         if ($this->getRandomBoolean()) {
@@ -248,6 +235,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
+        $lead->setDataChannel($this->channel);
         /** @var Address $address */
         $address = new Address();
         $address->setLabel('Primary Address');
@@ -286,6 +274,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $lead->setAddress($address);
 
+        $countSources = count($this->sources) - 1;
+        $source       = $this->sources[mt_rand(0, $countSources)];
+        $lead->setSource($source);
+
         return $lead;
     }
 
@@ -305,27 +297,6 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         /** @var EntityManager $em */
         $workflow->transit($workflowItem, $transition);
         $workflowItem->setUpdated();
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 
     public function getOrder()

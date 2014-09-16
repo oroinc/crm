@@ -80,7 +80,7 @@ class OrderTest extends AbstractEntityTestCase
             'createdAt'           => ['createdAt', $createdAt, $createdAt],
             'updatedAt'           => ['updatedAt', $updatedAt, $updatedAt],
             'channel'             => ['channel', $channel, $channel],
-            'owner'               => ['owner', $owner, $owner]
+            'owner'               => ['owner', $owner, $owner],
         ];
     }
 }

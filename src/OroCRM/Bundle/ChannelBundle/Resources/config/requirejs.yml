@@ -1,0 +1,6 @@
+config:
+    paths:
+        'orocrmchannel/js/app/components/integration-widget':            'bundles/orocrmchannel/js/app/components/integration-widget.js'
+        'orocrmchannel/js/app/components/channel':                       'bundles/orocrmchannel/js/app/components/channel.js'
+        'orocrmchannel/js/entity-management/entity-component-view':      'bundles/orocrmchannel/js/entity-management/entity-component-view.js'
+        'orocrmchannel/js/entity-management/model':                      'bundles/orocrmchannel/js/entity-management/model.js'

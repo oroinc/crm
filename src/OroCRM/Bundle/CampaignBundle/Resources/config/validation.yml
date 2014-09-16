@@ -10,7 +10,7 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - NotBlank: ~
             - Regex:
                 pattern: "/^[a-zA-Z0-9_\-]*$/"
-                message: "This value should contains only alphabetic symbols, underscore, hyphen and numbers"
+                message: "This value should contain only alphabetic symbols, underscore, hyphen and numbers."
             - Length:
                 max: 20
         startDate:
@@ -23,4 +23,31 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
         owner:
             - NotBlank: ~
         reportPeriod:
+            - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
+    properties:
+        name:
+            - NotBlank: ~
+            - Length:
+                max: 100
+        senderEmail:
+            - Email: ~
+            - Length:
+                max: 100
+        senderName:
+            - Length:
+                max: 100
+        scheduledFor:
+            - DateTime: ~
+        marketingList:
+            - NotBlank: ~
+        owner:
+            - NotBlank: ~
+        transport:
+            - NotBlank: ~
+
+OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings:
+    properties:
+        template:
             - NotBlank: ~

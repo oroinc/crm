@@ -1,7 +1,21 @@
 workflows:
     b2b_flow_sales_funnel:
         transition_definitions:
-            start_definition:
+            start_from_lead:
+                pre_conditions:
+                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Lead']]
+                post_actions:
+                    - @create_related_entity: # create Sales Funnel if it not exist yet
+                        conditions:
+                            @empty: [$sales_funnel.id]
+                        parameters: ~
+                    - @redirect: # redirect to Sales funnel view page
+                        route: 'orocrm_sales_salesfunnel_view'
+                        route_parameters:
+                            id: $sales_funnel.id
+            start_from_opportunity:
+                pre_conditions:
+                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
                 post_actions:
                     - @create_related_entity: # create Sales Funnel if it not exist yet
                         conditions:
@@ -32,13 +46,15 @@ workflows:
                         attribute: $lead.status
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
-                    @equal: [$lead.status.name, 'new']
+                    @and:
+                        - @equal: [$lead.status.name, 'new']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     @or:
                         parameters:
                             - @not_empty: $new_company_name
-                            - @not_empty: $new_account
-                        message: "Company name or account must be selected."
+                            - @not_empty: $new_b2bcustomer
+                        message: "Company name or customer must be selected."
                 post_actions: # set lead.status = "qualified"
                     - @find_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
@@ -120,53 +136,80 @@ workflows:
                                         method_parameters: [$.result.phone]
                                     - @unset_value: # unset temporary property
                                         [$.result.phone]
-                    - @tree: # create and set Account
+                    - @tree:
                         conditions:
-                            @and: # if account not selected and company name is selected
-                                - @empty: $new_account
+                            @and: # if customer not selected and company name is selected
+                                - @empty:     $new_b2bcustomer
                                 - @not_empty: $new_company_name
                         actions:
-                            - @find_entity: # try to find account by company name
-                                class: OroCRM\Bundle\AccountBundle\Entity\Account
-                                attribute: $new_account
+                            - @find_entity: # try to find b2bcustomer by company name
+                                class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                attribute: $new_b2bcustomer
                                 where:
                                     name: $new_company_name
                                 case_insensitive: true
-                            - @create_entity: # if account not found - create new one
+                            - @find_entity: # try to find account by company name
                                 conditions:
-                                    @empty: $new_account
+                                    @empty: $new_b2bcustomer
                                 parameters:
                                     class: OroCRM\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
+                                    where:
+                                        name: $new_company_name
+                                case_insensitive: true
+                            - @create_entity: # if b2bcustomer not found - create new one
+                                conditions:
+                                    @and:
+                                        - @empty: $new_account
+                                        - @empty: $new_b2bcustomer
+                                parameters:
+                                    class:     OroCRM\Bundle\AccountBundle\Entity\Account
+                                    attribute: $new_account
                                     data:
                                         name: $new_company_name
-                                        extendWebsite: $lead.website
-                                        extendEmployees: $lead.numberOfEmployees
-                    - @call_method: # connect Account with Contact
-                        object: $new_account
-                        method: addContact
-                        method_parameters: [$lead.contact]
+                            - @create_entity: # if b2bcustomer not found - create new one
+                                conditions:
+                                    @empty: $new_b2bcustomer
+                                parameters:
+                                    class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+                                    attribute: $new_b2bcustomer
+                                    data:
+                                        name:      $new_company_name
+                                        account:   $new_account
+                                        website:   $lead.website
+                                        employees: $lead.numberOfEmployees
+                                        dataChannel: $dataChannel
+                    - @call_method: # connect customer with Contact
+                        conditions:
+                            @empty: $new_b2bcustomer.contact
+                        parameters:
+                            object: $new_b2bcustomer
+                            method: setContact
+                            method_parameters: [$lead.contact]
                     - @create_entity: # create an opportunity
-                        class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+                        class:     OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
-                        flush: true
+                        flush:     true
                         data:
-                            name: $new_opportunity_name
-                            contact: $lead.contact
-                            account: $new_account
-                            lead: $lead
-                            notes: $new_notes
+                            name:        $new_opportunity_name
+                            contact:     $lead.contact
+                            customer:    $new_b2bcustomer
+                            dataChannel: $dataChannel
+                            lead:        $lead
+                            notes:       $new_notes
                     - @find_entity: # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
                     - @unset_value:
-                        [$new_account]
+                        [$new_account, $new_customer]
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @equal:
-                        message: 'Opportunity must be in status "In progress"'
-                        parameters: [$opportunity.status.name, 'in_progress']
+                    @and:
+                        - @equal:
+                            message: 'Opportunity must be in status "In progress"'
+                            parameters: [$opportunity.status.name, 'in_progress']
+                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "in_progress"
                     @and:
                         - @greater_or_equal:

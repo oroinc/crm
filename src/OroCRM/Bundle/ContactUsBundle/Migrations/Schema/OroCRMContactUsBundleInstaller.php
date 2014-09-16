@@ -17,7 +17,7 @@ class OroCRMContactUsBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_5';
+        return 'v1_6';
     }
 
     /**
@@ -79,6 +79,7 @@ class OroCRMContactUsBundleInstaller implements Installation
         $table->addColumn('contact_reason_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('preferred_contact_method', 'string', ['length' => 100]);
         $table->addColumn('feedback', 'text', ['notnull' => false]);
@@ -92,6 +93,7 @@ class OroCRMContactUsBundleInstaller implements Installation
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_342872E81023C4EE');
         $table->addIndex(['contact_reason_id'], 'IDX_342872E8374A36E9', []);
+        $table->addIndex(['data_channel_id'], 'IDX_342872E8BDC09B73', []);
         $table->addIndex(['opportunity_id'], 'IDX_342872E89A34590F', []);
         $table->addIndex(['lead_id'], 'IDX_342872E855458D', []);
         $table->addIndex(['workflow_step_id'], 'IDX_342872E871FE882C', []);
@@ -172,6 +174,13 @@ class OroCRMContactUsBundleInstaller implements Installation
             ['opportunity_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_channel'),
+            ['data_channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_342872E8BDC09B73'
         );
     }
 

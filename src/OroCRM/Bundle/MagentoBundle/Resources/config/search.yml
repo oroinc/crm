@@ -56,6 +56,14 @@ OroCRM\Bundle\MagentoBundle\Entity\Order:
                     name:                   storeName
                     target_type:            text
                     target_fields:          [storeName]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
 
 OroCRM\Bundle\MagentoBundle\Entity\Cart:
     alias:                          orocrm_magento_cart
@@ -135,6 +143,15 @@ OroCRM\Bundle\MagentoBundle\Entity\Cart:
                     name:                   label
                     target_type:            text
                     target_fields:          [statusLabel]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
+
 
 OroCRM\Bundle\MagentoBundle\Entity\Customer:
     alias:                          orocrm_magento_customer
@@ -178,3 +195,11 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
             name:                   storeName
             target_type:            text
             target_fields:          [storeName]
+        -
+            name:                  dataChannel
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name:          id
+                    target_type:   integer
+                    target_fields: [dataChannelId]
