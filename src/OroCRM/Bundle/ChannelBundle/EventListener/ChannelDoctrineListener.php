@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
@@ -116,7 +116,9 @@ class ChannelDoctrineListener
             foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
                 foreach ($groupedByEntityUpdates as &$data) {
 
-                    $data['account'] = $this->getAccount($uow, $data);
+                    if(empty($data['account'])) {
+                        $data['account'] = $this->getAccount($uow, $data);
+                    }
 
                     $entity = $this->createHistoryEntry($em, $customerIdentity, $data);
                     $em->persist($entity);
@@ -142,12 +144,12 @@ class ChannelDoctrineListener
         $changeSet = $uow->getEntityChangeSet($data['entity']);
 
         if (array_key_exists('account', $changeSet)) {
-            $account = !empty($changeSet['account'][0]) ? : $changeSet['account'][1];
+            $account = !empty($changeSet['account'][0]) ? $changeSet['account'][0] : $changeSet['account'][1];
         } else {
             $account = $data['entity']->getAccount();
         }
 
-        return ($account->getid()) ? : false;
+        return ($account instanceof Account) ? $account->getid() : false;
     }
 
     /**
@@ -243,6 +245,8 @@ class ChannelDoctrineListener
         $qb->setParameter('account', $account);
         $qb->setParameter('channel', $channel);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        $result = $qb->getQuery()->getSingleScalarResult();
+
+        return empty($result) ? $result : 0;
     }
 }
