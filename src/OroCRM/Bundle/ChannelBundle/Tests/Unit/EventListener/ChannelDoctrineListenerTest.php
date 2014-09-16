@@ -76,8 +76,6 @@ class ChannelDoctrineListenerTest extends \PHPUnit_Framework_TestCase
             'hash2' => $customer1,
         ];
 
-        $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Model\Customer')->disableOriginalConstructor()->getMock();
-
         $uow->expects($this->once())
             ->method('getScheduledEntityInsertions')
             ->will($this->returnValue($entities));
