@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Selenium\Accounts;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 
 class AclAccountTest extends Selenium2TestCase
@@ -11,6 +13,7 @@ class AclAccountTest extends Selenium2TestCase
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /* @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
@@ -35,6 +38,7 @@ class AclAccountTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /* @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - User Management - System')
@@ -115,7 +119,8 @@ class AclAccountTest extends Selenium2TestCase
 
     public function deleteAcl($login, $roleName, $username, $accountName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /* @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Account', array('Delete'), 'None')
@@ -123,8 +128,9 @@ class AclAccountTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->submit();
+        /* @var Accounts $login  */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->checkActionMenu('Delete')
             ->open(array($accountName))
@@ -134,7 +140,8 @@ class AclAccountTest extends Selenium2TestCase
 
     public function updateAcl($login, $roleName, $username, $accountName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /* @var Roles $login  */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Account', array('Edit'), 'None')
@@ -142,8 +149,9 @@ class AclAccountTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->submit();
+        /* @var Accounts $login */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
             ->checkActionMenu('Update')
             ->open(array($accountName))
@@ -152,7 +160,8 @@ class AclAccountTest extends Selenium2TestCase
 
     public function createAcl($login, $roleName, $username)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /* @var Roles $login  */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Account', array('Create'), 'None')
@@ -160,14 +169,16 @@ class AclAccountTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->submit();
+        /* @var Accounts $login */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->assertElementNotPresent("//div[@class = 'container-fluid']//a[contains(., 'Create Account')]");
     }
 
     public function viewAcl($login, $username, $roleName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /* @var Roles $login  */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Account', array('View'), 'None')
@@ -175,8 +186,9 @@ class AclAccountTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->submit();
+        /* @var Accounts $login */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->assertTitle('403 - Forbidden');
     }
 
