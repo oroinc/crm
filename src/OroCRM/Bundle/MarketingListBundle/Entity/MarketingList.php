@@ -42,6 +42,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *          }
  *      }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class MarketingList
 {

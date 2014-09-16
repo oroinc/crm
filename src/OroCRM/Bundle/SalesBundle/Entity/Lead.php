@@ -61,6 +61,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          }
  *      }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
 {

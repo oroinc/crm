@@ -54,6 +54,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  *  }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Opportunity extends ExtendOpportunity implements EmailHolderInterface, ChannelAwareInterface
 {
