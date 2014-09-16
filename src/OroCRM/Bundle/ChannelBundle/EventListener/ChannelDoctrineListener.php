@@ -247,6 +247,6 @@ class ChannelDoctrineListener
 
         $result = $qb->getQuery()->getSingleScalarResult();
 
-        return empty($result) ? $result : 0;
+        return !empty($result) ? $result : 0;
     }
 }
