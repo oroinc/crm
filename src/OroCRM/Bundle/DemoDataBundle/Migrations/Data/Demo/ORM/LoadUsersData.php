@@ -208,9 +208,13 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
     {
         static $dictionaries = array();
 
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
         if (!isset($dictionaries[$name])) {
             $dictionary = array();
-            $fileName = __DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . $name;
+            $fileName = $dictionaryDir . DIRECTORY_SEPARATOR . $name;
             foreach (file($fileName) as $item) {
                 $dictionary[] = trim($item);
             }
