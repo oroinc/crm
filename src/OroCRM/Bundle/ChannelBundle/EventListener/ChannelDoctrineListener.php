@@ -108,7 +108,6 @@ class ChannelDoctrineListener
         }
 
         $this->initializeFromEventArgs($args);
-        $this->isInProgress = true;
 
         if (!empty($this->queued)) {
             foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
@@ -125,6 +124,8 @@ class ChannelDoctrineListener
                     $this->em->persist($entity);
                 }
             }
+
+            $this->isInProgress = true;
 
             $this->em->flush();
 
