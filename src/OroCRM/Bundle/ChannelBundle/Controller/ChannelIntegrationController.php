@@ -58,7 +58,7 @@ class ChannelIntegrationController extends Controller
         return [
             'form'        => $handler->getFormView(),
             'isSubmitted' => null !== $data,
-            'savedData'   => $data
+            'savedId'     => $data
         ];
     }
 }
