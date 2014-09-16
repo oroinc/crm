@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
@@ -19,6 +20,9 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
 {
     /** @var ContainerInterface */
     protected $container;
+
+    /** @var Organization */
+    protected $organization;
 
     /** @var  Channel */
     protected $dataChannel;
@@ -65,6 +69,8 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
      */
     public function load(ObjectManager $om)
     {
+        $this->organization = $this->getReference('default_organization');
+
         $this->createDataChannel($om);
         $this->persistDemoEmbeddedForm($om);
         $this->persistDemoContactUsForm($om);
@@ -100,6 +106,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
         $embeddedForm->setCss($contactUs->getDefaultCss());
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
+        $embeddedForm->setOwner($this->organization);
         $embeddedForm->setDataChannel($this->dataChannel);
         $om->persist($embeddedForm);
     }
@@ -118,6 +125,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
             }
             $request->setPreferredContactMethod(ContactRequest::CONTACT_METHOD_BOTH);
             $request->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            $request->setOwner($this->organization);
             $request->setDataChannel($this->dataChannel);
             $om->persist($request);
         }

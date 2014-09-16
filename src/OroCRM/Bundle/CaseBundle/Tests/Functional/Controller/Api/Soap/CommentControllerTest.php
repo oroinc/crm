@@ -36,9 +36,9 @@ class CommentControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
-        $this->initSoapClient();
 
         $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->initSoapClient();
     }
 
     protected function postFixtureLoad()
@@ -132,6 +132,7 @@ class CommentControllerTest extends WebTestCase
      */
     public function testUpdate(array $originalComment)
     {
+        $this->initSoapClient();
         $id = $originalComment['id'];
 
         $updateData = [
@@ -160,6 +161,7 @@ class CommentControllerTest extends WebTestCase
      */
     public function testDelete($id)
     {
+        $this->initSoapClient();
         $result = $this->soapClient->deleteCaseComment($id);
         $this->assertTrue($result);
 

@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -27,7 +28,9 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id"
+ *          "owner_column_name"="owner_id",
+ *          "organization_field_name"="organization",
+ *          "organization_column_name"="organization_id"
  *      },
  *      "security"={
  *          "type"="ACL"
@@ -95,6 +98,14 @@ class CaseComment
      * @Oro\Versioned
      */
     protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @var \DateTime
@@ -298,5 +309,28 @@ class CaseComment
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return CaseEntity
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

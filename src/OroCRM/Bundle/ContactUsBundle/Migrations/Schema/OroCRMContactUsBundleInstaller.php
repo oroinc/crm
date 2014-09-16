@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_7\OroCRMContactUsBundle;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -17,7 +18,7 @@ class OroCRMContactUsBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7';
     }
 
     /**
@@ -35,6 +36,7 @@ class OroCRMContactUsBundleInstaller implements Installation
         $this->addOrocrmContactusReqEmailsForeignKeys($schema);
         $this->addOrocrmContactusRequestForeignKeys($schema);
         $this->addOrocrmContactusRequestCallsForeignKeys($schema);
+        OroCRMContactUsBundle::addOwner($schema);
     }
 
     /**

@@ -55,11 +55,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     protected function loadCalendars()
     {
+        $organization = $this->getReference('default_organization');
         /** @var \Oro\Bundle\UserBundle\Entity\User[] $users */
         $users = $this->user->findAll();
         foreach ($users as $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findByUser($user->getId());
+            $calendar->setOrganization($organization);
             /** @var CalendarEvent $event */
             $days = $this->getDatePeriod();
             foreach ($days as $day) {
