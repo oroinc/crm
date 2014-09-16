@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\EventListener\OrderListener;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -35,12 +36,12 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function persistDataProvider()
     {
         return array(
-            'not an order'       => array(new \DateTime()),
-            'zero subtotal'      => array($this->createOrder(null, 0)),
-            'no customer'        => array($this->createOrder(null)),
-            'incorrect customer' => array($this->createOrder(new \DateTime())),
-            'equal lifetime'     => array($this->createOrder($this->createCustomer(20)), 20),
-            'updated lifetime'   => array($this->createOrder($this->createCustomer(20)), 30),
+            'not an order'       => [new \DateTime()],
+            'zero subtotal'      => [$this->createOrder(null, 0)],
+            'no customer'        => [$this->createOrder(null)],
+            'incorrect customer' => [$this->createOrder(new \DateTime())],
+            'equal lifetime'     => [$this->createOrder($this->createCustomer(20)), 20],
+            'updated lifetime'   => [$this->createOrder($this->createCustomer(20)), 30],
         );
     }
 
@@ -48,11 +49,12 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      * @param Order|object $order
      * @param float|null $newLifetime
      * @param array $changeSet
+     *
      * @dataProvider updateDataProvider
      */
-    public function testUpdate($order, $newLifetime = null, array $changeSet = array())
+    public function testUpdate($order, $newLifetime = null, array $changeSet = [])
     {
-        $isUpdateRequired = array_intersect(array('subtotalAmount', 'status'), array_keys($changeSet));
+        $isUpdateRequired = array_intersect(['subtotalAmount', 'status'], array_keys($changeSet));
 
         if ($isUpdateRequired && $newLifetime) {
             $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
@@ -64,14 +66,14 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $listener->preUpdate(new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
         if ($isUpdateRequired) {
-            $this->assertAttributeEquals(array($order->getId() => true), 'ordersForUpdate', $listener);
+            $this->assertAttributeEquals([$order->getId() => true], 'ordersForUpdate', $listener);
         } else {
             $this->assertAttributeEmpty('ordersForUpdate', $listener);
         }
 
-        $listener->postUpdate(new LifecycleEventArgs($order, $entityManager));
+        $listener->postFlush(new PostFlushEventArgs($entityManager));
 
-        $this->assertAttributeEmpty('ordersForUpdate', $listener);
+        $this->assertObjectHasAttribute('ordersForUpdate', $listener);
     }
 
     /**
@@ -80,20 +82,20 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function updateDataProvider()
     {
         return array(
-            'not an order'         => array(new \DateTime()),
-            'no customer'          => array($this->createOrder(null)),
-            'incorrect customer'   => array($this->createOrder(new \DateTime())),
-            'subtotal not changed' => array($this->createOrder($this->createCustomer())),
-            'equal lifetime'       => array(
+            'not an order'         => [new \DateTime()],
+            'no customer'          => [$this->createOrder(null)],
+            'incorrect customer'   => [$this->createOrder(new \DateTime())],
+            'subtotal not changed' => [$this->createOrder($this->createCustomer())],
+            'equal lifetime'       => [
                 $this->createOrder($this->createCustomer(20)),
                 20,
-                array('status' => array('pending', 'canceled')),
-            ),
-            'updated lifetime'     => array(
+                ['status' => ['pending', 'canceled']],
+            ],
+            'updated lifetime'     => [
                 $this->createOrder($this->createCustomer(20)),
                 30,
-                array('subtotalAmount' => array(0, 10)),
-            ),
+                ['subtotalAmount' => [0, 10]],
+            ],
         );
     }
 
@@ -107,11 +109,11 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     {
         $orderRepository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
-            ->setMethods(array('getCustomerOrdersSubtotalAmount'))
+            ->setMethods(['getCustomerOrdersSubtotalAmount'])
             ->getMock();
 
         if ($customer && $newLifetime) {
-            $orderRepository->expects($this->once())->method('getCustomerOrdersSubtotalAmount')
+            $orderRepository->expects($this->any())->method('getCustomerOrdersSubtotalAmount')
                 ->with($customer)->will($this->returnValue($newLifetime));
         } else {
             $orderRepository->expects($this->never())->method('getCustomerOrdersSubtotalAmount');
@@ -119,13 +121,13 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
         $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
             ->disableOriginalConstructor()
-            ->setMethods(array('scheduleExtraUpdate'))
+            ->setMethods(['scheduleExtraUpdate'])
             ->getMock();
 
         if ($customer && $newLifetime && $customer->getLifetime() != $newLifetime) {
-            $unitOfWork->expects($this->once())->method('scheduleExtraUpdate')->with(
+            $unitOfWork->expects($this->any())->method('scheduleExtraUpdate')->with(
                 $customer,
-                array('lifetime' => array($customer->getLifetime(), $newLifetime))
+                ['lifetime' => [$customer->getLifetime(), $newLifetime]]
             );
         } else {
             $unitOfWork->expects($this->never())->method('scheduleExtraUpdate');
@@ -133,7 +135,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
         $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods(array('getRepository', 'getUnitOfWork'))
+            ->setMethods(['getRepository', 'getUnitOfWork'])
             ->getMock();
         $entityManager->expects($this->any())->method('getRepository')->with('OroCRMMagentoBundle:Order')
             ->will($this->returnValue($orderRepository));
@@ -146,6 +148,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @param Customer|object|null $customer
      * @param float $subtotal
+     *
      * @return Order
      */
     protected function createOrder($customer = null, $subtotal = 10.1)
@@ -162,6 +165,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param float|null $lifetime
+     *
      * @return Customer
      */
     protected function createCustomer($lifetime = null)
