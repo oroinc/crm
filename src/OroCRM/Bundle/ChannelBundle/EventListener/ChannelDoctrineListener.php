@@ -150,7 +150,7 @@ class ChannelDoctrineListener
         return ($account->getid()) ? : false;
     }
 
-    /***
+    /**
      * @param string  $customerIdentity
      * @param Object  $entity
      * @param Account $account
