@@ -8,8 +8,8 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-
 use Doctrine\ORM\UnitOfWork;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
@@ -147,7 +147,7 @@ class ChannelDoctrineListener
             $account = $data['entity']->getAccount();
         }
 
-        return $account;
+        return ($account->getid()) ? : false;
     }
 
     /***
@@ -218,7 +218,7 @@ class ChannelDoctrineListener
         $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
         $qb->set('l.status', LifetimeValueHistory::STATUS_OLD);
         $qb->andWhere('l.account = :account');
-        $qb->andWhere('l.channel = :channel');
+        $qb->andWhere('l.dataChannel = :channel');
         $qb->setParameter('account', $account);
         $qb->setParameter('channel', $channel);
         $qb->getQuery()->execute();
