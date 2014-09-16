@@ -37,7 +37,7 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
-
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->createChannel();
 
         $contactUsRequest = new ContactRequest();
@@ -47,6 +47,7 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
         $contactUsRequest->setEmailAddress('email@email.com');
         $contactUsRequest->setComment('some comment');
         $contactUsRequest->setDataChannel($this->getReference('default_channel'));
+        $contactUsRequest->setOwner($organization);
 
         $this->em->persist($contactUsRequest);
         $this->em->flush();
@@ -63,6 +64,7 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
         $builder->setName(self::CHANNEL_NAME);
         $builder->setChannelType(self::CHANNEL_TYPE);
         $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setOwner($this->em->getRepository('OroOrganizationBundle:Organization')->getFirst());
 
         $channel = $builder->getChannel();
 

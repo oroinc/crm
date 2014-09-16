@@ -59,6 +59,7 @@ class MarketingListTest extends \PHPUnit_Framework_TestCase
             array('type', $type),
             array('segment', $this->getMock('Oro\Bundle\SegmentBundle\Entity\Segment')),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
+            array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')),
             array('lastRun', new \DateTime()),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),

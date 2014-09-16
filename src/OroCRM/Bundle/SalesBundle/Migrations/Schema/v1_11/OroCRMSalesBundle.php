@@ -36,6 +36,16 @@ class OroCRMSalesBundle implements Migration
                 ]
             )
         );
+        //Add organization fields to ownership entity config
+        $queries->addQuery(
+            new UpdateOwnershipTypeQuery(
+                'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
+                [
+                    'organization_field_name' => 'organization',
+                    'organization_column_name' => 'organization_id'
+                ]
+            )
+        );
     }
 
     /**
@@ -73,6 +83,16 @@ class OroCRMSalesBundle implements Migration
             ['organization_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+
+        $table = $schema->getTable('orocrm_sales_b2bcustomer');
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addIndex(['organization_id'], 'idx_dac0bd2932c8a3de');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 }

@@ -23,6 +23,7 @@ services:
 
     orocrm_case.manager.comment.api:
         class: %orocrm_case.manager.comment.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_case.comment.class%
             - @doctrine.orm.entity_manager

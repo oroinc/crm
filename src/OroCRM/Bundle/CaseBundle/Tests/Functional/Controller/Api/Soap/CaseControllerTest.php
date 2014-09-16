@@ -36,9 +36,9 @@ class CaseControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
-        $this->initSoapClient();
 
         $this->loadFixtures(['OroCRM\Bundle\CaseBundle\Tests\Functional\DataFixtures\LoadCaseEntityData']);
+        $this->initSoapClient();
     }
 
     protected function postFixtureLoad()
