@@ -110,6 +110,8 @@ class ChannelDoctrineListener
         $this->initializeFromEventArgs($args);
 
         if (!empty($this->queued)) {
+            $toOutDate = [];
+
             foreach ($this->queued as $customerIdentity => $groupedByEntityUpdates) {
                 foreach ($groupedByEntityUpdates as $data) {
                     $account = is_object($data['account'])
@@ -121,8 +123,14 @@ class ChannelDoctrineListener
                         : $this->em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
 
                     $entity = $this->createHistoryEntry($customerIdentity, $account, $channel);
+                    $toOutDate[] = [$account, $channel];
+
                     $this->em->persist($entity);
                 }
+            }
+
+            foreach (array_chunk($toOutDate, 50) as $chunks) {
+                $this->setOldHistoryStatus($chunks);
             }
 
             $this->isInProgress = true;
@@ -178,8 +186,6 @@ class ChannelDoctrineListener
      */
     protected function createHistoryEntry($customerIdentity, Account $account, Channel $channel)
     {
-        $this->setOldHistoryStatus($account, $channel);
-
         $history = new LifetimeValueHistory();
         $history->setAmount($this->calculateLifetime($customerIdentity, $account, $channel));
         $history->setDataChannel($channel);
@@ -189,19 +195,23 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param Account $account
-     * @param Channel $channel
+     * @param array $records
      */
-    protected function setOldHistoryStatus(Account $account, Channel $channel)
+    protected function setOldHistoryStatus(array $records)
     {
+        $accounts = $channels = [];
+        foreach ($records as $row) {
+            list($accounts[], $channels[]) = $row;
+        }
+
         /** @var QueryBuilder $qb */
         $qb = $this->em->createQueryBuilder();
         $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
         $qb->set('l.status', LifetimeValueHistory::STATUS_OLD);
-        $qb->andWhere('l.account = :account');
-        $qb->andWhere('l.dataChannel = :channel');
-        $qb->setParameter('account', $account);
-        $qb->setParameter('channel', $channel);
+        $qb->andWhere('l.account IN (:accounts)');
+        $qb->andWhere('l.dataChannel IN (:channels)');
+        $qb->setParameter('accounts', $accounts);
+        $qb->setParameter('channels', $channels);
 
         $qb->getQuery()->execute();
     }
