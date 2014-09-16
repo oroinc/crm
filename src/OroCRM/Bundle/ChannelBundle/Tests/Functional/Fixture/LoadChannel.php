@@ -43,6 +43,6 @@ class LoadChannel extends AbstractFixture
      */
     protected function loadOwner()
     {
-        return $this->em->getRepository('OroOrganizationBundle:Organization')->findOneByName('default');
+        return $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
     }
 }

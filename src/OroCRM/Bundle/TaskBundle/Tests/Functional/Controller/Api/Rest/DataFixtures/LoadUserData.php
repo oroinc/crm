@@ -33,7 +33,7 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
             ->getRepository('OroUserBundle:Role')
             ->findBy(array('role' => 'IS_AUTHENTICATED_ANONYMOUSLY'));
 
-        $organization = $this->getReference('default_organization');
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $user = $userManager->createUser();
         $api = new UserApi();

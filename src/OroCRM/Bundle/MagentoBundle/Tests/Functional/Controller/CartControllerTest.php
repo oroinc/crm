@@ -43,7 +43,7 @@ class CartControllerTest extends AbstractController
 
         $filteredHtml = str_replace(['<br/>', '<br />'], ' ', $result->getContent());
         $this->assertContains(
-            'John Doe street CITY AZ US 123456',
+            'John Doe OroCRM street CITY AZ US 123456',
             preg_replace('#\s+#', ' ', $filteredHtml)
         );
     }
