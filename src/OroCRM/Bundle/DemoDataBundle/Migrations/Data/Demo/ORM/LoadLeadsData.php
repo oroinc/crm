@@ -125,7 +125,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function loadLeads()
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "leads.csv", "r");
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "leads.csv", "r");
         if ($handle) {
             $headers = array();
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {

@@ -85,7 +85,11 @@ class LoadAccountData extends AbstractFixture implements ContainerAwareInterface
     {
         $companies = array();
 
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "accounts.csv", "r");
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "accounts.csv", "r");
         if ($handle) {
             $headers = array();
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
