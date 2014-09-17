@@ -6,6 +6,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class AccountTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,8 +14,15 @@ class AccountTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new Account();
         $entity->setName('Test');
+
         $this->assertEquals('Test', $entity->getName());
         $this->assertEquals('Test', (string)$entity);
+
+        $organization = new Organization();
+        $this->assertNull($entity->getOrganization());
+        $entity->setOrganization($organization);
+        $this->assertSame($organization, $entity->getOrganization());
+
     }
 
     public function testBeforeSave()

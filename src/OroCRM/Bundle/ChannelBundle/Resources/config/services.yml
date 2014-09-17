@@ -130,6 +130,7 @@ services:
     # Channel API
     orocrm_channel.channel.manager:
         class: %orocrm_channel.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager

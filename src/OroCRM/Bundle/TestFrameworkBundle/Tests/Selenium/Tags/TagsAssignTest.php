@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Tags;
 
 use Oro\Bundle\SearchBundle\Tests\Selenium\Pages\Search;
+use Oro\Bundle\TagBundle\Tests\Selenium\Pages\Tags;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use Oro\Bundle\UserBundle\Tests\Selenium\Pages\User;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
+use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 /**
  * Class TagsAssignTest
@@ -22,6 +24,7 @@ class TagsAssignTest extends Selenium2TestCase
         $tagName = 'Tag_'.mt_rand();
 
         $login = $this->login();
+        /* @var Tags $login */
         $login->openTags('Oro\Bundle\TagBundle')
             ->add()
             ->assertTitle('Create Tag - Tags - System')
@@ -45,6 +48,7 @@ class TagsAssignTest extends Selenium2TestCase
 
         $login = $this->login();
 
+        /* @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->setAccountName($accountName)
@@ -69,6 +73,7 @@ class TagsAssignTest extends Selenium2TestCase
         $contactName = 'Contact_'.mt_rand();
 
         $login = $this->login();
+        /* @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->add()
             ->setFirstName($contactName . '_first')

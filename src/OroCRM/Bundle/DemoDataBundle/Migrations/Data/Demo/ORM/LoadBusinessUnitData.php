@@ -47,17 +47,8 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
     public function load(ObjectManager $manager)
     {
         /** @var Organization $organization */
-        $organization = $this->organizationRepository->findOneBy(array('name' => 'default'));
-        if (!$organization) {
-            $organization = $this->organizationRepository->findOneBy(array('name' => 'Acme, Inc'));
-        }
-        if (!$organization) {
-            throw new \Exception('"default" company is not defined');
-        }
+        $organization = $this->organizationRepository->getFirst();
 
-        $organization->setName('Acme, Inc');
-
-        $this->persist($this->organizationManager, $organization);
         $this->addReference('default_organization', $organization);
 
         /** @var BusinessUnit $oroMain */

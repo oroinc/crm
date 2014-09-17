@@ -13,15 +13,16 @@ definitions:
                         class:     OroCRM\Bundle\ContactBundle\Entity\Contact
                         attribute: $contact
                         data:
-                            birthday:    $birthday
-                            email:       $email
-                            firstName:   $firstName
-                            gender:      $gender
-                            lastName:    $lastName
-                            middleName:  $middleName
-                            namePrefix:  $namePrefix
-                            nameSuffix:  $nameSuffix
-                            owner:       $owner
+                            birthday:     $birthday
+                            email:        $email
+                            firstName:    $firstName
+                            gender:       $gender
+                            lastName:     $lastName
+                            middleName:   $middleName
+                            namePrefix:   $namePrefix
+                            nameSuffix:   $nameSuffix
+                            owner:        $owner
+                            organization: $organization
                     - @tree: # add Contact Email
                         conditions:
                             @not_empty: $email
@@ -97,6 +98,7 @@ definitions:
                             defaultContact: $contact
                             name:           $.accountName
                             owner:          $owner
+                            organization:   $organization
                     - @unset_value: [$.accountName]
 
 triggers:

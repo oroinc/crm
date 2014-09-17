@@ -5,6 +5,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface
 {
@@ -23,6 +24,9 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
      */
     public function load(ObjectManager $manager)
     {
+        /** @var Organization $organization */
+        $organization = $this->getReference('default_organization');
+
         $handle  = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         $headers = fgetcsv($handle, 1000, ",");
 
@@ -31,10 +35,12 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
         while (($data = fgetcsv($handle, 1000, ",")) !== false) {
             $data = array_combine($headers, array_values($data));
 
+
             if (!isset($companies[$data['Company']])) {
                 $account = new Account();
                 $account->setName($data['Company']);
                 $account->setOwner($this->getRandomUserReference());
+                $account->setOrganization($organization);
 
                 $this->em->persist($account);
 

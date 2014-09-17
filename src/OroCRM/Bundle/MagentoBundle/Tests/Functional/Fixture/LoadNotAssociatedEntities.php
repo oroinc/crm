@@ -38,6 +38,8 @@ class LoadNotAssociatedEntities extends AbstractFixture implements ContainerAwar
             ->getRepository('OroOrganizationBundle:BusinessUnit')
             ->findOneByName('Main');
 
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+
         $user = new User();
         $user->setUsername('somename');
         $user->addGroup($group);
@@ -50,6 +52,7 @@ class LoadNotAssociatedEntities extends AbstractFixture implements ContainerAwar
         $user->addGroup($group);
         $user->setPlainPassword('test password');
         $user->setSalt(md5(mt_rand(1, 222)));
+        $user->setOrganization($organization);
 
         $userManager->updateUser($user);
         $this->setReference('not_associated_entities_owner', $user);
@@ -57,6 +60,7 @@ class LoadNotAssociatedEntities extends AbstractFixture implements ContainerAwar
         $account = new Account();
         $account->setName('Some Test Name');
         $account->setOwner($user);
+        $account->setOrganization($organization);
         $manager->persist($account);
         $this->setReference('not_associated_account', $account);
 
@@ -64,6 +68,7 @@ class LoadNotAssociatedEntities extends AbstractFixture implements ContainerAwar
         $contact->setFirstName('Test First Name');
         $contact->setLastName('Test Last Name');
         $contact->setOwner($user);
+        $contact->setOrganization($organization);
         $manager->persist($contact);
         $this->setReference('not_associated_contact', $contact);
 
