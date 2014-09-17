@@ -12,6 +12,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class AccountController extends Controller
 {
@@ -27,7 +28,9 @@ class AccountController extends Controller
      */
     public function viewAction(Account $account)
     {
-        $channels = $this->getDoctrine()->getRepository('OroIntegrationBundle:Channel')->findAll();
+        $channels = $this->getDoctrine()
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->findBy(['status' => Channel::STATUS_ACTIVE]);
 
         return array('entity' => $account, 'channels' => $channels);
     }
