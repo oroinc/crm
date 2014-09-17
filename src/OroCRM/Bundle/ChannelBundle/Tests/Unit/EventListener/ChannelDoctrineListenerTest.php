@@ -49,34 +49,32 @@ class ChannelDoctrineListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityManager')
             ->will($this->returnValue($em));
 
-        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
+        $account    = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
             ->disableOriginalConstructor()->getMock();
+        $account_id = spl_object_hash($account);
         $account->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(152));
+            ->will($this->returnValue($account_id));
 
-        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channel    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()->getMock();
+        $channel_id = spl_object_hash($channel);
         $channel->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue(28));
+            ->will($this->returnValue($channel_id));
 
         $customer = new Customer();
         $customer->setAccount($account);
         $customer->setDataChannel($channel);
+        $customer->setId(1);
 
         $customer1 = clone $customer;
-        $customer1->setId(1);
-
-        $customer2 = clone $customer;
         $customer1->setId(2);
 
         $entities = [
-            'hash1' => $customer1,
-            'hash2' => $customer2,
+            'hash1' => $customer,
+            'hash2' => $customer1,
         ];
-
-        $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Model\Customer')->disableOriginalConstructor()->getMock();
 
         $uow->expects($this->once())
             ->method('getScheduledEntityInsertions')
@@ -96,7 +94,6 @@ class ChannelDoctrineListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->channelDoctrineListener->onFlush($args);
 
-
         $reflectionProperty = new \ReflectionProperty(get_class($this->channelDoctrineListener), 'queued');
         $reflectionProperty->setAccessible(true);
         $field = $reflectionProperty->getValue($this->channelDoctrineListener);
@@ -104,16 +101,11 @@ class ChannelDoctrineListenerTest extends \PHPUnit_Framework_TestCase
         foreach ($field as $entity => $value) {
             $this->assertEquals($entity, 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer');
             foreach ($value as $entityKey => $changeset) {
-                $this->assertEquals($entityKey, '152__28');
+                $this->assertEquals($entityKey, $account_id . '__' . $channel_id);
                 $this->assertArrayHasKey('account', $changeset);
                 $this->assertArrayHasKey('channel', $changeset);
-                $this->assertArrayHasKey('entity', $changeset);
-                $this->assertEquals($changeset['account'], 152);
-                $this->assertEquals($changeset['channel'], 28);
-                $this->assertInstanceOf(
-                    'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
-                    $changeset['entity']
-                );
+                $this->assertEquals($changeset['account'], $account_id);
+                $this->assertEquals($changeset['channel'], $channel_id);
             }
         }
     }

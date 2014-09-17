@@ -6,8 +6,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
-
 use Doctrine\ORM\PersistentCollection;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
@@ -15,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 class OrderListener
 {
     /** @var array */
-    protected $ordersForUpdate = array();
+    protected $ordersForUpdate = [];
 
     /** @var bool */
     protected $isInProgress = false;
@@ -43,7 +43,7 @@ class OrderListener
 
         // if subtotal or status has been changed
         if ($this->isOrderValid($entity)
-            && array_intersect(array('subtotalAmount', 'status'), array_keys($event->getEntityChangeSet()))
+            && array_intersect(['subtotalAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
