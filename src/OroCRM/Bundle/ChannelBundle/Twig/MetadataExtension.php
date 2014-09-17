@@ -20,9 +20,7 @@ class MetadataExtension extends \Twig_Extension
     }
 
     /**
-     * Returns a list of functions to add to the existing list.
-     *
-     * @return array An array of functions
+     * {@inheritdoc}
      */
     public function getFunctions()
     {
@@ -64,9 +62,7 @@ class MetadataExtension extends \Twig_Extension
     }
 
     /**
-     * Returns the name of the extension.
-     *
-     * @return string The extension name
+     * {@inheritdoc}
      */
     public function getName()
     {

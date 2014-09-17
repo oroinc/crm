@@ -155,7 +155,7 @@ services:
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
