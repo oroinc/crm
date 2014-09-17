@@ -112,9 +112,11 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new OrderListener();
 
-        $reflectionProperty = new \ReflectionProperty(get_class($listener), 'ordersForUpdate');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($listener, [1=>true]);
+        if ($newLifetime && $order->getCustomer()->getLifetime() !== $newLifetime) {
+            $reflectionProperty = new \ReflectionProperty(get_class($listener), 'ordersForUpdate');
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($listener, [1=>true]);
+        }
 
         $listener->postFlush(new PostFlushEventArgs($entityManager));
 
