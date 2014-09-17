@@ -78,7 +78,7 @@ class DashboardController extends Controller
         $chartViewBuilder = $this->get('oro_chart.view_builder');
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_by_customer_chart');
-        $data['chartView'] = $orderDataProvider->getAverageOrderAmountByCustomerChartView($chartViewBuilder);
+        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView($chartViewBuilder);
 
         return $data;
     }

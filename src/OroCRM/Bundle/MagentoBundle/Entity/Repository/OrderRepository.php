@@ -54,7 +54,7 @@ class OrderRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return array
      */
-    public function getAverageOrdersByCustomers(AclHelper $aclHelper)
+    public function getAverageOrderAmount(AclHelper $aclHelper)
     {
         /** @var \DateTime $sliceDate */
         list($sliceDate, $monthMatch, $channelTemplate) = $this->getOrderSliceDateAndTemplates();
@@ -78,7 +78,10 @@ class OrderRepository extends EntityRepository
         $sql = '
             SELECT data_channel_id, month_created, AVG(order_amount) as average_order_amount
             FROM (
-                SELECT data_channel_id, EXTRACT(month from created_at) as month_created, COUNT(id) as order_amount
+                SELECT
+                    data_channel_id,
+                    EXTRACT(month from created_at) as month_created,
+                    SUM(subtotal_amount - discount_amount) as order_amount
                 FROM orocrm_magento_order
                 WHERE created_at > DATE ?
                 GROUP BY customer_id, data_channel_id, month_created

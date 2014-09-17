@@ -44,11 +44,11 @@ class OrderDataProvider
      * @param ChartViewBuilder $viewBuilder
      * @return ChartView
      */
-    public function getAverageOrderAmountByCustomerChartView(ChartViewBuilder $viewBuilder)
+    public function getAverageOrderAmountChartView(ChartViewBuilder $viewBuilder)
     {
         /** @var OrderRepository $orderRepository */
         $orderRepository = $this->registry->getRepository('OroCRMMagentoBundle:Order');
-        $result = $orderRepository->getAverageOrdersByCustomers($this->aclHelper);
+        $result = $orderRepository->getAverageOrderAmount($this->aclHelper);
 
         // prepare chart items
         $items = [];
@@ -81,7 +81,8 @@ class OrderDataProvider
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label' => $orderAmountLabel
+                    'label' => $orderAmountLabel,
+                    'type' => 'currency'
                 ],
             ],
         ];
