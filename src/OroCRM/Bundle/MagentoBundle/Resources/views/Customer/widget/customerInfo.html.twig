@@ -1,6 +1,31 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
-<div class="widget-content row-fluid row-fluid-divider">
+{% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
+{% set tabs = [] %}
+{% if 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order' in customer.dataChannel.entities %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': "orocrm.magento.order.entity_plural_label"|trans,
+            'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
+{% endif %}
+{% if 'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart' in customer.dataChannel.entities %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'orocrm_magento_customer_carts' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': "orocrm.magento.cart.entity_plural_label"|trans,
+            'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': customer.channel.id})
+        }
+    ]) %}
+{% endif %}
+
+{% set hasTabs = tabs|length > 0 %}
+
+<div class="widget-content row-fluid {% if hasTabs %}row-fluid-divider{% endif %}">
     <div class="responsive-cell form-horizontal">
         {% set customer_name_link %}
             <a href="{{ path("orocrm_magento_customer_view", {'id':customer.id}) }}">
@@ -43,22 +68,10 @@
         {{ UI.renderProperty("orocrm.magento.customer.gender.label"|trans, oro_gender(customer.gender)) }}
         {{ UI.renderProperty("orocrm.magento.customer.vat.label"|trans, customer.vat is null ? null : customer.vat|oro_format_percent ) }}
     </div>
-    <div class="responsive-cell" id="magento-without-border-tabs">
-        {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
-        {% set tabs =
-            [{
-                'alias': 'orocrm_magento_customer_orders' ~ uniqueSuffix,
-                'widgetType': 'block',
-                'label': "orocrm.magento.order.entity_plural_label"|trans,
-                'url': path('orocrm_magento_widget_customer_orders', {'customerId': customer.id, 'channelId': customer.channel.id})
-            },
-            {
-                'alias': 'orocrm_magento_customer_carts' ~ uniqueSuffix,
-                'widgetType': 'block',
-                'label': "orocrm.magento.cart.entity_plural_label"|trans,
-                'url': path('orocrm_magento_widget_customer_carts', {'customerId': customer.id, 'channelId': customer.channel.id})
-            }]
-        %}
-        {{ tabPanel(tabs) }}
-    </div>
+
+    {% if hasTabs %}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {{ tabPanel(tabs) }}
+        </div>
+    {% endif %}
 </div>

@@ -3,7 +3,7 @@
 
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
 {% set tabs = [] %}
-{% if 1 == 1 %}
+{% if 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead' in channel.entities %}
     {% set tabs = tabs|merge([
         {
             'alias': 'orocrm_sales_b2bcustomer_leads' ~ uniqueSuffix,
@@ -13,7 +13,7 @@
         }
     ]) %}
 {% endif %}
-{% if 1 == 1 %}
+{% if 'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity' in channel.entities %}
     {% set tabs = tabs|merge([
         {
             'alias': 'orocrm_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
