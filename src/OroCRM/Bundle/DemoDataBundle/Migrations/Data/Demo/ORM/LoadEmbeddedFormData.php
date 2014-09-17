@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +17,7 @@ use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 use OroCRM\Bundle\ContactUsBundle\Form\Type\ContactRequestType;
 
-class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInterface
+class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /** @var ContainerInterface */
     protected $container;
@@ -55,6 +56,16 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
         ),
     );
     // @codingStandardsIgnoreEnd
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadBusinessUnitData'
+        ];
+    }
 
     /**
      * {@inheritDoc}
@@ -107,7 +118,6 @@ class LoadEmbeddedFormData extends AbstractFixture implements ContainerAwareInte
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
         $embeddedForm->setOwner($this->organization);
-        $embeddedForm->setDataChannel($this->dataChannel);
         $om->persist($embeddedForm);
     }
 
