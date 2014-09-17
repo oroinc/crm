@@ -959,6 +959,7 @@ datagrid:
                 acl_recource: orocrm_magento_cart_view
                 rowAction:    true
 
+    # @todo: use for b2b account widget or remove
     magento-account-order-grid:
         source:
             type: orm

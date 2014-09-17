@@ -227,7 +227,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
             - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }
-            - { name: kernel.event_listener, event: oro_menu.configure.account_sales_tab_panel, method: onNavigationConfigure }
 
     orocrm_channel.state_cache:
           parent: oro.cache.abstract
