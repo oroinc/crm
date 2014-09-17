@@ -49,7 +49,6 @@ class OroCRMCampaignBundle implements Migration
     {
         $table = $schema->getTable($tableName);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_E9A0640332C8A3DE', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
