@@ -27,6 +27,7 @@ class OroCRMChannelBundle implements Migration
     {
         $table = $schema->createTable('orocrm_channel_lifetime_hist');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn(
@@ -38,6 +39,8 @@ class OroCRMChannelBundle implements Migration
         $table->setPrimaryKey(['id']);
         $table->addIndex(['data_channel_id'], 'IDX_2B156554BDC09B73', []);
         $table->addIndex(['account_id'], 'IDX_2B1565549B6B5FBA', []);
+        $table->addIndex(['account_id', 'data_channel_id', 'status'], 'orocrm_chl_ltv_hist_idx');
+        $table->addIndex(['status'], 'orocrm_chl_ltv_hist_status_idx');
     }
 
     /**

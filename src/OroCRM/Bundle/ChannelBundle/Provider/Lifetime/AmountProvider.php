@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider\Lifetime;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 
@@ -9,6 +10,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class AmountProvider
 {
@@ -24,76 +26,57 @@ class AmountProvider
     }
 
     /**
+     * Returns account lifetime value aggregated for all channels if $channel attribute is not passed.
+     * Or for single channel otherwise.
+     *
      * @param Account      $account
      * @param Channel|null $channel
      *
-     * @return double
+     * @return float
      */
     public function getAccountLifeTimeValue(Account $account, Channel $channel = null)
     {
         if (null !== $channel) {
-            $qb = $this->getChannelAccountLifetimeQueryBuilder();
+            $qb = $this->getChannelAccountLifetimeQueryBuilder(true);
             $qb->setParameter('dataChannel', $channel);
-            $qb->setParameter('account', $account);
-
-            $result = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR);
         } else {
-            $result = $this->getAccountLifetime($account->getId());
+            $qb = $this->getChannelAccountLifetimeQueryBuilder();
         }
 
-        return (float)$result;
+        $qb->setParameter('account', $account);
+        $result = $qb->getQuery()->getOneOrNullResult(AbstractQuery::HYDRATE_SCALAR);
+
+        return (float)($result ? reset($result) : 0);
     }
 
     /**
-     * @return \Doctrine\ORM\QueryBuilder
+     * Returns query builder that allows to fetch account lifetime value from history table
+     * Following parameters are required to be passed:
+     *  - account  Account entity or identifier
+     *
+     * Following parameters are optional:
+     *  - dataChannel - Channel entity or id to be used for fetch criteria, required if $addChannelParam is set to true
+     *
+     * @param bool $addChannelParam
+     *
+     * @return QueryBuilder
      */
-    protected function getChannelAccountLifetimeQueryBuilder()
+    public function getChannelAccountLifetimeQueryBuilder($addChannelParam = false)
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
         $qb = $em->createQueryBuilder();
         $qb->from('OroCRMChannelBundle:LifetimeValueHistory', 'h');
-        $qb->select('h.amount');
-        $qb->andWhere('h.dataChannel = :dataChannel');
-        $qb->andWhere('h.amount = :account');
-        $qb->orderBy('h.id', 'DESC');
+        $qb->select('SUM(h.amount)');
+        $qb->andWhere('h.account = :account');
+        if ($addChannelParam) {
+            // do not change order, need for idx
+            $qb->andWhere('h.dataChannel = :dataChannel');
+        }
+        $qb->andWhere('h.status = :status');
+        $qb->setParameter('status', LifetimeValueHistory::STATUS_NEW);
         $qb->setMaxResults(1);
 
         return $qb;
-    }
-
-    /**
-     * @param int $accountId
-     *
-     * @return bool|string
-     */
-    protected function getAccountLifetime($accountId)
-    {
-        /** @var EntityManager $em */
-        $em   = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
-        $expr = $em->getExpressionBuilder();
-
-        $qb = $em->createQueryBuilder();
-        $qb->from('OroCRMChannelBundle:LifetimeValueHistory', 'h');
-        $qb->select($expr->max('h.id'));
-        $qb->where('h.account = :accountId');
-        $qb->setParameter('accountId', $accountId);
-        $qb->groupBy('h.dataChannel', 'h.account');
-
-        /**
-         * SELECT SUM(h.amount)
-         * FROM (
-         *     SELECT  MAX(dd.id) as id
-         *     FROM history dd where account_id = 10
-         *     GROUP BY  dd.c_id,  dd.account_id
-         * ) as maxres
-         * JOIN history h ON h.id = maxres.id WHERE h.account_id = 10
-         */
-        $statement = $em->getConnection()->executeQuery(
-            'SELECT COUNT(*) FROM (' . $qb->getQuery()->getSQL() . ') AS e',
-            [],
-            []
-        );
-        return $statement->fetchColumn();
     }
 }

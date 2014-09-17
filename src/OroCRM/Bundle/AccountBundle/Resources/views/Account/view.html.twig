@@ -100,7 +100,7 @@
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
             {% spaceless %}
-                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
+                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.channelType %}
                 {{ placeholder(placeHolderName, {'accountId': entity.id, 'channelId': channel.id}) }}
             {% endspaceless %}
         {%- endset -%}

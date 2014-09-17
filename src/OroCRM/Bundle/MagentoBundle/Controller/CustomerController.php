@@ -11,9 +11,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @Route("/customer")
@@ -64,7 +64,7 @@ class CustomerController extends Controller
      *          requirements={"accountId"="\d+", "channelId"="\d+"}
      * )
      * @ParamConverter("account", class="OroCRMAccountBundle:Account", options={"id" = "accountId"})
-     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
@@ -72,9 +72,9 @@ class CustomerController extends Controller
     {
         $customers = $this->getDoctrine()
             ->getRepository('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer')
-            ->findBy(array('account' => $account, 'channel' => $channel));
+            ->findBy(array('account' => $account, 'dataChannel' => $channel));
 
-        return array('customers' => $customers, 'channel' => $channel);
+        return array('customers' => $customers, 'channel' => $channel, 'account' => $account);
     }
 
     /**
@@ -83,7 +83,7 @@ class CustomerController extends Controller
      *        name="orocrm_magento_widget_customer_info",
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
-     * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id" = "channelId"})
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
      */
