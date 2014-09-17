@@ -3,23 +3,23 @@
 
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
 {% set tabs = [] %}
-{% if 0 == 1 %}
+{% if 1 == 1 %}
     {% set tabs = tabs|merge([
         {
             'alias': 'orocrm_sales_b2bcustomer_leads' ~ uniqueSuffix,
             'widgetType': 'block',
             'label': "orocrm.sales.b2bcustomer.leads.label"|trans,
-            'url': path('orocrm_sales_widget_b2bcustomer_leads', {'customerId': customer.id, 'channelId': channel.id})
+            'url': path('orocrm_sales_b2bcustomer_widget_leads', {'id': customer.id})
         }
     ]) %}
 {% endif %}
-{% if 0 == 1 %}
+{% if 1 == 1 %}
     {% set tabs = tabs|merge([
         {
             'alias': 'orocrm_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
             'widgetType': 'block',
             'label': "orocrm.sales.b2bcustomer.opportunities.label"|trans,
-            'url': path('orocrm_sales_widget_b2bcustomer_opportunities', {'customerId': customer.id, 'channelId': channel.id})
+            'url': path('orocrm_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
         }
     ]) %}
 {% endif %}
