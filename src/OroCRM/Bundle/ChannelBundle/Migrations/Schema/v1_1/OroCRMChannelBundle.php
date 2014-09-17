@@ -27,7 +27,7 @@ class OroCRMChannelBundle implements Migration
     {
         $table = $schema->createTable('orocrm_channel_lifetime_hist');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
-        $table->addColumn('status', 'boolean', []);
+        $table->addColumn('status', 'boolean', ['notnull' => true]);
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn(

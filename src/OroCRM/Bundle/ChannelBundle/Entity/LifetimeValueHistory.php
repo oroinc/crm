@@ -29,7 +29,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="boolean")
+     * @ORM\Column(name="status", type="boolean", nullable=false)
      */
     protected $status;
 
@@ -70,7 +70,15 @@ class LifetimeValueHistory implements ChannelAwareInterface
     }
 
     /**
-     * @param string $status
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param bool $status
      */
     public function setStatus($status)
     {
@@ -78,19 +86,11 @@ class LifetimeValueHistory implements ChannelAwareInterface
     }
 
     /**
-     * @return string
+     * @return bool
      */
     public function getStatus()
     {
         return $this->status;
-    }
-
-    /**
-     * @return int
-     */
-    public function getId()
-    {
-        return $this->id;
     }
 
     /**
