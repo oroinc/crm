@@ -2,15 +2,18 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @Route("/b2bcustomer")
@@ -195,5 +198,40 @@ class B2bCustomerController extends Controller
             'routeName'   => 'orocrm_sales_opportunity_info',
             'extraData'   => ['Email' => 'primaryEmail']
         ];
+    }
+
+    /**
+     * @Route(
+     *      "/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}",
+     *      name="orocrm_sales_widget_account_b2bcustomers_info",
+     *      requirements={"accountId"="\d+", "channelId"="\d+"}
+     * )
+     * @ParamConverter("account", class="OroCRMAccountBundle:Account", options={"id" = "accountId"})
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @Template
+     */
+    public function accountCustomersInfoAction(Account $account, Channel $channel)
+    {
+        $customers = $this->getDoctrine()
+            ->getRepository('OroCRMSalesBundle:B2bCustomer')
+            ->findBy(array('account' => $account, 'dataChannel' => $channel));
+
+        return array('customers' => $customers, 'channel' => $channel);
+    }
+
+    /**
+     * @Route(
+     *        "/widget/b2bcustomer-info/{id}/channel/{channelId}",
+     *        name="orocrm_sales_widget_b2bcustomer_info",
+     *        requirements={"id"="\d+", "channelId"="\d+"}
+     * )
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
+     */
+    public function customerInfoAction(B2bCustomer $customer, Channel $channel)
+    {
+        return array('customer' => $customer, 'channel' => $channel);
     }
 }
