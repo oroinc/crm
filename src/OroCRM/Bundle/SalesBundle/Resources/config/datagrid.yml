@@ -656,6 +656,7 @@ datagrid:
                     type: string
                     data_name: email.email
 
+    # @todo: use for b2b account widget or remove
     sales-account-lead-grid:
         extends: sales-lead-grid
         source:
@@ -667,6 +668,7 @@ datagrid:
                       and:
                         - c.account = :accountId
 
+    # @todo: use for b2b account widget or remove
     sales-account-opportunity-grid:
         extends: sales-opportunity-grid
         source:
