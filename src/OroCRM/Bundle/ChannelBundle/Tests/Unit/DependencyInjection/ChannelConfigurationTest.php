@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\DependencyInjection;
 
 use Oro\Component\Config\CumulativeResourceManager;
+
 use OroCRM\Bundle\ChannelBundle\DependencyInjection\CompilerPass\SettingsPass;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle1\TestBundle1;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Bundles\TestBundle2\TestBundle2;

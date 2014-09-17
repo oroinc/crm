@@ -6,6 +6,7 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.account.name.label'|trans, account.name) }}
+            {{ UI.renderProperty('orocrm.account.lifetime_value.label'|trans, orocrm_channel_account_lifetime(account)|oro_format_currency) }}
 
             {% if resource_granted('oro_tag_view_tag_cloud') %}
                 {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
