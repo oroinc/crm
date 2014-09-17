@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Entity;
+namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form;
 
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 
@@ -47,7 +47,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
 
         $request->setCreatedAt($createdAt);
         $request->setUpdatedAt($updatedAt);
-
 
         $this->assertNull($request->getWorkflowStep());
         $this->assertNull($request->getWorkflowStep());

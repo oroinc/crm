@@ -66,12 +66,14 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
         $caseManager = $this->container->get('orocrm_case.manager');
 
         $adminUser = $manager->getRepository('OroUserBundle:User')->findOneByUsername('admin');
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         foreach ($this->casesData as $caseData) {
             $case = $caseManager->createCase()
                 ->setSubject($caseData['subject'])
                 ->setDescription($caseData['description'])
                 ->setReportedAt(new \DateTime($caseData['reportedAt'], new \DateTimeZone('UTC')))
+                ->setOrganization($organization)
                 ->setOwner($adminUser);
 
             if (isset($caseData['relatedContact'])) {
@@ -83,6 +85,7 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
                     ->setMessage($commentData['message'])
                     ->setPublic($commentData['public'])
                     ->setCreatedAt(new \DateTime($commentData['createdAt'], new \DateTimeZone('UTC')))
+                    ->setOrganization($organization)
                     ->setOwner($adminUser);
 
                 if (isset($commentData['contact'])) {

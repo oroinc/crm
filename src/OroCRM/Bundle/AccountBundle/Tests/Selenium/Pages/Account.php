@@ -31,16 +31,6 @@ class Account extends AbstractPageEntity
         $this->zipcode = $this->test->byId('orocrm_account_form_billingAddress_postalCode');
         $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
 
-        if ($this->test->byXpath("//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]")
-            ->displayed()) {
-            $this->state = $this->test->byXpath(
-                "//input[starts-with(@id,'orocrm_account_form_billingAddress_region_text')]"
-            );
-        } else {
-            $this->state = $this->test
-                ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
-        }
-
         return $this;
     }
 
@@ -164,44 +154,6 @@ class Account extends AbstractPageEntity
         $this->waitForAjax();
 
         return $this;
-    }
-
-    public function setRegion($state)
-    {
-
-        if ($this->test->byXPath("//input[starts-with(@id, 'orocrm_account_form_billingAddress_region_text')]")
-            ->displayed()) {
-            $this->state = $this->test->byXPath(
-                "//input[starts-with(@id, 'orocrm_account_form_billingAddress_region_text')]"
-            );
-        } else {
-            $this->state = $this->test
-                ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_region')]/a");
-        }
-
-        $this->state->click();
-        $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($state);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$state}')]",
-            "Country's autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$state}')]")->click();
-
-        return $this;
-    }
-
-    public function setZipCode($zipcode)
-    {
-        $this->zipcode->clear();
-        $this->zipcode->value($zipcode);
-        return $this;
-    }
-
-    public function getZipCode()
-    {
-        return $this->zipcode->value();
     }
 
     public function edit()

@@ -35,6 +35,8 @@ class LoadOwnerUser extends AbstractFixture implements ContainerAwareInterface
             ->getRepository('OroOrganizationBundle:BusinessUnit')
             ->findOneByName('Main');
 
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
+
         $user = new User();
         $user->setUsername('owner_User');
         $user->addGroup($group);
@@ -47,6 +49,7 @@ class LoadOwnerUser extends AbstractFixture implements ContainerAwareInterface
         $user->addGroup($group);
         $user->setPlainPassword('test password');
         $user->setSalt(md5(mt_rand(1, 222)));
+        $user->setOrganization($organization);
 
         $userManager->updateUser($user);
         $this->setReference('owner_user', $user);

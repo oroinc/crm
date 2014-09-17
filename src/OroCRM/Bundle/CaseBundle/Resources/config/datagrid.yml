@@ -194,4 +194,4 @@ datagrid:
             query:
                 where:
                     and:
-                        - assignedTo.id = :id OR owner.id = :id
+                        - (assignedTo.id = :id OR owner.id = :id)

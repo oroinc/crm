@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -16,10 +15,9 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\UserBundle\Entity\User;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -30,23 +28,24 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
     const FLUSH_MAX = 50;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
 
     /** @var WorkflowManager */
@@ -58,6 +57,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     /** @var  ConfigManager */
     protected $configManager;
 
+    /** @var Organization */
+    protected $organization;
+
     /** @var BuilderFactory */
     protected $channelBuilderFactory;
 
@@ -66,6 +68,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     /** @var AbstractEnumValue[] */
     protected $sources;
+
 
     /**
      * {@inheritDoc}
@@ -83,6 +86,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     public function load(ObjectManager $manager)
     {
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->initSupportingEntities($manager);
         $this->loadLeads();
     }
@@ -112,7 +116,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     public function loadLeads()
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "leads.csv", "r");
+        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "leads.csv", "r");
         if ($handle) {
             $headers = array();
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
@@ -120,7 +124,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 $headers = $data;
             }
             $randomUser = count($this->users) - 1;
-            $i = 0;
+            $i          = 0;
             while (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 $user = $this->users[mt_rand(0, $randomUser)];
                 $this->setSecurityContext($user);
@@ -159,16 +163,16 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         );
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
-            $opportunity = $leadWorkflowItem->getResult()->get('opportunity');
+            $opportunity   = $leadWorkflowItem->getResult()->get('opportunity');
             $salesFlowItem = $this->workflowManager->startWorkflow(
                 'b2b_flow_sales',
                 $opportunity,
                 'develop',
                 array(
-                    'budget_amount' => mt_rand(10, 10000),
-                    'customer_need' => mt_rand(10, 10000),
+                    'budget_amount'     => mt_rand(10, 10000),
+                    'customer_need'     => mt_rand(10, 10000),
                     'proposed_solution' => mt_rand(10, 10000),
-                    'probability' => round(mt_rand(50, 85) / 100.00, 2)
+                    'probability'       => round(mt_rand(50, 85) / 100.00, 2)
                 )
             );
 
@@ -180,7 +184,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         'close_as_won',
                         array(
                             'close_revenue' => mt_rand(100, 1000),
-                            'close_date' => new \DateTime('now'),
+                            'close_date'    => new \DateTime('now'),
                         )
                     );
                 } else {
@@ -190,8 +194,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         'close_as_lost',
                         array(
                             'close_reason_name' => 'cancelled',
-                            'close_revenue' => mt_rand(100, 1000),
-                            'close_date' => new \DateTime('now'),
+                            'close_revenue'     => mt_rand(100, 1000),
+                            'close_date'        => new \DateTime('now'),
                         )
                     );
                 }
@@ -204,7 +208,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      */
     protected function getRandomBoolean()
     {
-        return (bool) mt_rand(0, 1);
+        return (bool)mt_rand(0, 1);
     }
 
     /**
@@ -213,12 +217,14 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token           = new UsernamePasswordOrganizationToken($user, $user->getUsername(
+        ), 'main', $this->organization);
         $securityContext->setToken($token);
     }
+
     /**
      * @param  array $data
-     * @param User $user
+     * @param User   $user
      *
      * @return Lead
      */

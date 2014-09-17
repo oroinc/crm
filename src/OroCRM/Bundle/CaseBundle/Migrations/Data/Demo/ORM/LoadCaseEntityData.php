@@ -12,6 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -95,6 +96,11 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected $entitiesCount;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -112,6 +118,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     public function load(ObjectManager $manager)
     {
         $this->entityManager = $manager;
+        $this->organization = $this->getReference('default_organization');
 
         for ($i = 0; $i < self::CASES_COUNT; ++$i) {
             $subject = self::$fixtureSubjects[$i];
@@ -156,6 +163,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $case->setSource($source);
         $case->setStatus($status);
         $case->setPriority($priority);
+        $case->setOrganization($this->organization);
 
         switch (rand(0, 1)) {
             case 0:
@@ -172,6 +180,7 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
         $commentsCount = rand(self::MIN_COMMENTS_PER_CASE, self::MAX_COMMENTS_PER_CASE);
         for ($i = 0; $i < $commentsCount; ++$i) {
             $comment = $this->createComment($this->getRandomText());
+            $comment->setOrganization($this->organization);
             $case->addComment($comment);
         }
 

@@ -14,6 +14,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class LifetimeValueHistory implements ChannelAwareInterface
 {
+    const STATUS_NEW = 1;
+    const STATUS_OLD = 0;
+
     /**
      * @var integer
      *
@@ -22,6 +25,13 @@ class LifetimeValueHistory implements ChannelAwareInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="boolean")
+     */
+    protected $status;
 
     /**
      * @var Channel
@@ -44,7 +54,7 @@ class LifetimeValueHistory implements ChannelAwareInterface
      *
      * @ORM\Column(name="amount", type="money", nullable=false)
      */
-    protected $amount = 0;
+    protected $amount;
 
     /**
      * @var \DateTime $createdAt
@@ -52,6 +62,28 @@ class LifetimeValueHistory implements ChannelAwareInterface
      * @ORM\Column(type="datetime", name="created_at")
      */
     protected $createdAt;
+
+    public function __construct()
+    {
+        $this->amount = 0;
+        $this->status = self::STATUS_NEW;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
 
     /**
      * @return int
