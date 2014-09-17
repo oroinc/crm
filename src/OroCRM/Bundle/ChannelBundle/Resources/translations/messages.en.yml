@@ -44,4 +44,10 @@ orocrm:
         channel_type:
             custom.label: Custom
 
+        dashboard:
+            average_customer_lifetime_chart:
+                title: Average lifetime value by customer
+                description: This widget shows average lifetime by customer for each data channel in form of a line chart
+                lifetime: lifetime value
+
 oro.embeddedform.data_channel.label: Channel
