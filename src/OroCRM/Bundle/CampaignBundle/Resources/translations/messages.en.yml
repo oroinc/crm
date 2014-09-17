@@ -55,7 +55,8 @@ orocrm:
             campaigns_by_close_revenue:
                 title: Campaigns by close revenue
                 description: This widget shows you top 5 campaigns that generate most revenue.
-
+        organization:
+            label: Organization
         emailcampaign:
             entity_description:  Marketing email campaigns
             entity_label:        Email Campaign

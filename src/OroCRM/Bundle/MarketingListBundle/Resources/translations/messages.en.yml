@@ -8,6 +8,7 @@ orocrm:
         created_at.label:    Created At
         name.label:          Name
         owner.label:         Owner
+        organization.label:  Organization
         segment.label:       Segment
 
         marketing_list_items.label:              Marketing List Items

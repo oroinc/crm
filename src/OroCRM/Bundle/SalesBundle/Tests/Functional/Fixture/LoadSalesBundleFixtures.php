@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
@@ -37,6 +38,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     /** @var User */
     protected $user;
 
+    /** @var Organization */
+    protected $organization;
+
     /**
      * {@inheritDoc}
      */
@@ -51,6 +55,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     public function load(ObjectManager $manager)
     {
         $this->em = $manager;
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $this->createChannel();
         $this->createAccount();
@@ -65,6 +70,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
     {
         $account = new Account();
         $account->setName(self::ACCOUNT_NAME);
+        $account->setOrganization($this->organization);
 
         $this->em->persist($account);
         $this->em->flush();
@@ -80,6 +86,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $customer->setAccount($this->getReference('default_account'));
         $customer->setName(self::CUSTOMER_NAME);
         $customer->setDataChannel($this->getReference('default_channel'));
+        $customer->setOrganization($this->organization);
 
         $this->em->persist($customer);
         $this->em->flush();
@@ -98,6 +105,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setLastName('lname');
         $lead->setCustomer($this->getReference('default_b2bcustomer'));
         $lead->setEmail('email@email.com');
+        $lead->setOrganization($this->organization);
 
         $this->em->persist($lead);
         $this->em->flush();
@@ -115,6 +123,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $opportunity->setDataChannel($this->getReference('default_channel'));
         $opportunity->setBudgetAmount(50.00);
         $opportunity->setProbability(10);
+        $opportunity->setOrganization($this->organization);
 
         $this->em->persist($opportunity);
         $this->em->flush();
@@ -133,6 +142,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $salesFunnel->setLead($this->getReference('default_lead'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);
+        $salesFunnel->setOrganization($this->organization);
 
         $this->em->persist($salesFunnel);
         $this->em->flush();
@@ -147,6 +157,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $salesFunnel->setOpportunity($this->getReference('default_opportunity'));
         $salesFunnel->setOwner($this->getUser());
         $salesFunnel->setStartDate($date);
+        $salesFunnel->setOrganization($this->organization);
 
         $this->em->persist($salesFunnel);
         $this->em->flush();
@@ -161,6 +172,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $builder->setName(self::CHANNEL_NAME);
         $builder->setChannelType(self::CHANNEL_TYPE);
         $builder->setStatus(Channel::STATUS_ACTIVE);
+        $builder->setOwner($this->organization);
         $builder->setEntities();
 
         $channel = $builder->getChannel();

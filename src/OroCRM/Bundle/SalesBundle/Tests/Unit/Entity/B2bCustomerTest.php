@@ -41,13 +41,14 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function getSetDataProvider()
     {
-        $name    = uniqid('name');
-        $address = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $owner   = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $date    = new \DateTime();
+        $name         = uniqid('name');
+        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $contact      = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $date         = new \DateTime();
 
         return [
             'id'              => ['id', null, null],
@@ -58,6 +59,7 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
             'contact'         => ['contact', $contact, $contact],
             'dataChannel'     => ['dataChannel', $channel, $channel],
             'owner'           => ['owner', $owner, $owner],
+            'organization'    => ['organization', $organization, $organization],
             'createdAt'       => ['createdAt', $date, $date],
             'updatedAt'       => ['updatedAt', $date, $date],
         ];

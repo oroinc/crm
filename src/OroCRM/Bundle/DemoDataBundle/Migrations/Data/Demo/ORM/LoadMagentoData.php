@@ -11,11 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\UserBundle\Entity\User;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -27,7 +23,14 @@ use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
+
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -42,6 +45,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
 
     /** @var  Channel */
     protected $dataChannel;
+
+    /** @var Organization */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -66,15 +72,18 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $om)
     {
+        $this->organization = $this->getReference('default_organization');
         $this->users = $om->getRepository('OroUserBundle:User')->findAll();
 
         $website = new Website();
-        $website->setCode('admin')
+        $website
+            ->setCode('admin')
             ->setName('Admin');
         $om->persist($website);
 
         $store = new Store();
-        $store->setCode('admin')
+        $store
+            ->setCode('admin')
             ->setName('Admin')
             ->setWebsite($website);
         $om->persist($website);
@@ -94,6 +103,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $integration->setConnectors(['customer', 'cart', 'order']);
         $integration->setName(self::INTEGRATION_NAME);
         $integration->setTransport($transport);
+        $integration->setOrganization($this->organization);
         $om->persist($integration);
 
         $builder = $this->factory->createBuilderForIntegration($integration);
@@ -190,6 +200,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $origin
     ) {
         $order = new Order();
+        $order->setOrganization($this->organization);
         $order->setChannel($integration);
         $order->setCustomer($customer);
         $order->setOwner($customer->getOwner());
@@ -280,6 +291,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $rate = 1
     ) {
         $cart = new Cart();
+        $cart->setOrganization($this->organization);
         $cart->setChannel($integration);
         $cart->setCustomer($customer);
         $cart->setOwner($customer->getOwner());
@@ -422,6 +434,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setOriginId($i + 1)
                 ->setAccount($accounts[$buffer[$i]])
                 ->setContact($contact)
+                ->setOrganization($this->organization)
                 ->setOwner($this->getRandomOwner());
             $customer->setDataChannel($this->dataChannel);
 
