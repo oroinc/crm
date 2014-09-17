@@ -5,12 +5,16 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.name.label'|trans, entity.name) }}
-            {{ ui.renderProperty('orocrm.campaign.emailcampaign.senderEmail.label'|trans, entity.senderEmail) }}
-            {{ ui.renderProperty('orocrm.campaign.emailcampaign.senderName.label'|trans, entity.senderName) }}
+            {{ ui.renderProperty('orocrm.campaign.emailcampaign.sender_email.label'|trans, entity.senderEmail) }}
+            {{ ui.renderProperty('orocrm.campaign.emailcampaign.sender_name.label'|trans, entity.senderName) }}
             {{ ui.renderProperty('orocrm.campaign.emailcampaign.schedule.label'|trans, ('orocrm.campaign.emailcampaign.schedule.' ~ entity.schedule)|trans ) }}
 
             {% if entity.schedule == constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\EmailCampaign::SCHEDULE_DEFERRED') %}
                 {{ ui.renderProperty('orocrm.campaign.emailcampaign.scheduled_for.label'|trans, entity.scheduledFor ? entity.scheduledFor|oro_format_datetime : '') }}
+            {% endif %}
+
+            {% if entity.sent %}
+                {{ ui.renderProperty('orocrm.campaign.emailcampaign.sent_at.label'|trans, entity.sentAt ? entity.sentAt|oro_format_datetime : '') }}
             {% endif %}
 
             {%- if entity.campaign is not empty -%}

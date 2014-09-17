@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
@@ -25,7 +25,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id"
+ *              "owner_column_name"="owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -146,6 +148,14 @@ class EmailCampaign
      * @ORM\JoinColumn(name="transport_settings_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $transportSettings;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @var \DateTime
@@ -556,5 +566,28 @@ class EmailCampaign
         $this->transportSettings = $transportSettings;
 
         return $this;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Campaign
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }
