@@ -107,6 +107,7 @@ orocrm:
             orders.label:        Customer orders
             lifetime.label:      Lifetime value
             currency.label:      Currency
+            organization.label:  Organization
 
         customergroup:
             entity_label:        Customer Group
@@ -163,6 +164,7 @@ orocrm:
             workflow_step.label:       Workflow step
             website.label:             Website
             status_message.label:      Status message
+            organization.label:        Organization
 
         cartitem:
             entity_label:              Shopping Cart Item
@@ -283,6 +285,7 @@ orocrm:
             workflow_item.label:    Workflow item
             workflow_step.label:    Workflow step
             website.label:          Website
+            organization.label:     Organization
 
         product:
             entity_label:         Product

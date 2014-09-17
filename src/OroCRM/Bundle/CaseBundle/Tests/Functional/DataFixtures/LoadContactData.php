@@ -27,10 +27,12 @@ class LoadContactData extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         $adminUser = $manager->getRepository('OroUserBundle:User')->findOneByUsername('admin');
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         foreach ($this->contactsData as $contactData) {
             $contact = new Contact();
             $contact->setOwner($adminUser);
+            $contact->setOrganization($organization);
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
             $contact->setEmail($contactData['email']);

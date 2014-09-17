@@ -13,6 +13,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\UserBundle\Model\Gender;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -66,6 +67,11 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     protected $factory;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritDoc}
      */
     public function setContainer(ContainerInterface $container = null)
@@ -81,6 +87,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $this->em        = $manager;
         $this->countries = $this->loadStructure('OroAddressBundle:Country', 'getIso2Code');
         $this->regions   = $this->loadStructure('OroAddressBundle:Region', 'getCombinedCode');
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $this->createTransport()
             ->createIntegration()
@@ -148,6 +155,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cart->setIsGuest(0);
         $cart->setStore($this->store);
         $cart->setOwner($this->getUser());
+        $cart->setOrganization($this->organization);
 
         $this->em->persist($cart);
 
@@ -181,6 +189,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $integration->setType('magento');
         $integration->setConnectors(["customer", "order", "cart", "region"]);
         $integration->setTransport($this->transport);
+        $integration->setOrganization($this->organization);
 
         $this->em->persist($integration);
         $this->integration = $integration;
@@ -227,6 +236,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cartAddress->setFirstName('John');
         $cartAddress->setLastName('Doe');
         $cartAddress->setOriginId($originId);
+        $cartAddress->setOrganization($this->organization);
 
         $this->em->persist($cartAddress);
 
@@ -253,6 +263,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $address->setPrimary(true);
         $address->setOrganization('oro');
         $address->setOriginId(1);
+        $address->setOrganization($this->organization);
 
         $this->em->persist($address);
 
@@ -275,6 +286,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $address->setPostalCode(123456);
         $address->setFirstName('John');
         $address->setLastName('Doe');
+        $address->setOrganization($this->organization);
 
         $this->em->persist($address);
 
@@ -307,6 +319,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setUpdatedAt(new \DateTime('now'));
         $customer->addAddress($address);
         $customer->setOwner($this->getUser());
+        $customer->setOrganization($this->organization);
 
         $this->em->persist($customer);
 
@@ -356,6 +369,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $account = new Account;
         $account->setName('acc');
         $account->setOwner($this->getUser());
+        $account->setOrganization($this->organization);
 
         $this->em->persist($account);
 
@@ -459,6 +473,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setRemoteIp('unique ip');
         $order->setGiftMessage('some very unique gift message');
         $order->setOwner($this->getUser());
+        $order->setOrganization($this->organization);
 
         $this->em->persist($order);
 
@@ -507,6 +522,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $builder->setChannelType(self::CHANNEL_TYPE);
         $builder->setStatus(Channel::STATUS_ACTIVE);
         $builder->setDataSource($this->integration);
+        $builder->setOwner($this->organization);
         $builder->setEntities();
 
         $channel = $builder->getChannel();

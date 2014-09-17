@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -12,9 +13,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
 class CartTest extends AbstractEntityTestCase
 {
-    /**
-     * @var Cart
-     */
+    /** @var Cart */
     protected $entity;
 
     /**
@@ -43,6 +42,7 @@ class CartTest extends AbstractEntityTestCase
         $testItemsCollection = new ArrayCollection([new CartItem()]);
         $testStore           = new Store();
         $owner               = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization        = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'status'            => ['status', $testStatus, $testStatus],
@@ -65,6 +65,7 @@ class CartTest extends AbstractEntityTestCase
             'store'             => ['store', $testStore, $testStore],
             'statusMessage'     => ['statusMessage', 'some message', 'some message'],
             'owner'             => ['owner', $owner, $owner],
+            'organization'      => ['organization', $organization, $organization]
         ];
     }
 }

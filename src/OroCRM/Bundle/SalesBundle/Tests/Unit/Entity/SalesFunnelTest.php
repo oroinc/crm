@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 
 class SalesFunnelTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +21,7 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
     public function getSetDataProvider()
     {
         $now          = new \DateTime('now');
+        $organization = new Organization();
         $lead         = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
             ->disableOriginalConstructor()
             ->getMock();
@@ -46,7 +48,8 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
             'workflowStep' => array('workflowStep', $workflowStep, $workflowStep),
             'createdAt'    => array('createdAt', $now, $now),
             'updatedAt'    => array('updatedAt', $now, $now),
-            'dataChannel'  => ['dataChannel', $channel, $channel]
+            'dataChannel'  => ['dataChannel', $channel, $channel],
+            'organization' => array('organization', $organization, $organization)
         );
     }
 

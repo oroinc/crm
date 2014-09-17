@@ -46,6 +46,7 @@ class LoadContactGroupData extends AbstractFixture implements ContainerAwareInte
         foreach ($groups as $group => $user) {
             $contactGroup = new Group($group);
             $contactGroup->setOwner($user);
+            $contactGroup->setOrganization($this->getReference('default_organization'));
             $entityManager->persist($contactGroup);
         }
         $entityManager->flush();

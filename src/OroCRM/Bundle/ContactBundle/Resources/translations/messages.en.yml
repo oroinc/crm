@@ -81,6 +81,7 @@ orocrm:
         twitter.label:       Twitter
         updated_by.label:    Updated By
         picture.label:       Picture
+        organization.label:  Organization
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\ContactAddress
@@ -149,6 +150,7 @@ orocrm:
             label.label:         Label
             manage:              Manage groups
             owner.label:         Owner
+            organization.label:  Organization
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Method

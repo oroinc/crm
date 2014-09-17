@@ -56,7 +56,8 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('reportedAt', new \DateTime()),
             array('closedAt', new \DateTime()),
             array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
-            array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account'))
+            array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account')),
+            array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
         );
     }
 

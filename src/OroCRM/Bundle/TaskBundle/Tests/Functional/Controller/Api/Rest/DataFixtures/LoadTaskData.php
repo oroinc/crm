@@ -42,6 +42,7 @@ class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
         if (!$reporter) {
             return;
         }
+        $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $task = new Task();
         $task->setSubject('Acl task');
@@ -49,6 +50,7 @@ class LoadTaskData extends AbstractFixture implements ContainerAwareInterface
         $task->setDueDate(new \DateTime());
         $task->setReporter($reporter);
         $task->setOwner($assignedTo);
+        $task->setOrganization($organization);
 
         $manager->persist($task);
         $manager->flush();

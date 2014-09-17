@@ -10,6 +10,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 /**
  * Marketing list
@@ -26,7 +27,10 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id"
+ *              "owner_column_name"="owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -38,6 +42,8 @@ use Oro\Bundle\UserBundle\Entity\User;
  *          }
  *      }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class MarketingList
 {
@@ -118,6 +124,14 @@ class MarketingList
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @var \Datetime
@@ -595,5 +609,28 @@ class MarketingList
     public function __toString()
     {
         return $this->getName();
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return MarketingList
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

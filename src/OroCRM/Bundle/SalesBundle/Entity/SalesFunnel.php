@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -24,25 +25,27 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_salesfunnel_index",
- *  routeView="orocrm_sales_salesfunnel_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-filter"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "workflow"={
- *          "active_workflow"="b2b_flow_sales_funnel"
+ *      routeName="orocrm_sales_salesfunnel_index",
+ *      routeView="orocrm_sales_salesfunnel_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-filter"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "workflow"={
+ *              "active_workflow"="b2b_flow_sales_funnel"
+ *          }
  *      }
- *  }
  * )
  */
 class SalesFunnel implements ChannelAwareInterface
@@ -134,6 +137,14 @@ class SalesFunnel implements ChannelAwareInterface
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @return int
@@ -312,5 +323,28 @@ class SalesFunnel implements ChannelAwareInterface
     public function beforeUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return SalesFunnel
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

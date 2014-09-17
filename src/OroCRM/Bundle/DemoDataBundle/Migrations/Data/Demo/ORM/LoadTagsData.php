@@ -3,8 +3,11 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\TagBundle\Entity\Tag;
 use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -16,7 +19,6 @@ use Doctrine\ORM\EntityManager;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -57,6 +59,11 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -109,6 +116,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->randomUser = count($this->usersRepository)-1;
         $this->randomUserTag = count($this->tagsUser)-1;
         $this->tagManager = $this->container->get('oro_tag.tag.manager');
+        $this->organization = $this->getReference('default_organization');
     }
 
     /**
@@ -119,7 +127,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     {
         $tags = array();
         foreach ($tagsNames as $tagName) {
-            $tags[] = new Tag($tagName);
+            $tag = new Tag($tagName);
+            $tag->setOrganization($this->organization);
+            $tags[] = $tag;
         }
 
         return $tags;
@@ -130,7 +140,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->tagsUser = $this->createTags(array('Friends', 'Developer', 'Wholesale'));
         foreach ($this->usersRepository as $user) {
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
             $securityContext->setToken($token);
 
             $ownTag = array($this->tagsUser[rand(0, $this->randomUserTag)]);
@@ -168,7 +178,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             $user = $this->usersRepository[rand(0, $this->randomUser)];
 
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
             $securityContext->setToken($token);
 
             $ownTags = array(
@@ -195,7 +205,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             $user = $this->usersRepository[rand(0, $this->randomUser)];
 
             $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
             $securityContext->setToken($token);
 
             $ownTags = array(

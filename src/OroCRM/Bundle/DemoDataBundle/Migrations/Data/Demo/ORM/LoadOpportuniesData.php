@@ -2,17 +2,17 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-
-use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
-use Oro\Bundle\UserBundle\Entity\User;
-
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixtureInterface
 {
@@ -21,6 +21,9 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
 
     /** @var  B2bCustomer[] */
     protected $b2bCustomers;
+
+    /** @var Organization */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -46,7 +49,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
 
     protected function initSupportingEntities()
     {
-        /** @var EntityRepository $repo */
+        $this->organization = $this->getReference('default_organization');
         $this->contacts     = $this->em->getRepository('OroCRMContactBundle:Contact')->findAll();
         $this->b2bCustomers = $this->em->getRepository('OroCRMSalesBundle:B2bCustomer')->findAll();
     }
@@ -72,7 +75,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token           = new UsernamePasswordToken($user, uniqid('username'), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
 
@@ -90,6 +93,7 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setName($contact->getFirstName() . ' ' . $contact->getLastName());
         $opportunity->setContact($contact);
         $opportunity->setOwner($user);
+        $opportunity->setOrganization($this->organization);
         $opportunity->setCustomer($customer);
         $opportunity->setDataChannel($dataChannel);
 
