@@ -572,7 +572,7 @@ class EmailCampaign
      * Set organization
      *
      * @param Organization $organization
-     * @return Campaign
+     * @return EmailCampaign
      */
     public function setOrganization(Organization $organization = null)
     {
