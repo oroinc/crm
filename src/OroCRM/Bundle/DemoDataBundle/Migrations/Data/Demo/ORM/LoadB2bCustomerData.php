@@ -6,8 +6,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
