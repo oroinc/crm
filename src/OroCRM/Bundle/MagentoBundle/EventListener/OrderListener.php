@@ -4,7 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
+use Doctrine\ORM\PersistentCollection;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -12,10 +14,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 
 class OrderListener
 {
-    /**
-     * @var array
-     */
-    protected $ordersForUpdate = array();
+    /** @var array */
+    protected $ordersForUpdate = [];
+
+    /** @var bool */
+    protected $isInProgress = false;
 
     /**
      * @param LifecycleEventArgs $event
@@ -39,30 +42,59 @@ class OrderListener
         $entity = $event->getEntity();
 
         // if subtotal or status has been changed
-        if ($this->isOrderValid($entity) &&
-            array_intersect(array('subtotalAmount', 'status'), array_keys($event->getEntityChangeSet()))
+        if ($this->isOrderValid($entity)
+            && array_intersect(['subtotalAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
     }
 
     /**
-     * @param LifecycleEventArgs $event
+     * @param PostFlushEventArgs $event
      */
-    public function postUpdate(LifecycleEventArgs $event)
+    public function postFlush(PostFlushEventArgs $event)
     {
-        /** @var Order $entity */
-        $entity = $event->getEntity();
+        if ($this->isInProgress || empty($this->ordersForUpdate)) {
+            return;
+        }
 
-        // if order was scheduled for update
-        if ($this->isOrderValid($entity) && !empty($this->ordersForUpdate[$entity->getId()])) {
-            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity->getCustomer());
-            unset($this->ordersForUpdate[$entity->getId()]);
+        $uow      = $event->getEntityManager()->getUnitOfWork();
+        $entities = array_merge(
+            $uow->getScheduledEntityInsertions(),
+            $uow->getScheduledEntityDeletions(),
+            $uow->getScheduledEntityUpdates()
+        );
+
+        $collections = array_merge(
+            $uow->getScheduledCollectionDeletions(),
+            $uow->getScheduledCollectionUpdates()
+        );
+
+        /** @var PersistentCollection $collectionToChange */
+        foreach ($collections as $collectionToChange) {
+            $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
+        }
+
+        $needFlush = false;
+        /** @var Order $entity */
+        foreach ($entities as $entity) {
+            // if order was scheduled for update
+            if ($this->isOrderValid($entity) && !empty($this->ordersForUpdate[$entity->getId()])) {
+                $needFlush |= $this->recalculateCustomerLifetime($event->getEntityManager(), $entity->getCustomer());
+                unset($this->ordersForUpdate[$entity->getId()]);
+            }
+        }
+
+        if ($needFlush) {
+            $this->isInProgress = true;
+            $event->getEntityManager()->flush();
+            $this->isInProgress = false;
         }
     }
 
     /**
-     * @param Order|object $order
+     * @param Order|object $order `
+     *
      * @return bool
      */
     protected function isOrderValid($order)
@@ -81,7 +113,9 @@ class OrderListener
 
     /**
      * @param EntityManager $entityManager
-     * @param Customer $customer
+     * @param Customer      $customer
+     *
+     * @return bool         Returns 'true' when real changes were provided
      */
     protected function recalculateCustomerLifetime(EntityManager $entityManager, Customer $customer)
     {
@@ -89,13 +123,14 @@ class OrderListener
 
         /** @var OrderRepository $orderRepository */
         $orderRepository = $entityManager->getRepository('OroCRMMagentoBundle:Order');
-        $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
+        $newLifetime     = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
 
         if ($newLifetime != $oldLifetime) {
-            $entityManager->getUnitOfWork()->scheduleExtraUpdate(
-                $customer,
-                array('lifetime' => array($oldLifetime, $newLifetime))
-            );
+            $customer->setLifetime($newLifetime);
+
+            return true;
         }
+
+        return false;
     }
 }
