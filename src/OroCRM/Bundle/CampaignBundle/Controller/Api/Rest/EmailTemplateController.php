@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
@@ -53,10 +54,15 @@ class EmailTemplateController extends RestController
             );
         }
 
+        $securityContext = $this->get('security.context');
+        /** @var UsernamePasswordOrganizationToken $token */
+        $token        = $securityContext->getToken();
+        $organization = $token->getOrganizationContext();
+
         $templates = $this
             ->getDoctrine()
             ->getRepository('OroEmailBundle:EmailTemplate')
-            ->getTemplateByEntityName($entity->getEntity());
+            ->getTemplateByEntityName($entity->getEntity(), $organization);
 
         return $this->handleView(
             $this->view($templates, Codes::HTTP_OK)
