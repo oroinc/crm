@@ -28,11 +28,10 @@ class AclTest extends Selenium2TestCase
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
-            ->setOwner('Main')
             ->setEntity('Role', array('View'), 'System')
-            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
-            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
-            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
             ->save()
             ->assertMessage('Role saved');
 
@@ -62,6 +61,7 @@ class AclTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
+            ->setOrganization('OroCRM')
             ->uncheckInviteUser()
             ->save()
             ->assertMessage('User saved')
