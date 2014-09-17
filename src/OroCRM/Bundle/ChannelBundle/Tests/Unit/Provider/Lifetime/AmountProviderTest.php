@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
-use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Annotations\AnnotationReader;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
