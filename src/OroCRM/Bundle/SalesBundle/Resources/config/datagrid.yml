@@ -656,30 +656,6 @@ datagrid:
                     type: string
                     data_name: email.email
 
-    # @todo: use for b2b account widget or remove
-    sales-account-lead-grid:
-        extends: sales-lead-grid
-        source:
-            query:
-                join:
-                    inner:
-                        - { join: l.customer, alias: c }
-                where:
-                      and:
-                        - c.account = :accountId
-
-    # @todo: use for b2b account widget or remove
-    sales-account-opportunity-grid:
-        extends: sales-opportunity-grid
-        source:
-             query:
-                join:
-                    inner:
-                        - { join: o.customer, alias: c }
-                where:
-                      and:
-                        - c.account = :accountId
-
     orocrm-sales-b2bcustomers-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
         source:
