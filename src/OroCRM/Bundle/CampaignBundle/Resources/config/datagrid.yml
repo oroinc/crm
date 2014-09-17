@@ -361,11 +361,10 @@ datagrid:
                             join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
                             alias: 'cs'
                             conditionType: 'WITH'
-                            condition: 'mli.id = cs.marketingListItem'
+                            condition: 'mli.id = cs.marketingListItem AND cs.emailCampaign = :emailCampaign'
                 where:
                     and:
                         - mlr.id IS NULL
-                        - cs.emailCampaign = :emailCampaign
                 groupBy: t1.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
         columns:
             campaignContactedTimes:

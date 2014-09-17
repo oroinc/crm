@@ -27,7 +27,6 @@ class ChannelControllerTest extends WebTestCase
 
     public function testCreateChannel()
     {
-        $organization = $this->getOrganization();
         $crawler      = $this->client->request('GET', $this->getUrl('orocrm_channel_create'));
         $name         = 'Simple channel';
         $form         = $crawler->selectButton('Save and Close')->form();
@@ -35,7 +34,6 @@ class ChannelControllerTest extends WebTestCase
 
         $form['orocrm_channel_form[name]']        = $name;
         $form['orocrm_channel_form[channelType]'] = $channelType;
-        $form['orocrm_channel_form[owner]']       = $organization->getId();
         $form['orocrm_channel_form[entities]']    = json_encode(
             ['OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity']
         );
@@ -164,16 +162,5 @@ class ChannelControllerTest extends WebTestCase
 
         $this->assertEmpty($result['data']);
         $this->assertEmpty($result['options']['totalRecords']);
-    }
-
-    /**
-     * @return Organization
-     */
-    protected function getOrganization()
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroOrganizationBundle:Organization')
-            ->findOneByName(LoadOrganizationAndBusinessUnitData::MAIN_ORGANIZATION);
     }
 }

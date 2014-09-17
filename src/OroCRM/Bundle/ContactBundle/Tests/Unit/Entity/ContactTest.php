@@ -356,6 +356,8 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
         $source = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Source');
         $method = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Method');
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+
         return array(
             'namePrefix' => array('namePrefix', 'test', 'test'),
             'firstName' => array('firstName', 'test', 'test'),
@@ -381,6 +383,7 @@ class ContactTest extends \PHPUnit_Framework_TestCase
             'updatedAt' => array('updatedAt', $now, $now),
             'createdBy' => array('createdBy', $user, $user),
             'updatedBy' => array('updatedBy', $user, $user),
+            'organization' => array('organization', $organization, $organization),
         );
     }
 

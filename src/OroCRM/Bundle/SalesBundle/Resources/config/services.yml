@@ -15,18 +15,21 @@ parameters:
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.opportunity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.lead.manager.api:
         class: %orocrm_sales.lead.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.salesfunnel.manager.api:
         class: %orocrm_sales.salesfunnel.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.salesfunnel.entity.class%
             - @doctrine.orm.entity_manager
@@ -107,6 +110,7 @@ services:
 
     orocrm_sales.b2bcustomer.manager.api:
         class: %orocrm_sales.b2bcustomer.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
             - @doctrine.orm.entity_manager

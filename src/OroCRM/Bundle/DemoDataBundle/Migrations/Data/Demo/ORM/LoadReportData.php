@@ -3,6 +3,7 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ReportBundle\Entity\Report;
 use Oro\Bundle\ReportBundle\Entity\ReportType;
 
@@ -38,6 +39,11 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
     // @codingStandardsIgnoreEnd
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -61,6 +67,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
         if ($manager) {
             $this->em = $manager;
         }
+        $this->organization = $this->getReference('default_organization');
     }
 
     public function loadReports()
@@ -81,6 +88,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
                 ->findOneBy(array('name' => $values['owner']));
             $report->setOwner($owner);
             $report->setDefinition($values['definition']);
+            $report->setOrganization($this->organization);
             $this->persist($this->em, $report);
         }
 
