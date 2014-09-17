@@ -165,7 +165,7 @@ class DashboardController extends Controller
                 array(
                     'name' => 'multiline_chart',
                     "data_schema" => array(
-                        "label" => array("field_name" => "month", "label" => null, "type" => "date"),
+                        "label" => array("field_name" => "month", "label" => null, "type" => "month"),
                         "value" => array(
                             "field_name" => "amount",
                             "label" => $translator->trans(
