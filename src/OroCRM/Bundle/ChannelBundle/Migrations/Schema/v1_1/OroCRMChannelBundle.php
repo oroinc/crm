@@ -16,6 +16,7 @@ class OroCRMChannelBundle implements Migration
     {
         $this->createOrocrmChannelLifetimeHistTable($schema);
         $this->addOrocrmChannelLifetimeHistForeignKeys($schema);
+        $this->addChannelIndexes($schema);
     }
 
     /**
@@ -65,5 +66,16 @@ class OroCRMChannelBundle implements Migration
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
             'FK_2B156554BDC09B73'
         );
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addChannelIndexes(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_channel');
+        $table->addIndex(['name'], 'crm_channel_name_idx', []);
+        $table->addIndex(['status'], 'crm_channel_status_idx', []);
+        $table->addIndex(['channel_type'], 'crm_channel_channel_type_idx', []);
     }
 }
