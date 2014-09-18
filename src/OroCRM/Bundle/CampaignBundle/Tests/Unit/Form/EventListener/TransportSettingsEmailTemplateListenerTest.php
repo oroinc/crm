@@ -24,11 +24,17 @@ class TransportSettingsEmailTemplateListenerTest extends \PHPUnit_Framework_Test
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $securityContext;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $form;
 
     protected function setUp()
     {
         $this->registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $this->securityContext = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
 
         $this->form = $this
             ->getMockBuilder('Symfony\Component\Form\Form')
@@ -67,7 +73,7 @@ class TransportSettingsEmailTemplateListenerTest extends \PHPUnit_Framework_Test
             ->method('getConfig')
             ->will($this->returnValue($config));
 
-        $this->listener = new TransportSettingsEmailTemplateListener($this->registry);
+        $this->listener = new TransportSettingsEmailTemplateListener($this->registry, $this->securityContext);
     }
 
     public function testGetSubscribedEvents()
