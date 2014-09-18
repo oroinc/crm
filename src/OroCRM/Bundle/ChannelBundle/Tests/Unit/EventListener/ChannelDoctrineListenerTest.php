@@ -2,16 +2,15 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-
+use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-use Doctrine\ORM\UnitOfWork;
+use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\EntityManagerMock;
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Model\EntityManagerMock;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
 {
@@ -63,7 +62,6 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
             ->disableOriginalConstructor()->getMock();
         $this->em->setUnitOfWork($unitOfWork);
-
 
         $config = $this->em->getConfiguration();
         $config->setMetadataDriverImpl($metadataDriver);
@@ -178,11 +176,9 @@ class ChannelDoctrineListenerTest extends OrmTestCase
             ->method('getEntityManager')
             ->will($this->returnValue($this->em));
 
-        $account    = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
+        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
             ->disableOriginalConstructor()->getMock();
-
-
-        $channel    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
             ->disableOriginalConstructor()->getMock();
 
         $queue = [
@@ -218,7 +214,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     protected function createStatementMock(array $records)
     {
         $statement = $this->getMock('Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\StatementMock');
-        $statement->expects($this->exactly(count($records) ))
+        $statement->expects($this->exactly(count($records)))
             ->method('fetchAll')
             ->will(
                 new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(
