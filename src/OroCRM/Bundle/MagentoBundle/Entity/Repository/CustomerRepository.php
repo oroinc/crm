@@ -25,7 +25,7 @@ class CustomerRepository extends EntityRepository
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
-            "CONCAT(YEAR(c.createdAt), MONTH(c.createdAt)) as formattedDate",
+            "DATE(CONCAT(YEAR(c.createdAt), '-', MONTH(c.createdAt), '-01')) as formattedDate",
             'COUNT(c) as cnt',
             'IDENTITY(c.dataChannel)',
             'c.createdAt'

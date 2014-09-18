@@ -30,10 +30,15 @@ class DashboardControllerTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('New Magento Customers', $result->getContent());
 
-        /** @var Channel[] $channels */
-        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->findAll();
+        $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
+
+        /** @var array $channels */
+        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->getByType(
+            $aclHelper,
+            'magento'
+        );
         foreach ($channels as $channel) {
-            $this->assertContains($channel->getName(), $result->getContent());
+            $this->assertContains($channel['name'], $result->getContent());
         }
     }
 }

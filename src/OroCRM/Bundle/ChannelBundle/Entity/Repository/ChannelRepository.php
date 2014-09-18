@@ -18,7 +18,7 @@ class ChannelRepository extends EntityRepository
     public function getByType(AclHelper $aclHelper, $type)
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('c')
+            ->select('c.id', 'c.name')
             ->from('OroCRMChannelBundle:Channel', 'c', 'c.id')
             ->where("c.channelType = :type")
             ->setParameter('type', $type);
