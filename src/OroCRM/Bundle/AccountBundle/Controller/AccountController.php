@@ -30,7 +30,7 @@ class AccountController extends Controller
     {
         $channels = $this->getDoctrine()
             ->getRepository('OroCRMChannelBundle:Channel')
-            ->findBy(['status' => Channel::STATUS_ACTIVE]);
+            ->findBy(['status' => Channel::STATUS_ACTIVE], ['channelType' => 'ASC', 'name' => 'ASC']);
 
         return array('entity' => $account, 'channels' => $channels);
     }

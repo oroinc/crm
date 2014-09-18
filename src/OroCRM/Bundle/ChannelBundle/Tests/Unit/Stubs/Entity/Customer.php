@@ -5,19 +5,56 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\MappedSuperclass
+ */
 class Customer
 {
-    /** @var int */
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
     protected $id;
 
-    /** @var Account */
+    /**
+     * @var Account
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     */
     protected $account;
 
-    /** @var Channel */
-    protected $dataChannel;
+    /**
+     * @var Channel
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *  defaultValues={
+     *      "importexport"={
+     *          "short"=true,
+     *          "order"=5
+     *      }
+     *  }
+     * )
+     */
+    protected $channel;
 
-    /** @var float */
-    protected $lifetime;
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="lifetime", type="money", nullable=true)
+     */
+    protected $lifetime = 0;
 
     /**
      * @param int $id

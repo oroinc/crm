@@ -26,10 +26,13 @@ class AmountProvider
     }
 
     /**
+     * Returns account lifetime value aggregated for all channels if $channel attribute is not passed.
+     * Or for single channel otherwise.
+     *
      * @param Account      $account
      * @param Channel|null $channel
      *
-     * @return double
+     * @return float
      */
     public function getAccountLifeTimeValue(Account $account, Channel $channel = null)
     {
@@ -47,11 +50,18 @@ class AmountProvider
     }
 
     /**
+     * Returns query builder that allows to fetch account lifetime value from history table
+     * Following parameters are required to be passed:
+     *  - account  Account entity or identifier
+     *
+     * Following parameters are optional:
+     *  - dataChannel - Channel entity or id to be used for fetch criteria, required if $addChannelParam is set to true
+     *
      * @param bool $addChannelParam
      *
      * @return QueryBuilder
      */
-    protected function getChannelAccountLifetimeQueryBuilder($addChannelParam = false)
+    public function getChannelAccountLifetimeQueryBuilder($addChannelParam = false)
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');

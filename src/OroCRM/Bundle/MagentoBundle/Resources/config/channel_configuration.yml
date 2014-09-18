@@ -39,7 +39,6 @@ orocrm_channel:
               - OroCRM\Bundle\MagentoBundle\Entity\Website
           navigation_items:
               - application_menu.sales_tab.magento_order
-              - account_sales_tab_panel.orocrm_magento_account_orders_tab
           belongs_to:
               integration: magento
               connector: order

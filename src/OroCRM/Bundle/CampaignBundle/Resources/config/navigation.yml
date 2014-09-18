@@ -39,6 +39,8 @@ oro_titles:
     orocrm_campaign_create: oro.ui.create_entity
     orocrm_campaign_update: %%entity.name%% - Edit
 
+    oro_tracking_website_index: ~
+
     orocrm_email_campaign_index:  ~
     orocrm_email_campaign_view:   %%entity.name%%
     orocrm_email_campaign_create: oro.ui.create_entity
