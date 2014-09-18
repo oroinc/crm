@@ -11,16 +11,9 @@ class Account extends AbstractPageEntity
     /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $owner;
 
-    public function init()
-    {
-        $this->accountName = $this->test->byId('orocrm_account_form_name');
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
-
-        return $this;
-    }
-
     public function setAccountName($accountName)
     {
+        $this->accountName = $this->test->byId('orocrm_account_form_name');
         $this->accountName->clear();
         $this->accountName->value($accountName);
         return $this;
@@ -28,6 +21,7 @@ class Account extends AbstractPageEntity
 
     public function setOwner($owner)
     {
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
         $this->owner->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
