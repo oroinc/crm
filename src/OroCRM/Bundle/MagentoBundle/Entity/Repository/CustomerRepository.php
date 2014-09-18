@@ -3,20 +3,26 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class CustomerRepository extends EntityRepository
 {
     /**
      * Returns data grouped by created_at, data_channel_id
      *
+     * @param AclHelper $aclHelper
      * @param \DateTime $dateFrom
      * @param \DateTime $dateTo
      * @param array     $ids Filter by channel ids
      *
      * @return array
      */
-    public function getGroupedByChannelArray(\DateTime $dateFrom, \DateTime $dateTo, $ids = array())
-    {
+    public function getGroupedByChannelArray(
+        AclHelper $aclHelper,
+        \DateTime $dateFrom,
+        \DateTime $dateTo,
+        $ids = array()
+    ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
             "CONCAT(YEAR(c.createdAt), MONTH(c.createdAt)) as formattedDate",
@@ -34,6 +40,6 @@ class CustomerRepository extends EntityRepository
                 ->setParameter('channelIds', $ids);
         }
 
-        return $qb->getQuery()->getArrayResult();
+        return $aclHelper->apply($qb)->getArrayResult();
     }
 }

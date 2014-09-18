@@ -270,3 +270,4 @@ services:
         arguments:
             - @doctrine
             - @translator
+            - @oro_security.acl_helper

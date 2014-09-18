@@ -25,14 +25,20 @@ class CustomerDataProvider
     protected $translator;
 
     /**
+     * @var AclHelper
+     */
+    protected $aclHelper;
+
+    /**
      * @param ManagerRegistry     $registry
      * @param TranslatorInterface $translator
      * @param AclHelper           $aclHelper
      */
-    public function __construct(ManagerRegistry $registry, TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry, TranslatorInterface $translator, AclHelper $aclHelper)
     {
         $this->registry   = $registry;
         $this->translator = $translator;
+        $this->aclHelper  = $aclHelper;
     }
 
     /**
@@ -60,9 +66,9 @@ class CustomerDataProvider
         $items      = [];
 
         // get all integration channels
-        $channels   = $channelRepository->getByType('magento');
+        $channels   = $channelRepository->getByType($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
-        $data       = $customerRepository->getGroupedByChannelArray($past, $now, $channelIds);
+        $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, $now, $channelIds);
 
         // create dates by date period
         foreach ($datePeriod as $dt) {

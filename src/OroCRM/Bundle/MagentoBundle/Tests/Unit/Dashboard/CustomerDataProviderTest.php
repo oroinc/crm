@@ -21,10 +21,18 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataProvider;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $aclHelper;
+
     protected function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
         $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $this->aclHelper  = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->translator->expects($this->any())
             ->method('trans')
@@ -36,7 +44,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->dataProvider = new CustomerDataProvider($this->registry, $this->translator);
+        $this->dataProvider = new CustomerDataProvider($this->registry, $this->translator, $this->aclHelper);
     }
 
     public function testGetNewCustomerChartView()
@@ -103,11 +111,12 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $channelRepository->expects($this->once())
             ->method('getByType')
-            ->with('magento')
+            ->with($this->aclHelper, 'magento')
             ->will($this->returnValue($expectedChannels));
 
         $customerRepository->expects($this->once())
             ->method('getGroupedByChannelArray')
+            ->with($this->aclHelper)
             ->will($this->returnValue($sourceData));
 
         $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')

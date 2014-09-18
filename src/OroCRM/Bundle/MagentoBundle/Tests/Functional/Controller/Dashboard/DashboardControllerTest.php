@@ -31,9 +31,7 @@ class DashboardControllerTest extends WebTestCase
         $this->assertContains('New Magento Customers', $result->getContent());
 
         /** @var Channel[] $channels */
-        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->getByType(
-            'magento'
-        );
+        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->findAll();
         foreach ($channels as $channel) {
             $this->assertContains($channel->getName(), $result->getContent());
         }
