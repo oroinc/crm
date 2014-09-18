@@ -7,7 +7,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 
-class AddDashboardMultilineWidgets extends AbstractDashboardFixture implements DependentFixtureInterface
+class AddECommerceDashboard extends AbstractDashboardFixture implements DependentFixtureInterface
 {
     /**
      * {@inheritdoc}
@@ -22,12 +22,11 @@ class AddDashboardMultilineWidgets extends AbstractDashboardFixture implements D
      */
     public function load(ObjectManager $manager)
     {
-        $mainDashboard = $this->findAdminDashboardModel($manager, 'main');
+        $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
+        $dashboard
+            ->setLabel($this->container->get('translator')->trans('orocrm.magento.dashboard.e_commerce'))
+            ->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]));
 
-        if ($mainDashboard) {
-            $mainDashboard->addWidget($this->createWidgetModel('average_order_amount_chart', [1, 200]));
-
-            $manager->flush();
-        }
+        $manager->flush();
     }
 }

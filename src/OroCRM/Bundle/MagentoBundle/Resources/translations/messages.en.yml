@@ -3,6 +3,7 @@
 orocrm:
     magento:
         dashboard:
+            e_commerce: E-commerce
             my_sales_flow_b2c_chart:
                 title: My Sales Flow B2C
                 description: This widget gives you a quick overview of a B2C workflow in form of a funnel chart

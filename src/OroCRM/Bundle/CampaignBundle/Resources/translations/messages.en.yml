@@ -57,16 +57,21 @@ orocrm:
                 description: This widget shows you top 5 campaigns that generate most revenue.
         organization:
             label: Organization
+
         emailcampaign:
             entity_description:  Marketing email campaigns
             entity_label:        Email Campaign
             entity_plural_label: Email Campaigns
             id.label:            Id
             name.label:          Name
-            senderEmail.label:   Sender Email
-            senderName.label:    Sender Name
+            sender_email.label:  Sender Email
+            sender_name.label:   Sender Name
             description.label:   Description
-            transport.label:     Transport
+            organization.label:  Organization
+
+            transport.label:          Transport
+            transport_settings.label: Transport Settings
+
             schedule:
                 label:    Schedule
                 manual:   Manual
@@ -80,6 +85,7 @@ orocrm:
             updated_at.label:     Updated At
             campaign.label:       Campaign
             sent.label:           Sent
+            sent_at.label:        Sent At
             status:
                 sent: Sent
                 not_sent: Not sent
