@@ -6,9 +6,9 @@ orocrm:
             my_sales_flow_b2c_chart:
                 title: My Sales Flow B2C
                 description: This widget gives you a quick overview of a B2C workflow in form of a funnel chart
-            average_order_amount_by_customer_chart:
-                title: Average order amount by customer
-                description: This widget shows average order amount by customer for each data channel in form of a line chart
+            average_order_amount_chart:
+                title: Average order amount
+                description: This widget shows average order amount for each data channel in form of a line chart
                 order_amount: Order amount
             new_magento_customers_chart:
                 title: New Magento Customers

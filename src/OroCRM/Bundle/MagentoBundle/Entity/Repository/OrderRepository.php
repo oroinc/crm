@@ -74,26 +74,22 @@ class OrderRepository extends EntityRepository
             $result[$channelId] = ['name' => $channelName, 'data' => $channelTemplate];
         }
 
-        // execute query
-        $sql = '
-            SELECT data_channel_id, month_created, AVG(order_amount) as average_order_amount
-            FROM (
-                SELECT
-                    data_channel_id,
-                    EXTRACT(month from created_at) as month_created,
-                    SUM(subtotal_amount - discount_amount) as order_amount
-                FROM orocrm_magento_order
-                WHERE created_at > DATE ?
-                GROUP BY customer_id, data_channel_id, month_created
-            ) as amount_query
-            GROUP BY data_channel_id, month_created';
-        $amountStatistics = $entityManager->getConnection()->fetchAll($sql, array($sliceDate->format('Y-m-d')));
+        // execute data query
+        $queryBuilder = $this->createQueryBuilder('o');
+        $selectClause = '
+            IDENTITY(o.dataChannel) AS dataChannelId,
+            MONTH(o.createdAt) as monthCreated,
+            AVG(o.subtotalAmount - o.discountAmount) as averageOrderAmount';
+        $queryBuilder->select($selectClause)
+            ->where('o.createdAt > :sliceDate')->setParameter('sliceDate', $sliceDate)
+            ->groupBy('dataChannelId, monthCreated');
+        $amountStatistics = $aclHelper->apply($queryBuilder)->execute();
 
         foreach ($amountStatistics as $row) {
-            $channelId   = (int)$row['data_channel_id'];
-            $month       = (int)$row['month_created'];
+            $channelId   = (int)$row['dataChannelId'];
+            $month       = (int)$row['monthCreated'];
             $year        = $monthMatch[$month]['year'];
-            $orderAmount = (float)$row['average_order_amount'];
+            $orderAmount = (float)$row['averageOrderAmount'];
 
             if (isset($result[$channelId]['data'][$year][$month])) {
                 $result[$channelId]['data'][$year][$month] += $orderAmount;
