@@ -4,7 +4,7 @@ oro_entity:
             lifetimeValue:
                 query:
                     select:
-                        expr:         h.amount
+                        expr:         COALESCE (h.amount, 0)
                         return_type:  money
                     join:
                         left:
