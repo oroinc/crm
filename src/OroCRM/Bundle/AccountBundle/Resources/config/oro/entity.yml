@@ -4,8 +4,8 @@ oro_entity:
             lifetimeValue:
                 query:
                     select:
-                        expr:         h.amount
+                        expr:         COALESCE (h.amount, 0)
                         return_type:  money
                     join:
                         left:
-                            - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: h, conditionType: 'WITH', condition: 'h.account = entity' }
+                            - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: h, conditionType: 'WITH', condition: 'h.account = entity AND h.status = 1' }

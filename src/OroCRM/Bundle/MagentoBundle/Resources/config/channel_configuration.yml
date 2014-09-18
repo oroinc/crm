@@ -51,4 +51,4 @@ orocrm_channel:
                 - OroCRM\Bundle\MagentoBundle\Entity\Order
             integration_type: magento
             customer_identity: OroCRM\Bundle\MagentoBundle\Entity\Customer
-            lifetime_value: lifetimevalue
+            lifetime_value: lifetime

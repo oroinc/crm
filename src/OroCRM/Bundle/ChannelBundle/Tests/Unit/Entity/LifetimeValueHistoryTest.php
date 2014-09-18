@@ -28,8 +28,10 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
         $someAmount   = 123.12;
         $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
         $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $status       = true;
 
         return [
+            'status'      => ['status', $status, $status],
             'amount'      => ['amount', $someAmount, $someAmount],
             'account'     => ['account', $account, $account],
             'dataChannel' => ['dataChannel', $channel, $channel],
