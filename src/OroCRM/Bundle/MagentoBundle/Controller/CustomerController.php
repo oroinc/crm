@@ -89,7 +89,12 @@ class CustomerController extends Controller
      */
     public function customerInfoAction(Customer $customer, Channel $channel)
     {
-        return array('customer' => $customer, 'channel' => $channel);
+        return [
+            'customer'       => $customer,
+            'channel'        => $channel,
+            'orderClassName' => $this->container->getParameter('orocrm_magento.entity.order.class'),
+            'cartClassName'  => $this->container->getParameter('orocrm_magento.entity.cart.class'),
+        ];
     }
 
     /**

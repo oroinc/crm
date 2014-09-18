@@ -2,18 +2,17 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @Route("/b2bcustomer")
@@ -232,6 +231,11 @@ class B2bCustomerController extends Controller
      */
     public function customerInfoAction(B2bCustomer $customer, Channel $channel)
     {
-        return array('customer' => $customer, 'channel' => $channel);
+        return [
+            'customer'             => $customer,
+            'channel'              => $channel,
+            'leadClassName'        => $this->container->getParameter('orocrm_sales.lead.entity.class'),
+            'opportunityClassName' => $this->container->getParameter('orocrm_sales.opportunity.class'),
+        ];
     }
 }
