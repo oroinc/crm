@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -42,12 +43,13 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $companies          = [];
         $customersPersisted = 0;
         $channel            = $this->getChannel();
+        $organization       = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         while (($data = fgetcsv($handle, 1000, ",")) !== false && $customersPersisted < 25) {
             $data = array_combine($headers, array_values($data));
 
             if (!isset($companies[$data['Company']])) {
-                $customer = $this->createCustomer($data, $channel);
+                $customer = $this->createCustomer($organization, $data, $channel);
 
                 $this->em->persist($customer);
 
@@ -61,12 +63,13 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
     }
 
     /**
-     * @param array   $data
-     * @param Channel $channel
+     * @param Organization $organization
+     * @param array        $data
+     * @param Channel      $channel
      *
      * @return B2bCustomer
      */
-    protected function createCustomer($data, Channel $channel = null)
+    protected function createCustomer(Organization $organization, $data, Channel $channel = null)
     {
         $address  = new Address();
         $customer = new B2bCustomer();
@@ -74,6 +77,7 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $customer->setName($data['Company']);
         $customer->setOwner($this->getRandomUserReference());
         $customer->setAccount($this->getAccount());
+        $customer->setOrganization($organization);
 
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
