@@ -50,6 +50,9 @@ parameters:
 
     orocrm_magento.converter.region.class:                                  OroCRM\Bundle\MagentoBundle\Converter\RegionConverter
 
+    # dahsboard
+    orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -249,3 +252,10 @@ services:
         class: %orocrm_magento.converter.region.class%
         arguments:
             - @orocrm_magento.orm.regions_repository
+
+    orocrm_magento.dashboard.data_provider.order:
+        class: %orocrm_magento.dashboard.data_provider.order.class%
+        arguments:
+            - @doctrine
+            - @translator
+            - @oro_security.acl_helper
