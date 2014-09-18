@@ -64,16 +64,16 @@
             }
 
         select2Config.ajax = {
-            'url': {{ url|json_encode|raw }},
-            'data': function (query, page) {
+            url: {{ url|json_encode|raw }},
+            data: function (query, page) {
                 return {
-                    'page': page,
-                    'per_page': {{ configs.per_page|default(10) }},
-                    'name': "{{ configs.autocomplete_alias }}",
-                    'query': getQueryString(query)
+                    page: page,
+                    per_page: {{ configs.per_page|default(10)|json_encode|raw }},
+                    name: {{ configs.autocomplete_alias|json_encode|raw }},
+                    query: getQueryString(query)
                 };
             },
-            'results': function (data, page) {
+            results: function (data, page) {
                 return data;
             }
         };
