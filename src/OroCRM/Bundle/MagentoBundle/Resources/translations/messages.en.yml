@@ -10,7 +10,10 @@ orocrm:
                 title: Average order amount by customer
                 description: This widget shows average order amount by customer for each data channel in form of a line chart
                 order_amount: Order amount
-
+            new_magento_customers_chart:
+                title: New Magento Customers
+                description: This widget gives you a quick overview of new magento customers
+                customer_count: Customers count
         datagrid:
             actions:
                 view:

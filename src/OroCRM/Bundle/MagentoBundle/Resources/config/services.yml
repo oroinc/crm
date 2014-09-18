@@ -48,6 +48,7 @@ parameters:
 
     # dahsboard
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
+    orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -263,3 +264,9 @@ services:
             - @doctrine
             - @translator
             - @oro_security.acl_helper
+
+    orocrm_magento.dashboard.data_provider.customer:
+        class: %orocrm_magento.dashboard.data_provider.customer.class%
+        arguments:
+            - @doctrine
+            - @translator

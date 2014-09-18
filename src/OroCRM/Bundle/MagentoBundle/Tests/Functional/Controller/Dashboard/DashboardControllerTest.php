@@ -21,4 +21,21 @@ class DashboardControllerTest extends WebTestCase
             $this->assertContains($channel->getName(), $result->getContent());
         }
     }
+
+    public function testNewCustomersAction()
+    {
+        $this->initClient();
+        $this->client->request('GET', $this->getUrl('orocrm_magento_dashboard_new_customers_chart'));
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains('New Magento Customers', $result->getContent());
+
+        /** @var Channel[] $channels */
+        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->getByType(
+            'magento'
+        );
+        foreach ($channels as $channel) {
+            $this->assertContains($channel->getName(), $result->getContent());
+        }
+    }
 }
