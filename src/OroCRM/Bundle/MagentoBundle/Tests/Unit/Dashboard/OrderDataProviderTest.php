@@ -77,7 +77,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_by_customer_chart.order_amount.trans',
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount.trans',
                     'type' => 'currency',
                 ],
             ],

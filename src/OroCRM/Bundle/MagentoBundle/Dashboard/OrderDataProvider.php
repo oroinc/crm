@@ -69,7 +69,7 @@ class OrderDataProvider
         }
 
         $orderAmountLabel = $this->translator->trans(
-            'orocrm.magento.dashboard.average_order_amount_by_customer_chart.order_amount'
+            'orocrm.magento.dashboard.average_order_amount_chart.order_amount'
         );
         $chartOptions = [
             'name' => 'multiline_chart',

@@ -25,7 +25,7 @@ class AddDashboardMultilineWidgets extends AbstractDashboardFixture implements D
         $mainDashboard = $this->findAdminDashboardModel($manager, 'main');
 
         if ($mainDashboard) {
-            $mainDashboard->addWidget($this->createWidgetModel('average_order_amount_by_customer_chart', [1, 200]));
+            $mainDashboard->addWidget($this->createWidgetModel('average_order_amount_chart', [1, 200]));
 
             $manager->flush();
         }
