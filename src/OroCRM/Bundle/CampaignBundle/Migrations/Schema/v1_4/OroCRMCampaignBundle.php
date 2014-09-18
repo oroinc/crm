@@ -15,14 +15,24 @@ class OroCRMCampaignBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addOrganization($schema);
+        self::addOrganization($schema, 'orocrm_campaign');
+        self::addOrganization($schema, 'orocrm_campaign_email');
 
         //Add organization fields to ownership entity config
         $queries->addQuery(
             new UpdateOwnershipTypeQuery(
-                'OroCRM\Bundle\CallBundle\Entity\Call',
+                'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
                 [
-                    'organization_field_name' => 'organization',
+                    'organization_field_name'  => 'organization',
+                    'organization_column_name' => 'organization_id'
+                ]
+            )
+        );
+        $queries->addQuery(
+            new UpdateOwnershipTypeQuery(
+                'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign',
+                [
+                    'organization_field_name'  => 'organization',
                     'organization_column_name' => 'organization_id'
                 ]
             )
@@ -33,12 +43,12 @@ class OroCRMCampaignBundle implements Migration
      * Adds organization_id field
      *
      * @param Schema $schema
+     * @param string $tableName
      */
-    public static function addOrganization(Schema $schema)
+    public static function addOrganization(Schema $schema, $tableName)
     {
-        $table = $schema->getTable('orocrm_campaign');
+        $table = $schema->getTable($tableName);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_E9A0640332C8A3DE', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_id'],
