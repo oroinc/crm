@@ -2,30 +2,35 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
+use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\UnitOfWork;
+use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Doctrine\Common\Annotations\AnnotationReader;
 
-use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\EntityManagerMock;
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
+use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\EntityManagerMock;
 
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
 {
+    const TEST_CHANNEL_ID = 1;
+    const TEST_ACCOUNT_ID = 112;
+
     /** @var EntityManagerMock */
     protected $em;
+
+    /** @var UnitOfWork|\PHPUnit_Framework_MockObject_MockObject */
+    protected $uow;
 
     /** @var ChannelDoctrineListener */
     protected $channelDoctrineListener;
 
-    /** @var UnitOfWork */
-    protected $uow;
-
     /** @var array */
-    protected $fields = [
-        'temp1' => [
+    protected $settings = [
+        'someChannelType' => [
             'entity' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
             'field'  => 'lifetime',
         ]
@@ -40,86 +45,49 @@ class ChannelDoctrineListenerTest extends OrmTestCase
             'password'     => 'wayne'
         ];
 
-        $this->em = $this->getTestEntityManager($conn);
+        $metadataDriver = new AnnotationDriver(
+            new AnnotationReader(),
+            ['OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity']
+        );
 
         $this->uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
             ->disableOriginalConstructor()->getMock();
-        $this->uow->expects($this->any())->method('commit');
-        $this->uow->expects($this->any())->method('persist');
-
+        $this->em  = $this->getTestEntityManager($conn);
         $this->em->setUnitOfWork($this->uow);
-
-        $metadataDriver = new AnnotationDriver(
-            new AnnotationReader(),
-            [
-                'OroCRM\Bundle\AccountBundle\Entity',
-                'OroCRM\Bundle\ChannelBundle\Entity',
-                'OroCRM\Bundle\MagentoBundle\Entity',
-                'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity',
-            ]
-        );
-
-        $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()->getMock();
-        $this->em->setUnitOfWork($unitOfWork);
 
         $config = $this->em->getConfiguration();
         $config->setMetadataDriverImpl($metadataDriver);
         $config->setEntityNamespaces(
             [
-                'OroCRMAccountBundle' => 'OroCRM\Bundle\AccountBundle\Entity',
-                'OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Entity',
+                'OroCRMAccountBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity',
+                'OroCRMChannelBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity',
                 'OroCRMMagentoBundle' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity',
             ]
         );
 
         $settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
-
-        $settingProvider->expects($this->once())
-            ->method('getLifetimeValueSettings')
-            ->will($this->returnValue($this->fields));
+        $settingProvider->expects($this->once())->method('getLifetimeValueSettings')
+            ->will($this->returnValue($this->settings));
 
         $this->channelDoctrineListener = new ChannelDoctrineListener($settingProvider);
     }
 
     protected function tearDown()
     {
-        unset($this->em, $this->channelDoctrineListener);
+        unset($this->em, $this->uow, $this->channelDoctrineListener);
     }
 
     public function testOnFlush()
     {
-        $args = $this->getMockBuilder('Doctrine\ORM\Event\OnFlushEventArgs')
-            ->disableOriginalConstructor()->getMock();
+        $args = new OnFlushEventArgs($this->em);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()->getMock();
-
-        $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()->getMock();
-
-        $em->expects($this->once())
-            ->method('getUnitOfWork')
-            ->will($this->returnValue($uow));
-
-        $args->expects($this->once())
-            ->method('getEntityManager')
-            ->will($this->returnValue($em));
-
-        $account    = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
-            ->disableOriginalConstructor()->getMock();
-        $account_id = spl_object_hash($account);
-        $account->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($account_id));
-
-        $channel    = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()->getMock();
-        $channel_id = spl_object_hash($channel);
-        $channel->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($channel_id));
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $account->expects($this->any())->method('getId')
+            ->will($this->returnValue(self::TEST_ACCOUNT_ID));
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel->expects($this->any())->method('getId')
+            ->will($this->returnValue(self::TEST_CHANNEL_ID));
 
         $customer = new Customer();
         $customer->setAccount($account);
@@ -134,70 +102,50 @@ class ChannelDoctrineListenerTest extends OrmTestCase
             'hash2' => $customer1,
         ];
 
-        $uow->expects($this->once())
-            ->method('getScheduledEntityInsertions')
+        $this->uow->expects($this->once())->method('getScheduledEntityInsertions')
             ->will($this->returnValue($entities));
-        $uow->expects($this->once())
-            ->method('getScheduledEntityDeletions')
+        $this->uow->expects($this->once())->method('getScheduledEntityDeletions')
             ->will($this->returnValue([]));
-        $uow->expects($this->once())
-            ->method('getScheduledEntityUpdates')
+        $this->uow->expects($this->once())->method('getScheduledEntityUpdates')
             ->will($this->returnValue([]));
-        $uow->expects($this->once())
-            ->method('getScheduledCollectionDeletions')
+        $this->uow->expects($this->once())->method('getScheduledCollectionDeletions')
             ->will($this->returnValue([]));
-        $uow->expects($this->once())
-            ->method('getScheduledCollectionUpdates')
+        $this->uow->expects($this->once())->method('getScheduledCollectionUpdates')
             ->will($this->returnValue([]));
 
         $this->channelDoctrineListener->onFlush($args);
 
-        $reflectionProperty = new \ReflectionProperty(get_class($this->channelDoctrineListener), 'queued');
-        $reflectionProperty->setAccessible(true);
-        $field = $reflectionProperty->getValue($this->channelDoctrineListener);
-
-        foreach ($field as $entity => $value) {
+        $queued = $this->readAttribute($this->channelDoctrineListener, 'queued');
+        foreach ($queued as $entity => $value) {
             $this->assertEquals($entity, 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer');
-            foreach ($value as $entityKey => $changeset) {
-                $this->assertEquals($entityKey, $account_id . '__' . $channel_id);
-                $this->assertArrayHasKey('account', $changeset);
-                $this->assertArrayHasKey('channel', $changeset);
-                $this->assertEquals($changeset['account'], $account_id);
-                $this->assertEquals($changeset['channel'], $channel_id);
+
+            foreach ($value as $entityKey => $changeSet) {
+                $this->assertArrayHasKey('account', $changeSet);
+                $this->assertArrayHasKey('channel', $changeSet);
+                $this->assertEquals($changeSet['account'], self::TEST_ACCOUNT_ID);
+                $this->assertEquals($changeSet['channel'], self::TEST_CHANNEL_ID);
             }
         }
     }
 
     public function testPostFlush()
     {
-        $args = $this->getMockBuilder('Doctrine\ORM\Event\PostFlushEventArgs')
-            ->disableOriginalConstructor()->getMock();
-        $args->expects($this->once())
-            ->method('getEntityManager')
-            ->will($this->returnValue($this->em));
+        $args = new PostFlushEventArgs($this->em);
 
-        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
-            ->disableOriginalConstructor()->getMock();
-        $channel = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
-            ->disableOriginalConstructor()->getMock();
+        $account  = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $channel  = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account2 = clone $account;
 
         $queue = [
             'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer' => [
-                "1__2" => [
-                    'account' => $account,
-                    'channel' => $channel,
-                ]
+                uniqid('accountId__channelId') => ['account' => $account, 'channel' => $channel],
+                uniqid('accountId__channelId') => ['account' => $account2, 'channel' => $channel],
             ]
         ];
 
-        $smt = $this->createStatementMock([['sclr0' => [100]]]);
-
-        $this->getDriverConnectionMock($this->em)
-            ->expects($this->any())
-            ->method('prepare')
-            ->will($this->returnValue($smt));
-
-        $this->em->setUnitOfWork($this->uow);
+        $this->setUpDatabaseQueriesAssertions($this->em);
+        $this->uow->expects($this->exactly(2))->method('persist');
+        $this->uow->expects($this->once())->method('commit');
 
         $reflectionProperty = new \ReflectionProperty(get_class($this->channelDoctrineListener), 'queued');
         $reflectionProperty->setAccessible(true);
@@ -207,33 +155,40 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     }
 
     /**
-     * @param array $records
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @param EntityManagerMock $em
      */
-    protected function createStatementMock(array $records)
+    private function setUpDatabaseQueriesAssertions(EntityManagerMock $em)
     {
-        $statement = $this->getMock('Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\StatementMock');
-        $statement->expects($this->exactly(count($records)))
-            ->method('fetchAll')
+        $selectLifetimeSmt = $this->getMock('Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\StatementMock');
+        $selectLifetimeSmt->expects($this->exactly(2))->method('fetchAll')
             ->will(
-                new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(
-                    array_merge($records, [false])
+                $this->onConsecutiveCalls(
+                    [['sclr0' => [100]]],
+                    [['sclr0' => [200]]]
                 )
             );
 
-        $statement->expects($this->exactly(count($records) - 1))
-            ->method('fetch')
-            ->will(
-                new \PHPUnit_Framework_MockObject_Stub_ConsecutiveCalls(
-                    array_merge($records, [false])
-                )
-            );
-
-        $statement->expects($this->exactly(count($records)))
-            ->method('rowCount')
+        $updateSmt = $this->getMock('Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\Mocks\StatementMock');
+        $updateSmt->expects($this->once())->method('rowCount')
             ->will($this->returnValue(1));
 
-        return $statement;
+        $this->getDriverConnectionMock($em)->expects($this->any())
+            ->method('prepare')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            'SELECT SUM(c0_.lifetime) AS sclr0 FROM Customer c0_ ' .
+                            'WHERE c0_.account_id = ? AND c0_.channel_id = ?',
+                            $selectLifetimeSmt
+                        ],
+                        [
+                            'UPDATE LifetimeValueHistory SET status = 0 ' .
+                            'WHERE account_id IN (?, ?) AND data_channel_id = ?',
+                            $updateSmt
+                        ]
+                    ]
+                )
+            );
     }
 }
