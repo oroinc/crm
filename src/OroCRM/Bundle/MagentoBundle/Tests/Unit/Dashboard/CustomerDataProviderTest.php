@@ -47,47 +47,19 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->dataProvider = new CustomerDataProvider($this->registry, $this->translator, $this->aclHelper);
     }
 
-    public function testGetNewCustomerChartView()
-    {
-        $expectedChannels = [
-            3 => [
-                'name' => 'First',
-            ],
-            4 => [
-                'name' => 'Second',
-            ]
-        ];
-
-        $sourceData = [
-            1 => [
-                1 => 3,
-                'cnt' => 16,
-                'data' => [2014 => [9 => 3]],
-                'createdAt' => new \DateTime('now', new \DateTimeZone('UTC'))
-            ],
-            2 => [
-                1 => 4,
-                'cnt' => 12,
-                'data' => [2014 => [9 => 5]],
-                'createdAt' => new \DateTime('now', new \DateTimeZone('UTC'))
-            ]
-        ];
-        $expectedArrayData = $this->getExpectedArrayData();
-        $expectedOptions = [
-            'name'        => 'multiline_chart',
-            'data_schema' => [
-                'label' => [
-                    'field_name' => 'month_year',
-                    'label'      => null,
-                    'type'       => 'month'
-                ],
-                'value' => [
-                    'field_name' => 'cnt',
-                    'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count.trans',
-                ],
-            ],
-        ];
-
+    /**
+     * @param array $channels
+     * @param array $sourceData
+     * @param array $expectedArrayData
+     * @param array $expectedOptions
+     * @dataProvider getNewCustomerChartViewDataProvider
+     */
+    public function testGetNewCustomerChartView(
+        array $channels,
+        array $sourceData,
+        array $expectedArrayData,
+        array $expectedOptions
+    ) {
         $channelRepository = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
             ->getMock();
@@ -112,7 +84,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $channelRepository->expects($this->once())
             ->method('getByType')
             ->with($this->aclHelper, 'magento')
-            ->will($this->returnValue($expectedChannels));
+            ->will($this->returnValue($channels));
 
         $customerRepository->expects($this->once())
             ->method('getGroupedByChannelArray')
@@ -144,38 +116,82 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    protected function getExpectedArrayData()
+    /**
+     * @return array
+     */
+    public function getNewCustomerChartViewDataProvider()
     {
+        $ulcTimezone = new \DateTimeZone('UTC');
+        $now  = new \DateTime('now', $ulcTimezone);
+        $past = clone $now;
+        $past = $past->sub(new \DateInterval("P11M"));
+        $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $ulcTimezone);
+
+        $past->setTime(0, 0, 0);
+
+        $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
+        $dates      = [];
+
+        $nowMonth = $now->format('Y-m');
+        $nowDate  = $now->format('Y-m-01');
+
+        // create dates by date period
+        /** @var \DateTime $dt */
+        foreach ($datePeriod as $dt) {
+            $key = $dt->format('Y-m');
+            $dates[$key] = array(
+                'month_year' => sprintf('%s-01', $key),
+                'cnt'        => 0
+            );
+        }
+
+        $expected = [];
+
+        $firstDates = $dates;
+        $firstDates[$nowMonth]['cnt'] = 16;
+        $expected['First'] = array_values($firstDates);
+
+        $secondDates = $dates;
+        $secondDates[$nowMonth]['cnt'] = 12;
+        $expected['Second'] = array_values($secondDates);
+
         return [
-            'First' => [
-                ['month_year' => '2013-09-01', 'cnt' => 0],
-                ['month_year' => '2013-10-01', 'cnt' => 0],
-                ['month_year' => '2013-11-01', 'cnt' => 0],
-                ['month_year' => '2013-12-01', 'cnt' => 0],
-                ['month_year' => '2014-01-01', 'cnt' => 0],
-                ['month_year' => '2014-02-01', 'cnt' => 0],
-                ['month_year' => '2014-03-01', 'cnt' => 0],
-                ['month_year' => '2014-04-01', 'cnt' => 0],
-                ['month_year' => '2014-05-01', 'cnt' => 0],
-                ['month_year' => '2014-06-01', 'cnt' => 0],
-                ['month_year' => '2014-07-01', 'cnt' => 0],
-                ['month_year' => '2014-08-01', 'cnt' => 0],
-                ['month_year' => '2014-09-01', 'cnt' => 16],
-            ],
-            'Second' => [
-                ['month_year' => '2013-09-01', 'cnt' => 0],
-                ['month_year' => '2013-10-01', 'cnt' => 0],
-                ['month_year' => '2013-11-01', 'cnt' => 0],
-                ['month_year' => '2013-12-01', 'cnt' => 0],
-                ['month_year' => '2014-01-01', 'cnt' => 0],
-                ['month_year' => '2014-02-01', 'cnt' => 0],
-                ['month_year' => '2014-03-01', 'cnt' => 0],
-                ['month_year' => '2014-04-01', 'cnt' => 0],
-                ['month_year' => '2014-05-01', 'cnt' => 0],
-                ['month_year' => '2014-06-01', 'cnt' => 0],
-                ['month_year' => '2014-07-01', 'cnt' => 0],
-                ['month_year' => '2014-08-01', 'cnt' => 0],
-                ['month_year' => '2014-09-01', 'cnt' => 12],
+            [
+                'channels' => [
+                    3 => [
+                        'name' => 'First',
+                    ],
+                    4 => [
+                        'name' => 'Second',
+                    ]
+                ],
+                'sourceData' => [
+                    [
+                        'channelId' => 3,
+                        'cnt' => 16,
+                        'formattedDate' => $nowDate
+                    ],
+                    [
+                        'channelId' => 4,
+                        'cnt' => 12,
+                        'formattedDate' => $nowDate
+                    ]
+                ],
+                'expectedArrayData' => $expected,
+                'expectedOptions' => [
+                    'name'        => 'multiline_chart',
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'month_year',
+                            'label'      => null,
+                            'type'       => 'month'
+                        ],
+                        'value' => [
+                            'field_name' => 'cnt',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count.trans',
+                        ],
+                    ],
+                ]
             ]
         ];
     }

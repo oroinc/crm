@@ -54,11 +54,12 @@ class CustomerDataProvider
         /** @var ChannelRepository $channelRepository */
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
 
-        $now          = new \DateTime('now', new \DateTimeZone('UTC'));
-        $past         = clone $now;
-        $past         = $past->sub(new \DateInterval("P12M"));
+        $ulcTimezone = new \DateTimeZone('UTC');
+        $now  = new \DateTime('now', $ulcTimezone);
+        $past = clone $now;
+        $past = $past->sub(new \DateInterval("P11M"));
+        $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $ulcTimezone);
 
-        $now->setTime(23, 59, 59);
         $past->setTime(0, 0, 0);
 
         $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
@@ -71,6 +72,7 @@ class CustomerDataProvider
         $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, $now, $channelIds);
 
         // create dates by date period
+        /** @var \DateTime $dt */
         foreach ($datePeriod as $dt) {
             $key = $dt->format('Y-m');
             $dates[$key] = array(
@@ -79,14 +81,15 @@ class CustomerDataProvider
             );
         }
 
-        foreach ($data as $v) {
-            $key         = \DateTime::createFromFormat('Y-m-d', $v['formattedDate'])->format('Y-m');
-            $channelName = $channels[$v[1]]['name'];
+        foreach ($data as $row) {
+            $key         = \DateTime::createFromFormat('Y-m-d', $row['formattedDate'])->format('Y-m');
+            $channelId   = (int)$row['channelId'];
+            $channelName = $channels[$channelId]['name'];
 
             if (!isset($items[$channelName])) {
                 $items[$channelName] = $dates;
             }
-            $items[$channelName][$key]['cnt'] = (int)$v['cnt'];
+            $items[$channelName][$key]['cnt'] = (int)$row['cnt'];
         }
 
         // restore default keys
