@@ -86,6 +86,24 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     protected $name;
 
     /**
+     * @var double
+     *
+     * @ORM\Column(name="lifetime", type="money", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=15
+     *          }
+     *      }
+     * )
+     */
+    protected $lifetime = 0;
+
+    /**
      * @var Address $shippingAddress
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
@@ -259,6 +277,22 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param float $lifetime
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
     }
 
     /**
