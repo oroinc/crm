@@ -62,4 +62,24 @@ class DashboardController extends Controller
 
         return $widgetAttr;
     }
+
+    /**
+     * @Route(
+     *      "/average_order_amount_by_customer",
+     *      name="orocrm_magento_dashboard_average_order_amount",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:ordersByCustomers.html.twig")
+     */
+    public function averageOrderAmountAction()
+    {
+        $widgetAttributes = $this->get('oro_dashboard.widget_attributes');
+        $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
+        $chartViewBuilder = $this->get('oro_chart.view_builder');
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
+        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView($chartViewBuilder);
+
+        return $data;
+    }
 }
