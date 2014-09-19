@@ -7,8 +7,8 @@
 .order-info-widget {
     /*min-height: 300px;*/
 }
-.magento-website-selector-container .selector {
-    float:left;
+.magento-website-selector-container {
+    position: relative;
 }
 .magento-website-selector-container .selector > span {
     overflow: hidden;
@@ -17,8 +17,10 @@
     width: 235px !important;
 }
 .magento-website-selector-container .sync-website-list-link {
-    line-height: 26px;
-    margin-left: 15px;
+    line-height: 28px;
+    position: absolute;
+    top: 0;
+    left: 305px;
 }
 #magento-without-border-tabs{
     min-width: 595px;

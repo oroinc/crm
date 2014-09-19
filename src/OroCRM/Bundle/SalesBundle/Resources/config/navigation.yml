@@ -81,22 +81,6 @@ oro_menu_config:
                 description: 'orocrm.sales.menu.shortcut_new_opportunity.description'
                 isCustomAction: true
 
-        orocrm_sales_account_leads_tab:
-            label: 'orocrm.sales.widgets.leads'
-            display: false
-            extras:
-                position: 10
-                widgetRoute: 'orocrm_sales_widget_account_leads'
-                widgetAcl: 'orocrm_sales_lead_view'
-
-        orocrm_sales_account_opportunities_tab:
-            label: 'orocrm.sales.widgets.opportunities'
-            display: false
-            extras:
-                position: 20
-                widgetAcl: 'orocrm_sales_opportunity_view'
-                widgetRoute: 'orocrm_sales_widget_account_opportunities'
-
     tree:
         application_menu:
             children:
@@ -114,11 +98,6 @@ oro_menu_config:
                 shortcut_list_opportunities: ~
                 shortcut_new_lead: ~
                 shortcut_new_opportunity: ~
-
-        account_sales_tab_panel:
-            children:
-                orocrm_sales_account_leads_tab: ~
-                orocrm_sales_account_opportunities_tab: ~
 
 oro_titles:
     orocrm_sales_opportunity_index: ~

@@ -1,4 +1,8 @@
 parameters:
+    # entities
+    orocrm_magento.entity.order.class:                                      OroCRM\Bundle\MagentoBundle\Entity\Order
+    orocrm_magento.entity.cart.class:                                       OroCRM\Bundle\MagentoBundle\Entity\Cart
+
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
@@ -45,6 +49,9 @@ parameters:
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
 
     orocrm_magento.converter.region.class:                                  OroCRM\Bundle\MagentoBundle\Converter\RegionConverter
+
+    # dahsboard
+    orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -142,20 +149,12 @@ services:
         lazy: true
 
     # event listeners
-    orocrm_magento.event_listener.account_orders_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'accountId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-account-order-grid, method: onBuildAfter }
-
     orocrm_magento.event_listener.order:
         class: %orocrm_magento.event_listener.order.class%
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
@@ -253,3 +252,10 @@ services:
         class: %orocrm_magento.converter.region.class%
         arguments:
             - @orocrm_magento.orm.regions_repository
+
+    orocrm_magento.dashboard.data_provider.order:
+        class: %orocrm_magento.dashboard.data_provider.order.class%
+        arguments:
+            - @doctrine
+            - @translator
+            - @oro_security.acl_helper

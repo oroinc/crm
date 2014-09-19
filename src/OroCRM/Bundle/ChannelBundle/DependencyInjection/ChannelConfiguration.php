@@ -67,6 +67,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                 ->cannotBeEmpty()
                                 ->defaultValue(self::DEFAULT_CUSTOMER_IDENTITY)
                             ->end()
+                            ->scalarNode('lifetime_value')->cannotBeEmpty()->end()
                         ->end()
                     ->end()
                 ->end()
