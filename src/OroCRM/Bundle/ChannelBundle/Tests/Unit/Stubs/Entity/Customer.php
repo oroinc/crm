@@ -5,9 +5,6 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -38,14 +35,6 @@ class Customer
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "short"=true,
-     *          "order"=5
-     *      }
-     *  }
-     * )
      */
     protected $channel;
 

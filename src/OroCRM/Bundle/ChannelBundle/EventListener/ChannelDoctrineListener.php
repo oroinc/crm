@@ -18,6 +18,8 @@ use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class ChannelDoctrineListener
 {
+    const MAX_UPDATE_CHUNK_SIZE = 50;
+
     /** @var UnitOfWork */
     protected $uow;
 
@@ -88,7 +90,7 @@ class ChannelDoctrineListener
                         $oldAccount          = $this->getOldValue($changeSet, 'account');
                         $extraUpdateRequired = $oldChannel || $oldAccount;
                         if ($extraUpdateRequired) {
-                            $this->scheduleUpdate($className, $oldAccount ? : $account, $oldChannel ? : $channel);
+                            $this->scheduleUpdate($className, $oldAccount ?: $account, $oldChannel ?: $channel);
                         }
                     }
                 } else {
@@ -122,14 +124,14 @@ class ChannelDoctrineListener
                         ? $data['channel']
                         : $this->em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
 
-                    $entity = $this->createHistoryEntry($customerIdentity, $account, $channel);
+                    $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
                     $toOutDate[] = [$account, $channel];
 
                     $this->em->persist($entity);
                 }
             }
 
-            foreach (array_chunk($toOutDate, 50) as $chunks) {
+            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
                 $this->setOldHistoryStatus($chunks);
             }
 
@@ -158,8 +160,8 @@ class ChannelDoctrineListener
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
             $this->queued[$customerIdentity][$key] = [
-                'account' => $account->getId() ? : $account,
-                'channel' => $channel->getId() ? : $channel,
+                'account' => $account->getId() ?: $account,
+                'channel' => $channel->getId() ?: $channel,
             ];
         }
     }
@@ -199,21 +201,24 @@ class ChannelDoctrineListener
      */
     protected function setOldHistoryStatus(array $records)
     {
-        $accounts = $channels = [];
+        $groupedByChannel = [];
+        /** @var Channel $channel */
         foreach ($records as $row) {
-            list($accounts[], $channels[]) = $row;
+            list($account, $channel) = $row;
+            $groupedByChannel[$channel->getId()][] = $account;
         }
 
-        /** @var QueryBuilder $qb */
-        $qb = $this->em->createQueryBuilder();
-        $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
-        $qb->set('l.status', LifetimeValueHistory::STATUS_OLD);
-        $qb->andWhere('l.account IN (:accounts)');
-        $qb->andWhere('l.dataChannel IN (:channels)');
-        $qb->setParameter('accounts', $accounts);
-        $qb->setParameter('channels', $channels);
-
-        $qb->getQuery()->execute();
+        foreach ($groupedByChannel as $channelId => $accounts) {
+            /** @var QueryBuilder $qb */
+            $qb = $this->em->createQueryBuilder();
+            $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
+            $qb->set('l.status', LifetimeValueHistory::STATUS_OLD);
+            $qb->andWhere('l.account IN (:accounts)');
+            $qb->andWhere('l.dataChannel = :channel');
+            $qb->setParameter('accounts', $accounts);
+            $qb->setParameter('channel', $channelId);
+            $qb->getQuery()->execute();
+        }
     }
 
     /**
