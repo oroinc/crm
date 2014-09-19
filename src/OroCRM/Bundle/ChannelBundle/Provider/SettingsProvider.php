@@ -239,4 +239,24 @@ class SettingsProvider
 
         return $config;
     }
+
+    /**
+     * @return array
+     */
+    public function getLifetimeValueSettings()
+    {
+        $settings = $this->getSettings(self::CHANNEL_TYPE_PATH);
+        $result   = [];
+
+        foreach ($settings as $channelType => $setting) {
+            if (!empty($setting['lifetime_value'])) {
+                $result[$channelType] = [
+                    'entity' => $setting['customer_identity'],
+                    'field'  => $setting['lifetime_value']
+                ];
+            }
+        }
+
+        return $result;
+    }
 }
