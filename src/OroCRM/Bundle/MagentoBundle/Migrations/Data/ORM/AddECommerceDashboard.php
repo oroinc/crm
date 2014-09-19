@@ -25,7 +25,8 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
         $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
         $dashboard
             ->setLabel($this->container->get('translator')->trans('orocrm.magento.dashboard.e_commerce'))
-            ->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]));
+            ->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]))
+            ->addWidget($this->createWidgetModel('new_magento_customers_chart', [0, 0]));
 
         $manager->flush();
     }
