@@ -52,3 +52,7 @@ orocrm:
         call_date_time.label:  Call date & time
         contact_phone_number.label: Phone number
         organization.label:    Organization
+
+        datagrid:
+            delete: Delete
+            update: Update

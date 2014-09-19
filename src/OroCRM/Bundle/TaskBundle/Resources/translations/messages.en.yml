@@ -22,6 +22,9 @@ orocrm:
         organization.label:         Organization
 
         datagrid:
+            delete:       Delete
+            view:         View
+            update:       Update
             view: View
             update: Update
             delete: Delete

@@ -119,20 +119,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_task_view
-                label:         View
+                label:         orocrm.task.datagrid.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_task_update
-                label:         Update
+                label:         orocrm.task.datagrid.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_task_delete
-                label:         Delete
+                label:         orocrm.task.datagrid.delete
                 icon:          trash
                 link:          delete_link
 

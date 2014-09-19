@@ -83,3 +83,8 @@ orocrm:
 
         message:
             saved: Case saved
+
+        datagrid:
+            delete:       Delete
+            view:         View
+            update:       Update

@@ -724,13 +724,13 @@ datagrid:
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_b2bcustomer_update
-                label:         Update
+                label:         orocrm.sales.b2bcustomer.datagrid.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_b2bcustomer_delete
-                label:         Delete
+                label:         orocrm.sales.b2bcustomer.datagrid.delete
                 icon:          trash
                 link:          delete_link
 

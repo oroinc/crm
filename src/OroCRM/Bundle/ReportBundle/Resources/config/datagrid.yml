@@ -33,7 +33,7 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_account_view
-                label:         View
+                label:         oro.report.datagrid.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
@@ -103,7 +103,7 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_account_view
-                label:         View
+                label:         oro.report.datagrid.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true

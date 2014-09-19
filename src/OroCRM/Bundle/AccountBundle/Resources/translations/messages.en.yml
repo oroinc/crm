@@ -53,3 +53,11 @@ orocrm:
 
         organization:
             label: Organization
+
+        #
+        # DataGrid
+        #
+        datagrid:
+            delete:       Delete
+            view:         View
+            update:       Update
