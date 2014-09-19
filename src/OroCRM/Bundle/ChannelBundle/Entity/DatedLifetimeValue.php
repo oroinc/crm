@@ -1,0 +1,184 @@
+<?php
+
+namespace OroCRM\Bundle\ChannelBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+
+/**
+ * @ORM\Entity()
+ * @ORM\Table(name="orocrm_channel_dated_lifetime")
+ * @ORM\HasLifecycleCallbacks()
+ */
+class DatedLifetimeValue implements ChannelAwareInterface
+{
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @var Channel
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="CASCADE")
+     */
+    protected $dataChannel;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="amount", type="money")
+     */
+    protected $amount;
+
+    /**
+     * @var \DateTime $createdAt
+     *
+     * @ORM\Column(type="datetime", name="created_at")
+     */
+    protected $createdAt;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="day", type="smallint")
+     */
+    protected $day;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="month", type="smallint")
+     */
+    protected $month;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="quarter", type="smallint")
+     */
+    protected $quarter;
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param Channel $dataChannel
+     */
+    public function setDataChannel(Channel $dataChannel)
+    {
+        $this->dataChannel = $dataChannel;
+    }
+
+    /**
+     * @return Channel
+     */
+    public function getDataChannel()
+    {
+        return $this->dataChannel;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param int $day
+     */
+    public function setDay($day)
+    {
+        $this->day = $day;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDay()
+    {
+        return $this->day;
+    }
+
+    /**
+     * @param mixed $month
+     */
+    public function setMonth($month)
+    {
+        $this->month = $month;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    /**
+     * @param mixed $quarter
+     */
+    public function setQuarter($quarter)
+    {
+        $this->quarter = $quarter;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuarter()
+    {
+        return $this->quarter;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        $this->setCreatedAt($date);
+        $this->setDay($date->format('d'));
+        $this->setMonth($date->format('m'));
+        $this->setQuarter(ceil($date->format('m') / 3));
+    }
+}

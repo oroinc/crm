@@ -17,6 +17,8 @@ class OroCRMChannelBundle implements Migration
         $this->createOrocrmChannelLifetimeHistTable($schema);
         $this->addOrocrmChannelLifetimeHistForeignKeys($schema);
         $this->addChannelIndexes($schema);
+        $this->createOrocrmChannelLifetimeHistoryForDayTable($schema);
+        $this->createOrocrmChannelLifetimeHistoryForDayForeignKeys($schema);
     }
 
     /**
@@ -77,5 +79,46 @@ class OroCRMChannelBundle implements Migration
         $table->addIndex(['name'], 'crm_channel_name_idx', []);
         $table->addIndex(['status'], 'crm_channel_status_idx', []);
         $table->addIndex(['channel_type'], 'crm_channel_channel_type_idx', []);
+    }
+
+    /**
+     * Create orocrm_channel_lifetime_hist table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmChannelLifetimeHistoryForDayTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_channel_dated_lifetime');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn(
+            'amount',
+            'money',
+            ['notnull' => true, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']
+        );
+        $table->addColumn('created_at', 'datetime', []);
+        $table->addColumn('day', 'smallint', ['notnull' => false, 'unsigned' => true]);
+        $table->addColumn('month', 'smallint', ['notnull' => false, 'unsigned' => true]);
+        $table->addColumn('quarter', 'smallint', ['notnull' => false, 'unsigned' => true]);
+
+        $table->setPrimaryKey(['id']);
+
+        $table->addIndex(['data_channel_id']);
+    }
+
+    /**
+     * Create orocrm_channel_lifetime_hist table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmChannelLifetimeHistoryForDayForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_channel_dated_lifetime');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('orocrm_channel'),
+            ['data_channel_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+        );
     }
 }
