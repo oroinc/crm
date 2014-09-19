@@ -29,13 +29,12 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     protected $channelDoctrineListener;
 
     /** @var array */
-    protected $settings
-        = [
-            'someChannelType' => [
-                'entity' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
-                'field'  => 'lifetime',
-            ]
-        ];
+    protected $settings = [
+        'someChannelType' => [
+            'entity' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
+            'field'  => 'lifetime',
+        ]
+    ];
 
     protected function setUp()
     {
@@ -133,16 +132,14 @@ class ChannelDoctrineListenerTest extends OrmTestCase
     {
         $args = new PostFlushEventArgs($this->em);
 
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-
-        $account2 = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $channel2 = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account  = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $channel  = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $account2 = clone $account;
 
         $queue = [
             'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer' => [
                 uniqid('accountId__channelId') => ['account' => $account, 'channel' => $channel],
-                uniqid('accountId__channelId') => ['account' => $account2, 'channel' => $channel2],
+                uniqid('accountId__channelId') => ['account' => $account2, 'channel' => $channel],
             ]
         ];
 
