@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\DatedLifetimeValueRepository")
  * @ORM\Table(name="orocrm_channel_dated_lifetime")
  * @ORM\HasLifecycleCallbacks()
  */

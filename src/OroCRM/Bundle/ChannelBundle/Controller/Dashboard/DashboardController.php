@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller\Dashboard;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Bundle\FrameworkBundle\Translation\Translator;
@@ -12,6 +13,9 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
+use OroCRM\Bundle\ChannelBundle\Entity\DatedLifetimeValue;
 
 class DashboardController extends Controller
 {
@@ -25,7 +29,12 @@ class DashboardController extends Controller
      */
     public function averageCustomerLifetimeAction($widget)
     {
-##################################################################
+        /** @var ObjectManager $entityManager */
+        $om = $this->getDoctrine()->getManager();
+
+        /** @var AclHelper $aclHelper */
+        $aclHelper = $this->get('oro_security.acl_helper');
+
         // calculate slice date
         $currentYear  = (int)date('Y');
         $currentMonth = (int)date('m');
@@ -37,6 +46,7 @@ class DashboardController extends Controller
         // calculate match for month and default channel template
         $monthMatch      = [];
         $channelTemplate = [];
+
         if ($sliceYear != $currentYear) {
             for ($i = $sliceMonth; $i <= 12; $i++) {
                 $monthMatch[$i]                  = ['year' => $sliceYear, 'month' => $i];
@@ -47,92 +57,77 @@ class DashboardController extends Controller
             $monthMatch[$i]                    = ['year' => $currentYear, 'month' => $i];
             $channelTemplate[$currentYear][$i] = 0;
         }
-##################################################################
+
+        $channels         = $this->getChannels($om, $aclHelper);
+        $resultTemplate   = $this->prepareResultTemplate($channels, $channelTemplate);
+        $amountStatistics = $om->getRepository('OroCRMChannelBundle:DatedLifetimeValue')
+            ->findAmountStatisticsByDate($sliceDate);
+
+        foreach ($amountStatistics as $datedLifetimeValue) {
+            /** @var DatedLifetimeValue $datedLifetimeValue */
+            $channelId = (int)$datedLifetimeValue->getDataChannel()->getId();
+            $month     = (int)$datedLifetimeValue->getMonth();
+            $year      = $monthMatch[$month]['year'];
+            $amount    = (float)$datedLifetimeValue->getAmount();
+
+            if (isset($resultTemplate[$channelId]['data'][$year][$month])) {
+                $resultTemplate[$channelId]['data'][$year][$month] += $amount;
+            }
+        }
+
+        $items = $this->prepareChartItems($resultTemplate);
+
+        /** @var Translator $translator */
+        $translator = $this->get('translator');
+
+        /** @var ChartViewBuilder $viewBuilder */
+        $viewBuilder = $this->container->get('oro_chart.view_builder');
+        $widgetAttr  = $this->get('oro_dashboard.widget_attributes')
+            ->getWidgetAttributesForTwig('average_customer_lifetime_chart');
+
+        $widgetAttr['chartView'] = $this->getView($translator, $viewBuilder, $items);
+
+        return $widgetAttr;
+    }
 
 
-##################################################################
-        /** @var EntityManager $entityManager */
-        $em        = $this->getDoctrine();
-        $aclHelper = $this->get('oro_security.acl_helper');
-
-        $queryBuilder = $em->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c');
+    /**
+     * @param ObjectManager $om
+     * @param AclHelper     $aclHelper
+     *
+     * @return mixed
+     */
+    protected function getChannels(ObjectManager $om, AclHelper $aclHelper)
+    {
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $om->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c');
         $queryBuilder->select('c.id, c.name')->orderBy('c.name');
-        $channels = $aclHelper->apply($queryBuilder)->execute();
+        return $aclHelper->apply($queryBuilder)->execute();
+    }
 
-        // prepare result template
+    /**
+     * @param array $channels
+     * @param array $channelTemplate
+     *
+     * @return array
+     */
+    protected function prepareResultTemplate(array $channels, array $channelTemplate)
+    {
         $result = [];
         foreach ($channels as $channel) {
             $channelId          = $channel['id'];
             $channelName        = $channel['name'];
             $result[$channelId] = ['name' => $channelName, 'data' => $channelTemplate];
         }
-##################################################################
 
-##################################################################
-        $amountStatistics = $em->getRepository('OroCRMChannelBundle:DatedLifetimeValue')->findAll();
-
-##################################################################
-
-##################################################################
-
-        foreach ($amountStatistics as $datedLifetimeValue) {
-            $channelId = (int)$datedLifetimeValue->getDataChannel()->getId();
-            $month     = (int)$datedLifetimeValue->getMonth();
-            $year      = $monthMatch[$month]['year'];
-            $amount    = (float)$datedLifetimeValue->getAmount();
-
-            if (isset($result[$channelId]['data'][$year][$month])) {
-                $result[$channelId]['data'][$year][$month] += $amount;
-            }
-        }
-        // prepare chart items
-        $items = $this->prepareChartItems($result);
-##################################################################
-
-#########################################################################
-        /** @var Translator $translator */
-        $translator = $this->get('translator');
-
-        /** @var ChartViewBuilder $viewBuilder */
-        $viewBuilder = $this->container->get('oro_chart.view_builder');
-
-        $widgetAttr = $this->get('oro_dashboard.widget_attributes')
-            ->getWidgetAttributesForTwig('average_customer_lifetime_chart');
-
-        $widgetAttr['chartView'] = $this->getView($translator, $viewBuilder, $items);
-#########################################################################
-
-        return $widgetAttr;
+        return $result;
     }
 
     /**
-     * @param Translator       $translator
-     * @param ChartViewBuilder $viewBuilder
-     * @param array            $items
+     * @param $resultTemplate
      *
-     * @return ChartView
+     * @return array
      */
-    protected function getView(Translator $translator, ChartViewBuilder $viewBuilder, $items)
-    {
-        return $viewBuilder
-            ->setOptions(
-                [
-                    'name'        => 'multiline_chart',
-                    "data_schema" => [
-                        "label" => ["field_name" => "month", "label" => null, "type" => "date"],
-                        "value" => [
-                            "field_name" => "amount",
-                            "label"      => $translator->trans(
-                                    'orocrm.channel.dashboard.average_customer_lifetime_chart.lifetime'
-                                )
-                        ],
-                    ],
-                ]
-            )
-            ->setArrayData($items)
-            ->getView();
-    }
-
     protected function prepareChartItems($resultTemplate)
     {
         $items = [];
@@ -153,5 +148,41 @@ class DashboardController extends Controller
             }
         }
         return $items;
+    }
+
+    /**
+     * @param Translator       $translator
+     * @param ChartViewBuilder $viewBuilder
+     * @param array            $items
+     *
+     * @return ChartView
+     */
+    protected function getView(Translator $translator, ChartViewBuilder $viewBuilder, $items)
+    {
+        return $viewBuilder
+            ->setOptions(
+                [
+                    'name'        => 'multiline_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'month', 'label' => null, 'type' => 'date'],
+                        'value' => [
+                            'field_name' => 'amount',
+                            'label'      => $this->getTranslationLabel($translator)
+                        ],
+                    ],
+                ]
+            )
+            ->setArrayData($items)
+            ->getView();
+    }
+
+    /**
+     * @param Translator $translator
+     *
+     * @return string
+     */
+    protected function getTranslationLabel(Translator $translator)
+    {
+        return $translator->trans('orocrm.channel.dashboard.average_customer_lifetime_chart.lifetime');
     }
 }
