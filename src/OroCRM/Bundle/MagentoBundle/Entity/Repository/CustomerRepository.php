@@ -27,8 +27,7 @@ class CustomerRepository extends EntityRepository
         $qb->select(
             "DATE(CONCAT(YEAR(c.createdAt), '-', MONTH(c.createdAt), '-01')) as formattedDate",
             'COUNT(c) as cnt',
-            'IDENTITY(c.dataChannel)',
-            'c.createdAt'
+            'IDENTITY(c.dataChannel)'
         )
             ->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
             ->setParameter('dateFrom', $dateFrom)

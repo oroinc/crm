@@ -54,9 +54,7 @@ class CustomerDataProvider
         /** @var ChannelRepository $channelRepository */
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
 
-        $currentYear  = (int)date('Y');
-        $currentMonth = (int)date('m');
-        $now          = new \DateTime(sprintf('%s-%s-01', $currentYear, $currentMonth), new \DateTimeZone('UTC'));
+        $now          = new \DateTime('now', new \DateTimeZone('UTC'));
         $past         = clone $now;
         $past         = $past->sub(new \DateInterval("P12M"));
 
@@ -82,7 +80,7 @@ class CustomerDataProvider
         }
 
         foreach ($data as $v) {
-            $key         = $v['createdAt']->format('Y-m');
+            $key         = \DateTime::createFromFormat('Y-m-d', $v['formattedDate'])->format('Y-m');
             $channelName = $channels[$v[1]]['name'];
 
             if (!isset($items[$channelName])) {
