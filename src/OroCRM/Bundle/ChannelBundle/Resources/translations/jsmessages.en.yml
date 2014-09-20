@@ -15,9 +15,9 @@ orocrm:
             select_customer_identity: Please select customer identity
             entity:                   Please select entity
         confirmation:
-            text: Are you sure you want to change type?
-            title: Change Type
-            agree: Yes, I Agree
+            text: Are you sure you want to change channel type?
+            title: Change Channel Type
+            agree: Yes
         entity_owner:
             System: System
             Custom: Custom
