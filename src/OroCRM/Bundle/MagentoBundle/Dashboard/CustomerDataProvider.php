@@ -82,7 +82,7 @@ class CustomerDataProvider
         }
 
         foreach ($data as $row) {
-            $key         = \DateTime::createFromFormat('Y-m-d', $row['formattedDate'])->format('Y-m');
+            $key         = date("Y-m", strtotime(sprintf('%s-%s', $row['yearCreated'], $row['monthCreated'])));
             $channelId   = (int)$row['channelId'];
             $channelName = $channels[$channelId]['name'];
 

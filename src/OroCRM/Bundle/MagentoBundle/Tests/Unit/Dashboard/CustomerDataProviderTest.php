@@ -133,7 +133,6 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $dates      = [];
 
         $nowMonth = $now->format('Y-m');
-        $nowDate  = $now->format('Y-m-01');
 
         // create dates by date period
         /** @var \DateTime $dt */
@@ -167,14 +166,16 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                 ],
                 'sourceData' => [
                     [
-                        'channelId' => 3,
-                        'cnt' => 16,
-                        'formattedDate' => $nowDate
+                        'channelId'    => 3,
+                        'cnt'          => 16,
+                        'yearCreated'  => $now->format('Y'),
+                        'monthCreated' => $now->format('m'),
                     ],
                     [
-                        'channelId' => 4,
-                        'cnt' => 12,
-                        'formattedDate' => $nowDate
+                        'channelId'    => 4,
+                        'cnt'          => 12,
+                        'yearCreated'  => $now->format('Y'),
+                        'monthCreated' => $now->format('m'),
                     ]
                 ],
                 'expectedArrayData' => $expected,
