@@ -108,7 +108,8 @@ class TransportSettingsEmailTemplateListener implements EventSubscriberInterface
                 'query_builder'  => function (EmailTemplateRepository $templateRepository) use ($entityName, $token) {
                     return $templateRepository->getEntityTemplatesQueryBuilder(
                         $entityName,
-                        $token->getOrganizationContext()
+                        $token->getOrganizationContext(),
+                        true
                     );
                 },
             ],
