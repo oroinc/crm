@@ -8,11 +8,11 @@ orocrm:
             success: Marketing list successfully refreshed
         remove_dialog:
             confirm_title: Remove Confirmation
-            confirm_ok: Yes, I Agree
+            confirm_ok: Yes
             content: Are you sure you want to remove this item?
             success: Removed.
         unremove_dialog:
             confirm_title: Undo Remove Confirmation
-            confirm_ok: Yes, I Agree
+            confirm_ok: Yes
             content: Are you sure you want to undo remove for this item?
             success: Removed.
