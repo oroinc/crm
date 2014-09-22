@@ -15,4 +15,8 @@ oro_dashboard_config:
             route:       orocrm_magento_dashboard_average_order_amount
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.average_order_amount_chart.description
-            icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
+        new_magento_customers_chart:
+            label:       orocrm.magento.dashboard.new_magento_customers_chart.title
+            route:       orocrm_magento_dashboard_new_customers_chart
+            acl:         orocrm_magento_cart_view
+            description: orocrm.magento.dashboard.new_magento_customers_chart.description

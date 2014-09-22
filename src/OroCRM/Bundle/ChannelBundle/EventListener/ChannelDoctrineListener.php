@@ -212,7 +212,7 @@ class ChannelDoctrineListener
             /** @var QueryBuilder $qb */
             $qb = $this->em->createQueryBuilder();
             $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
-            $qb->set('l.status', LifetimeValueHistory::STATUS_OLD);
+            $qb->set('l.status', $qb->expr()->literal(LifetimeValueHistory::STATUS_OLD));
             $qb->andWhere('l.account IN (:accounts)');
             $qb->andWhere('l.dataChannel = :channel');
             $qb->setParameter('accounts', $accounts);

@@ -11,7 +11,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository")
  * @ORM\Table(name="orocrm_channel", indexes={
  *     @ORM\Index(name="crm_channel_name_idx", columns={"name"}),
  *     @ORM\Index(name="crm_channel_status_idx", columns={"status"}),
