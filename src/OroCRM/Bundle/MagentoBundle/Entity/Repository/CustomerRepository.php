@@ -25,14 +25,15 @@ class CustomerRepository extends EntityRepository
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
-            "DATE(CONCAT(YEAR(c.createdAt), '-', MONTH(c.createdAt), '-01')) as formattedDate",
+            'YEAR(c.createdAt) as yearCreated',
+            'MONTH(c.createdAt) as monthCreated',
             'COUNT(c) as cnt',
             'IDENTITY(c.dataChannel) as channelId'
         )
             ->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
             ->setParameter('dateFrom', $dateFrom)
             ->setParameter('dateTo', $dateTo)
-            ->groupBy('formattedDate', 'c.dataChannel');
+            ->groupBy('yearCreated', 'monthCreated', 'c.dataChannel');
 
         if ($ids) {
             $qb->andWhere($qb->expr()->in('c.dataChannel', ':channelIds'))
