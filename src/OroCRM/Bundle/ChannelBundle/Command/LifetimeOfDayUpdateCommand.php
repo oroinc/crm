@@ -120,9 +120,13 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
      */
     protected function createDatedLifetimeValue($dataChannelId, $avgAmount)
     {
+        $dateTimeFormatter = $this->getService('oro_locale.formatter.date_time');
+        $date              = $dateTimeFormatter->format(new \DateTime('now'));
+
         $entity = new DatedLifetimeValue();
         $entity->setDataChannel($this->dataChannels[$dataChannelId]);
         $entity->setAmount($avgAmount);
+        $entity->setCreatedAt($date);
 
         return $entity;
     }

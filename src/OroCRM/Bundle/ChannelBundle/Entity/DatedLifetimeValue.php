@@ -174,9 +174,13 @@ class DatedLifetimeValue implements ChannelAwareInterface
      */
     public function prePersist()
     {
-        $date = new \DateTime('now', new \DateTimeZone('UTC'));
+        $date = $this->getCreatedAt();
 
-        $this->setCreatedAt($date);
+        if (empty($date)) {
+            $date = new \DateTime('now', new \DateTimeZone('UTC'));
+            $this->setCreatedAt($date);
+        }
+
         $this->setDay($date->format('d'));
         $this->setMonth($date->format('m'));
         $this->setQuarter(ceil($date->format('m') / 3));
