@@ -10,6 +10,8 @@ use Doctrine\ORM\Event\PostFlushEventArgs;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 class B2bCustomerLifetimeListener
 {
@@ -21,6 +23,9 @@ class B2bCustomerLifetimeListener
 
     /** @var array */
     protected $queued = [];
+
+    /** @var bool */
+    protected $isInProgress = false;
 
     /**
      * @param OnFlushEventArgs $args
@@ -44,37 +49,126 @@ class B2bCustomerLifetimeListener
         );
 
         foreach ($entities as $entity) {
-            if (!$entity->getId() && $this->isValuable($entity, true)) {
+            if (!$entity->getId() && $this->isValuable($entity)) {
                 // handle creation, just add to prev lifetime value and recalculate change set
                 $b2bCustomer = $entity->getCustomer();
                 $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $entity->getCloseRevenue());
+                $this->scheduleUpdate($b2bCustomer, false);
                 $this->uow->computeChangeSet(
                     $this->em->getClassMetadata(ClassUtils::getClass($b2bCustomer)),
                     $b2bCustomer
                 );
             } elseif ($this->uow->isScheduledForDelete($entity) && $this->isValuable($entity)) {
                 $this->scheduleUpdate($entity->getCustomer());
-            } else {
+            } elseif ($this->uow->isScheduledForUpdate($entity)) {
                 // handle update
                 $changeSet = $this->uow->getEntityChangeSet($entity);
-                
+
+                if ($this->isChangeSetValuable($changeSet)) {
+                    if (!empty($changeSet['customer'])
+                        && $changeSet['customer'][0] instanceof B2bCustomer
+                        && B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                    ) {
+                        // handle change of b2b customer
+                        $this->scheduleUpdate($changeSet['customer'][0]);
+                    }
+
+                    if ($this->isValuable($entity, isset($changeSet['closeRevenue']))
+                        || B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                    ) {
+                        $this->scheduleUpdate($entity->getCustomer());
+                    }
+                }
             }
         }
     }
 
-
-    protected function scheduleUpdate(B2bCustomer $b2bCustomer)
+    /**
+     * @param PostFlushEventArgs $args
+     */
+    public function postFlush(PostFlushEventArgs $args)
     {
+        if ($this->isInProgress) {
+            return;
+        }
 
+        $this->initializeFromEventArgs($args);
+        $repo = $this->em->getRepository('OroCRMSalesBundle:B2bCustomer');
+
+        $flushRequired = false;
+        foreach ($this->queued as $b2bCustomer) {
+            $flushRequired |= $repo->calculateLifetime($b2bCustomer);
+        }
+
+        if ($flushRequired) {
+            $this->isInProgress = true;
+
+            $this->em->flush($this->queued);
+
+            $this->isInProgress = false;
+        }
+
+        $this->queued = [];
     }
 
+    /**
+     * @param B2bCustomer $b2bCustomer
+     */
+    protected function scheduleUpdate(B2bCustomer $b2bCustomer)
+    {
+        $this->queued[$b2bCustomer->getId()] = $b2bCustomer;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     * @param bool        $takeZeroRevenue
+     *
+     * @return bool
+     */
     protected function isValuable(Opportunity $opportunity, $takeZeroRevenue = false)
     {
         return
-            $opportunity->getCustomer() &&
-            $opportunity->getStatus() &&
-            $opportunity->getStatus()->getName() === 'won'  &&
-            ($takeZeroRevenue || $opportunity->getCloseRevenue() > 0);
+            $opportunity->getCustomer()
+            && $opportunity->getStatus()
+            && $opportunity->getStatus()->getName() === B2bCustomerRepository::VALUABLE_STATUS
+            && ($takeZeroRevenue || $opportunity->getCloseRevenue() > 0);
+    }
+
+    /**
+     * @param array $changeSet
+     *
+     * @return bool
+     */
+    protected function isChangeSetValuable(array $changeSet)
+    {
+        $fieldsUpdated = array_intersect(['customer', 'status', 'closeRevenue'], array_keys($changeSet));
+
+        if (!empty($changeSet['status'])) {
+            $statusChangeSet = array_map(
+                function (OpportunityStatus $status = null) {
+                    return $status ? $status->getName() : null;
+                },
+                $changeSet['status']
+            );
+
+            // if status was changed, check whether it had/has needed value
+            return in_array(B2bCustomerRepository::VALUABLE_STATUS, $statusChangeSet, true);
+        }
+
+        return (bool)$fieldsUpdated;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     * @param array       $changeSet
+     *
+     * @return bool|string
+     */
+    protected function getOldStatus(Opportunity $opportunity, array $changeSet)
+    {
+        return isset($changeSet['status']) && $changeSet['status'][0] instanceof OpportunityStatus
+            ? $changeSet['status'][0]->getName()
+            : ($opportunity->getStatus() ? $opportunity->getStatus()->getName() : false);
     }
 
     /**
@@ -82,7 +176,7 @@ class B2bCustomerLifetimeListener
      */
     protected function initializeFromEventArgs($args)
     {
-        $this->em = $args->getEntityManager();
+        $this->em  = $args->getEntityManager();
         $this->uow = $this->em->getUnitOfWork();
     }
 }

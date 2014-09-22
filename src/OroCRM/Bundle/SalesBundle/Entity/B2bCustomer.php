@@ -19,7 +19,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(

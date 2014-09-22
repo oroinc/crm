@@ -27,6 +27,15 @@
     <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="pull-left label label-info orocrm-channel-lifetime-value-label">
+        <b>
+            {{ 'orocrm.sales.b2bcustomer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        </b>
+    </div>
+{% endblock %}
+
 {% block pageHeader %}
     {% set breadcrumbs = {
         'entity': entity,

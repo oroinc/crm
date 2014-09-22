@@ -216,7 +216,7 @@ class B2bCustomerController extends Controller
             ->getRepository('OroCRMSalesBundle:B2bCustomer')
             ->findBy(array('account' => $account, 'dataChannel' => $channel));
 
-        return array('customers' => $customers, 'channel' => $channel);
+        return array('account' => $account, 'customers' => $customers, 'channel' => $channel);
     }
 
     /**

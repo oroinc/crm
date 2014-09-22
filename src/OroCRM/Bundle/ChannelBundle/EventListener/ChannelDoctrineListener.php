@@ -235,7 +235,7 @@ class ChannelDoctrineListener
         $qb->from($customerIdentity, 'e');
         $qb->select(sprintf('SUM(e.%s)', $this->customerIdentities[$customerIdentity]));
         $qb->andWhere('e.account = :account');
-        $qb->andWhere('e.channel = :channel');
+        $qb->andWhere('e.dataChannel = :channel');
         $qb->setParameter('account', $account);
         $qb->setParameter('channel', $channel);
 
