@@ -100,6 +100,7 @@ class OroCRMChannelBundle implements Migration
         $table->addColumn('day', 'smallint', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('month', 'smallint', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('quarter', 'smallint', ['notnull' => false, 'unsigned' => true]);
+        $table->addColumn('year', 'smallint', ['notnull' => false, 'unsigned' => true]);
 
         $table->setPrimaryKey(['id']);
 

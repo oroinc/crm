@@ -16,7 +16,7 @@ class DatedLifetimeValue implements ChannelAwareInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="id", type="integer")
+     * @ORM\Column(name="id", type="integer", options={"unsigned"=true})
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -47,23 +47,30 @@ class DatedLifetimeValue implements ChannelAwareInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="day", type="smallint")
+     * @ORM\Column(name="day", type="smallint", options={"unsigned"=true})
      */
     protected $day;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="month", type="smallint")
+     * @ORM\Column(name="month", type="smallint", options={"unsigned"=true})
      */
     protected $month;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quarter", type="smallint")
+     * @ORM\Column(name="quarter", type="smallint", options={"unsigned"=true})
      */
     protected $quarter;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="year", type="smallint", options={"unsigned"=true})
+     */
+    protected $year;
 
     /**
      * @return int
@@ -170,6 +177,22 @@ class DatedLifetimeValue implements ChannelAwareInterface
     }
 
     /**
+     * @param int $year
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
      * @ORM\PrePersist
      */
     public function prePersist()
@@ -183,6 +206,7 @@ class DatedLifetimeValue implements ChannelAwareInterface
 
         $this->setDay($date->format('d'));
         $this->setMonth($date->format('m'));
+        $this->setYear($date->format('Y'));
         $this->setQuarter(ceil($date->format('m') / 3));
     }
 }

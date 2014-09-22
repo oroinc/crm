@@ -48,7 +48,11 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
 
         foreach ($results as $result) {
             $dataChannelId = $result['dataChannel'];
-            $averageAmount = $result['avg_amount'];
+            $averageAmount = $result['avgAmount'];
+
+            if(empty($dataChannelId) && empty($averageAmount)) {
+                continue;
+            }
 
             $output->writeln(
                 sprintf(
@@ -83,7 +87,7 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
 
         $qb->from('OroCRMChannelBundle:LifetimeValueHistory', 'l');
         $qb->addselect('(l.dataChannel) as dataChannel');
-        $qb->addSelect($qb->expr()->avg('l.amount') . ' as avg_amount');
+        $qb->addSelect($qb->expr()->avg('l.amount') . ' as avgAmount');
         $qb->andWhere('l.status = 1');
 
         return $qb->getQuery()->getResult();
@@ -126,7 +130,7 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
         $entity = new DatedLifetimeValue();
         $entity->setDataChannel($this->dataChannels[$dataChannelId]);
         $entity->setAmount($avgAmount);
-        $entity->setCreatedAt($date);
+        $entity->setCreatedAt(new \DateTime($date));
 
         return $entity;
     }

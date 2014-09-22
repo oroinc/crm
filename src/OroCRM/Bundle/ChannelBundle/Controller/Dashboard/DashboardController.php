@@ -65,10 +65,10 @@ class DashboardController extends Controller
 
         foreach ($amountStatistics as $datedLifetimeValue) {
             /** @var DatedLifetimeValue $datedLifetimeValue */
-            $channelId = (int)$datedLifetimeValue->getDataChannel()->getId();
-            $month     = (int)$datedLifetimeValue->getMonth();
-            $year      = $monthMatch[$month]['year'];
-            $amount    = (float)$datedLifetimeValue->getAmount();
+            $channelId = (int)$datedLifetimeValue['dataChannel'];
+            $month     = (int)$datedLifetimeValue['month'];
+            $year      = (int)$datedLifetimeValue['year'];#$monthMatch[$month]['year'];
+            $amount    = (float)$datedLifetimeValue['amount'];
 
             if (isset($resultTemplate[$channelId]['data'][$year][$month])) {
                 $resultTemplate[$channelId]['data'][$year][$month] += $amount;
