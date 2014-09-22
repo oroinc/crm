@@ -43,6 +43,16 @@ class UpdateExtendedFieldQuery extends ParametrizedMigrationQuery
         unset($data['extend']['index']['extend_ownership']);
         unset($data['extend']['index']['extend_ticker_symbol']);
         unset($data['extend']['index']['extend_rating']);
+        unset($data['extend']['schema']['property']['extend_website']);
+        unset($data['extend']['schema']['property']['extend_employees']);
+        unset($data['extend']['schema']['property']['extend_ownership']);
+        unset($data['extend']['schema']['property']['extend_ticker_symbol']);
+        unset($data['extend']['schema']['property']['extend_rating']);
+        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_website']);
+        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_employees']);
+        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_ownership']);
+        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_ticker_symbol']);
+        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_rating']);
 
         $query  = 'UPDATE oro_entity_config SET data = :data WHERE id = :id';
         $params = ['data' => $data, 'id' => $classConfig['id']];
