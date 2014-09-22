@@ -7,7 +7,6 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\UserBundle\Migrations\Schema\v1_7\UpdateExtendedFieldQuery;
 
 class DropFields implements Migration, OrderedMigrationInterface
 {

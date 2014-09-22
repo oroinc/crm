@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\UserBundle\Migrations\Schema\v1_7;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Psr\Log\LoggerInterface;
 
@@ -36,30 +36,29 @@ class UpdateExtendedFieldQuery extends ParametrizedMigrationQuery
     {
         $className = 'OroCRM\Bundle\AccountBundle\Entity\Account';
         $classConfig = $this->loadEntityConfigData($logger, $className);
-        $data = $this->connection->convertToPHPValue($classConfig['data'], 'array');
+        if ($classConfig) {
+            $data = $this->connection->convertToPHPValue($classConfig['data'], 'array');
+            $fields = [
+                'extend_website',
+                'extend_employees',
+                'extend_ownership',
+                'extend_ticker_symbol',
+                'extend_rating'
+            ];
 
-        unset($data['extend']['index']['extend_website']);
-        unset($data['extend']['index']['extend_employees']);
-        unset($data['extend']['index']['extend_ownership']);
-        unset($data['extend']['index']['extend_ticker_symbol']);
-        unset($data['extend']['index']['extend_rating']);
-        unset($data['extend']['schema']['property']['extend_website']);
-        unset($data['extend']['schema']['property']['extend_employees']);
-        unset($data['extend']['schema']['property']['extend_ownership']);
-        unset($data['extend']['schema']['property']['extend_ticker_symbol']);
-        unset($data['extend']['schema']['property']['extend_rating']);
-        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_website']);
-        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_employees']);
-        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_ownership']);
-        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_ticker_symbol']);
-        unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields']['extend_rating']);
+            foreach ($fields as $field) {
+                unset($data['extend']['index'][$field]);
+                unset($data['extend']['schema']['property'][$field]);
+                unset($data['extend']['schema']['doctrine']['Extend\Entity\ExtendAccount']['fields'][$field]);
+            }
 
-        $query  = 'UPDATE oro_entity_config SET data = :data WHERE id = :id';
-        $params = ['data' => $data, 'id' => $classConfig['id']];
-        $types  = ['data' => 'array', 'id' => 'integer'];
-        $this->logQuery($logger, $query, $params, $types);
-        if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params, $types);
+            $query = 'UPDATE oro_entity_config SET data = :data WHERE id = :id';
+            $params = ['data' => $data, 'id' => $classConfig['id']];
+            $types = ['data' => 'array', 'id' => 'integer'];
+            $this->logQuery($logger, $query, $params, $types);
+            if (!$dryRun) {
+                $this->connection->executeUpdate($query, $params, $types);
+            }
         }
     }
 
@@ -71,15 +70,13 @@ class UpdateExtendedFieldQuery extends ParametrizedMigrationQuery
      */
     protected function loadEntityConfigData(LoggerInterface $logger, $className)
     {
-        $sql = 'SELECT ec.id, ec.data'
-            . ' FROM oro_entity_config ec'
-            . ' WHERE ec.class_name = :class';
+        $sql = 'SELECT ec.id, ec.data FROM oro_entity_config ec WHERE ec.class_name = :class';
         $params = ['class' => $className];
         $types  = ['class' => 'string'];
         $this->logQuery($logger, $sql, $params, $types);
 
         $rows = $this->connection->fetchAll($sql, $params, $types);
 
-        return $rows[0];
+        return reset($rows);
     }
 }
