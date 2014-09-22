@@ -64,10 +64,9 @@ class DashboardController extends Controller
             ->findAmountStatisticsByDate($sliceDate);
 
         foreach ($amountStatistics as $datedLifetimeValue) {
-            /** @var DatedLifetimeValue $datedLifetimeValue */
             $channelId = (int)$datedLifetimeValue['dataChannel'];
             $month     = (int)$datedLifetimeValue['month'];
-            $year      = (int)$datedLifetimeValue['year'];#$monthMatch[$month]['year'];
+            $year      = (int)$datedLifetimeValue['year'];
             $amount    = (float)$datedLifetimeValue['amount'];
 
             if (isset($resultTemplate[$channelId]['data'][$year][$month])) {
@@ -89,7 +88,6 @@ class DashboardController extends Controller
 
         return $widgetAttr;
     }
-
 
     /**
      * @param ObjectManager $om
