@@ -10,9 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
@@ -97,20 +95,6 @@ class OrderController extends Controller
     public function customerOrdersWidgetAction(Customer $customer, Channel $channel)
     {
         return array('customer' => $customer, 'channel' => $channel);
-    }
-
-    /**
-     * @Route(
-     *        "/account-widget/account-orders/{id}/",
-     *        name="orocrm_magento_widget_account_orders",
-     *        requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("orocrm_magento_order_view")
-     * @Template
-     */
-    public function accountOrdersAction(Account $account)
-    {
-        return array('account' => $account);
     }
 
     /**

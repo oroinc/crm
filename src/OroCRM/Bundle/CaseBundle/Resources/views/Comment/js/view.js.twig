@@ -1,15 +1,15 @@
-<script type="text/html" id="{{ id|raw }}">
+<script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
         <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <% if (createdBy) { %>
                     <span class="visual">
-                        <img src="<% if (createdBy.avatar) { %><%= createdBy.avatar %><% } else { %>{{ asset('bundles/oroui/img/avatar-xsmall.png')|raw }}<% } %>" />
+                        <img src="<% if (createdBy.avatar) { %><%- createdBy.avatar %><% } else { %>{{ asset('bundles/oroui/img/avatar-xsmall.png')|e('html_attr')|raw }}<% } %>" />
                         <% if (createdBy.url) { %>
-                            <a class="user" href="<%= createdBy.url %>"><%= createdBy.fullName %></a>
+                            <a class="user" href="<%= createdBy.url %>"><%- createdBy.fullName %></a>
                         <% } else { %>
-                            <span class="user"><%= createdBy %></span>
+                            <span class="user"><%- createdBy %></span>
                         <% } %>
                     </span>
                 <% } %>
@@ -21,8 +21,8 @@
                 <div class="message"><%= briefMessage %></div>
             </div>
             <div class="actions">
-                <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.edit'|trans|raw }}"><i class="icon-edit hide-text">{{ 'orocrm.case.casecomment.action.edit'|trans|raw }}</i></button>
-                <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.delete'|trans|raw }}"><i class="icon-trash hide-text">{{ 'orocrm.case.casecomment.action.delete'|trans|raw }}</i></button>
+                <button class="btn item-edit-button<% if (!permissions.edit) { %> disabled<% } %>" <% if (!permissions.edit) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.edit'|trans|e('html_attr')|raw }}"><i class="icon-edit hide-text">{{ 'orocrm.case.casecomment.action.edit'|trans|e('html_attr')|raw }}</i></button>
+                <button class="btn item-remove-button<% if (!permissions.delete) { %> disabled<% } %>" <% if (!permissions.delete) { %> disabled="disabled"<% } %> title="{{ 'orocrm.case.casecomment.action.delete'|trans|e('html_attr')|raw }}"><i class="icon-trash hide-text">{{ 'orocrm.case.casecomment.action.delete'|trans|e('html_attr')|raw }}</i></button>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
@@ -34,9 +34,9 @@
                             <%= _.template(
                                 {{ 'orocrm.case.casecomment.message.updated_by'|trans|json_encode|raw }},
                                 {
-                                    user: updatedBy.url ?
-                                        '<a class="user" href="' + updatedBy.url + '">' + updatedBy.fullName + '</a>'
-                                        : (updatedBy ? '<i class="user">' + updatedBy + '</i>' : ''),
+                                    user: updatedBy.url
+                                        ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
+                                        : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
                                     date: '<i class="date">' + updatedAt + '</i>'
                                 },
                                 { interpolate: /\{\{(.+?)\}\}/g }
