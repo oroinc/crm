@@ -49,6 +49,7 @@ define([
      */
     function initializeChannelTypeComponent(selector, fields) {
         var $el = $(selector);
+        var $formStart = $el.parents('form').serializeArray();
 
         $el.on('change', function changeTypeHandler(e) {
             var prevEl  = e.removed,
@@ -58,7 +59,7 @@ define([
                     content: __('orocrm.channel.confirmation.text')
                 });
 
-            confirm.on('ok', function processChangeType() {
+            var processChangeType = function() {
                 var data,
                     $form = $el.parents('form'),
                     elementNames = _.map(fields, function (elementIdentifier) {
@@ -80,13 +81,31 @@ define([
                         data: $.param(data)
                     });
                 }
+            }
+
+            confirm.on('ok', function (){
+                processChangeType();
             });
 
             confirm.on('cancel', function revertChanges() {
                 $el.select2('val', prevEl.id)
             });
 
-            confirm.open();
+            var $openConfirm = 0;
+            var $formChanged = $el.parents('form').serializeArray();
+
+            $.each($formChanged, function(i, fd) {
+                if((fd.name !== $el.attr('name'))
+                    && ($formStart[i].value != fd.value)) {
+                    $openConfirm = 1;
+                }
+            });
+
+            if ($openConfirm) {
+                confirm.open();
+            } else {
+                processChangeType();
+            }
         });
     }
 
