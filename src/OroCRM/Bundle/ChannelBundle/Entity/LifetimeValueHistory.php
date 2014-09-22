@@ -17,8 +17,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class LifetimeValueHistory implements ChannelAwareInterface
 {
-    const STATUS_NEW = 1;
-    const STATUS_OLD = 0;
+    const STATUS_NEW = true;
+    const STATUS_OLD = false;
 
     /**
      * @var integer
