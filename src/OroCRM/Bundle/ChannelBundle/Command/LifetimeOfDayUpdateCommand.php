@@ -50,7 +50,7 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
             $dataChannelId = $result['dataChannel'];
             $averageAmount = $result['avgAmount'];
 
-            if(empty($dataChannelId) && empty($averageAmount)) {
+            if (empty($dataChannelId) && empty($averageAmount)) {
                 continue;
             }
 
@@ -126,8 +126,8 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
     {
         $dateTimeFormatter = $this->getService('oro_locale.formatter.date_time');
         $date              = $dateTimeFormatter->format(new \DateTime('now'));
+        $entity            = new DatedLifetimeValue();
 
-        $entity = new DatedLifetimeValue();
         $entity->setDataChannel($this->dataChannels[$dataChannelId]);
         $entity->setAmount($avgAmount);
         $entity->setCreatedAt(new \DateTime($date));

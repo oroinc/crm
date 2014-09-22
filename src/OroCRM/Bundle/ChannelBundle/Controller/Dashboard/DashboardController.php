@@ -29,12 +29,6 @@ class DashboardController extends Controller
      */
     public function averageCustomerLifetimeAction($widget)
     {
-        /** @var ObjectManager $entityManager */
-        $om = $this->getDoctrine()->getManager();
-
-        /** @var AclHelper $aclHelper */
-        $aclHelper = $this->get('oro_security.acl_helper');
-
         // calculate slice date
         $currentYear  = (int)date('Y');
         $currentMonth = (int)date('m');
@@ -53,29 +47,34 @@ class DashboardController extends Controller
                 $channelTemplate[$sliceYear][$i] = 0;
             }
         }
+
         for ($i = 1; $i <= $currentMonth; $i++) {
             $monthMatch[$i]                    = ['year' => $currentYear, 'month' => $i];
             $channelTemplate[$currentYear][$i] = 0;
         }
 
-        $channels         = $this->getChannels($om, $aclHelper);
+        /** @var ObjectManager $entityManager */
+        $om               = $this->getDoctrine()->getManager();
+        $channels         = $this->getChannels($om);
         $resultTemplate   = $this->prepareResultTemplate($channels, $channelTemplate);
         $amountStatistics = $om->getRepository('OroCRMChannelBundle:DatedLifetimeValue')
             ->findAmountStatisticsByDate($sliceDate);
 
-        foreach ($amountStatistics as $datedLifetimeValue) {
-            $channelId = (int)$datedLifetimeValue['dataChannel'];
-            $month     = (int)$datedLifetimeValue['month'];
-            $year      = (int)$datedLifetimeValue['year'];
-            $amount    = (float)$datedLifetimeValue['amount'];
+        $this->fillResultTemplate($amountStatistics, $resultTemplate);
 
-            if (isset($resultTemplate[$channelId]['data'][$year][$month])) {
-                $resultTemplate[$channelId]['data'][$year][$month] += $amount;
-            }
-        }
-
+        /** @var array $items */
         $items = $this->prepareChartItems($resultTemplate);
 
+        return $this->getWidgetAttributes($items);
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return array
+     */
+    protected function getWidgetAttributes(array $items)
+    {
         /** @var Translator $translator */
         $translator = $this->get('translator');
 
@@ -90,16 +89,37 @@ class DashboardController extends Controller
     }
 
     /**
+     * @param $amountStatistics
+     * @param $resultTemplate
+     */
+    protected function fillResultTemplate(array $amountStatistics, array &$resultTemplate)
+    {
+        foreach ($amountStatistics as $datedLifetimeValue) {
+            $channelId = (int)$datedLifetimeValue['dataChannel'];
+            $month     = (int)$datedLifetimeValue['month'];
+            $year      = (int)$datedLifetimeValue['year'];
+            $amount    = (float)$datedLifetimeValue['amount'];
+
+            if (isset($resultTemplate[$channelId]['data'][$year][$month])) {
+                $resultTemplate[$channelId]['data'][$year][$month] += $amount;
+            }
+        }
+    }
+
+    /**
      * @param ObjectManager $om
-     * @param AclHelper     $aclHelper
      *
      * @return mixed
      */
-    protected function getChannels(ObjectManager $om, AclHelper $aclHelper)
+    protected function getChannels(ObjectManager $om)
     {
+        /** @var AclHelper $aclHelper */
         /** @var QueryBuilder $queryBuilder */
+        $aclHelper    = $this->get('oro_security.acl_helper');
         $queryBuilder = $om->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c');
+
         $queryBuilder->select('c.id, c.name')->orderBy('c.name');
+
         return $aclHelper->apply($queryBuilder)->execute();
     }
 
@@ -129,11 +149,9 @@ class DashboardController extends Controller
     protected function prepareChartItems($resultTemplate)
     {
         $items = [];
-
         foreach ($resultTemplate as $row) {
-            $channelName = $row['name'];
-            $channelData = $row['data'];
-
+            $channelName         = $row['name'];
+            $channelData         = $row['data'];
             $items[$channelName] = [];
 
             foreach ($channelData as $year => $monthData) {
