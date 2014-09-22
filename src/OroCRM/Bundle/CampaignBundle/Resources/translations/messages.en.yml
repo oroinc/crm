@@ -109,4 +109,4 @@ orocrm:
                 campaign_sender_name: Sender Name
                 title: Campaign Configuration
             transport:
-                internal: Internal
+                internal: OroCRM
