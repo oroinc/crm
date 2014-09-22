@@ -26,3 +26,11 @@
     -webkit-box-shadow: none;
     -moz-box-shadow: none;
 }
+
+.orocrm-channel-lifetime-value-label {
+    padding: 4px 10px;
+}
+
+.customer-content .orocrm-channel-lifetime-value-label {
+    margin-left: 5px;
+}

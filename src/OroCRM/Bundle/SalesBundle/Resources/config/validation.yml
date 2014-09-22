@@ -36,6 +36,8 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
                 max: 255
         dataChannel:
             - NotBlank: ~
+        email:
+            - Email: ~
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:

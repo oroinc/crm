@@ -82,4 +82,24 @@ class DashboardController extends Controller
 
         return $data;
     }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_new_customers_chart",
+     *      name="orocrm_magento_dashboard_new_customers_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:newCustomersChart.html.twig")
+     */
+    public function newCustomersAction()
+    {
+        $widgetAttributes     = $this->get('oro_dashboard.widget_attributes');
+        $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
+        $chartViewBuilder     = $this->get('oro_chart.view_builder');
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
+        $data['chartView'] = $customerDataProvider->getNewCustomerChartView($chartViewBuilder);
+
+        return $data;
+    }
 }

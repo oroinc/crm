@@ -24,7 +24,7 @@ class ChannelIntegrationController extends Controller
     {
         $translator      = $this->get('translator');
         $integrationName = urldecode($channelName) . ' ' . $translator->trans('orocrm.channel.data_source.label');
-        $integration = new Integration();
+        $integration     = new Integration();
         $integration->setType(urldecode($type));
         $integration->setName(trim($integrationName));
 

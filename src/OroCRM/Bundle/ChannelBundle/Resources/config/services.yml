@@ -16,6 +16,9 @@ parameters:
     orocrm_channel.form.type.channel_select.class:                        OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType
     orocrm_channel.form.type.create_or_select_inline_channel_aware.class: OroCRM\Bundle\ChannelBundle\Form\Type\CreateOrSelectInlineChannelAwareType
     orocrm_channel.form.type.multiple_entity_channel_aware.class:         OroCRM\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
+    orocrm_channel.form.embedded_type_extension.class:                    OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+    orocrm_channel.form.integration_type_extension.class:                 OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -28,6 +31,7 @@ parameters:
     orocrm_channel.provider.entity_metadata.class:                     OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
     orocrm_channel.provider.request_channel.class:                     OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider
+    orocrm_channel.provider.lifetime.amount_provider.class:            OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
@@ -45,9 +49,11 @@ parameters:
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
     orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
+    orocrm_channel.channel_doctrinet.listener.class:                   OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
+    orocrm_channel.twig.lifetime_value_extension.class:                OroCRM\Bundle\ChannelBundle\Twig\LifetimeValueExtension
 
     #validators
     orocrm_channel.validators.channel_integration_validator.class:     OroCRM\Bundle\ChannelBundle\Validator\ChannelIntegrationConstraintValidator
@@ -206,6 +212,11 @@ services:
         calls:
             - [setStateProvider, [@orocrm_channel.provider.state_provider]]
 
+    orocrm_channel.provider.lifetime.amount_provider:
+        class: %orocrm_channel.provider.lifetime.amount_provider.class%
+        arguments:
+            - @doctrine
+
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%
         arguments:
@@ -220,7 +231,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_menu.configure.application_menu, method: onNavigationConfigure }
             - { name: kernel.event_listener, event: oro_menu.configure.shortcuts, method: onNavigationConfigure }
-            - { name: kernel.event_listener, event: oro_menu.configure.account_sales_tab_panel, method: onNavigationConfigure }
 
     orocrm_channel.state_cache:
           parent: oro.cache.abstract
@@ -263,6 +273,14 @@ services:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
+    orocrm_channel.channel_doctrinet.listener:
+      class: %orocrm_channel.channel_doctrinet.listener.class%
+      arguments:
+          - @orocrm_channel.provider.settings_provider
+      tags:
+        - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+        - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
     #twig
     orocrm_channel.twig.metadata_extension:
         class: %orocrm_channel.twig.metadata_extension.class%
@@ -272,17 +290,24 @@ services:
         tags:
             - { name: twig.extension }
 
-    orocrm_channel_bundle.integration_type_extension:
-        class: OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+    orocrm_channel.form.integration_type_extension:
+        class: %orocrm_channel.form.integration_type_extension.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
         tags:
             - { name: form.type_extension, alias: oro_integration_channel_form }
 
-    orocrm_channel_bundle.embedded_form_type_extension:
-        class: OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
+    orocrm_channel.form.embedded_type_extension:
+        class: %orocrm_channel.form.embedded_type_extension.class%
         tags:
             - { name: form.type_extension, alias: embedded_form }
+
+    orocrm_channel.twig.lifetime_value_extension:
+        class: %orocrm_channel.twig.lifetime_value_extension.class%
+        arguments:
+            - @orocrm_channel.provider.lifetime.amount_provider
+        tags:
+            - { name: twig.extension }
 
     #validators
     orocrm_channel.validators.channel_integration_validator:

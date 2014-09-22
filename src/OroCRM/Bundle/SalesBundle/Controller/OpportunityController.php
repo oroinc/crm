@@ -9,8 +9,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
@@ -118,19 +116,5 @@ class OpportunityController extends Controller
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
             $this->get('orocrm_sales.opportunity.form.handler')
         );
-    }
-
-    /**
-     * @Route(
-     *        "/widget/account-opportunities/{id}",
-     *        name="orocrm_sales_widget_account_opportunities",
-     *        requirements={"id"="\d+"}
-     * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
-     * @Template()
-     */
-    public function accountOpportunitiesAction(Account $account)
-    {
-        return array('entity' => $account);
     }
 }
