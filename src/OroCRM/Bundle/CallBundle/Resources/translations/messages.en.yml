@@ -31,6 +31,8 @@ orocrm:
             contact_name: Contact name
             account_name: Account name
             date_time:    Call date
+            delete: Delete
+            update: Update
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
@@ -52,7 +54,3 @@ orocrm:
         call_date_time.label:  Call date & time
         contact_phone_number.label: Phone number
         organization.label:    Organization
-
-        datagrid:
-            delete: Delete
-            update: Update

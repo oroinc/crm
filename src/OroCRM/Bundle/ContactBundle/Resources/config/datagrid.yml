@@ -120,7 +120,7 @@ datagrid:
                     - { table: %orocrm_contact.entity.class%, alias: c }
         columns:
             hasGroup:
-                label: Has group
+                label: orocrm.contact.group.has_group.label
                 editable: true
                 frontend_type: boolean
             firstName:

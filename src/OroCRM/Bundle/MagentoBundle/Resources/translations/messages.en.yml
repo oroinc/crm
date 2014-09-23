@@ -228,6 +228,7 @@ orocrm:
             all_sites:                    All web sites
             api_user.label:               SOAP API User
             api_key.label:                SOAP API Key
+            new_api_key.label:            New SOAP API Key
             entity_description:           Represent integration channel transport
             entity_label:                 Integration Channel Transport
             entity_plural_label:          Integration Channel Transports

@@ -110,3 +110,6 @@ orocrm:
                 title: Campaign Configuration
             transport:
                 internal: OroCRM
+
+        acl:
+            send_emails: Send campaign emails
