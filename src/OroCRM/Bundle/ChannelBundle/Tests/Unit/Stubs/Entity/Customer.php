@@ -2,17 +2,21 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity;
 
+use Doctrine\ORM\Mapping as ORM;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
-use Doctrine\ORM\Mapping as ORM;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity
  * @ORM\MappedSuperclass
  */
-class Customer
+class Customer implements ChannelAwareInterface
 {
+    use ChannelEntityTrait;
+
     /**
      * @var int
      *
@@ -29,14 +33,6 @@ class Customer
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $account;
-
-    /**
-     * @var Channel
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
-     * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $channel;
 
     /**
      * @var double
@@ -75,22 +71,6 @@ class Customer
     public function getAccount()
     {
         return $this->account;
-    }
-
-    /**
-     * @param Channel $dataChannel
-     */
-    public function setDataChannel($dataChannel)
-    {
-        $this->dataChannel = $dataChannel;
-    }
-
-    /**
-     * @return Channel
-     */
-    public function getDataChannel()
-    {
-        return $this->dataChannel;
     }
 
     /**

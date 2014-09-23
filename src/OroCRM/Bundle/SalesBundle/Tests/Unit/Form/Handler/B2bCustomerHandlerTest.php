@@ -97,90 +97,14 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod($method);
 
-        $appendForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $appendForm->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue([]));
-
-        $removeForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $removeForm->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue([]));
-
-        $leadsForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $leadsForm->expects($this->at(0))
-            ->method('get')
-            ->with('added')
-            ->will($this->returnValue($appendForm));
-
-        $leadsForm->expects($this->at(1))
-            ->method('get')
-            ->with('removed')
-            ->will($this->returnValue($removeForm));
-
-        $appendForm2 = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $appendForm2->expects($this->once())
-            ->method('getData')
-            ->will($this->returnValue([]));
-
-        $removeForm2 = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $removeForm2->expects($this->any())
-            ->method('getData')
-            ->will($this->returnValue([]));
-
-        $opportunityForm = $this->getMockBuilder('Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $opportunityForm->expects($this->at(0))
-            ->method('get')
-            ->with('added')
-            ->will($this->returnValue($appendForm2));
-
-        $opportunityForm->expects($this->at(1))
-            ->method('get')
-            ->with('removed')
-            ->will($this->returnValue($removeForm2));
-
-        $this->form->expects($this->any())
-            ->method('setData')
+        $this->form->expects($this->any())->method('setData')
             ->with($this->entity);
-
-        $this->form->expects($this->once())
-            ->method('submit')
+        $this->form->expects($this->once())->method('submit')
             ->with($this->request);
-
-        $this->form->expects($this->exactly(2))
-            ->method('has')
+        $this->form->expects($this->once())->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->form->expects($this->any())
-            ->method('get')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['leads', $leadsForm],
-                        ['opportunities', $opportunityForm]
-                    ]
-                )
-            );
-
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertTrue($this->handler->process($this->entity));
     }
 
     public function supportedMethods()
@@ -189,45 +113,5 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
             ['POST'],
             ['PUT']
         ];
-    }
-
-    public function testProcessWithoutLeadViewPermission()
-    {
-        $this->request->setMethod('POST');
-
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
-
-        $this->form->expects($this->once())
-            ->method('submit')
-            ->with($this->request);
-
-        $this->form->expects($this->once())
-            ->method('isValid')
-            ->will($this->returnValue(true));
-
-        $this->form->expects($this->any())
-            ->method('has')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['leads', false],
-                        ['opportunities', false]
-                    ]
-                )
-            );
-
-        $this->form->expects($this->never())
-            ->method('get');
-
-        $this->assertTrue($this->handler->process($this->entity));
-
-        $actualLeads         = $this->entity->getLeads()->toArray();
-        $actualOpportunities = $this->entity->getOpportunities()->toArray();
-        $this->assertCount(0, $actualLeads);
-        $this->assertEquals([], $actualLeads);
-        $this->assertCount(0, $actualOpportunities);
-        $this->assertEquals([], $actualOpportunities);
     }
 }

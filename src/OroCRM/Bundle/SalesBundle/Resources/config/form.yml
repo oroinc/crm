@@ -166,9 +166,6 @@ services:
 
     orocrm_sales.b2bcustomer.form.type:
         class: %orocrm_sales.b2bcustomer.form.type.class%
-        arguments:
-            - @router
-            - @oro_locale.formatter.name
         tags:
             - { name: form.type, alias: orocrm_sales_b2bcustomer }
 
