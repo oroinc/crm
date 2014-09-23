@@ -20,19 +20,26 @@ class CustomerRepository extends EntityRepository
     public function getGroupedByChannelArray(
         AclHelper $aclHelper,
         \DateTime $dateFrom,
-        \DateTime $dateTo,
+        \DateTime $dateTo = null,
         $ids = array()
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
-            "DATE(CONCAT(YEAR(c.createdAt), '-', MONTH(c.createdAt), '-01')) as formattedDate",
+            'YEAR(c.createdAt) as yearCreated',
+            'MONTH(c.createdAt) as monthCreated',
             'COUNT(c) as cnt',
             'IDENTITY(c.dataChannel) as channelId'
-        )
-            ->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
-            ->setParameter('dateFrom', $dateFrom)
-            ->setParameter('dateTo', $dateTo)
-            ->groupBy('formattedDate', 'c.dataChannel');
+        );
+
+        if ($dateTo) {
+            $qb->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
+                ->setParameter('dateTo', $dateTo);
+        } else {
+            $qb->andWhere('c.createdAt > :dateFrom');
+        }
+
+        $qb->setParameter('dateFrom', $dateFrom)
+            ->groupBy('yearCreated', 'monthCreated', 'c.dataChannel');
 
         if ($ids) {
             $qb->andWhere($qb->expr()->in('c.dataChannel', ':channelIds'))
