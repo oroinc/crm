@@ -240,4 +240,4 @@ orocrm:
             leads:                   Leads
             opportunities:           Opportunities
         channel_type:
-            b2b.label: B2b
+            b2b.label: B2B
