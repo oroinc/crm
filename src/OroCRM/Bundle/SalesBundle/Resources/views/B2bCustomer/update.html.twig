@@ -41,8 +41,7 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {{ parent() }}
 {% endblock stats %}
 
 {% block content_data %}

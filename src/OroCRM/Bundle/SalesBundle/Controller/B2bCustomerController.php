@@ -96,6 +96,7 @@ class B2bCustomerController extends Controller
 
     /**
      * @param  B2bCustomer $entity
+     *
      * @return array
      */
     protected function update(B2bCustomer $entity = null)
@@ -168,9 +169,9 @@ class B2bCustomerController extends Controller
     {
         $customers = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:B2bCustomer')
-            ->findBy(array('account' => $account, 'dataChannel' => $channel));
+            ->findBy(['account' => $account, 'dataChannel' => $channel]);
 
-        return array('account' => $account, 'customers' => $customers, 'channel' => $channel);
+        return ['account' => $account, 'customers' => $customers, 'channel' => $channel];
     }
 
     /**
