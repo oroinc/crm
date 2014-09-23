@@ -97,7 +97,6 @@ class OroCRMChannelBundle implements Migration
             ['notnull' => true, 'precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']
         );
         $table->addColumn('created_at', 'datetime', []);
-        $table->addColumn('day', 'smallint', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('month', 'smallint', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('quarter', 'smallint', ['notnull' => false, 'unsigned' => true]);
         $table->addColumn('year', 'smallint', ['notnull' => false, 'unsigned' => true]);

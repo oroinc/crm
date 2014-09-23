@@ -47,13 +47,6 @@ class DatedLifetimeValue implements ChannelAwareInterface
     /**
      * @var int
      *
-     * @ORM\Column(name="day", type="smallint", options={"unsigned"=true})
-     */
-    protected $day;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="month", type="smallint", options={"unsigned"=true})
      */
     protected $month;
@@ -129,22 +122,6 @@ class DatedLifetimeValue implements ChannelAwareInterface
     }
 
     /**
-     * @param int $day
-     */
-    public function setDay($day)
-    {
-        $this->day = $day;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDay()
-    {
-        return $this->day;
-    }
-
-    /**
      * @param mixed $month
      */
     public function setMonth($month)
@@ -204,7 +181,6 @@ class DatedLifetimeValue implements ChannelAwareInterface
             $this->setCreatedAt($date);
         }
 
-        $this->setDay($date->format('d'));
         $this->setMonth($date->format('m'));
         $this->setYear($date->format('Y'));
         $this->setQuarter(ceil($date->format('m') / 3));
