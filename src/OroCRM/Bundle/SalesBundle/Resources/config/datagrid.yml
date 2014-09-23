@@ -665,6 +665,7 @@ datagrid:
                 select:
                     - c.id
                     - c.name
+                    - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
                     - c.createdAt
                     - channel.name as channelName
                 from:
@@ -677,6 +678,9 @@ datagrid:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
             name:
                 label:          orocrm.sales.b2bcustomer.name.label
+            lifetime:
+                label:          orocrm.sales.b2bcustomer.lifetime.label
+                frontend_type:  currency
             createdAt:
                 label:          oro.ui.created_at
                 frontend_type:  datetime
@@ -684,6 +688,7 @@ datagrid:
             columns:
                 channelName: { data_name: channelName }
                 name:        { data_name: c.name }
+                lifetime:    { data_name: c.lifetime }
                 createdAt:   { data_name: c.createdAt }
             default:
                 name: ASC
@@ -699,6 +704,9 @@ datagrid:
                  name:
                     type:      string
                     data_name: c.name
+                 lifetime:
+                    type: number
+                    data_name: c.lifetime
         properties:
             id: ~
             view_link:
@@ -961,138 +969,3 @@ datagrid:
                     data_name: email.email
             default:
                 createdAt: DESC
-
-    sales-b2bcustomer-lead-grid:
-        extends: base-sales-b2bcustomer-leads-grid
-        source:
-            query:
-                select:
-                    - >
-                        (CASE WHEN (:customer IS NOT NULL) THEN
-                          CASE WHEN (l.customer = :customer OR l.id IN (:data_in)) AND l.id NOT IN (:data_not_in)
-                          THEN true ELSE false END
-                        ELSE
-                          CASE WHEN l.id IN (:data_in) AND l.id NOT IN (:data_not_in)
-                          THEN true ELSE false END
-                        END)  as hasLeads
-        columns:
-            hasLeads:
-                label:         orocrm.sales.lead.assigned.label
-                editable: true
-                frontend_type: boolean
-            name:
-                label:         orocrm.sales.lead.name.label
-            statusLabel:
-                label:         orocrm.sales.lead.status.label
-            firstName:
-                label:         orocrm.sales.lead.first_name.label
-            lastName:
-                label:         orocrm.sales.lead.last_name.label
-            createdAt:
-                label:         oro.ui.created_at
-                frontend_type: datetime
-            email:
-                label:         orocrm.sales.lead.email.label
-            phoneNumber:
-                label:         orocrm.sales.lead.phone_number.label
-        sorters:
-            columns:
-                hasLeads:
-                    data_name: hasLeads
-                name:
-                    data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
-                firstName:
-                    data_name: l.firstName
-                lastName:
-                    data_name: l.lastName
-                createdAt:
-                    data_name: l.createdAt
-                email:
-                    data_name: l.email
-                phoneNumber:
-                    data_name: l.phoneNumber
-            default:
-                hasLeads:  DESC
-        properties:
-            id: ~
-        options:
-            routerEnabled: false
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
-                dataField: id
-                columnName: hasLeads
-                selectors:
-                    included: '#appendLeads'
-                    excluded: '#removeLeads'
-
-    sales-b2bcustomer-opportunity-grid:
-        extends: base-sales-b2bcustomer-opportunities-grid
-        source:
-            query:
-                select:
-                    - >
-                        (CASE WHEN (:customer IS NOT NULL) THEN
-                          CASE WHEN (o.customer = :customer OR o.id IN (:data_in)) AND o.id NOT IN (:data_not_in)
-                          THEN true ELSE false END
-                        ELSE
-                          CASE WHEN o.id IN (:data_in) AND o.id NOT IN (:data_not_in)
-                          THEN true ELSE false END
-                        END)  as hasOpportunities
-        columns:
-            hasOpportunities:
-                label:         orocrm.sales.opportunity.assigned.label
-                editable:      true
-                frontend_type: boolean
-            name:
-                label:         orocrm.sales.opportunity.name.label
-            createdAt:
-                label:         oro.ui.created_at
-                frontend_type: datetime
-            closeDate:
-                label:         orocrm.sales.opportunity.close_date.label
-                frontend_type: date
-            budgetAmount:
-                label:         orocrm.sales.opportunity.budget_amount.label
-                frontend_type: currency
-            probability:
-                label:         orocrm.sales.opportunity.probability.label
-                frontend_type: percent
-            statusLabel:
-                label:         orocrm.sales.opportunity.status.label
-            primaryEmail:
-                label:         orocrm.contact.email.label
-        sorters:
-            columns:
-                hasOpportunities:
-                    data_name: hasOpportunities
-                name:
-                    data_name: o.name
-                createdAt:
-                    data_name: o.createdAt
-                closeDate:
-                    data_name: o.closeDate
-                budgetAmount:
-                    data_name: o.budgetAmount
-                probability:
-                    data_name: o.probability
-                statusLabel:
-                    data_name: status.label
-                primaryEmail:
-                    data_name: email.email
-            default:
-                hasOpportunities: DESC
-        properties:
-            id: ~
-        options:
-            routerEnabled: false
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
-                dataField: id
-                columnName: hasOpportunities
-                selectors:
-                    included: '#appendOpportunities'
-                    excluded: '#removeOpportunities'

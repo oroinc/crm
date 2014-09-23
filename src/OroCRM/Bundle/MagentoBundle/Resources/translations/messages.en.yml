@@ -110,7 +110,7 @@ orocrm:
             data_channel.label:  Channel
             name.label:          Name
             orders.label:        Customer orders
-            lifetime.label:      Lifetime value
+            lifetime.label:      Order lifetime value
             currency.label:      Currency
             organization.label:  Organization
 
@@ -440,6 +440,5 @@ orocrm:
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
-        channel_lifetime.label: Lifetime value
 
 "E-commerce": "E-commerce"
