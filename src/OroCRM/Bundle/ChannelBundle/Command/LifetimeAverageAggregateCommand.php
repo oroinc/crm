@@ -14,7 +14,7 @@ use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\DatedLifetimeValue;
 
-class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCommandInterface
+class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements CronCommandInterface
 {
     /** @var array */
     protected $dataChannels = [];
@@ -32,7 +32,7 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
      */
     public function configure()
     {
-        $this->setName('oro:cron:lifetime-avarage:aggregate');
+        $this->setName('oro:cron:lifetime-average:aggregate');
         $this->addOption(
             'regenerate',
             'r',
