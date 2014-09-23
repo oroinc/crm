@@ -40,6 +40,7 @@ orocrm:
                 currency:         Currency
                 sub_total:        Sub Total
                 grand_total:      Grand Total
+                page_total:       Page Total
                 gift_message:     Gift message
                 row_total:        Row Total
                 tax_amount:       Tax Amount

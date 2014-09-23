@@ -237,7 +237,7 @@ datagrid:
                         END) as hasContact
         columns:
             hasContact:
-                label:   Assigned
+                label:   orocrm.account.assigned.label
                 editable: true
                 frontend_type: boolean
             first_name:

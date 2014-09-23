@@ -41,6 +41,7 @@ orocrm:
         default_contact.label:      Default Contact
         phone.label:                Phone
         email.label:                Email
+        assigned.label:             Assigned
 
         extend_description.label:   Description
 
