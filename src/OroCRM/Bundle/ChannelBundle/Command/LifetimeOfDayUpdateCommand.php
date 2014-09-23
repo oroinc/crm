@@ -36,11 +36,10 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
         $this->addOption(
             'regenerate',
             'r',
-            InputOption::VALUE_OPTIONAL,
-            'This option allows to regenerate all history in orocrm_channel_dated_lifetime',
-            false
+            InputOption::VALUE_NONE,
+            'This option allows to regenerate all history in orocrm_channel_dated_lifetime'
         );
-        $this->setDescription('Update lifetime of day history table');
+        $this->setDescription('Update lifetime average value in history table');
     }
 
     /**
@@ -79,7 +78,7 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
 
             $output->writeln(
                 sprintf(
-                    'Create row in DatedLifetimeValue for channel %s, with average amount %s',
+                    'Update or create row in DatedLifetimeValue for channel %s, with average amount %s',
                     $dataChannelId,
                     $averageAmount
                 )
@@ -116,17 +115,14 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
     }
 
     /**
-     * @param               $dataChannelId
-     * @param               $avgAmount
-     * @param \DateTime     $date
+     * @param string    $dataChannelId
+     * @param string    $avgAmount
+     * @param \DateTime $date
      *
      * @return null|object
      */
-    protected function updateOrCreateDatedLifetimeValue(
-        $dataChannelId,
-        $avgAmount,
-        \DateTime $date
-    ) {
+    protected function updateOrCreateDatedLifetimeValue($dataChannelId, $avgAmount, \DateTime $date)
+    {
         $entity = $this->getEm()->getRepository('OroCRMChannelBundle:DatedLifetimeValue')->findOneBy(
             [
                 'dataChannel' => $dataChannelId,
@@ -245,7 +241,8 @@ class LifetimeOfDayUpdateCommand extends ContainerAwareCommand implements CronCo
             $lastMonth = [end($month), $year];
         }
 
-        $sql .= 'group by h1.account_id) test2 ON test2.id = h.id';
+        $sql .= 'group by h1.account_id ';
+        $sql .= ') test2 ON test2.id = h.id';
 
         /** @var Statement $statement */
         $statement = $this->getEm()->getConnection()->prepare($sql);
