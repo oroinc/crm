@@ -48,14 +48,10 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
-{% block breadcrumbs %}
+{% block stats %}
     {{ parent() }}
-    <div class="pull-left label label-info orocrm-channel-lifetime-value-label">
-        <b>
-            {{ 'orocrm.magento.channel_lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
-        </b>
-    </div>
-{% endblock %}
+    <li><b>{{ 'orocrm.magento.customer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}</b></li>
+{% endblock stats %}
 
 {% block content_data %}
     {% set customerInformationWidget %}

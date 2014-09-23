@@ -783,10 +783,12 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface, Cha
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $em = $eventArgs->getEntityManager();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
-        $this->setStatus($defaultStatus);
+        if (!$this->status) {
+            $em = $eventArgs->getEntityManager();
+            /** @var LeadStatus $defaultStatus */
+            $defaultStatus = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+            $this->setStatus($defaultStatus);
+        }
     }
 
     /**

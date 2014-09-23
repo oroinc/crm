@@ -41,8 +41,7 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {{ parent() }}
 {% endblock stats %}
 
 {% block content_data %}
@@ -98,32 +97,6 @@
             }]
         }]
         ) %}
-    {% endif %}
-
-    {% if form.leads is defined%}
-        {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.sales.b2bcustomer.leads.label'|trans,
-            'subblocks': [{
-                'title' : null,
-                'useSpan': false,
-                'data' : [
-                    form_widget(form.leads)
-                ]
-            }]
-        }] ) %}
-    {% endif %}
-
-    {% if form.opportunities is defined%}
-        {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.sales.b2bcustomer.opportunities.label'|trans,
-            'subblocks': [{
-            'title' : null,
-            'useSpan': false,
-                'data' : [
-                    form_widget(form.opportunities)
-                ]
-            }]
-        }] ) %}
     {% endif %}
 
     {% set data = {
