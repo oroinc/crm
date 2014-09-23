@@ -48,8 +48,47 @@ define([
      * @param {Object.<string, *>} fields
      */
     function initializeChannelTypeComponent(selector, fields) {
-        var $el = $(selector);
-        var $formStart = $el.parents('form').serializeArray();
+        var $el = $(selector),
+            $form = $el.parents('form');
+
+        /**
+         * Get serialized form string with current element value excluded.
+         *
+         * @returns {String}
+         */
+        var getFormState = function() {
+            $el.attr('disabled', true);
+            var result = $form.serialize();
+            $el.attr('disabled', false);
+
+            return result;
+        };
+        var formStartState = getFormState();
+
+        var processChangeType = function() {
+            var data,
+                event,
+                $form = $el.parents('form'),
+                elementNames = _.map(fields, function (elementIdentifier) {
+                    return $(elementIdentifier).attr('name');
+                });
+
+            data = _.filter($form.serializeArray(), function (field) {
+                return _.indexOf(elementNames, field.name) !== -1;
+            });
+            data.push({name: UPDATE_MARKER, value: 1});
+
+            event = { formEl: $form, data: data, reloadManually: true };
+            mediator.trigger('channelFormReload:before', event);
+
+            if (event.reloadManually) {
+                mediator.execute('submitPage', {
+                    url:  $form.attr('action'),
+                    type: $form.attr('method'),
+                    data: $.param(data)
+                });
+            }
+        };
 
         $el.on('change', function changeTypeHandler(e) {
             var prevEl  = e.removed,
@@ -59,49 +98,12 @@ define([
                     content: __('orocrm.channel.confirmation.text')
                 });
 
-            var processChangeType = function() {
-                var data,
-                    $form = $el.parents('form'),
-                    elementNames = _.map(fields, function (elementIdentifier) {
-                        return $(elementIdentifier).attr('name');
-                    });
-
-                data = _.filter($form.serializeArray(), function (field) {
-                    return _.indexOf(elementNames, field.name) !== -1;
-                });
-                data.push({name: UPDATE_MARKER, value: 1});
-
-                var event = { formEl: $form, data: data, reloadManually: true };
-                mediator.trigger('channelFormReload:before', event);
-
-                if (event.reloadManually) {
-                    mediator.execute('submitPage', {
-                        url:  $form.attr('action'),
-                        type: $form.attr('method'),
-                        data: $.param(data)
-                    });
-                }
-            }
-
-            confirm.on('ok', function (){
-                processChangeType();
-            });
-
+            confirm.on('ok', processChangeType);
             confirm.on('cancel', function revertChanges() {
                 $el.select2('val', prevEl.id)
             });
 
-            var $openConfirm = 0;
-            var $formChanged = $el.parents('form').serializeArray();
-
-            $.each($formChanged, function(i, fd) {
-                if((fd.name !== $el.attr('name'))
-                    && ($formStart[i].value != fd.value)) {
-                    $openConfirm = 1;
-                }
-            });
-
-            if ($openConfirm) {
+            if (getFormState() != formStartState) {
                 confirm.open();
             } else {
                 processChangeType();
