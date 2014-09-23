@@ -100,32 +100,6 @@
         ) %}
     {% endif %}
 
-    {% if form.leads is defined%}
-        {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.sales.b2bcustomer.leads.label'|trans,
-            'subblocks': [{
-                'title' : null,
-                'useSpan': false,
-                'data' : [
-                    form_widget(form.leads)
-                ]
-            }]
-        }] ) %}
-    {% endif %}
-
-    {% if form.opportunities is defined%}
-        {% set dataBlocks = dataBlocks|merge([{
-            'title' : 'orocrm.sales.b2bcustomer.opportunities.label'|trans,
-            'subblocks': [{
-            'title' : null,
-            'useSpan': false,
-                'data' : [
-                    form_widget(form.opportunities)
-                ]
-            }]
-        }] ) %}
-    {% endif %}
-
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,

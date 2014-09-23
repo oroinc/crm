@@ -155,52 +155,6 @@ class B2bCustomerController extends Controller
 
     /**
      * @Route(
-     *      "/widget/leads/{id}",
-     *      name="orocrm_sales_widget_leads_assign",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
-     * )
-     * @AclAncestor("orocrm_sales_lead_view")
-     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
-     */
-    public function leadsAssignAction(B2bCustomer $b2bCustomer = null)
-    {
-        return [
-            'b2bCustomer' => $b2bCustomer,
-            'gridName'    => 'sales-b2bcustomer-lead-grid',
-            'addedName'   => 'appendLeads',
-            'removedName' => 'removeLeads',
-            'columnName'  => 'hasLeads',
-            'routeName'   => 'orocrm_sales_lead_info',
-            'extraData'   => ['Phone' => 'phoneNumber', 'Email' => 'email']
-        ];
-    }
-
-    /**
-     * @Route(
-     *      "/widget/opportunities/{id}",
-     *      name="orocrm_sales_widget_opportunities_assign",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
-     * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
-     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
-     */
-    public function opportunitiesAssignAction(B2bCustomer $b2bCustomer = null)
-    {
-        return [
-            'b2bCustomer' => $b2bCustomer,
-            'gridName'    => 'sales-b2bcustomer-opportunity-grid',
-            'addedName'   => 'appendOpportunities',
-            'removedName' => 'removeOpportunities',
-            'columnName'  => 'hasOpportunities',
-            'routeName'   => 'orocrm_sales_opportunity_info',
-            'extraData'   => ['Email' => 'primaryEmail']
-        ];
-    }
-
-    /**
-     * @Route(
      *      "/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}",
      *      name="orocrm_sales_widget_account_b2bcustomers_info",
      *      requirements={"accountId"="\d+", "channelId"="\d+"}
