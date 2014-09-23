@@ -1,0 +1,55 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroAddressBundle::macros.html.twig' as address %}
+
+{% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
+{% set tabs = [] %}
+{% if leadClassName in channel.entities %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'orocrm_sales_b2bcustomer_leads' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'orocrm.sales.b2bcustomer.leads.label'|trans,
+            'url': path('orocrm_sales_b2bcustomer_widget_leads', {'id': customer.id})
+        }
+    ]) %}
+{% endif %}
+{% if opportunityClassName in channel.entities %}
+    {% set tabs = tabs|merge([
+        {
+            'alias': 'orocrm_sales_b2bcustomer_opportunities' ~ uniqueSuffix,
+            'widgetType': 'block',
+            'label': 'orocrm.sales.b2bcustomer.opportunities.label'|trans,
+            'url': path('orocrm_sales_b2bcustomer_widget_opportunities', {'id': customer.id})
+        }
+    ]) %}
+{% endif %}
+
+{% set hasTabs = tabs|length > 0 %}
+
+<div class="widget-content row-fluid {% if hasTabs %}row-fluid-divider{% endif %}">
+    <div class="responsive-cell form-horizontal">
+        {% set customer_name_link %}
+            <a href="{{ path('orocrm_sales_b2bcustomer_view', {'id':customer.id}) }}">
+                {{ customer.name|escape }}
+            </a>
+        {% endset %}
+        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.name.label'|trans, customer_name_link) }}
+
+        {%- if resource_granted('orocrm_contact_view') and customer.contact -%}
+            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': customer.contact.id}) ~ '">' ~ customer.contact|oro_format_name|escape ~ '</a>' %}
+        {%- else -%}
+            {% set contactView = customer.contact ? customer.contact|oro_format_name : '' %}
+        {%- endif -%}
+
+        {{ UI.renderHtmlProperty('orocrm.sales.lead.contact.label'|trans, contactView) }}
+
+        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(customer.shippingAddress)) }}
+        {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.billing_address.label'|trans, address.renderAddress(customer.billingAddress)) }}
+    </div>
+
+    {% if hasTabs %}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {{ tabPanel(tabs) }}
+        </div>
+    {% endif %}
+</div>

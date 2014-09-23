@@ -1,13 +1,5 @@
 oro_menu_config:
     items:
-        orocrm_magento_account_orders_tab:
-            label:   'orocrm.magento.order.entity_plural_label'
-            display: false
-            extras:
-                position:    30
-                widgetAcl:   'orocrm_magento_order_view'
-                widgetRoute: 'orocrm_magento_widget_account_orders'
-
         magento_cart:
             label:   'orocrm.magento.cart.entity_plural_label'
             route:   'orocrm_magento_cart_index'
@@ -36,9 +28,6 @@ oro_menu_config:
                 description: 'orocrm.magento.customer.entity_plural_label'
 
     tree:
-        account_sales_tab_panel:
-            children:
-                orocrm_magento_account_orders_tab: ~
         application_menu:
             children:
                 sales_tab:
