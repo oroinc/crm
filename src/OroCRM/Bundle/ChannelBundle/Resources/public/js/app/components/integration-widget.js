@@ -1,5 +1,13 @@
-define(['underscore', 'backbone', 'orotranslation/js/translator', 'routing', 'oro/dialog-widget', 'text!./template/integration-widget-link.html'],
-function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
+define([
+    'underscore',
+    'backbone',
+    'orotranslation/js/translator',
+    'routing',
+    'oro/dialog-widget',
+    'oroui/js/delete-confirmation',
+    'text!./template/integration-widget-link.html'
+],
+function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplate) {
     'use strict';
 
     var $ = Backbone.$;
@@ -44,7 +52,7 @@ function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
          */
         events: {
             'click [data-purpose="open-form-widget"]':          'openDialog',
-            'click [data-purpose="remove-integration-data"]' :  'removeIntegrationData'
+            'click [data-purpose="remove-integration-data"]' :  'onRemoveIntegrationData'
         },
 
         /**
@@ -95,6 +103,14 @@ function (_, Backbone, __, routing, DialogWidget, linkTemplate) {
 
             formDialog.on('formSave', _.bind(processFormSave, this));
             formDialog.render();
+        },
+
+        onRemoveIntegrationData: function () {
+            var confirm = new DeleteConfirmation({
+                content: __('orocrm.channel.confirmation.delete_confirmation')
+            });
+            confirm.on('ok', _.bind(this.removeIntegrationData, this));
+            confirm.open();
         },
 
         /**

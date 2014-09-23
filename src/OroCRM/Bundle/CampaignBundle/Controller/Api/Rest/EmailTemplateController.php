@@ -43,12 +43,12 @@ class EmailTemplateController extends RestController
             );
         }
 
-        $entity = $this
+        $marketingList = $this
             ->getDoctrine()
             ->getRepository('OroCRMMarketingListBundle:MarketingList')
             ->find((int)$id);
 
-        if (!$entity) {
+        if (!$marketingList) {
             return $this->handleView(
                 $this->view(null, Codes::HTTP_NOT_FOUND)
             );
@@ -59,11 +59,12 @@ class EmailTemplateController extends RestController
         $token        = $securityContext->getToken();
         $organization = $token->getOrganizationContext();
 
-        $templates = $this
+        $templatesQueryBuilder = $this
             ->getDoctrine()
             ->getRepository('OroEmailBundle:EmailTemplate')
-            ->getTemplateByEntityName($entity->getEntity(), $organization);
+            ->getEntityTemplatesQueryBuilder($marketingList->getEntity(), $organization, true);
 
+        $templates = $templatesQueryBuilder->getQuery()->getArrayResult();
         return $this->handleView(
             $this->view($templates, Codes::HTTP_OK)
         );

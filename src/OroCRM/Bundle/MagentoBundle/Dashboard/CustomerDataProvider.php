@@ -69,7 +69,7 @@ class CustomerDataProvider
         // get all integration channels
         $channels   = $channelRepository->getByType($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
-        $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, $now, $channelIds);
+        $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, null, $channelIds);
 
         // create dates by date period
         /** @var \DateTime $dt */
@@ -82,7 +82,7 @@ class CustomerDataProvider
         }
 
         foreach ($data as $row) {
-            $key         = \DateTime::createFromFormat('Y-m-d', $row['formattedDate'])->format('Y-m');
+            $key         = date("Y-m", strtotime(sprintf('%s-%s', $row['yearCreated'], $row['monthCreated'])));
             $channelId   = (int)$row['channelId'];
             $channelName = $channels[$channelId]['name'];
 
