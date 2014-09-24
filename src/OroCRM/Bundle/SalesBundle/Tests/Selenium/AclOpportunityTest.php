@@ -4,15 +4,44 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 
 class AclOpportunityTest extends Selenium2TestCase
 {
+    /**
+     * @return string
+     */
+    public function testCreateChannel()
+    {
+        $name = 'Channel_' . mt_rand();
+
+        $login = $this->login();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setName($name)
+            ->setStatus('Active')
+            ->setType('Custom')
+            ->addEntity('Opportunity')
+            ->addEntity('Lead')
+            ->addEntity('Sales Process')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $name;
+    }
+
     public function testCreateRole()
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
@@ -36,6 +65,7 @@ class AclOpportunityTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - User Management - System')
@@ -139,7 +169,8 @@ class AclOpportunityTest extends Selenium2TestCase
 
     public function deleteAcl($login, $roleName, $username, $opportunityName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /** @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Opportunity', array('Delete'), 'None')
@@ -147,8 +178,9 @@ class AclOpportunityTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->checkActionMenu('Delete')
             ->open(array($opportunityName))
@@ -159,7 +191,8 @@ class AclOpportunityTest extends Selenium2TestCase
 
     public function updateAcl($login, $roleName, $username, $opportunityName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /** @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Opportunity', array('Edit'), 'None')
@@ -167,8 +200,9 @@ class AclOpportunityTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->checkActionMenu('Update')
             ->open(array($opportunityName))
@@ -177,7 +211,8 @@ class AclOpportunityTest extends Selenium2TestCase
 
     public function createAcl($login, $roleName, $username)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /** @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Opportunity', array('Create'), 'None')
@@ -185,8 +220,9 @@ class AclOpportunityTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->assertElementNotPresent(
                 "//div[@class='pull-right title-buttons-container']//a[contains(., 'Create Opportunity')]"
             );
@@ -194,7 +230,8 @@ class AclOpportunityTest extends Selenium2TestCase
 
     public function viewAcl($login, $username, $roleName)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /** @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Opportunity', array('View'), 'None')
@@ -202,8 +239,9 @@ class AclOpportunityTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->assertTitle('403 - Forbidden');
     }
 
