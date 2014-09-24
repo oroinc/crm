@@ -76,6 +76,29 @@ orocrm:
                 load: Sorry, comments were not loaded correctly.
                 delete: Sorry, comment deleting failed.
 
+        casepriority:
+            entity_label:                   Case Priority
+            entity_plural_label:            Case Priorities
+            entity_description:             Represent case priority
+            name.label:                     Name
+            label.label:                    Label
+            order.label:                    Order
+
+        casesource:
+            entity_label:                   Case Source
+            entity_plural_label:            Case Sources
+            entity_description:             Represent case source
+            name.label:                     Name
+            label.label:                    Label
+
+        casestatus:
+            entity_label:                   Case Status
+            entity_plural_label:            Case Statuses
+            entity_description:             Represent case status
+            name.label:                     Name
+            label.label:                    Label
+            order.label:                    Order
+
         block:
             additional: Additional
             comments:   Comments

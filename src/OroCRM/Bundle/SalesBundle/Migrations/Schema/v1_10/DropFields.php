@@ -26,6 +26,7 @@ class DropFields implements Migration, OrderedMigrationInterface
         $this->modifyOrocrmLeadTable($schema, $queries);
         $this->modifyOrocrmOpportunityTable($schema, $queries);
         $this->modifyOrocrmAccountTable($schema, $queries);
+        $queries->addQuery(new UpdateExtendedFieldQuery());
     }
 
     /**
