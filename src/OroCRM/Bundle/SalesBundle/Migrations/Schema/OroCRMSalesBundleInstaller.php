@@ -89,7 +89,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_11';
+        return 'v1_12';
     }
 
     /**
@@ -321,6 +321,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('lifetime', 'money', ['notnull' => false]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
         $table->setPrimaryKey(['id']);
