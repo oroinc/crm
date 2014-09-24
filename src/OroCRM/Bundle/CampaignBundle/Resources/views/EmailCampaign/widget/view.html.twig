@@ -33,7 +33,7 @@
             {%- endif -%}
             {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
 
-            {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.description.label'|trans, entity.description) }}
+            {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.description.label'|trans, entity.description|escape|nl2br) }}
         </div>
     </div>
 </div>
