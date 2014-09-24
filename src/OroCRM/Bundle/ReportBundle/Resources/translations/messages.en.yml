@@ -54,6 +54,3 @@ orocrm:
         leads_by_date: Number leads by date
         opportunities_by_status: Opportunities by status
         opportunities_won_by_period: Won opportunities by date period
-
-
-
