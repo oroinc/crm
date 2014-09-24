@@ -19,7 +19,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -84,6 +84,24 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
      * )
      */
     protected $name;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="lifetime", type="money", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=15
+     *          }
+     *      }
+     * )
+     */
+    protected $lifetime = 0;
 
     /**
      * @var Address $shippingAddress
@@ -259,6 +277,22 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param float $lifetime
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
     }
 
     /**
