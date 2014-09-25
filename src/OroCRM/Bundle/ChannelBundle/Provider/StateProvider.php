@@ -34,8 +34,8 @@ class StateProvider
     protected $securityFacade;
 
     /**
-     * @param SettingsProvider $settingsProvider
-     * @param Cache $cache
+     * @param SettingsProvider  $settingsProvider
+     * @param Cache             $cache
      * @param RegistryInterface $registry
      */
     public function __construct(
