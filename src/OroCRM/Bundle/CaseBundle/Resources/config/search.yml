@@ -19,3 +19,11 @@ OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
             name:                   resolution
             target_type:            text
             target_fields:          [resolution]
+        -
+            name:                   comments
+            relation_type:          one-to-many
+            relation_fields:
+                -
+                    name:           message
+                    target_type:    text
+                    target_fields:  [message]
