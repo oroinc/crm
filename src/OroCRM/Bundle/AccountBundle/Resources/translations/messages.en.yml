@@ -44,7 +44,7 @@ orocrm:
 
         extend_description.label:   Description
 
-        lifetime_value.label:       Lifetime value
+        lifetime_value.label:       Lifetime sales value
 
         contact:
             name:                   Contact name
