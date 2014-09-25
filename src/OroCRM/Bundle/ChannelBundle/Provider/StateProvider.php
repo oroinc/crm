@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\ChannelBundle\Provider;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
-use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class StateProvider
 {
