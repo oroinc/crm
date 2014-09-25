@@ -201,6 +201,8 @@ services:
             - @orocrm_channel.provider.settings_provider
             - @orocrm_channel.state_cache
             - @doctrine
+            - @oro_security.security_facade
+            - @oro_security.acl_helper
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
