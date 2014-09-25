@@ -65,10 +65,14 @@ class ChannelObjectBuilder
 
     /**
      * @param null|string $type
+     *
+     * @return ChannelObjectBuilder
      */
     public function setChannelType($type)
     {
         $this->channelType = $type;
+
+        return $this;
     }
 
     /**
@@ -98,6 +102,8 @@ class ChannelObjectBuilder
 
     /**
      * @param array $entities
+     *
+     * @return ChannelObjectBuilder
      */
     public function setEntities(array $entities = null)
     {
@@ -109,40 +115,58 @@ class ChannelObjectBuilder
         }
 
         $this->entities = $entities;
+
+        return $this;
     }
 
     /**
      * @param Organization $organization
+     *
+     * @return ChannelObjectBuilder
      */
     public function setOwner(Organization $organization = null)
     {
         $this->owner = $organization;
+
+        return $this;
     }
 
     /**
      * @param string $name
+     *
+     * @return ChannelObjectBuilder
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
      * Set data source object to channel
      *
      * @param Integration|null $dataSource
+     *
+     * @return ChannelObjectBuilder
      */
     public function setDataSource(Integration $dataSource = null)
     {
         $this->dataSource = $dataSource;
+
+        return $this;
     }
 
     /**
      * @param bool $status
+     *
+     * @return ChannelObjectBuilder
      */
     public function setStatus($status)
     {
         $this->status = $status;
+
+        return $this;
     }
 
     /**
@@ -167,13 +191,14 @@ class ChannelObjectBuilder
             $owner = $this->getDefaultOrganization();
         }
 
-        $this->channel->setChannelType($type);
-        $this->channel->setName($name);
-        $this->channel->setOwner($owner);
-        $this->channel->setCustomerIdentity($identity);
-        $this->channel->setEntities($this->entities);
-        $this->channel->setStatus($this->status);
-        $this->channel->setDataSource($this->dataSource);
+        $this->channel
+            ->setChannelType($type)
+            ->setName($name)
+            ->setOwner($owner)
+            ->setCustomerIdentity($identity)
+            ->setEntities($this->entities)
+            ->setStatus($this->status)
+            ->setDataSource($this->dataSource);
 
         return $this->channel;
     }

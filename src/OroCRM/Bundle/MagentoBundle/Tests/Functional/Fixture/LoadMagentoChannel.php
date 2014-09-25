@@ -89,7 +89,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $this->regions   = $this->loadStructure('OroAddressBundle:Region', 'getCombinedCode');
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
-        $this->createTransport()
+        $this
+            ->createTransport()
             ->createIntegration()
             ->createChannel()
             ->createWebSite()
@@ -513,19 +514,20 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     }
 
     /**
-     * @return Channel
+     * @return LoadMagentoChannel
      */
     protected function createChannel()
     {
-        $builder = $this->factory->createBuilder();
-        $builder->setName(self::CHANNEL_NAME);
-        $builder->setChannelType(self::CHANNEL_TYPE);
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setDataSource($this->integration);
-        $builder->setOwner($this->organization);
-        $builder->setEntities();
-
-        $channel = $builder->getChannel();
+        $channel = $this
+            ->factory
+            ->createBuilder()
+            ->setName(self::CHANNEL_NAME)
+            ->setChannelType(self::CHANNEL_TYPE)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setDataSource($this->integration)
+            ->setOwner($this->organization)
+            ->setEntities()
+            ->getChannel();
 
         $this->em->persist($channel);
         $this->em->flush();

@@ -11,6 +11,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
+use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
 class LoadChannelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -38,13 +39,14 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $om)
     {
-        $builder = $this->factory->createBuilder();
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setEntities();
-        $builder->setChannelType('b2b');
-
-        $channel = $builder->getChannel();
-        $channel->setName('B2B channel');
+        $channel = $this
+            ->factory
+            ->createBuilder()
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setEntities()
+            ->setChannelType(DefaultChannelData::B2B_CHANNEL_TYPE)
+            ->setName('B2B channel')
+            ->getChannel();
 
         $om->persist($channel);
         $om->flush();
