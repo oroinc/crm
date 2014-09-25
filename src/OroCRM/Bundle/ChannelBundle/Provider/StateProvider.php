@@ -37,6 +37,8 @@ class StateProvider
      * @param SettingsProvider  $settingsProvider
      * @param Cache             $cache
      * @param RegistryInterface $registry
+     * @param SecurityFacade    $securityFacade
+     * @param AclHelper         $aclHelper
      */
     public function __construct(
         SettingsProvider $settingsProvider,
