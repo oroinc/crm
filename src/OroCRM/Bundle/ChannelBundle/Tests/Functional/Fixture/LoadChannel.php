@@ -23,13 +23,14 @@ class LoadChannel extends AbstractFixture
         $date = new \DateTime('now');
 
         $channel = new Channel();
-        $channel->setName('some name');
-        $channel->setOwner($this->loadOwner());
-        $channel->setChannelType('testType');
-        $channel->setCreatedAt($date);
-        $channel->setUpdatedAt($date);
-        $channel->setCustomerIdentity('test1');
-        $channel->setEntities(['test1', 'test2']);
+        $channel
+            ->setName('some name')
+            ->setOwner($this->loadOwner())
+            ->setChannelType('testType')
+            ->setCreatedAt($date)
+            ->setUpdatedAt($date)
+            ->setCustomerIdentity('test1')
+            ->setEntities(['test1', 'test2']);
 
         $manager->persist($channel);
 
