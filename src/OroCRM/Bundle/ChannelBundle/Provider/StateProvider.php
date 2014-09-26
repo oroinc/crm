@@ -5,9 +5,11 @@ namespace OroCRM\Bundle\ChannelBundle\Provider;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Cache\Cache;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class StateProvider
 {
@@ -25,16 +27,31 @@ class StateProvider
     /** @var null|array */
     protected $enabledEntities;
 
+    /** @var AclHelper */
+    protected $aclHelper;
+
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
     /**
      * @param SettingsProvider  $settingsProvider
      * @param Cache             $cache
      * @param RegistryInterface $registry
+     * @param SecurityFacade    $securityFacade
+     * @param AclHelper         $aclHelper
      */
-    public function __construct(SettingsProvider $settingsProvider, Cache $cache, RegistryInterface $registry)
-    {
+    public function __construct(
+        SettingsProvider $settingsProvider,
+        Cache $cache,
+        RegistryInterface $registry,
+        SecurityFacade $securityFacade,
+        AclHelper $aclHelper
+    ) {
         $this->settingsProvider = $settingsProvider;
-        $this->cache            = $cache;
-        $this->registry         = $registry;
+        $this->cache = $cache;
+        $this->registry = $registry;
+        $this->securityFacade = $securityFacade;
+        $this->aclHelper = $aclHelper;
     }
 
     /**
@@ -76,7 +93,7 @@ class StateProvider
             $qb->setParameter('count', count($entities));
         }
 
-        return (bool)$qb->getQuery()->getArrayResult();
+        return (bool)$this->aclHelper->apply($qb)->getArrayResult();
     }
 
     /**
@@ -85,7 +102,7 @@ class StateProvider
      */
     public function processChannelChange()
     {
-        $this->cache->delete(self::CACHE_ID);
+        $this->cache->delete($this->getCacheId());
     }
 
     /**
@@ -110,7 +127,7 @@ class StateProvider
                 ->setParameter('status', Channel::STATUS_ACTIVE)
                 ->innerJoin('c.entities', 'e');
 
-            $assignedEntityNames = $qb->getQuery()->getArrayResult();
+            $assignedEntityNames = $this->aclHelper->apply($qb)->getArrayResult();
             $assignedEntityNames = array_map(
                 function ($result) {
                     return $result['name'];
@@ -135,7 +152,7 @@ class StateProvider
      */
     protected function tryCacheLookUp()
     {
-        $fetchResult = $this->cache->fetch(self::CACHE_ID);
+        $fetchResult = $this->cache->fetch($this->getCacheId());
 
         return is_array($fetchResult) ? $fetchResult : false;
     }
@@ -145,7 +162,7 @@ class StateProvider
      */
     protected function persistToCache()
     {
-        $this->cache->save(self::CACHE_ID, $this->enabledEntities);
+        $this->cache->save($this->getCacheId(), $this->enabledEntities);
     }
 
     /**
@@ -154,5 +171,15 @@ class StateProvider
     protected function getManager()
     {
         return $this->registry->getManager();
+    }
+
+    /**
+     * Get cache ID depending on the current organization
+     *
+     * @return string
+     */
+    protected function getCacheId()
+    {
+        return self::CACHE_ID . '_' . $this->securityFacade->getOrganizationId();
     }
 }
