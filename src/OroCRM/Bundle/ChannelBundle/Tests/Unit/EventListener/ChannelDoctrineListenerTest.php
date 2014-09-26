@@ -134,6 +134,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
         $account  = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
         $channel  = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel->expects($this->any())->method('getId')->will($this->returnValue(1));
         $account2 = clone $account;
 
         $queue = [
@@ -179,11 +180,11 @@ class ChannelDoctrineListenerTest extends OrmTestCase
                     [
                         [
                             'SELECT SUM(c0_.lifetime) AS sclr0 FROM Customer c0_ ' .
-                            'WHERE c0_.account_id = ? AND c0_.channel_id = ?',
+                            'WHERE c0_.account_id = ? AND c0_.data_channel_id = ?',
                             $selectLifetimeSmt
                         ],
                         [
-                            'UPDATE LifetimeValueHistory SET status = 0 ' .
+                            'UPDATE LifetimeValueHistory SET status = ? ' .
                             'WHERE account_id IN (?, ?) AND data_channel_id = ?',
                             $updateSmt
                         ]

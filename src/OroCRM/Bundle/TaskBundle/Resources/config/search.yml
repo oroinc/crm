@@ -1,0 +1,17 @@
+OroCRM\Bundle\TaskBundle\Entity\Task:
+    alias:                          orocrm_task
+    title_fields:                   [subject]
+    route:
+        name:                       orocrm_task_view
+        parameters:
+            id:                     id
+    search_template:                OroCRMTaskBundle:Search:result.html.twig
+    fields:
+        -
+            name:                   subject
+            target_type:            text
+            target_fields:          [subject]
+        -
+            name:                   description
+            target_type:            text
+            target_fields:          [description]

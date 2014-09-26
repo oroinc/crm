@@ -1054,10 +1054,12 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $em = $eventArgs->getEntityManager();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
-        $this->setStatus($defaultStatus);
+        if (!$this->status) {
+            $em = $eventArgs->getEntityManager();
+            /** @var LeadStatus $defaultStatus */
+            $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+            $this->setStatus($defaultStatus);
+        }
     }
 
     /**

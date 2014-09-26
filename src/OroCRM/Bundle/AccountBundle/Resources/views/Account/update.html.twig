@@ -47,11 +47,6 @@
     {% endif %}
 {% endblock pageHeader %}
 
-{% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ form.vars.value.createdAt ? form.vars.value.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ form.vars.value.updatedAt ? form.vars.value.updatedAt|oro_format_datetime : 'N/A' }}</li>
-{% endblock stats %}
-
 {% block content_data %}
     {% set id = 'account-profile' %}
 
