@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
@@ -16,12 +17,15 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
      */
     public function load(ObjectManager $manager)
     {
-        $builder = $this->container->get('orocrm_channel.builder.factory')->createBuilder();
-        $builder->setChannelType(self::B2B_CHANNEL_TYPE);
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setEntities();
+        /** @var BuilderFactory $builderFactory */
+        $builderFactory = $this->container->get('orocrm_channel.builder.factory');
+        $channel = $builderFactory
+            ->createBuilder()
+            ->setChannelType(self::B2B_CHANNEL_TYPE)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setEntities()
+            ->getChannel();
 
-        $channel  = $builder->getChannel();
         $entities = $channel->getEntities();
 
         $shouldBeCreated = false;
