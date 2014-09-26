@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class DatedLifetimeValueRepository extends EntityRepository
+class LifetimeValueAverageAggregationRepository extends EntityRepository
 {
     public function findAmountStatisticsByDate($date)
     {

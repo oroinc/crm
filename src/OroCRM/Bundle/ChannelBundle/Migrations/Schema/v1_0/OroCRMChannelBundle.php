@@ -114,13 +114,15 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
             $schema->getTable('oro_integration_channel'),
             ['data_source_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_AEA90B921A935C57'
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_organization'),
             ['organization_owner_id'],
             ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_AEA90B929124A35B'
         );
     }
 
@@ -136,7 +138,8 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
             $schema->getTable('orocrm_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
+            ['onDelete' => 'CASCADE', 'onUpdate' => null],
+            'FK_92BC967172F5A1AA'
         );
     }
 

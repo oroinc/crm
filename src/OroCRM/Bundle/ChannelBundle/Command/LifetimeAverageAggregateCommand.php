@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 
-use OroCRM\Bundle\ChannelBundle\Entity\DatedLifetimeValue;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements CronCommandInterface
 {
@@ -24,7 +24,7 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      */
     public function getDefaultDefinition()
     {
-        return '00 4 * * *';
+        return '0 4 * * *';
     }
 
     /**
@@ -33,13 +33,13 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
     public function configure()
     {
         $this->setName('oro:cron:lifetime-average:aggregate');
+        $this->setDescription('Run daily aggregation of average lifetime value per channel');
         $this->addOption(
-            'regenerate',
-            'r',
+            'force',
+            'f',
             InputOption::VALUE_NONE,
-            'This option allows to regenerate all history in orocrm_channel_dated_lifetime'
+            'This option enforces regeneration of aggregation values from scratch(Useful for system timezone changes)'
         );
-        $this->setDescription('Update lifetime average value in history table');
     }
 
     /**
@@ -47,8 +47,6 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln($this->getDescription());
-
         $regenerate = $input->getOption('regenerate');
         $today      = new \DateTime('now');
 
@@ -78,7 +76,7 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
 
             $output->writeln(
                 sprintf(
-                    'Update or create row in DatedLifetimeValue for channel %s, with average amount %s',
+                    'Update or create row in LifetimeValueAverageAggregation for channel %s, with average amount %s',
                     $dataChannelId,
                     $averageAmount
                 )
@@ -123,7 +121,7 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      */
     protected function updateOrCreateDatedLifetimeValue($dataChannelId, $avgAmount, \DateTime $date)
     {
-        $entity = $this->getEm()->getRepository('OroCRMChannelBundle:DatedLifetimeValue')->findOneBy(
+        $entity = $this->getEm()->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')->findOneBy(
             [
                 'dataChannel' => $dataChannelId,
                 'month'       => $date->format('m'),
@@ -145,11 +143,11 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      * @param string    $avgAmount
      * @param \DateTime $date
      *
-     * @return DatedLifetimeValue
+     * @return LifetimeValueAverageAggregation
      */
     protected function createDatedLifetimeValue($dataChannelId, $avgAmount, \DateTime $date = null)
     {
-        $entity = new DatedLifetimeValue();
+        $entity = new LifetimeValueAverageAggregation();
 
         if (!$date instanceof \DateTime) {
             $dateTimeFormatter = $this->getService('oro_locale.formatter.date_time');

@@ -15,7 +15,7 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-use OroCRM\Bundle\ChannelBundle\Entity\DatedLifetimeValue;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class DashboardController extends Controller
 {
@@ -57,7 +57,7 @@ class DashboardController extends Controller
         $om               = $this->getDoctrine()->getManager();
         $channels         = $this->getChannels($om);
         $resultTemplate   = $this->prepareResultTemplate($channels, $channelTemplate);
-        $amountStatistics = $om->getRepository('OroCRMChannelBundle:DatedLifetimeValue')
+        $amountStatistics = $om->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')
             ->findAmountStatisticsByDate($sliceDate);
 
         $this->fillResultTemplate($amountStatistics, $resultTemplate);

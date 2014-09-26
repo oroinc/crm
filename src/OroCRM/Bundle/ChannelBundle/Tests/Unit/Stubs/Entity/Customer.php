@@ -6,17 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
  * @ORM\Entity
- * @ORM\MappedSuperclass
  */
 class Customer implements ChannelAwareInterface
 {
-    use ChannelEntityTrait;
-
     /**
      * @var int
      *
@@ -25,6 +21,14 @@ class Customer implements ChannelAwareInterface
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
+
+    /**
+     * @var Channel
+     *
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
+     * @ORM\JoinColumn(name="data_channel_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $dataChannel;
 
     /**
      * @var Account
@@ -60,7 +64,7 @@ class Customer implements ChannelAwareInterface
     /**
      * @param Account $account
      */
-    public function setAccount($account)
+    public function setAccount(Account $account)
     {
         $this->account = $account;
     }
@@ -71,6 +75,22 @@ class Customer implements ChannelAwareInterface
     public function getAccount()
     {
         return $this->account;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDataChannel(Channel $channel)
+    {
+        $this->dataChannel = $channel;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataChannel()
+    {
+        return $this->dataChannel;
     }
 
     /**

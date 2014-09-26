@@ -7,11 +7,13 @@ use Doctrine\ORM\Mapping as ORM;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\DatedLifetimeValueRepository")
- * @ORM\Table(name="orocrm_channel_dated_lifetime")
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\Entity(
+ *     repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository"
+ * )
+ * @ORM\Table(name="orocrm_channel_ltime_avg_aggr")
+ * @ORM\HasLifecycleCallbacks
  */
-class DatedLifetimeValue implements ChannelAwareInterface
+class LifetimeValueAverageAggregation implements ChannelAwareInterface
 {
     /**
      * @var integer
@@ -23,6 +25,13 @@ class DatedLifetimeValue implements ChannelAwareInterface
     protected $id;
 
     /**
+     * @var double
+     *
+     * @ORM\Column(name="amount", type="money", nullable=false)
+     */
+    protected $amount;
+
+    /**
      * @var Channel
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ChannelBundle\Entity\Channel")
@@ -31,37 +40,30 @@ class DatedLifetimeValue implements ChannelAwareInterface
     protected $dataChannel;
 
     /**
-     * @var double
-     *
-     * @ORM\Column(name="amount", type="money")
-     */
-    protected $amount;
-
-    /**
      * @var \DateTime $createdAt
      *
-     * @ORM\Column(type="datetime", name="created_at")
+     * @ORM\Column(type="datetime", name="created_at", nullable=false)
      */
     protected $createdAt;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="month", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="month", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $month;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="quarter", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="quarter", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $quarter;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="year", type="smallint", options={"unsigned"=true})
+     * @ORM\Column(name="year", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $year;
 
@@ -78,7 +80,7 @@ class DatedLifetimeValue implements ChannelAwareInterface
      */
     public function setAmount($amount)
     {
-        $this->amount = $amount;
+        $this->amount = (float)$amount;
     }
 
     /**
@@ -106,9 +108,57 @@ class DatedLifetimeValue implements ChannelAwareInterface
     }
 
     /**
+     * @param int $month
+     */
+    public function setMonth($month)
+    {
+        $this->month = (int)$month;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
+
+    /**
+     * @param int $quarter
+     */
+    public function setQuarter($quarter)
+    {
+        $this->quarter = (int)$quarter;
+    }
+
+    /**
+     * @return int
+     */
+    public function getQuarter()
+    {
+        return $this->quarter;
+    }
+
+    /**
+     * @param int $year
+     */
+    public function setYear($year)
+    {
+        $this->year = (int)$year;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
+
+    /**
      * @param \DateTime $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -122,65 +172,16 @@ class DatedLifetimeValue implements ChannelAwareInterface
     }
 
     /**
-     * @param mixed $month
-     */
-    public function setMonth($month)
-    {
-        $this->month = $month;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getMonth()
-    {
-        return $this->month;
-    }
-
-    /**
-     * @param mixed $quarter
-     */
-    public function setQuarter($quarter)
-    {
-        $this->quarter = $quarter;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQuarter()
-    {
-        return $this->quarter;
-    }
-
-    /**
-     * @param int $year
-     */
-    public function setYear($year)
-    {
-        $this->year = $year;
-    }
-
-    /**
-     * @return int
-     */
-    public function getYear()
-    {
-        return $this->year;
-    }
-
-    /**
      * @ORM\PrePersist
      */
     public function prePersist()
     {
-        $date = $this->getCreatedAt();
-
-        if (empty($date)) {
+        if (!$this->getCreatedAt()) {
             $date = new \DateTime('now', new \DateTimeZone('UTC'));
             $this->setCreatedAt($date);
         }
 
+        $date = $this->getCreatedAt();
         $this->setMonth($date->format('m'));
         $this->setYear($date->format('Y'));
         $this->setQuarter(ceil($date->format('m') / 3));
