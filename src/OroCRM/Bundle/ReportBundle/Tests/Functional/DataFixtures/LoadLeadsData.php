@@ -2,38 +2,32 @@
 
 namespace OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Collections\Collection;
-
+use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
+
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, OrderedFixtureInterface
 {
@@ -104,11 +98,13 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $enumRepo      = $manager->getRepository($className);
         $this->sources = $enumRepo->findAll();
 
-        $builder = $this->channelBuilderFactory->createBuilder();
-        $builder->setChannelType('b2b');
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setEntities();
-        $this->channel = $builder->getChannel();
+        $this->channel = $this
+            ->channelBuilderFactory
+            ->createBuilder()
+            ->setChannelType(DefaultChannelData::B2B_CHANNEL_TYPE)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setEntities()
+            ->getChannel();
 
         $manager->persist($this->channel);
         $manager->flush($this->channel);
@@ -118,7 +114,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "leads.csv", "r");
         if ($handle) {
-            $headers = array();
+            $headers = [];
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
@@ -156,10 +152,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             'b2b_flow_lead',
             $lead,
             'qualify',
-            array(
+            [
                 'opportunity_name' => $lead->getName(),
                 'company_name' => $lead->getCompanyName(),
-            )
+            ]
         );
         if ($this->getRandomBoolean()) {
             /** @var Opportunity $opportunity */
@@ -168,12 +164,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                 'b2b_flow_sales',
                 $opportunity,
                 'develop',
-                array(
+                [
                     'budget_amount'     => mt_rand(10, 10000),
                     'customer_need'     => mt_rand(10, 10000),
                     'proposed_solution' => mt_rand(10, 10000),
                     'probability'       => round(mt_rand(50, 85) / 100.00, 2)
-                )
+                ]
             );
 
             if ($this->getRandomBoolean()) {
@@ -182,21 +178,21 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                         $this->workflowManager,
                         $salesFlowItem,
                         'close_as_won',
-                        array(
+                        [
                             'close_revenue' => mt_rand(100, 1000),
                             'close_date'    => new \DateTime('now'),
-                        )
+                        ]
                     );
                 } else {
                     $this->transit(
                         $this->workflowManager,
                         $salesFlowItem,
                         'close_as_lost',
-                        array(
+                        [
                             'close_reason_name' => 'cancelled',
                             'close_revenue'     => mt_rand(100, 1000),
                             'close_date'        => new \DateTime('now'),
-                        )
+                        ]
                     );
                 }
             }
