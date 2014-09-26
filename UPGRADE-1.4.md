@@ -10,10 +10,9 @@ UPGRADE FROM 1.3 to 1.4
 - `Form\Type\ContactRequestType` field `dataChannel` has been included
 
 ####MagentoBundle:
-- Account has been removed Order
 - `Entity\Cart`, `Entity\Customer` and `Entity\Order` now implement `ChannelAwareInterface` and use `ChannelEntityTrait`
 - `Form\Type\WebsiteSelectType` has been added
-- `Service\ImportHelper` method `getChannelFromContext` has been renamed to `getIntegrationFromContext~
+- `Service\ImportHelper` method `getChannelFromContext` has been renamed to `getIntegrationFromContext`
 
 ####SalesBundle:
 - `Entity\Leads` and `Entity\Opportunities` no longer have relationship with `AccountBundle\Entity\Account` this field has been removed
