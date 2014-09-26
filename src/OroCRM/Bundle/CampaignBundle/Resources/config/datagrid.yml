@@ -43,7 +43,7 @@ datagrid:
                     type:        date
                     data_name:   c.endDate
                 budget:
-                    type:        number
+                    type:        currency
                     data_name:   c.budget
         sorters:
             columns:

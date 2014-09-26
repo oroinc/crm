@@ -63,7 +63,7 @@ datagrid:
                     type: string
                     data_name: a.name
                 value:
-                    type:             number
+                    type:             currency
                     data_name:        value
                     filter_by_having: true
                     options:
@@ -282,13 +282,13 @@ datagrid:
                     data_name: numberOfOpportunities
                     filter_by_having: true
                 closeRevenue:
-                    type: number
+                    type: currency
                     data_name: closeRevenue
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: budgetAmount
                     filter_by_having: true
                     options:
@@ -367,7 +367,7 @@ datagrid:
                     data_name: cnt
                     filter_by_having: true
                 value:
-                    type: number
+                    type: currency
                     data_name: value
                     filter_by_having: true
                     options:
