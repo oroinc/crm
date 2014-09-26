@@ -235,6 +235,8 @@ datagrid:
                           CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
                           THEN true ELSE false END
                         END) as hasContact
+            bind_parameters:
+                - account
         columns:
             hasContact:
                 label:   Assigned
@@ -300,9 +302,7 @@ datagrid:
                     enabled: false
         options:
             routerEnabled: false
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasContact
                 selectors:
