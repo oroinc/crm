@@ -17,10 +17,6 @@ orocrm:
             status.label:                   Status
             priority.label:                 Priority
 
-            delete:       Delete
-            view:         View
-            update:       Update
-
         menu:
             index.label: Cases
 

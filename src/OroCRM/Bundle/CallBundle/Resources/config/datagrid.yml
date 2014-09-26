@@ -76,14 +76,14 @@ datagrid:
             update:
                 type:          navigate
                 acl_resource:  orocrm_call_create
-                label:         orocrm.call.datagrid.update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
                 rowAction:     true
             delete:
                 type:          delete
                 acl_resource:  orocrm_call_delete
-                label:         orocrm.call.datagrid.delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
                 rowAction:     true

@@ -72,16 +72,17 @@ datagrid:
                 link:         view_link
                 acl_resource: orocrm_channel_view
                 icon:         eye-open
+                label:        oro.grid.action.view
                 rowAction:    true
             update:
                 type:         navigate
                 link:         update_link
                 acl_resource: orocrm_channel_update
                 icon:         edit
-                label:        orocrm.channel.datagrid.action.update.label
+                label:        oro.grid.action.update
             delete:
                 type:         delete
                 link:         delete_link
                 acl_resource: orocrm_channel_delete
                 icon:         trash
-                label:        orocrm.channel.datagrid.action.delete.label
+                label:        oro.grid.action.delete

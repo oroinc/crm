@@ -21,14 +21,6 @@ orocrm:
         workflow_item.label:        Workflow item
         organization.label:         Organization
 
-        datagrid:
-            delete:       Delete
-            view:         View
-            update:       Update
-            view: View
-            update: Update
-            delete: Delete
-
         add_entity: Add task
         saved_message: Task saved
 

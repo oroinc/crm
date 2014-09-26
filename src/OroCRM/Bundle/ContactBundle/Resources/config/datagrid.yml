@@ -85,14 +85,14 @@ datagrid:
             update:
                 type:          navigate
                 acl_resource:  orocrm_contact_group_update
-                label:         orocrm.contact.datagrid.update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
                 rowAction:     true
             delete:
                 type:          delete
                 acl_resource:  orocrm_contact_group_delete
-                label:         orocrm.contact.datagrid.delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         options:
@@ -304,20 +304,20 @@ datagrid:
             view:
                 type: navigate
                 acl_resource: orocrm_contact_view
-                label: orocrm.contact.datagrid.view
+                label: oro.grid.action.view
                 icon: eye-open
                 link: view_link
                 rowAction: true
             update:
                 type: navigate
                 acl_resource: orocrm_contact_update
-                label: orocrm.contact.datagrid.update
+                label: oro.grid.action.update
                 icon: edit
                 link: update_link
             delete:
                 type: delete
                 acl_resource: orocrm_contact_delete
-                label: orocrm.contact.datagrid.delete
+                label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
         mass_actions:
@@ -326,7 +326,7 @@ datagrid:
                 entity_name: %orocrm_contact.entity.class%
                 data_identifier: c.id
                 acl_resource: orocrm_contact_delete
-                label: orocrm.contact.datagrid.delete
+                label: oro.grid.action.delete
                 icon: trash
         options:
             entityHint: contact
