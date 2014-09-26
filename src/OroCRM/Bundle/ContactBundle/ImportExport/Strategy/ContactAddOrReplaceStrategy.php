@@ -2,10 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
-use Symfony\Component\Security\Core\Util\ClassUtils;
-
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Util\ClassUtils;
 
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\FormBundle\Entity\PrimaryItem;
@@ -17,11 +15,6 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    /**
-     * @var RegistryInterface
-     */
-    protected $registry;
-
     /**
      * @var ContactAddress|null
      */
@@ -36,14 +29,6 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      * @var ContactPhone|null
      */
     protected $primaryPhone;
-
-    /**
-     * @param RegistryInterface $registry
-     */
-    public function setRegistry(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
-    }
 
     /**
      * {@inheritdoc}
@@ -122,16 +107,9 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
      */
     protected function getEntity($originEntity, $criteria)
     {
-        if (!$this->registry) {
-            throw new \RuntimeException('Registry was not set');
-        }
+        $className = ClassUtils::getClass($originEntity);
 
-        $className = ClassUtils::getRealClass($originEntity);
-
-        return $this->registry
-            ->getManagerForClass($className)
-            ->getRepository($className)
-            ->findOneBy($criteria);
+        return $this->databaseHelper->findOneBy($className, $criteria);
     }
 
     /**
