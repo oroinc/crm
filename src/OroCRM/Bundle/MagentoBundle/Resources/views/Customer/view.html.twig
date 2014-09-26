@@ -50,7 +50,11 @@
 
 {% block stats %}
     {{ parent() }}
-    <li><b>{{ 'orocrm.magento.customer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}</b></li>
+    <li>
+        <div class="pull-right label label-info orocrm-channel-lifetime-value-label">
+            {{ 'orocrm.magento.customer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        </div>
+    </li>
 {% endblock stats %}
 
 {% block content_data %}
