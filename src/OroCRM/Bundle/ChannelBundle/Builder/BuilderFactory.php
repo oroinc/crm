@@ -79,8 +79,9 @@ class BuilderFactory
         $integration->setConnectors($connectors);
 
         $builder = new ChannelObjectBuilder($this->registry->getManager(), $this->settingsProvider, $channel);
-        $builder->setChannelType($type);
-        $builder->setEntities($entities);
+        $builder
+            ->setChannelType($type)
+            ->setEntities($entities);
 
         return $builder;
     }

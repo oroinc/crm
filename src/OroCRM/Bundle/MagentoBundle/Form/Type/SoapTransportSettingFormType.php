@@ -12,6 +12,7 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SoapTransportSettingFormType extends AbstractType
 {
@@ -56,7 +57,11 @@ class SoapTransportSettingFormType extends AbstractType
         $builder->add(
             'apiKey',
             'password',
-            ['label' => 'orocrm.magento.magentosoaptransport.api_key.label', 'required' => true]
+            [
+                'label'         => 'orocrm.magento.magentosoaptransport.api_key.label',
+                'required'      => true,
+                'constraints'   => [new NotBlank()]
+            ]
         );
         $builder->add(
             'isWsiMode',
