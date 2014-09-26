@@ -55,7 +55,12 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
 
         if ($data->getId()) {
             // change label for apiKey field
-            FormUtils::replaceField($form, 'apiKey', ['label' => 'New SOAP API Key', 'required' => false]);
+            FormUtils::replaceField(
+                $form,
+                'apiKey',
+                ['label' => 'New SOAP API Key', 'required' => false],
+                ['constraints']
+            );
         }
     }
 
