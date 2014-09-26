@@ -87,20 +87,20 @@ also bring the `integration` field to configure the integration. It should be de
 | `entities`          | Determines which fields will be defined in `entities` field after channel type has been selected                    | no       |
 | `integration_type`  | Determines which integration type should be created in scope of particular channel that is based on the current ype | no       |
 | `customer_identity` | Determines entity that will be used as customer identifier for channels that are based of the current ype           | no       |
-| `lifetime_value`    | Determines which fields will be used from `customer_identity` for calculating lifetime value                        | no       |
+| `lifetime_value`    | Determines which fields will be used from `customer_identity` for calculating lifetime sales value                  | no       |
 
 
 By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
 will be included automatically.
 
-Lifetime value
---------------
+Lifetime sales value
+--------------------
 
-In order to bring full 360 degrees view of account in scope of the channel "Channel lifetime value" was defined.
+In order to bring full 360 degrees view of account in scope of the channel "Channel lifetime sales value" was defined.
 Each channel type could define field from _customer identity_ entity that should be used as indicator of aggregated
 amount for single customer.
 
-OroChannel bundle provides mechanism for tracking changes of lifetime value per customer and stores history of those changes.
+OroChannel bundle provides mechanism for tracking changes of lifetime sales value per customer and stores history of those changes.
 Developer needs just to configure lifetime field for channel type to enable tracking.
 
 In order to use data from history **Amount provider** was implemented. It's registered as service for DIC with `orocrm_channel.provider.lifetime.amount_provider` identifier.
