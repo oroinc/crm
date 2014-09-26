@@ -28,26 +28,26 @@ class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
         $someFloat    = 121.12;
 
         return [
-            'amount'      => ['amount', $someFloat, $someFloat],
-            'dataChannel' => ['dataChannel', $channel, $channel],
-            'month'       => ['month', $someInteger, $someInteger],
-            'quarter'     => ['quarter', $someInteger, $someInteger],
-            'year'        => ['year', $someInteger, $someInteger],
-            'createdAt'   => ['createdAt', $someDateTime, $someDateTime],
+            'amount'          => ['amount', $someFloat, $someFloat],
+            'dataChannel'     => ['dataChannel', $channel, $channel],
+            'month'           => ['month', $someInteger, $someInteger],
+            'quarter'         => ['quarter', $someInteger, $someInteger],
+            'year'            => ['year', $someInteger, $someInteger],
+            'aggregationDate' => ['aggregationDate', $someDateTime, $someDateTime],
         ];
     }
 
     public function testPrePersist()
     {
-        $this->assertNull($this->entity->getCreatedAt());
+        $this->assertNull($this->entity->getDate());
         $this->assertNull($this->entity->getMonth());
         $this->assertNull($this->entity->getQuarter());
         $this->assertNull($this->entity->getYear());
 
         $this->entity->prePersist();
 
-        $this->assertInstanceOf('DateTime', $this->entity->getCreatedAt());
-        $this->assertLessThan(3, $this->entity->getCreatedAt()->diff(new \DateTime())->s);
+        $this->assertInstanceOf('DateTime', $this->entity->getDate());
+        $this->assertLessThan(3, $this->entity->getDate()->diff(new \DateTime())->s);
 
         $this->assertNotEmpty($this->entity->getMonth());
         $this->assertNotEmpty($this->entity->getQuarter());

@@ -40,11 +40,11 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     protected $dataChannel;
 
     /**
-     * @var \DateTime $createdAt
+     * @var \DateTime $aggregationDate
      *
-     * @ORM\Column(type="datetime", name="created_at", nullable=false)
+     * @ORM\Column(type="datetime", name="aggregation_date", nullable=false)
      */
-    protected $createdAt;
+    protected $aggregationDate;
 
     /**
      * @var int
@@ -156,19 +156,19 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTime $aggregationDate
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setAggregationDate(\DateTime $aggregationDate)
     {
-        $this->createdAt = $createdAt;
+        $this->aggregationDate = $aggregationDate;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getAggregationDate()
     {
-        return $this->createdAt;
+        return $this->aggregationDate;
     }
 
     /**
@@ -176,12 +176,12 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
      */
     public function prePersist()
     {
-        if (!$this->getCreatedAt()) {
+        if (!$this->getAggregationDate()) {
             $date = new \DateTime('now', new \DateTimeZone('UTC'));
-            $this->setCreatedAt($date);
+            $this->setAggregationDate($date);
         }
 
-        $date = $this->getCreatedAt();
+        $date = $this->getAggregationDate();
         $this->setMonth($date->format('m'));
         $this->setYear($date->format('Y'));
         $this->setQuarter(ceil($date->format('m') / 3));

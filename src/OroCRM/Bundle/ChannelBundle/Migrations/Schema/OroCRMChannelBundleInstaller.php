@@ -136,7 +136,7 @@ class OroCRMChannelBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['unsigned' => true, 'autoincrement' => true]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('amount', 'money', ['precision' => 19, 'scale' => 4, 'comment' => '(DC2Type:money)']);
-        $table->addColumn('created_at', 'datetime', []);
+        $table->addColumn('aggregation_date', 'datetime', []);
         $table->addColumn('month', 'smallint', ['unsigned' => true]);
         $table->addColumn('quarter', 'smallint', ['unsigned' => true]);
         $table->addColumn('year', 'smallint', ['unsigned' => true]);

@@ -1,0 +1,64 @@
+channels:
+    custom:
+        01_2014:
+            UTC:  15
+            KIEV: 15
+            LA:   15
+        02_2014:
+            UTC:  20
+            KIEV: 20
+            LA:   20
+        03_2014:
+            UTC:  30
+            KIEV: 30
+            LA:   30
+        04_2014:
+            UTC:  130
+            KIEV: 130
+            LA:   130
+        05_2014:
+            UTC:  130
+            KIEV: 130
+            LA:   304
+        06_2014:
+            UTC:  304
+            KIEV: 304
+            LA:   304
+    b2b:
+        01_2014:
+            UTC:  0
+        02_2014:
+            UTC:  0
+        03_2014:
+            UTC:  1500
+        04_2014:
+            UTC:  1750
+        05_2014:
+            UTC:  1750
+        06_2014:
+            UTC:  1750
+    b2b_kiev:
+        01_2014:
+            UTC:  0
+            KIEV: 0
+            LA:   0
+        02_2014:
+            UTC:  0
+            KIEV: 0
+            LA:   0
+        03_2014:
+            UTC:  0
+            KIEV: 0
+            LA:   0
+        04_2014:
+            UTC:  2500
+            KIEV: 0
+            LA:   2000
+        05_2014:
+            UTC:  2000 # from prev month
+            KIEV: 2000 # only current month
+            LA:   2000 # from prev month
+        06_2014:
+            UTC:  2000
+            KIEV: 2000
+            LA:   2000

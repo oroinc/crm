@@ -165,6 +165,8 @@ class LifetimeValueHistory implements ChannelAwareInterface
      */
     public function prePersist()
     {
-        $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
     }
 }
