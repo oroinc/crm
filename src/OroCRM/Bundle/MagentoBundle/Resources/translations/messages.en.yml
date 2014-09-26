@@ -3,7 +3,7 @@
 orocrm:
     magento:
         dashboard:
-            e_commerce: E-commerce
+            e_commerce: Ecommerce
             my_sales_flow_b2c_chart:
                 title: My Sales Flow B2C
                 description: This widget gives you a quick overview of a B2C workflow in form of a funnel chart
@@ -12,7 +12,7 @@ orocrm:
                 description: This widget shows average order amount for each data channel in form of a line chart
                 order_amount: Order amount
             new_magento_customers_chart:
-                title: New Magento Customers
+                title: New Web Customers
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
         datagrid:
@@ -109,7 +109,7 @@ orocrm:
             data_channel.label:  Channel
             name.label:          Name
             orders.label:        Customer orders
-            lifetime.label:      Lifetime value
+            lifetime.label:      Order lifetime value
             currency.label:      Currency
             organization.label:  Organization
 
@@ -438,4 +438,3 @@ orocrm:
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
-        channel_lifetime.label: Lifetime value

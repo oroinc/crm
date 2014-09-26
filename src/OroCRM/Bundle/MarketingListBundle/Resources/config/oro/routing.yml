@@ -29,3 +29,12 @@ orocrm_marketing_list_unsubscribed_item_api:
         version:  latest|v1
     defaults:
         version:  latest
+
+orocrm_marketing_list_segment_api:
+    resource:     "@OroCRMMarketingListBundle/Controller/Api/Rest/SegmentController.php"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+    defaults:
+        version:  latest

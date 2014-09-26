@@ -10,6 +10,6 @@ env:
 before_script:
   - composer self-update
   - phpenv config-add travis.php.ini
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist --update-no-dev
 
-script: phpunit --coverage-text
+script: phpunit

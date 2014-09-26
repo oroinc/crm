@@ -1,5 +1,9 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 <div class="widget-content">
-    {{ dataGrid.renderGrid('magento-customer-order-grid', {'customerId': customer.id, 'channelId': channel.id}) }}
+    {% set scope = 'customer-%customer%-channel-%channel%'|replace({'%customer%': customer.id, '%channel%': channel.id}) %}
+    {{ dataGrid.renderGrid(
+        oro_datagrid_build_fullname('magento-customer-order-grid', scope),
+        {'customerId': customer.id, 'channelId': channel.id}
+    ) }}
 </div>

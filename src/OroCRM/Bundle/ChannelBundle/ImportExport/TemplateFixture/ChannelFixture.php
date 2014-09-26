@@ -41,10 +41,11 @@ class ChannelFixture extends AbstractTemplateRepository implements TemplateFixtu
     {
         list($name, $type) = explode('|', $key);
 
-        $entity->setName($name);
-        $entity->setChannelType($type);
-        $entity->setStatus(Channel::STATUS_ACTIVE);
-        $entity->setCreatedAt(new \DateTime());
-        $entity->setUpdatedAt(new \DateTime());
+        $entity
+            ->setName($name)
+            ->setChannelType($type)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setCreatedAt(new \DateTime())
+            ->setUpdatedAt(new \DateTime());
     }
 }
