@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -14,6 +13,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -49,11 +49,13 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
         $headers = fgetcsv($handle, 1000, ',');
 
         while (($data = fgetcsv($handle, 1000, ',')) !== false) {
-            $combined     = array_combine($headers, $data);
+            $combined = array_combine($headers, $data);
+            $logDate  = new \DateTime($combined['Created Date UTC'], new \DateTimeZone('UTC'));
+
             $historyEntry = new LifetimeValueHistory();
             $historyEntry->setAccount($this->ensureAccountCreated($manager, $combined['Account name']));
-            $historyEntry->setDataChannel($this->ensureChannelCreated($manager, $combined['Channel name']));
-            $historyEntry->setCreatedAt(new \DateTime($combined['Created Date UTC'], new \DateTimeZone('UTC')));
+            $historyEntry->setDataChannel($this->ensureChannelCreated($manager, $combined['Channel name'], $logDate));
+            $historyEntry->setCreatedAt($logDate);
             $historyEntry->setStatus($combined['Status']);
             $historyEntry->setAmount($combined['Amount']);
 
@@ -67,15 +69,17 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
     /**
      * @param EntityManager $em
      * @param string        $name
+     * @param \DateTime     $created
      *
      * @return mixed
      */
-    protected function ensureChannelCreated(EntityManager $em, $name)
+    protected function ensureChannelCreated(EntityManager $em, $name, \DateTime $created)
     {
         if (!isset($this->channels[$name])) {
             $builder = $this->factory->createBuilder();
             $builder->setChannelType('custom');
             $builder->setName($name);
+            $builder->setCreatedAt($created);
 
             $channel = $builder->getChannel();
             $em->persist($channel);
@@ -86,6 +90,12 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
         return $this->channels[$name];
     }
 
+    /**
+     * @param EntityManager $em
+     * @param string        $name
+     *
+     * @return Account
+     */
     protected function ensureAccountCreated(EntityManager $em, $name)
     {
         if (!isset($this->accounts[$name])) {

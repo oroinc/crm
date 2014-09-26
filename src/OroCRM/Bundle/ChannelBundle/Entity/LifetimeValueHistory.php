@@ -8,12 +8,12 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
- * @ORM\Entity(repositoryClass="OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueHistoryRepository")
+ * @ORM\Entity
  * @ORM\Table(name="orocrm_channel_lifetime_hist", indexes={
  *      @ORM\Index(name="orocrm_chl_ltv_hist_idx", columns={"account_id", "data_channel_id", "status"}),
  *      @ORM\Index(name="orocrm_chl_ltv_hist_status_idx", columns={"status"})
  * })
- * @ORM\HasLifecycleCallbacks()
+ * @ORM\HasLifecycleCallbacks
  */
 class LifetimeValueHistory implements ChannelAwareInterface
 {

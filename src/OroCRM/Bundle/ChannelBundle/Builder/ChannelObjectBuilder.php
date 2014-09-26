@@ -45,6 +45,9 @@ class ChannelObjectBuilder
     /** @var Channel */
     protected $channel;
 
+    /** @var \DateTime */
+    protected $createdAt;
+
     /**
      * @param EntityManager    $em
      * @param SettingsProvider $settingsProvider
@@ -146,6 +149,14 @@ class ChannelObjectBuilder
     }
 
     /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * Returns built channel
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -174,6 +185,7 @@ class ChannelObjectBuilder
         $this->channel->setEntities($this->entities);
         $this->channel->setStatus($this->status);
         $this->channel->setDataSource($this->dataSource);
+        $this->channel->setCreatedAt($this->createdAt);
 
         return $this->channel;
     }

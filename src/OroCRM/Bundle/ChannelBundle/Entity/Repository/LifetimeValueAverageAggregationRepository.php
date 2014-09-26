@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 
+use Carbon\Carbon;
+
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
@@ -33,6 +35,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
                 $period    = new \DatePeriod($startDate, new \DateInterval('P1M'), $now);
                 /** @var \DateTime $date */
                 foreach ($period as $date) {
+                    $date->setTimezone(new \DateTimeZone($timeZone));
                     $entry = $this->doMonthAggregation($channel, $date);
                     $em->persist($entry);
                 }
@@ -77,9 +80,11 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         /** @var QueryBuilder */
         $qb = $this->createQueryBuilder('dl');
 
-        $qb->select('(dl.dataChannel) as dataChannel, dl.createdAt as createdAt, dl.month as month, dl.year as year');
+        $qb->select(
+            '(dl.dataChannel) as dataChannel, dl.aggregationDate as createdAt, dl.month as month, dl.year as year'
+        );
         $qb->addSelect($qb->expr()->max('dl.amount') . ' as amount');
-        $qb->andWhere('dl.createdAt > :date');
+        $qb->andWhere('dl.aggregationDate > :date');
         $qb->addGroupBy('dl.year', 'dl.month');
         $qb->setParameter('date', $date);
 
@@ -108,8 +113,11 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
             );
         }
 
+        $aggregationDate = Carbon::createFromTimestampUTC($date->format('U'));
+        $aggregationDate->firstOfMonth();
+
         $entity = $entity ?: new LifetimeValueAverageAggregation();
-        $entity->setAggregationDate($date);
+        $entity->setAggregationDate($aggregationDate);
         $entity->setDataChannel($this->getEntityManager()->getReference($channelClassName, $channelId));
         $entity->setAmount($this->getAggregatedValue($channel, $date));
 
@@ -128,24 +136,26 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         $metadata = $em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory');
 
         $sql = <<<SQL
-  SELECT AVG(h.{{ amount }})
-  FROM {{ tableName }} h
+  SELECT AVG(h.{amount})
+  FROM {tableName} h
   JOIN(
-    SELECT MAX(h1.{{ id }}) as identity
-    FROM {{ tablName }}
-    WHERE h1.{{ dataChannel }} = :channelId AND h1.{{ aggregationDate }} BETWEEN :startDate AND :endDate
-    GROUP BY h1.{{ account }}
-  ) maxres ON maxres.identity = h.{{ id }}
+    SELECT MAX(h1.{id}) as identity
+    FROM {tableName} h1
+    WHERE h1.{dataChannel} = :channelId AND h1.{createdAt} <= :endDate
+    GROUP BY h1.{account}
+  ) maxres ON maxres.identity = h.{id}
 SQL;
 
         $sqlNames = ['tableName' => $metadata->getTableName()];
-        $fields   = $metadata->getFieldNames();
-        foreach ($fields as $fieldName) {
+        foreach ($metadata->getFieldNames() as $fieldName) {
             $sqlNames[$fieldName] = $metadata->getColumnName($fieldName);
         }
+        foreach ($metadata->getAssociationNames() as $fieldName) {
+            $sqlNames[$fieldName] = $metadata->getSingleAssociationJoinColumnName($fieldName);
+        }
 
-        preg_replace_callback(
-            '/{{(.+)}}/',
+        $sql = preg_replace_callback(
+            '/{(\w+)}/',
             function ($matches) use ($sqlNames) {
                 $fieldName = trim(end($matches));
                 if (isset($sqlNames[$fieldName])) {
@@ -157,15 +167,16 @@ SQL;
             $sql
         );
 
-        $endDate = clone $date;
-        $endDate->add(new \DateInterval('P1M'));
+        $calculationPeriodEnd = Carbon::instance($date);
+        $calculationPeriodEnd->firstOfMonth();
+        $calculationPeriodEnd->addMonth();
 
         return $em
             ->getConnection()
             ->executeQuery(
                 $sql,
-                ['channelId' => $channel->getId(), 'startDate' => $date, 'endDate' => $endDate],
-                ['channelId' => Type::INTEGER, 'startDate' => Type::DATETIME, 'endDate' => Type::DATETIME]
+                ['channelId' => $channel->getId(), 'endDate' => $calculationPeriodEnd],
+                ['channelId' => Type::INTEGER, 'endDate' => Type::DATETIME]
             )
             ->fetchColumn(0);
     }

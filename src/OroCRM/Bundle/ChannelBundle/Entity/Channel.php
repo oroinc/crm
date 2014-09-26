@@ -40,7 +40,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  */
 class Channel
 {
-    const STATUS_ACTIVE   = true;
+    const STATUS_ACTIVE = true;
     const STATUS_INACTIVE = false;
 
     /**
@@ -302,7 +302,7 @@ class Channel
      */
     public function setStatus($status)
     {
-        $this->status = (bool) $status;
+        $this->status = (bool)$status;
     }
 
     /**
@@ -310,7 +310,7 @@ class Channel
      */
     public function getStatus()
     {
-        return (bool) $this->status;
+        return (bool)$this->status;
     }
 
     /**
@@ -382,7 +382,13 @@ class Channel
      */
     public function prePersist()
     {
-        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt($now);
+        }
+
+        $this->setUpdatedAt($now);
     }
 
     /**
@@ -398,6 +404,6 @@ class Channel
      */
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 }

@@ -42,6 +42,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @var \DateTime $aggregationDate
      *
+     * NOTE: Always in LOCAL TZ
      * @ORM\Column(type="datetime", name="aggregation_date", nullable=false)
      */
     protected $aggregationDate;
@@ -49,6 +50,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @var int
      *
+     * NOTE: denormalized value in LOCAL TZ
      * @ORM\Column(name="month", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $month;
@@ -56,6 +58,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @var int
      *
+     * NOTE: denormalized value in LOCAL TZ
      * @ORM\Column(name="quarter", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $quarter;
@@ -63,6 +66,7 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
     /**
      * @var int
      *
+     * NOTE: denormalized value in LOCAL TZ
      * @ORM\Column(name="year", type="smallint", options={"unsigned"=true}, nullable=false)
      */
     protected $year;
