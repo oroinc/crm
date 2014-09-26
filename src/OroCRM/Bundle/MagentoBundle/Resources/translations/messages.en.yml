@@ -13,7 +13,7 @@ orocrm:
                 order_amount: Order amount
             new_magento_customers_chart:
                 title: New Web Customers
-                description: This widget gives you a quick overview of new magento customers
+                description: This widget gives you a quick overview of new web customers
                 customer_count: Customers count
         datagrid:
             actions:
@@ -110,7 +110,7 @@ orocrm:
             data_channel.label:  Channel
             name.label:          Name
             orders.label:        Customer orders
-            lifetime.label:      Order lifetime sales value
+            lifetime.label:      Lifetime sales value
             currency.label:      Currency
             organization.label:  Organization
 
