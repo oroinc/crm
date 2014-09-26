@@ -71,22 +71,27 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTime            $date
+     * @param string|\DateInterval $interval
      *
      * @return array
      */
-    public function findAmountStatisticsByDate($date)
+    public function findAggregationsByDate(\DateTime $date, $interval = 'P1Y')
     {
-        /** @var QueryBuilder */
-        $qb = $this->createQueryBuilder('dl');
+        $endDate = clone $date;
+        $endDate->add($interval instanceof \DateInterval ? $interval : new \DateInterval($interval));
 
-        $qb->select(
-            '(dl.dataChannel) as dataChannel, dl.aggregationDate as createdAt, dl.month as month, dl.year as year'
-        );
-        $qb->addSelect($qb->expr()->max('dl.amount') . ' as amount');
-        $qb->andWhere('dl.aggregationDate > :date');
-        $qb->addGroupBy('dl.year', 'dl.month');
-        $qb->setParameter('date', $date);
+        /** @var QueryBuilder */
+        $qb = $this->createQueryBuilder('lva');
+        $qb->select('ch.id as channelId');
+        $qb->addSelect('lva.amount');
+        $qb->addSelect('lva.month');
+        $qb->addSelect(' lva.year');
+        $qb->leftJoin('lva.dataChannel', 'ch');
+        $qb->andWhere($qb->expr()->between('lva.aggregationDate', ':dateStart', ':dateEnd'));
+        $qb->addGroupBy('ch.id', 'lva.year', 'lva.month', 'lva.amount');
+        $qb->setParameter('dateStart', $date);
+        $qb->setParameter('dateEnd', $endDate);
 
         return $qb->getQuery()->getResult();
     }

@@ -2,17 +2,21 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Command;
 
+use Symfony\Component\Yaml\Yaml;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 
 /**
  * @outputBuffering enabled
- * @dbIsolation
  */
 class LifetimeAverageAggregateCommandTest extends WebTestCase
 {
-    const TEST_START_DATE = '2014-01-01 00:00:00';
+    const TEST_START_DATE = '2013-10-01 00:00:00';
+
+    /** @var array */
+    protected $channelMap;
 
     protected function setUp()
     {
@@ -72,8 +76,24 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
             ->get('doctrine')
             ->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
 
-        $values = $repo->findAmountStatisticsByDate(self::TEST_START_DATE);
-        $this->assertSame([], $values);
+        $fileName                = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'Fixture'
+            . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'expected_results.yml';
+        $expectedResults         = Yaml::parse(file_get_contents($fileName));
+        $expectedTimeZoneResults = $expectedResults['data'][$systemTimezone];
+        $channelMap              = $this->getChannelIdMap();
+
+        $values = $repo->findAggregationsByDate(new \DateTime(self::TEST_START_DATE, new \DateTimeZone('UTC')));
+        foreach ($values as $channelMonthData) {
+            $key         = sprintf('%02d_%d', $channelMonthData['month'], $channelMonthData['year']);
+            $channelName = $channelMap[$channelMonthData['channelId']];
+            if (isset($expectedTimeZoneResults[$channelName], $expectedTimeZoneResults[$channelName][$key])) {
+                $this->assertEquals(
+                    $expectedTimeZoneResults[$channelName][$key],
+                    $channelMonthData['amount'],
+                    sprintf('Not equals for channel "%s" and month "%s"', $channelName, $key)
+                );
+            }
+        }
     }
 
     /**
@@ -86,5 +106,27 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
             'Kiev'        => ['$systemTimezone' => 'Europe/Kiev'],
             'Los angeles' => ['$systemTimezone' => 'America/Los_Angeles'],
         ];
+    }
+
+    /**
+     * @return array
+     */
+    protected function getChannelIdMap()
+    {
+        if (null === $this->channelMap) {
+            $items = $this->getContainer()->get('doctrine')
+                ->getRepository('OroCRMChannelBundle:Channel')
+                ->createQueryBuilder('c')
+                ->select('c.id, c.name')
+                ->getQuery()
+                ->getArrayResult();
+
+            $this->channelMap = [];
+            foreach ($items as $item) {
+                $this->channelMap[$item['id']] = $item['name'];
+            }
+        }
+
+        return $this->channelMap;
     }
 }
