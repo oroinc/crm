@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Selenium;
 use Oro\Bundle\ReportBundle\Tests\Selenium\Pages\Reports;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages\Campaigns;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
 
@@ -16,6 +17,31 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
  */
 class CampaignManagementTest extends Selenium2TestCase
 {
+    /**
+     * @return string
+     */
+    public function testCreateChannel()
+    {
+        $name = 'Channel_' . mt_rand();
+
+        $login = $this->login();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setName($name)
+            ->setStatus('Active')
+            ->setType('Custom')
+            ->addEntity('Opportunity')
+            ->addEntity('Lead')
+            ->addEntity('Sales Process')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $name;
+    }
+
     /**
      * Test create new campaign functionality
      * @return string

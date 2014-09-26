@@ -74,7 +74,7 @@ class AmountProvider
             $qb->andWhere('h.dataChannel = :dataChannel');
         }
         $qb->andWhere('h.status = :status');
-        $qb->setParameter('status', LifetimeValueHistory::STATUS_NEW);
+        $qb->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW));
         $qb->setMaxResults(1);
 
         return $qb;
