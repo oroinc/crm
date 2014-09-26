@@ -93,8 +93,8 @@ also bring the `integration` field to configure the integration. It should be de
 By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
 will be included automatically.
 
-Lifetime value
---------------
+Lifetime sales value
+--------------------
 
 In order to bring full 360 degrees view of account in scope of the channel "Channel lifetime sales value" was defined.
 Each channel type could define field from _customer identity_ entity that should be used as indicator of aggregated
