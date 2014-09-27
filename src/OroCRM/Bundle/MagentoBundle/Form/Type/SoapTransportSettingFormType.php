@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\FormBundle\Form\DataTransformer\ArrayToJsonTransformer;
@@ -12,7 +13,6 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapSettingsFormSubscriber;
 use OroCRM\Bundle\MagentoBundle\Form\EventListener\SoapConnectorsFormSubscriber;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 class SoapTransportSettingFormType extends AbstractType
 {
@@ -58,9 +58,9 @@ class SoapTransportSettingFormType extends AbstractType
             'apiKey',
             'password',
             [
-                'label'         => 'orocrm.magento.magentosoaptransport.api_key.label',
-                'required'      => true,
-                'constraints'   => [new NotBlank()]
+                'label'       => 'orocrm.magento.magentosoaptransport.api_key.label',
+                'required'    => true,
+                'constraints' => [new NotBlank()]
             ]
         );
         $builder->add(
