@@ -32,6 +32,7 @@ parameters:
     orocrm_channel.provider.utils.entity_state_provider.class:         OroCRM\Bundle\ChannelBundle\Provider\Utility\EntityStateProvider
     orocrm_channel.provider.request_channel.class:                     OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider
     orocrm_channel.provider.lifetime.amount_provider.class:            OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider
+    orocrm_channel.provider.lifetime.average_widget_provider.class:    OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider
 
     # datagrid
     orocrm_channel.datagrid.extension.orm_channel_limitation.class:    OroCRM\Bundle\ChannelBundle\Datagrid\ChannelLimitationExtension
@@ -218,6 +219,13 @@ services:
         class: %orocrm_channel.provider.lifetime.amount_provider.class%
         arguments:
             - @doctrine
+
+    orocrm_channel.provider.lifetime.average_widget_provider:
+        class: %orocrm_channel.provider.lifetime.average_widget_provider.class%
+        arguments:
+            - @doctrine
+            - @oro_locale.settings
+            - @oro_security.acl_helper
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%

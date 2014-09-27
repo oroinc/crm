@@ -71,29 +71,36 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
     }
 
     /**
-     * @param \DateTime            $date
-     * @param string|\DateInterval $interval
+     * @param \DateTime                      $startDate
+     * @param string|\DateInterval|\DateTime $endDate    - Could be passed exact date, date period object or string
+     * @param array|null                     $channelIds - Channel ids to filter or null if filtration is no needed~
      *
      * @return array
      */
-    public function findAggregationsByDate(\DateTime $date, $interval = 'P1Y')
+    public function findForPeriod(\DateTime $startDate, $endDate = 'P1Y', $channelIds = null)
     {
-        $endDate = clone $date;
-        $endDate->add($interval instanceof \DateInterval ? $interval : new \DateInterval($interval));
+        if (!$endDate instanceof \DateTime) {
+            $endDate = clone $startDate;
+            $endDate->add($endDate instanceof \DateInterval ? $endDate : new \DateInterval($endDate));
+        }
 
         /** @var QueryBuilder */
         $qb = $this->createQueryBuilder('lva');
-        $qb->select('ch.id as channelId');
+        $qb->select('IDENTITY(lva.dataChannel) as channelId');
         $qb->addSelect('lva.amount');
         $qb->addSelect('lva.month');
         $qb->addSelect(' lva.year');
-        $qb->leftJoin('lva.dataChannel', 'ch');
         $qb->andWhere($qb->expr()->between('lva.aggregationDate', ':dateStart', ':dateEnd'));
-        $qb->addGroupBy('ch.id', 'lva.year', 'lva.month', 'lva.amount');
-        $qb->setParameter('dateStart', $date);
+        $qb->addGroupBy('lva.dataChannel', 'lva.year', 'lva.month', 'lva.amount');
+        $qb->setParameter('dateStart', $startDate);
         $qb->setParameter('dateEnd', $endDate);
 
-        return $qb->getQuery()->getResult();
+        if (null !== $channelIds) {
+            $qb->andWhere($qb->expr()->in('lva.dataChannel', ':channelIds'))
+                ->setParameter('channelIds', $channelIds);
+        }
+
+        return $qb->getQuery()->getArrayResult();
     }
 
     /**
@@ -118,11 +125,8 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
             );
         }
 
-        $aggregationDate = Carbon::createFromTimestampUTC($date->format('U'));
-        $aggregationDate->firstOfMonth();
-
         $entity = $entity ?: new LifetimeValueAverageAggregation();
-        $entity->setAggregationDate($aggregationDate);
+        $entity->setAggregationDate($date);
         $entity->setDataChannel($this->getEntityManager()->getReference($channelClassName, $channelId));
         $entity->setAmount($this->getAggregatedValue($channel, $date));
 
@@ -133,14 +137,11 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
      * @param Channel   $channel
      * @param \DateTime $date Datetime object in system timezone
      *
-     * @return array
+     * @return float
      */
     private function getAggregatedValue(Channel $channel, \DateTime $date)
     {
-        $em       = $this->getEntityManager();
-        $metadata = $em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory');
-
-        $sql = <<<SQL
+        $sql  = <<<SQL
   SELECT AVG(h.{amount})
   FROM {tableName} h
   JOIN(
@@ -151,15 +152,8 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
   ) maxres ON maxres.identity = h.{id}
 SQL;
 
-        $sqlNames = ['tableName' => $metadata->getTableName()];
-        foreach ($metadata->getFieldNames() as $fieldName) {
-            $sqlNames[$fieldName] = $metadata->getColumnName($fieldName);
-        }
-        foreach ($metadata->getAssociationNames() as $fieldName) {
-            $sqlNames[$fieldName] = $metadata->getSingleAssociationJoinColumnName($fieldName);
-        }
-
-        $sql = preg_replace_callback(
+        $sqlNames = $this->getSQLColumnNamesArray();
+        $sql      = preg_replace_callback(
             '/{(\w+)}/',
             function ($matches) use ($sqlNames) {
                 $fieldName = trim(end($matches));
@@ -176,7 +170,7 @@ SQL;
         $calculationPeriodEnd->firstOfMonth();
         $calculationPeriodEnd->addMonth();
 
-        return $em
+        return $this->getEntityManager()
             ->getConnection()
             ->executeQuery(
                 $sql,
@@ -184,5 +178,24 @@ SQL;
                 ['channelId' => Type::INTEGER, 'endDate' => Type::DATETIME]
             )
             ->fetchColumn(0);
+    }
+
+    /**
+     * @return array
+     */
+    private function getSQLColumnNamesArray()
+    {
+        $em       = $this->getEntityManager();
+        $metadata = $em->getClassMetadata('OroCRMChannelBundle:LifetimeValueHistory');
+
+        $sqlNames = ['tableName' => $metadata->getTableName()];
+        foreach ($metadata->getFieldNames() as $fieldName) {
+            $sqlNames[$fieldName] = $metadata->getColumnName($fieldName);
+        }
+        foreach ($metadata->getAssociationNames() as $fieldName) {
+            $sqlNames[$fieldName] = $metadata->getSingleAssociationJoinColumnName($fieldName);
+        }
+
+        return $sqlNames;
     }
 }

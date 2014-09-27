@@ -82,7 +82,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
         $expectedTimeZoneResults = $expectedResults['data'][$systemTimezone];
         $channelMap              = $this->getChannelIdMap();
 
-        $values = $repo->findAggregationsByDate(new \DateTime(self::TEST_START_DATE, new \DateTimeZone('UTC')));
+        $values = $repo->findForPeriod(new \DateTime(self::TEST_START_DATE, new \DateTimeZone('UTC')));
         foreach ($values as $channelMonthData) {
             $key         = sprintf('%02d_%d', $channelMonthData['month'], $channelMonthData['year']);
             $channelName = $channelMap[$channelMonthData['channelId']];

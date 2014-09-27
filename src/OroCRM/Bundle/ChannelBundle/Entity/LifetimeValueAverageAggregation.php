@@ -164,7 +164,10 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
      */
     public function setAggregationDate(\DateTime $aggregationDate)
     {
-        $this->aggregationDate = $aggregationDate;
+        $this->aggregationDate = \DateTime::createFromFormat(
+            \DateTime::ISO8601,
+            $aggregationDate->format('Y-m-01\T00:00:00+0000')
+        );
     }
 
     /**
