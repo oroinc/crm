@@ -62,30 +62,6 @@ services:
             - %orocrm_campaign.email_campaign.entity.class%
             - @doctrine.orm.entity_manager
 
-    orocrm_campaign.event_listener.campaign_tracking_total_report_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments: ['code', false]
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.campaign-tracking-total-report-grid, method: onBuildAfter }
-
-    orocrm_campaign.event_listener.campaign_tracking_detailed_report_daily_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments: ['code', false]
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.campaign-tracking-detailed-report-day-grid, method: onBuildAfter }
-
-    orocrm_campaign.event_listener.campaign_tracking_detailed_report_hourly_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments: ['code', false]
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.campaign-tracking-detailed-report-hour-grid, method: onBuildAfter }
-
-    orocrm_campaign.event_listener.campaign_tracking_detailed_report_monthly_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments: ['code', false]
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.campaign-tracking-detailed-report-month-grid, method: onBuildAfter }
-
     orocrm_campaign.data_transformer.multi_line:
         class: %orocrm_campaign.data_transformer.multi_line.class%
 

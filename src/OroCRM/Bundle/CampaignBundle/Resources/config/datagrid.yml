@@ -105,6 +105,8 @@ datagrid:
                     and:
                         - e.code = :code
                 groupBy: e.name
+            bind_parameters:
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label
@@ -148,6 +150,8 @@ datagrid:
                     and:
                         - e.code = :code
                 groupBy: e.name, logTime
+            bind_parameters:
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label
@@ -173,6 +177,8 @@ datagrid:
                     and:
                         - e.code = :code
                 groupBy: e.name, logTime
+            bind_parameters:
+                - :code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label
@@ -200,6 +206,8 @@ datagrid:
                     and:
                         - e.code = :code
                 groupBy: e.name, yearLoggedAt, monthLoggedAt
+            bind_parameters:
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label

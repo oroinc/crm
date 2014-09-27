@@ -167,15 +167,6 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-orders-widget-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-widget-grid, method: onBuildAfter }
 
-    orocrm_magento.event_listener.cart_items_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'id'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
-
     orocrm_magento.event_listener.channel_owner_set:
         class: %orocrm_magento.event_listener.channel_owner_set.class%
         arguments:
