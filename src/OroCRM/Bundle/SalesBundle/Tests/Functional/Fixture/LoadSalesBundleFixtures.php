@@ -168,14 +168,15 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
      */
     protected function createChannel()
     {
-        $builder = $this->factory->createBuilder();
-        $builder->setName(self::CHANNEL_NAME);
-        $builder->setChannelType(self::CHANNEL_TYPE);
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setOwner($this->organization);
-        $builder->setEntities();
-
-        $channel = $builder->getChannel();
+        $channel = $this
+            ->factory
+            ->createBuilder()
+            ->setName(self::CHANNEL_NAME)
+            ->setChannelType(self::CHANNEL_TYPE)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setOwner($this->organization)
+            ->setEntities()
+            ->getChannel();
 
         $this->em->persist($channel);
         $this->em->flush();

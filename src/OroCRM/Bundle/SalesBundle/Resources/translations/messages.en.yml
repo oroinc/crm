@@ -214,7 +214,7 @@ orocrm:
             entity_description:         Represent B2B customer
             id.label:                   Id
             name.label:                 Name
-            lifetime.label:             Close revenue lifetime value
+            lifetime.label:             Lifetime sales value
             shipping_address.label:     Shipping Address
             billing_address.label:      Billing Address
             account.label:              Account

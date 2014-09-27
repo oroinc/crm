@@ -39,11 +39,13 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
      */
     public function fillEntityData($key, $entity)
     {
-        $userRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $contactRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $leadRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
-        $channelRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
+        $customerRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $leadRepo         = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
+        $channelRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $organizationRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         switch ($key) {
             case 'Jerry Coleman':
@@ -53,6 +55,7 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));
+                $entity->setOrganization($organizationRepo->getEntity('default'));
                 $entity->setBudgetAmount(1000000);
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setLead($leadRepo->getEntity('Jerry Coleman'));

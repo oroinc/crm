@@ -60,13 +60,14 @@ class LoadContactUsBundleFixtures extends AbstractFixture implements ContainerAw
      */
     protected function createChannel()
     {
-        $builder = $this->factory->createBuilder();
-        $builder->setName(self::CHANNEL_NAME);
-        $builder->setChannelType(self::CHANNEL_TYPE);
-        $builder->setStatus(Channel::STATUS_ACTIVE);
-        $builder->setOwner($this->em->getRepository('OroOrganizationBundle:Organization')->getFirst());
-
-        $channel = $builder->getChannel();
+        $channel = $this
+            ->factory
+            ->createBuilder()
+            ->setName(self::CHANNEL_NAME)
+            ->setChannelType(self::CHANNEL_TYPE)
+            ->setStatus(Channel::STATUS_ACTIVE)
+            ->setOwner($this->em->getRepository('OroOrganizationBundle:Organization')->getFirst())
+            ->getChannel();
 
         $this->em->persist($channel);
         $this->em->flush();
