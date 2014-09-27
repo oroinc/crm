@@ -15,6 +15,11 @@ use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueAverageAggregation;
 
 class LifetimeValueAverageAggregationRepository extends EntityRepository
 {
+    const BATCH_SIZE = 50;
+
+    /** @var array */
+    protected $itemsToWrite = [];
+
     /**
      * Run per channel aggregation
      * If $initialAggregation option set to false then run aggregation only current month or run from scratch otherwise
@@ -31,21 +36,28 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         /** @var Channel $channel */
         foreach ($channels as $channel) {
             if ($initialAggregation) {
-                $startDate = $channel->getCreatedAt();
-                $period    = new \DatePeriod($startDate, new \DateInterval('P1M'), $now);
+                /*
+                 * Convert creation date from UTC to local timezone, this needed for correct start period calculation
+                 * For example: channel created at 2014-05-01 05:00:00 UTC local timezone is USA/LA
+                 *              so first entry should be saved for 04-2014
+                 * Also reset day and time to 1 day of month in order to ensure that interval always will
+                 * include current month
+                 */
+                $startDate = Carbon::instance($channel->getCreatedAt());
+                $startDate->setTimezone(new \DateTimeZone($timeZone));
+                $startDate->firstOfMonth();
+
+                $period = new \DatePeriod($startDate, new \DateInterval('P1M'), $now);
                 /** @var \DateTime $date */
                 foreach ($period as $date) {
-                    $date->setTimezone(new \DateTimeZone($timeZone));
-                    $entry = $this->doMonthAggregation($channel, $date);
-                    $em->persist($entry);
+                    $this->doMonthAggregation($channel, $date);
                 }
             } else {
-                $entry = $this->doMonthAggregation($channel, $now, true);
-                $em->persist($entry);
+                    $this->doMonthAggregation($channel, $now, true);
             }
         }
 
-        $em->flush();
+        $this->ensureRealized();
     }
 
     /**
@@ -72,16 +84,18 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
 
     /**
      * @param \DateTime                      $startDate
-     * @param string|\DateInterval|\DateTime $endDate    - Could be passed exact date, date period object or string
-     * @param array|null                     $channelIds - Channel ids to filter or null if filtration is no needed~
+     * @param string|\DateInterval|\DateTime $endDateParam - Could be passed exact date, date period object or string
+     * @param array|null                     $channelIds   - Channel ids to filter or null if filtration is no needed
      *
      * @return array
      */
-    public function findForPeriod(\DateTime $startDate, $endDate = 'P1Y', $channelIds = null)
+    public function findForPeriod(\DateTime $startDate, $endDateParam = 'P1Y', $channelIds = null)
     {
-        if (!$endDate instanceof \DateTime) {
+        if (!$endDateParam instanceof \DateTime) {
             $endDate = clone $startDate;
-            $endDate->add($endDate instanceof \DateInterval ? $endDate : new \DateInterval($endDate));
+            $endDate->add($endDate instanceof \DateInterval ? $endDate : new \DateInterval($endDateParam));
+        } else {
+            $endDate = $endDateParam;
         }
 
         /** @var QueryBuilder */
@@ -129,8 +143,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         $entity->setAggregationDate($date);
         $entity->setDataChannel($this->getEntityManager()->getReference($channelClassName, $channelId));
         $entity->setAmount($this->getAggregatedValue($channel, $date));
-
-        return $entity;
+        $this->write($entity);
     }
 
     /**
@@ -141,7 +154,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
      */
     private function getAggregatedValue(Channel $channel, \DateTime $date)
     {
-        $sql  = <<<SQL
+        $sql = <<<SQL
   SELECT AVG(h.{amount})
   FROM {tableName} h
   JOIN(
@@ -197,5 +210,36 @@ SQL;
         }
 
         return $sqlNames;
+    }
+
+    /**
+     * Ensure that all buffered items wrote to DB
+     */
+    private function ensureRealized()
+    {
+        if (!empty($this->itemsToWrite)) {
+            $this->write([], true);
+        }
+    }
+
+    /**
+     * @param array|object $items
+     * @param bool         $enforceFlush
+     */
+    private function write($items, $enforceFlush = false)
+    {
+        $items              = is_array($items) ? $items : [$items];
+        $this->itemsToWrite = array_merge($this->itemsToWrite, $items);
+
+        if (count($this->itemsToWrite) >= self::BATCH_SIZE || $enforceFlush) {
+            $em = $this->getEntityManager();
+            foreach ($this->itemsToWrite as $item) {
+                $em->persist($item);
+            }
+
+            $em->flush();
+            $em->clear();
+            $this->itemsToWrite = [];
+        }
     }
 }

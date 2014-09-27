@@ -13,11 +13,10 @@ use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregatio
 
 class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements CronCommandInterface
 {
-    /** @var array */
-    protected $dataChannels = [];
+    const COMMAND_NAME = 'oro:cron:lifetime-average:aggregate';
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getDefaultDefinition()
     {
@@ -25,17 +24,17 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function configure()
     {
-        $this->setName('oro:cron:lifetime-average:aggregate');
+        $this->setName(self::COMMAND_NAME);
         $this->setDescription('Run daily aggregation of average lifetime value per channel');
         $this->addOption(
             'force',
             'f',
             InputOption::VALUE_NONE,
-            'This option enforces regeneration of aggregation values from scratch(Useful for system timezone changes)'
+            'This option enforces regeneration of aggregation values from scratch(Useful after system timezone change)'
         );
         $this->addOption(
             'use-delete',
@@ -46,13 +45,12 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         /** @var LifetimeValueAverageAggregationRepository $repo */
-        $repo = $this->getService('doctrine')->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
-
+        $repo  = $this->getService('doctrine')->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
         $force = $input->getOption('force');
         if ($force) {
             $output->writeln('<comment>Removing existing data...</comment>');

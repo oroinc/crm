@@ -9,7 +9,8 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
 
 /**
- * @outputBuffering enabled
+ * @outputBuffering false
+ * @dbIsolation
  */
 class LifetimeAverageAggregateCommandTest extends WebTestCase
 {

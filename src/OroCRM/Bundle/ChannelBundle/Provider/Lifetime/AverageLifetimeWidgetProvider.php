@@ -2,14 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider\Lifetime;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class AverageLifetimeWidgetProvider
 {
-    /** @var RegistryInterface */
+    /** @var ManagerRegistry */
     protected $registry;
 
     /** @var LocaleSettings */
@@ -19,11 +19,11 @@ class AverageLifetimeWidgetProvider
     protected $aclHelper;
 
     /**
-     * @param RegistryInterface $registry
-     * @param LocaleSettings    $localeSettings
-     * @param AclHelper         $aclHelper
+     * @param ManagerRegistry $registry
+     * @param LocaleSettings  $localeSettings
+     * @param AclHelper       $aclHelper
      */
-    public function __construct(RegistryInterface $registry, LocaleSettings $localeSettings, AclHelper $aclHelper)
+    public function __construct(ManagerRegistry $registry, LocaleSettings $localeSettings, AclHelper $aclHelper)
     {
         $this->registry       = $registry;
         $this->localeSettings = $localeSettings;
@@ -41,7 +41,7 @@ class AverageLifetimeWidgetProvider
         // created end date in local timezone
         $now = new \DateTime('now', $localTimezone);
         // convert local date to search criteria format in UTC
-        $end   = \DateTime::createFromFormat(\DateTime::ISO8601, $now->format('Y-m-01\T00:00:00+0000'));
+        $end = \DateTime::createFromFormat(\DateTime::ISO8601, $now->format('Y-m-01\T00:00:00+0000'));
         $end->add(new \DateInterval('P1M'));
         $start = clone $end;
         $start->sub(new \DateInterval('P1Y'));

@@ -50,7 +50,8 @@ parameters:
     orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
     orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
-    orocrm_channel.channel_doctrinet.listener.class:                   OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
+    orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
+    orocrm_channel.event_listener.timezone_change.class:               OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -283,13 +284,20 @@ services:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }
 
-    orocrm_channel.channel_doctrinet.listener:
-      class: %orocrm_channel.channel_doctrinet.listener.class%
+    orocrm_channel.event_listener.doctrine:
+      class: %orocrm_channel.event_listener.doctrine.class%
       arguments:
           - @orocrm_channel.provider.settings_provider
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
+    orocrm_channel.event_listener.timezone_change:
+      class: %orocrm_channel.event_listener.timezone_change.class%
+      arguments:
+          - @doctrine
+      tags:
+        - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
     #twig
     orocrm_channel.twig.metadata_extension:

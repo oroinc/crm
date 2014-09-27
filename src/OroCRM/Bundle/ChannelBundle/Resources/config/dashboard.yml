@@ -1,6 +1,6 @@
 oro_dashboard_config:
     widgets:
-        average_customer_lifetime_chart:
+        average_lifetime_sales_chart:
             label:       orocrm.channel.dashboard.average_lifetime_sales_chart.title
             route:       orocrm_channel_dashboard_average_lifetime_sales_chart
             acl:         orocrm_channel_view

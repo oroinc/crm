@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class ChannelRepository extends EntityRepository

@@ -8,11 +8,14 @@ use Symfony\Bundle\FrameworkBundle\Translation\Translator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+/**
+ * @Route("/dashboard")
+ */
 class DashboardController extends Controller
 {
     /**
      * @Route(
-     *      "/sales_flow_b2c/chart/{widget}",
+     *      "/chart/{widget}",
      *      name="orocrm_channel_dashboard_average_lifetime_sales_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
