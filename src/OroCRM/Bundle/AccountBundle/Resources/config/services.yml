@@ -82,13 +82,6 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: accounts, acl_resource: orocrm_account_view }
 
-    orocrm_account.event_listener.account_contacts_update_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-           - 'account'
-        tags:
-           - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.account-contacts-update-grid, method: onBuildAfter }
-
     orocrm_account.activity_widget_provider:
         class: %orocrm_account.activity_widget_provider.class%
         arguments:

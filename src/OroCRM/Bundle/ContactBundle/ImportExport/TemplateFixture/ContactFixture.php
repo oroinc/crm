@@ -44,12 +44,14 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
      */
     public function fillEntityData($key, $entity)
     {
-        $userRepo    = $this->templateManager
+        $userRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $accountRepo = $this->templateManager
             ->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
         $contactAddressRepo = $this->templateManager
             ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\ContactAddress');
+        $organizationRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         switch ($key) {
             case 'Jerry Coleman':
@@ -73,6 +75,7 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setSource($this->createContactSource('website'))
                     ->setMethod($this->createContactMethod('phone'))
                     ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setOrganization($organizationRepo->getEntity('default'))
                     ->setAssignedTo($userRepo->getEntity('John Doo'))
                     ->addEmail($this->createContactEmail('JerryAColeman@armyspy.com', true))
                     ->addEmail($this->createContactEmail('JerryAColeman@cuvox.de'))
@@ -110,6 +113,7 @@ class ContactFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setSource($this->createContactSource('website'))
                     ->setMethod($this->createContactMethod('phone'))
                     ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setOrganization($organizationRepo->getEntity('default'))
                     ->setAssignedTo($userRepo->getEntity('John Doo'))
                     ->addEmail($this->createContactEmail('JohnSmith@armyspy.com', true))
                     ->addEmail($this->createContactEmail('JohnSmith@cuvox.de'))

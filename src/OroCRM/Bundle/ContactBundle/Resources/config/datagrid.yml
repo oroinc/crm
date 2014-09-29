@@ -118,6 +118,8 @@ datagrid:
                       END) as hasGroup
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
+            bind_parameters:
+                - group
         columns:
             hasGroup:
                 label: Has group
@@ -151,9 +153,7 @@ datagrid:
             default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         options:
             entityHint: contact
-            requireJSModules:
-                - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasGroup
                 selectors:
@@ -364,6 +364,8 @@ datagrid:
                         - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
+            bind_parameters:
+                - contact
         columns:
             hasContact:
                 label:         orocrm.contact.assigned_to.label
@@ -433,9 +435,7 @@ datagrid:
             id: ~
         options:
             entityHint: account
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasContact
                 selectors:

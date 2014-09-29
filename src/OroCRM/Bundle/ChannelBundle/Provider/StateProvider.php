@@ -136,7 +136,7 @@ class StateProvider
             );
 
             $this->enabledEntities = [];
-            foreach ($settings as $entityName => $singleEntitySettings) {
+            foreach (array_keys($settings) as $entityName) {
                 if (in_array($entityName, $assignedEntityNames, true)) {
                     $this->enabledEntities[$entityName] = true;
                 }

@@ -34,7 +34,11 @@
 
 {% block stats %}
     {{ parent() }}
-    <li><b>{{ 'orocrm.sales.b2bcustomer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}</b></li>
+    <li>
+        <div class="label label-info orocrm-channel-lifetime-value-label">
+            {{ 'orocrm.sales.b2bcustomer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        </div>
+    </li>
 {% endblock stats %}
 
 {% block content_data %}
@@ -42,7 +46,7 @@
         {{ oro_widget_render({
             'widgetType': 'block',
             'title': 'orocrm.sales.widgets.b2bcustomer_information'|trans,
-            'url': path('orocrm_salses_b2bcustomer_widget_info', {id: entity.id})
+            'url': path('orocrm_sales_b2bcustomer_widget_info', {id: entity.id})
         }) }}
     {% endset %}
 

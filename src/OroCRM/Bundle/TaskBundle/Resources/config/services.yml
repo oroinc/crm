@@ -19,31 +19,6 @@ services:
         tags:
             - { name: form.type, alias: task }
 
-    #data grid events
-    orocrm_task.event_listener.account_tasks_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'accountId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-account-tasks-grid, method: onBuildAfter }
-
-    orocrm_task.event_listener.contact_tasks_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'contactId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-contact-tasks-grid, method: onBuildAfter }
-
-    orocrm_task.event_listener.user_tasks_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'userId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.task-user-tasks-grid, method: onBuildAfter }
-
     orocrm_task.manager.api:
         class: %orocrm_task.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract

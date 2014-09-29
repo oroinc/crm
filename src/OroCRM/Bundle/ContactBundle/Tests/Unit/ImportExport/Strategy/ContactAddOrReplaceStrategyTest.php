@@ -28,27 +28,12 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    protected $databaseHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $context;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $em;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadata;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $repository;
 
     protected function setUp()
     {
@@ -56,13 +41,6 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->em = $this->getMock('Doctrine\ORM\EntityManagerInterface');
-
-        $this->importStrategyHelper
-            ->expects($this->any())
-            ->method('getEntityManager')
-            ->will($this->returnValue($this->em));
 
         $this->fieldHelper = $this
             ->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\FieldHelper')
@@ -74,6 +52,11 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->method('getFields')
             ->will($this->returnValue([]));
 
+        $this->databaseHelper = $this
+            ->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->context = $this
             ->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
 
@@ -82,44 +65,15 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadata
-            ->expects($this->atLeastOnce())
-            ->method('getIdentifierValues')
-            ->will($this->returnValue([]));
-
-        $this->em
-            ->expects($this->atLeastOnce())
-            ->method('getClassMetadata')
-            ->will($this->returnValue($this->metadata));
-
-        $this->repository = $this
-            ->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->em
-            ->expects($this->any())
-            ->method('getRepository')
-            ->will($this->returnValue($this->repository));
-
         $this->strategy = new ContactAddOrReplaceStrategy(
             $this->importStrategyHelper,
-            $this->fieldHelper
+            $this->fieldHelper,
+            $this->databaseHelper
         );
 
         $this->strategy->setImportExportContext($this->context);
 
         $this->registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
-    }
-
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Registry was not set
-     */
-    public function testRegistryNotSet()
-    {
-        $this->strategy->setEntityName('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $this->strategy->process($this->getEntity());
     }
 
     /**
@@ -129,18 +83,13 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
     {
         $class = 'OroCRM\Bundle\ContactBundle\Entity\Contact';
 
-        $this->registry
-            ->expects($this->exactly(3))
-            ->method('getManagerForClass')
-            ->will($this->returnValue($this->em));
-
-        $this->repository
+        $this->databaseHelper
             ->expects($this->exactly(3))
             ->method('findOneBy')
-            ->with($this->isType('array'))
+            ->with($this->isType('string'), $this->isType('array'))
             ->will(
                 $this->returnCallback(
-                    function ($criteria) {
+                    function ($class, $criteria) {
                         $propertyMap = [
                             'iso2Code'     => 'Oro\Bundle\AddressBundle\Entity\Country',
                             'combinedCode' => 'Oro\Bundle\AddressBundle\Entity\Region',
@@ -190,7 +139,6 @@ class ContactAddOrReplaceStrategyTest extends \PHPUnit_Framework_TestCase
         $contact->expects($this->once())->method('setPrimaryPhone')
             ->with($this->isInstanceOf('OroCRM\Bundle\ContactBundle\Entity\ContactPhone'));
 
-        $this->strategy->setRegistry($this->registry);
         $this->strategy->setEntityName($class);
         $this->strategy->process($contact);
     }

@@ -40,7 +40,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  */
 class Channel
 {
-    const STATUS_ACTIVE   = true;
+    const STATUS_ACTIVE = true;
     const STATUS_INACTIVE = false;
 
     /**
@@ -196,10 +196,14 @@ class Channel
 
     /**
      * @param string $name
+     *
+     * @return Channel
      */
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
     }
 
     /**
@@ -212,6 +216,8 @@ class Channel
 
     /**
      * @param array $entities
+     *
+     * @return Channel
      */
     public function setEntities(array $entities)
     {
@@ -238,6 +244,8 @@ class Channel
         foreach ($removed as $entityName) {
             $this->getEntitiesCollection()->removeElement($entityName);
         }
+
+        return $this;
     }
 
     /**
@@ -267,10 +275,14 @@ class Channel
 
     /**
      * @param Organization $owner
+     *
+     * @return Channel
      */
     public function setOwner(Organization $owner)
     {
         $this->owner = $owner;
+
+        return $this;
     }
 
     /**
@@ -283,10 +295,14 @@ class Channel
 
     /**
      * @param Integration $dataSource
+     *
+     * @return Channel
      */
     public function setDataSource(Integration $dataSource = null)
     {
         $this->dataSource = $dataSource;
+
+        return $this;
     }
 
     /**
@@ -299,10 +315,14 @@ class Channel
 
     /**
      * @param boolean $status
+     *
+     * @return Channel
      */
     public function setStatus($status)
     {
-        $this->status = (bool) $status;
+        $this->status = (bool)$status;
+
+        return $this;
     }
 
     /**
@@ -310,15 +330,19 @@ class Channel
      */
     public function getStatus()
     {
-        return (bool) $this->status;
+        return (bool)$this->status;
     }
 
     /**
      * @param string $customerIdentity
+     *
+     * @return Channel
      */
     public function setCustomerIdentity($customerIdentity)
     {
         $this->customerIdentity = $customerIdentity;
+
+        return $this;
     }
 
     /**
@@ -331,10 +355,14 @@ class Channel
 
     /**
      * @param string $channelType
+     *
+     * @return Channel
      */
     public function setChannelType($channelType)
     {
         $this->channelType = $channelType;
+
+        return $this;
     }
 
     /**
@@ -347,10 +375,14 @@ class Channel
 
     /**
      * @param \DateTime $createdAt
+     *
+     * @return Channel
      */
-    public function setCreatedAt(\DateTime $createdAt)
+    public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -363,10 +395,14 @@ class Channel
 
     /**
      * @param \DateTime $updatedAt
+     *
+     * @return Channel
      */
     public function setUpdatedAt(\DateTime $updatedAt)
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     /**
@@ -382,7 +418,13 @@ class Channel
      */
     public function prePersist()
     {
-        $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+
+        if (!$this->getCreatedAt()) {
+            $this->setCreatedAt($now);
+        }
+
+        $this->setUpdatedAt($now);
     }
 
     /**
@@ -398,6 +440,6 @@ class Channel
      */
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string)$this->getName();
     }
 }
