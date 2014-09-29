@@ -14,7 +14,7 @@ class AclContactTest extends Selenium2TestCase
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
-            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
