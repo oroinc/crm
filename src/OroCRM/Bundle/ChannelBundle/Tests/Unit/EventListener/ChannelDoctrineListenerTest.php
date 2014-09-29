@@ -119,7 +119,7 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         foreach ($queued as $entity => $value) {
             $this->assertEquals($entity, 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer');
 
-            foreach ($value as $entityKey => $changeSet) {
+            foreach ($value as $changeSet) {
                 $this->assertArrayHasKey('account', $changeSet);
                 $this->assertArrayHasKey('channel', $changeSet);
                 $this->assertEquals($changeSet['account'], self::TEST_ACCOUNT_ID);

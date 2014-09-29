@@ -45,6 +45,9 @@ class ChannelObjectBuilder
     /** @var Channel */
     protected $channel;
 
+    /** @var \DateTime */
+    protected $createdAt;
+
     /**
      * @param EntityManager    $em
      * @param SettingsProvider $settingsProvider
@@ -170,6 +173,14 @@ class ChannelObjectBuilder
     }
 
     /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt(\DateTime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
      * Returns built channel
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -191,14 +202,14 @@ class ChannelObjectBuilder
             $owner = $this->getDefaultOrganization();
         }
 
-        $this->channel
-            ->setChannelType($type)
-            ->setName($name)
-            ->setOwner($owner)
-            ->setCustomerIdentity($identity)
-            ->setEntities($this->entities)
-            ->setStatus($this->status)
-            ->setDataSource($this->dataSource);
+        $this->channel->setChannelType($type);
+        $this->channel->setName($name);
+        $this->channel->setOwner($owner);
+        $this->channel->setCustomerIdentity($identity);
+        $this->channel->setEntities($this->entities);
+        $this->channel->setStatus($this->status);
+        $this->channel->setDataSource($this->dataSource);
+        $this->channel->setCreatedAt($this->createdAt);
 
         return $this->channel;
     }

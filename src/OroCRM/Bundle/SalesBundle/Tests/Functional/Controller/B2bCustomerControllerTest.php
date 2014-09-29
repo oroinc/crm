@@ -142,7 +142,7 @@ class B2bCustomerControllerTest extends WebTestCase
         $crawler = $this->client->request(
             'GET',
             $this->getUrl(
-                'orocrm_salses_b2bcustomer_widget_info',
+                'orocrm_sales_b2bcustomer_widget_info',
                 ['id' => $returnValue['id'], '_widgetContainer' => 'block']
             )
         );
