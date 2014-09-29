@@ -28,8 +28,7 @@ class LifetimeValueAverageAggregationTest extends AbstractEntityTestCase
         $someDateTime    = new \DateTime();
         $someInteger     = 3;
         $someFloat       = 121.12;
-        $aggregationDate = Carbon::createFromTimestampUTC(time());
-        $aggregationDate->firstOfMonth();
+        $aggregationDate = \DateTime::createFromFormat(\DateTime::ISO8601, date('Y-m-01\T00:00:00+0000'));
 
         return [
             'amount'          => ['amount', $someFloat, $someFloat],
