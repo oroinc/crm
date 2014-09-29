@@ -199,7 +199,11 @@ class EmailCampaignSender
      */
     protected function getIterator()
     {
-        return $this->marketingListProvider
-            ->getMarketingListEntitiesIterator($this->emailCampaign->getMarketingList());
+        $list = $this->emailCampaign->getMarketingList();
+        if (is_null($list)) {
+            return null;
+        }
+
+        return $this->marketingListProvider->getMarketingListEntitiesIterator($list);
     }
 }
