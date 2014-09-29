@@ -25,7 +25,9 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
         $dashboard = $this->findAdminDashboardModel($manager, 'e_commerce');
         if (!$dashboard) {
             $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
-            $dashboard->setLabel($this->container->get('translator')->trans('orocrm.channel.e_commerce.label'));
+            $dashboard->setLabel(
+                $this->container->get('translator')->trans('orocrm.channel.daashboard.e_commerce.label')
+            );
         }
 
         $dashboard->addWidget($this->createWidgetModel('average_lifetime_sales_chart', [0, 1]));
