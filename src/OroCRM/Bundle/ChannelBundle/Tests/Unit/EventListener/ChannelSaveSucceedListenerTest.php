@@ -54,10 +54,12 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnChannelSucceedSave()
     {
-        $this->entity->setEntities([
+        $this->entity->setEntities(
+            [
                 'OroCRM\Bundle\AcmeBundle\Entity\TestEntity1',
                 'OroCRM\Bundle\AcmeBundle\Entity\TestEntity2',
-            ]);
+            ]
+        );
 
         $this->event->expects($this->once())
             ->method('getChannel')

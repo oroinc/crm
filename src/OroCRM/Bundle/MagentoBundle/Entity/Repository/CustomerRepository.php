@@ -2,8 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
+use Doctrine\ORM\EntityRepository;
 
 class CustomerRepository extends EntityRepository
 {

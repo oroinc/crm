@@ -54,11 +54,11 @@ class CustomerDataProvider
         /** @var ChannelRepository $channelRepository */
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
 
-        $ulcTimezone = new \DateTimeZone('UTC');
-        $now  = new \DateTime('now', $ulcTimezone);
+        $utcTimezone = new \DateTimeZone('UTC');
+        $now  = new \DateTime('now', $utcTimezone);
         $past = clone $now;
         $past = $past->sub(new \DateInterval("P11M"));
-        $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $ulcTimezone);
+        $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $utcTimezone);
 
         $past->setTime(0, 0, 0);
 
@@ -67,7 +67,7 @@ class CustomerDataProvider
         $items      = [];
 
         // get all integration channels
-        $channels   = $channelRepository->getByType($this->aclHelper, 'magento');
+        $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
         $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, null, $channelIds);
 
@@ -75,10 +75,10 @@ class CustomerDataProvider
         /** @var \DateTime $dt */
         foreach ($datePeriod as $dt) {
             $key = $dt->format('Y-m');
-            $dates[$key] = array(
+            $dates[$key] = [
                 'month_year' => sprintf('%s-01', $key),
                 'cnt'        => 0
-            );
+            ];
         }
 
         foreach ($data as $row) {

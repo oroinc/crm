@@ -57,7 +57,11 @@ class LifetimeValueHistoryTest extends AbstractEntityTestCase
 
         $this->entity->prePersist();
 
-        $this->assertInstanceOf('DateTime', $this->entity->getCreatedAt());
-        $this->assertLessThan(3, $this->entity->getCreatedAt()->diff(new \DateTime())->s);
+        $result = $this->entity->getCreatedAt();
+        $this->assertInstanceOf('DateTime', $result);
+        $this->assertLessThan(3, $result->diff(new \DateTime())->s);
+
+        $this->entity->prePersist();
+        $this->assertSame($result, $this->entity->getCreatedAt());
     }
 }
