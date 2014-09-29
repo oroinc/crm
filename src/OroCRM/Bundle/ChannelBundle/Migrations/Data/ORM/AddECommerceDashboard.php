@@ -26,7 +26,7 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
         if (!$dashboard) {
             $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
             $dashboard->setLabel(
-                $this->container->get('translator')->trans('orocrm.channel.daashboard.e_commerce.label')
+                $this->container->get('translator')->trans('orocrm.channel.dashboard.e_commerce.label')
             );
         }
 
