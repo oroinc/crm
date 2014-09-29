@@ -3,12 +3,11 @@
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_20;
 
 use Doctrine\DBAL\Schema\Schema;
-use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMMagentoBundle  implements Migration
+class OroCRMMagentoBundle implements Migration
 {
     /**
      * {@inheritdoc}
