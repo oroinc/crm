@@ -82,7 +82,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             );
 
         $channelRepository->expects($this->once())
-            ->method('getByType')
+            ->method('getAvailableChannelNames')
             ->with($this->aclHelper, 'magento')
             ->will($this->returnValue($channels));
 

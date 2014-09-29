@@ -33,10 +33,8 @@ class DashboardControllerTest extends WebTestCase
         $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
 
         /** @var array $channels */
-        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')->getByType(
-            $aclHelper,
-            'magento'
-        );
+        $channels = $this->getContainer()->get('doctrine')->getRepository('OroCRMChannelBundle:Channel')
+            ->getAvailableChannelNames($aclHelper, 'magento');
         foreach ($channels as $channel) {
             $this->assertContains($channel['name'], $result->getContent());
         }
