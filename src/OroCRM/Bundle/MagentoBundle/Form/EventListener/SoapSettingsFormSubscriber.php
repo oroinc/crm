@@ -10,7 +10,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Utils\FormUtils as IntegrationFormUtils;
-use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 class SoapSettingsFormSubscriber implements EventSubscriberInterface
@@ -18,6 +17,9 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
     /** @var Mcrypt */
     protected $encryptor;
 
+    /**
+     * @param Mcrypt $encryptor
+     */
     public function __construct(Mcrypt $encryptor)
     {
         $this->encryptor = $encryptor;

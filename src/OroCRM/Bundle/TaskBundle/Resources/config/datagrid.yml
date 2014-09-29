@@ -143,6 +143,8 @@ datagrid:
                 where:
                       and:
                         - task.relatedAccount = :accountId
+            bind_parameters:
+                - accountId
 
     task-contact-tasks-grid:
         extends: tasks-grid
@@ -151,6 +153,8 @@ datagrid:
                 where:
                       and:
                         - task.relatedContact = :contactId
+            bind_parameters:
+                - contactId
 
     task-user-tasks-grid:
         extends: tasks-grid
@@ -159,3 +163,5 @@ datagrid:
                 where:
                       and:
                         - task.owner = :userId
+            bind_parameters:
+                - userId

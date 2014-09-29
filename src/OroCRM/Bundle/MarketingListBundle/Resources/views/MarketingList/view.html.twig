@@ -7,7 +7,7 @@
 {% oro_title_set({params : {"%entityName%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if entity.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_STATIC') and resource_granted('EDIT', entity) %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_api_post_marketinglist_segment_run', { 'id': entity.segment.id }) ,
             'aCss':   'no-hash run-button btn',

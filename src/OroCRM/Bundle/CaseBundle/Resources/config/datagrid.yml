@@ -172,6 +172,8 @@ datagrid:
                 where:
                     and:
                         - relatedAccount.id = :id
+            bind_parameters:
+                - id
 
     contact-cases-grid:
         extends: base-case-grid
@@ -187,6 +189,8 @@ datagrid:
                 where:
                     and:
                         - relatedContact.id = :id
+            bind_parameters:
+                - id
 
     user-cases-grid:
         extends: cases-grid
@@ -195,3 +199,5 @@ datagrid:
                 where:
                     and:
                         - (assignedTo.id = :id OR owner.id = :id)
+            bind_parameters:
+                - id

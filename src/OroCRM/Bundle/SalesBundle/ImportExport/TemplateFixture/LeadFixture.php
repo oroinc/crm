@@ -39,17 +39,20 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
      */
     public function fillEntityData($key, $entity)
     {
-        $addressRepo  = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
-        $userRepo     = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
-        $customerRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
-        $contactRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channelRepo  = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $addressRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
+        $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
+        $customerRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
+        $contactRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $channelRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $organizationRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         switch ($key) {
             case 'Jerry Coleman':
                 $entity->setName('Oro Inc. Lead Name');
                 $entity->setCompanyName('Oro Inc.');
                 $entity->setOwner($userRepo->getEntity('John Doo'));
+                $entity->setOrganization($organizationRepo->getEntity('default'));
                 $entity->setDataChannel($channelRepo->getEntity('B2b channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());

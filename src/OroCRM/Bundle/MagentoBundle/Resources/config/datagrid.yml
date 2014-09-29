@@ -340,6 +340,8 @@ datagrid:
                 where:
                     and:
                         - c.cart = :id
+            bind_parameters:
+                - id
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
@@ -741,6 +743,8 @@ datagrid:
                 where:
                     and:
                         - oi.order = :id
+            bind_parameters:
+                - id
         columns:
             sku:
                 label: orocrm.magento.datagrid.columns.sku

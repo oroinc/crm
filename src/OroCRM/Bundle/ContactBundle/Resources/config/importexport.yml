@@ -35,8 +35,6 @@ services:
     orocrm_contact.importexport.strategy.contact.add_or_replace:
         class: %orocrm_contact.importexport.strategy.contact.class%
         parent: oro_importexport.strategy.configurable_add_or_replace
-        calls:
-             - [setRegistry, [@doctrine]]
 
     # Import processor
     orocrm_contact.importexport.processor.import:

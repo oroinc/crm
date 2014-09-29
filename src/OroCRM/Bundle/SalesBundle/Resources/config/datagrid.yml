@@ -808,6 +808,8 @@ datagrid:
                 where:
                     and:
                         - l.customer = :customerId
+            bind_parameters:
+                - customerId
         columns:
             name:
                 label:         orocrm.sales.lead.name.label
@@ -932,6 +934,8 @@ datagrid:
                 where:
                     and:
                         - o.customer = :customerId
+            bind_parameters:
+                - customerId
         columns:
             name:
                 label:         orocrm.sales.opportunity.name.label
