@@ -23,5 +23,13 @@ class UpdateEntityLabel implements Migration
                 'orocrm.account.entity_label'
             )
         );
+        $queries->addQuery(
+            new UpdateEntityConfigEntityValueQuery(
+                'OroCRM\Bundle\AccountBundle\Entity\Account',
+                'entity',
+                'plural_label',
+                'orocrm.account.entity_plural_label'
+            )
+        );
     }
 }
