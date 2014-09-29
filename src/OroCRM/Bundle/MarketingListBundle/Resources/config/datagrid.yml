@@ -89,7 +89,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.marketinglist.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_marketing_list_view
@@ -97,13 +97,13 @@ datagrid:
             update:
                 type:          navigate
                 acl_resource:  orocrm_marketing_list_update
-                label:         orocrm.marketinglist.datagrid.actions.update.label
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_marketing_list_delete
-                label:         orocrm.marketinglist.datagrid.actions.delete.label
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
 

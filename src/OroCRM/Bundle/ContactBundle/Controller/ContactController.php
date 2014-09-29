@@ -45,6 +45,10 @@ class ContactController extends Controller
      */
     public function infoAction(Contact $contact)
     {
+        if (!$this->getRequest()->get('_wid')) {
+            return $this->redirect($this->get('router')->generate('orocrm_contact_view', ['id' => $contact->getId()]));
+        }
+
         return array(
             'entity'  => $contact
         );
