@@ -28,7 +28,7 @@ class ReportController extends Controller
         $pageTitle = $this->get('oro_datagrid.datagrid.manager')->getConfigurationForGrid($gridName)['pageTitle'];
 
         return [
-            'pageTitle' => $pageTitle,
+            'pageTitle' => $this->get('translator')->trans($pageTitle),
             'gridName'  => $gridName,
             'params'    => [
                 'reportGroupName' => $reportGroupName,

@@ -29,8 +29,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      routeView="orocrm_account_view",
  *      defaultValues={
  *          "entity"={
- *              "label"="Account",
- *              "plural_label"="Accounts",
  *              "icon"="icon-suitcase"
  *          },
  *          "ownership"={

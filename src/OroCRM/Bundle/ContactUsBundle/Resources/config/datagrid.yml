@@ -90,20 +90,20 @@ datagrid:
             view:
                 acl_resource: orocrm_contactus_request_view
                 type:         navigate
-                label:        orocrm.contactus.contactrequest.datagrid.view
+                label:        oro.grid.action.view
                 icon:         eye-open
                 link:         view_link
                 rowAction:    true
             update:
                 acl_resource: orocrm_contactus_request_edit
                 type:         navigate
-                label:        orocrm.contactus.contactrequest.datagrid.update
+                label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
             delete:
                 acl_resource: orocrm_contactus_request_delete
                 type:         delete
-                label:        orocrm.contactus.contactrequest.datagrid.delete
+                label:        oro.grid.action.delete
                 icon:         trash
                 link:         delete_link
         options:

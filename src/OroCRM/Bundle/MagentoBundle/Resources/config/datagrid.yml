@@ -126,7 +126,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_customer_view
@@ -301,7 +301,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
@@ -508,7 +508,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_product_view
@@ -705,7 +705,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -877,7 +877,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -957,7 +957,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
@@ -1080,7 +1080,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -1185,7 +1185,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
