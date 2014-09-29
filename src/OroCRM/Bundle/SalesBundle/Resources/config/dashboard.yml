@@ -22,15 +22,18 @@ oro_dashboard_config:
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.opportunities_by_lead_source_chart.description
             icon:        bundles/orocrmsales/img/opportunities_by_lead_source.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.opportunities_by_state.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart
             acl:         orocrm_sales_opportunity_view
             description: orocrm.sales.dashboard.my_sales_flow_b2b_chart.description
             icon:        bundles/orocrmsales/img/my_sales_flow_b2b.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
