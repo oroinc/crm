@@ -103,7 +103,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
         $qb->select('IDENTITY(lva.dataChannel) as channelId');
         $qb->addSelect('lva.amount');
         $qb->addSelect('lva.month');
-        $qb->addSelect(' lva.year');
+        $qb->addSelect('lva.year');
         $qb->andWhere($qb->expr()->between('lva.aggregationDate', ':dateStart', ':dateEnd'));
         $qb->addGroupBy('lva.dataChannel', 'lva.year', 'lva.month', 'lva.amount');
         $qb->setParameter('dateStart', $startDate);
