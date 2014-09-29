@@ -260,7 +260,7 @@ datagrid:
                     type: string
                     data_name: c.email
                 grandTotal:
-                    type: number
+                    type: currency
                     data_name: c.grandTotal
                 countryName:
                     type: entity
@@ -480,12 +480,12 @@ datagrid:
                     type: string
                     data_name: p.type
                 price:
-                    type:             number
+                    type:             currency
                     data_name:        p.price
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 specialPrice:
-                    type:             number
+                    type:             currency
                     data_name:        p.specialPrice
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
@@ -656,17 +656,17 @@ datagrid:
                     type:             string
                     data_name:        email
                 totalPaidAmount:
-                    type:             number
+                    type:             currency
                     data_name:        o.totalPaidAmount
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 grandTotal:
-                    type:             number
+                    type:             currency
                     data_name:        grandTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 subTotal:
-                    type:             number
+                    type:             currency
                     data_name:        subTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
@@ -1038,15 +1038,15 @@ datagrid:
                     type:         datetime
                     data_name:    o.updatedAt
                 subtotalAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.subtotalAmount
                     options:
                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 totalAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.totalAmount
                 totalPaidAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.totalPaidAmount
                 status:
                     type:         string
@@ -1166,7 +1166,7 @@ datagrid:
                     type:             datetime
                     data_name:        c.updatedAt
                 grandTotal:
-                    type:             number
+                    type:             currency
                     data_name:        c.grandTotal
                 statusLabel:
                     type:             entity

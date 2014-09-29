@@ -111,7 +111,7 @@ datagrid:
                     type: date
                     data_name: o.closeDate
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: o.budgetAmount
                 probability:
                     type: percent
@@ -454,10 +454,10 @@ datagrid:
                     type: string
                     data_name: opportunity.name
                 opportunityBudget:
-                    type: number
+                    type: currency
                     data_name: opportunity.budgetAmount
                 opportunityRevenue:
-                    type: number
+                    type: currency
                     data_name: opportunity.closeRevenue
                 opportunityProbability:
                     type: percent
@@ -911,7 +911,7 @@ datagrid:
                     type: date
                     data_name: o.closeDate
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: o.budgetAmount
                 probability:
                     type: percent
