@@ -3,7 +3,7 @@ oro_dashboard_config:
         quick_launchpad:
             items:
                 contacts:
-                    label:      Contacts
+                    label:      orocrm.contact.entity_plural_label
                     icon:       group
                     route:      orocrm_contact_index
                     acl:        orocrm_contact_view

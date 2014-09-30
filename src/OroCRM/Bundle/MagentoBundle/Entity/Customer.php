@@ -19,6 +19,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
@@ -55,7 +56,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  * @Oro\Loggable
  */
-class Customer extends ExtendCustomer implements ChannelAwareInterface
+class Customer extends ExtendCustomer implements ChannelAwareInterface, CustomerIdentityInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
 

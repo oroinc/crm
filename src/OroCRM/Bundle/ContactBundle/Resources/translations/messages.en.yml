@@ -151,6 +151,7 @@ orocrm:
             manage:              Manage groups
             owner.label:         Owner
             organization.label:  Organization
+            has_group.label:     Has group
 
         #
         # Entity oroCRM\Bundle\ContactBundle\Entity\Method

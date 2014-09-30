@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
@@ -59,12 +59,10 @@ class OrderRepository extends EntityRepository
         /** @var \DateTime $sliceDate */
         list($sliceDate, $monthMatch, $channelTemplate) = $this->getOrderSliceDateAndTemplates();
 
-        // get all channels
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
-        $queryBuilder = $entityManager->getRepository('OroCRMChannelBundle:Channel')->createQueryBuilder('c');
-        $queryBuilder->select('c.id, c.name')->orderBy('c.name');
-        $channels = $aclHelper->apply($queryBuilder)->execute();
+        $channels      = $entityManager->getRepository('OroCRMChannelBundle:Channel')
+            ->getAvailableChannelNames($aclHelper, 'magento');
 
         // prepare result template
         $result = [];

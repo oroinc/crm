@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -25,12 +25,12 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
         $dashboard = $this->findAdminDashboardModel($manager, 'e_commerce');
         if (!$dashboard) {
             $dashboard = $this->createAdminDashboardModel($manager, 'e_commerce');
-            $dashboard->setLabel($this->container->get('translator')->trans('orocrm.magento.dashboard.e_commerce'));
+            $dashboard->setLabel(
+                $this->container->get('translator')->trans('orocrm.channel.dashboard.e_commerce.label')
+            );
         }
 
-        $dashboard->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]))
-            ->addWidget($this->createWidgetModel('new_magento_customers_chart', [1, 0]));
-
+        $dashboard->addWidget($this->createWidgetModel('average_lifetime_sales_chart', [0, 1]));
         $manager->flush();
     }
 }

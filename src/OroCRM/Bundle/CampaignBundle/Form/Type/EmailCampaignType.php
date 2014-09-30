@@ -61,8 +61,8 @@ class EmailCampaignType extends AbstractType
                 'choice',
                 [
                     'choices' => [
-                        EmailCampaign::SCHEDULE_MANUAL   => ucfirst(EmailCampaign::SCHEDULE_MANUAL),
-                        EmailCampaign::SCHEDULE_DEFERRED => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
+                        EmailCampaign::SCHEDULE_MANUAL   => 'orocrm.campaign.emailcampaign.schedule.manual',
+                        EmailCampaign::SCHEDULE_DEFERRED => 'orocrm.campaign.emailcampaign.schedule.deferred'
                     ],
                     'label'   => 'orocrm.campaign.emailcampaign.schedule.label',
                 ]

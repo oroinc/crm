@@ -20,17 +20,17 @@
             {{ UI.button({
                 'aCss':  'btn-danger',
                 'iCss':  'icon-remove',
-                'label': 'orocrm.channel.button.deactivate.label',
+                'label': 'orocrm.channel.button.deactivate.label'|trans,
                 'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
-                'title': 'orocrm.channel.button.deactivate.label',
+                'title': 'orocrm.channel.button.deactivate.label'|trans,
             }) }}
         {% else %}
             {{ UI.button({
                 'aCss':  'btn-success',
                 'iCss':  'icon-ok',
-                'label': 'orocrm.channel.button.activate.label',
+                'label': 'orocrm.channel.button.activate.label'|trans,
                 'path':  path('orocrm_channel_change_status', {'id' : entity.id}),
-                'title': 'orocrm.channel.button.activate.label',
+                'title': 'orocrm.channel.button.activate.label'|trans,
             }) }}
         {% endif %}
 

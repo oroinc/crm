@@ -2,19 +2,19 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
-use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
-use Doctrine\ORM\UnitOfWork;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
+use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
+use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 
 class ChannelDoctrineListener
 {
@@ -25,6 +25,9 @@ class ChannelDoctrineListener
 
     /** @var EntityManager */
     protected $em;
+
+    /** @var LifetimeHistoryRepository */
+    protected $lifetimeRepo;
 
     /** @var array */
     protected $queued = [];
@@ -69,33 +72,39 @@ class ChannelDoctrineListener
             $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
         }
 
+        $entitiesToTrack = $this->customerIdentities;
+        $entities        = array_filter(
+            $entities,
+            function ($entity) use ($entitiesToTrack) {
+                return $entity instanceof CustomerIdentityInterface
+                && array_key_exists(ClassUtils::getClass($entity), $entitiesToTrack);
+            }
+        );
+
+        /** @var CustomerIdentityInterface $entity */
         foreach ($entities as $entity) {
             $className = ClassUtils::getClass($entity);
+            if ($this->uow->isScheduledForUpdate($entity)) {
+                $changeSet = $this->uow->getEntityChangeSet($entity);
 
-            if (array_key_exists($className, $this->customerIdentities)) {
-                /** @var ChannelAwareInterface $entity */
-                if ($this->uow->isScheduledForUpdate($entity)) {
-                    $changeSet = $this->uow->getEntityChangeSet($entity);
+                $isUpdateRequired = array_key_exists('dataChannel', $changeSet)
+                    || array_key_exists('account', $changeSet)
+                    || array_key_exists($this->customerIdentities[$className], $changeSet);
 
-                    $isUpdateRequired = array_key_exists('dataChannel', $changeSet)
-                        || array_key_exists('account', $changeSet)
-                        || array_key_exists($this->customerIdentities[$className], $changeSet);
+                if ($isUpdateRequired) {
+                    $account = $entity->getAccount();
+                    $channel = $entity->getDataChannel();
+                    $this->scheduleUpdate($className, $account, $channel);
 
-                    if ($isUpdateRequired) {
-                        $account = $entity->getAccount();
-                        $channel = $entity->getDataChannel();
-                        $this->scheduleUpdate($className, $account, $channel);
-
-                        $oldChannel          = $this->getOldValue($changeSet, 'dataChannel');
-                        $oldAccount          = $this->getOldValue($changeSet, 'account');
-                        $extraUpdateRequired = $oldChannel || $oldAccount;
-                        if ($extraUpdateRequired) {
-                            $this->scheduleUpdate($className, $oldAccount ?: $account, $oldChannel ?: $channel);
-                        }
+                    $oldChannel          = $this->getOldValue($changeSet, 'dataChannel');
+                    $oldAccount          = $this->getOldValue($changeSet, 'account');
+                    $extraUpdateRequired = $oldChannel || $oldAccount;
+                    if ($extraUpdateRequired) {
+                        $this->scheduleUpdate($className, $oldAccount ?: $account, $oldChannel ?: $channel);
                     }
-                } else {
-                    $this->scheduleUpdate($className, $entity->getAccount(), $entity->getDataChannel());
                 }
+            } else {
+                $this->scheduleUpdate($className, $entity->getAccount(), $entity->getDataChannel());
             }
         }
     }
@@ -125,19 +134,19 @@ class ChannelDoctrineListener
                         : $this->em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
 
                     $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
-                    $toOutDate[] = [$account, $channel];
+                    $toOutDate[] = [$account, $channel, $entity];
 
                     $this->em->persist($entity);
                 }
             }
 
-            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
-                $this->setOldHistoryStatus($chunks);
-            }
-
             $this->isInProgress = true;
 
             $this->em->flush();
+
+            foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
+                $this->lifetimeRepo->massStatusUpdate($chunks);
+            }
 
             $this->queued       = [];
             $this->isInProgress = false;
@@ -180,7 +189,7 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param string  $customerIdentity
+     * @param string $customerIdentity
      * @param Account $account
      * @param Channel $channel
      *
@@ -188,8 +197,15 @@ class ChannelDoctrineListener
      */
     protected function createHistoryEntry($customerIdentity, Account $account, Channel $channel)
     {
+        $lifetimeAmount = $this->lifetimeRepo->calculateAccountLifetime(
+            $customerIdentity,
+            $this->customerIdentities[$customerIdentity],
+            $account,
+            $channel
+        );
+
         $history = new LifetimeValueHistory();
-        $history->setAmount($this->calculateLifetime($customerIdentity, $account, $channel));
+        $history->setAmount($lifetimeAmount);
         $history->setDataChannel($channel);
         $history->setAccount($account);
 
@@ -197,58 +213,12 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param array $records
-     */
-    protected function setOldHistoryStatus(array $records)
-    {
-        $groupedByChannel = [];
-        /** @var Channel $channel */
-        foreach ($records as $row) {
-            list($account, $channel) = $row;
-            $groupedByChannel[$channel->getId()][] = $account;
-        }
-
-        foreach ($groupedByChannel as $channelId => $accounts) {
-            /** @var QueryBuilder $qb */
-            $qb = $this->em->createQueryBuilder();
-            $qb->update('OroCRMChannelBundle:LifetimeValueHistory', 'l');
-            $qb->set('l.status', ':status');
-            $qb->andWhere('l.account IN (:accounts)');
-            $qb->andWhere('l.dataChannel = :channel');
-            $qb->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_OLD));
-            $qb->setParameter('accounts', $accounts);
-            $qb->setParameter('channel', $channelId);
-            $qb->getQuery()->execute();
-        }
-    }
-
-    /**
-     * @param string  $customerIdentity
-     * @param Account $account
-     * @param Channel $channel
-     *
-     * @return double
-     */
-    protected function calculateLifetime($customerIdentity, Account $account, Channel $channel)
-    {
-        /** @var QueryBuilder $qb */
-        $qb = $this->em->createQueryBuilder();
-        $qb->from($customerIdentity, 'e');
-        $qb->select(sprintf('SUM(e.%s)', $this->customerIdentities[$customerIdentity]));
-        $qb->andWhere('e.account = :account');
-        $qb->andWhere('e.dataChannel = :channel');
-        $qb->setParameter('account', $account);
-        $qb->setParameter('channel', $channel);
-
-        return (float)$qb->getQuery()->getSingleScalarResult();
-    }
-
-    /**
      * @param PostFlushEventArgs|OnFlushEventArgs $args
      */
     protected function initializeFromEventArgs($args)
     {
-        $this->em  = $args->getEntityManager();
-        $this->uow = $this->em->getUnitOfWork();
+        $this->em           = $args->getEntityManager();
+        $this->uow          = $this->em->getUnitOfWork();
+        $this->lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
     }
 }
