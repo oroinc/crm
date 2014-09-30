@@ -44,7 +44,7 @@ class B2bCustomerGridTest extends AbstractDatagridTestCase
                         'gridName' => 'orocrm-sales-b2bcustomers-grid'
                     ],
                     'gridFilters'         => [
-                        'orocrm-sales-b2bcustomers-grid[_filter][channelName][value]' => 'b2b Channel',
+                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'b2bCustomer name',
                     ],
                     'assert'              => [
                         'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
