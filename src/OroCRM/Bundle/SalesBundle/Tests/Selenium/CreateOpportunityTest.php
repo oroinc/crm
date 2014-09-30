@@ -29,7 +29,6 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->add()
             ->assertTitle('Create Opportunity - Opportunities - Sales')
             ->setName($opportunityName)
-            ->setAccount($accountName)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
