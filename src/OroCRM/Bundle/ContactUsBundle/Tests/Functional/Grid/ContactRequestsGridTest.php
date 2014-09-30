@@ -47,12 +47,9 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                         'gridName' => 'orcrm-contact-requests-grid'
                     ],
                     'gridFilters'         => [
-                        'orcrm-contact-requests-grid[_filter][channelName][value]' =>
-                            LoadContactUsBundleFixtures::CHANNEL_NAME,
-                        'orcrm-contact-requests-grid[_filter][firstName][value]'   => 'fname'
+                        'orcrm-contact-requests-grid[_filter][firstName][value]' => 'fname'
                     ],
                     'assert'              => [
-                        'channelName'  => LoadContactUsBundleFixtures::CHANNEL_NAME,
                         'firstName'    => 'fname',
                         'lastName'     => 'lname',
                         'emailAddress' => 'email@email.com',
@@ -67,9 +64,7 @@ class ContactRequestsGridTest extends AbstractDatagridTestCase
                         'gridName' => 'orcrm-contact-requests-grid'
                     ],
                     'gridFilters'         => [
-                        'orcrm-contact-requests-grid[_filter][channelName][value]' =>
-                            LoadContactUsBundleFixtures::CHANNEL_NAME,
-                        'orcrm-contact-requests-grid[_filter][firstName][value]'   => 'something'
+                        'orcrm-contact-requests-grid[_filter][firstName][value]' => 'something'
                     ],
                     'assert'              => [],
                     'expectedResultCount' => 0
