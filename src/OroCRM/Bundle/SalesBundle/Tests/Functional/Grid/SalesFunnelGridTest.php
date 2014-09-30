@@ -31,8 +31,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-funnel-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-funnel-grid[_filter][channelName][value]' => 'b2b Channel',
-                        'sales-funnel-grid[_filter][leadName][value]'    => 'Lead name',
+                        'sales-funnel-grid[_filter][leadName][value]' => 'Lead name',
                     ],
                     'assert'              => [
                         'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
@@ -47,8 +46,7 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-funnel-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-funnel-grid[_filter][channelName][value]' => 'b2b Channel',
-                        'sales-funnel-grid[_filter][leadName][value]'    => 'something',
+                        'sales-funnel-grid[_filter][leadName][value]' => 'something',
                     ],
                     'assert'              => [
                         'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME,
@@ -63,7 +61,6 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-funnel-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-funnel-grid[_filter][channelName][value]'     => 'b2b Channel',
                         'sales-funnel-grid[_filter][opportunityName][value]' => 'opname',
                     ],
                     'assert'              => [
@@ -81,7 +78,6 @@ class SalesFunnelGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-funnel-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-funnel-grid[_filter][channelName][value]'     => 'b2b Channel',
                         'sales-funnel-grid[_filter][opportunityName][value]' => 'something',
                     ],
                     'assert'              => [],

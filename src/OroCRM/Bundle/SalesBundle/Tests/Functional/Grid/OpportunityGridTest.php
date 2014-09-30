@@ -45,7 +45,6 @@ class OpportunityGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-opportunity-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-opportunity-grid[_filter][channelName][value]'  => 'b2b Channel',
                         'sales-opportunity-grid[_filter][budgetAmount][value]' => 50.00,
                     ],
                     'assert'              => [
@@ -63,7 +62,6 @@ class OpportunityGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-opportunity-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-opportunity-grid[_filter][channelName][value]'  => 'b2b Channel',
                         'sales-opportunity-grid[_filter][budgetAmount][value]' => 150.00,
                     ],
                     'assert'              => [],

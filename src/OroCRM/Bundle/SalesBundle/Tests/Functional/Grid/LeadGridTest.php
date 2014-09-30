@@ -47,8 +47,7 @@ class LeadGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-lead-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-lead-grid[_filter][channelName][value]' => 'b2b Channel',
-                        'sales-lead-grid[_filter][name][value]'        => 'Lead name',
+                        'sales-lead-grid[_filter][name][value]' => 'Lead name',
                     ],
                     'assert'              => [
                         'name'        => 'Lead name',
@@ -66,8 +65,7 @@ class LeadGridTest extends AbstractDatagridTestCase
                         'gridName' => 'sales-lead-grid'
                     ],
                     'gridFilters'         => [
-                        'sales-lead-grid[_filter][channelName][value]' => 'b2b Channel',
-                        'sales-lead-grid[_filter][name][value]'        => 'some name',
+                        'sales-lead-grid[_filter][name][value]' => 'some name',
                     ],
                     'assert'              => [],
                     'expectedResultCount' => 0
