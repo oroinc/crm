@@ -1,4 +1,4 @@
-HANGELOG for 1.4.0-RC1
+CHANGELOG for 1.4.0-RC1
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.4.0-RC1 versions.
 * 1.4.0-RC1 (2014-09-30)
@@ -36,9 +36,9 @@ Sending rules—for now, only one-time dispatch is available.
 Email campaign might be tied to a marketing campaign, but it might exist on its own as well.
  * Ecommerce dashboard
 In addition to default dashboard we have added a special Ecommerce-targeted board with three widgets:
-<ul><li>Average order amount</li>
-   <li>New web customers</li>
-   <li>Average customer lifetime sales</li></ul>
+   - Average order amount
+   - New web customers
+   - Average customer lifetime sales
 Every widget displays historical trend for the particular value over the past 12 months. You can also add them to any other dashboard using the Add Widget button.
 
 CHANGELOG for 1.3.1
