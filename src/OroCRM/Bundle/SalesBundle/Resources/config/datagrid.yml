@@ -111,7 +111,7 @@ datagrid:
                     type: date
                     data_name: o.closeDate
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: o.budgetAmount
                 probability:
                     type: percent
@@ -130,20 +130,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_sales_opportunity_view
-                label:         orocrm.sales.opportunity.datagrid.view
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_opportunity_update
-                label:         orocrm.sales.opportunity.datagrid.update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_opportunity_delete
-                label:         orocrm.sales.opportunity.datagrid.delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
 
@@ -258,20 +258,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_sales_lead_view
-                label:         orocrm.sales.lead.datagrid.view
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_lead_update
-                label:         orocrm.sales.lead.datagrid.update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_lead_delete
-                label:         orocrm.sales.lead.datagrid.delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         filters:
@@ -415,20 +415,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_sales_salesfunnel_view
-                label:         orocrm.sales.salesfunnel.datagrid.view
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_salesfunnel_update
-                label:         orocrm.sales.salesfunnel.datagrid.update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_salesfunnel_delete
-                label:         orocrm.sales.salesfunnel.datagrid.delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         filters:
@@ -454,10 +454,10 @@ datagrid:
                     type: string
                     data_name: opportunity.name
                 opportunityBudget:
-                    type: number
+                    type: currency
                     data_name: opportunity.budgetAmount
                 opportunityRevenue:
-                    type: number
+                    type: currency
                     data_name: opportunity.closeRevenue
                 opportunityProbability:
                     type: percent
@@ -725,20 +725,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_sales_b2bcustomer_view
-                label:         orocrm.sales.b2bcustomer.datagrid.view
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_sales_b2bcustomer_update
-                label:         Update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_sales_b2bcustomer_delete
-                label:         Delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
 
@@ -911,7 +911,7 @@ datagrid:
                     type: date
                     data_name: o.closeDate
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: o.budgetAmount
                 probability:
                     type: percent

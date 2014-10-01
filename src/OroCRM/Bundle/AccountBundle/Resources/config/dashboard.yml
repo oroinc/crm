@@ -3,7 +3,7 @@ oro_dashboard_config:
         quick_launchpad:
             items:
                 accounts:
-                    label:      Accounts
+                    label:      orocrm.account.entity_plural_label
                     icon:       suitcase
                     route:      orocrm_account_index
                     acl:        orocrm_account_view

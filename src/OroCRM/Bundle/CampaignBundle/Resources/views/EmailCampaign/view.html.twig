@@ -33,7 +33,7 @@
     {% set breadcrumbs = {
         'entity':      entity,
         'indexPath':   path('orocrm_email_campaign_index'),
-        'indexLabel':  'orocrm.campaign.emailcampaign.entity_plural_label',
+        'indexLabel':  'orocrm.campaign.emailcampaign.entity_plural_label'|trans,
         'entityTitle': entity.name|default('N/A'),
     } %}
     {{ parent() }}

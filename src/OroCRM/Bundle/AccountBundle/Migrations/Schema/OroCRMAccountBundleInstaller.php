@@ -62,7 +62,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_5';
     }
 
     /**
@@ -109,6 +109,7 @@ class OroCRMAccountBundleInstaller implements
         $table = $schema->createTable('orocrm_account');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('default_contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
@@ -127,6 +128,7 @@ class OroCRMAccountBundleInstaller implements
         );
         $table->setPrimaryKey(['id']);
         $table->addIndex(['user_owner_id'], 'IDX_7166D3719EB185F9', []);
+        $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE', []);
         $table->addIndex(['default_contact_id'], 'IDX_7166D371AF827129', []);
         $table->addIndex(['name'], 'account_name_idx', []);
     }
@@ -163,6 +165,12 @@ class OroCRMAccountBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_contact'),
             ['default_contact_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
