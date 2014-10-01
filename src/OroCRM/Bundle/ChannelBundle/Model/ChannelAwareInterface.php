@@ -8,8 +8,10 @@ interface ChannelAwareInterface
 {
     /**
      * @param Channel $channel
+     *
+     * @TODO remove null after BAP-5248
      */
-    public function setDataChannel(Channel $channel);
+    public function setDataChannel(Channel $channel = null);
 
     /**
      * @return Channel
