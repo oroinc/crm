@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
+
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
@@ -107,6 +108,36 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
     {
         $campaign = new EmailCampaign();
 
+        $this->sender->send($campaign);
+    }
+
+    public function testNotSent()
+    {
+        $segment = new Segment();
+
+        $marketingList = new MarketingList();
+        $marketingList->setSegment($segment);
+
+        $campaign = new EmailCampaign();
+        $campaign
+            ->setMarketingList($marketingList)
+            ->setSenderName('test')
+            ->setSenderEmail('test@localhost');
+
+        $this->marketingListProvider
+            ->expects($this->once())
+            ->method('getMarketingListEntitiesIterator')
+            ->will($this->returnValue(null));
+
+        $this->transport->expects($this->never())
+            ->method('send');
+
+        $this->transportProvider
+            ->expects($this->once())
+            ->method('getTransportByName')
+            ->will($this->returnValue($this->transport));
+
+        $this->sender->setEmailCampaign($campaign);
         $this->sender->send($campaign);
     }
 
