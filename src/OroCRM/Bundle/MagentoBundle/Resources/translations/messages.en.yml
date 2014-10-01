@@ -40,6 +40,7 @@ orocrm:
                 currency:         Currency
                 sub_total:        Sub Total
                 grand_total:      Grand Total
+                page_total:       Page Total
                 gift_message:     Gift message
                 row_total:        Row Total
                 tax_amount:       Tax Amount
@@ -228,6 +229,7 @@ orocrm:
             all_sites:                    All web sites
             api_user.label:               SOAP API User
             api_key.label:                SOAP API Key
+            new_api_key.label:            New SOAP API Key
             entity_description:           Represent integration channel transport
             entity_label:                 Integration Channel Transport
             entity_plural_label:          Integration Channel Transports
@@ -438,3 +440,5 @@ orocrm:
         cart_information: Cart Information
         communications: Communications
         entity_number: %entityName% %entityNumber%
+
+"E-commerce": "E-commerce"

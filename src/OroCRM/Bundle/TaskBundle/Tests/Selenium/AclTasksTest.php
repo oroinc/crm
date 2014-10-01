@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\TaskBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages\Tasks;
 
 class AclTasksTest extends Selenium2TestCase
@@ -11,10 +13,11 @@ class AclTasksTest extends Selenium2TestCase
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
-            ->setEntity('Task', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Task', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
@@ -34,6 +37,7 @@ class AclTasksTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - User Management - System')
@@ -114,6 +118,7 @@ class AclTasksTest extends Selenium2TestCase
 
     public function deleteAcl($login, $roleName, $username, $taskSubject)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -122,8 +127,9 @@ class AclTasksTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openTasks('OroCRM\Bundle\TaskBundle')
+            ->submit();
+        /** @var Tasks $login */
+        $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $taskSubject)
             ->checkActionMenu('Delete')
             ->open(array($taskSubject))
@@ -132,6 +138,7 @@ class AclTasksTest extends Selenium2TestCase
 
     public function updateAcl($login, $roleName, $username, $taskSubject)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -140,8 +147,9 @@ class AclTasksTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openTasks('OroCRM\Bundle\TaskBundle')
+            ->submit();
+        /** @var Tasks $login */
+        $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $taskSubject)
             ->checkActionMenu('Update')
             ->open(array($taskSubject))
@@ -150,6 +158,7 @@ class AclTasksTest extends Selenium2TestCase
 
     public function createAcl($login, $roleName, $username)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -158,8 +167,9 @@ class AclTasksTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openTasks('OroCRM\Bundle\TaskBundle')
+            ->submit();
+        /** @var Tasks $login */
+        $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->assertElementNotPresent(
                 "//div[@class='pull-right title-buttons-container']//a[contains(., 'Create Task')]"
             );
@@ -167,6 +177,7 @@ class AclTasksTest extends Selenium2TestCase
 
     public function viewAcl($login, $username, $roleName)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -175,8 +186,9 @@ class AclTasksTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openTasks('OroCRM\Bundle\TaskBundle')
+            ->submit();
+        /** @var Tasks $login */
+        $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->assertTitle('403 - Forbidden');
     }
 

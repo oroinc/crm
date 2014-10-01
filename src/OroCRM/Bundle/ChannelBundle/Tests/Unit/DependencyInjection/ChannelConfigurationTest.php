@@ -53,7 +53,7 @@ class ChannelConfigurationTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\TestBundle1\Entity\Entity3',
                     ],
                     'integration_type'  => 'test',
-                    'customer_identity' => 'OroCRM\Bundle\TestBundle1\Entity\TestCustomer',
+                    'customer_identity' => 'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer',
                     'lifetime_value'    => 'some_field',
                 ],
                 'test2' => [

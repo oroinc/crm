@@ -29,9 +29,9 @@ class AclTest extends Selenium2TestCase
             ->add()
             ->setLabel($this->newRole['LABEL'] . $randomPrefix)
             ->setEntity('Role', array('View'), 'System')
-            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
-            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
-            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->save()
             ->assertMessage('Role saved');
 

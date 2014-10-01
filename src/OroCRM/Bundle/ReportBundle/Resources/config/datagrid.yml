@@ -1,6 +1,6 @@
 datagrid:
     orocrm_report-accounts-life_time_value:
-        pageTitle: "Account life time value"
+        pageTitle: orocrm.report.accounts_life_time_value
         source:
             type: orm
             acl_resource: oro_report_view
@@ -33,7 +33,7 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_account_view
-                label:         View
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
@@ -44,12 +44,12 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: 'Page total'
+                        label: orocrm.magento.datagrid.columns.page_total
 
             grand_total:
                 columns:
                     name:
-                        label: 'Grand Total'
+                        label: orocrm.magento.datagrid.columns.grand_total
                     value:
                         expr: SUM( o.closeRevenue )
                         formatter: currency
@@ -63,7 +63,7 @@ datagrid:
                     type: string
                     data_name: a.name
                 value:
-                    type:             number
+                    type:             currency
                     data_name:        value
                     filter_by_having: true
                     options:
@@ -73,7 +73,7 @@ datagrid:
             export: true
 
     orocrm_report-accounts-by_opportunities:
-        pageTitle: "Accounts by opportunities"
+        pageTitle: orocrm.report.accounts_by_opportunities
         source:
             type: orm
             acl_resource: oro_report_view
@@ -103,7 +103,7 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_account_view
-                label:         View
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
@@ -114,11 +114,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     name:
-                        label: 'Page Total'
+                        label: orocrm.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     name:
-                        label: 'Grand Total'
+                        label: orocrm.magento.datagrid.columns.grand_total
                     wonCount:
                         expr: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
                     lostCount:
@@ -174,7 +174,7 @@ datagrid:
             export: true
 
     orocrm_report-leads-by_date:
-        pageTitle: "Number leads by date"
+        pageTitle: orocrm.report.leads_by_date
         source:
             type: orm
             acl_resource: oro_report_view
@@ -192,11 +192,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     createdDate:
-                        label: 'Page Total'
+                        label: orocrm.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     createdDate:
-                        label: 'Grand Total'
+                        label: orocrm.magento.datagrid.columns.grand_total
                     leadsCount:
                         expr: COUNT(l.id)
         columns:
@@ -215,7 +215,7 @@ datagrid:
             export: true
 
     orocrm_report-opportunities-by_status:
-        pageTitle: "Opportunities by status"
+        pageTitle: orocrm.report.opportunities_by_status
         source:
             type: orm
             acl_resource: oro_report_view
@@ -244,11 +244,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     statusLabel:
-                        label: 'Page Total'
+                        label: orocrm.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     statusLabel:
-                        label: 'Grand Total'
+                        label: orocrm.magento.datagrid.columns.grand_total
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
@@ -282,13 +282,13 @@ datagrid:
                     data_name: numberOfOpportunities
                     filter_by_having: true
                 closeRevenue:
-                    type: number
+                    type: currency
                     data_name: closeRevenue
                     filter_by_having: true
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 budgetAmount:
-                    type: number
+                    type: currency
                     data_name: budgetAmount
                     filter_by_having: true
                     options:
@@ -298,7 +298,7 @@ datagrid:
             export: true
 
     orocrm_report-opportunities-won_by_period:
-        pageTitle: "Won opportunities by date period"
+        pageTitle: orocrm.report.opportunities_won_by_period
         source:
             type: orm
             acl_resource: oro_report_view
@@ -330,11 +330,11 @@ datagrid:
                 hide_if_one_page: true
                 columns:
                     period:
-                        label: 'Page Total'
+                        label: orocrm.magento.datagrid.columns.page_total
             grand_total:
                 columns:
                     period:
-                        label: 'Grand Total'
+                        label: orocrm.magento.datagrid.columns.grand_total
                     cnt:
                         expr: COUNT( o.id )
                     value:
@@ -367,7 +367,7 @@ datagrid:
                     data_name: cnt
                     filter_by_having: true
                 value:
-                    type: number
+                    type: currency
                     data_name: value
                     filter_by_having: true
                     options:

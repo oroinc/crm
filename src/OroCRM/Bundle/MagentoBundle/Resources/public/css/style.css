@@ -21,6 +21,7 @@
     position: absolute;
     top: 0;
     left: 305px;
+    white-space: nowrap;
 }
 #magento-without-border-tabs{
     min-width: 595px;

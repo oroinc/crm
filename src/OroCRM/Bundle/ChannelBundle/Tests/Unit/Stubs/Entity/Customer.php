@@ -7,11 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * @ORM\Entity
  */
-class Customer implements ChannelAwareInterface
+class Customer implements ChannelAwareInterface, CustomerIdentityInterface
 {
     /**
      * @var int
