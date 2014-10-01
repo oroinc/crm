@@ -97,8 +97,10 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
 
     /**
      * @param Channel $dataChannel
+     *
+     * @TODO remove null after BAP-5248
      */
-    public function setDataChannel(Channel $dataChannel)
+    public function setDataChannel(Channel $dataChannel = null)
     {
         $this->dataChannel = $dataChannel;
     }
