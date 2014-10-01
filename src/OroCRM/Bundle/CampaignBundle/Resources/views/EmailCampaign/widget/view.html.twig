@@ -32,7 +32,7 @@
                 {% set marketingListView = entity.marketingList.name %}
             {%- endif -%}
 
-            {%- if marketingListView -%}
+            {%- if marketingListView is defined -%}
                 {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
             {%- endif -%}
 
