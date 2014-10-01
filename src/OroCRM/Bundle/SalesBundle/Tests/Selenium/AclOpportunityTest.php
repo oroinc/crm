@@ -8,6 +8,7 @@ use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
 use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 
 class AclOpportunityTest extends Selenium2TestCase
@@ -28,9 +29,11 @@ class AclOpportunityTest extends Selenium2TestCase
             ->setName($name)
             ->setStatus('Active')
             ->setType('Custom')
+            ->setStatus('Active')
             ->addEntity('Opportunity')
             ->addEntity('Lead')
             ->addEntity('Sales Process')
+            ->addEntity('B2B customer')
             ->save()
             ->assertMessage('Channel saved');
 
@@ -98,11 +101,12 @@ class AclOpportunityTest extends Selenium2TestCase
 
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
+        $customer = $this->createB2BCustomer($login, $accountName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
@@ -133,6 +137,25 @@ class AclOpportunityTest extends Selenium2TestCase
             ->save();
 
         return $accountName;
+    }
+
+    /**
+     * @param Login  $login
+     * @param string $account
+     * @return string
+     */
+    protected function createB2BCustomer(Login $login, $account)
+    {
+        $name = 'B2BCustomer_'.mt_rand();
+        /** @var B2BCustomers $login */
+        $login->openB2BCustomers('OroCRM\Bundle\SalesBundle')
+            ->add()
+            ->setName($name)
+            ->setOwner('admin')
+            ->setAccount($account)
+            ->save();
+
+        return $name;
     }
 
     /**
