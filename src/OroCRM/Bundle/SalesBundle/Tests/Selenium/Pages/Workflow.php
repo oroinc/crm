@@ -44,17 +44,17 @@ class Workflow extends AbstractPageEntity
         return $this;
     }
 
-    public function setAccount($account)
+    public function setB2BCustomer($customer)
     {
-        $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_new_account')]/a")->click();
+        $this->test->byXpath("//div[starts-with(@id,'oro_workflow_transition_new_b2bcustomer')]/a")->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($account);
+        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($customer);
         $this->waitForAjax();
         $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$account}')]",
+            "//div[@id='select2-drop']//div[contains(., '{$customer}')]",
             "Account autocomplete doesn't return search value"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$account}')]")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$customer}')]")->click();
 
         return $this;
     }
