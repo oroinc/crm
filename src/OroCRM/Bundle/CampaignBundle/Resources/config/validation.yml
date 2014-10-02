@@ -24,6 +24,8 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - NotBlank: ~
         reportPeriod:
             - NotBlank: ~
+        organization:
+            - NotBlank: ~
 
 OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
     properties:
@@ -45,6 +47,8 @@ OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign:
         owner:
             - NotBlank: ~
         transport:
+            - NotBlank: ~
+        organization:
             - NotBlank: ~
 
 OroCRM\Bundle\CampaignBundle\Entity\InternalTransportSettings:
