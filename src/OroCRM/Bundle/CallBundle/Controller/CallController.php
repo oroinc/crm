@@ -18,6 +18,48 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
 class CallController extends Controller
 {
     /**
+     * This action is used to render the list of emails associated with the given entity
+     * on the view page of this entity
+     *
+     * @Route("/activity/view/{entityClass}/{entityId}", name="orocrm_call_activity_view")
+     * @AclAncestor("orocrm_call_view")
+     * @Template
+     */
+    public function activityAction($entityClass, $entityId)
+    {
+        return array(
+            'entity' => $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId)
+        );
+    }
+
+    /**
+     * @Route("/activity/create", name="orocrm_call_activity_create")
+     * @Template("OroCRMCallBundle:Call:dialog/update.html.twig")
+     * @AclAncestor("orocrm_call_create")
+     */
+    public function activityCreateAction()
+    {
+        /** @var Call $call */
+        $call = $this->initEntity();
+        /** @var string $entityClass */
+        $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName(
+            $this->getRequest()->get('entityClass', null)
+        );
+        /** @var integer $entityId */
+        $entityId = $this->getRequest()->get('entityId', null);
+        /** @var object $activityOwner */
+        if ($entityClass && $entityId) {
+            $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
+        } else {
+            $entity = null;
+        }
+        $call->addActivityTarget($entity);
+        $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
+
+        return $this->update($call, $redirect);
+    }
+
+    /**
      * @Route("/create", name="orocrm_call_create")
      * @Template("OroCRMCallBundle:Call:update.html.twig")
      * @Acl(

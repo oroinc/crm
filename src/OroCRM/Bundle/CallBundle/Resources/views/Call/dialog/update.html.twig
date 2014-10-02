@@ -1,0 +1,39 @@
+{#
+    Available variables:
+    * entity       - Oro\Bundle\EmailBundle\Model\Email
+    * form         - Oro\Bundle\EmailBundle\Form\type\EmailType
+    * saved        - bool
+#}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% block page_container %}
+<div class="widget-content email-form">
+    {% if not form.vars.valid and form.vars.errors|length %}
+        <div class="alert alert-error">
+            <div class="message">
+                {{ form_errors(form) }}
+            </div>
+        </div>
+    {% endif %}
+    <div class="form-container">
+        <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_activity_create') }}" method="post">
+            <fieldset class="form-horizontal">
+                {{ form_row(form.subject) }}
+                {{ form_row(form.notes) }}
+                {{ form_row(form.callDateTime) }}
+                {{ form_row(form.contactPhoneNumber) }}
+                {{ form_row(form.phoneNumber) }}
+                {{ form_row(form.direction) }}
+                {{ form_row(form.duration) }}
+                {{ form_rest(form) }}
+                <div class="widget-actions form-actions">
+                    <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                    <button class="btn btn-primary" type="submit">{{ 'Log'|trans }}</button>
+                </div>
+            </fieldset>
+        </form>
+        {{ oro_form_js_validation(form) }}
+    </div>
+</div>
+{% endblock %}

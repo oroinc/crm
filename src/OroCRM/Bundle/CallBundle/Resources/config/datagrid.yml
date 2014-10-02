@@ -184,6 +184,9 @@ datagrid:
                     type: datetime
                     data_name: call.callDateTime
 
+    activity-call-grid:
+        extends: widget-base-calls-grid
+
     dashboard-recent-calls-grid:
         options:
             entityHint: call

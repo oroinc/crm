@@ -2,15 +2,19 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Validator\ExecutionContext;
+
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
+use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * Call
@@ -37,13 +41,19 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "immutable"=true,
+ *              "route"="orocrm_call_activity_view",
+ *              "acl"="orocrm_call_view",
+*               "action_widget"="orocrm_log_call_button"
  *          }
  *      }
  * )
  */
-class Call
+class Call extends ExtendCall
 {
     /**
      * @var integer

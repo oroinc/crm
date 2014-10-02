@@ -10,7 +10,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class ControllersTest extends WebTestCase
+class CallControllerTest extends WebTestCase
 {
     protected function setUp()
     {
@@ -43,6 +43,25 @@ class ControllersTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Call saved", $crawler->html());
+    }
+
+    public function testActivityCreate()
+    {
+        $crawler = $this->client->request('GET', $this->getUrl('orocrm_call_activity_create'));
+        /** @var Form $form */
+        $form = $crawler->selectButton('Log')->form();
+        $form['orocrm_call_form[subject]'] = 'Test Call';
+        $form['orocrm_call_form[duration]'] = '00:00:05';
+        $form['orocrm_call_form[notes]'] = 'Call Notes';
+        $form['orocrm_call_form[phoneNumber]'] = '123-123-123';
+
+        $this->client->submit($form);
+
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $call = self::getContainer()->get('doctrine.orm.entity_manager')->getRepository('OroCRMCallBundle:Call')
+            ->findOneBySubject('Test Call');
+        $this->assertNotNull($call);
     }
 
     /**

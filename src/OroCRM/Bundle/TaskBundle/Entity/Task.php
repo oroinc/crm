@@ -46,6 +46,9 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *          "security"={
  *              "type"="ACL"
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "workflow"={
  *              "active_workflow"="task_flow"
  *          },
