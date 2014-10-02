@@ -1,20 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages;
+namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 
 /**
- * Class Tasks
+ * Class B2BCustomers
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Tasks openTasks openTasks(string)
- *
+ * @method B2BCustomers openB2BCustomers openB2BCustomers(string)
  * {@inheritdoc}
  */
-class Tasks extends AbstractPageFilteredGrid
+class B2BCustomers extends AbstractPageFilteredGrid
 {
-    const URL = 'task';
+    const URL = 'b2bcustomer';
 
     public function __construct($testCase, $redirect = true)
     {
@@ -23,26 +22,20 @@ class Tasks extends AbstractPageFilteredGrid
     }
 
     /**
-     * @return Task
+     * @return B2BCustomer
      */
     public function add()
     {
-        $this->test->byXPath("//a[@title='Create Task']")->click();
+        $this->test->byXPath("//a[@title='Create B2B customer']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $task = new Task($this->test);
-        return $task->init();
+        return new B2BCustomer($this->test);
     }
 
-    /**
-     * @param array $entityData
-     *
-     * @return Task
-     */
     public function open($entityData = array())
     {
         $page = parent::open($entityData);
 
-        return new Task($page->test);
+        return new B2BCustomer($page->test);
     }
 }

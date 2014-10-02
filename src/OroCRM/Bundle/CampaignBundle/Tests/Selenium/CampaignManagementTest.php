@@ -30,12 +30,13 @@ class CampaignManagementTest extends Selenium2TestCase
             ->assertTitle('Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
+            ->setType('Custom')
             ->setName($name)
             ->setStatus('Active')
-            ->setType('Custom')
             ->addEntity('Opportunity')
             ->addEntity('Lead')
             ->addEntity('Sales Process')
+            ->addEntity('B2B customer')
             ->save()
             ->assertMessage('Channel saved');
 
