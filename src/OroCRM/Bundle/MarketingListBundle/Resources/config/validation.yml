@@ -12,6 +12,8 @@ OroCRM\Bundle\MarketingListBundle\Entity\MarketingList:
             - NotBlank:     ~
             - Length:
                 max: 255
+        organization:
+            - NotBlank: ~
 
 Oro\Bundle\SegmentBundle\Entity\Segment:
     constraints:
