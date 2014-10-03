@@ -417,9 +417,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             /** @var Contact $contact */
             $contact = $contacts[$buffer[$i]];
             $customer = new Customer();
-            if (is_null($accounts[$buffer[$i]])) {
-                var_dump($buffer[$i]);
-            }
             $customer->setWebsite($website)
                 ->setChannel($integration)
                 ->setStore($store)

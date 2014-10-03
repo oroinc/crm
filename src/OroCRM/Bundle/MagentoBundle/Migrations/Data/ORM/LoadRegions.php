@@ -9,10 +9,26 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 
-class LoadRegions extends AbstractFixture
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+class LoadRegions extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var ObjectRepository */
     protected $regionRepository;
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
 
     /**
      * {@inheritDoc}
@@ -21,7 +37,11 @@ class LoadRegions extends AbstractFixture
     {
         $this->regionRepository = $manager->getRepository('OroCRMMagentoBundle:Region');
 
-        if (($handler = fopen(__DIR__ . '/data/regions.csv', 'r')) !== false) {
+        $dir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMMagentoBundle/Migrations/Data/ORM');
+
+        if (($handler = fopen($dir . '/data/regions.csv', 'r')) !== false) {
             $header = fgetcsv($handler, 0, ",");
 
             while (($data = fgetcsv($handler, 0, ',')) !== false) {

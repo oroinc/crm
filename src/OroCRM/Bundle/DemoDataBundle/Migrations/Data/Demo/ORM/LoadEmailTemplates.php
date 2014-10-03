@@ -3,6 +3,9 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 class LoadEmailTemplates extends AbstractEmailFixture
 {
     /**
@@ -12,6 +15,8 @@ class LoadEmailTemplates extends AbstractEmailFixture
      */
     public function getEmailsDir()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'emails';
+        return $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/emails');
     }
 }
