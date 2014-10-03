@@ -168,7 +168,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
         return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
-    public function getContactManager()
+    protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
     }
