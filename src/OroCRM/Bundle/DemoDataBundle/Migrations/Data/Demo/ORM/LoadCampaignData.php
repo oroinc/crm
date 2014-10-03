@@ -67,6 +67,7 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "campaigns.csv", "r");
         if ($handle) {
             $headers = array();

@@ -2,9 +2,8 @@
 
 namespace OroCRM\Bundle\CRMBundle\EventListener\Migration;
 
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\MigrationBundle\EventListener\ReleaseDataFixtureListener as BaseListener;
 
@@ -12,19 +11,19 @@ use Oro\Bundle\MigrationBundle\EventListener\ReleaseDataFixtureListener as BaseL
  * TODO: This listener is a temporary solution for migration of data fixtures.
  * TODO: It should be removed in scope of https://magecore.atlassian.net/browse/BAP-3605
  */
-class ReleaseDataFixtureListener extends BaseListener implements ContainerAwareInterface
+class ReleaseDataFixtureListener extends BaseListener
 {
     /**
-     * @var ContainerInterface
+     * @var KernelInterface
      */
-    protected $container;
+    protected $kernel;
 
     /**
-     * {@inheritDoc}
+     * @param KernelInterface $kernel
      */
-    public function setContainer(ContainerInterface $container = null)
+    public function __construct(KernelInterface $kernel)
     {
-        $this->container = $container;
+        $this->kernel = $kernel;
     }
 
     /**
@@ -32,9 +31,8 @@ class ReleaseDataFixtureListener extends BaseListener implements ContainerAwareI
      */
     protected function getMappingData()
     {
-        $filePath = $this->container
-            ->get('kernel')
-            ->locateResource('@OroCRMCRMBundle/EventListener/Migration/data/1.0.0/crm.yml');
+        $filePath = $this->kernel->locateResource('@OroCRMCRMBundle/EventListener/Migration/data/1.0.0/crm.yml');
+
         return Yaml::parse(realpath($filePath));
     }
 }
