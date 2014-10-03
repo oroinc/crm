@@ -92,9 +92,10 @@ class LoadCampaignData extends AbstractFixture implements ContainerAwareInterfac
                     $manager->persist($lead);
                 }
                 $manager->persist($campaign);
-
-                $manager->flush();
             }
+
+            $manager->flush();
+
             fclose($handle);
         }
     }
