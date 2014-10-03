@@ -11,12 +11,13 @@ use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
+
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 
 class MarketingListProvider
 {
-    const RESULT_ITEMS_MIXIN = 'orocrm-marketing-list-items-mixin';
+    const RESULT_ITEMS_MIXIN    = 'orocrm-marketing-list-items-mixin';
     const RESULT_ENTITIES_MIXIN = 'orocrm-marketing-list-entities-mixin';
 
     /**
@@ -27,7 +28,7 @@ class MarketingListProvider
     /**
      * @var array
      */
-    protected $dataGrid = array();
+    protected $dataGrid = [];
 
     /**
      * @param Manager $dataGridManager
@@ -39,7 +40,8 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
-     * @param string|null $mixin
+     * @param string|null   $mixin
+     *
      * @return QueryBuilder|null
      */
     public function getMarketingListQueryBuilder(MarketingList $marketingList, $mixin = null)
@@ -48,7 +50,7 @@ class MarketingListProvider
             $dataGrid = $this->getSegmentDataGrid($marketingList->getSegment(), $mixin);
 
             /** @var OrmDatasource $dataSource */
-            $dataSource = $dataGrid->getAcceptedDatasource();
+            $dataSource   = $dataGrid->getAcceptedDatasource();
             $queryBuilder = $dataSource->getQueryBuilder();
 
             return $queryBuilder;
@@ -59,6 +61,7 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     *
      * @return null|\Iterator
      */
     public function getMarketingListResultIterator(MarketingList $marketingList)
@@ -76,7 +79,7 @@ class MarketingListProvider
                 ->getConfig();
 
             $skipCountWalker = $dataGridConfig->offsetGetByPath(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH, false);
-            $iterator = new BufferedQueryResultIterator($queryBuilder, !$skipCountWalker);
+            $iterator        = new BufferedQueryResultIterator($queryBuilder, !$skipCountWalker);
 
             return $iterator;
         }
@@ -86,6 +89,7 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     *
      * @return QueryBuilder|null
      */
     public function getMarketingListEntitiesQueryBuilder(MarketingList $marketingList)
@@ -110,6 +114,7 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     *
      * @return BufferedQueryResultIterator|null
      */
     public function getMarketingListEntitiesIterator(MarketingList $marketingList)
@@ -122,8 +127,9 @@ class MarketingListProvider
     }
 
     /**
-     * @param Segment $segment
+     * @param Segment     $segment
      * @param null|string $mixin
+     *
      * @return DatagridInterface
      */
     protected function getSegmentDataGrid(Segment $segment, $mixin = null)
@@ -132,9 +138,9 @@ class MarketingListProvider
 
         $resultKey = $dataGridName . $mixin;
         if (empty($this->dataGrid[$resultKey])) {
-            $gridParameters = array(
+            $gridParameters = [
                 PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true)
-            );
+            ];
             if ($mixin) {
                 $gridParameters['grid-mixin'] = $mixin;
             }
