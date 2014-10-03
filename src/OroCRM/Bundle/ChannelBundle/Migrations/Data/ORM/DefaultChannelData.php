@@ -41,12 +41,20 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
             $builder->setName($integration->getName() . ' channel');
 
             $channel = $builder->getChannel();
-            $this->em->persist($builder->getChannel());
-            $this->em->flush();
+            $this->saveChannel($channel);
 
             foreach ($channel->getEntities() as $entity) {
                 $this->fillChannelToEntity($channel, $entity);
             }
         }
+    }
+
+    /**
+     * @param Channel $channel
+     */
+    protected function saveChannel(Channel $channel)
+    {
+        $this->em->persist($channel);
+        $this->em->flush();
     }
 }
