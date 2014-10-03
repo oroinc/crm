@@ -137,9 +137,7 @@ class EmailCampaignSender
                 $statisticsRecord = new EmailCampaignStatistics();
                 $statisticsRecord->setEmailCampaign($this->emailCampaign)
                     ->setMarketingListItem($marketingListItem);
-                $manager->persist($statisticsRecord);
-
-                $manager->flush();
+                $this->saveEntity($manager, $statisticsRecord);
                 $manager->commit();
             } catch (\Exception $e) {
                 $manager->rollback();
@@ -155,6 +153,16 @@ class EmailCampaignSender
 
         $this->emailCampaign->setSent(true);
         $manager->persist($this->emailCampaign);
+        $manager->flush();
+    }
+
+    /**
+     * @param EntityManager $manager
+     * @param EmailCampaignStatistics $statisticsRecord
+     */
+    protected function saveEntity(EntityManager $manager, EmailCampaignStatistics $statisticsRecord)
+    {
+        $manager->persist($statisticsRecord);
         $manager->flush();
     }
 
