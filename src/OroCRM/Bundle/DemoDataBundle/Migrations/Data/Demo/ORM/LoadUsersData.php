@@ -85,7 +85,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $this->loadUsers();
     }
 
-
     /**
      * Load users
      *
@@ -93,7 +92,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
      */
     public function loadUsers()
     {
-
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
             $lastName = $this->generateLastName();
@@ -208,9 +206,13 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
     {
         static $dictionaries = array();
 
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
         if (!isset($dictionaries[$name])) {
             $dictionary = array();
-            $fileName = __DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . $name;
+            $fileName = $dictionaryDir . DIRECTORY_SEPARATOR . $name;
             foreach (file($fileName) as $item) {
                 $dictionary[] = trim($item);
             }
