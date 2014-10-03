@@ -109,10 +109,19 @@ class EmailCampaignSender
     {
         $this->assertTransport();
         $marketingList = $this->emailCampaign->getMarketingList();
+        if (is_null($marketingList)) {
+            return;
+        }
+
+        $iterator = $this->getIterator();
+        if (is_null($iterator)) {
+            return;
+        }
+
         /** @var EntityManager $manager */
         $manager = $this->registry->getManager();
 
-        foreach ($this->getIterator() as $entity) {
+        foreach ($iterator as $entity) {
             $to = $this->contactInformationFieldsProvider->getQueryContactInformationFields(
                 $marketingList->getSegment(),
                 $entity,
@@ -137,9 +146,7 @@ class EmailCampaignSender
                 $statisticsRecord = new EmailCampaignStatistics();
                 $statisticsRecord->setEmailCampaign($this->emailCampaign)
                     ->setMarketingListItem($marketingListItem);
-                $manager->persist($statisticsRecord);
-
-                $manager->flush();
+                $this->saveEntity($manager, $statisticsRecord);
                 $manager->commit();
             } catch (\Exception $e) {
                 $manager->rollback();
@@ -155,6 +162,16 @@ class EmailCampaignSender
 
         $this->emailCampaign->setSent(true);
         $manager->persist($this->emailCampaign);
+        $manager->flush();
+    }
+
+    /**
+     * @param EntityManager $manager
+     * @param EmailCampaignStatistics $statisticsRecord
+     */
+    protected function saveEntity(EntityManager $manager, EmailCampaignStatistics $statisticsRecord)
+    {
+        $manager->persist($statisticsRecord);
         $manager->flush();
     }
 
@@ -195,11 +212,12 @@ class EmailCampaignSender
     }
 
     /**
-     * @return \Iterator
+     * @return \Iterator|null
      */
     protected function getIterator()
     {
-        return $this->marketingListProvider
-            ->getMarketingListEntitiesIterator($this->emailCampaign->getMarketingList());
+        return $this->marketingListProvider->getMarketingListEntitiesIterator(
+            $this->emailCampaign->getMarketingList()
+        );
     }
 }

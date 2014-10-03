@@ -81,7 +81,7 @@ class ContactPhoneController extends RestController implements ClassResourceInte
         return new Response($responseData, $phone ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
-    public function getContactManager()
+    protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
     }

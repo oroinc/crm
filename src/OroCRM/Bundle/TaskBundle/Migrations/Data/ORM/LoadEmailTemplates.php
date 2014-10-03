@@ -7,6 +7,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\EmailBundle\Migrations\Data\ORM\AbstractEmailFixture;
 use Oro\Bundle\MigrationBundle\Entity\Repository\DataFixtureRepository;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 class LoadEmailTemplates extends AbstractEmailFixture
 {
     /**
@@ -42,6 +45,8 @@ class LoadEmailTemplates extends AbstractEmailFixture
      */
     public function getEmailsDir()
     {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'data/emails';
+        return $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMTaskBundle/Migrations/Data/ORM/data/emails');
     }
 }

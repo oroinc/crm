@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
@@ -31,6 +32,7 @@ class WorkflowTest extends Selenium2TestCase
 
         $leadName = $this->createLead($login);
         $accountName = $this->createAccount($login);
+        $customer = $this->createB2BCustomer($login, $accountName);
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -42,7 +44,7 @@ class WorkflowTest extends Selenium2TestCase
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->submit()
             ->checkStep('New Opportunity')
             ->develop()
@@ -73,6 +75,7 @@ class WorkflowTest extends Selenium2TestCase
 
         $leadName = $this->createLead($login);
         $accountName = $this->createAccount($login);
+        $customer = $this->createB2BCustomer($login, $accountName);
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -84,7 +87,7 @@ class WorkflowTest extends Selenium2TestCase
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->submit()
             ->checkStep('New Opportunity')
             ->develop()
@@ -97,8 +100,9 @@ class WorkflowTest extends Selenium2TestCase
             ->closeAsLost()
             ->setCloseReason('Cancelled')
             ->submit()
-            ->checkStep('Lost Opportunity')
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->checkStep('Lost Opportunity');
+        /** @var  Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $leadName)
             ->open(array($leadName))
             ->checkStatus('Lost');
@@ -165,8 +169,9 @@ class WorkflowTest extends Selenium2TestCase
             ->closeAsWon()
             ->setCloseRevenue('100')
             ->submit()
-            ->checkStep('Won Opportunity')
-            ->openOpportunities('OroCRM\Bundle\SalesBundle')
+            ->checkStep('Won Opportunity');
+        /** @var  Opportunities $login */
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
             ->checkStatus('Won');
@@ -261,12 +266,12 @@ class WorkflowTest extends Selenium2TestCase
     {
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
-
+        $customer = $this->createB2BCustomer($login, $accountName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
@@ -298,5 +303,24 @@ class WorkflowTest extends Selenium2TestCase
             ->save();
 
         return $accountName;
+    }
+
+    /**
+     * @param Login  $login
+     * @param string $account
+     * @return string
+     */
+    protected function createB2BCustomer(Login $login, $account)
+    {
+        $name = 'B2BCustomer_'.mt_rand();
+        /** @var B2BCustomers $login */
+        $login->openB2BCustomers('OroCRM\Bundle\SalesBundle')
+            ->add()
+            ->setName($name)
+            ->setOwner('admin')
+            ->setAccount($account)
+            ->save();
+
+        return $name;
     }
 }
