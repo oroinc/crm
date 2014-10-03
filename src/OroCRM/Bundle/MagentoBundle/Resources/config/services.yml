@@ -1,4 +1,8 @@
 parameters:
+    # entities
+    orocrm_magento.entity.order.class:                                      OroCRM\Bundle\MagentoBundle\Entity\Order
+    orocrm_magento.entity.cart.class:                                       OroCRM\Bundle\MagentoBundle\Entity\Cart
+
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
@@ -45,6 +49,10 @@ parameters:
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
 
     orocrm_magento.converter.region.class:                                  OroCRM\Bundle\MagentoBundle\Converter\RegionConverter
+
+    # dahsboard
+    orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
+    orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -142,20 +150,12 @@ services:
         lazy: true
 
     # event listeners
-    orocrm_magento.event_listener.account_orders_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'accountId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-account-order-grid, method: onBuildAfter }
-
     orocrm_magento.event_listener.order:
         class: %orocrm_magento.event_listener.order.class%
         tags:
             - { name: doctrine.event_listener, event: postPersist }
             - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postUpdate }
+            - { name: doctrine.event_listener, event: postFlush }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%
@@ -166,15 +166,6 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-orders-widget-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customer-cart-widget-grid, method: onBuildAfter }
-
-    orocrm_magento.event_listener.cart_items_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'id'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cartitem-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-orderitem-grid, method: onBuildAfter }
 
     orocrm_magento.event_listener.channel_owner_set:
         class: %orocrm_magento.event_listener.channel_owner_set.class%
@@ -201,6 +192,7 @@ services:
     # Customer API
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - OroCRM\Bundle\MagentoBundle\Entity\Customer
             - @doctrine.orm.entity_manager
@@ -252,3 +244,17 @@ services:
         class: %orocrm_magento.converter.region.class%
         arguments:
             - @orocrm_magento.orm.regions_repository
+
+    orocrm_magento.dashboard.data_provider.order:
+        class: %orocrm_magento.dashboard.data_provider.order.class%
+        arguments:
+            - @doctrine
+            - @translator
+            - @oro_security.acl_helper
+
+    orocrm_magento.dashboard.data_provider.customer:
+        class: %orocrm_magento.dashboard.data_provider.customer.class%
+        arguments:
+            - @doctrine
+            - @translator
+            - @oro_security.acl_helper

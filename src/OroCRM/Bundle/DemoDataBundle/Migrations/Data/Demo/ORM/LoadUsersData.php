@@ -2,7 +2,6 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\ORM\EntityManager;
-use Oro\Bundle\UserBundle\Entity\Role;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -10,6 +9,8 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
@@ -34,6 +35,11 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -62,8 +68,8 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         if ($manager) {
             $this->em = $manager;
         }
-
-        $this->userManager = $this->container->get('oro_user.manager');
+        $this->organization = $this->getReference('default_organization');
+        $this->userManager  = $this->container->get('oro_user.manager');
         $this->role = $this->em->getRepository('OroUserBundle:Role')->findOneBy(
             array('role' => LoadRolesData::ROLE_MANAGER)
         );
@@ -142,6 +148,8 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $user->setOwner($this->getBusinessUnit('Acme, General'));
         $user->addBusinessUnit($this->getBusinessUnit('Acme, General'));
         $user->addRole($role);
+        $user->setOrganization($this->organization);
+        $user->addOrganization($this->organization);
 
         return $user;
     }

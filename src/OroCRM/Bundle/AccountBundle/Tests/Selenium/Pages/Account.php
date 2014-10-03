@@ -9,33 +9,11 @@ class Account extends AbstractPageEntity
     /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $accountName;
     /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $street;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $city;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $zipcode;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $country;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $state;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $owner;
-
-    public function init()
-    {
-        $this->accountName = $this->test->byId('orocrm_account_form_name');
-        $this->street = $this->test->byId('orocrm_account_form_billingAddress_street');
-        $this->city = $this->test->byId('orocrm_account_form_billingAddress_city');
-        $this->country = $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_billingAddress_country')]/a");
-        $this->zipcode = $this->test->byId('orocrm_account_form_billingAddress_postalCode');
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
-
-        return $this;
-    }
 
     public function setAccountName($accountName)
     {
+        $this->accountName = $this->test->byId('orocrm_account_form_name');
         $this->accountName->clear();
         $this->accountName->value($accountName);
         return $this;
@@ -43,6 +21,7 @@ class Account extends AbstractPageEntity
 
     public function setOwner($owner)
     {
+        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
         $this->owner->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
@@ -114,46 +93,6 @@ class Account extends AbstractPageEntity
     public function getAccountName()
     {
         return $this->accountName->value();
-    }
-
-    public function setStreet($street)
-    {
-        $this->street->clear();
-        $this->street->value($street);
-        return $this;
-    }
-
-    public function getStreet()
-    {
-        return $this->street->value();
-    }
-
-    public function setCity($city)
-    {
-        $this->city->clear();
-        $this->city->value($city);
-        return $this;
-    }
-
-    public function getCity()
-    {
-        return $this->city->value();
-    }
-
-    public function setCountry($country)
-    {
-        $this->country->click();
-        $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($country);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$country}')]",
-            "Country's autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$country}')]")->click();
-        $this->waitForAjax();
-
-        return $this;
     }
 
     public function edit()

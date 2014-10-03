@@ -28,7 +28,7 @@ class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
                     ->end()
                     ->info(
                         'Path to Channel entity in the select statement. ' .
-                        'Root entity should be passed as ".Э without alias'
+                        'Root entity should be passed as "." without alias'
                     )
                 ->end()
             ->end();

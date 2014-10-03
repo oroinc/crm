@@ -38,10 +38,12 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
      */
     public function fillEntityData($key, $entity)
     {
-        $userRepo    = $this->templateManager
+        $userRepo = $this->templateManager
             ->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $contactRepo = $this->templateManager
             ->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $organizationRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         switch ($key) {
             case 'Coleman':
@@ -49,6 +51,7 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setId(1)
                     ->setName($key)
                     ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setOrganization($organizationRepo->getEntity('default'))
                     ->addContact($contactRepo->getEntity('Jerry Coleman'))
                     ->setDefaultContact($contactRepo->getEntity('Jerry Coleman'));
                 return;
@@ -57,6 +60,7 @@ class AccountFixture extends AbstractTemplateRepository implements TemplateFixtu
                     ->setId(2)
                     ->setName($key)
                     ->setOwner($userRepo->getEntity('John Doo'))
+                    ->setOrganization($organizationRepo->getEntity('default'))
                     ->addContact($contactRepo->getEntity('John Smith'))
                     ->setDefaultContact($contactRepo->getEntity('John Smith'));
                 return;

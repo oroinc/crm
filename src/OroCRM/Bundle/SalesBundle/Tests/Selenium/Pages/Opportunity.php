@@ -17,7 +17,7 @@ class Opportunity extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $contact;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $account;
+    protected $b2b_customer;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $probability;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
@@ -44,7 +44,8 @@ class Opportunity extends AbstractPageEntity
     {
         $this->name = $this->test->byId('orocrm_sales_opportunity_form_name');
         $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a");
-        $this->account = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_account')]/a");
+        $this->b2b_customer = $this->test
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_customer')]/a");
         $this->probability = $this->test->byId('orocrm_sales_opportunity_form_probability');
         $this->budget = $this->test->byId('orocrm_sales_opportunity_form_budgetAmount');
         $this->customerNeed = $this->test->byId('orocrm_sales_opportunity_form_customerNeed');
@@ -91,25 +92,25 @@ class Opportunity extends AbstractPageEntity
         )->text();
     }
 
-    public function setAccount($account)
+    public function setB2BCustomer($customer)
     {
-        $this->account->click();
+        $this->b2b_customer->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($account);
+        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($customer);
         $this->waitForAjax();
         $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$account}')]",
+            "//div[@id='select2-drop']//div[contains(., '{$customer}')]",
             "Account autocomplete doesn't return search value"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$account}')]")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$customer}')]")->click();
 
         return $this;
     }
 
-    public function getAccount()
+    public function getB2BCustomer()
     {
         return $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_account')]/a/span")->text();
+            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_customer')]/a/span")->text();
     }
 
     public function setProbability($probability)

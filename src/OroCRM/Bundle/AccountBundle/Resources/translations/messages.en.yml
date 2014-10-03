@@ -23,7 +23,6 @@ orocrm:
 
         sections:
             general:                General
-            sales:                  Sales
         form:
             choose_account:         Choose an account...
             select_contacts:        Select contacts
@@ -42,10 +41,16 @@ orocrm:
         default_contact.label:      Default Contact
         phone.label:                Phone
         email.label:                Email
+        assigned.label:             Assigned
 
         extend_description.label:   Description
+
+        lifetime_value.label:       Lifetime sales value
 
         contact:
             name:                   Contact name
             email:                  Contact email
             phone:                  Contact phone
+
+        organization:
+            label: Organization

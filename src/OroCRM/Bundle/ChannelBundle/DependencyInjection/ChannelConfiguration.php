@@ -66,7 +66,23 @@ class ChannelConfiguration implements ConfigurationInterface
                             ->scalarNode('customer_identity')
                                 ->cannotBeEmpty()
                                 ->defaultValue(self::DEFAULT_CUSTOMER_IDENTITY)
+                                ->validate()
+                                    ->ifTrue(
+                                        function ($v) {
+                                            if (class_exists($v)) {
+                                                return !in_array(
+                                                    'OroCRM\\Bundle\\ChannelBundle\\Model\\CustomerIdentityInterface',
+                                                    class_implements($v)
+                                                );
+                                            }
+
+                                            return true;
+                                        }
+                                    )
+                                    ->thenInvalid('Invalid class given %s, should implements CustomerIdentityInterface')
+                                ->end()
                             ->end()
+                            ->scalarNode('lifetime_value')->cannotBeEmpty()->end()
                         ->end()
                     ->end()
                 ->end()

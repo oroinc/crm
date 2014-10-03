@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
@@ -18,12 +19,13 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
@@ -39,7 +41,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -52,7 +56,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  * @Oro\Loggable
  */
-class Customer extends ExtendCustomer implements ChannelAwareInterface
+class Customer extends ExtendCustomer implements ChannelAwareInterface, CustomerIdentityInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
 
@@ -266,6 +270,14 @@ class Customer extends ExtendCustomer implements ChannelAwareInterface
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -543,5 +555,28 @@ class Customer extends ExtendCustomer implements ChannelAwareInterface
     public function setOwner(User $user)
     {
         $this->owner = $user;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Customer
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }

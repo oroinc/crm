@@ -128,20 +128,20 @@ datagrid:
             view:
                 type:         navigate
                 acl_resource: orocrm_case_view
-                label:        View
+                label:        oro.grid.action.view
                 icon:         eye-open
                 link:         view_link
                 rowAction:    true
             update:
                 type:         navigate
                 acl_resource: orocrm_case_update
-                label:        Update
+                label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
             delete:
                 type:         delete
                 acl_resource: orocrm_case_delete
-                label:         Delete
+                label:        oro.grid.action.delete
                 icon:         trash
                 link:         delete_link
     cases-grid:
@@ -172,6 +172,8 @@ datagrid:
                 where:
                     and:
                         - relatedAccount.id = :id
+            bind_parameters:
+                - id
 
     contact-cases-grid:
         extends: base-case-grid
@@ -187,6 +189,8 @@ datagrid:
                 where:
                     and:
                         - relatedContact.id = :id
+            bind_parameters:
+                - id
 
     user-cases-grid:
         extends: cases-grid
@@ -194,4 +198,6 @@ datagrid:
             query:
                 where:
                     and:
-                        - assignedTo.id = :id OR owner.id = :id
+                        - (assignedTo.id = :id OR owner.id = :id)
+            bind_parameters:
+                - id

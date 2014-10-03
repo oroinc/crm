@@ -9,9 +9,9 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\EmailBundle\Model\FolderType;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
-use Oro\Bundle\EmailBundle\Entity\EmailFolder;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -109,7 +109,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
                 new \DateTime('now')
             );
 
-            $email->addFolder($origin->getFolder(EmailFolder::SENT));
+            $email->addFolder($origin->getFolder(FolderType::SENT));
 
             $emailBody = $this->emailEntityBuilder->body(
                 "Hi,\n" . $this->templates[$randomTemplate]['Text'],

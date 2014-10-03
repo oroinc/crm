@@ -11,8 +11,9 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\NavigationBundle\Entity\Builder\ItemFactory;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -36,6 +37,11 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     /** @var  EntityManager */
     protected $em;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -62,6 +68,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $manager)
     {
+        $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->initSupportingEntities();
         $this->loadUsersTags();
     }
@@ -75,7 +82,6 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
 
     public function loadUsersTags()
     {
-
         $params = array(
             'account' => array(
                 "url" => "/account",
@@ -91,7 +97,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "url" => "/contact",
                 "title_rendered" => "Contacts - Customers",
                 "title" => "{\"template\":\"Contacts - Customers\",\"short_template\":\"Contacts\",\"params\":[]}",
-                "position" => 0,
+                "position" => 1,
                 "type" => "pinbar",
                 "display_type" => "list",
                 "maximized" => false,
@@ -101,7 +107,7 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "url" => "/lead",
                 "title_rendered" => "Leads - Sales",
                 "title" => "{\"template\":\"Leads - Sales\",\"short_template\":\"Leads\",\"params\":[]}",
-                "position" => 0,
+                "position" => 2,
                 "type" => "pinbar",
                 "display_type" => "list",
                 "maximized" => false,
@@ -112,22 +118,24 @@ class LoadPintabsData extends AbstractFixture implements ContainerAwareInterface
                 "title_rendered" => "Opportunities - Sales",
                 "title"
                     => "{\"template\":\"Opportunities - Sales\",\"short_template\":\"Opportunities\",\"params\":[]}",
-                "position" => 0,
+                "position" => 3,
                 "type" => "pinbar",
                 "display_type" => "list",
                 "maximized" => false,
                 "remove" => false
             )
         );
+        $organization = $this->getReference('default_organization');
         foreach ($this->users as $user) {
             $securityContext = $this->container->get('security.context');
 
-            $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
 
             $securityContext->setToken($token);
             foreach ($params as $param) {
                 $param['user'] = $user;
                 $pinTab = $this->navigationFactory->createItem($param['type'], $param);
+                $pinTab->getItem()->setOrganization($organization);
                 $this->persist($this->em, $pinTab);
             }
         }

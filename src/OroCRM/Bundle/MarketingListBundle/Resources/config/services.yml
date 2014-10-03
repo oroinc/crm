@@ -35,18 +35,21 @@ services:
 
     orocrm_marketing_list.marketing_list.manager.api:
         class: %orocrm_marketing_list.marketing_list.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_marketing_list.marketing_list_removed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_removed_item.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.removed_item.class%
             - @doctrine.orm.entity_manager
 
     orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api:
         class: %orocrm_marketing_list.marketing_list_unsubscribed_item.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_marketing_list.unsubscribed_item.class%
             - @doctrine.orm.entity_manager
@@ -76,10 +79,16 @@ services:
             - @oro_entity_config.provider.entity
             - @doctrine
 
+    orocrm_marketing_list.provider.chain_exclusion:
+        class: %oro_entity.exclusion_provider.chain.class%
+        calls:
+            - [addProvider, [@oro_query_designer.exclusion_provider]]
+            - [addProvider, [@orocrm_marketing_list.provider.contact_information_exclusion]]
+
     orocrm_marketing_list.entity_provider.contact_information:
         parent: oro_query_designer.entity_provider
         calls:
-            - [setExclusionProvider, [@orocrm_marketing_list.provider.contact_information_exclusion]]
+            - [setExclusionProvider, [@orocrm_marketing_list.provider.chain_exclusion]]
 
     orocrm_marketing_list.datagrid.listener.items:
         class: %orocrm_marketing_list.datagrid.listener.items.class%

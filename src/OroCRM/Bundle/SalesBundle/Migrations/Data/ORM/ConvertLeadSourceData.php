@@ -103,12 +103,8 @@ class ConvertLeadSourceData extends AbstractFixture implements ContainerAwareInt
      */
     protected function getLeadSourceOptions(ObjectManager $manager, FieldConfigModel $fieldModel)
     {
-        $options = [];
-        try {
-            $options = $manager->getRepository('OroEntityConfigBundle:OptionSet')
-                ->findOptionsByField($fieldModel->getId());
-        } catch (\Exception $e) {
-        }
+        $options = $manager->getRepository('OroEntityConfigBundle:OptionSet')
+            ->findOptionsByField($fieldModel->getId());
 
         return $options;
     }

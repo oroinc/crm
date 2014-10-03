@@ -128,7 +128,7 @@ class EmailCampaignController extends Controller
      * @Acl(
      *      id="orocrm_email_campaign_send",
      *      type="action",
-     *      label="Send campaign emails",
+     *      label="orocrm.campaign.acl.send_emails",
      *      group_name=""
      * )
      *

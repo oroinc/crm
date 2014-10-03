@@ -111,10 +111,10 @@ orocrm:
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
+            organization.label:   Organization
             customer.label:       B2B Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
-
             datagrid:
                 view:     View
                 update:   Update
@@ -163,10 +163,10 @@ orocrm:
             workflow_step.label:  Step
             information:          Lead Information
             campaign.label:       Campaign
+            organization.label:   Organization
             customer.label:       B2B Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
-
             source:
                 unclassified:     Unclassified
                 others:           Others
@@ -197,6 +197,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             data_channel.label:   Channel
+            organization.label:   Organization
 
             hint: 'Sales Process #%id%'
 
@@ -213,6 +214,7 @@ orocrm:
             entity_description:         Represent B2B customer
             id.label:                   Id
             name.label:                 Name
+            lifetime.label:             Lifetime sales value
             shipping_address.label:     Shipping Address
             billing_address.label:      Billing Address
             account.label:              Account
@@ -227,6 +229,7 @@ orocrm:
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
             employees.label:            Employees
+            organization.label:         Organization
             opportunities.select:       Select opportunities
             leads.select:               Select leads
             datagrid:
@@ -238,4 +241,4 @@ orocrm:
             leads:                   Leads
             opportunities:           Opportunities
         channel_type:
-            b2b.label: B2b
+            b2b.label: B2B

@@ -16,9 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
 class OrderTest extends AbstractEntityTestCase
 {
-    /**
-     * @var Order
-     */
+    /** @var Order */
     protected $entity;
 
     /**
@@ -45,6 +43,7 @@ class OrderTest extends AbstractEntityTestCase
         $updatedAt    = new \DateTime('now');
         $channel      = new Channel();
         $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
             'incrementId'         => ['incrementId', 1, 1],
@@ -81,6 +80,7 @@ class OrderTest extends AbstractEntityTestCase
             'updatedAt'           => ['updatedAt', $updatedAt, $updatedAt],
             'channel'             => ['channel', $channel, $channel],
             'owner'               => ['owner', $owner, $owner],
+            'organization'        => ['organization', $organization, $organization]
         ];
     }
 }

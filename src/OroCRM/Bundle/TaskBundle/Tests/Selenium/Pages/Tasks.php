@@ -9,6 +9,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method Tasks openTasks openTasks(string)
+ *
  * {@inheritdoc}
  */
 class Tasks extends AbstractPageFilteredGrid
@@ -36,16 +37,12 @@ class Tasks extends AbstractPageFilteredGrid
     /**
      * @param array $entityData
      *
-     * @return mixed|Task
+     * @return Task
      */
     public function open($entityData = array())
     {
-        $task = $this->getEntity($entityData, 1);
-        $task->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
+        $page = parent::open($entityData);
 
-        return new Task($this->test);
+        return new Task($page->test);
     }
 }

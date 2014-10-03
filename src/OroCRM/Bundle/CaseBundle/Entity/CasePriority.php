@@ -7,10 +7,23 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_case_priority")
  * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CaseBundle\Entity\CasePriorityTranslation")
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={
+ *              "groups"={"dictionary"}
+ *          },
+ *          "dictionary"={
+ *              "virtual_fields"={"label"}
+ *          }
+ *      }
+ * )
  */
 class CasePriority implements Translatable
 {
@@ -23,6 +36,13 @@ class CasePriority implements Translatable
      *
      * @ORM\Id
      * @ORM\Column(name="name", type="string", length=16)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $name;
 

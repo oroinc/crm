@@ -11,6 +11,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -24,6 +25,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 /**
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  *
  * @ORM\Table(
  *      name="orocrm_sales_lead",
@@ -42,7 +44,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -57,6 +61,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          }
  *      }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
 class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
 {
@@ -438,6 +444,14 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @var B2bCustomer
@@ -1040,10 +1054,35 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $em = $eventArgs->getEntityManager();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
-        $this->setStatus($defaultStatus);
+        if (!$this->status) {
+            $em = $eventArgs->getEntityManager();
+            /** @var LeadStatus $defaultStatus */
+            $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+            $this->setStatus($defaultStatus);
+        }
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Lead
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 
     /**

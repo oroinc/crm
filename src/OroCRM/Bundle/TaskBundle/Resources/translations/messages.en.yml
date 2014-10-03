@@ -19,11 +19,7 @@ orocrm:
         reporter.label:             Reporter
         id.label:                   Id
         workflow_item.label:        Workflow item
-
-        datagrid:
-            view: View
-            update: Update
-            delete: Delete
+        organization.label:         Organization
 
         add_entity: Add task
         saved_message: Task saved

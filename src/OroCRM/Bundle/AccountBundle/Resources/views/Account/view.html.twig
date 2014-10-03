@@ -42,8 +42,13 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+    {{ parent() }}
+    <li>
+        <div class="label label-info orocrm-channel-lifetime-value-label">
+            {{ 'orocrm.account.lifetime_value.label'|trans }}:
+            {{ orocrm_channel_account_lifetime(entity)|oro_format_currency }}
+        </div>
+    </li>
 {% endblock stats %}
 
 {% block content_data %}
@@ -73,10 +78,6 @@
         ) %}
     {% endif %}
 
-    {% set accountSalesSection %}
-        {{ menuTabPanel('account_sales_tab_panel', {'id': entity.id}) }}
-    {% endset %}
-
     {% set dataBlocks = [
         {
             'title': 'orocrm.account.sections.general'|trans,
@@ -85,22 +86,11 @@
         }
     ] %}
 
-    {% if accountSalesSection|trim is not empty %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title': 'orocrm.account.sections.sales'|trans,
-                'subblocks': [
-                    {'data' : [accountSalesSection]}
-                ]
-            }
-        ]) %}
-    {% endif %}
-
     {# Render account channels #}
     {% for channel in channels %}
         {%- set accountChannelInfoSection -%}
             {% spaceless %}
-                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.type %}
+                {% set placeHolderName = 'orocrm_account_channel_info_' ~ channel.channelType %}
                 {{ placeholder(placeHolderName, {'accountId': entity.id, 'channelId': channel.id}) }}
             {% endspaceless %}
         {%- endset -%}

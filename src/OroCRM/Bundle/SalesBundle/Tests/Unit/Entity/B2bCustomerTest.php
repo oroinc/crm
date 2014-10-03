@@ -9,7 +9,7 @@ use Doctrine\Common\Util\ClassUtils;
 
 class B2bCustomerTest extends \PHPUnit_Framework_TestCase
 {
-    const TEST_ID   = 12;
+    const TEST_ID = 12;
     const TEST_NAME = 'test name';
 
     /** @var B2bCustomer */
@@ -41,23 +41,27 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function getSetDataProvider()
     {
-        $name    = uniqid('name');
-        $address = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $owner   = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $date    = new \DateTime();
+        $name         = uniqid('name');
+        $address      = $this->getMock('Oro\Bundle\AddressBundle\Entity\Address');
+        $account      = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $contact      = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
+        $channel      = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $owner        = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
+        $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
+        $date         = new \DateTime();
+        $lifetime     = 12.22;
 
         return [
             'id'              => ['id', null, null],
             'name'            => ['name', $name, $name],
+            '$lifetime'       => ['lifetime', $lifetime, $lifetime],
             'shippingAddress' => ['shippingAddress', $address, $address],
             'billingAddress'  => ['billingAddress', $address, $address],
             'account'         => ['account', $account, $account],
             'contact'         => ['contact', $contact, $contact],
             'dataChannel'     => ['dataChannel', $channel, $channel],
             'owner'           => ['owner', $owner, $owner],
+            'organization'    => ['organization', $organization, $organization],
             'createdAt'       => ['createdAt', $date, $date],
             'updatedAt'       => ['updatedAt', $date, $date],
         ];
@@ -146,6 +150,6 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
     public function testToSting()
     {
         $this->entity->setName(self::TEST_NAME);
-        $this->assertSame(self::TEST_NAME, (string) $this->entity);
+        $this->assertSame(self::TEST_NAME, (string)$this->entity);
     }
 }

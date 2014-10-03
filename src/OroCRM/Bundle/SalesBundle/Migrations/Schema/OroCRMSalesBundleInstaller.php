@@ -18,6 +18,7 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_6\OroCRMSalesBundle as SalesActivityMigration;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 
 /**
@@ -88,7 +89,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_12';
     }
 
     /**
@@ -115,6 +116,8 @@ class OroCRMSalesBundleInstaller implements
         SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
         SalesActivityMigration::addActivityAssociations($schema, $this->activityExtension);
         OpportunityAttachment::addOpportunityAttachment($schema, $this->attachmentExtension);
+
+        SalesOrganizations::addOrganization($schema);
     }
 
     /**
@@ -289,6 +292,7 @@ class OroCRMSalesBundleInstaller implements
             'combined_name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
+
         $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
@@ -317,6 +321,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('account_id', 'integer', ['notnull' => false]);
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('lifetime', 'money', ['notnull' => false]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', []);
         $table->setPrimaryKey(['id']);

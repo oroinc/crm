@@ -17,7 +17,7 @@ use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 
 class ChannelTypeSubscriberTest extends FormIntegrationTestCase
 {
-    const TEST_CHANNEL_TYPE      = 'test_type';
+    const TEST_CHANNEL_TYPE = 'test_type';
     const TEST_CUSTOMER_IDENTITY = 'OroCRM\Bundle\AcmeBundle\Entity\Test1';
 
     /** @var SettingsProvider|\PHPUnit_Framework_MockObject_MockObject */
@@ -63,9 +63,8 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
      *
      * @param Channel|null $formData
      * @param string       $channelType
-     * @param boolean      $isCustomerIdentityUserDefined
      */
-    public function testPreSet($formData, $channelType, $isCustomerIdentityUserDefined)
+    public function testPreSet($formData, $channelType)
     {
         $events = $this->subscriber->getSubscribedEvents();
         $this->assertArrayHasKey(FormEvents::PRE_SET_DATA, $events);
@@ -114,13 +113,11 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
         return [
             'without data' => [
                 null,
-                self::TEST_CHANNEL_TYPE,
-                true
+                self::TEST_CHANNEL_TYPE
             ],
             'with data'    => [
                 $channel,
-                self::TEST_CHANNEL_TYPE,
-                false
+                self::TEST_CHANNEL_TYPE
             ]
         ];
     }

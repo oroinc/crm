@@ -44,6 +44,8 @@ class LoadCustomerContact extends AbstractFixture implements DependentFixtureInt
         $this->setReference('admin_user', $admin);
         $contact->setOwner($admin);
 
+        $contact->setOrganization($manager->getRepository('OroOrganizationBundle:Organization')->getFirst());
+
         $customer->setContact($contact);
 
         $this->setReference('contact', $contact);

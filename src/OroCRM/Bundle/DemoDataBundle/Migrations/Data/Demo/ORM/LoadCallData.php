@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -21,6 +22,11 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
     );
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -33,6 +39,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $om)
     {
+        $this->organization = $this->getReference('default_organization');
         $this->persistDemoCalls($om);
         $om->flush();
     }
@@ -59,6 +66,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             /** @var Account $account */
             $account = $accounts[$accountRandom];
             $call = new Call();
+            $call->setOrganization($this->organization);
             $call->setOwner($contact->getOwner());
             $call->setSubject($this->subjects[array_rand($this->subjects)]);
             $call->setDuration(

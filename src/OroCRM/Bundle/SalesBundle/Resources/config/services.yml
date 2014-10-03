@@ -1,32 +1,37 @@
 parameters:
-    orocrm_sales.opportunity.class:                        OroCRM\Bundle\SalesBundle\Entity\Opportunity
-    orocrm_sales.opportunity.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.opportunity.class:                          OroCRM\Bundle\SalesBundle\Entity\Opportunity
+    orocrm_sales.opportunity.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.lead.entity.class:                        OroCRM\Bundle\SalesBundle\Entity\Lead
-    orocrm_sales.lead.manager.api.class:                   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.lead.entity.class:                          OroCRM\Bundle\SalesBundle\Entity\Lead
+    orocrm_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.lead.datagrid_helper.class:               Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
+    orocrm_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
-    orocrm_sales.salesfunnel.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
-    orocrm_sales.salesfunnel.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.salesfunnel.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
+    orocrm_sales.salesfunnel.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-    orocrm_sales.b2bcustomer.entity.class:                 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
-    orocrm_sales.b2bcustomer.manager.api.class:            Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.b2bcustomer.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
+    orocrm_sales.b2bcustomer.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    orocrm_sales.event_listener.b2bcustomer_lifetime.class:  OroCRM\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.opportunity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.lead.manager.api:
         class: %orocrm_sales.lead.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.lead.entity.class%
             - @doctrine.orm.entity_manager
 
     orocrm_sales.salesfunnel.manager.api:
         class: %orocrm_sales.salesfunnel.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.salesfunnel.entity.class%
             - @doctrine.orm.entity_manager
@@ -61,52 +66,20 @@ services:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers, acl_resource: orocrm_sales_b2bcustomer_view }
         lazy: true
 
-    orocrm_sales.event_listener.account_contacts_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'accountId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-lead-grid, method: onBuildAfter }
-
-    orocrm_sales.event_listener.account_opportunities_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'accountId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-account-opportunity-grid, method: onBuildAfter }
-
     orocrm_sales.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
         arguments:
             - 'OroCRM\Bundle\SalesBundle\Entity'
 
-    orocrm_sales.event_listener.b2bcustomer_leads_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'customerId'
-            - false
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-leads-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-opportunities-grid, method: onBuildAfter }
-
-    orocrm_sales.event_listener.sales_b2bcustomer_lead_grid_listener:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'customer'
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-lead-grid, method: onBuildAfter }
-
-    orocrm_sales.event_listener.sales_b2bcustomer_opportunity_grid:
-        class: %oro_datagrid.event_listener.base_orm_relation.class%
-        arguments:
-            - 'customer'
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-b2bcustomer-opportunity-grid, method: onBuildAfter }
-
     orocrm_sales.b2bcustomer.manager.api:
         class: %orocrm_sales.b2bcustomer.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_sales.event_listener.b2bcustomer_lifetime:
+        class: %orocrm_sales.event_listener.b2bcustomer_lifetime.class%
+        tags:
+        - { name: doctrine.event_listener, event: onFlush, method: onFlush }
+        - { name: doctrine.event_listener, event: postFlush, method: postFlush }

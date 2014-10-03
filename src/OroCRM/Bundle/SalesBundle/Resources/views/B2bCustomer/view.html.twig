@@ -22,27 +22,31 @@
     {% endif %}
 {% endblock navButtons %}
 
-{% block stats %}
-    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
-{% endblock stats %}
-
 {% block pageHeader %}
     {% set breadcrumbs = {
-        'entity': entity,
-        'indexPath': path('orocrm_sales_b2bcustomer_index'),
-        'indexLabel': 'orocrm.sales.b2bcustomer.entity_label'|trans,
-        'entityTitle': entity.name|default('N/A')
+    'entity':      entity,
+    'indexPath':   path('orocrm_sales_b2bcustomer_index'),
+    'indexLabel': 'orocrm.sales.b2bcustomer.entity_plural_label'|trans,
+    'entityTitle': entity.name|default('N/A')
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
+
+{% block stats %}
+    {{ parent() }}
+    <li>
+        <div class="label label-info orocrm-channel-lifetime-value-label">
+            {{ 'orocrm.sales.b2bcustomer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        </div>
+    </li>
+{% endblock stats %}
 
 {% block content_data %}
     {% set b2bcustomerInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
             'title': 'orocrm.sales.widgets.b2bcustomer_information'|trans,
-            'url': path('orocrm_salses_b2bcustomer_widget_info', {id: entity.id})
+            'url': path('orocrm_sales_b2bcustomer_widget_info', {id: entity.id})
         }) }}
     {% endset %}
 

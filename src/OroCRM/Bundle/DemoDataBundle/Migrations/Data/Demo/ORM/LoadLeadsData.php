@@ -3,7 +3,6 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -14,14 +13,19 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-use Oro\Bundle\UserBundle\Entity\User;
+
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -41,6 +45,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
     /** @var  ConfigManager */
     protected $configManager;
+
+    /**
+     * @var Organization
+     */
+    protected $organization;
 
     /**
      * {@inheritdoc}
@@ -85,6 +94,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
         $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $this->em->getRepository('OroAddressBundle:Country')->findAll();
+        $this->organization = $this->getReference('default_organization');
     }
 
     /**
@@ -153,7 +163,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     protected function setSecurityContext($user)
     {
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordToken($user, $user->getUsername(), 'main');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
     /**
@@ -175,6 +185,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setPhoneNumber($data['TelephoneNumber']);
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
+        $lead->setOrganization($this->organization);
         $lead->setDataChannel($this->getReference('default_channel'));
 
         /** @var Address $address */

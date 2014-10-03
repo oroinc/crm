@@ -15,6 +15,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\Source;
@@ -61,6 +62,11 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
     protected $em;
 
     /**
+     * @var Organization
+     */
+    protected $organization;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -103,6 +109,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $this->accounts = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
         $this->contactGroups = $this->em->getRepository('OroCRMContactBundle:Group')->findAll();
         $this->contactSources = $this->em->getRepository('OroCRMContactBundle:Source')->findAll();
+        $this->organization = $this->getReference('default_organization');
     }
 
     /**
@@ -179,6 +186,7 @@ class LoadContactData extends AbstractFixture implements ContainerAwareInterface
         $contact->setLastName($data['Surname']);
         $contact->setNamePrefix($data['Title']);
         $contact->setGender($data['Gender']);
+        $contact->setOrganization($this->organization);
 
         $phone = new ContactPhone($data['TelephoneNumber']);
         $phone->setPrimary(true);

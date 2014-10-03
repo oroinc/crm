@@ -379,4 +379,12 @@ class Lead extends AbstractPageEntity
 
         return new Contacts($this->test, false);
     }
+
+    public function setChannel($channel)
+    {
+        $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_dataChannel')]/a")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(.) = '{$channel}']")->click();
+
+        return $this;
+    }
 }

@@ -59,6 +59,7 @@ services:
 
     orocrm_call.call.manager.api:
         class: %orocrm_call.call.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_call.call.entity.class%
             - @doctrine.orm.entity_manager

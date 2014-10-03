@@ -39,8 +39,11 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
      */
     public function isIgnoredEntity($className)
     {
-        $entityConfig = $this->entityConfigProvider->getConfig($className);
+        if (!$this->entityConfigProvider->hasConfig($className)) {
+            return true;
+        }
 
+        $entityConfig = $this->entityConfigProvider->getConfig($className);
         if ($entityConfig->has('contact_information')) {
             return false;
         }
@@ -48,9 +51,11 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
         /** @var ClassMetadataInfo $metadata */
         $metadata = $this->managerRegistry->getManagerForClass($className)->getClassMetadata($className);
         foreach ($metadata->getFieldNames() as $fieldName) {
-            $fieldConfig = $this->entityConfigProvider->getConfig($className, $fieldName);
-            if ($fieldConfig->has('contact_information')) {
-                return false;
+            if ($this->entityConfigProvider->hasConfig($className, $fieldName)) {
+                $fieldConfig = $this->entityConfigProvider->getConfig($className, $fieldName);
+                if ($fieldConfig->has('contact_information')) {
+                    return false;
+                }
             }
         }
 

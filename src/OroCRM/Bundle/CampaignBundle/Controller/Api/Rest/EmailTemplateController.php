@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Oro\Bundle\EmailBundle\Entity\EmailTemplate;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
@@ -42,22 +43,28 @@ class EmailTemplateController extends RestController
             );
         }
 
-        $entity = $this
+        $marketingList = $this
             ->getDoctrine()
             ->getRepository('OroCRMMarketingListBundle:MarketingList')
             ->find((int)$id);
 
-        if (!$entity) {
+        if (!$marketingList) {
             return $this->handleView(
                 $this->view(null, Codes::HTTP_NOT_FOUND)
             );
         }
 
-        $templates = $this
+        $securityContext = $this->get('security.context');
+        /** @var UsernamePasswordOrganizationToken $token */
+        $token        = $securityContext->getToken();
+        $organization = $token->getOrganizationContext();
+
+        $templatesQueryBuilder = $this
             ->getDoctrine()
             ->getRepository('OroEmailBundle:EmailTemplate')
-            ->getTemplateByEntityName($entity->getEntity());
+            ->getEntityTemplatesQueryBuilder($marketingList->getEntity(), $organization, true);
 
+        $templates = $templatesQueryBuilder->getQuery()->getArrayResult();
         return $this->handleView(
             $this->view($templates, Codes::HTTP_OK)
         );

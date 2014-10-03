@@ -119,20 +119,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_task_view
-                label:         View
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_task_update
-                label:         Update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_task_delete
-                label:         Delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
 
@@ -143,6 +143,8 @@ datagrid:
                 where:
                       and:
                         - task.relatedAccount = :accountId
+            bind_parameters:
+                - accountId
 
     task-contact-tasks-grid:
         extends: tasks-grid
@@ -151,6 +153,8 @@ datagrid:
                 where:
                       and:
                         - task.relatedContact = :contactId
+            bind_parameters:
+                - contactId
 
     task-user-tasks-grid:
         extends: tasks-grid
@@ -159,3 +163,5 @@ datagrid:
                 where:
                       and:
                         - task.owner = :userId
+            bind_parameters:
+                - userId

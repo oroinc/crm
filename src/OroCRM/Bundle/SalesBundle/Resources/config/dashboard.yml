@@ -3,14 +3,14 @@ oro_dashboard_config:
         quick_launchpad:
             items:
                 leads:
-                    label:      Leads
+                    label:      orocrm.sales.lead.entity_plural_label
                     icon:       phone-sign
                     route:      orocrm_sales_lead_index
                     acl:        orocrm_sales_lead_view
                     position:   20
                     applicable: @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
                 opportunities:
-                    label:      Opportunities
+                    label:      orocrm.sales.opportunity.entity_plural_label
                     icon:       usd
                     route:      orocrm_sales_opportunity_index
                     acl:        orocrm_sales_opportunity_view

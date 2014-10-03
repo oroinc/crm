@@ -149,20 +149,20 @@ datagrid:
             view:
                 type:          navigate
                 acl_resource:  orocrm_account_view
-                label:         View
+                label:         oro.grid.action.view
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_account_update
-                label:         Update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
             delete:
                 type:          delete
                 acl_resource:  orocrm_account_delete
-                label:         Delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         mass_actions:
@@ -235,9 +235,11 @@ datagrid:
                           CASE WHEN c.id IN (:data_in) AND c.id NOT IN (:data_not_in)
                           THEN true ELSE false END
                         END) as hasContact
+            bind_parameters:
+                - account
         columns:
             hasContact:
-                label:   Assigned
+                label:   orocrm.account.assigned.label
                 editable: true
                 frontend_type: boolean
             first_name:
@@ -300,9 +302,7 @@ datagrid:
                     enabled: false
         options:
             routerEnabled: false
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasContact
                 selectors:

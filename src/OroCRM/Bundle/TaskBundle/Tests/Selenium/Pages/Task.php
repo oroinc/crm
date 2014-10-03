@@ -9,6 +9,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\Workflow;
  * Class Task
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @method Task assertTitle() assertTitle($title, $message = '')
  */
 class Task extends AbstractPageEntity
 {

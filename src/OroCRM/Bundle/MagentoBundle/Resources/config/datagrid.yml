@@ -126,7 +126,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_customer_view
@@ -260,7 +260,7 @@ datagrid:
                     type: string
                     data_name: c.email
                 grandTotal:
-                    type: number
+                    type: currency
                     data_name: c.grandTotal
                 countryName:
                     type: entity
@@ -301,7 +301,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
@@ -340,6 +340,8 @@ datagrid:
                 where:
                     and:
                         - c.cart = :id
+            bind_parameters:
+                - id
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
@@ -478,12 +480,12 @@ datagrid:
                     type: string
                     data_name: p.type
                 price:
-                    type:             number
+                    type:             currency
                     data_name:        p.price
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 specialPrice:
-                    type:             number
+                    type:             currency
                     data_name:        p.specialPrice
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
@@ -506,7 +508,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_product_view
@@ -654,17 +656,17 @@ datagrid:
                     type:             string
                     data_name:        email
                 totalPaidAmount:
-                    type:             number
+                    type:             currency
                     data_name:        o.totalPaidAmount
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 grandTotal:
-                    type:             number
+                    type:             currency
                     data_name:        grandTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 subTotal:
-                    type:             number
+                    type:             currency
                     data_name:        subTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
@@ -703,7 +705,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -741,6 +743,8 @@ datagrid:
                 where:
                     and:
                         - oi.order = :id
+            bind_parameters:
+                - id
         columns:
             sku:
                 label: orocrm.magento.datagrid.columns.sku
@@ -873,7 +877,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -953,134 +957,11 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
                 rowAction:    true
-
-    magento-account-order-grid:
-        source:
-            type: orm
-            acl_resource: orocrm_magento_order_view
-            query:
-                select:
-                    - o.id
-                    - o.incrementId
-                    - o.totalInvoicedAmount
-                    - o.shippingAmount
-                    - o.subtotalAmount
-                    - o.status
-                    - o.createdAt
-                    - o.updatedAt
-                    - step.label as stepLabel
-                from:
-                    - { table: %orocrm_magento.order.entity.class%, alias: o }
-                join:
-                    left:
-                        - { join: o.workflowStep, alias: step }
-                        - { join: o.customer, alias: customer }
-                where:
-                    and:
-                        - customer.account = :accountId
-        properties:
-            id: ~
-            view_link:
-                type: url
-                route: orocrm_magento_order_view
-                params: [ id ]
-        columns:
-            incrementId:
-                label:            orocrm.magento.order.increment_id.label
-            totalInvoicedAmount:
-                label:            orocrm.magento.order.total_invoiced_amount.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
-            shippingAmount:
-                label:            orocrm.magento.order.shipping_amount.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
-            subtotalAmount:
-                label:            orocrm.magento.order.subtotal_amount.label
-                type:             localized_number
-                method:           formatCurrency
-                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
-                align:            right
-            status:
-                label:            orocrm.magento.order.status.label
-            stepLabel:
-                label:            orocrm.magento.order.b2c_flow_order_follow_up.step.label
-            createdAt:
-                label:            oro.ui.created_at
-                frontend_type:    datetime
-            updatedAt:
-                label:            oro.ui.updated_at
-                frontend_type:    datetime
-        sorters:
-            columns:
-                incrementId:            { data_name: o.incrementId }
-                totalInvoicedAmount:    { data_name: o.totalInvoicedAmount }
-                shippingAmount:         { data_name: o.shippingAmount }
-                subtotalAmount:         { data_name: o.subtotalAmount }
-                status:                 { data_name: o.status }
-                stepLabel:              { data_name: step.label }
-                createdAt:              { data_name: o.createdAt }
-                updatedAt:              { data_name: o.updatedAt }
-            default:
-                createdAt:  DESC
-        filters:
-            columns:
-                incrementId:
-                    type:             string
-                    data_name:        o.incrementId
-                totalInvoicedAmount:
-                    type:             number
-                    data_name:        o.totalInvoicedAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                shippingAmount:
-                    type:             number
-                    data_name:        o.shippingAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                subtotalAmount:
-                    type:             number
-                    data_name:        o.subtotalAmount
-                    options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                status:
-                    type:             string
-                    data_name:        o.status
-                stepLabel:
-                    type:             entity
-                    data_name:        o.workflowStep
-                    options:
-                        field_type:   oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_magento.order.entity.class%
-                createdAt:
-                    type:             datetime
-                    data_name:        o.createdAt
-                    enabled:          false
-                updatedAt:
-                    type:             datetime
-                    data_name:        o.updatedAt
-                    enabled:          false
-        actions:
-            view:
-                type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
-                link:         view_link
-                icon:         eye-open
-                acl_recource: orocrm_magento_order_view
-                rowAction:    true
-        options:
-            entityHint: order
-            export: true
 
     magento-customer-orders-widget-grid:
         source:
@@ -1157,15 +1038,15 @@ datagrid:
                     type:         datetime
                     data_name:    o.updatedAt
                 subtotalAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.subtotalAmount
                     options:
                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 totalAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.totalAmount
                 totalPaidAmount:
-                    type:         number
+                    type:         currency
                     data_name:    o.totalPaidAmount
                 status:
                     type:         string
@@ -1199,7 +1080,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_order_view
@@ -1285,7 +1166,7 @@ datagrid:
                     type:             datetime
                     data_name:        c.updatedAt
                 grandTotal:
-                    type:             number
+                    type:             currency
                     data_name:        c.grandTotal
                 statusLabel:
                     type:             entity
@@ -1304,7 +1185,7 @@ datagrid:
         actions:
             view:
                 type:         navigate
-                label:        orocrm.magento.datagrid.actions.view.label
+                label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view

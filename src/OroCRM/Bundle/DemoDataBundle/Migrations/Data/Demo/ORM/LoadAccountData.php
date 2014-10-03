@@ -1,13 +1,14 @@
 <?php
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
@@ -39,6 +40,9 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
      */
     public function load(ObjectManager $manager)
     {
+        /** @var Organization $organization */
+        $organization = $this->getReference('default_organization');
+
         $dictionaryDir = $this->container
             ->get('kernel')
             ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
@@ -55,6 +59,7 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
                 $account = new Account();
                 $account->setName($data['Company']);
                 $account->setOwner($this->getRandomUserReference());
+                $account->setOrganization($organization);
 
                 $this->em->persist($account);
 

@@ -85,14 +85,14 @@ datagrid:
             update:
                 type:          navigate
                 acl_resource:  orocrm_contact_group_update
-                label:         Update
+                label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
                 rowAction:     true
             delete:
                 type:          delete
                 acl_resource:  orocrm_contact_group_delete
-                label:         Delete
+                label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
         options:
@@ -118,9 +118,11 @@ datagrid:
                       END) as hasGroup
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
+            bind_parameters:
+                - group
         columns:
             hasGroup:
-                label: Has group
+                label: orocrm.contact.group.has_group.label
                 editable: true
                 frontend_type: boolean
             firstName:
@@ -151,9 +153,7 @@ datagrid:
             default: { hasGroup: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC }
         options:
             entityHint: contact
-            requireJSModules:
-                - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasGroup
                 selectors:
@@ -304,20 +304,20 @@ datagrid:
             view:
                 type: navigate
                 acl_resource: orocrm_contact_view
-                label: orocrm.contact.datagrid.view
+                label: oro.grid.action.view
                 icon: eye-open
                 link: view_link
                 rowAction: true
             update:
                 type: navigate
                 acl_resource: orocrm_contact_update
-                label: orocrm.contact.datagrid.update
+                label: oro.grid.action.update
                 icon: edit
                 link: update_link
             delete:
                 type: delete
                 acl_resource: orocrm_contact_delete
-                label: orocrm.contact.datagrid.delete
+                label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
         mass_actions:
@@ -326,7 +326,7 @@ datagrid:
                 entity_name: %orocrm_contact.entity.class%
                 data_identifier: c.id
                 acl_resource: orocrm_contact_delete
-                label: orocrm.contact.datagrid.delete
+                label: oro.grid.action.delete
                 icon: trash
         options:
             entityHint: contact
@@ -364,6 +364,8 @@ datagrid:
                         - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
+            bind_parameters:
+                - contact
         columns:
             hasContact:
                 label:         orocrm.contact.assigned_to.label
@@ -433,9 +435,7 @@ datagrid:
             id: ~
         options:
             entityHint: account
-            requireJSModules:
-              - orodatagrid/js/datagrid/listener/column-form-listener
-            columnListener:
+            rowSelection:
                 dataField: id
                 columnName: hasContact
                 selectors:

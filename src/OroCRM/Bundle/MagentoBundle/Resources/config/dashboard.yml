@@ -1,4 +1,8 @@
 oro_dashboard_config:
+    dashboards:
+        e_commerce:
+            twig: OroDashboardBundle:Index:default.html.twig
+
     widgets:
         my_sales_flow_b2c_chart:
             label:       orocrm.magento.dashboard.my_sales_flow_b2c_chart.title
@@ -6,3 +10,15 @@ oro_dashboard_config:
             acl:         orocrm_magento_cart_view
             description: orocrm.magento.dashboard.my_sales_flow_b2c_chart.description
             icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
+        average_order_amount_chart:
+            label:       orocrm.magento.dashboard.average_order_amount_chart.title
+            route:       orocrm_magento_dashboard_average_order_amount
+            acl:         orocrm_magento_order_view
+            description: orocrm.magento.dashboard.average_order_amount_chart.description
+            icon:        bundles/orocrmmagento/img/average-amount-order.png
+        new_magento_customers_chart:
+            label:       orocrm.magento.dashboard.new_magento_customers_chart.title
+            route:       orocrm_magento_dashboard_new_customers_chart
+            acl:         orocrm_magento_cart_view
+            description: orocrm.magento.dashboard.new_magento_customers_chart.description
+            icon:        bundles/orocrmmagento/img/number-magento-customers.png

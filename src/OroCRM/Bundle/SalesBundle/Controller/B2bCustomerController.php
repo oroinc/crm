@@ -2,14 +2,16 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
@@ -52,7 +54,7 @@ class B2bCustomerController extends Controller
     }
 
     /**
-     * @Route("/widget/info/{id}", name="orocrm_salses_b2bcustomer_widget_info", requirements={"id"="\d+"})
+     * @Route("/widget/info/{id}", name="orocrm_sales_b2bcustomer_widget_info", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_sales_b2bcustomer_view")
      * @Template
      */
@@ -94,6 +96,7 @@ class B2bCustomerController extends Controller
 
     /**
      * @param  B2bCustomer $entity
+     *
      * @return array
      */
     protected function update(B2bCustomer $entity = null)
@@ -153,47 +156,41 @@ class B2bCustomerController extends Controller
 
     /**
      * @Route(
-     *      "/widget/leads/{id}",
-     *      name="orocrm_sales_widget_leads_assign",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
+     *      "/widget/b2bcustomers-info/account/{accountId}/channel/{channelId}",
+     *      name="orocrm_sales_widget_account_b2bcustomers_info",
+     *      requirements={"accountId"="\d+", "channelId"="\d+"}
      * )
-     * @AclAncestor("orocrm_sales_lead_view")
-     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
+     * @ParamConverter("account", class="OroCRMAccountBundle:Account", options={"id" = "accountId"})
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("orocrm_sales_b2bcustomer_view")
+     * @Template
      */
-    public function leadsAssignAction(B2bCustomer $b2bCustomer = null)
+    public function accountCustomersInfoAction(Account $account, Channel $channel)
     {
-        return [
-            'b2bCustomer' => $b2bCustomer,
-            'gridName'    => 'sales-b2bcustomer-lead-grid',
-            'addedName'   => 'appendLeads',
-            'removedName' => 'removeLeads',
-            'columnName'  => 'hasLeads',
-            'routeName'   => 'orocrm_sales_lead_info',
-            'extraData'   => ['Phone' => 'phoneNumber', 'Email' => 'email']
-        ];
+        $customers = $this->getDoctrine()
+            ->getRepository('OroCRMSalesBundle:B2bCustomer')
+            ->findBy(['account' => $account, 'dataChannel' => $channel]);
+
+        return ['account' => $account, 'customers' => $customers, 'channel' => $channel];
     }
 
     /**
      * @Route(
-     *      "/widget/opportunities/{id}",
-     *      name="orocrm_sales_widget_opportunities_assign",
-     *      requirements={"id"="\d+"},
-     *      defaults={"id"=0}
+     *        "/widget/b2bcustomer-info/{id}/channel/{channelId}",
+     *        name="orocrm_sales_widget_b2bcustomer_info",
+     *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
-     * @AclAncestor("orocrm_sales_opportunity_view")
-     * @Template("OroCRMSalesBundle:B2bCustomer:multipleAssign.html.twig")
+     * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
+     * @AclAncestor("orocrm_magento_customer_view")
+     * @Template
      */
-    public function opportunitiesAssignAction(B2bCustomer $b2bCustomer = null)
+    public function customerInfoAction(B2bCustomer $customer, Channel $channel)
     {
         return [
-            'b2bCustomer' => $b2bCustomer,
-            'gridName'    => 'sales-b2bcustomer-opportunity-grid',
-            'addedName'   => 'appendOpportunities',
-            'removedName' => 'removeOpportunities',
-            'columnName'  => 'hasOpportunities',
-            'routeName'   => 'orocrm_sales_opportunity_info',
-            'extraData'   => ['Email' => 'primaryEmail']
+            'customer'             => $customer,
+            'channel'              => $channel,
+            'leadClassName'        => $this->container->getParameter('orocrm_sales.lead.entity.class'),
+            'opportunityClassName' => $this->container->getParameter('orocrm_sales.opportunity.class'),
         ];
     }
 }

@@ -9,6 +9,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
@@ -27,22 +28,24 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @ORM\HasLifecycleCallbacks()
  * @Oro\Loggable
  * @Config(
- *  routeName="orocrm_sales_opportunity_index",
- *  routeView="orocrm_sales_opportunity_view",
- *  defaultValues={
- *      "entity"={
- *          "icon"="icon-usd"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="user_owner_id"
- *      },
- *      "security"={
- *          "type"="ACL",
- *          "group_name"=""
- *      },
- *      "form"={
+ *      routeName="orocrm_sales_opportunity_index",
+ *      routeView="orocrm_sales_opportunity_view",
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-usd"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
  *              "grid_name"="sales-opportunity-grid",
  *      },
@@ -51,6 +54,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  *  }
  * )
+ *
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
 class Opportunity extends ExtendOpportunity implements EmailHolderInterface, ChannelAwareInterface
 {
@@ -365,6 +370,14 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface, Cha
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowStep;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @var B2bCustomer
@@ -770,10 +783,35 @@ class Opportunity extends ExtendOpportunity implements EmailHolderInterface, Cha
      */
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
-        $em = $eventArgs->getEntityManager();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus   = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
-        $this->setStatus($defaultStatus);
+        if (!$this->status) {
+            $em = $eventArgs->getEntityManager();
+            /** @var LeadStatus $defaultStatus */
+            $defaultStatus = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
+            $this->setStatus($defaultStatus);
+        }
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return Opportunity
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 
     /**

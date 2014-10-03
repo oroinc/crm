@@ -44,7 +44,7 @@ class EmailCampaignType extends AbstractType
                 'senderEmail',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.senderEmail.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.sender_email.label',
                     'required' => false
                 ]
             )
@@ -52,7 +52,7 @@ class EmailCampaignType extends AbstractType
                 'senderName',
                 'text',
                 [
-                    'label'    => 'orocrm.campaign.emailcampaign.senderName.label',
+                    'label'    => 'orocrm.campaign.emailcampaign.sender_name.label',
                     'required' => false
                 ]
             )
@@ -61,8 +61,8 @@ class EmailCampaignType extends AbstractType
                 'choice',
                 [
                     'choices' => [
-                        EmailCampaign::SCHEDULE_MANUAL   => ucfirst(EmailCampaign::SCHEDULE_MANUAL),
-                        EmailCampaign::SCHEDULE_DEFERRED => ucfirst(EmailCampaign::SCHEDULE_DEFERRED)
+                        EmailCampaign::SCHEDULE_MANUAL   => 'orocrm.campaign.emailcampaign.schedule.manual',
+                        EmailCampaign::SCHEDULE_DEFERRED => 'orocrm.campaign.emailcampaign.schedule.deferred'
                     ],
                     'label'   => 'orocrm.campaign.emailcampaign.schedule.label',
                 ]

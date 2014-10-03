@@ -39,7 +39,8 @@ class LoadMarketingListData extends AbstractFixture implements ContainerAwareInt
         $entity
             ->setType($type)
             ->setName('list_name')
-            ->setEntity('entity');
+            ->setEntity('entity')
+            ->setOrganization($manager->getRepository('OroOrganizationBundle:Organization')->getFirst());
 
         $manager->persist($entity);
         $manager->flush($entity);

@@ -10,15 +10,17 @@ use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomer;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
@@ -29,7 +31,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
- *              "owner_column_name"="user_owner_id"
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -44,7 +48,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  * )
  */
-class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface
+class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface, CustomerIdentityInterface
 {
     use ChannelEntityTrait;
 
@@ -81,6 +85,24 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
      * )
      */
     protected $name;
+
+    /**
+     * @var double
+     *
+     * @ORM\Column(name="lifetime", type="money", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          },
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=15
+     *          }
+     *      }
+     * )
+     */
+    protected $lifetime = 0;
 
     /**
      * @var Address $shippingAddress
@@ -180,6 +202,14 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     protected $owner;
 
     /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
+
+    /**
      * @var ArrayCollection $tags
      */
     protected $tags;
@@ -248,6 +278,22 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return float
+     */
+    public function getLifetime()
+    {
+        return $this->lifetime;
+    }
+
+    /**
+     * @param float $lifetime
+     */
+    public function setLifetime($lifetime)
+    {
+        $this->lifetime = $lifetime;
     }
 
     /**
@@ -492,5 +538,28 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function __toString()
     {
         return (string) $this->getName();
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return B2bCustomer
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }
