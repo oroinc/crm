@@ -46,7 +46,7 @@ class Workflow extends AbstractPageEntity
 
     public function setB2BCustomer($customer)
     {
-        $this->test->byXpath("//div[starts-with(@id,'oro_workflow_transition_new_b2bcustomer')]/a")->click();
+        $this->test->byXpath("//div[starts-with(@id,'oro_workflow_transition_new_b2bcustomer')]//a")->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($customer);
         $this->waitForAjax();
