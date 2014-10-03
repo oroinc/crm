@@ -28,10 +28,13 @@
 
             {%- if entity.marketingList and resource_granted('orocrm_marketing_list_view') -%}
                 {% set marketingListView = '<a href="' ~ path('orocrm_marketing_list_view', {'id': entity.marketingList.id}) ~ '">' ~ entity.marketingList.name ~ '</a>' %}
-            {%- else -%}
+            {%- elseif entity.marketingList -%}
                 {% set marketingListView = entity.marketingList.name %}
             {%- endif -%}
-            {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
+
+            {%- if marketingListView is defined -%}
+                {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.marketing_list.label'|trans, marketingListView) }}
+            {%- endif -%}
 
             {{ ui.renderHtmlProperty('orocrm.campaign.emailcampaign.description.label'|trans, entity.description|escape|nl2br) }}
         </div>
