@@ -27,12 +27,8 @@ class LoadMagentoCountryData extends LoadCountryData implements ContainerAwareIn
      */
     protected function getFileName()
     {
-        $dir = $this->container
+        return $this->container
             ->get('kernel')
-            ->locateResource('@OroCRMMagentoBundle/Migrations/Data/ORM');
-        $fileName = $dir . $this->structureFileName;
-        $fileName = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
-
-        return $fileName;
+            ->locateResource('@OroCRMMagentoBundle/Migrations/Data/ORM' . $this->structureFileName);
     }
 }

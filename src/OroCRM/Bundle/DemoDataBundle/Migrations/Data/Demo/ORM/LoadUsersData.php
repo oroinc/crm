@@ -85,7 +85,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $this->loadUsers();
     }
 
-
     /**
      * Load users
      *
@@ -93,7 +92,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
      */
     public function loadUsers()
     {
-
         for ($i = 0; $i < 50; ++$i) {
             $firstName = $this->generateFirstName();
             $lastName = $this->generateLastName();

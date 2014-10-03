@@ -33,6 +33,11 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     protected $mailerProcessor;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -49,6 +54,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             return;
         }
 
+        $this->container = $container;
         $this->emailEntityBuilder = $container->get('oro_email.email.entity.builder');
         $this->mailerProcessor = $container->get('oro_email.mailer.processor');
     }

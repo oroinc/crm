@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -10,21 +11,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface, ContainerAwareInterface
+class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritdoc}
      */

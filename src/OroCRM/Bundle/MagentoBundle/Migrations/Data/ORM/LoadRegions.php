@@ -12,7 +12,7 @@ use Oro\Bundle\AddressBundle\Entity\Region as BAPRegion;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LoadRegions extends AbstractFixture
+class LoadRegions extends AbstractFixture implements ContainerAwareInterface
 {
     /** @var ObjectRepository */
     protected $regionRepository;

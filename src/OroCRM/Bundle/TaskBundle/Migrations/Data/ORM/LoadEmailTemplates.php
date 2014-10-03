@@ -10,21 +10,8 @@ use Oro\Bundle\MigrationBundle\Entity\Repository\DataFixtureRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
-class LoadEmailTemplates extends AbstractEmailFixture implements ContainerAwareInterface
+class LoadEmailTemplates extends AbstractEmailFixture
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -58,9 +45,8 @@ class LoadEmailTemplates extends AbstractEmailFixture implements ContainerAwareI
      */
     public function getEmailsDir()
     {
-        $emailsDir = $this->container
+        return $this->container
             ->get('kernel')
             ->locateResource('@OroCRMTaskBundle/Migrations/Data/ORM/data/emails');
-        return $emailsDir;
     }
 }
