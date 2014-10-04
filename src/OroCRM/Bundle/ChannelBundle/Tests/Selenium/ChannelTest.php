@@ -33,6 +33,7 @@ class ChannelTest extends Selenium2TestCase
             ->addEntity('Lead')
             ->addEntity('Sales Process')
             ->addEntity('B2B customer')
+            ->addEntity('Contact Request')
             ->save()
             ->assertMessage('Channel saved');
 
