@@ -101,11 +101,13 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * @param Contact $entity
-     * @return Contact
+     * {@inheritdoc}
      */
     protected function beforeProcessEntity($entity)
     {
+        /** @var Contact $entity */
+        $entity = parent::beforeProcessEntity($entity);
+
         // need to manually set empty types to skip merge from existing entities
         $itemData = $this->context->getValue('itemData');
 
@@ -123,11 +125,13 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * @param Contact $entity
-     * @return Contact
+     * {@inheritdoc}
      */
     protected function afterProcessEntity($entity)
     {
+        /** @var Contact $entity */
+        $entity = parent::afterProcessEntity($entity);
+
         // there can be only one primary entity
         $addresses = $entity->getAddresses();
         $primaryAddress = $this->getPrimaryEntity($addresses);
