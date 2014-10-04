@@ -56,11 +56,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             $country = $contactAddress->getCountry();
             if ($country) {
                 /** @var \Oro\Bundle\AddressBundle\Entity\Country $existingCountry */
-                $existingCountry = $this->getEntity(
-                    $country,
-                    ['iso2Code' => $country->getIso2Code()]
-                );
-
+                $existingCountry = $this->getEntity($country, $country->getIso2Code());
                 $contactAddress->setCountry($existingCountry);
             } else {
                 $contactAddress->setCountry(null);
@@ -70,11 +66,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
             $region = $contactAddress->getRegion();
             if ($region) {
                 /** @var \Oro\Bundle\AddressBundle\Entity\Region $existingRegion */
-                $existingRegion = $this->getEntity(
-                    $region,
-                    ['combinedCode' => $region->getCombinedCode()]
-                );
-
+                $existingRegion = $this->getEntity($region, $region->getCombinedCode());
                 $contactAddress->setRegion($existingRegion);
             } else {
                 $contactAddress->setRegion(null);
@@ -85,11 +77,7 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
                 $contactAddress->removeType($addressType);
 
                 /** @var \Oro\Bundle\AddressBundle\Entity\AddressType $existingAddressType */
-                $existingAddressType = $this->getEntity(
-                    $addressType,
-                    ['name' => $addressType->getName()]
-                );
-
+                $existingAddressType = $this->getEntity($addressType, $addressType->getName());
                 if ($existingAddressType) {
                     $contactAddress->addType($existingAddressType);
                 }
@@ -101,15 +89,15 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
 
     /**
      * @param object $originEntity
-     * @param array  $criteria
+     * @param int|string  $identifier
      * @throws \RuntimeException
      * @return object|null
      */
-    protected function getEntity($originEntity, $criteria)
+    protected function getEntity($originEntity, $identifier)
     {
         $className = ClassUtils::getClass($originEntity);
 
-        return $this->databaseHelper->findOneBy($className, $criteria);
+        return $this->databaseHelper->find($className, $identifier);
     }
 
     /**
@@ -191,5 +179,27 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
         }
 
         return !empty($primaryEntities) ? current($primaryEntities) : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function findEntityByIdentityValues($entityName, array $identityValues)
+    {
+        // contact last name and first name must be in this order to support compound index
+        if ($entityName == 'OroCRM\Bundle\ContactBundle\Entity\Contact') {
+            if (array_key_exists('firstName', $identityValues) && array_key_exists('lastName', $identityValues)) {
+                $firstName = $identityValues['firstName'];
+                $lastName = $identityValues['lastName'];
+                unset($identityValues['firstName']);
+                unset($identityValues['lastName']);
+                $identityValues = array_merge(
+                    array('lastName' => $lastName, 'firstName' => $firstName),
+                    $identityValues
+                );
+            }
+        }
+
+        return parent::findEntityByIdentityValues($entityName, $identityValues);
     }
 }
