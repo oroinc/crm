@@ -35,7 +35,3 @@ OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
             name:                   comment
             target_type:            text
             target_fields:          [comment]
-        -
-            name:                   preferredContactMethod
-            target_type:            text
-            target_fields:          [preferredContactMethod]
