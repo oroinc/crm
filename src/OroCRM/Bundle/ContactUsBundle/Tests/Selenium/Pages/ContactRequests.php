@@ -38,12 +38,8 @@ class ContactRequests extends AbstractPageFilteredGrid
      */
     public function open($entityData = array())
     {
-        $form = $this->getEntity($entityData, 4);
-        $form->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
+        $page = parent::open($entityData);
 
-        return new ContactRequest($this->test);
+        return new ContactRequest($page->test);
     }
 }
