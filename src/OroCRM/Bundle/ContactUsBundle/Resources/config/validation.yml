@@ -16,8 +16,6 @@ OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
             - NotBlank: ~
         dataChannel:
             - NotBlank: ~
-        organization:
-            - NotBlank: ~
     constraints:
         - Callback:
             methods:
