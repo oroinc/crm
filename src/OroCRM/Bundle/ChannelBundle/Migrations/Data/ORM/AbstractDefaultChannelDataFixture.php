@@ -63,8 +63,7 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
     /**
      * @param Channel $channel
      * @param string  $entity
-     *
-     * @throws \Exception
+     * @param array   $additionalParameters
      */
     protected function fillChannelToEntity(Channel $channel, $entity, $additionalParameters = [])
     {
