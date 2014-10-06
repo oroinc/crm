@@ -91,20 +91,4 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         $qb->getQuery()
             ->execute();
     }
-
-    /**
-     * Do persist into EntityManager
-     *
-     * @param array $items
-     */
-    private function write(array $items)
-    {
-        foreach ($items as $item) {
-            $this->em->persist($item);
-        }
-        $this->em->flush();
-        foreach ($items as $item) {
-            $this->em->detach($item);
-        }
-    }
 }
