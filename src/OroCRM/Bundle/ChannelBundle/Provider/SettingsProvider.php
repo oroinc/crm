@@ -153,12 +153,12 @@ class SettingsProvider
 
         uasort(
             $settings,
-            function ($a, $b) {
-                if ($a['priority'] == $b['priority']) {
+            function ($firstArray, $secondArray) {
+                if ($firstArray['priority'] == $secondArray['priority']) {
                     return 0;
                 }
 
-                return ($a['priority'] < $b['priority']) ? -1 : 1;
+                return ($firstArray['priority'] < $secondArray['priority']) ? -1 : 1;
             }
         );
 
