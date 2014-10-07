@@ -47,3 +47,4 @@ orocrm_channel:
                 - OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
             customer_identity: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
             lifetime_value: lifetime
+            priority: -20
