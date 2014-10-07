@@ -1,14 +1,8 @@
-{#
-    Available variables:
-    * entity       - Oro\Bundle\EmailBundle\Model\Email
-    * form         - Oro\Bundle\EmailBundle\Form\type\EmailType
-    * saved        - bool
-#}
 {% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 
 {% block page_container %}
-<div class="widget-content email-form">
+<div class="widget-content">
     {% if not form.vars.valid and form.vars.errors|length %}
         <div class="alert alert-error">
             <div class="message">
@@ -19,10 +13,12 @@
     <div class="form-container">
         <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_activity_create') }}" method="post">
             <fieldset class="form-horizontal">
+                {% if not form.owner %}
+                    {{ form_row(form.owner) }}
+                {% endif %}
                 {{ form_row(form.subject) }}
                 {{ form_row(form.notes) }}
                 {{ form_row(form.callDateTime) }}
-                {{ form_row(form.contactPhoneNumber) }}
                 {{ form_row(form.phoneNumber) }}
                 {{ form_row(form.direction) }}
                 {{ form_row(form.duration) }}

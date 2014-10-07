@@ -18,7 +18,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
 class CallController extends Controller
 {
     /**
-     * This action is used to render the list of emails associated with the given entity
+     * This action is used to render the list of calls associated with the given entity
      * on the view page of this entity
      *
      * @Route("/activity/view/{entityClass}/{entityId}", name="orocrm_call_activity_view")
@@ -50,6 +50,9 @@ class CallController extends Controller
         /** @var object $activityOwner */
         if ($entityClass && $entityId) {
             $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
+            if ($entity && method_exists($entity, 'getOwner')) {
+                $call->setOwner($entity->getOwner());
+            }
         } else {
             $entity = null;
         }
