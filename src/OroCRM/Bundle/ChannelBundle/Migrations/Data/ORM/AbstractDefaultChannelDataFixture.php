@@ -63,10 +63,9 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
     /**
      * @param Channel $channel
      * @param string  $entity
-     *
-     * @throws \Exception
+     * @param array   $additionalParameters
      */
-    protected function fillChannelToEntity(Channel $channel, $entity)
+    protected function fillChannelToEntity(Channel $channel, $entity, $additionalParameters = [])
     {
         $interfaces = class_implements($entity) ?: [];
         if (!in_array('OroCRM\\Bundle\\ChannelBundle\\Model\\ChannelAwareInterface', $interfaces)) {
@@ -74,56 +73,22 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         }
 
         /** @var QueryBuilder $qb */
-        $qb = $this->em->getRepository($entity)
-            ->createQueryBuilder('e');
-
-        $iterator   = new BufferedQueryResultIterator($qb);
-        $writeCount = 0;
-        $toWrite    = [];
-        try {
-            $this->em->beginTransaction();
-            /** @var ChannelAwareInterface $data */
-            foreach ($iterator as $data) {
-                $writeCount++;
-
-                if (!$data->getDataChannel()) {
-                    $channelReference = $this->em->getReference(ClassUtils::getClass($channel), $channel->getId());
-                    $data->setDataChannel($channelReference);
-                    $toWrite[] = $data;
-                }
-
-                if (0 === $writeCount % static::BATCH_SIZE) {
-                    $this->write($toWrite);
-
-                    $toWrite = [];
-                }
+        $qb = $this->em->createQueryBuilder()
+            ->update($entity, 'e')
+            ->set('e.dataChannel', $channel->getId())
+            ->where('e.dataChannel IS NULL');
+        if (!empty($additionalParameters)) {
+            foreach ($additionalParameters as $parameterName => $value) {
+                $qb->andWhere(
+                    sprintf(
+                        'e.%s = :%s',
+                        $parameterName,
+                        $parameterName
+                    )
+                )->setParameter($parameterName, $value);
             }
-
-            if (count($toWrite) > 0) {
-                $this->write($toWrite);
-            }
-
-            $this->em->commit();
-        } catch (\Exception $exception) {
-            $this->em->rollback();
-
-            throw $exception;
         }
-    }
-
-    /**
-     * Do persist into EntityManager
-     *
-     * @param array $items
-     */
-    private function write(array $items)
-    {
-        foreach ($items as $item) {
-            $this->em->persist($item);
-        }
-        $this->em->flush();
-        foreach ($items as $item) {
-            $this->em->detach($item);
-        }
+        $qb->getQuery()
+            ->execute();
     }
 }
