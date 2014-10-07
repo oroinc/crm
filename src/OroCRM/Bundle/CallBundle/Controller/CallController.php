@@ -115,6 +115,19 @@ class CallController extends Controller
     }
 
     /**
+     * View call
+     *
+     * @Route("/view/{id}", name="orocrm_call_view")
+     * @Template
+     */
+    public function viewAction(Call $entity)
+    {
+        return [
+            'entity'        => $entity,
+        ];
+    }
+
+    /**
      * @Route("/widget", name="orocrm_call_widget_calls")
      * @Template
      * @AclAncestor("orocrm_call_view")

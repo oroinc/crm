@@ -99,6 +99,21 @@ class CallControllerTest extends WebTestCase
     /**
      * @depends testUpdate
      */
+    public function testView($id)
+    {
+        $crawler = $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_call_view', array('id' => $id))
+        );
+
+        $result = $this->client->getResponse();
+        $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains("Test Call", $crawler->html());
+    }
+
+    /**
+     * @depends testUpdate
+     */
     public function testDelete($id)
     {
         $this->client->request(
