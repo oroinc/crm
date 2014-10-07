@@ -142,6 +142,7 @@ class SettingsProvider
 
     /**
      * Returns channel types that could be used in channel type selector
+     * sorted by priority
      *
      * @return array
      */
@@ -149,6 +150,17 @@ class SettingsProvider
     {
         $settings     = $this->getSettings(self::CHANNEL_TYPE_PATH);
         $channelTypes = [];
+
+        uasort(
+            $settings,
+            function ($a, $b) {
+                if ($a['priority'] == $b['priority']) {
+                    return 0;
+                }
+
+                return ($a['priority'] < $b['priority']) ? -1 : 1;
+            }
+        );
 
         foreach (array_keys($settings) as $channelTypeName) {
             $channelTypes[$channelTypeName] = $settings[$channelTypeName]['label'];
