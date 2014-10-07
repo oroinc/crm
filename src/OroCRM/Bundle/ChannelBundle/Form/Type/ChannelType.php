@@ -58,7 +58,6 @@ class ChannelType extends AbstractType
                 'required' => true,
                 'label'    => 'orocrm.channel.channel_type.label',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
-                //'data'     => $this->settingsProvider->getDefaultChannelType(),
             ]
         );
         $builder->add(
