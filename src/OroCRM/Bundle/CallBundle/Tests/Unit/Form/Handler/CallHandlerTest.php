@@ -27,6 +27,11 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     */
+    protected $entityRoutingHelper;
+
+    /**
      * @var CallHandler
      */
     protected $handler;
@@ -45,9 +50,21 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
+        $callActivityManager = $this->getMockBuilder('OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->entityRoutingHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->entity  = new Call();
-        $this->handler = new CallHandler($this->form, $this->request, $this->manager);
+        $this->handler = new CallHandler(
+            $this->form,
+            $this->request,
+            $this->manager,
+            $callActivityManager,
+            $this->entityRoutingHelper
+        );
     }
 
     public function testProcessUnsupportedRequest()
@@ -104,6 +121,10 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
+
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->will($this->returnValue(null));
 
         $this->manager->expects($this->once())
             ->method('persist')
