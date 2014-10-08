@@ -1,11 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\Model;
+namespace OroCRM\Bundle\CallBundle\Model;
 
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
 
-class ExtendTask
+class ExtendCall
 {
+    use ExtendActivity;
+
     /**
      * Constructor
      *

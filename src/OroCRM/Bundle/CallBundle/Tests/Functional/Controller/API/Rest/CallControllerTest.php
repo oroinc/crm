@@ -8,7 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class RestCallsTest extends WebTestCase
+class CallControllerTest extends WebTestCase
 {
     protected function setUp()
     {
