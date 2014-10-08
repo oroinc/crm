@@ -26,7 +26,6 @@ class ChannelTest extends Selenium2TestCase
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setName($name)
-            ->setStatus('Active')
             ->setType('Custom')
             ->setStatus('Active')
             ->addEntity('Opportunity')
