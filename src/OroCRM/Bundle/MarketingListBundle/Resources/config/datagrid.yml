@@ -17,6 +17,7 @@ datagrid:
                 join:
                     inner:
                         - { join: ml.type, alias: type }
+                    left:
                         - { join: ml.segment, alias: segment }
         columns:
             name:
