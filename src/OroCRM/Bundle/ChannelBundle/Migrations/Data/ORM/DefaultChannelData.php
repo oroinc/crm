@@ -44,7 +44,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
             $this->saveChannel($channel);
 
             foreach ($channel->getEntities() as $entity) {
-                $this->fillChannelToEntity($channel, $entity);
+                $this->fillChannelToEntity($channel, $entity, ['channel' => $integration]);
             }
         }
     }

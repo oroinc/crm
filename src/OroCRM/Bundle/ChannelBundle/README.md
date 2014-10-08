@@ -79,6 +79,7 @@ also bring the `integration` field to configure the integration. It should be de
             integration_type: some_type
             customer_identity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
             lifetime_value: field
+            priority: -10
 ```
 
 | Option              | Description                                                                                                         | Required |
@@ -88,6 +89,7 @@ also bring the `integration` field to configure the integration. It should be de
 | `integration_type`  | Determines which integration type should be created in scope of particular channel that is based on the current ype | no       |
 | `customer_identity` | Determines entity that will be used as customer identifier for channels that are based of the current ype           | no       |
 | `lifetime_value`    | Determines which fields will be used from `customer_identity` for calculating lifetime sales value                  | no       |
+| `priority`          | Uses to sort channel types by priority. Default value is 0                                                          | no       |
 
 
 By default, if `customer_identity` option is not set `OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity` will be used as *customer identity* and
