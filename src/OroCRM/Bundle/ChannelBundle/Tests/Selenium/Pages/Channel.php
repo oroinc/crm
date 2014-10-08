@@ -48,7 +48,7 @@ class Channel extends AbstractPageEntity
     public function setType($type)
     {
         $this->test->byXPath("//div[@id='s2id_orocrm_channel_form_channelType']/a")->click();
-        $this->test->byXpath("//li/div[@class='select2-result-label' and contains(text(), {$type})]")->click();
+        $this->test->byXpath("//li/div[@class='select2-result-label' and contains(text(), '{$type}')]")->click();
         $this->waitForAjax();
         return $this;
     }
