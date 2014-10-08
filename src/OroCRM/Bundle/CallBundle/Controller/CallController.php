@@ -43,11 +43,10 @@ class CallController extends Controller
         $call = $this->initEntity();
         /** @var string $entityClass */
         $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName(
-            $this->getRequest()->get('entityClass', null)
+            $this->getRequest()->get('entityClass')
         );
         /** @var integer $entityId */
-        $entityId = $this->getRequest()->get('entityId', null);
-        /** @var object $activityOwner */
+        $entityId = $this->getRequest()->get('entityId');
         if ($entityClass && $entityId) {
             $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
             if ($entity && method_exists($entity, 'getOwner')) {
