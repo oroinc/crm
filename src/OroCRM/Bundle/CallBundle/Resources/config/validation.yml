@@ -13,6 +13,8 @@ OroCRM\Bundle\CallBundle\Entity\Call:
         contactPhoneNumber:
             - Length:
                 max: 255
+        organization:
+            - NotBlank: ~
 
     constraints:
         - Callback:
