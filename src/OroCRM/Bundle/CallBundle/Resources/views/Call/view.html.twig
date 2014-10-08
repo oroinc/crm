@@ -32,9 +32,6 @@
 {% endblock pageHeader %}
 
 {% block stats %}
-    <li>{{ 'orocrm.call.call_date_time.label'|trans }}: {{ breadcrumbs.entity.callDateTime ? breadcrumbs.entity.callDateTime|oro_format_datetime : 'N/A' }}</li>
-    <li>{{ 'orocrm.call.phone_number.label'|trans }}: {{ breadcrumbs.entity.phoneNumber ? breadcrumbs.entity.phoneNumber|oro_format_date : 'N/A' }}</li>
-    <li>{{ 'orocrm.call.duration.label'|trans }}: {{ breadcrumbs.entity.duration ? breadcrumbs.entity.duration|oro_format_duration : 'N/A' }}</li>
 {% endblock stats %}
 
 {% block content_data %}

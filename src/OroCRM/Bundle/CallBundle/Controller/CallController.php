@@ -50,13 +50,11 @@ class CallController extends Controller
         /** @var object $activityOwner */
         if ($entityClass && $entityId) {
             $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
-            if ($entity && method_exists($entity, 'getOwner')) {
-                $call->setOwner($entity->getOwner());
-            }
+            $call->addActivityTarget($entity);
         } else {
             $entity = null;
         }
-        $call->addActivityTarget($entity);
+
         $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
 
         return $this->update($call, $redirect);
