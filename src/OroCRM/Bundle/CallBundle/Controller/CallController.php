@@ -49,13 +49,11 @@ class CallController extends Controller
         $entityId = $this->getRequest()->get('entityId');
         if ($entityClass && $entityId) {
             $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
-            if ($entity && method_exists($entity, 'getOwner')) {
-                $call->setOwner($entity->getOwner());
-            }
+            $call->addActivityTarget($entity);
         } else {
             $entity = null;
         }
-        $call->addActivityTarget($entity);
+
         $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
 
         return $this->update($call, $redirect);
@@ -111,6 +109,19 @@ class CallController extends Controller
         return array(
             'entity_class' => $this->container->getParameter('orocrm_call.call.entity.class')
         );
+    }
+
+    /**
+     * View call
+     *
+     * @Route("/view/{id}", name="orocrm_call_view")
+     * @Template
+     */
+    public function viewAction(Call $entity)
+    {
+        return [
+            'entity'        => $entity,
+        ];
     }
 
     /**

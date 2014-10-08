@@ -32,6 +32,12 @@ orocrm:
             account_name: Account name
             date_time:    Call date
 
+        sections:
+            general: General
+
+        widget:
+            call_information: Call Information
+
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
         #
