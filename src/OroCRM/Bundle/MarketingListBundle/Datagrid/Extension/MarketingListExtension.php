@@ -12,8 +12,12 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
+/**
+ * For segment based marketing lists show not only segment results but also already contacted entities.
+ */
 class MarketingListExtension extends AbstractExtension
 {
     const OPTIONS_MIXIN_PATH = '[options][mixin]';
@@ -44,8 +48,12 @@ class MarketingListExtension extends AbstractExtension
             return false;
         }
 
-        return (bool)$this->marketingListHelper
+        $marketingListId = $this->marketingListHelper
             ->getMarketingListIdByGridName($config->offsetGetByPath('[name]'));
+        $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
+
+        // Accept only segment based marketing lists
+        return $marketingList && $marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL;
     }
 
     /**

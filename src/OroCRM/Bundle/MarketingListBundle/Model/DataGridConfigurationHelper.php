@@ -52,9 +52,9 @@ class DataGridConfigurationHelper
 
         $scopes = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), ['name']);
         foreach ($scopes as $scope) {
-            $path             = sprintf('[%s]', $scope);
+            $path = sprintf('[%s]', $scope);
             $additionalParams = $gridConfiguration->offsetGetByPath($path);
-            $baseParams       = $configuration->offsetGetByPath($path, []);
+            $baseParams = $configuration->offsetGetByPath($path, []);
 
             if (!is_array($additionalParams) || !is_array($baseParams)) {
                 continue;

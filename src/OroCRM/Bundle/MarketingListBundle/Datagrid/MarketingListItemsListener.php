@@ -43,6 +43,8 @@ class MarketingListItemsListener
     }
 
     /**
+     * Apply marketing list grid mixin.
+     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
@@ -75,6 +77,8 @@ class MarketingListItemsListener
     }
 
     /**
+     * Add marketingList instance to parameters.
+     *
      * @param BuildAfter $event
      */
     public function onBuildAfter(BuildAfter $event)
@@ -100,6 +104,8 @@ class MarketingListItemsListener
     }
 
     /**
+     * Accept orocrm_marketing_list_items_grid_* grids only in case when they has mixin to apply.
+     *
      * @param string       $gridName
      * @param ParameterBag $parameters
      *
