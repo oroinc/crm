@@ -20,8 +20,7 @@
         {%- endif -%}
         {{ ui.renderHtmlProperty('orocrm.call.related_contact.label'|trans, contactView) }}
 
-        {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
-        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhone(phoneNumber)) }}
+        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhone(entity.phoneNumber)) }}
 
         {{ ui.renderProperty('orocrm.call.direction.label'|trans, entity.direction ? entity.direction.label : null) }}
 

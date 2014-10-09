@@ -17,12 +17,7 @@ class CallTypeTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $contactPhoneSubscriber =
-            $this->getMockBuilder('OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-        $this->type = new CallType($contactPhoneSubscriber);
+        $this->type = new CallType();
     }
 
     public function testSetDefaultOptions()
@@ -45,8 +40,7 @@ class CallTypeTest extends FormIntegrationTestCase
             'relatedAccount' => 'orocrm_account_select',
             'subject' => 'text',
             'relatedContact' => 'orocrm_contact_select',
-            'contactPhoneNumber' => 'entity',
-            'phoneNumber' => 'text',
+            'phoneNumber' => 'orocrm_call_phone',
             'notes' => 'textarea',
             'callDateTime' => 'oro_datetime',
             'callStatus' => 'entity',
@@ -58,7 +52,7 @@ class CallTypeTest extends FormIntegrationTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $counter = 1;
+        $counter = 0;
         foreach ($expectedFields as $fieldName => $formType) {
             $builder->expects($this->at($counter))
                 ->method('add')
@@ -67,6 +61,5 @@ class CallTypeTest extends FormIntegrationTestCase
             $counter++;
         }
         $this->type->buildForm($builder, array());
-
     }
 }

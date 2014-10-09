@@ -5,7 +5,6 @@
 'Log': 'Log'
 'Call logged successfully': 'Call saved'
 'Call deleted successfully': 'Call deleted successfully'
-'Phone number is required field': 'Phone number is required field'
 
 orocrm:
     dashboard:
@@ -20,8 +19,8 @@ orocrm:
             call_list.description: List of calls
             shortcut_call_list.label: Show calls list
             shortcut_call_list.description: List of calls
-        phone.required.message: Phone number is required field
-        form.call.other: Other...
+        form:
+            choose_or_enter_phone: Choose or enter a phone number ...
 
         controller:
             call.saved.message: Call saved
@@ -56,5 +55,4 @@ orocrm:
         direction.label:       Direction
         call_status.label:     Call status
         call_date_time.label:  Call date & time
-        contact_phone_number.label: Phone number
         organization.label:    Organization

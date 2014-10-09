@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
-use Symfony\Component\Validator\ExecutionContext;
-
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -13,7 +11,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
@@ -101,14 +98,6 @@ class Call extends ExtendCall
     protected $phoneNumber;
 
     /**
-     * @var ContactPhone
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
-     * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     */
-    protected $contactPhoneNumber;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
@@ -155,6 +144,7 @@ class Call extends ExtendCall
 
     public function __construct()
     {
+        parent::__construct();
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
@@ -377,29 +367,6 @@ class Call extends ExtendCall
     }
 
     /**
-     * Set contactPhoneNumber
-     *
-     * @param ContactPhone $contactPhoneNumber
-     * @return Call
-     */
-    public function setContactPhoneNumber(ContactPhone $contactPhoneNumber = null)
-    {
-        $this->contactPhoneNumber = $contactPhoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get contactPhoneNumber
-     *
-     * @return ContactPhone
-     */
-    public function getContactPhoneNumber()
-    {
-        return $this->contactPhoneNumber;
-    }
-
-    /**
      * Set callStatus
      *
      * @param CallStatus $callStatus
@@ -420,17 +387,6 @@ class Call extends ExtendCall
     public function getCallStatus()
     {
         return $this->callStatus;
-    }
-
-    public function isPhoneValid(ExecutionContext $context)
-    {
-        if (!$this->getPhoneNumber() && !$this->getContactPhoneNumber()) {
-            $propertyPath = $context->getPropertyPath() . '.contactPhoneNumber';
-            $context->addViolationAt(
-                $propertyPath,
-                'orocrm.call.phone.required.message'
-            );
-        }
     }
 
     /**

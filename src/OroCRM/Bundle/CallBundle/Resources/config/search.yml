@@ -1,7 +1,7 @@
 OroCRM\Bundle\CallBundle\Entity\Call:
     alias: orocrm_call
     label: orocrm.call.entity_plural_label
-    title_fields: [subject, phoneNumber, contactPhoneNumber]
+    title_fields: [subject, phoneNumber]
     route:
         name: orocrm_call_update
         parameters:
@@ -52,14 +52,6 @@ OroCRM\Bundle\CallBundle\Entity\Call:
                     name:                   name
                     target_type:            text
                     target_fields:          [accountName]
-        -
-            name: contactPhoneNumber
-            relation_type: many-to-one
-            relation_fields:
-                -
-                    name:                   phone
-                    target_type:            text
-                    target_fields:          [phone]
         -
             name: direction
             relation_type: many-to-one

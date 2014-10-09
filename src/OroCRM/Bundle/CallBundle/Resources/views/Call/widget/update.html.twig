@@ -33,8 +33,7 @@
                     <div class="span6">
                         {{ form_row(form.relatedAccount) }}
                         {{ form_row(form.relatedContact) }}
-                        {{ form_row(form.contactPhoneNumber) }}
-                        {{ form_widget(form.phoneNumber) }}
+                        {{ form_row(form.phoneNumber) }}
                         {{ form_row(form.direction) }}
                         {{ form_row(form.duration) }}
                         <div class="hide">
@@ -50,18 +49,5 @@
             </form>
             {{ oro_form_js_validation(form) }}
         </div>
-
-        <script type="text/javascript">
-            require(['jquery', 'orocrm/contactphone/view'],
-            function($, ContactPhoneView){
-                $(function() {
-                    new ContactPhoneView({
-                        contact: $('#{{ form.relatedContact.vars.id }}'),
-                        phoneSelector: $('#{{ form.contactPhoneNumber.vars.id }}'),
-                        phonePlain: $('#{{ form.phoneNumber.vars.id }}')
-                    });
-                });
-            });
-        </script>
     {% endif %}
 </div>
