@@ -89,14 +89,12 @@ datagrid:
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
-                rowAction:     true
             delete:
                 type:          delete
                 acl_resource:  orocrm_call_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
-                rowAction:     true
         options:
             entityHint: calls
             export: true
