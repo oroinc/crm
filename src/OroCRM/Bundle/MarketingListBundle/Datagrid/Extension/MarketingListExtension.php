@@ -12,7 +12,6 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 /**
@@ -53,7 +52,7 @@ class MarketingListExtension extends AbstractExtension
         $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
 
         // Accept only segment based marketing lists
-        return $marketingList && $marketingList->getType()->getName() !== MarketingListType::TYPE_MANUAL;
+        return $marketingList && $marketingList->isManual();
     }
 
     /**

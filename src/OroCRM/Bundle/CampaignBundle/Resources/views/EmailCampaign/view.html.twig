@@ -58,7 +58,7 @@
     {%- set listData -%}
         {% if entity.marketingList is not empty %}
             {% set mixinName = constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MIXIN_NAME') %}
-            {% if entity.marketingList.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_MANUAL') %}
+            {% if entity.marketingList.manual %}
                 {% set mixinName = constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME') %}
             {% endif %}
             {{ dataGrid.renderGrid(
