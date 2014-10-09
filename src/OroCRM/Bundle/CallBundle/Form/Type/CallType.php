@@ -6,30 +6,14 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\CallBundle\Form\EventListener\ContactPhoneSubscriber;
-
 class CallType extends AbstractType
 {
-    private $contactPhoneSubscriber;
-
-    /**
-     * Constructor.
-     *
-     * @param ContactPhoneSubscriber $contactPhoneSubscriber
-     */
-    public function __construct(ContactPhoneSubscriber $contactPhoneSubscriber)
-    {
-        $this->contactPhoneSubscriber = $contactPhoneSubscriber;
-    }
-
     /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventSubscriber($this->contactPhoneSubscriber);
-
         $builder
             ->add(
                 'relatedAccount',
@@ -43,22 +27,9 @@ class CallType extends AbstractType
                 array('required' => false, 'label' => 'orocrm.call.related_contact.label')
             )
             ->add(
-                'contactPhoneNumber',
-                'entity',
-                array(
-                    'label'    => 'orocrm.call.contact_phone_number.label',
-                    'class'    => 'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
-                    'required' => false
-                )
-            )
-            ->add(
                 'phoneNumber',
-                'text',
-                array(
-                    'label'    => 'orocrm.call.phone_number.label',
-                    'required' => false,
-                    'attr'     => array('class' => 'hide')
-                )
+                'orocrm_call_phone',
+                array('required' => true, 'label' => 'orocrm.call.phone_number.label')
             )
             ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
             ->add(
@@ -98,10 +69,7 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
-                'error_mapping' => array(
-                    '.' => 'contactPhoneNumber',
-                ),
+                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call'
             )
         );
     }

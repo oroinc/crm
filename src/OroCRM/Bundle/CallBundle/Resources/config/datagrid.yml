@@ -9,14 +9,13 @@ datagrid:
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
                 join:
                     left:
                         - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
                         - { join: call.relatedAccount, alias: account }
         columns:
             contactName:
@@ -103,14 +102,13 @@ datagrid:
                     - account.id as accountId
                     - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
                 join:
                     left:
                         - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
                         - { join: call.relatedAccount, alias: account }
         columns:
             dateTime:
@@ -200,7 +198,7 @@ datagrid:
                     - contact.id as contactId
                     - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                     - directionType.name as callDirection
                 from:
@@ -208,7 +206,6 @@ datagrid:
                 join:
                     left:
                         - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
                         - { join: call.relatedAccount, alias: account }
                         - { join: call.direction, alias: directionType }
                     inner:

@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
-use Symfony\Component\Validator\ExecutionContext;
-
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -13,7 +11,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
@@ -99,14 +96,6 @@ class Call extends ExtendCall
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
      */
     protected $phoneNumber;
-
-    /**
-     * @var ContactPhone
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
-     * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     */
-    protected $contactPhoneNumber;
 
     /**
      * @var string
@@ -378,29 +367,6 @@ class Call extends ExtendCall
     }
 
     /**
-     * Set contactPhoneNumber
-     *
-     * @param ContactPhone $contactPhoneNumber
-     * @return Call
-     */
-    public function setContactPhoneNumber(ContactPhone $contactPhoneNumber = null)
-    {
-        $this->contactPhoneNumber = $contactPhoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get contactPhoneNumber
-     *
-     * @return ContactPhone
-     */
-    public function getContactPhoneNumber()
-    {
-        return $this->contactPhoneNumber;
-    }
-
-    /**
      * Set callStatus
      *
      * @param CallStatus $callStatus
@@ -421,17 +387,6 @@ class Call extends ExtendCall
     public function getCallStatus()
     {
         return $this->callStatus;
-    }
-
-    public function isPhoneValid(ExecutionContext $context)
-    {
-        if (!$this->getPhoneNumber() && !$this->getContactPhoneNumber()) {
-            $propertyPath = $context->getPropertyPath() . '.contactPhoneNumber';
-            $context->addViolationAt(
-                $propertyPath,
-                'orocrm.call.phone.required.message'
-            );
-        }
     }
 
     /**
