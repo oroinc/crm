@@ -3,35 +3,48 @@
 
 {% block page_container %}
 <div class="widget-content">
-    {% if not form.vars.valid and form.vars.errors|length %}
-        <div class="alert alert-error">
-            <div class="message">
-                {{ form_errors(form) }}
+    {% if saved %}
+        <script type="text/javascript">
+            require(['underscore', 'orotranslation/js/translator', 'oroui/js/widget-manager', 'oroui/js/messenger', 'oroui/js/mediator'],
+                function(_, __, widgetManager, messenger, mediator) {
+                    widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                        mediator.trigger('widget_success:' + widget.getAlias());
+                        mediator.trigger('widget_success:' + widget.getWid());
+                        widget.remove(true);
+                    });
+                });
+        </script>
+    {% else %}
+        {% if not form.vars.valid and form.vars.errors|length %}
+            <div class="alert alert-error">
+                <div class="message">
+                    {{ form_errors(form) }}
+                </div>
             </div>
+        {% endif %}
+        <div class="form-container">
+            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_activity_create', {'entityClass': app.request.get('entityClass'), 'entityId': app.request.get('entityId')}) }}" method="post">
+                <fieldset class="form-horizontal">
+                    {% if form.owner is defined %}
+                        {{ form_row(form.owner) }}
+                    {% endif %}
+                    {{ form_row(form.subject) }}
+                    {{ form_row(form.notes) }}
+                    {{ form_row(form.callDateTime) }}
+                    {{ form_row(form.relatedAccount) }}
+                    {{ form_row(form.relatedContact) }}
+                    {{ form_row(form.phoneNumber) }}
+                    {{ form_row(form.direction) }}
+                    {{ form_row(form.duration) }}
+                    {{ form_rest(form) }}
+                    <div class="widget-actions form-actions">
+                        <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                        <button class="btn btn-primary" type="submit">{{ 'Log'|trans }}</button>
+                    </div>
+                </fieldset>
+            </form>
+            {{ oro_form_js_validation(form) }}
         </div>
     {% endif %}
-    <div class="form-container">
-        <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_activity_create') }}" method="post">
-            <fieldset class="form-horizontal">
-                {% if form.owner is defined %}
-                    {{ form_row(form.owner) }}
-                {% endif %}
-                {{ form_row(form.subject) }}
-                {{ form_row(form.notes) }}
-                {{ form_row(form.callDateTime) }}
-                {{ form_row(form.relatedAccount) }}
-                {{ form_row(form.relatedContact) }}
-                {{ form_row(form.phoneNumber) }}
-                {{ form_row(form.direction) }}
-                {{ form_row(form.duration) }}
-                {{ form_rest(form) }}
-                <div class="widget-actions form-actions">
-                    <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
-                    <button class="btn btn-primary" type="submit">{{ 'Log'|trans }}</button>
-                </div>
-            </fieldset>
-        </form>
-        {{ oro_form_js_validation(form) }}
-    </div>
 </div>
 {% endblock %}

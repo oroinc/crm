@@ -41,22 +41,8 @@ class CallController extends Controller
     {
         /** @var Call $call */
         $call = $this->initEntity();
-        /** @var string $entityClass */
-        $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName(
-            $this->getRequest()->get('entityClass')
-        );
-        /** @var integer $entityId */
-        $entityId = $this->getRequest()->get('entityId');
-        if ($entityClass && $entityId) {
-            $entity = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
-            $call->addActivityTarget($entity);
-        } else {
-            $entity = null;
-        }
 
-        $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
-
-        return $this->update($call, $redirect);
+        return $this->update($call, false);
     }
 
     /**

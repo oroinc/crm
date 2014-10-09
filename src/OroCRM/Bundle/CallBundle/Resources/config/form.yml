@@ -46,6 +46,8 @@ services:
             - @orocrm_call.call.form
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_call.call.activity.manager
+            - @oro_entity.routing_helper
 
     orocrm_call.call.form.handler.api:
         class: %orocrm_call.call.form.handler.class%
@@ -54,6 +56,8 @@ services:
             - @orocrm_call.call.form.api
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_call.call.activity.manager
+            - @oro_entity.routing_helper
 
     orocrm_call.call.manager.api:
         class: %orocrm_call.call.manager.api.class%
