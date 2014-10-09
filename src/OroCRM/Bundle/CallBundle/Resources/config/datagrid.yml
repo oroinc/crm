@@ -63,6 +63,10 @@ datagrid:
                 dateTime: DESC
         properties:
             id: ~
+            view_link:
+                type:       url
+                route:      orocrm_call_view
+                params:     [ id ]
             update_link:
                 type:       url
                 route:      orocrm_call_update
@@ -72,6 +76,13 @@ datagrid:
                 route:      oro_api_delete_call
                 params:     [ id ]
         actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_call_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_call_create
