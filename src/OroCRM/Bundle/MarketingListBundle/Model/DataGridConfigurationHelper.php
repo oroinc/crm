@@ -44,10 +44,13 @@ class DataGridConfigurationHelper
         $gridConfiguration = $this->configurationProvider->getConfiguration($gridName);
         $basicAlias = $configuration->offsetGetByPath('[source][query][from][0][alias]');
         foreach ($this->pathsToFix as $path) {
-            $gridConfiguration->offsetSetByPath(
-                $path,
-                $this->fixMixinAlias($basicAlias, $gridConfiguration->offsetGetByPath($path))
-            );
+            $forFix = $gridConfiguration->offsetGetByPath($path);
+            if ($forFix) {
+                $gridConfiguration->offsetSetByPath(
+                    $path,
+                    $this->fixMixinAlias($basicAlias, $forFix)
+                );
+            }
         }
 
         $scopes = array_diff(array_keys($gridConfiguration->getIterator()->getArrayCopy()), ['name']);
@@ -80,7 +83,7 @@ class DataGridConfigurationHelper
             foreach ($configuration as $key => $value) {
                 $configuration[$key] = $this->fixMixinAlias($alias, $configuration[$key]);
             }
-        } else {
+        } elseif (is_string($configuration)) {
             $configuration = str_replace(self::ROOT_ALIAS_PLACEHOLDER, $alias, $configuration);
         }
 
