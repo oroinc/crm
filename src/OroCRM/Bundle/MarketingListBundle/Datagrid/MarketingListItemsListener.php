@@ -7,8 +7,9 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
+use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
 {
@@ -20,9 +21,9 @@ class MarketingListItemsListener
     protected $dataGridConfigurationHelper;
 
     /**
-     * @var MarketingListSegmentHelper
+     * @var MarketingListHelper
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     /**
      * @var array
@@ -31,14 +32,14 @@ class MarketingListItemsListener
 
     /**
      * @param DataGridConfigurationHelper $dataGridConfigurationHelper
-     * @param MarketingListSegmentHelper  $segmentHelper
+     * @param MarketingListHelper $marketingListHelper
      */
     public function __construct(
         DataGridConfigurationHelper $dataGridConfigurationHelper,
-        MarketingListSegmentHelper $segmentHelper
+        MarketingListHelper $marketingListHelper
     ) {
         $this->dataGridConfigurationHelper = $dataGridConfigurationHelper;
-        $this->segmentHelper               = $segmentHelper;
+        $this->marketingListHelper = $marketingListHelper;
     }
 
     /**
@@ -88,8 +89,8 @@ class MarketingListItemsListener
         $dataSource = $dataGrid->getDatasource();
 
         if ($dataSource instanceof OrmDatasource) {
-            $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
-            $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
+            $marketingListId = $this->marketingListHelper->getMarketingListIdByGridName($dataGridName);
+            $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
 
             $dataSource
                 ->getQueryBuilder()
@@ -110,8 +111,6 @@ class MarketingListItemsListener
             return false;
         }
 
-        $segmentId = $this->segmentHelper->getSegmentIdByGridName($gridName);
-
-        return $segmentId && (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
+        return strpos($gridName, ConfigurationProvider::GRID_PREFIX) === 0;
     }
 }
