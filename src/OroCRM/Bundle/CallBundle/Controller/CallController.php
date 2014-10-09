@@ -41,9 +41,8 @@ class CallController extends Controller
     {
         /** @var Call $call */
         $call = $this->initEntity();
-        $redirect = ($this->getRequest()->get('redirect')) ? true : false;
 
-        return $this->update($call, $redirect);
+        return $this->update($call, false);
     }
 
     /**
