@@ -22,6 +22,26 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
     /** @var StoreStrategy */
     protected $storeStrategy;
 
+    /** @var array */
+    protected static $fieldsForManualUpdate = [
+        'id',
+        'store',
+        'status',
+        'cartItems',
+        'customer',
+        'relatedCalls',
+        'relatedEmails',
+        'shippingAddress',
+        'billingAddress',
+        'workflowItem',
+        'workflowStep',
+        'opportunity',
+        'owner',
+        'organization',
+        'channel',
+        'dataChannel',
+    ];
+
     /**
      * @param StoreStrategy $storeStrategy
      */
@@ -44,24 +64,7 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
             $newEntity
         );
         if ($existingEntity) {
-            $this->strategyHelper->importEntity(
-                $existingEntity,
-                $newEntity,
-                [
-                    'id',
-                    'store',
-                    'status',
-                    'cartItems',
-                    'customer',
-                    'relatedCalls',
-                    'relatedEmails',
-                    'shippingAddress',
-                    'billingAddress',
-                    'workflowItem',
-                    'workflowStep',
-                    'owner'
-                ]
-            );
+            $this->strategyHelper->importEntity($existingEntity, $newEntity, self::$fieldsForManualUpdate);
             $this->removeErrorMessage($existingEntity);
         } else {
             $hasContactInfo = ($newEntity->getBillingAddress() && $newEntity->getBillingAddress()->getPhone())
