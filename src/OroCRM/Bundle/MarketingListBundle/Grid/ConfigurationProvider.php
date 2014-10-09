@@ -11,7 +11,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
-    const GRID_PREFIX = 'orocrm_marketing_list_grid_';
+    const GRID_PREFIX = 'orocrm_marketing_list_items_grid_';
 
     /**
      * @var ConfigurationProviderInterface
@@ -75,7 +75,8 @@ class ConfigurationProvider implements ConfigurationProviderInterface
             if ($marketingList->getType()->getName() === MarketingListType::TYPE_MANUAL) {
                 $concreteGridName = $this->getEntityGridName($marketingList->getEntity());
             } else {
-                $concreteGridName = Segment::GRID_PREFIX . $marketingList->getSegment()->getId();
+                $postfix = str_replace(self::GRID_PREFIX . $marketingList->getId(), '', $gridName);
+                $concreteGridName = Segment::GRID_PREFIX . $marketingList->getSegment()->getId() . $postfix;
             }
 
             $concreteGridConfiguration =  $this->chainConfigurationProvider->getConfiguration($concreteGridName);

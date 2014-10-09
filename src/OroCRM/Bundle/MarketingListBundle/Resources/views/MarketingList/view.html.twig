@@ -100,11 +100,17 @@
 
     {% set itemsGridName = gridName ~ '_items' %}
     {% set removedItemsGridName = gridName ~ '_removed_items' %}
+    {% set itemsMixin = 'orocrm-marketing-list-items-mixin' %}
+    {% set removedItemsMixin = 'orocrm-marketing-list-removed-items-mixin' %}
+    {% if entity.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_MANUAL') %}
+        {% set itemsMixin = 'orocrm-marketing-list-manual-items-mixin' %}
+        {% set removedItemsMixin = 'orocrm-marketing-list-manual-removed-items-mixin' %}
+    {% endif %}
     {%- set listData -%}
-        {{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': 'orocrm-marketing-list-items-mixin'}) }}
+        {{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': itemsMixin}) }}
     {%- endset -%}
     {%- set removedItemsGrid -%}
-        {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': 'orocrm-marketing-list-removed-items-mixin'}) }}
+        {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': removedItemsMixin}) }}
     {%- endset -%}
 
     {% set dataBlocks = [
