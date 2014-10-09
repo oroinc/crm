@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Controller;
 
-use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -11,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 
 /**
  * @Route("/marketing-list")
@@ -50,7 +50,7 @@ class MarketingListController extends Controller
         return [
             'entity'   => $entity,
             'config'   => $entityConfig,
-            'gridName' => Segment::GRID_PREFIX . $entity->getSegment()->getId()
+            'gridName' => ConfigurationProvider::GRID_PREFIX . $entity->getId()
         ];
     }
 

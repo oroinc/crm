@@ -111,7 +111,7 @@ datagrid:
         source:
             query:
                 select:
-                    - t1.id
+                    - __root_entity__.id
                     - mli.contactedTimes
                     - mli.lastContactedAt
                 join:
@@ -120,12 +120,12 @@ datagrid:
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
-                            condition: 'mlr.entityId = t1.id AND mlr.marketingList = :marketingListEntity'
+                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
                         -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
-                            condition: 'mli.entityId = t1.id AND mli.marketingList = :marketingListEntity'
+                            condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
         columns:
             contactedTimes:
                 label: orocrm.marketinglist.datagrid.contactedTimes
@@ -159,7 +159,7 @@ datagrid:
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
-                            condition: 'mlu.entityId = t1.id AND mlu.marketingList = :marketingListEntity'
+                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
         columns:
             subscribed:
                 label: orocrm.marketinglist.datagrid.subscribed
@@ -252,17 +252,17 @@ datagrid:
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
                             alias: 'mlu'
                             conditionType: 'WITH'
-                            condition: 'mlu.entityId = t1.id AND mlu.marketingList = :marketingListEntity'
+                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
                         -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
                             alias: 'mlr'
                             conditionType: 'WITH'
-                            condition: 'mlr.entityId = t1.id AND mlr.marketingList = :marketingListEntity'
+                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
                         -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
-                            condition: 'mli.entityId = t1.id AND mli.marketingList = :marketingListEntity'
+                            condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
                 where:
                     and:
                         - mlr.id IS NULL

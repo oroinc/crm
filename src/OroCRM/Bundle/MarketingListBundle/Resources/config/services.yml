@@ -22,9 +22,13 @@ parameters:
     orocrm_marketing_list.model.marketing_list_item_connector.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector
     orocrm_marketing_list.datagrid.extension.class: OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension
     orocrm_marketing_list.model.segment_helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper
+    orocrm_marketing_list.model.helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper
 
     orocrm_marketing_list.twig.extension.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension
     orocrm_marketing_list.provider.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider
+
+    orocrm_marketing_list.datagrid.configuration.provider.class: OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider
+
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -94,7 +98,7 @@ services:
         class: %orocrm_marketing_list.datagrid.listener.items.class%
         arguments:
             - @orocrm_marketing_list.datagrid_configuration_helper
-            - @orocrm_marketing_list.model.segment_helper
+            - @orocrm_marketing_list.model.helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }
@@ -127,10 +131,15 @@ services:
         arguments:
             - @doctrine
 
+    orocrm_marketing_list.model.helper:
+        class: %orocrm_marketing_list.model.helper.class%
+        arguments:
+            - @doctrine
+
     orocrm_marketing_list.datagrid.extension:
         class: %orocrm_marketing_list.datagrid.extension.class%
         arguments:
-            - @orocrm_marketing_list.model.segment_helper
+            - @orocrm_marketing_list.model.helper
         tags:
             - { name: oro_datagrid.extension }
 
@@ -153,3 +162,12 @@ services:
         class: %orocrm_marketing_list.provider.contact_information_fields.class%
         arguments:
             - @orocrm_marketing_list.contact_information_field_helper
+
+    orocrm_marketing_list.datagrid.configuration.provider:
+        class: %orocrm_marketing_list.datagrid.configuration.provider.class%
+        arguments:
+            - @oro_datagrid.configuration.provider.chain
+            - @oro_entity_config.provider.form
+            - @orocrm_marketing_list.model.helper
+        tags:
+            - { name: oro_datagrid.configuration.provider, priority: -10 }

@@ -103,6 +103,9 @@
     {%- set listData -%}
         {{ dataGrid.renderGrid(itemsGridName, {'grid-mixin': 'orocrm-marketing-list-items-mixin'}) }}
     {%- endset -%}
+    {%- set removedItemsGrid -%}
+        {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': 'orocrm-marketing-list-removed-items-mixin'}) }}
+    {%- endset -%}
 
     {% set dataBlocks = [
         {
@@ -121,7 +124,7 @@
         {
             'title' : 'orocrm.marketinglist.block.removed'|trans,
             'subblocks': [
-                {'data' : [dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': 'orocrm-marketing-list-removed-items-mixin'})]}
+                {'data' : [removedItemsGrid]}
             ]
         }
     ] %}

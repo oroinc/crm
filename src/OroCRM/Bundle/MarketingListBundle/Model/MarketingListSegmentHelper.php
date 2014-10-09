@@ -6,6 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 
 class MarketingListSegmentHelper
 {
@@ -50,6 +51,7 @@ class MarketingListSegmentHelper
 
     /**
      * @param int $segmentId
+     * @deprecated
      *
      * @return MarketingList
      */
