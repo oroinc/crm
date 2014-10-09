@@ -73,6 +73,9 @@ class AmountProvider
             // do not change order, need for idx
             $qb->andWhere('h.dataChannel = :dataChannel');
         }
+        $qb->leftJoin('h.dataChannel', 'ch');
+        $qb->andWhere('ch.status = :channelStatus');
+        $qb->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE));
         $qb->andWhere('h.status = :status');
         $qb->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW));
         $qb->setMaxResults(1);
