@@ -152,7 +152,7 @@ class OroCRMCallBundle implements
             . ' WHERE entity_id IS NULL AND field_id IN ('
             . ' SELECT oecf.id FROM oro_entity_config_field AS oecf'
             . ' WHERE oecf.field_name = :field'
-            . ' AND oecf.entity_id = ('
+            . ' AND oecf.entity_id IN ('
             . ' SELECT oec.id'
             . ' FROM oro_entity_config AS oec'
             . ' WHERE oec.class_name = :class'
