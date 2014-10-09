@@ -21,7 +21,6 @@ parameters:
 
     orocrm_marketing_list.model.marketing_list_item_connector.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector
     orocrm_marketing_list.datagrid.extension.class: OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension
-    orocrm_marketing_list.model.segment_helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper
     orocrm_marketing_list.model.helper.class: OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper
 
     orocrm_marketing_list.twig.extension.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension
@@ -125,11 +124,6 @@ services:
         arguments:
             - @doctrine
             - @oro_entity.doctrine_helper
-
-    orocrm_marketing_list.model.segment_helper:
-        class: %orocrm_marketing_list.model.segment_helper.class%
-        arguments:
-            - @doctrine
 
     orocrm_marketing_list.model.helper:
         class: %orocrm_marketing_list.model.helper.class%
