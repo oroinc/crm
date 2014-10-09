@@ -1,6 +1,7 @@
 parameters:
     orocrm_call.call.entity.class:                  OroCRM\Bundle\CallBundle\Entity\Call
     orocrm_call.event_listener.datagrid.call.class: OroCRM\Bundle\CallBundle\EventListener\Datagrid\CallListener
+    orocrm_call.call.activity.manager.class:        OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager
 
 services:
     orocrm_call.event_listener.datagrid.call:
@@ -10,3 +11,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.widget-base-calls-grid, method: onBuildBefore }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.widget-base-calls-grid, method: onBuildAfter }
+
+    orocrm_call.call.activity.manager:
+        class: %orocrm_call.call.activity.manager.class%
+        arguments:
+            - @oro_entity_config.provider.activity

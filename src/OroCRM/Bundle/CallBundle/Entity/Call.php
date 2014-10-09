@@ -155,6 +155,7 @@ class Call extends ExtendCall
 
     public function __construct()
     {
+        parent::__construct();
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
