@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Marketing list unsubscribed item.
@@ -12,6 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
+ * @Config()
  */
 class MarketingListUnsubscribedItem
 {
@@ -35,7 +37,10 @@ class MarketingListUnsubscribedItem
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="MarketingList", inversedBy="marketingListUnsubscribedItems")
+     * @ORM\ManyToOne(
+     *     targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList",
+     *     inversedBy="marketingListUnsubscribedItems"
+     * )
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingList;

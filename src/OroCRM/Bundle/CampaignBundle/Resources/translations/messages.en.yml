@@ -113,3 +113,17 @@ orocrm:
 
         acl:
             send_emails: Send campaign emails
+
+        emailcampaignstatistics:
+            entity_label: Email Campaign Statistics
+            entity_plural_label: Email Campaign Statistics
+            created_at.label: Created At
+            email_campaign.label: Email Campaign
+            id.label: Id
+            marketing_list_item.label: Marketing List Item
+
+        internaltransportsettings:
+            entity_label: Email Campaign Internal Transport Settings
+            entity_plural_label: Email Campaign Internal Transport Settings
+            id.label: Id
+            template.label: Template

@@ -10,6 +10,8 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                 max: 100
         birthday:
             - Date: ~
+        organization:
+            - NotBlank: ~
         addresses:
             - Oro\Bundle\FormBundle\Validator\Constraints\ContainsPrimary:
                 message: One of addresses must be set as primary.
@@ -30,6 +32,8 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
             - Length:
                 min: 3
                 max: 255
+        organization:
+            - NotBlank: ~
 
 # Prevent required values for all child of AbstractAddress
 OroCRM\Bundle\ContactBundle\Entity\ContactAddress:

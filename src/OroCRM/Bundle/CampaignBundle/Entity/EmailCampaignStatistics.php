@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
 /**
@@ -11,6 +12,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  *
  * @ORM\Table(name="orocrm_campaign_email_stats")
  * @ORM\Entity
+ * @Config()
  * @ORM\HasLifecycleCallbacks
  */
 class EmailCampaignStatistics
