@@ -22,10 +22,10 @@ class MarketingListHandler
     /**
      * @var array
      */
-    protected $marketingListTypeToSegmentTypeMap = array(
+    protected $marketingListTypeToSegmentTypeMap = [
         MarketingListType::TYPE_DYNAMIC => SegmentType::TYPE_DYNAMIC,
         MarketingListType::TYPE_STATIC => SegmentType::TYPE_STATIC
-    );
+    ];
 
     /**
      * @var FormInterface
@@ -85,7 +85,9 @@ class MarketingListHandler
 
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($this->request);
-            $this->processSegment($entity);
+            if (!$entity->isManual()) {
+                $this->processSegment($entity);
+            }
 
             if ($this->isValid($entity)) {
                 $this->onSuccess($entity);
@@ -150,18 +152,20 @@ class MarketingListHandler
      */
     protected function isValid(MarketingList $marketingList)
     {
-        $errors = $this->validator->validate($marketingList->getSegment(), array('marketing_list'));
-        if (count($errors) > 0) {
-            /** @var ConstraintViolationInterface $error */
-            foreach ($errors as $error) {
-                $this->form->addError(
-                    new FormError(
-                        $error->getMessage(),
-                        $error->getMessageTemplate(),
-                        $error->getMessageParameters(),
-                        $error->getMessagePluralization()
-                    )
-                );
+        if (!$marketingList->isManual()) {
+            $errors = $this->validator->validate($marketingList->getSegment(), ['marketing_list']);
+            if (count($errors) > 0) {
+                /** @var ConstraintViolationInterface $error */
+                foreach ($errors as $error) {
+                    $this->form->addError(
+                        new FormError(
+                            $error->getMessage(),
+                            $error->getMessageTemplate(),
+                            $error->getMessageParameters(),
+                            $error->getMessagePluralization()
+                        )
+                    );
+                }
             }
         }
 

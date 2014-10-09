@@ -102,7 +102,7 @@
     {% set removedItemsGridName = gridName ~ '_removed_items' %}
     {% set itemsMixin = 'orocrm-marketing-list-items-mixin' %}
     {% set removedItemsMixin = 'orocrm-marketing-list-removed-items-mixin' %}
-    {% if entity.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_MANUAL') %}
+    {% if entity.manual %}
         {% set itemsMixin = 'orocrm-marketing-list-manual-items-mixin' %}
         {% set removedItemsMixin = 'orocrm-marketing-list-manual-removed-items-mixin' %}
     {% endif %}

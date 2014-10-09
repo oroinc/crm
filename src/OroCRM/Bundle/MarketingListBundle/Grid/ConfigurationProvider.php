@@ -6,7 +6,6 @@ use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class ConfigurationProvider implements ConfigurationProviderInterface
@@ -72,7 +71,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
             $marketingList = $this->helper->getMarketingList($marketingListId);
 
             // Get configuration based on marketing list type
-            if ($marketingList->getType()->getName() === MarketingListType::TYPE_MANUAL) {
+            if ($marketingList->isManual()) {
                 $concreteGridName = $this->getEntityGridName($marketingList->getEntity());
             } else {
                 $postfix = str_replace(self::GRID_PREFIX . $marketingList->getId(), '', $gridName);

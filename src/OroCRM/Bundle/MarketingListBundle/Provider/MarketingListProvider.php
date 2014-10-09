@@ -13,7 +13,6 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 
 class MarketingListProvider
@@ -63,7 +62,7 @@ class MarketingListProvider
      */
     public function getMarketingListResultIterator(MarketingList $marketingList)
     {
-        if ($marketingList->getType()->getName() === MarketingListType::TYPE_MANUAL) {
+        if ($marketingList->isManual()) {
             $mixin = self::MANUAL_RESULT_ITEMS_MIXIN;
         } else {
             $mixin = self::RESULT_ITEMS_MIXIN;
@@ -85,7 +84,7 @@ class MarketingListProvider
      */
     public function getMarketingListEntitiesQueryBuilder(MarketingList $marketingList)
     {
-        if ($marketingList->getType()->getName() === MarketingListType::TYPE_MANUAL) {
+        if ($marketingList->isManual()) {
             $mixin = self::MANUAL_RESULT_ENTITIES_MIXIN;
         } else {
             $mixin = self::RESULT_ENTITIES_MIXIN;

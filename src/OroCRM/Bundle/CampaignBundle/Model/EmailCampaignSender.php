@@ -12,7 +12,6 @@ use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
 use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
@@ -170,7 +169,7 @@ class EmailCampaignSender
      */
     protected function getEmailFields(MarketingList $marketingList)
     {
-        if ($marketingList->getType()->getName() === MarketingListType::TYPE_MANUAL) {
+        if ($marketingList->isManual()) {
             $emailFields = $this->contactInformationFieldsProvider
                 ->getEntityTypedFields(
                     $marketingList->getEntity(),
