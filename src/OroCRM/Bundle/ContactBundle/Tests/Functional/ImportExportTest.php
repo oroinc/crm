@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
 use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Crawler;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
@@ -49,10 +48,31 @@ class ImportExportTest extends WebTestCase
         return $batchJobRepository->getJobManager();
     }
 
+    public function strategyDataProvider()
+    {
+        return [
+            'add'            => ['orocrm_contact.add'],
+            'add or replace' => ['orocrm_contact.add_or_replace'],
+        ];
+    }
+
     /**
-     * @return Crawler
+     * @param string $strategy
+     * @dataProvider strategyDataProvider
      */
-    public function testImportFormAction()
+    public function testImportExport($strategy)
+    {
+        $this->validateImportFile($strategy);
+        $this->doImport($strategy);
+
+        $this->doExport();
+        $this->validateExportResult();
+    }
+
+    /**
+     * @param string $strategy
+     */
+    protected function validateImportFile($strategy)
     {
         $crawler = $this->client->request(
             'GET',
@@ -64,19 +84,10 @@ class ImportExportTest extends WebTestCase
                 )
             )
         );
-        $result  = $this->client->getResponse();
+        $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains($strategy, $result->getContent());
 
-        return $crawler;
-    }
-
-    /**
-     * @param Crawler $crawler
-     *
-     * @depends testImportFormAction
-     */
-    public function testImportValidateAction(Crawler $crawler)
-    {
         $this->assertTrue(file_exists($this->file));
 
         /** @var Form $form */
@@ -89,6 +100,7 @@ class ImportExportTest extends WebTestCase
         );
 
         $form['oro_importexport_import[file]']->upload($this->file);
+        $form['oro_importexport_import[processorAlias]'] = $strategy;
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -102,17 +114,18 @@ class ImportExportTest extends WebTestCase
     }
 
     /**
-     * @depends testImportValidateAction
+     * @param string $strategy
      */
-    public function testImportProcessAction()
+    protected function doImport($strategy)
     {
+        // test import
         $this->client->followRedirects(false);
         $this->client->request(
             'GET',
             $this->getUrl(
                 'oro_importexport_import_process',
                 array(
-                    'processorAlias' => 'orocrm_contact.add_or_replace',
+                    'processorAlias' => $strategy,
                     '_format'        => 'json'
                 )
             )
@@ -130,10 +143,7 @@ class ImportExportTest extends WebTestCase
         );
     }
 
-    /**
-     * @depends testImportProcessAction
-     */
-    public function testInstantExport()
+    protected function doExport()
     {
         $this->client->followRedirects(false);
         $this->client->request(
@@ -153,19 +163,9 @@ class ImportExportTest extends WebTestCase
         $this->assertEquals(1, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
 
-        return $data['url'];
-    }
-
-    /**
-     * @param $url
-     *
-     * @depends testInstantExport
-     */
-    public function testDownloadExportResultAction($url)
-    {
         $this->client->request(
             'GET',
-            $url
+            $data['url']
         );
 
         $result = $this->client->getResponse();
@@ -173,10 +173,7 @@ class ImportExportTest extends WebTestCase
         $this->assertResponseContentTypeEquals($result, 'text/csv');
     }
 
-    /**
-     * @depends testDownloadExportResultAction
-     */
-    public function testDataValid()
+    protected function validateExportResult()
     {
         $data    = $this->getFileContents($this->file);
         $content = $this->getFileContents($this->getExportFile());
@@ -186,14 +183,18 @@ class ImportExportTest extends WebTestCase
             'Accounts 2 Account name',
         ];
 
-        $this->assertEquals($content[0], $data[0]);
-
         foreach ($excludedProperties as $excludedProperty) {
             $key = array_search($excludedProperty, $data[0]);
             if (false !== $key) {
-                unset($data[0][$key], $data[1][$key], $content[0][$key]);
+                unset($data[0][$key], $data[1][$key]);
             }
         }
+
+        foreach ($data as $key => $values) {
+            $data[$key] = array_values($values);
+        }
+
+        $this->assertEquals($content[0], $data[0]);
 
         $content = array_combine($content[0], $content[1]);
         $data    = array_combine($data[0], $data[1]);
