@@ -88,6 +88,9 @@ class ContactAddressController extends Controller
             $contact->addAddress($address);
         }
 
+        // Update contact's modification date when an address is changed
+        $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+
         if ($this->get('orocrm_contact.form.handler.contact_address')->process($address)) {
             $this->getDoctrine()->getManager()->flush();
             $responseData['entity'] = $address;
