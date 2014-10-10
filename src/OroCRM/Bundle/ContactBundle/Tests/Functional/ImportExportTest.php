@@ -25,8 +25,6 @@ class ImportExportTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
-
-        $this->file = $this->getImportTemplate();
     }
 
     protected function tearDown()
@@ -44,7 +42,7 @@ class ImportExportTest extends WebTestCase
     protected function getBatchJobManager()
     {
         /** @var BatchJobRepository $batchJobRepository */
-        $batchJobRepository = $this->client->getKernel()->getContainer()->get('akeneo_batch.job_repository');
+        $batchJobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
         return $batchJobRepository->getJobManager();
     }
 
@@ -88,6 +86,7 @@ class ImportExportTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains($strategy, $result->getContent());
 
+        $this->file = $this->getImportTemplate();
         $this->assertTrue(file_exists($this->file));
 
         /** @var Form $form */
@@ -175,34 +174,39 @@ class ImportExportTest extends WebTestCase
 
     protected function validateExportResult()
     {
-        $data    = $this->getFileContents($this->file);
-        $content = $this->getFileContents($this->getExportFile());
+        $importTemplate = $this->getFileContents($this->file);
+        $exportedData = $this->getFileContents($this->getExportFile());
 
-        $excludedProperties = [
-            'Accounts 1 Account name',
-            'Accounts 2 Account name',
-        ];
+        $commonFields = array_intersect($importTemplate[0], $exportedData[0]);
 
-        foreach ($excludedProperties as $excludedProperty) {
-            $key = array_search($excludedProperty, $data[0]);
-            if (false !== $key) {
-                unset($data[0][$key], $data[1][$key]);
+        $importTemplateValues = $this->extractFieldValues($commonFields, $importTemplate);
+        $exportedDataValues = $this->extractFieldValues($commonFields, $exportedData);
+
+        $this->assertEquals($importTemplateValues, $exportedDataValues);
+    }
+
+    /**
+     * @param array $fields
+     * @param array $data
+     * @return array
+     */
+    protected function extractFieldValues(array $fields, array $data)
+    {
+        // ID is changed
+        // birthdays have different timestamps
+        $skippedFields = ['Id', 'Birthday'];
+
+        $values = [];
+        foreach ($fields as $field) {
+            if (!in_array($field, $skippedFields)) {
+                $key = array_search($field, $data[0]);
+                if (false !== $key) {
+                    $values[$field] = $data[1][$key];
+                }
             }
         }
 
-        foreach ($data as $key => $values) {
-            $data[$key] = array_values($values);
-        }
-
-        $this->assertEquals($content[0], $data[0]);
-
-        $content = array_combine($content[0], $content[1]);
-        $data    = array_combine($data[0], $data[1]);
-
-        // @todo: fix date BAP-4560
-        unset($data['Birthday'], $content['Birthday'], $data['Id'], $content['Id']);
-
-        $this->assertEmpty(array_diff($data, $content));
+        return $values;
     }
 
     /**
