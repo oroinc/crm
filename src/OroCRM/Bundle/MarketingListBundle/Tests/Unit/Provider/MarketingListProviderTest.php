@@ -4,7 +4,9 @@ namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
+use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
 
 class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
@@ -34,16 +36,13 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         unset($this->dataGridManager);
     }
 
-    public function testGetMarketingListQueryBuilderManual()
+    /**
+     * @dataProvider queryBuilderDataProvider
+     * @param string $type
+     */
+    public function testGetMarketingListQueryBuilder($type)
     {
-        $this->markTestIncomplete('CRM-2039');
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
-        $this->assertNull($this->provider->getMarketingListQueryBuilder($marketingList));
-    }
-
-    public function testGetMarketingListQueryBuilderBySegment()
-    {
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
+        $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -54,16 +53,28 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($queryBuilder, $this->provider->getMarketingListQueryBuilder($marketingList));
     }
 
-    public function testGetMarketingListResultIteratorManual()
+    public function queryBuilderDataProvider()
     {
-        $this->markTestIncomplete('CRM-2039');
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
-        $this->assertNull($this->provider->getMarketingListResultIterator($marketingList));
+        return [
+            [MarketingListType::TYPE_MANUAL],
+            [MarketingListType::TYPE_DYNAMIC],
+            [MarketingListType::TYPE_STATIC],
+        ];
     }
 
-    public function testGetMarketingListResultIterator()
+    /**
+     * @dataProvider queryBuilderDataProvider
+     * @param string $type
+     */
+    public function testGetMarketingListResultIterator($type)
     {
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
+        if ($type === MarketingListType::TYPE_MANUAL) {
+            $mixin = MarketingListProvider::MANUAL_RESULT_ITEMS_MIXIN;
+        } else {
+            $mixin = MarketingListProvider::RESULT_ITEMS_MIXIN;
+        }
+
+        $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -84,16 +95,31 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             $marketingList,
             $queryBuilder,
             $dataGrid,
-            MarketingListProvider::RESULT_ITEMS_MIXIN
+            $mixin
         );
 
         $this->assertInstanceOf('\Iterator', $this->provider->getMarketingListResultIterator($marketingList));
     }
 
-    public function testGetMarketingListEntitiesQueryBuilder()
+    /**
+     * @dataProvider queryBuilderDataProvider
+     * @param string $type
+     */
+    public function testGetMarketingListEntitiesQueryBuilder($type)
     {
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
-        $this->assertEntitiesQueryBuilder($marketingList);
+        $marketingList = $this->getMarketingList($type);
+
+        $from = $this->getMockBuilder('Doctrine\ORM\Query\Expr\From')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $from->expects($this->once())
+            ->method('getAlias')
+            ->will($this->returnValue('alias'));
+        $queryBuilder = $this->assertEntitiesQueryBuilder($marketingList, 'alias');
+        $queryBuilder->expects($this->once())
+            ->method('getDQLPart')
+            ->with('from')
+            ->will($this->returnValue([$from]));
 
         $this->assertInstanceOf(
             'Doctrine\ORM\QueryBuilder',
@@ -101,29 +127,42 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetMarketingListEntitiesQueryBuilderManual()
+    /**
+     * @dataProvider queryBuilderDataProvider
+     * @param string $type
+     */
+    public function testGetMarketingListEntitiesIterator($type)
     {
-        $this->markTestIncomplete('CRM-2039');
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
-        $this->assertNull($this->provider->getMarketingListEntitiesQueryBuilder($marketingList));
-    }
+        $marketingList = $this->getMarketingList($type);
 
-    public function testGetMarketingListEntitiesIteratorManual()
-    {
-        $this->markTestIncomplete('CRM-2039');
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
-        $this->assertNull($this->provider->getMarketingListEntitiesIterator($marketingList));
-    }
+        $from = $this->getMockBuilder('Doctrine\ORM\Query\Expr\From')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $from->expects($this->once())
+            ->method('getAlias')
+            ->will($this->returnValue('alias'));
+        $queryBuilder = $this->assertEntitiesQueryBuilder($marketingList, 'alias');
+        $queryBuilder->expects($this->once())
+            ->method('getDQLPart')
+            ->with('from')
+            ->will($this->returnValue([$from]));
 
-    public function testGetMarketingListEntitiesIterator()
-    {
-        $marketingList = $this->getMarketingList(MarketingListType::TYPE_DYNAMIC);
-        $this->assertEntitiesQueryBuilder($marketingList);
         $this->assertInstanceOf('\Iterator', $this->provider->getMarketingListEntitiesIterator($marketingList));
     }
 
-    protected function assertEntitiesQueryBuilder($marketingList)
+    /**
+     * @param MarketingList $marketingList
+     * @param string $alias
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function assertEntitiesQueryBuilder(MarketingList $marketingList, $alias)
     {
+        if ($marketingList->isManual()) {
+            $mixin = MarketingListProvider::MANUAL_RESULT_ENTITIES_MIXIN;
+        } else {
+            $mixin = MarketingListProvider::RESULT_ENTITIES_MIXIN;
+        }
+
         $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
@@ -135,36 +174,25 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $queryBuilder->expects($this->once())
             ->method('select')
-            ->with('t1')
+            ->with($alias)
             ->will($this->returnSelf());
         $queryBuilder->expects($this->once())
             ->method('orderBy')
-            ->with('t1.id')
+            ->with($alias . '.id')
             ->will($this->returnSelf());
 
         $this->assertGetQueryBuilder(
             $marketingList,
             $queryBuilder,
             $dataGrid,
-            MarketingListProvider::RESULT_ENTITIES_MIXIN
+            $mixin
         );
+
+        return $queryBuilder;
     }
 
-    protected function assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid, $mixin = null)
+    protected function assertGetQueryBuilder(MarketingList $marketingList, $queryBuilder, $dataGrid, $mixin = null)
     {
-        $segment = $this->getMockBuilder('Oro\Bundle\SegmentBundle\Entity\Segment')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $segment->expects($this->atLeastOnce())
-            ->method('getGridPrefix')
-            ->will($this->returnValue('grid_prefix_'));
-        $segment->expects($this->atLeastOnce())
-            ->method('getId')
-            ->will($this->returnValue(1));
-        $marketingList->expects($this->atLeastOnce())
-            ->method('getSegment')
-            ->will($this->returnValue($segment));
-
         $dataSource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
             ->disableOriginalConstructor()
             ->getMock();
@@ -175,15 +203,15 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAcceptedDatasource')
             ->will($this->returnValue($dataSource));
 
-        $parameters = array(
-            PagerInterface::PAGER_ROOT_PARAM => array(PagerInterface::DISABLED_PARAM => true)
-        );
+        $parameters = [
+            PagerInterface::PAGER_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true]
+        ];
         if ($mixin) {
             $parameters['grid-mixin'] = $mixin;
         }
         $this->dataGridManager->expects($this->atLeastOnce())
             ->method('getDatagrid')
-            ->with('grid_prefix_1', $parameters)
+            ->with(ConfigurationProvider::GRID_PREFIX . $marketingList->getId(), $parameters)
             ->will($this->returnValue($dataGrid));
     }
 
@@ -192,16 +220,22 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $type = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')
             ->disableOriginalConstructor()
             ->getMock();
-        $type->expects($this->atLeastOnce())
+        $type->expects($this->any())
             ->method('getName')
             ->will($this->returnValue($typeName));
 
         $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
-        $marketingList->expects($this->atLeastOnce())
+        $marketingList->expects($this->any())
             ->method('getType')
             ->will($this->returnValue($type));
+        $marketingList->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue(1));
+        $marketingList->expects($this->any())
+            ->method('isManual')
+            ->will($this->returnValue($typeName === MarketingListType::TYPE_MANUAL));
 
         return $marketingList;
     }
