@@ -8,6 +8,9 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             - NotBlank: ~
             - Length:
                 max: 100
+        gender:
+            - Choice:
+                choices: [male, female]
         birthday:
             - Date: ~
         organization:
