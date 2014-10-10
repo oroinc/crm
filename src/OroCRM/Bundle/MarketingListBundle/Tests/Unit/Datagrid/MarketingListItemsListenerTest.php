@@ -171,11 +171,17 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
                 ->with($this->equalTo($gridName))
                 ->will($this->returnValue($marketingList->getId()));
 
-            $this->marketingListHelper
-                ->expects($this->exactly((int)$useDataSource))
-                ->method('getMarketingList')
-                ->with($this->equalTo($marketingList->getId()))
-                ->will($this->returnValue($marketingList));
+            if ((int)$useDataSource) {
+                $this->marketingListHelper
+                    ->expects($this->exactly((int)$useDataSource))
+                    ->method('getMarketingList')
+                    ->with($this->equalTo($marketingList->getId()))
+                    ->will($this->returnValue($marketingList));
+            } else {
+                $this->marketingListHelper
+                    ->expects($this->never())
+                    ->method('getMarketingList');
+            }
         }
 
         $qb = $this
