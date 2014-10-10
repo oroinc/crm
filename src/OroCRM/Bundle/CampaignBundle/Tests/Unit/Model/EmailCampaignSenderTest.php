@@ -3,10 +3,10 @@
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Model;
 
 use Oro\Bundle\SegmentBundle\Entity\Segment;
-
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSender;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
 class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
@@ -100,6 +100,11 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->sender->setLogger($this->logger);
     }
 
+    protected function tearDown()
+    {
+        unset($this->sender);
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Transport is required to perform send
@@ -143,15 +148,19 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $iterable
-     *
+     * @param array $to
+     * @param object $type
      * @dataProvider sendDataProvider
      */
-    public function testSend($iterable, $to)
+    public function testSend($iterable, $to, $type)
     {
         $segment = new Segment();
+        $entity = '\stdClass';
 
         $marketingList = new MarketingList();
         $marketingList->setSegment($segment);
+        $marketingList->setType($type);
+        $marketingList->setEntity($entity);
 
         $campaign = new EmailCampaign();
         $campaign
@@ -180,14 +189,15 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $manager->expects($this->exactly($itCount))
             ->method('commit');
 
+        $fields = ['email'];
+        $this->assertFieldsCall($fields, $marketingList, $entity);
         if ($itCount) {
             $this->contactInformationFieldsProvider
                 ->expects($this->exactly($itCount))
-                ->method('getQueryContactInformationFields')
+                ->method('getTypedFieldsValues')
                 ->with(
-                    $this->equalTo($segment),
-                    $this->isType('object'),
-                    $this->equalTo(ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
+                    $this->equalTo($fields),
+                    $this->isType('object')
                 )
                 ->will($this->returnValue($to));
 
@@ -218,15 +228,19 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $iterable
-     *
+     * @param array $to
+     * @param object $type
      * @dataProvider sendDataProvider
      */
-    public function testSendError($iterable, $to)
+    public function testSendError($iterable, $to, $type)
     {
         $segment = new Segment();
+        $entity = '\stdClass';
 
         $marketingList = new MarketingList();
         $marketingList->setSegment($segment);
+        $marketingList->setType($type);
+        $marketingList->setEntity($entity);
 
         $campaign = new EmailCampaign();
         $campaign
@@ -255,14 +269,15 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $manager->expects($this->exactly($itCount))
             ->method('rollback');
 
+        $fields = ['email'];
+        $this->assertFieldsCall($fields, $marketingList, $entity);
         if ($itCount) {
             $this->contactInformationFieldsProvider
                 ->expects($this->exactly($itCount))
-                ->method('getQueryContactInformationFields')
+                ->method('getTypedFieldsValues')
                 ->with(
-                    $this->equalTo($segment),
-                    $this->isType('object'),
-                    $this->equalTo(ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
+                    $this->equalTo($fields),
+                    $this->isType('object')
                 )
                 ->will($this->returnValue($to));
 
@@ -296,13 +311,32 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->sender->send($campaign);
     }
 
+    protected function assertFieldsCall($fields, MarketingList $marketingList, $entity)
+    {
+        if ($marketingList->isManual()) {
+            $this->contactInformationFieldsProvider->expects($this->once())
+                ->method('getEntityTypedFields')
+                ->with($marketingList->getEntity(), ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
+                ->will($this->returnValue($fields));
+        } else {
+            $this->contactInformationFieldsProvider->expects($this->once())
+                ->method('getQueryTypedFields')
+                ->with(
+                    $marketingList->getSegment(),
+                    $entity,
+                    ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
+                )
+                ->will($this->returnValue($fields));
+        }
+    }
+
     /**
      * @return array
      */
     public function sendDataProvider()
     {
         $entity = $this->getMockBuilder('\stdClass')
-            ->setMethods(array('getId'))
+            ->setMethods(['getId'])
             ->getMock();
 
         $entity
@@ -310,13 +344,23 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue(self::ENTITY_ID));
 
+        $manualType = new MarketingListType(MarketingListType::TYPE_MANUAL);
+        $segmentBasedType = new MarketingListType(MarketingListType::TYPE_DYNAMIC);
+
         return [
-            [[$entity, $entity], []],
-            [[$entity], []],
-            [[], []],
-            [[], ['mail@example.com']],
-            [[$entity], ['mail@example.com']],
-            [[$entity, $entity], ['mail@example.com']],
+            [[$entity, $entity], [], $manualType],
+            [[$entity], [], $manualType],
+            [[], [], $manualType],
+            [[], ['mail@example.com'], $manualType],
+            [[$entity], ['mail@example.com'], $manualType],
+            [[$entity, $entity], ['mail@example.com'], $manualType],
+
+            [[$entity, $entity], [], $segmentBasedType],
+            [[$entity], [], $segmentBasedType],
+            [[], [], $segmentBasedType],
+            [[], ['mail@example.com'], $segmentBasedType],
+            [[$entity], ['mail@example.com'], $segmentBasedType],
+            [[$entity, $entity], ['mail@example.com'], $segmentBasedType],
         ];
     }
 }
