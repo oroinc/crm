@@ -30,16 +30,14 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $contactInfoFields
-     * @param array $contactInfoFields
-     * @param object $entity
+     * @param array $definition
      * @param string $type
      * @param array $expected
      *
-     * @dataProvider fieldsDataProvider
+     * @dataProvider queryFieldsDataProvider
      */
-    public function testGetQueryContactInformationFields($contactInfoFields, $definition, $entity, $type, $expected)
+    public function testGetQueryTypedFields($contactInfoFields, $definition, $type, $expected)
     {
-        $this->markTestIncomplete('CRM-2039');
         $queryDesigner = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
         $queryDesigner
             ->expects($this->any())
@@ -53,8 +51,89 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $expected,
-            $this->provider->getQueryContactInformationFields($queryDesigner, $entity, $type)
+            $this->provider->getQueryTypedFields($queryDesigner, '\stdClass', $type)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function queryFieldsDataProvider()
+    {
+        return [
+            [
+                null,
+                json_encode([]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                []
+            ],
+            [
+                [],
+                json_encode([]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                []
+            ],
+            [
+                ['email' => 'email'],
+                json_encode([]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                ['email']
+            ],
+            [
+                ['email' => 'email'],
+                json_encode(['columns' => [['name' => 'primaryEmail']]]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                []
+            ],
+            [
+                ['email' => 'email'],
+                json_encode(['columns' => [['name' => 'primaryEmail']]]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                []
+            ],
+            [
+                ['email' => 'email'],
+                json_encode(['columns' => [['name' => 'email']]]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_PHONE,
+                []
+            ],
+            [
+                ['email' => 'email'],
+                json_encode(['columns' => [['name' => 'email'], ['name' => 'phone']]]),
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
+                ['email']
+            ],
+        ];
+    }
+
+    /**
+     * @param array $contactInfoFields
+     * @param string $type
+     * @param array $expected
+     *
+     * @dataProvider fieldsDataProvider
+     */
+    public function testGetEntityTypedFields($contactInfoFields, $type, $expected)
+    {
+        $this->helper
+            ->expects($this->once())
+            ->method('getEntityContactInformationColumns')
+            ->will($this->returnValue($contactInfoFields));
+
+        $this->assertEquals(
+            $expected,
+            $this->provider->getEntityTypedFields('\stdClass', $type)
+        );
+    }
+
+    public function testGetTypedFieldsValues()
+    {
+        $entity = new \stdClass();
+        $entity->email = 'test';
+        $entity->other = 'other';
+
+        $expected = ['test'];
+        $this->assertEquals($expected, $this->provider->getTypedFieldsValues(['email'], $entity));
     }
 
     /**
@@ -62,60 +141,26 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function fieldsDataProvider()
     {
-        $email = new ContactEmail('mail@example');
-        $email->setPrimary(true);
-        $contact = new Contact();
-        $contact->addEmail($email);
-
         return [
             [
                 null,
-                json_encode([]),
-                $contact,
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
                 []
             ],
             [
                 [],
-                json_encode([]),
-                $contact,
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
                 []
             ],
             [
                 ['email' => 'email'],
-                json_encode([]),
-                $contact,
-                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
-                ['mail@example']
-            ],
-            [
-                ['email' => 'email'],
-                json_encode(['columns' => [['name' => 'primaryEmail']]]),
-                $contact,
-                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
-                []
-            ],
-            [
-                ['email' => 'email'],
-                json_encode(['columns' => [['name' => 'primaryEmail']]]),
-                $contact,
-                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
-                []
-            ],
-            [
-                ['email' => 'email'],
-                json_encode(['columns' => [['name' => 'email']]]),
-                $contact,
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_PHONE,
                 []
             ],
             [
                 ['email' => 'email'],
-                json_encode(['columns' => [['name' => 'email'], ['name' => 'phone']]]),
-                $contact,
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL,
-                ['mail@example']
+                ['email']
             ],
         ];
     }
