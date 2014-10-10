@@ -36,6 +36,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMarketingListQueryBuilderManual()
     {
+        $this->markTestIncomplete('CRM-2039');
         $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
         $this->assertNull($this->provider->getMarketingListQueryBuilder($marketingList));
     }
@@ -55,6 +56,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMarketingListResultIteratorManual()
     {
+        $this->markTestIncomplete('CRM-2039');
         $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
         $this->assertNull($this->provider->getMarketingListResultIterator($marketingList));
     }
@@ -101,12 +103,14 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMarketingListEntitiesQueryBuilderManual()
     {
+        $this->markTestIncomplete('CRM-2039');
         $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
         $this->assertNull($this->provider->getMarketingListEntitiesQueryBuilder($marketingList));
     }
 
     public function testGetMarketingListEntitiesIteratorManual()
     {
+        $this->markTestIncomplete('CRM-2039');
         $marketingList = $this->getMarketingList(MarketingListType::TYPE_MANUAL);
         $this->assertNull($this->provider->getMarketingListEntitiesIterator($marketingList));
     }
