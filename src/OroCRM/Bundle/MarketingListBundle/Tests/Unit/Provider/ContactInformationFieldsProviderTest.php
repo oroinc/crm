@@ -39,6 +39,7 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetQueryContactInformationFields($contactInfoFields, $definition, $entity, $type, $expected)
     {
+        $this->markTestIncomplete('CRM-2039');
         $queryDesigner = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
         $queryDesigner
             ->expects($this->any())
