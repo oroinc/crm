@@ -16,13 +16,17 @@ class OrderStrategy extends BaseStrategy
         'id',
         'store',
         'items',
+        'cart',
         'customer',
         'addresses',
         'workflowItem',
         'workflowStep',
         'relatedCalls',
         'relatedEmails',
-        'owner'
+        'organization',
+        'owner',
+        'channel',
+        'dataChannel'
     ];
 
     /** @var StoreStrategy */
@@ -145,7 +149,11 @@ class OrderStrategy extends BaseStrategy
 
             $existingAddress = $entityToUpdate->getAddresses()->get($k);
             if ($existingAddress) {
-                $this->strategyHelper->importEntity($existingAddress, $address, ['id', 'region', 'country']);
+                $this->strategyHelper->importEntity(
+                    $existingAddress,
+                    $address,
+                    ['id', 'region', 'country', 'owner', 'types']
+                );
                 $address = $existingAddress;
             }
 
