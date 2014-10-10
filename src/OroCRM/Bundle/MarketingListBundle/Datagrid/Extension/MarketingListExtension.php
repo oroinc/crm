@@ -49,10 +49,14 @@ class MarketingListExtension extends AbstractExtension
 
         $marketingListId = $this->marketingListHelper
             ->getMarketingListIdByGridName($config->offsetGetByPath('[name]'));
+        if (!$marketingListId) {
+            return false;
+        }
+
         $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
 
         // Accept only segment based marketing lists
-        return $marketingList && $marketingList->isManual();
+        return $marketingList && !$marketingList->isManual();
     }
 
     /**
