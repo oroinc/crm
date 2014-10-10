@@ -95,6 +95,7 @@
         }]
     %}
 
+    {# TODO: remove this check after full support of manual marketing lists CRM-1878 #}
     {% if not form.vars.value.manual %}
     {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
     {% set columnsComponentOptions = {
@@ -165,6 +166,7 @@
 
     {{ UI.scrollData(id, data, form) }}
 
+    {# TODO: remove this check after full support of manual marketing lists CRM-1878 #}
     {% if not form.vars.value.manual %}
     {{ QD.query_designer_column_chain_template('column-chain-template') }}
     {{ segmentQD.initJsWidgets(type, form, entities, metadata, {'with-relations': false}) }}
