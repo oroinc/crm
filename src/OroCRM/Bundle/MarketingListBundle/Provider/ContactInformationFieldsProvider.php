@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Util\ClassUtils;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
 use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class ContactInformationFieldsProvider
 {
@@ -28,23 +29,16 @@ class ContactInformationFieldsProvider
 
     /**
      * @param AbstractQueryDesigner $abstractQueryDesigner
-     * @param object $entity
+     * @param string $entityClass
      * @param string $type
      *
-     * @return string[]
+     * @return array
      */
-    public function getQueryContactInformationFields(AbstractQueryDesigner $abstractQueryDesigner, $entity, $type)
+    public function getQueryTypedFields(AbstractQueryDesigner $abstractQueryDesigner, $entityClass, $type)
     {
-        $contactInformationFields = $this
-            ->contactInformationFieldHelper
-            ->getEntityContactInformationColumns(ClassUtils::getRealClass($entity));
-
-        if (empty($contactInformationFields)) {
-            return [];
-        }
+        $typedFields = $this->getEntityTypedFields($entityClass, $type);
 
         $definitionColumns = [];
-
         $definition = $abstractQueryDesigner->getDefinition();
         if ($definition) {
             $definition = json_decode($definition, JSON_OBJECT_AS_ARRAY);
@@ -58,7 +52,31 @@ class ContactInformationFieldsProvider
             }
         }
 
-        $typedFields = array_keys(
+        if (!empty($definitionColumns)) {
+            $typedFields = array_intersect($typedFields, $definitionColumns);
+        }
+
+        return $typedFields;
+    }
+
+    /**
+     * @param string|object $entityOrClass
+     * @param string $type
+     * @return array
+     */
+    public function getEntityTypedFields($entityOrClass, $type)
+    {
+        $entityOrClass = ClassUtils::getRealClass($entityOrClass);
+
+        $contactInformationFields = $this
+            ->contactInformationFieldHelper
+            ->getEntityContactInformationColumns($entityOrClass);
+
+        if (empty($contactInformationFields)) {
+            return [];
+        }
+
+        return array_keys(
             array_filter(
                 $contactInformationFields,
                 function ($contactInformationField) use ($type) {
@@ -66,11 +84,38 @@ class ContactInformationFieldsProvider
                 }
             )
         );
+    }
 
-        if (!empty($definitionColumns)) {
-            $typedFields = array_intersect($typedFields, $definitionColumns);
+    /**
+     * @param MarketingList $marketingList
+     * @param string $type
+     * @return array
+     */
+    public function getMarketingListTypedFields(MarketingList $marketingList, $type)
+    {
+        if ($marketingList->isManual()) {
+            $typedFields = $this->getEntityTypedFields(
+                $marketingList->getEntity(),
+                $type
+            );
+        } else {
+            $typedFields = $this->getQueryTypedFields(
+                $marketingList->getSegment(),
+                $marketingList->getEntity(),
+                $type
+            );
         }
 
+        return $typedFields;
+    }
+
+    /**
+     * @param array $typedFields
+     * @param object $entity
+     * @return array
+     */
+    public function getTypedFieldsValues(array $typedFields, $entity)
+    {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         return array_map(

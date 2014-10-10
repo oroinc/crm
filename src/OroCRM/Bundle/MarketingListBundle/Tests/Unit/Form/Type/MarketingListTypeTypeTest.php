@@ -43,20 +43,6 @@ class MarketingListTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->at(2))
             ->method('add')
             ->with(
-                'type',
-                'entity',
-                [
-                    'class'       => 'OroCRMMarketingListBundle:MarketingListType',
-                    'property'    => 'label',
-                    'required'    => true,
-                    'empty_value' => 'orocrm.marketinglist.form.choose_marketing_list_type'
-                ]
-            )
-            ->will($this->returnSelf());
-
-        $builder->expects($this->at(3))
-            ->method('add')
-            ->with(
                 'description',
                 'textarea',
                 ['required' => false]
