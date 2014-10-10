@@ -346,7 +346,7 @@ class Channel
     }
 
     /**
-     * @return EntityName
+     * @return string
      */
     public function getCustomerIdentity()
     {
