@@ -381,7 +381,40 @@ datagrid:
                 where:
                     and:
                         - mlr.id IS NULL
-                groupBy: t1.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+                groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+        columns:
+            campaignContactedTimes:
+                label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
+            campaignLastContactedAt:
+                label: orocrm.campaign.emailcampaign.datagrid.campaignLastContactedAt
+                frontend_type: datetime
+        filters:
+            columns:
+                campaignContactedTimes:  { type: number,   data_name: campaignContactedTimes }
+                campaignLastContactedAt: { type: datetime, data_name: campaignLastContactedAt }
+        sorters:
+            columns:
+                campaignContactedTimes:  { data_name: campaignContactedTimes }
+                campaignLastContactedAt: { data_name: campaignLastContactedAt }
+
+    orocrm-email-campaign-marketing-list-manual-items-mixin:
+        extends: orocrm-marketing-list-manual-items-base-unsubscribe-mixin
+        source:
+            query:
+                select:
+                    - COUNT(cs.id) as campaignContactedTimes
+                    - MAX(cs.createdAt) as campaignLastContactedAt
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
+                            alias: 'cs'
+                            conditionType: 'WITH'
+                            condition: 'mli.id = cs.marketingListItem AND cs.emailCampaign = :emailCampaign'
+                where:
+                    and:
+                        - mlr.id IS NULL
+                groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
         columns:
             campaignContactedTimes:
                 label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
