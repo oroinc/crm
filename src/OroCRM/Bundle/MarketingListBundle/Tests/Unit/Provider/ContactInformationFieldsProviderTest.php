@@ -39,6 +39,21 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetQueryTypedFields($contactInfoFields, $definition, $type, $expected)
     {
         $queryDesigner = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
+        $this->assertGetQueryTypedFieldsCalls($queryDesigner, $definition, $contactInfoFields);
+
+        $this->assertEquals(
+            $expected,
+            $this->provider->getQueryTypedFields($queryDesigner, '\stdClass', $type)
+        );
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject$queryDesigner
+     * @param array $definition
+     * @param array $contactInfoFields
+     */
+    protected function assertGetQueryTypedFieldsCalls($queryDesigner, $definition, $contactInfoFields)
+    {
         $queryDesigner
             ->expects($this->any())
             ->method('getDefinition')
@@ -48,11 +63,6 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('getEntityContactInformationColumns')
             ->will($this->returnValue($contactInfoFields));
-
-        $this->assertEquals(
-            $expected,
-            $this->provider->getQueryTypedFields($queryDesigner, '\stdClass', $type)
-        );
     }
 
     /**
@@ -115,15 +125,22 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetEntityTypedFields($contactInfoFields, $type, $expected)
     {
-        $this->helper
-            ->expects($this->once())
-            ->method('getEntityContactInformationColumns')
-            ->will($this->returnValue($contactInfoFields));
+        $entity = '\stdClass';
+        $this->assertGetEntityTypedFieldsCalls($entity, $contactInfoFields);
 
         $this->assertEquals(
             $expected,
-            $this->provider->getEntityTypedFields('\stdClass', $type)
+            $this->provider->getEntityTypedFields($entity, $type)
         );
+    }
+
+    protected function assertGetEntityTypedFieldsCalls($entity, $contactInfoFields)
+    {
+        $this->helper
+            ->expects($this->once())
+            ->method('getEntityContactInformationColumns')
+            ->with($entity)
+            ->will($this->returnValue($contactInfoFields));
     }
 
     public function testGetTypedFieldsValues()
@@ -163,5 +180,57 @@ class ContactInformationFieldsProviderTest extends \PHPUnit_Framework_TestCase
                 ['email']
             ],
         ];
+    }
+
+    /**
+     * @param array $contactInfoFields
+     * @param string $type
+     * @param array $expected
+     *
+     * @dataProvider fieldsDataProvider
+     */
+    public function testGetMarketingListTypedFieldsManual($contactInfoFields, $type, $expected)
+    {
+        $entity = '\stdClass';
+        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $marketingList->expects($this->once())
+            ->method('isManual')
+            ->will($this->returnValue(true));
+        $marketingList->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue('\stdClass'));
+        $this->assertGetEntityTypedFieldsCalls($entity, $contactInfoFields);
+
+        $this->assertEquals($expected, $this->provider->getMarketingListTypedFields($marketingList, $type));
+    }
+
+    /**
+     * @param array $contactInfoFields
+     * @param array $definition
+     * @param string $type
+     * @param array $expected
+     *
+     * @dataProvider queryFieldsDataProvider
+     */
+    public function testGetMarketingListTypedFieldsNonManual($contactInfoFields, $definition, $type, $expected)
+    {
+        $queryDesigner = $this->getMockForAbstractClass('Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner');
+        $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $marketingList->expects($this->once())
+            ->method('isManual')
+            ->will($this->returnValue(false));
+        $marketingList->expects($this->once())
+            ->method('getSegment')
+            ->will($this->returnValue($queryDesigner));
+        $marketingList->expects($this->once())
+            ->method('getEntity')
+            ->will($this->returnValue('\stdClass'));
+        $this->assertGetQueryTypedFieldsCalls($queryDesigner, $definition, $contactInfoFields);
+
+        $this->assertEquals($expected, $this->provider->getMarketingListTypedFields($marketingList, $type));
     }
 }

@@ -190,7 +190,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->method('commit');
 
         $fields = ['email'];
-        $this->assertFieldsCall($fields, $marketingList, $entity);
+        $this->assertFieldsCall($fields, $marketingList);
         if ($itCount) {
             $this->contactInformationFieldsProvider
                 ->expects($this->exactly($itCount))
@@ -270,7 +270,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->method('rollback');
 
         $fields = ['email'];
-        $this->assertFieldsCall($fields, $marketingList, $entity);
+        $this->assertFieldsCall($fields, $marketingList);
         if ($itCount) {
             $this->contactInformationFieldsProvider
                 ->expects($this->exactly($itCount))
@@ -311,23 +311,12 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->sender->send($campaign);
     }
 
-    protected function assertFieldsCall($fields, MarketingList $marketingList, $entity)
+    protected function assertFieldsCall($fields, MarketingList $marketingList)
     {
-        if ($marketingList->isManual()) {
-            $this->contactInformationFieldsProvider->expects($this->once())
-                ->method('getEntityTypedFields')
-                ->with($marketingList->getEntity(), ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
-                ->will($this->returnValue($fields));
-        } else {
-            $this->contactInformationFieldsProvider->expects($this->once())
-                ->method('getQueryTypedFields')
-                ->with(
-                    $marketingList->getSegment(),
-                    $entity,
-                    ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
-                )
-                ->will($this->returnValue($fields));
-        }
+        $this->contactInformationFieldsProvider->expects($this->once())
+            ->method('getMarketingListTypedFields')
+            ->with($marketingList, ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL)
+            ->will($this->returnValue($fields));
     }
 
     /**

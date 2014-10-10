@@ -10,7 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 /**
  * @Route("/marketing-list")

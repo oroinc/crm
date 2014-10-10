@@ -7,6 +7,7 @@ use Symfony\Component\Security\Core\Util\ClassUtils;
 
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
 use OroCRM\Bundle\MarketingListBundle\Model\ContactInformationFieldHelper;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class ContactInformationFieldsProvider
 {
@@ -83,6 +84,29 @@ class ContactInformationFieldsProvider
                 }
             )
         );
+    }
+
+    /**
+     * @param MarketingList $marketingList
+     * @param string $type
+     * @return array
+     */
+    public function getMarketingListTypedFields(MarketingList $marketingList, $type)
+    {
+        if ($marketingList->isManual()) {
+            $typedFields = $this->getEntityTypedFields(
+                $marketingList->getEntity(),
+                $type
+            );
+        } else {
+            $typedFields = $this->getQueryTypedFields(
+                $marketingList->getSegment(),
+                $marketingList->getEntity(),
+                $type
+            );
+        }
+
+        return $typedFields;
     }
 
     /**

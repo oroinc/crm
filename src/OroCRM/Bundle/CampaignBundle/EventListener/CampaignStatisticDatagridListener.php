@@ -12,6 +12,8 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 class CampaignStatisticDatagridListener
 {
     const PATH_GROUPBY = '[source][query][groupBy]';
+    const PATH_NAME = '[name]';
+    const PATH_SELECT = '[source][query][select]';
 
     const MIXIN_NAME = 'orocrm-email-campaign-marketing-list-items-mixin';
     const MANUAL_MIXIN_NAME = 'orocrm-email-campaign-marketing-list-manual-items-mixin';
@@ -38,13 +40,13 @@ class CampaignStatisticDatagridListener
     {
         $config     = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName   = $config->offsetGetByPath('[name]');
+        $gridName   = $config->offsetGetByPath(self::PATH_NAME);
 
         if (!$this->isApplicable($gridName, $parameters)) {
             return;
         }
 
-        $selects = $config->offsetGetByPath('[source][query][select]', []);
+        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
         $groupBy = [];
         foreach ($selects as $select) {
             $select = trim($select);

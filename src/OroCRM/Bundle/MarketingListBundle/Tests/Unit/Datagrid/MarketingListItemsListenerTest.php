@@ -6,7 +6,7 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 {

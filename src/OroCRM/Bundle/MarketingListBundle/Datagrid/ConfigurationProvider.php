@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MarketingListBundle\Grid;
+namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
@@ -11,6 +11,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 class ConfigurationProvider implements ConfigurationProviderInterface
 {
     const GRID_PREFIX = 'orocrm_marketing_list_items_grid_';
+    const GRID_NAME_OFFSET = '[name]';
 
     /**
      * @var ConfigurationProviderInterface
@@ -52,7 +53,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     public function isApplicable($gridName)
     {
-        return strpos($gridName, self::GRID_PREFIX) === 0;
+        return (bool)$this->helper->getMarketingListIdByGridName($gridName);
     }
 
     /**
@@ -69,6 +70,11 @@ class ConfigurationProvider implements ConfigurationProviderInterface
         if (empty($this->configuration[$gridName])) {
             $marketingListId = $this->helper->getMarketingListIdByGridName($gridName);
             $marketingList = $this->helper->getMarketingList($marketingListId);
+            if (!$marketingList) {
+                throw new \RuntimeException(
+                    sprintf('Marketing List with id "%s" not found.', $marketingListId)
+                );
+            }
 
             // Get configuration based on marketing list type
             if ($marketingList->isManual()) {
@@ -80,7 +86,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
             $concreteGridConfiguration =  $this->chainConfigurationProvider->getConfiguration($concreteGridName);
             // Reset configured name to current gridName for further usage in Listener and Extension
-            $concreteGridConfiguration->offsetSetByPath('[name]', $gridName);
+            $concreteGridConfiguration->offsetSetByPath(self::GRID_NAME_OFFSET, $gridName);
             $this->configuration[$gridName] = $concreteGridConfiguration;
         }
 
@@ -93,11 +99,16 @@ class ConfigurationProvider implements ConfigurationProviderInterface
      */
     protected function getEntityGridName($entityName)
     {
+        $gridName = null;
         if ($this->configProvider->hasConfig($entityName)) {
             $config = $this->configProvider->getConfig($entityName);
-            return $config->get('grid_name');
+            $gridName = $config->get('grid_name');
         }
 
-        return null;
+        if (!$gridName) {
+            throw new \RuntimeException(sprintf('Grid not found for entity "%s"', $entityName));
+        }
+
+        return $gridName;
     }
 }
