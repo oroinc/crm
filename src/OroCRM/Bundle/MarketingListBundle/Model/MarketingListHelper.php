@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Model;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListHelper
 {

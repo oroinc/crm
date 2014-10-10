@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CampaignBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
@@ -11,7 +12,6 @@ use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
 use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
-use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
@@ -121,7 +121,11 @@ class EmailCampaignSender
 
         /** @var EntityManager $manager */
         $manager = $this->registry->getManager();
-        $emailFields = $this->getEmailFields($marketingList);
+        $emailFields = $this->contactInformationFieldsProvider
+            ->getMarketingListTypedFields(
+                $marketingList,
+                ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
+            );
         foreach ($iterator as $entity) {
             $to = $this->contactInformationFieldsProvider->getTypedFieldsValues($emailFields, $entity);
             $to = array_unique($to);
@@ -161,30 +165,6 @@ class EmailCampaignSender
         $this->emailCampaign->setSent(true);
         $manager->persist($this->emailCampaign);
         $manager->flush();
-    }
-
-    /**
-     * @param MarketingList $marketingList
-     * @return array
-     */
-    protected function getEmailFields(MarketingList $marketingList)
-    {
-        if ($marketingList->isManual()) {
-            $emailFields = $this->contactInformationFieldsProvider
-                ->getEntityTypedFields(
-                    $marketingList->getEntity(),
-                    ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
-                );
-        } else {
-            $emailFields = $this->contactInformationFieldsProvider
-                ->getQueryTypedFields(
-                    $marketingList->getSegment(),
-                    $marketingList->getEntity(),
-                    ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
-                );
-        }
-
-        return $emailFields;
     }
 
     /**

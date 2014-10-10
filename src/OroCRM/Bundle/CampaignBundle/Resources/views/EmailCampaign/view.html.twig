@@ -57,12 +57,13 @@
 
     {%- set listData -%}
         {% if entity.marketingList is not empty %}
-            {% set mixinName = constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MIXIN_NAME') %}
             {% if entity.marketingList.manual %}
                 {% set mixinName = constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME') %}
+            {% else %}
+                {% set mixinName = constant('OroCRM\\Bundle\\CampaignBundle\\EventListener\\CampaignStatisticDatagridListener::MIXIN_NAME') %}
             {% endif %}
             {{ dataGrid.renderGrid(
-                constant('OroCRM\\Bundle\\MarketingListBundle\\Grid\\ConfigurationProvider::GRID_PREFIX') ~ entity.marketingList.id,
+                constant('OroCRM\\Bundle\\MarketingListBundle\\Datagrid\\ConfigurationProvider::GRID_PREFIX') ~ entity.marketingList.id,
                 {
                     'grid-mixin': mixinName,
                     'emailCampaign': entity.id

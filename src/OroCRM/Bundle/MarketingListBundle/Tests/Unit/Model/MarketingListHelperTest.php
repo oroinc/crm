@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model;
 
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListHelperTest extends \PHPUnit_Framework_TestCase

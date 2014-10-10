@@ -26,7 +26,7 @@ parameters:
     orocrm_marketing_list.twig.extension.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Twig\ContactInformationFieldsExtension
     orocrm_marketing_list.provider.contact_information_fields.class: OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider
 
-    orocrm_marketing_list.datagrid.configuration.provider.class: OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider
+    orocrm_marketing_list.datagrid.configuration.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider
 
 services:
     orocrm_marketing_list.entity_provider:

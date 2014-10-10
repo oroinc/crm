@@ -13,7 +13,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListProvider
 {

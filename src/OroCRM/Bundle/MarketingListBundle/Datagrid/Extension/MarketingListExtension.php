@@ -20,6 +20,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 class MarketingListExtension extends AbstractExtension
 {
     const OPTIONS_MIXIN_PATH = '[options][mixin]';
+    const NAME_PATH = '[name]';
 
     /**
      * @var MarketingListHelper
@@ -48,7 +49,7 @@ class MarketingListExtension extends AbstractExtension
         }
 
         $marketingListId = $this->marketingListHelper
-            ->getMarketingListIdByGridName($config->offsetGetByPath('[name]'));
+            ->getMarketingListIdByGridName($config->offsetGetByPath(self::NAME_PATH));
         if (!$marketingListId) {
             return false;
         }
@@ -103,7 +104,7 @@ class MarketingListExtension extends AbstractExtension
             $qb->setParameter(
                 'marketingListId',
                 $this->marketingListHelper->getMarketingListIdByGridName(
-                    $config->offsetGetByPath('[name]')
+                    $config->offsetGetByPath(self::NAME_PATH)
                 )
             );
         }

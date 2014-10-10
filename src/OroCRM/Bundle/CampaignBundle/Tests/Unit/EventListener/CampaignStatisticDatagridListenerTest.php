@@ -8,7 +8,7 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 {
