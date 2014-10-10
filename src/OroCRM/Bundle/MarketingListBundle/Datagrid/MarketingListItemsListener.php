@@ -7,7 +7,6 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
@@ -117,6 +116,6 @@ class MarketingListItemsListener
             return false;
         }
 
-        return strpos($gridName, ConfigurationProvider::GRID_PREFIX) === 0;
+        return (bool)$this->marketingListHelper->getMarketingListIdByGridName($gridName);
     }
 }

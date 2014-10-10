@@ -6,8 +6,7 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
+use OroCRM\Bundle\MarketingListBundle\Grid\ConfigurationProvider;
 
 class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,14 +18,14 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     protected $listener;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DataGridConfigurationHelper
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dataGridHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|MarketingListSegmentHelper
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     protected function setUp()
     {
@@ -35,12 +34,12 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->segmentHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper')
+        $this->marketingListHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new MarketingListItemsListener($this->dataGridHelper, $this->segmentHelper);
+        $this->listener = new MarketingListItemsListener($this->dataGridHelper, $this->marketingListHelper);
     }
 
     /**
@@ -83,20 +82,13 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(new ParameterBag($parameters)));
 
         if ($hasParameter) {
-            $this->segmentHelper
-                ->expects($this->once())
-                ->method('getSegmentIdByGridName')
-                ->with($this->equalTo($gridName))
-                ->will($this->returnValue((int)$isApplicable));
-
-            $this->segmentHelper
-                ->expects($this->any())
-                ->method('getMarketingListBySegment')
-                ->with($this->equalTo((int)$isApplicable))
-                ->will($this->returnValue(new MarketingList()));
+            $this->marketingListHelper->expects($this->once())
+                ->method('getMarketingListIdByGridName')
+                ->with($gridName)
+                ->will($this->returnValue(intval($isApplicable)));
         }
 
-        if ($isApplicable && $hasParameter) {
+        if ($hasParameter && $isApplicable) {
             $this->dataGridHelper
                 ->expects($this->once())
                 ->method('extendConfiguration')
@@ -116,12 +108,12 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     public function preBuildDataProvider()
     {
         return [
-            ['gridName', false, false],
-            ['gridName', true, false],
-            [Segment::GRID_PREFIX, false, false],
-            [Segment::GRID_PREFIX, true, false],
-            [Segment::GRID_PREFIX . '1', false, true],
-            [Segment::GRID_PREFIX . '1', true, true],
+            'incorrect grid no parameters' => ['gridName', false, false],
+            'incorrect grid with parameters' => ['gridName', true, false],
+            'incorrect id no parameters' => [ConfigurationProvider::GRID_PREFIX, false, false],
+            'incorrect id with parameters' => [ConfigurationProvider::GRID_PREFIX, true, false],
+            'correct grid no parameters' => [ConfigurationProvider::GRID_PREFIX . '1', false, false],
+            'correct grid with parameters' => [ConfigurationProvider::GRID_PREFIX . '1', true, true],
         ];
     }
 
@@ -173,15 +165,15 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
         /** @var MarketingList $marketingList */
         if ($hasParameter) {
-            $this->segmentHelper
+            $this->marketingListHelper
                 ->expects($this->exactly(1 + (int)$useDataSource))
-                ->method('getSegmentIdByGridName')
+                ->method('getMarketingListIdByGridName')
                 ->with($this->equalTo($gridName))
                 ->will($this->returnValue($marketingList->getId()));
 
-            $this->segmentHelper
-                ->expects($this->exactly(1 + (int)$useDataSource))
-                ->method('getMarketingListBySegment')
+            $this->marketingListHelper
+                ->expects($this->exactly((int)$useDataSource))
+                ->method('getMarketingList')
                 ->with($this->equalTo($marketingList->getId()))
                 ->will($this->returnValue($marketingList));
         }
@@ -268,17 +260,11 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
         if ($hasParameter) {
             $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
 
-            $this->segmentHelper
+            $this->marketingListHelper
                 ->expects($this->once())
-                ->method('getSegmentIdByGridName')
+                ->method('getMarketingListIdByGridName')
                 ->with($this->equalTo($gridName))
                 ->will($this->returnValue((int)$isApplicable));
-
-            $this->segmentHelper
-                ->expects($this->any())
-                ->method('getMarketingListBySegment')
-                ->with($this->equalTo((int)$isApplicable))
-                ->will($this->returnValue(new MarketingList()));
         }
 
         $datagrid
