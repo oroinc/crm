@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MarketingListBundle\Datagrid\Extension;
 
 use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\ORM\QueryBuilder;
 
@@ -11,23 +12,27 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
+use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
+/**
+ * For segment based marketing lists show not only segment results but also already contacted entities.
+ */
 class MarketingListExtension extends AbstractExtension
 {
     const OPTIONS_MIXIN_PATH = '[options][mixin]';
+    const NAME_PATH = '[name]';
 
     /**
-     * @var MarketingListSegmentHelper
+     * @var MarketingListHelper
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     /**
-     * @param MarketingListSegmentHelper $segmentHelper
+     * @param MarketingListHelper $marketingListHelper
      */
-    public function __construct(MarketingListSegmentHelper $segmentHelper)
+    public function __construct(MarketingListHelper $marketingListHelper)
     {
-        $this->segmentHelper = $segmentHelper;
+        $this->marketingListHelper = $marketingListHelper;
     }
 
     /**
@@ -43,12 +48,16 @@ class MarketingListExtension extends AbstractExtension
             return false;
         }
 
-        $segmentId = $this->segmentHelper->getSegmentIdByGridName($config->offsetGetByPath('[name]'));
-        if (!$segmentId) {
+        $marketingListId = $this->marketingListHelper
+            ->getMarketingListIdByGridName($config->offsetGetByPath(self::NAME_PATH));
+        if (!$marketingListId) {
             return false;
         }
 
-        return (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
+        $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
+
+        // Accept only segment based marketing lists
+        return $marketingList && !$marketingList->isManual();
     }
 
     /**
@@ -93,9 +102,9 @@ class MarketingListExtension extends AbstractExtension
 
         if ($addParameter) {
             $qb->setParameter(
-                'segmentId',
-                $this->segmentHelper->getSegmentIdByGridName(
-                    $config->offsetGetByPath('[name]')
+                'marketingListId',
+                $this->marketingListHelper->getMarketingListIdByGridName(
+                    $config->offsetGetByPath(self::NAME_PATH)
                 )
             );
         }
@@ -122,9 +131,12 @@ class MarketingListExtension extends AbstractExtension
         $itemsQb
             ->select('mli.entityId')
             ->from('OroCRMMarketingListBundle:MarketingListItem', 'item')
-            ->leftJoin('item.marketingList', 'list')
-            ->where('list.segment = :segmentId');
+            ->where('item.marketingList = :marketingListId');
 
-        return new Func('t1.id IN', [$itemsQb->getDQL()]);
+        /** @var From[] $from */
+        $from = $qb->getDQLPart('from');
+        $alias = $from ? $from[0]->getAlias() : 't1';
+
+        return new Func($alias . '.id IN', [$itemsQb->getDQL()]);
     }
 }

@@ -3,17 +3,18 @@
 namespace OroCRM\Bundle\CampaignBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+
 use Psr\Log\LoggerInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
+use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
+use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
-use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
-use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 
 class EmailCampaignSender
 {
@@ -120,13 +121,14 @@ class EmailCampaignSender
 
         /** @var EntityManager $manager */
         $manager = $this->registry->getManager();
-
-        foreach ($iterator as $entity) {
-            $to = $this->contactInformationFieldsProvider->getQueryContactInformationFields(
-                $marketingList->getSegment(),
-                $entity,
+        $emailFields = $this->contactInformationFieldsProvider
+            ->getMarketingListTypedFields(
+                $marketingList,
                 ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL
             );
+        foreach ($iterator as $entity) {
+            $to = $this->contactInformationFieldsProvider->getTypedFieldsValues($emailFields, $entity);
+            $to = array_unique($to);
 
             try {
                 $manager->beginTransaction();
@@ -154,7 +156,7 @@ class EmailCampaignSender
                 if ($this->logger) {
                     $this->logger->error(
                         sprintf('Email sending to "%s" failed.', implode(', ', $to)),
-                        array('exception' => $e)
+                        ['exception' => $e]
                     );
                 }
             }
