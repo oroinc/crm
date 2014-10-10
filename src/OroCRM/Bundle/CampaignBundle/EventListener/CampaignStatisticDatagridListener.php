@@ -47,6 +47,7 @@ class CampaignStatisticDatagridListener
         $selects = $config->offsetGetByPath('[source][query][select]', []);
         $groupBy = [];
         foreach ($selects as $select) {
+            $select = trim($select);
             // Do not add fields with aggregate functions
             preg_match('/(MIN|MAX|AVG|COUNT|SUM)\(/i', $select, $matches);
             if ($matches) {
@@ -58,7 +59,7 @@ class CampaignStatisticDatagridListener
             if (!empty($parts[2])) {
                 // Add alias
                 $groupBy[] = $parts[2];
-            } elseif (!$parts) {
+            } elseif (!$parts && strpos($select, ' ') === false) {
                 // Add field itself when there is no alias
                 $groupBy[] = $select;
             }
