@@ -6,9 +6,7 @@ use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Func;
 use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
 
 class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,82 +18,65 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registry;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $repository;
+    protected $marketingListHelper;
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-
-        $om = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+        $this->marketingListHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->repository = $this
-            ->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $om
-            ->expects($this->any())
-            ->method('getRepository')
-            ->with($this->equalTo(MarketingListSegmentHelper::MARKETING_LIST))
-            ->will($this->returnValue($this->repository));
-
-        $this->registry
-            ->expects($this->any())
-            ->method('getManagerForClass')
-            ->with($this->equalTo(MarketingListSegmentHelper::MARKETING_LIST))
-            ->will($this->returnValue($om));
-
-        $this->extension = new MarketingListExtension(
-            new MarketingListSegmentHelper($this->registry)
-        );
+        $this->extension = new MarketingListExtension($this->marketingListHelper);
     }
 
-    /**
-     * @param string      $gridName
-     * @param string      $dataSource
-     * @param bool        $isMixin
-     * @param object|null $entity
-     * @param bool        $expected
-     *
-     * @dataProvider applicableDataProvider
-     */
-    public function testIsApplicable($gridName, $dataSource, $isMixin, $entity, $expected)
+    public function testIsApplicableIncorrectDataSource()
     {
         $config = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
             ->disableOriginalConstructor()
             ->getMock();
+        $config
+            ->expects($this->once())
+            ->method('offsetGetByPath')
+            ->with(Builder::DATASOURCE_TYPE_PATH)
+            ->will($this->returnValue((Builder::DATASOURCE_TYPE_PATH . 'INCORRECT')));
+        $this->assertFalse($this->extension->isApplicable($config));
+    }
 
+    public function testIsApplicableNoMixin()
+    {
+        $config = $this
+            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
+            ->disableOriginalConstructor()
+            ->getMock();
         $config
             ->expects($this->any())
             ->method('offsetGetByPath')
             ->will(
                 $this->returnValueMap(
                     [
-                        ['[name]', null, $gridName],
-                        [Builder::DATASOURCE_TYPE_PATH, null, $dataSource],
-                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
+                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
+                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, false]
                     ]
                 )
             );
+        $this->assertFalse($this->extension->isApplicable($config));
+    }
 
-        $this->repository
-            ->expects($this->any())
-            ->method('findOneBy')
-            ->will($this->returnValue($entity));
+    /**
+     * @dataProvider applicableDataProvider
+     *
+     * @param int|null $marketingListId
+     * @param object|null $marketingList
+     * @param bool $expected
+     */
+    public function testIsApplicable($marketingListId, $marketingList, $expected)
+    {
+        $gridName = 'test_grid';
+        $config = $this->assertIsApplicable($marketingListId, $marketingList, $gridName, true);
 
-        $this->assertEquals(
-            $expected,
-            $this->extension->isApplicable($config)
-        );
+        $this->assertEquals($expected, $this->extension->isApplicable($config));
     }
 
     /**
@@ -103,15 +84,25 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function applicableDataProvider()
     {
+        $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonManualMarketingList->expects($this->once())
+            ->method('isManual')
+            ->will($this->returnValue(false));
+
+        $manualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $manualMarketingList->expects($this->once())
+            ->method('isManual')
+            ->will($this->returnValue(true));
+
         return [
-            ['gridName', 'dataSource', false, null, false],
-            ['gridName', 'dataSource', true, null, false],
-            ['gridName', OrmDatasource::TYPE, false, null, false],
-            ['gridName', OrmDatasource::TYPE, true, null, false],
-            [Segment::GRID_PREFIX, OrmDatasource::TYPE, false, null, false],
-            [Segment::GRID_PREFIX, OrmDatasource::TYPE, true, null, false],
-            [Segment::GRID_PREFIX . '1', OrmDatasource::TYPE, false, new \stdClass(), false],
-            [Segment::GRID_PREFIX . '1', OrmDatasource::TYPE, true, new \stdClass(), true],
+            [null, null, false],
+            [1, null, false],
+            [2, $manualMarketingList, false],
+            [3, $nonManualMarketingList, true]
         ];
     }
 
@@ -124,30 +115,20 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testVisitDatasource($dqlParts, $isMixin, $expected)
     {
-        $config = $this
-            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
+        $marketingListId = 1;
+        $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->repository
-            ->expects($this->any())
-            ->method('findOneBy')
-            ->will($this->returnValue(new \stdClass()));
-
-        $id = '1';
-
-        $config
-            ->expects($this->any())
-            ->method('offsetGetByPath')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['[source][type]', null, OrmDatasource::TYPE],
-                        ['[name]', null, Segment::GRID_PREFIX . $id],
-                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
-                    ]
-                )
-            );
+        if ($isMixin) {
+            $nonManualMarketingList->expects($this->once())
+                ->method('isManual')
+                ->will($this->returnValue(false));
+        } else {
+            $nonManualMarketingList->expects($this->never())
+                ->method('isManual');
+        }
+        $gridName = 'test_grid';
+        $config = $this->assertIsApplicable($marketingListId, $nonManualMarketingList, $gridName, $isMixin);
 
         $dataSource = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
@@ -178,7 +159,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
                 $qb
                     ->expects($this->once())
                     ->method('setParameter')
-                    ->with($this->equalTo('segmentId'), $this->equalTo($id));
+                    ->with($this->equalTo('marketingListId'), $this->equalTo($marketingListId));
             }
         }
 
@@ -195,6 +176,48 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->extension->visitDatasource($config, $dataSource);
+    }
+
+    /**
+     * @param int|null $marketingListId
+     * @param object|null $marketingList
+     * @param string $gridName
+     * @param bool $isMixin
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function assertIsApplicable($marketingListId, $marketingList, $gridName, $isMixin)
+    {
+        $config = $this
+            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $config
+            ->expects($this->any())
+            ->method('offsetGetByPath')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['[name]', null, $gridName],
+                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
+                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
+                    ]
+                )
+            );
+        $this->marketingListHelper->expects($this->any())
+            ->method('getMarketingListIdByGridName')
+            ->with($gridName)
+            ->will($this->returnValue($marketingListId));
+        if ($marketingListId) {
+            $this->marketingListHelper->expects($this->any())
+                ->method('getMarketingList')
+                ->with($marketingListId)
+                ->will($this->returnValue($marketingList));
+        } else {
+            $this->marketingListHelper->expects($this->never())
+                ->method('getMarketingList');
+        }
+
+        return $config;
     }
 
     /**

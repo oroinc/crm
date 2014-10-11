@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository as BatchJobRepository;
 
 use Symfony\Component\DomCrawler\Form;
-use Symfony\Component\DomCrawler\Crawler;
 
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
@@ -26,8 +25,6 @@ class ImportExportTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
-
-        $this->file = $this->getImportTemplate();
     }
 
     protected function tearDown()
@@ -45,14 +42,35 @@ class ImportExportTest extends WebTestCase
     protected function getBatchJobManager()
     {
         /** @var BatchJobRepository $batchJobRepository */
-        $batchJobRepository = $this->client->getKernel()->getContainer()->get('akeneo_batch.job_repository');
+        $batchJobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
         return $batchJobRepository->getJobManager();
     }
 
+    public function strategyDataProvider()
+    {
+        return [
+            'add'            => ['orocrm_contact.add'],
+            'add or replace' => ['orocrm_contact.add_or_replace'],
+        ];
+    }
+
     /**
-     * @return Crawler
+     * @param string $strategy
+     * @dataProvider strategyDataProvider
      */
-    public function testImportFormAction()
+    public function testImportExport($strategy)
+    {
+        $this->validateImportFile($strategy);
+        $this->doImport($strategy);
+
+        $this->doExport();
+        $this->validateExportResult();
+    }
+
+    /**
+     * @param string $strategy
+     */
+    protected function validateImportFile($strategy)
     {
         $crawler = $this->client->request(
             'GET',
@@ -64,19 +82,11 @@ class ImportExportTest extends WebTestCase
                 )
             )
         );
-        $result  = $this->client->getResponse();
+        $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+        $this->assertContains($strategy, $result->getContent());
 
-        return $crawler;
-    }
-
-    /**
-     * @param Crawler $crawler
-     *
-     * @depends testImportFormAction
-     */
-    public function testImportValidateAction(Crawler $crawler)
-    {
+        $this->file = $this->getImportTemplate();
         $this->assertTrue(file_exists($this->file));
 
         /** @var Form $form */
@@ -89,6 +99,7 @@ class ImportExportTest extends WebTestCase
         );
 
         $form['oro_importexport_import[file]']->upload($this->file);
+        $form['oro_importexport_import[processorAlias]'] = $strategy;
 
         $this->client->followRedirects(true);
         $this->client->submit($form);
@@ -102,17 +113,18 @@ class ImportExportTest extends WebTestCase
     }
 
     /**
-     * @depends testImportValidateAction
+     * @param string $strategy
      */
-    public function testImportProcessAction()
+    protected function doImport($strategy)
     {
+        // test import
         $this->client->followRedirects(false);
         $this->client->request(
             'GET',
             $this->getUrl(
                 'oro_importexport_import_process',
                 array(
-                    'processorAlias' => 'orocrm_contact.add_or_replace',
+                    'processorAlias' => $strategy,
                     '_format'        => 'json'
                 )
             )
@@ -123,17 +135,14 @@ class ImportExportTest extends WebTestCase
         $this->assertEquals(
             array(
                 'success'   => true,
-                'message'   => 'File was successful imported.',
+                'message'   => 'File was successfully imported.',
                 'errorsUrl' => null
             ),
             $data
         );
     }
 
-    /**
-     * @depends testImportProcessAction
-     */
-    public function testInstantExport()
+    protected function doExport()
     {
         $this->client->followRedirects(false);
         $this->client->request(
@@ -153,19 +162,9 @@ class ImportExportTest extends WebTestCase
         $this->assertEquals(1, $data['readsCount']);
         $this->assertEquals(0, $data['errorsCount']);
 
-        return $data['url'];
-    }
-
-    /**
-     * @param $url
-     *
-     * @depends testInstantExport
-     */
-    public function testDownloadExportResultAction($url)
-    {
         $this->client->request(
             'GET',
-            $url
+            $data['url']
         );
 
         $result = $this->client->getResponse();
@@ -173,35 +172,41 @@ class ImportExportTest extends WebTestCase
         $this->assertResponseContentTypeEquals($result, 'text/csv');
     }
 
-    /**
-     * @depends testDownloadExportResultAction
-     */
-    public function testDataValid()
+    protected function validateExportResult()
     {
-        $data    = $this->getFileContents($this->file);
-        $content = $this->getFileContents($this->getExportFile());
+        $importTemplate = $this->getFileContents($this->file);
+        $exportedData = $this->getFileContents($this->getExportFile());
 
-        $excludedProperties = [
-            'Accounts 1 Account name',
-            'Accounts 2 Account name',
-        ];
+        $commonFields = array_intersect($importTemplate[0], $exportedData[0]);
 
-        $this->assertEquals($content[0], $data[0]);
+        $importTemplateValues = $this->extractFieldValues($commonFields, $importTemplate);
+        $exportedDataValues = $this->extractFieldValues($commonFields, $exportedData);
 
-        foreach ($excludedProperties as $excludedProperty) {
-            $key = array_search($excludedProperty, $data[0]);
-            if (false !== $key) {
-                unset($data[0][$key], $data[1][$key], $content[0][$key]);
+        $this->assertEquals($importTemplateValues, $exportedDataValues);
+    }
+
+    /**
+     * @param array $fields
+     * @param array $data
+     * @return array
+     */
+    protected function extractFieldValues(array $fields, array $data)
+    {
+        // ID is changed
+        // birthdays have different timestamps
+        $skippedFields = ['Id', 'Birthday'];
+
+        $values = [];
+        foreach ($fields as $field) {
+            if (!in_array($field, $skippedFields)) {
+                $key = array_search($field, $data[0]);
+                if (false !== $key) {
+                    $values[$field] = $data[1][$key];
+                }
             }
         }
 
-        $content = array_combine($content[0], $content[1]);
-        $data    = array_combine($data[0], $data[1]);
-
-        // @todo: fix date BAP-4560
-        unset($data['Birthday'], $content['Birthday'], $data['Id'], $content['Id']);
-
-        $this->assertEmpty(array_diff($data, $content));
+        return $values;
     }
 
     /**

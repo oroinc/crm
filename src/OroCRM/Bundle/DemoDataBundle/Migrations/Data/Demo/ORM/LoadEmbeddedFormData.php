@@ -119,6 +119,7 @@ class LoadEmbeddedFormData extends AbstractFixture implements DependentFixtureIn
         $embeddedForm->setSuccessMessage($contactUs->getDefaultSuccessMessage());
         $embeddedForm->setTitle('Contact Us Form');
         $embeddedForm->setOwner($this->organization);
+        $embeddedForm->setDataChannel($this->dataChannel);
         $om->persist($embeddedForm);
     }
 
