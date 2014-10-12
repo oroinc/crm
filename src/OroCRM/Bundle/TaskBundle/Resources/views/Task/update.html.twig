@@ -53,15 +53,13 @@
         ]
     }] %}
 
-    {# This is required to show extended fields #}
-    {% if form.additional is defined and form.additional.children|length > 0 %}
-        {% set additionalData = [] %}
-        {% for value in form.additional %}
-            {% set additionalData = additionalData|merge([form_row(value)]) %}
-        {% endfor %}
-
+    {% set additionalData = [] %}
+    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
+        {% set additionalData = additionalData|merge([form_row(child)]) %}
+    {% endfor %}
+    {% if additionalData is not empty %}
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'Additional Information'|trans,
+            'title': 'Additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
