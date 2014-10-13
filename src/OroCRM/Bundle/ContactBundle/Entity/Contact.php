@@ -21,6 +21,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
+use OroCRM\Bundle\CallBundle\Model\PhoneHolderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -72,7 +73,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, PhoneHolderInterface
 {
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
@@ -1551,5 +1552,35 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return null|string
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $primaryPhone = $this->getPrimaryPhone();
+
+        return  $primaryPhone ? $primaryPhone->getPhone() : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return array
+     */
+    public function getPhoneNumbers()
+    {
+        $phones = [];
+
+        foreach ($this->getPhones() as $phone) {
+            if (!in_array($phone->getPhone(), $phones)) {
+                $phones[] = $phone->getPhone();
+            }
+        }
+
+        return $phones;
     }
 }
