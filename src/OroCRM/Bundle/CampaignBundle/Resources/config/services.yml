@@ -118,7 +118,7 @@ services:
     orocrm_campaign.listener.email_campaign_statistic:
         class: %orocrm_campaign.listener.email_campaign_statistic.class%
         arguments:
-            - @orocrm_marketing_list.model.segment_helper
+            - @orocrm_marketing_list.model.helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre,   method: onPreBuild }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after, method: onBuildAfter }

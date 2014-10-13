@@ -255,6 +255,18 @@ class MarketingList
     }
 
     /**
+     * @return bool
+     */
+    public function isManual()
+    {
+        if ($this->type) {
+            return $this->type->getName() === MarketingListType::TYPE_MANUAL;
+        }
+
+        return false;
+    }
+
+    /**
      * @return Segment
      */
     public function getSegment()

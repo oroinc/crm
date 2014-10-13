@@ -7,47 +7,63 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
+use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
 {
     const PATH_GROUPBY = '[source][query][groupBy]';
+    const PATH_NAME = '[name]';
+    const PATH_SELECT = '[source][query][select]';
 
     const MIXIN_NAME = 'orocrm-email-campaign-marketing-list-items-mixin';
+    const MANUAL_MIXIN_NAME = 'orocrm-email-campaign-marketing-list-manual-items-mixin';
 
     /**
-     * @var MarketingListSegmentHelper
+     * @var MarketingListHelper
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     /**
-     * @param MarketingListSegmentHelper $segmentHelper
+     * @param MarketingListHelper $marketingListHelper
      */
-    public function __construct(MarketingListSegmentHelper $segmentHelper)
+    public function __construct(MarketingListHelper $marketingListHelper)
     {
-        $this->segmentHelper = $segmentHelper;
+        $this->marketingListHelper = $marketingListHelper;
     }
 
     /**
+     * Add fields that are not mentioned in aggregate functions to GROUP BY.
+     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
     {
         $config     = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName   = $config->offsetGetByPath('[name]');
+        $gridName   = $config->offsetGetByPath(self::PATH_NAME);
 
         if (!$this->isApplicable($gridName, $parameters)) {
             return;
         }
 
-        $selects = $config->offsetGetByPath('[source][query][select]', []);
+        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
         $groupBy = [];
         foreach ($selects as $select) {
-            preg_match('/([^\s]+)\s+as\s+c\d+$/i', $select, $parts);
+            $select = trim($select);
+            // Do not add fields with aggregate functions
+            preg_match('/(MIN|MAX|AVG|COUNT|SUM)\(/i', $select, $matches);
+            if ($matches) {
+                continue;
+            }
 
-            if (!empty($parts[1])) {
-                $groupBy[] = $parts[1];
+            // Search for field alias if applicable or field name to use in group by
+            preg_match('/([^\s]+)\s+as\s+(\w+)$/i', $select, $parts);
+            if (!empty($parts[2])) {
+                // Add alias
+                $groupBy[] = $parts[2];
+            } elseif (!$parts && strpos($select, ' ') === false) {
+                // Add field itself when there is no alias
+                $groupBy[] = $select;
             }
         }
 
@@ -55,10 +71,12 @@ class CampaignStatisticDatagridListener
             return;
         }
 
+        // Add existing group by statement to group by list
         if ($existingGroupBy = $config->offsetGetByPath(self::PATH_GROUPBY)) {
             $groupBy[] = $existingGroupBy;
         }
 
+        // Update group by fields list
         $config->offsetSetByPath(self::PATH_GROUPBY, implode(', ', $groupBy));
     }
 
@@ -94,12 +112,11 @@ class CampaignStatisticDatagridListener
      */
     public function isApplicable($gridName, ParameterBag $parameterBag)
     {
-        if ($parameterBag->get(MarketingListItemsListener::MIXIN, false) !== self::MIXIN_NAME) {
+        $gridMixin = $parameterBag->get(MarketingListItemsListener::MIXIN, false);
+        if ($gridMixin !== self::MIXIN_NAME && $gridMixin !== self::MANUAL_MIXIN_NAME) {
             return false;
         }
 
-        $segmentId = $this->segmentHelper->getSegmentIdByGridName($gridName);
-
-        return $segmentId && (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
+        return (bool)$this->marketingListHelper->getMarketingListIdByGridName($gridName);
     }
 }

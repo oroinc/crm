@@ -8,7 +8,7 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
-use OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper;
+use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
 {
@@ -20,9 +20,9 @@ class MarketingListItemsListener
     protected $dataGridConfigurationHelper;
 
     /**
-     * @var MarketingListSegmentHelper
+     * @var MarketingListHelper
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     /**
      * @var array
@@ -31,17 +31,19 @@ class MarketingListItemsListener
 
     /**
      * @param DataGridConfigurationHelper $dataGridConfigurationHelper
-     * @param MarketingListSegmentHelper  $segmentHelper
+     * @param MarketingListHelper $marketingListHelper
      */
     public function __construct(
         DataGridConfigurationHelper $dataGridConfigurationHelper,
-        MarketingListSegmentHelper $segmentHelper
+        MarketingListHelper $marketingListHelper
     ) {
         $this->dataGridConfigurationHelper = $dataGridConfigurationHelper;
-        $this->segmentHelper               = $segmentHelper;
+        $this->marketingListHelper = $marketingListHelper;
     }
 
     /**
+     * Apply marketing list grid mixin.
+     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
@@ -74,6 +76,8 @@ class MarketingListItemsListener
     }
 
     /**
+     * Add marketingList instance to parameters.
+     *
      * @param BuildAfter $event
      */
     public function onBuildAfter(BuildAfter $event)
@@ -88,8 +92,8 @@ class MarketingListItemsListener
         $dataSource = $dataGrid->getDatasource();
 
         if ($dataSource instanceof OrmDatasource) {
-            $segmentId     = $this->segmentHelper->getSegmentIdByGridName($dataGridName);
-            $marketingList = $this->segmentHelper->getMarketingListBySegment($segmentId);
+            $marketingListId = $this->marketingListHelper->getMarketingListIdByGridName($dataGridName);
+            $marketingList = $this->marketingListHelper->getMarketingList($marketingListId);
 
             $dataSource
                 ->getQueryBuilder()
@@ -99,6 +103,8 @@ class MarketingListItemsListener
     }
 
     /**
+     * Accept orocrm_marketing_list_items_grid_* grids only in case when they has mixin to apply.
+     *
      * @param string       $gridName
      * @param ParameterBag $parameters
      *
@@ -110,8 +116,6 @@ class MarketingListItemsListener
             return false;
         }
 
-        $segmentId = $this->segmentHelper->getSegmentIdByGridName($gridName);
-
-        return $segmentId && (bool)$this->segmentHelper->getMarketingListBySegment($segmentId);
+        return (bool)$this->marketingListHelper->getMarketingListIdByGridName($gridName);
     }
 }
