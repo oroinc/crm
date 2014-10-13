@@ -182,7 +182,48 @@ class ImportExportTest extends WebTestCase
         $importTemplateValues = $this->extractFieldValues($commonFields, $importTemplate);
         $exportedDataValues = $this->extractFieldValues($commonFields, $exportedData);
 
-        $this->assertEquals($importTemplateValues, $exportedDataValues);
+        $this->assertExportResults($importTemplateValues, $exportedDataValues);
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     */
+    protected function assertExportResults(array $expected, array $actual)
+    {
+        $this->assertCollectionData($expected, $actual, ['Emails 2 Email', 'Emails 3 Email']);
+        $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
+        $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
+        $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/postal code', 'Addresses 3 Zip/postal code']);
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * Order of elements in collection is not important, except the first (primary) element
+     *
+     * @param array $expected
+     * @param array $actual
+     * @param array $keys
+     */
+    protected function assertCollectionData(array &$expected, array &$actual, array $keys)
+    {
+        $expectedValues = [];
+        $actualValues = [];
+
+        foreach ($keys as $key) {
+            $this->assertArrayHasKey($key, $expected);
+            $this->assertArrayHasKey($key, $actual);
+            $expectedValues[] = $expected[$key];
+            $actualValues[] = $actual[$key];
+            unset($expected[$key]);
+            unset($actual[$key]);
+        }
+
+        sort($expectedValues);
+        sort($actualValues);
+
+        $this->assertEquals($expectedValues, $actualValues);
     }
 
     /**
