@@ -3,16 +3,19 @@
 namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Types\Type;
 
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
+    const UPDATE_LIFETIME_READ_BATCH_SIZE  = 1000;
+    const UPDATE_LIFETIME_WRITE_BATCH_SIZE = 200;
+
     /**
      * {@inheritdoc}
      */
@@ -74,46 +77,73 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
      */
     protected function updateLifetimeForAccounts(Channel $channel, array $lifetimeFields)
     {
-        $persistedItemCount = 0;
+        $customerIdentity = $channel->getCustomerIdentity();
+        if (!isset($lifetimeFields[$customerIdentity])) {
+            return;
+        }
+        $lifetimeFieldName = $lifetimeFields[$customerIdentity];
 
         $accountRepo  = $this->em->getRepository('OroCRMAccountBundle:Account');
-        $lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
 
-        $accountRows = $accountRepo->createQueryBuilder('a')
-            ->select('a.id')
-            ->getQuery()
-            ->getArrayResult();
+        $accountIterator = new BufferedQueryResultIterator(
+            $accountRepo->createQueryBuilder('a')->select('a.id')
+        );
+        $accountIterator->setBufferSize(self::UPDATE_LIFETIME_READ_BATCH_SIZE);
 
-        foreach ($accountRows as $accountRow) {
-            $customerIdentity = $channel->getCustomerIdentity();
-            if (isset($lifetimeFields[$customerIdentity])) {
-                $account = $this->em->getReference($accountRepo->getClassName(), $accountRow['id']);
-                /** @var LifetimeHistoryRepository $lifetimeRepo */
-                $lifetimeAmount = $lifetimeRepo->calculateAccountLifetime(
-                    $customerIdentity,
-                    $lifetimeFields[$customerIdentity],
-                    $account,
-                    $channel
-                );
+        $accountIds = [];
+        foreach ($accountIterator as $accountRow) {
+            $accountIds[] = $accountRow['id'];
 
-                $history = new LifetimeValueHistory();
-                $history->setAmount($lifetimeAmount);
-                $history->setDataChannel($channel);
-                $history->setAccount($account);
-                $this->em->persist($history);
-                $persistedItemCount++;
-            }
-
-            if ($persistedItemCount === self::BATCH_SIZE) {
-                $this->em->flush();
-                $this->em->clear($lifetimeRepo->getClassName());
-                $persistedItemCount = 0;
+            if (count($accountIds) === self::UPDATE_LIFETIME_WRITE_BATCH_SIZE) {
+                $this->updateLifetime($accountIds, $channel, $customerIdentity, $lifetimeFieldName);
+                $accountIds = [];
             }
         }
 
-        if ($persistedItemCount > 0) {
-            $this->em->flush();
-            $this->em->clear($lifetimeRepo->getClassName());
+        if (count($accountIds) > 0) {
+            $this->updateLifetime($accountIds, $channel, $customerIdentity, $lifetimeFieldName);
         }
+    }
+
+    /**
+     * @param int[]   $accountIds
+     * @param Channel $channel
+     * @param string  $customerIdentity
+     * @param string  $lifetimeFieldName
+     */
+    protected function updateLifetime(array $accountIds, Channel $channel, $customerIdentity, $lifetimeFieldName)
+    {
+        $customerMetadata   = $this->em->getClassMetadata($customerIdentity);
+        $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
+
+        $this->em->getConnection()->executeUpdate(
+            'UPDATE orocrm_channel_lifetime_hist SET status = :status'
+            . sprintf(
+                ' WHERE data_channel_id = %d AND account_id IN (%s)',
+                $channel->getId(),
+                implode(',', $accountIds)
+            ),
+            ['status' => false],
+            ['status' => 'boolean']
+        );
+        $this->em->getConnection()->executeUpdate(
+            'INSERT INTO orocrm_channel_lifetime_hist'
+            . ' (account_id, data_channel_id, status, amount, created_at)'
+            . sprintf(
+                ' SELECT e.account_id AS hist_account_id, e.data_channel_id AS hist_data_channel_id,'
+                . ' :status as hist_status, SUM(COALESCE(e.%s, 0)) AS hist_amount,'
+                . ' :created_at AS hist_created_at',
+                $lifetimeColumnName
+            )
+            . sprintf(' FROM %s AS e', $customerMetadata->getTableName())
+            . sprintf(
+                ' WHERE e.data_channel_id = %d AND e.account_id IN (%s)',
+                $channel->getId(),
+                implode(',', $accountIds)
+            )
+            . ' GROUP BY hist_account_id, hist_data_channel_id, hist_status, hist_created_at',
+            ['status' => true, 'created_at' => new \DateTime(null, new \DateTimeZone('UTC'))],
+            ['status' => Type::BOOLEAN, 'created_at' => Type::DATETIME]
+        );
     }
 }
