@@ -6,13 +6,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallController extends Controller
@@ -33,19 +31,6 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/activity/create", name="orocrm_call_activity_create")
-     * @Template("OroCRMCallBundle:Call:dialog/update.html.twig")
-     * @AclAncestor("orocrm_call_create")
-     */
-    public function activityCreateAction()
-    {
-        /** @var Call $call */
-        $call = $this->initEntity();
-
-        return $this->update($call, false);
-    }
-
-    /**
      * @Route("/create", name="orocrm_call_create")
      * @Template("OroCRMCallBundle:Call:update.html.twig")
      * @Acl(
@@ -57,12 +42,7 @@ class CallController extends Controller
      */
     public function createAction()
     {
-        $redirect = ($this->getRequest()->get('no_redirect')) ? false : true;
-        $contactId = $this->getRequest()->get('contactId');
-        $accountId = $this->getRequest()->get('accountId');
-
-        $entity = $this->initEntity($contactId, $accountId);
-        return $this->update($entity, $redirect);
+        return $this->update();
     }
 
     /**
@@ -111,21 +91,6 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/widget", name="orocrm_call_widget_calls")
-     * @Template
-     * @AclAncestor("orocrm_call_view")
-     *
-     * @param Request $request
-     * @return array
-     */
-    public function callsAction(Request $request)
-    {
-        return array(
-            'datagridParameters' => $request->query->all()
-        );
-    }
-
-    /**
      * @Route("/base-widget", name="orocrm_call_base_widget_calls")
      * @Template
      * @AclAncestor("orocrm_call_view")
@@ -151,69 +116,35 @@ class CallController extends Controller
     }
 
     /**
-     * @param int|null $contactId
-     * @param int|null $accountId
-     * @return Call
-     * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
-    protected function initEntity($contactId = null, $accountId = null)
-    {
-        $entity = new Call();
-
-        $callStatus = $this->getDoctrine()
-            ->getRepository('OroCRMCallBundle:CallStatus')
-            ->findOneByName('completed');
-        $entity->setCallStatus($callStatus);
-
-        $callDirection = $this->getDoctrine()
-            ->getRepository('OroCRMCallBundle:CallDirection')
-            ->findOneByName('outgoing');
-        $entity->setDirection($callDirection);
-
-        if ($contactId) {
-            $repository = $this->getDoctrine()->getRepository('OroCRMContactBundle:Contact');
-            $contact = $repository->find($contactId);
-            if ($contact) {
-                $entity->setRelatedContact($contact);
-                $entity->setContactPhoneNumber($contact->getPrimaryPhone());
-            } else {
-                throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
-            }
-        }
-
-        if ($accountId) {
-            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
-            /** @var Account $account */
-            $account = $repository->find($accountId);
-            if ($account) {
-                $entity->setRelatedAccount($account);
-            } else {
-                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
-            }
-        }
-
-        return $entity;
-    }
-
-    /**
      * @param Call $entity
-     * @param bool $redirect
+     *
      * @return array
      */
-    protected function update(Call $entity = null, $redirect = true)
+    protected function update(Call $entity = null)
     {
         $saved = false;
 
         if (!$entity) {
             $entity = new Call();
+
+            $callStatus = $this->getDoctrine()
+                ->getRepository('OroCRMCallBundle:CallStatus')
+                ->findOneByName('completed');
+            $entity->setCallStatus($callStatus);
+
+            $callDirection = $this->getDoctrine()
+                ->getRepository('OroCRMCallBundle:CallDirection')
+                ->findOneByName('outgoing');
+            $entity->setDirection($callDirection);
         }
 
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
-            if ($redirect) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
-                );
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
+            );
+
+            if (!$this->getRequest()->get('_widgetContainer')) {
 
                 return $this->get('oro_ui.router')->redirectAfterSave(
                     ['route' => 'orocrm_call_update', 'parameters' => ['id' => $entity->getId()]],

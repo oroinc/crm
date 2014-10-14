@@ -60,6 +60,7 @@ class OroCRMCallBundle implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        $queries->addPreQuery($this->getFillUserActivityQuery());
         $queries->addPreQuery($this->getFillAccountActivityQuery());
         $queries->addPreQuery($this->getFillContactActivityQuery());
         $queries->addPreQuery($this->getFillPhoneQuery());
@@ -80,6 +81,19 @@ class OroCRMCallBundle implements
         $callTable->removeForeignKey('FK_1FBD1A24A156BF5C');
         $callTable->dropColumn('contact_phone_id');
         $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('contactPhoneNumber'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFillUserActivityQuery()
+    {
+        $sql = 'INSERT INTO %s (call_id, user_id)'
+            . ' SELECT id, owner_id'
+            . ' FROM orocrm_call'
+            . ' WHERE owner_id IS NOT NULL';
+
+        return sprintf($sql, $this->getAssociationTableName('oro_user'));
     }
 
     /**

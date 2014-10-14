@@ -125,7 +125,7 @@ datagrid:
                 turnOffToolbarRecordsNumber: 10
                 addResetAction: false
 
-    widget-calls-grid:
+    activity-call-grid:
         extends: widget-base-calls-grid
         filters:
             columns:
@@ -138,9 +138,6 @@ datagrid:
                 dateTime:
                     type: datetime
                     data_name: call.callDateTime
-
-    activity-call-grid:
-        extends: widget-base-calls-grid
 
     dashboard-recent-calls-grid:
         options:

@@ -35,13 +35,14 @@ orocrm:
         widget:
             call_information: Call Information
 
+        log_call:              Log call
+
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
         #
         entity_label:          Call
         entity_plural_label:   Calls
         entity_description:    Represent call
-        log_call:              Log call
         id.label:              Id
         subject.label:         Subject
         phone_number.label:    Phone number

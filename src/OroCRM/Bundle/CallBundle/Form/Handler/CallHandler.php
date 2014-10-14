@@ -99,10 +99,7 @@ class CallHandler
                 'phone_default' => $target->getPrimaryPhoneNumber(),
             ];
         } else {
-            $options = [
-                'phone_suggestions' => [],
-                'phone_default' => null,
-            ];
+            $options = [];
         }
 
         $this->form = $this->formFactory->createNamed($this->formName, $this->formType, $entity, $options);
