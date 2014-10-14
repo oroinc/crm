@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -18,6 +20,39 @@ class ContactAddOrReplaceStrategy extends ConfigurableAddOrReplaceStrategy
     public function setContactImportHelper(ContactImportHelper $contactImportHelper)
     {
         $this->contactImportHelper = $contactImportHelper;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function importExistingEntity(
+        $entity,
+        $existingEntity,
+        $itemData = null,
+        array $excludedFields = array()
+    ) {
+        // manually handle recursive relation to accounts
+        $entityName = ClassUtils::getClass($entity);
+        $fieldName = 'accounts';
+
+        if ($entity instanceof Contact
+            && $existingEntity instanceof Contact
+            && !$this->isFieldExcluded($entityName, $fieldName, $itemData)
+            && !in_array($fieldName, $excludedFields)
+        ) {
+            foreach ($existingEntity->getAccounts() as $account) {
+                $existingEntity->removeAccount($account);
+            }
+
+            foreach ($entity->getAccounts() as $account) {
+                $account->removeContact($entity);
+                $existingEntity->addAccount($account);
+            }
+
+            $excludedFields[] = $fieldName;
+        }
+
+        parent::importExistingEntity($entity, $existingEntity, $itemData, $excludedFields);
     }
 
     /**
