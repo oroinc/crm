@@ -75,7 +75,10 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             $randomPath = rand(1, 10);
             if ($randomPath > 2) {
                 $call->setRelatedContact($contact);
-                $call->setContactPhoneNumber($contact->getPrimaryPhone());
+                $contactPrimaryPhone = $contact->getPrimaryPhone();
+                if ($contactPrimaryPhone) {
+                    $call->setPhoneNumber($contactPrimaryPhone->getPhone());
+                }
                 $call->setDirection($directions['outgoing']);
             }
 
@@ -87,7 +90,8 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
                 }
             }
 
-            if (is_null($call->getContactPhoneNumber())) {
+            $phone = $call->getPhoneNumber();
+            if (empty($phone)) {
                 $phone = rand(1000000000, 9999999999);
                 $phone = sprintf(
                     "%s-%s-%s",
