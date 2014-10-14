@@ -4,12 +4,17 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\EmbeddedFormBundle\Entity\EmbeddedForm;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 class DefaultChannelData extends AbstractDefaultChannelDataFixture
 {
-    const CHANNEL_TYPE = 'custom';
+    const PREFERABLE_CHANNEL_TYPE = 'custom';
+
+    const FORM_TYPE = 'orocrm_contact_us.embedded_form';
 
     /**
      * {@inheritdoc}
@@ -18,16 +23,15 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
     {
         $entity = 'OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest';
 
-        $shouldBeCreated = $this->getRowCount($entity);
+        $forms = $this->em->getRepository('OroEmbeddedFormBundle:EmbeddedForm')
+            ->findBy(['formType' => self::FORM_TYPE]);
+
+        $existingRecords =  $this->getRowCount($entity);
+        $shouldBeCreated =  $existingRecords || !empty($forms);
         if ($shouldBeCreated) {
-            /** @var Channel $channel */
+            /** @var Channel|null $channel */
             $channel = $this->em->getRepository('OroCRMChannelBundle:Channel')
-                ->createQueryBuilder('c')
-                ->andWhere('c.channelType = :type')
-                ->setParameter('type', self::CHANNEL_TYPE)
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getOneOrNullResult();
+                ->findOneBy(['channelType' => self::PREFERABLE_CHANNEL_TYPE]);
 
             if (!$channel) {
                 $builder = $this->container->get('orocrm_channel.builder.factory')->createBuilder();
@@ -40,9 +44,19 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
 
             $channel = $builder->getChannel();
 
+            /** @var EmbeddedForm|ChannelAwareInterface $form hack with interface because this is extended field*/
+            foreach ($forms as $form) {
+                if (!$form->getDataChannel()) {
+                    $form->setDataChannel($channel);
+                }
+            }
+
             $this->em->persist($channel);
             $this->em->flush();
-            $this->fillChannelToEntity($channel, $entity);
+
+            if ($existingRecords) {
+                $this->fillChannelToEntity($channel, $entity);
+            }
         }
     }
 }
