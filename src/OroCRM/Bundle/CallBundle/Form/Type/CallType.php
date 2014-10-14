@@ -19,7 +19,12 @@ class CallType extends AbstractType
             ->add(
                 'phoneNumber',
                 'orocrm_call_phone',
-                array('required' => true, 'label' => 'orocrm.call.phone_number.label')
+                array(
+                    'required' => true,
+                    'label' => 'orocrm.call.phone_number.label',
+                    'suggestions' => $options['phone_suggestions'],
+                    'suggestion_default' => $options['phone_default'],
+                )
             )
             ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
             ->add(
@@ -59,7 +64,9 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call'
+                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'phone_suggestions' => [],
+                'phone_default' => null,
             )
         );
     }

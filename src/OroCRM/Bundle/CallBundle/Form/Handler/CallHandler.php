@@ -3,11 +3,13 @@
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
@@ -18,6 +20,16 @@ class CallHandler
      * @var FormInterface
      */
     protected $form;
+
+    /**
+     * @var string
+     */
+    protected $formName;
+
+    /**
+     * @var string
+     */
+    protected $formType;
 
     /**
      * @var Request
@@ -40,24 +52,35 @@ class CallHandler
     protected $entityRoutingHelper;
 
     /**
-     * @param FormInterface $form
+     * @var FormFactory
+     */
+    protected $formFactory;
+
+    /**
+     * @param string $formName
+     * @param string $formType
      * @param Request       $request
      * @param ObjectManager $manager
      * @param CallActivityManager $callActivityManager
      * @param EntityRoutingHelper $entityRoutingHelper
+     * @param FormFactory $formFactory
      */
     public function __construct(
-        FormInterface $form,
+        $formName,
+        $formType,
         Request $request,
         ObjectManager $manager,
         CallActivityManager $callActivityManager,
-        EntityRoutingHelper $entityRoutingHelper
+        EntityRoutingHelper $entityRoutingHelper,
+        FormFactory $formFactory
     ) {
-        $this->form    = $form;
+        $this->formName = $formName;
+        $this->formType = $formType;
         $this->request = $request;
         $this->manager = $manager;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
+        $this->formFactory = $formFactory;
     }
 
     /**
@@ -68,14 +91,26 @@ class CallHandler
      */
     public function process(Call $entity)
     {
-        $this->form->setData($entity);
+        $target = $this->getTargetEntity();
+
+        if ($target && $target instanceof PhoneHolderInterface) {
+            $options = [
+                'phone_suggestions' => $target->getPhoneNumbers(),
+                'phone_default' => $target->getPrimaryPhoneNumber(),
+            ];
+        } else {
+            $options = [
+                'phone_suggestions' => [],
+                'phone_default' => null,
+            ];
+        }
+
+        $this->form = $this->formFactory->createNamed($this->formName, $this->formType, $entity, $options);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-
-                $target = $this->getTargetEntity();
 
                 if ($target) {
                     $this->callActivityManager->addAssociation($entity, $target);
@@ -121,5 +156,15 @@ class CallHandler
     {
         $this->manager->persist($entity);
         $this->manager->flush();
+    }
+
+    /**
+     * Get form, that build into handler, via handler service
+     *
+     * @return FormInterface
+     */
+    public function getForm()
+    {
+        return $this->form;
     }
 }

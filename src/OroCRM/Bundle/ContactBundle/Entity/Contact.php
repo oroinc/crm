@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
@@ -72,7 +73,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, PhoneHolderInterface
 {
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
@@ -1551,5 +1552,31 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $primaryPhone = $this->getPrimaryPhone();
+
+        return  $primaryPhone ? $primaryPhone->getPhone() : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPhoneNumbers()
+    {
+        $phones = [];
+
+        foreach ($this->getPhones() as $phone) {
+            if (!in_array($phone->getPhone(), $phones)) {
+                $phones[] = $phone->getPhone();
+            }
+        }
+
+        return $phones;
     }
 }
