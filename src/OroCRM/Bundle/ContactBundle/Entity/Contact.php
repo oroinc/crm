@@ -1556,8 +1556,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Ph
 
     /**
      * {@inheritdoc}
-     *
-     * @return null|string
      */
     public function getPrimaryPhoneNumber()
     {
@@ -1568,8 +1566,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Ph
 
     /**
      * {@inheritdoc}
-     *
-     * @return array
      */
     public function getPhoneNumbers()
     {
