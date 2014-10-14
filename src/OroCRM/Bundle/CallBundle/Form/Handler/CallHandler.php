@@ -9,10 +9,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
-use OroCRM\Bundle\CallBundle\Model\PhoneHolderInterface;
 
 class CallHandler
 {

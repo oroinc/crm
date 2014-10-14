@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
@@ -21,7 +22,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
-use OroCRM\Bundle\CallBundle\Model\PhoneHolderInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
