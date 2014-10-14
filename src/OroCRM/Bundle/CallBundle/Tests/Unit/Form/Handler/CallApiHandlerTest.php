@@ -3,17 +3,13 @@
 namespace OroCRM\Bundle\CallBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
-
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-
 use OroCRM\Bundle\CallBundle\Entity\Call;
-use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
+use OroCRM\Bundle\CallBundle\Form\Handler\CallApiHandler;
 
-class CallHandlerTest extends \PHPUnit_Framework_TestCase
+class CallApiHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
@@ -31,19 +27,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityRoutingHelper
-     */
-    protected $entityRoutingHelper;
-
-    /**
      * @var CallHandler
      */
     protected $handler;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormFactory
-     */
-    protected $formFactory;
 
     /**
      * @var Call
@@ -59,37 +45,16 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->manager = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $callActivityManager = $this->getMockBuilder('OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->entityRoutingHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->entity  = new Call();
-        $this->handler = new CallHandler(
-            "orocrm_call_form",
-            "orocrm_call_form",
-            $this->request,
-            $this->manager,
-            $callActivityManager,
-            $this->entityRoutingHelper,
-            $this->formFactory
-        );
+        $this->handler = new CallApiHandler($this->form, $this->request, $this->manager);
     }
 
     public function testProcessUnsupportedRequest()
     {
-        $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->will($this->returnValue(null));
-
-        $this->formFactory->expects($this->once())
-            ->method('createNamed')
-            ->will($this->returnValue($this->form));
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->entity);
 
         $this->form->expects($this->never())
             ->method('submit');
@@ -103,13 +68,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessSupportedRequest($method)
     {
-        $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->will($this->returnValue(null));
-
-        $this->formFactory->expects($this->once())
-            ->method('createNamed')
-            ->will($this->returnValue($this->form));
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->entity);
 
         $this->request->setMethod($method);
 
@@ -132,13 +93,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod('POST');
 
-        $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->will($this->returnValue(null));
-
-        $this->formFactory->expects($this->once())
-            ->method('createNamed')
-            ->will($this->returnValue($this->form));
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->entity);
 
         $this->form->expects($this->once())
             ->method('submit')
