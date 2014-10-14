@@ -60,21 +60,21 @@ class OroCRMCallBundle implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        //$queries->addPreQuery($this->getFillAccountActivityQuery());
-        //$queries->addPreQuery($this->getFillContactActivityQuery());
+        $queries->addPreQuery($this->getFillAccountActivityQuery());
+        $queries->addPreQuery($this->getFillContactActivityQuery());
         $queries->addPreQuery($this->getFillPhoneQuery());
 
         $callTable = $schema->getTable('orocrm_call');
 
         // relation with account
-        //$callTable->removeForeignKey('FK_1FBD1A2411A6570A');
-        //$callTable->dropColumn('related_account_id');
-        //$queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedAccount'));
+        $callTable->removeForeignKey('FK_1FBD1A2411A6570A');
+        $callTable->dropColumn('related_account_id');
+        $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedAccount'));
 
         // relation with contact
-        //$callTable->removeForeignKey('FK_1FBD1A246D6C2DFA');
-        //$callTable->dropColumn('related_contact_id');
-        //$queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedContact'));
+        $callTable->removeForeignKey('FK_1FBD1A246D6C2DFA');
+        $callTable->dropColumn('related_contact_id');
+        $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedContact'));
 
         // relation with contact phone
         $callTable->removeForeignKey('FK_1FBD1A24A156BF5C');

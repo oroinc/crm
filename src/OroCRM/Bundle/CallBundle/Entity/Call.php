@@ -69,21 +69,6 @@ class Call extends ExtendCall
     protected $owner;
 
     /**
-     * @var Contact
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     */
-    protected $relatedContact;
-
-    /**
-     * @var Account
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "inverse_cast_method"="getSubject"}})
-     */
-    protected $relatedAccount;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255)
@@ -318,52 +303,6 @@ class Call extends ExtendCall
     public function getOwner()
     {
         return $this->owner;
-    }
-
-    /**
-     * Set relatedContact
-     *
-     * @param Contact $relatedContact
-     * @return Call
-     */
-    public function setRelatedContact(Contact $relatedContact = null)
-    {
-        $this->relatedContact = $relatedContact;
-
-        return $this;
-    }
-
-    /**
-     * Get relatedContact
-     *
-     * @return Contact
-     */
-    public function getRelatedContact()
-    {
-        return $this->relatedContact;
-    }
-
-    /**
-     * Set relatedAccount
-     *
-     * @param Account $relatedAccount
-     * @return Call
-     */
-    public function setRelatedAccount(Account $relatedAccount = null)
-    {
-        $this->relatedAccount = $relatedAccount;
-
-        return $this;
-    }
-
-    /**
-     * Get relatedAccount
-     *
-     * @return Account
-     */
-    public function getRelatedAccount()
-    {
-        return $this->relatedAccount;
     }
 
     /**

@@ -27,8 +27,6 @@ orocrm:
             call.deleted.message: Call deleted successfully
 
         datagrid:
-            contact_name: Contact name
-            account_name: Account name
             date_time:    Call date
 
         sections:
@@ -46,8 +44,6 @@ orocrm:
         log_call:              Log call
         id.label:              Id
         subject.label:         Subject
-        related_contact.label: Related contact
-        related_account.label: Related to
         phone_number.label:    Phone number
         owner.label:           Owner
         notes.label:           Additional comments

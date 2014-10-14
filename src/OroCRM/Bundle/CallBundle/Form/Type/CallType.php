@@ -15,17 +15,7 @@ class CallType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'relatedAccount',
-                'orocrm_account_select',
-                array('required' => false, 'label' => 'orocrm.call.related_account.label')
-            )
             ->add('subject', 'text', array('required' => true, 'label' => 'orocrm.call.subject.label'))
-            ->add(
-                'relatedContact',
-                'orocrm_contact_select',
-                array('required' => false, 'label' => 'orocrm.call.related_contact.label')
-            )
             ->add(
                 'phoneNumber',
                 'orocrm_call_phone',
