@@ -36,7 +36,7 @@ class CallTypeTest extends FormIntegrationTestCase
 
     public function testBuildForm()
     {
-        $expectedFields = array(
+        $expectedFields = [
             'relatedAccount' => 'orocrm_account_select',
             'subject' => 'text',
             'relatedContact' => 'orocrm_contact_select',
@@ -46,7 +46,7 @@ class CallTypeTest extends FormIntegrationTestCase
             'callStatus' => 'entity',
             'duration' => 'oro_time_interval',
             'direction' => 'entity'
-        );
+        ];
 
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
             ->disableOriginalConstructor()
@@ -60,6 +60,10 @@ class CallTypeTest extends FormIntegrationTestCase
                 ->will($this->returnSelf());
             $counter++;
         }
-        $this->type->buildForm($builder, array());
+        $options = [
+            'phone_suggestions' => [],
+            'phone_default' => null,
+        ];
+        $this->type->buildForm($builder, $options);
     }
 }

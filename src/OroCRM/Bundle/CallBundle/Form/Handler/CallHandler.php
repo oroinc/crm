@@ -95,13 +95,13 @@ class CallHandler
 
         if ($target && $target instanceof PhoneHolderInterface) {
             $options = [
-                'suggestions' => $target->getPhoneNumbers(),
-                'default_choice' => $target->getPrimaryPhoneNumber(),
+                'phone_suggestions' => $target->getPhoneNumbers(),
+                'phone_default' => $target->getPrimaryPhoneNumber(),
             ];
         } else {
             $options = [
-                'suggestions' => (array) $entity->getPhoneNumber(),
-                'default_choice' => $entity->getPhoneNumber(),
+                'phone_suggestions' => [],
+                'phone_default' => null,
             ];
         }
 
