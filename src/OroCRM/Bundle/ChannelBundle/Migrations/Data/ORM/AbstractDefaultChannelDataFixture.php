@@ -12,10 +12,8 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\BatchBundle\ORM\Query\QueryCountCalculator;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 abstract class AbstractDefaultChannelDataFixture extends AbstractFixture implements
     ContainerAwareInterface,
