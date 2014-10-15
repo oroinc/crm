@@ -72,7 +72,11 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             $call->setDuration(
                 new \DateTime(rand(0, 1) . ':' . rand(0, 59) . ':' . rand(0, 59), new \DateTimeZone('UTC'))
             );
+
+            $call->addActivityTarget($contact->getOwner());
+
             $randomPath = rand(1, 10);
+
             if ($randomPath > 2) {
                 $call->addActivityTarget($contact);
                 $contactPrimaryPhone = $contact->getPrimaryPhone();
