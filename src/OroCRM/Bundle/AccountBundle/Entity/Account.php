@@ -313,7 +313,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     /**
      * Get contacts collection
      *
-     * @return Collection
+     * @return Collection|Contact[]
      */
     public function getContacts()
     {

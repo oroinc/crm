@@ -25,14 +25,14 @@ class ChannelTest extends Selenium2TestCase
             ->assertTitle('Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
-            ->setName($name)
-            ->setStatus('Active')
             ->setType('Custom')
+            ->setName($name)
             ->setStatus('Active')
             ->addEntity('Opportunity')
             ->addEntity('Lead')
             ->addEntity('Sales Process')
             ->addEntity('B2B customer')
+            ->addEntity('Contact Request')
             ->save()
             ->assertMessage('Channel saved');
 

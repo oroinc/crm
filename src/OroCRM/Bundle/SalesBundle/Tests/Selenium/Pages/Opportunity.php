@@ -200,7 +200,7 @@ class Opportunity extends AbstractPageEntity
 
     public function checkStatus($status)
     {
-        $this->assertElementPresent("//div[@class='status-enabled pull-left'][contains(., '{$status}')]");
+        $this->assertElementPresent("//div[starts-with(@class, 'badge')][contains(., '{$status}')]");
 
         return $this;
     }

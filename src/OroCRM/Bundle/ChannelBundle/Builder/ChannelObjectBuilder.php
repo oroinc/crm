@@ -209,7 +209,10 @@ class ChannelObjectBuilder
         $this->channel->setEntities($this->entities);
         $this->channel->setStatus($this->status);
         $this->channel->setDataSource($this->dataSource);
-        $this->channel->setCreatedAt($this->createdAt);
+        if (null !== $this->createdAt) {
+            // set created at only whn not nullable, otherwise update scenario will fail
+            $this->channel->setCreatedAt($this->createdAt);
+        }
 
         return $this->channel;
     }

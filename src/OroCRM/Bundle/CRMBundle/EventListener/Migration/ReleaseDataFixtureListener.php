@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CRMBundle\EventListener\Migration;
 
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\MigrationBundle\EventListener\ReleaseDataFixtureListener as BaseListener;
@@ -13,10 +14,25 @@ use Oro\Bundle\MigrationBundle\EventListener\ReleaseDataFixtureListener as BaseL
 class ReleaseDataFixtureListener extends BaseListener
 {
     /**
+     * @var KernelInterface
+     */
+    protected $kernel;
+
+    /**
+     * @param KernelInterface $kernel
+     */
+    public function __construct(KernelInterface $kernel)
+    {
+        $this->kernel = $kernel;
+    }
+
+    /**
      * @return array
      */
     protected function getMappingData()
     {
-        return Yaml::parse(realpath(__DIR__ . '/data/1.0.0/crm.yml'));
+        $filePath = $this->kernel->locateResource('@OroCRMCRMBundle/EventListener/Migration/data/1.0.0/crm.yml');
+
+        return Yaml::parse(realpath($filePath));
     }
 }

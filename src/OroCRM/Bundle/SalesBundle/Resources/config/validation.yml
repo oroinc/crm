@@ -19,6 +19,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             - NotBlank: ~
         dataChannel:
             - NotBlank: ~
+        organization:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
@@ -38,6 +40,8 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - NotBlank: ~
         email:
             - Email: ~
+        organization:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
@@ -45,6 +49,8 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
             - NotBlank: ~
             - Date: ~
         dataChannel:
+            - NotBlank: ~
+        organization:
             - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
@@ -56,5 +62,7 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
         account:
             - NotBlank: ~
         dataChannel:
+            - NotBlank: ~
+        organization:
             - NotBlank: ~
 

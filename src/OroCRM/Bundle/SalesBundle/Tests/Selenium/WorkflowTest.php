@@ -32,6 +32,7 @@ class WorkflowTest extends Selenium2TestCase
 
         $leadName = $this->createLead($login);
         $accountName = $this->createAccount($login);
+        $customer = $this->createB2BCustomer($login, $accountName);
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -43,7 +44,7 @@ class WorkflowTest extends Selenium2TestCase
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->submit()
             ->checkStep('New Opportunity')
             ->develop()
@@ -74,6 +75,7 @@ class WorkflowTest extends Selenium2TestCase
 
         $leadName = $this->createLead($login);
         $accountName = $this->createAccount($login);
+        $customer = $this->createB2BCustomer($login, $accountName);
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -85,7 +87,7 @@ class WorkflowTest extends Selenium2TestCase
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Lead')
             ->qualify()
-            ->setAccount($accountName)
+            ->setB2BCustomer($customer)
             ->submit()
             ->checkStep('New Opportunity')
             ->develop()
