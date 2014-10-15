@@ -19,7 +19,7 @@ class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
                 ->scalarNode('channel_relation_path')
                     ->defaultValue('.dataChannel')
                     ->validate()
-                        ->always(
+                        ->ifTrue(
                             function ($value) {
                                return (substr_count((string)$value, '.') !== 1);
                             }

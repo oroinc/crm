@@ -74,7 +74,7 @@ class MarketingList
     /**
      * @var MarketingListType
      *
-     * @ORM\ManyToOne(targetEntity="MarketingListType")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType")
      * @ORM\JoinColumn(name="type", referencedColumnName="name", nullable=false)
      **/
     protected $type;
@@ -252,6 +252,18 @@ class MarketingList
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isManual()
+    {
+        if ($this->type) {
+            return $this->type->getName() === MarketingListType::TYPE_MANUAL;
+        }
+
+        return false;
     }
 
     /**

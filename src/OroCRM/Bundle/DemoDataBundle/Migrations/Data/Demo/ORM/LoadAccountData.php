@@ -1,5 +1,9 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
+
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -27,14 +31,17 @@ class LoadAccountData extends AbstractDemoFixture implements DependentFixtureInt
         /** @var Organization $organization */
         $organization = $this->getReference('default_organization');
 
-        $handle  = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "accounts.csv", "r");
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
+        $handle  = fopen($dictionaryDir . DIRECTORY_SEPARATOR . "accounts.csv", "r");
         $headers = fgetcsv($handle, 1000, ",");
 
         $companies = [];
 
         while (($data = fgetcsv($handle, 1000, ",")) !== false) {
             $data = array_combine($headers, array_values($data));
-
 
             if (!isset($companies[$data['Company']])) {
                 $account = new Account();

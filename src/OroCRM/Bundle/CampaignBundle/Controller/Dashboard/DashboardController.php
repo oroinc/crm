@@ -27,7 +27,7 @@ class DashboardController extends Controller
             ->getRepository('OroCRMCampaignBundle:Campaign')
             ->getCampaignsLeads($this->get('oro_security.acl_helper'), self::CAMPAIGN_LEAD_COUNT);
 
-        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
@@ -59,7 +59,7 @@ class DashboardController extends Controller
             ->getRepository('OroCRMCampaignBundle:Campaign')
             ->getCampaignsOpportunities($this->get('oro_security.acl_helper'), self::CAMPAIGN_OPPORTUNITY_COUNT);
 
-        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
@@ -91,7 +91,7 @@ class DashboardController extends Controller
             ->getRepository('OroCRMCampaignBundle:Campaign')
             ->getCampaignsByCloseRevenue($this->get('oro_security.acl_helper'), self::CAMPAIGN_CLOSE_REVENUE_COUNT);
 
-        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
