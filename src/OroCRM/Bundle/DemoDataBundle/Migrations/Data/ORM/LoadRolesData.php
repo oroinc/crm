@@ -49,7 +49,10 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
         /** @var AclManager $manager */
         $aclManager = $this->container->get('oro_security.acl.manager');
 
-        $fileName  = __DIR__ . '/CrmRoles/roles.yml';
+        $fileName = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
+
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
         $rolesData = Yaml::parse($fileName);
 

@@ -33,6 +33,11 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     protected $mailerProcessor;
 
     /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
+    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -49,6 +54,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             return;
         }
 
+        $this->container = $container;
         $this->emailEntityBuilder = $container->get('oro_email.email.entity.builder');
         $this->mailerProcessor = $container->get('oro_email.mailer.processor');
     }
@@ -65,7 +71,11 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
     protected function loadEmailTemplates()
     {
-        $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR. "emails.csv", "r");
+        $dictionaryDir = $this->container
+            ->get('kernel')
+            ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/Demo/ORM/dictionaries');
+
+        $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "emails.csv", "r");
         if ($handle) {
             $headers = array();
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {

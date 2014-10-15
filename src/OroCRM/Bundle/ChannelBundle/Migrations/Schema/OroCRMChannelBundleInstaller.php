@@ -6,13 +6,27 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMChannelBundleInstaller implements Installation
+class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAwareInterface
 {
+    /** @var ExtendExtension */
+    protected $extendExtension;
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -39,6 +53,9 @@ class OroCRMChannelBundleInstaller implements Installation
         $this->addOrocrmChannelEntityNameForeignKeys($schema);
         $this->addOrocrmChannelLifetimeHistForeignKeys($schema);
         $this->addOrocrmChannelLtimeAvgAggrForeignKeys($schema);
+
+        /** Add extended fields */
+        $this->addExtendedFields($schema);
     }
 
     /**
@@ -261,6 +278,21 @@ class OroCRMChannelBundleInstaller implements Installation
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null],
             'FK_EBDA8490BDC09B73'
+        );
+    }
+
+    /**
+     * @param $schema
+     */
+    public function addExtendedFields($schema)
+    {
+        $this->extendExtension->addManyToOneRelation(
+            $schema,
+            'oro_embedded_form',
+            'dataChannel',
+            'orocrm_channel',
+            'name',
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
         );
     }
 }

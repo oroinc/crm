@@ -11,6 +11,7 @@ class ChannelConfiguration implements ConfigurationInterface
 {
     const ROOT_NODE_NAME            = 'orocrm_channel';
     const DEFAULT_CUSTOMER_IDENTITY = 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity';
+    const DEFAULT_PRIORITY          = 0;
 
     /**
      * {@inheritDoc}
@@ -83,6 +84,7 @@ class ChannelConfiguration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->scalarNode('lifetime_value')->cannotBeEmpty()->end()
+                            ->integerNode('priority')->defaultValue(self::DEFAULT_PRIORITY)->end()
                         ->end()
                     ->end()
                 ->end()

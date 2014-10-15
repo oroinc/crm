@@ -28,6 +28,24 @@ class CustomerStrategy extends BaseStrategy
     /** @var array */
     protected $processedEntities = [];
 
+    /** @var array */
+    protected static $fieldsForManualUpdate = [
+        'id',
+        'contact',
+        'account',
+        'website',
+        'store',
+        'group',
+        'carts',
+        'orders',
+        'addresses',
+        'lifetime',
+        'owner',
+        'organization',
+        'channel',
+        'dataChannel'
+    ];
+
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -77,11 +95,7 @@ class CustomerStrategy extends BaseStrategy
         }
 
         // modify local entity after all relations done
-        $this->strategyHelper->importEntity(
-            $localEntity,
-            $remoteEntity,
-            ['id', 'contact', 'account', 'website', 'store', 'group', 'addresses', 'lifetime', 'owner']
-        );
+        $this->strategyHelper->importEntity($localEntity, $remoteEntity, self::$fieldsForManualUpdate);
 
         $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
 
@@ -101,19 +115,16 @@ class CustomerStrategy extends BaseStrategy
      */
     protected function updateStoresAndGroup(Customer $entity, Store $store, Website $website, CustomerGroup $group)
     {
-        // do not allow to change code/website name by imported entity
-        $doNotUpdateFields = ['id', 'code', 'name'];
-
         if (!isset($this->websiteEntityCache[$website->getCode()])) {
             $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
                 $website,
                 MagentoConnectorInterface::WEBSITE_TYPE,
                 [
-                'code'     => $website->getCode(),
-                'channel'  => $website->getChannel(),
-                'originId' => $website->getOriginId()
+                    'code'     => $website->getCode(),
+                    'channel'  => $website->getChannel(),
+                    'originId' => $website->getOriginId()
                 ],
-                $doNotUpdateFields
+                ['id', 'code', 'channel']
             );
         }
         $this->websiteEntityCache[$website->getCode()] = $this->merge($this->websiteEntityCache[$website->getCode()]);
@@ -123,11 +134,11 @@ class CustomerStrategy extends BaseStrategy
                 $store,
                 MagentoConnectorInterface::STORE_TYPE,
                 [
-                'code'     => $store->getCode(),
-                'channel'  => $store->getChannel(),
-                'originId' => $store->getOriginId()
+                    'code'     => $store->getCode(),
+                    'channel'  => $store->getChannel(),
+                    'originId' => $store->getOriginId()
                 ],
-                $doNotUpdateFields
+                ['id', 'code', 'website', 'channel']
             );
         }
         $this->storeEntityCache[$store->getCode()] = $this->merge($this->storeEntityCache[$store->getCode()]);
@@ -137,11 +148,11 @@ class CustomerStrategy extends BaseStrategy
                 $group,
                 MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE,
                 [
-                'name'     => $group->getName(),
-                'channel'  => $group->getChannel(),
-                'originId' => $group->getOriginId()
+                    'name'     => $group->getName(),
+                    'channel'  => $group->getChannel(),
+                    'originId' => $group->getOriginId()
                 ],
-                $doNotUpdateFields
+                ['id', 'channel']
             );
         }
         $this->groupEntityCache[$group->getName()] = $this->merge($this->groupEntityCache[$group->getName()]);
@@ -256,7 +267,17 @@ class CustomerStrategy extends BaseStrategy
                     $this->strategyHelper->importEntity(
                         $existingAddress,
                         $address,
-                        ['id', 'region', 'country', 'contactAddress', 'created', 'updated', 'contactPhone']
+                        [
+                            'id',
+                            'region',
+                            'country',
+                            'owner',
+                            'contactAddress',
+                            'created',
+                            'updated',
+                            'contactPhone',
+                            'types'
+                        ]
                     );
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());
@@ -278,7 +299,7 @@ class CustomerStrategy extends BaseStrategy
             $contact = $entity->getContact();
             if ($contact) {
                 $contactAddress = $address->getContactAddress();
-                $contactPhone = $address->getContactPhone();
+                $contactPhone   = $address->getContactPhone();
                 if ($contactAddress) {
                     $contactAddress->setOwner($contact);
                 }

@@ -80,8 +80,10 @@ class Customer implements ChannelAwareInterface, CustomerIdentityInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @TODO remove null after BAP-5248
      */
-    public function setDataChannel(Channel $channel)
+    public function setDataChannel(Channel $channel = null)
     {
         $this->dataChannel = $channel;
     }

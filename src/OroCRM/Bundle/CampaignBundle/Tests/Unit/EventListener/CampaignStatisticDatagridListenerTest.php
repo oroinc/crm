@@ -6,9 +6,9 @@ use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,16 +20,56 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $segmentHelper;
+    protected $marketingListHelper;
 
     protected function setUp()
     {
-        $this->segmentHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListSegmentHelper')
+        $this->marketingListHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new CampaignStatisticDatagridListener($this->segmentHelper);
+        $this->listener = new CampaignStatisticDatagridListener($this->marketingListHelper);
+    }
+
+    /**
+     * @dataProvider applicableDataProvider
+     * @param string|null $mixin
+     * @param string $gridName
+     * @param bool $isCorrectMixin
+     * @param int|null $id
+     * @param bool $expected
+     */
+    public function testIsApplicable($mixin, $gridName, $isCorrectMixin, $id, $expected)
+    {
+        $parametersBag = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\ParameterBag')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $parametersBag->expects($this->once())
+            ->method('get')
+            ->with(MarketingListItemsListener::MIXIN, false)
+            ->will($this->returnValue($mixin));
+
+        if ($isCorrectMixin) {
+            $this->marketingListHelper->expects($this->once())
+                ->method('getMarketingListIdByGridName')
+                ->with($gridName)
+                ->will($this->returnValue($id));
+        }
+
+        $this->assertEquals($expected, $this->listener->isApplicable($gridName, $parametersBag));
+    }
+
+    public function applicableDataProvider()
+    {
+        return [
+            [null, 'test_grid', false, null, false],
+            ['some_mixin', 'test_grid', false, null, false],
+            [CampaignStatisticDatagridListener::MIXIN_NAME, 'test_grid', true, null, false],
+            [CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME, 'test_grid', true, null, false],
+            [CampaignStatisticDatagridListener::MIXIN_NAME, 'test_grid', true, 1, true],
+            [CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME, 'test_grid', true, 1, true],
+        ];
     }
 
     /**
@@ -57,17 +97,11 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 
         $event = new PreBuild($config, new ParameterBag($parameters));
 
-        $this->segmentHelper
+        $this->marketingListHelper
             ->expects($this->any())
-            ->method('getSegmentIdByGridName')
+            ->method('getMarketingListIdByGridName')
             ->with($this->equalTo($gridName))
-            ->will($this->returnValue(true));
-
-        $this->segmentHelper
-            ->expects($this->any())
-            ->method('getMarketingListBySegment')
-            ->with($this->equalTo(true))
-            ->will($this->returnValue(new \stdClass()));
+            ->will($this->returnValue(1));
 
         $this->listener->onPreBuild($event);
 
@@ -82,125 +116,75 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     public function preBuildDataProvider()
     {
         return [
-            [
-                'gridName'   => 'gridName',
+            'no mixin' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [],
                 'selects'    => [],
                 'groupBy'    => null,
                 'expected'   => null,
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [],
-                'selects'    => [],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
+            'wrong mixin' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [MarketingListItemsListener::MIXIN => 'wrong'],
                 'selects'    => [],
                 'groupBy'    => null,
                 'expected'   => null,
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
+            'no fields' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
                 'selects'    => [],
                 'groupBy'    => null,
                 'expected'   => null,
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+            'group by no fields' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
+                'parameters' => [
+                    MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME
+                ],
                 'selects'    => [],
                 'groupBy'    => 'alias.existing',
                 'expected'   => 'alias.existing',
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
+            'field without alias' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
                 'selects'    => ['alias.field'],
                 'groupBy'    => null,
-                'expected'   => null,
+                'expected'   => 'alias.field',
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.field', 'alias.matchedFields as c1', 'alias.secondMatched as c2'],
+            'aliases and without' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
+                'parameters' => [
+                    MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME
+                ],
+                'selects'    => ['alias.field', 'alias.matchedFields  as  c1', 'alias.secondMatched aS someAlias3'],
                 'groupBy'    => null,
-                'expected'   => 'alias.matchedFields, alias.secondMatched',
+                'expected'   => 'alias.field, c1, someAlias3',
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
+            'mixed fields and group by' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
                 'selects'    => ['alias.field', 'alias.matchedFields as c1'],
                 'groupBy'    => 'alias.existing',
-                'expected'   => 'alias.matchedFields, alias.existing',
+                'expected'   => 'alias.field, c1, alias.existing',
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields as c1wrong'],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields as wrongc1'],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
+            'wrong field definition' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
+                'parameters' => [
+                    MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MANUAL_MIXIN_NAME
+                ],
                 'selects'    => ['alias.matchedFields wrongas c1'],
                 'groupBy'    => null,
                 'expected'   => null,
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
+            'with aggregate' => [
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields aswrong c1'],
+                'selects'    => ['MAX(t1.f0)', 'AvG(t10.F19) as agF1', 'alias.matchedFields AS c1'],
                 'groupBy'    => null,
-                'expected'   => null,
+                'expected'   => 'c1',
             ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields as ca'],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields as c100'],
-                'groupBy'    => null,
-                'expected'   => 'alias.matchedFields',
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields   as   c1'],
-                'groupBy'    => null,
-                'expected'   => 'alias.matchedFields',
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields AS c1'],
-                'groupBy'    => null,
-                'expected'   => 'alias.matchedFields',
-            ],
-            [
-                'gridName'   => Segment::GRID_PREFIX,
-                'parameters' => [MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME],
-                'selects'    => ['alias.matchedFields As c1'],
-                'groupBy'    => null,
-                'expected'   => 'alias.matchedFields',
-            ]
         ];
     }
 
@@ -231,13 +215,13 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getParameters')
             ->will($this->returnValue(new ParameterBag($parameters)));
 
-        $this->segmentHelper
+        $this->marketingListHelper
             ->expects($this->any())
             ->method('getSegmentIdByGridName')
             ->with($this->equalTo($gridName))
             ->will($this->returnValue(true));
 
-        $this->segmentHelper
+        $this->marketingListHelper
             ->expects($this->any())
             ->method('getMarketingListBySegment')
             ->with($this->equalTo(true))
@@ -276,13 +260,13 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 
         return [
             [
-                'gridName'   => Segment::GRID_PREFIX,
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [],
                 'dataSource' => $dataSource,
                 'expected'   => false,
             ],
             [
-                'gridName'   => Segment::GRID_PREFIX,
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [
                     MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME,
                     'emailCampaign'                   => 1
@@ -291,7 +275,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
                 'expected'   => false,
             ],
             [
-                'gridName'   => Segment::GRID_PREFIX,
+                'gridName'   => ConfigurationProvider::GRID_PREFIX,
                 'parameters' => [
                     MarketingListItemsListener::MIXIN => CampaignStatisticDatagridListener::MIXIN_NAME,
                     'emailCampaign'                   => 1
@@ -313,7 +297,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
         $grid
             ->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue(Segment::GRID_PREFIX));
+            ->will($this->returnValue(ConfigurationProvider::GRID_PREFIX));
 
         $grid
             ->expects($this->once())
@@ -326,17 +310,11 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->segmentHelper
-            ->expects($this->any())
-            ->method('getSegmentIdByGridName')
-            ->with($this->equalTo(Segment::GRID_PREFIX))
-            ->will($this->returnValue(true));
-
-        $this->segmentHelper
-            ->expects($this->any())
-            ->method('getMarketingListBySegment')
-            ->with($this->equalTo(true))
-            ->will($this->returnValue(new \stdClass()));
+        $this->marketingListHelper
+            ->expects($this->once())
+            ->method('getMarketingListIdByGridName')
+            ->with($this->equalTo(ConfigurationProvider::GRID_PREFIX))
+            ->will($this->returnValue(1));
 
         $event = new BuildAfter($grid);
         $this->listener->onBuildAfter($event);

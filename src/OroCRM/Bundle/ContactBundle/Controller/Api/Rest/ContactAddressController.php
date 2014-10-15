@@ -105,6 +105,8 @@ class ContactAddressController extends RestController implements ClassResourceIn
         $contact = $this->getContactManager()->find($contactId);
         if ($contact->getAddresses()->contains($address)) {
             $contact->removeAddress($address);
+            // Update contact's modification date when an address is removed
+            $contact->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             return $this->handleDeleteRequest($addressId);
         } else {
             return $this->handleView($this->view(null, Codes::HTTP_NOT_FOUND));
@@ -168,7 +170,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
         return new Response($responseData, $address ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
-    public function getContactManager()
+    protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
     }

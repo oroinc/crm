@@ -395,4 +395,12 @@ class Campaign extends ExtendCampaign
     {
         return $this->organization;
     }
+    
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }
