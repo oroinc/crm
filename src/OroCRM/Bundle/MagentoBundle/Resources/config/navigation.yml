@@ -45,5 +45,5 @@ oro_titles:
     orocrm_magento_cart_view:      Cart %%cart.id%%
     orocrm_magento_order_index:    ~
     orocrm_magento_order_view:     %%order.incrementId%%
-    orocrm_magento_product_index:  ~
+    orocrm_magento_product_index:  'Products'
     orocrm_magento_product_view:   %%product.name%%
