@@ -77,7 +77,10 @@ class OrderRepository extends EntityRepository
         $selectClause = '
             IDENTITY(o.dataChannel) AS dataChannelId,
             MONTH(o.createdAt) as monthCreated,
-            AVG(o.subtotalAmount - o.discountAmount) as averageOrderAmount';
+            AVG(
+                CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+            ) as averageOrderAmount';
         $queryBuilder->select($selectClause)
             ->where('o.createdAt > :sliceDate')->setParameter('sliceDate', $sliceDate)
             ->groupBy('dataChannelId, monthCreated');
