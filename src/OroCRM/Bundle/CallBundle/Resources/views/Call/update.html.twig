@@ -2,11 +2,6 @@
 
 {% oro_title_set({params : {"%subject%": form.vars.value.subject|default('N/A') } }) %}
 
-{% set formAction = form.vars.value.id
-    ? path('orocrm_call_update', { 'id': form.vars.value.id })
-    : path('orocrm_call_create')
-%}
-
 {% block head_script %}
     {{ parent() }}
 
