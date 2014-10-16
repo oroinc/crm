@@ -37,9 +37,7 @@ class CallTypeTest extends FormIntegrationTestCase
     public function testBuildForm()
     {
         $expectedFields = [
-            'relatedAccount' => 'orocrm_account_select',
             'subject' => 'text',
-            'relatedContact' => 'orocrm_contact_select',
             'phoneNumber' => 'orocrm_call_phone',
             'notes' => 'textarea',
             'callDateTime' => 'oro_datetime',

@@ -54,8 +54,6 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table = $schema->createTable('orocrm_call');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('call_direction_name', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addColumn('related_account_id', 'integer', ['notnull' => false]);
-        $table->addColumn('related_contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('call_status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
@@ -67,14 +65,13 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id'], 'IDX_1FBD1A2432C8A3DE', []);
         $table->addIndex(['owner_id'], 'IDX_1FBD1A247E3C61F9', []);
-        $table->addIndex(['related_contact_id'], 'IDX_1FBD1A246D6C2DFA', []);
-        $table->addIndex(['related_account_id'], 'IDX_1FBD1A2411A6570A', []);
         $table->addIndex(['call_status_name'], 'IDX_1FBD1A2476DB3689', []);
         $table->addIndex(['call_direction_name'], 'IDX_1FBD1A249F3E257D', []);
         $table->addIndex(['call_date_time'], 'call_dt_idx');
 
-        //$this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_account', true);
-        //$this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contact', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'oro_user', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_account', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contact', true);
     }
 
     /**
@@ -117,18 +114,6 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
             $schema->getTable('orocrm_call_direction'),
             ['call_direction_name'],
             ['name'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_account'),
-            ['related_account_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contact'),
-            ['related_contact_id'],
-            ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
         $table->addForeignKeyConstraint(

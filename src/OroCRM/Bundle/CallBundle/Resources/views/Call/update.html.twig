@@ -2,11 +2,6 @@
 
 {% oro_title_set({params : {"%subject%": form.vars.value.subject|default('N/A') } }) %}
 
-{% set formAction = form.vars.value.id
-    ? path('orocrm_call_update', { 'id': form.vars.value.id })
-    : path('orocrm_call_create')
-%}
-
 {% block head_script %}
     {{ parent() }}
 
@@ -30,8 +25,6 @@
         form_row(form.subject),
         form_row(form.notes),
         form_row(form.callDateTime),
-        form_row(form.relatedAccount),
-        form_row(form.relatedContact),
         form_row(form.phoneNumber),
         form_row(form.direction),
         form_row(form.duration)

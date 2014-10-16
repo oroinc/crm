@@ -45,7 +45,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
     }
 
     /**
-     * @param ObjectManager                                     $om
+     * @param ObjectManager $om
      */
     protected function persistDemoCalls(
         ObjectManager $om
@@ -72,9 +72,13 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             $call->setDuration(
                 new \DateTime(rand(0, 1) . ':' . rand(0, 59) . ':' . rand(0, 59), new \DateTimeZone('UTC'))
             );
+
+            $call->addActivityTarget($contact->getOwner());
+
             $randomPath = rand(1, 10);
+
             if ($randomPath > 2) {
-                $call->setRelatedContact($contact);
+                $call->addActivityTarget($contact);
                 $contactPrimaryPhone = $contact->getPrimaryPhone();
                 if ($contactPrimaryPhone) {
                     $call->setPhoneNumber($contactPrimaryPhone->getPhone());
@@ -83,10 +87,12 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             }
 
             if ($randomPath > 3) {
-                if ($call->getRelatedContact()) {
-                    $call->setRelatedAccount($call->getRelatedContact()->getAccounts()[0]);
+                /** @var Contact[] $relatedContacts */
+                $relatedContacts = $call->getActivityTargets('OroCRM\Bundle\ContactBundle\Entity\Contact');
+                if ($relatedContacts) {
+                    $call->addActivityTarget($relatedContacts[0]->getAccounts()[0]);
                 } else {
-                    $call->setRelatedAccount($account);
+                    $call->addActivityTarget($account);
                 }
             }
 
