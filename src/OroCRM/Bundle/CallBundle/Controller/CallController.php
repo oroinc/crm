@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Controller;
 
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -42,7 +43,22 @@ class CallController extends Controller
      */
     public function createAction()
     {
-        return $this->update();
+        $entity = new Call();
+
+        $callStatus = $this->getDoctrine()
+            ->getRepository('OroCRMCallBundle:CallStatus')
+            ->findOneByName('completed');
+        $entity->setCallStatus($callStatus);
+
+        $callDirection = $this->getDoctrine()
+            ->getRepository('OroCRMCallBundle:CallDirection')
+            ->findOneByName('outgoing');
+        $entity->setDirection($callDirection);
+
+        $formAction = $this->get('oro_entity.routing_helper')
+            ->generateUrlByRequest('orocrm_call_create', $this->getRequest());
+
+        return $this->update($entity, $formAction);
     }
 
     /**
@@ -57,7 +73,9 @@ class CallController extends Controller
      */
     public function updateAction(Call $entity)
     {
-        return $this->update($entity);
+        $formAction = $this->get('router')->generate('oro_note_update', ['id' => $entity->getId()]);
+
+        return $this->update($entity, $formAction);
     }
 
     /**
@@ -78,15 +96,13 @@ class CallController extends Controller
     }
 
     /**
-     * View call
-     *
      * @Route("/view/{id}", name="orocrm_call_view")
      * @Template
      */
     public function viewAction(Call $entity)
     {
         return [
-            'entity'        => $entity,
+            'entity' => $entity,
         ];
     }
 
@@ -94,9 +110,6 @@ class CallController extends Controller
      * @Route("/base-widget", name="orocrm_call_base_widget_calls")
      * @Template
      * @AclAncestor("orocrm_call_view")
-     *
-     * @param Request $request
-     * @return array
      */
     public function baseCallsAction(Request $request)
     {
@@ -116,35 +129,21 @@ class CallController extends Controller
     }
 
     /**
-     * @param Call $entity
+     * @param Call   $entity
+     * @param string $formAction
      *
      * @return array
      */
-    protected function update(Call $entity = null)
+    protected function update(Call $entity, $formAction)
     {
         $saved = false;
 
-        if (!$entity) {
-            $entity = new Call();
-
-            $callStatus = $this->getDoctrine()
-                ->getRepository('OroCRMCallBundle:CallStatus')
-                ->findOneByName('completed');
-            $entity->setCallStatus($callStatus);
-
-            $callDirection = $this->getDoctrine()
-                ->getRepository('OroCRMCallBundle:CallDirection')
-                ->findOneByName('outgoing');
-            $entity->setDirection($callDirection);
-        }
-
         if ($this->get('orocrm_call.call.form.handler')->process($entity)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
-            );
-
             if (!$this->getRequest()->get('_widgetContainer')) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    $this->get('translator')->trans('orocrm.call.controller.call.saved.message')
+                );
 
                 return $this->get('oro_ui.router')->redirectAfterSave(
                     ['route' => 'orocrm_call_update', 'parameters' => ['id' => $entity->getId()]],
@@ -156,9 +155,10 @@ class CallController extends Controller
         }
 
         return array(
-            'entity' => $entity,
-            'saved' => $saved,
-            'form' => $this->get('orocrm_call.call.form.handler')->getForm()->createView()
+            'entity'     => $entity,
+            'saved'      => $saved,
+            'form'       => $this->get('orocrm_call.call.form.handler')->getForm()->createView(),
+            'formAction' => $formAction
         );
     }
 }

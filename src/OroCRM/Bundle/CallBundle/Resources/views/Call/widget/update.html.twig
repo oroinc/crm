@@ -22,7 +22,7 @@
             </div>
         {% endif %}
         <div class="form-container">
-            <form id="{{ form.vars.name }}" action="{{ path('orocrm_call_create') }}" method="post">
+            <form id="{{ form.vars.name }}" action="{{ formAction }}" method="post">
                 <fieldset class="form form-horizontal">
                     <div class="span6">
                         {% if form.owner is defined %}{{ form_row(form.owner) }}{% endif %}

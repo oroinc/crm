@@ -57,13 +57,13 @@ class CallHandler
     protected $formFactory;
 
     /**
-     * @param string $formName
-     * @param string $formType
-     * @param Request       $request
-     * @param ObjectManager $manager
+     * @param string              $formName
+     * @param string              $formType
+     * @param Request             $request
+     * @param ObjectManager       $manager
      * @param CallActivityManager $callActivityManager
      * @param EntityRoutingHelper $entityRoutingHelper
-     * @param FormFactory $formFactory
+     * @param FormFactory         $formFactory
      */
     public function __construct(
         $formName,
@@ -74,32 +74,36 @@ class CallHandler
         EntityRoutingHelper $entityRoutingHelper,
         FormFactory $formFactory
     ) {
-        $this->formName = $formName;
-        $this->formType = $formType;
-        $this->request = $request;
-        $this->manager = $manager;
+        $this->formName            = $formName;
+        $this->formType            = $formType;
+        $this->request             = $request;
+        $this->manager             = $manager;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
-        $this->formFactory = $formFactory;
+        $this->formFactory         = $formFactory;
     }
 
     /**
      * Process form
      *
      * @param  Call $entity
+     *
      * @return bool  True on successful processing, false otherwise
      */
     public function process(Call $entity)
     {
-        $target = $this->getTargetEntity();
+        $targetEntityClass = $this->request->get('entityClass');
+        $targetEntityId    = $this->request->get('entityId');
 
-        if ($target && $target instanceof PhoneHolderInterface) {
-            $options = [
-                'phone_suggestions' => $target->getPhoneNumbers(),
-                'phone_default' => $target->getPrimaryPhoneNumber(),
-            ];
-        } else {
-            $options = [];
+        $options = [];
+        if ($targetEntityClass && $this->request->getMethod() === 'GET') {
+            $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
+            if ($targetEntity instanceof PhoneHolderInterface) {
+                $options = [
+                    'phone_suggestions' => $targetEntity->getPhoneNumbers(),
+                    'phone_default'     => $targetEntity->getPrimaryPhoneNumber(),
+                ];
+            }
         }
 
         $this->form = $this->formFactory->createNamed($this->formName, $this->formType, $entity, $options);
@@ -108,40 +112,19 @@ class CallHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-
-                if ($target) {
-                    $this->callActivityManager->addAssociation($entity, $target);
+                if ($targetEntityClass) {
+                    $this->callActivityManager->addAssociation(
+                        $entity,
+                        $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
+                    );
                 }
-
                 $this->onSuccess($entity);
+
                 return true;
             }
         }
 
         return false;
-    }
-
-    /**
-     * Get object of activity owner
-     *
-     * @return object|null
-     */
-    protected function getTargetEntity()
-    {
-        /** @var string $entityClass */
-        $entityClass = $this->entityRoutingHelper->decodeClassName(
-            $this->request->get('entityClass')
-        );
-        /** @var integer $entityId */
-        $entityId = $this->request->get('entityId');
-
-        if ($entityClass && $entityId) {
-            $entity = $this->manager->getRepository($entityClass)->find($entityId);
-        } else {
-            $entity = null;
-        }
-
-        return $entity;
     }
 
     /**
