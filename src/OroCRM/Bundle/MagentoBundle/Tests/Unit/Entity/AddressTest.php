@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
+use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+
 class AddressTest extends AbstractEntityTestCase
 {
     /**
@@ -24,5 +27,31 @@ class AddressTest extends AbstractEntityTestCase
             'owner'     => ['owner', $owner, $owner],
             'origin_id' => ['originId', $originId, $originId],
         ];
+    }
+
+    public function testGetPrimaryPhoneNumber()
+    {
+        $address = new Address();
+
+        $this->assertNull($address->getPrimaryPhoneNumber());
+
+        $address->setContactPhone(new ContactPhone('123-123'));
+        $this->assertEquals('123-123', $address->getPrimaryPhoneNumber());
+
+        $address->setPhone(new ContactPhone('456-456'));
+        $this->assertEquals('456-456', $address->getPrimaryPhoneNumber());
+    }
+
+    public function testGetPhoneNumbers()
+    {
+        $address = new Address();
+
+        $this->assertSame([], $address->getPhoneNumbers());
+
+        $address->setContactPhone(new ContactPhone('123-123'));
+        $this->assertSame(['123-123'], $address->getPhoneNumbers());
+
+        $address->setPhone(new ContactPhone('456-456'));
+        $this->assertEquals(['456-456', '123-123'], $address->getPhoneNumbers());
     }
 }

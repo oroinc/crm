@@ -24,4 +24,52 @@ class OpportunityTest extends \PHPUnit_Framework_TestCase
             'organization' => array('organization', $organization, $organization)
         );
     }
+
+    public function testGetEmail()
+    {
+        $opportunity = new Opportunity();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($opportunity->getEmail());
+
+        $opportunity->setContact($contact);
+        $contact->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email@example.com'));
+        $this->assertEquals('email@example.com', $opportunity->getEmail());
+    }
+
+    public function testGetPrimaryPhoneNumber()
+    {
+        $opportunity = new Opportunity();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($opportunity->getPrimaryPhoneNumber());
+
+        $opportunity->setContact($contact);
+        $contact->expects($this->once())
+            ->method('getPrimaryPhoneNumber')
+            ->will($this->returnValue('123-123'));
+        $this->assertEquals('123-123', $opportunity->getPrimaryPhoneNumber());
+    }
+
+    public function testGetPhoneNumbers()
+    {
+        $opportunity = new Opportunity();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertSame([], $opportunity->getPhoneNumbers());
+
+        $opportunity->setContact($contact);
+        $contact->expects($this->once())
+            ->method('getPhoneNumbers')
+            ->will($this->returnValue(['123-123', '456-456']));
+        $this->assertSame(['123-123', '456-456'], $opportunity->getPhoneNumbers());
+    }
 }

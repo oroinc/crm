@@ -81,4 +81,52 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($user, $entity->getOwner());
     }
+
+    public function testGetEmail()
+    {
+        $account = new Account();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($account->getEmail());
+
+        $account->setDefaultContact($contact);
+        $contact->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email@example.com'));
+        $this->assertEquals('email@example.com', $account->getEmail());
+    }
+
+    public function testGetPrimaryPhoneNumber()
+    {
+        $account = new Account();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($account->getPrimaryPhoneNumber());
+
+        $account->setDefaultContact($contact);
+        $contact->expects($this->once())
+            ->method('getPrimaryPhoneNumber')
+            ->will($this->returnValue('123-123'));
+        $this->assertEquals('123-123', $account->getPrimaryPhoneNumber());
+    }
+
+    public function testGetPhoneNumbers()
+    {
+        $account = new Account();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertSame([], $account->getPhoneNumbers());
+
+        $account->setDefaultContact($contact);
+        $contact->expects($this->once())
+            ->method('getPhoneNumbers')
+            ->will($this->returnValue(['123-123', '456-456']));
+        $this->assertSame(['123-123', '456-456'], $account->getPhoneNumbers());
+    }
 }

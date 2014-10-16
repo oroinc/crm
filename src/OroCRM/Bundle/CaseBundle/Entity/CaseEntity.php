@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -47,7 +48,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      }
  * )
  */
-class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
+class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface, PhoneHolderInterface
 {
     /**
      * @var integer
@@ -624,6 +625,36 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
         }
 
         return $contact->getEmail();
+    }
+
+    /**
+     * Get the primary phone of the related contact
+     *
+     * @return string|null
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $contact = $this->getRelatedContact();
+        if (!$contact) {
+            return null;
+        }
+
+        return $contact->getPrimaryPhoneNumber();
+    }
+
+    /**
+     * Get phones of the related contact
+     *
+     * @return string[]
+     */
+    public function getPhoneNumbers()
+    {
+        $contact = $this->getRelatedContact();
+        if (!$contact) {
+            return [];
+        }
+
+        return $contact->getPhoneNumbers();
     }
 
     /**

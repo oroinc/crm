@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 
@@ -13,7 +14,11 @@ use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
  */
-abstract class AbstractContactRequest implements FirstNameInterface, LastNameInterface
+abstract class AbstractContactRequest implements
+    FirstNameInterface,
+    LastNameInterface,
+    EmailHolderInterface,
+    PhoneHolderInterface
 {
     /**
      * @var integer
@@ -221,5 +226,35 @@ abstract class AbstractContactRequest implements FirstNameInterface, LastNameInt
     public function prePersist()
     {
         $this->createdAt = $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->emailAddress;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        return !empty($this->phone) ? $this->phone : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPhoneNumbers()
+    {
+        $phones = [];
+
+        if (!empty($this->phone)) {
+            $phones[] = $this->phone;
+        }
+
+        return $phones;
     }
 }

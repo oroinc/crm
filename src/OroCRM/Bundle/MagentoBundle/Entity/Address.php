@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
@@ -34,7 +35,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class Address extends ExtendAddress
+class Address extends ExtendAddress implements PhoneHolderInterface
 {
     use OriginTrait;
 
@@ -293,5 +294,35 @@ class Address extends ExtendAddress
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $phone = $this->phone;
+        if (empty($phone) && $this->getContactPhone()) {
+            $phone = $this->getContactPhone()->getPhone();
+        }
+
+        return !empty($phone) ? $phone : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPhoneNumbers()
+    {
+        $phones = [];
+
+        if (!empty($this->phone)) {
+            $phones[] = $this->phone;
+        }
+        if ($this->getContactPhone() && !in_array($this->getContactPhone()->getPhone(), $phones)) {
+            $phones[] = $this->getContactPhone()->getPhone();
+        }
+
+        return $phones;
     }
 }

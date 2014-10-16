@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
@@ -30,7 +31,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
  *      }
  * )
  */
-class OrderAddress extends ExtendOrderAddress
+class OrderAddress extends ExtendOrderAddress implements PhoneHolderInterface
 {
     /**
      * @var ArrayCollection
@@ -137,5 +138,27 @@ class OrderAddress extends ExtendOrderAddress
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        return !empty($this->phone) ? $this->phone : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPhoneNumbers()
+    {
+        $phones = [];
+
+        if (!empty($this->phone)) {
+            $phones[] = $this->phone;
+        }
+
+        return $phones;
     }
 }
