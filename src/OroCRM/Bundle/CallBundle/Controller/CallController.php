@@ -73,7 +73,7 @@ class CallController extends Controller
      */
     public function updateAction(Call $entity)
     {
-        $formAction = $this->get('router')->generate('oro_note_update', ['id' => $entity->getId()]);
+        $formAction = $this->get('router')->generate('orocrm_call_update', ['id' => $entity->getId()]);
 
         return $this->update($entity, $formAction);
     }
