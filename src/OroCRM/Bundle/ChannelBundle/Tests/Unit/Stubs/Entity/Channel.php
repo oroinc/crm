@@ -25,6 +25,13 @@ class Channel
     protected $dataSource;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="status", type="boolean", nullable=false)
+     */
+    protected $status;
+
+    /**
      * @return mixed
      */
     public function getId()

@@ -21,38 +21,6 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             target_type: text
             target_fields: [notes]
         -
-            name: relatedContact
-            relation_type: many-to-one
-            relation_fields:
-                -
-                    name:                   namePrefix
-                    target_type:            text
-                    target_fields:          [namePrefix]
-                -
-                    name:                   firstName
-                    target_type:            text
-                    target_fields:          [firstName]
-                -
-                    name:                   middleName
-                    target_type:            text
-                    target_fields:          [middleName]
-                -
-                    name:                   lastName
-                    target_type:            text
-                    target_fields:          [lastName]
-                -
-                    name:                   nameSuffix
-                    target_type:            text
-                    target_fields:          [nameSuffix]
-        -
-            name: relatedAccount
-            relation_type: many-to-one
-            relation_fields:
-                -
-                    name:                   name
-                    target_type:            text
-                    target_fields:          [accountName]
-        -
             name: direction
             relation_type: many-to-one
             relation_fields:

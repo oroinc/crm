@@ -19,7 +19,7 @@ class LoadMarketingListTypes extends AbstractFixture
         $types = [
             MarketingListType::TYPE_DYNAMIC,
             MarketingListType::TYPE_STATIC,
-            //MarketingListType::TYPE_MANUAL
+            MarketingListType::TYPE_MANUAL
         ];
 
         foreach ($types as $typeCode) {

@@ -3,8 +3,12 @@
 namespace OroCRM\Bundle\CallBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
+
 use Doctrine\Common\Persistence\ObjectManager;
+
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
@@ -27,7 +31,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var \PHPUnit_Framework_MockObject_MockObject|EntityRoutingHelper
      */
     protected $entityRoutingHelper;
 
@@ -35,6 +39,11 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
      * @var CallHandler
      */
     protected $handler;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|FormFactory
+     */
+    protected $formFactory;
 
     /**
      * @var Call
@@ -56,22 +65,31 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->entityRoutingHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->entity  = new Call();
         $this->handler = new CallHandler(
-            $this->form,
+            "orocrm_call_form",
+            "orocrm_call_form",
             $this->request,
             $this->manager,
             $callActivityManager,
-            $this->entityRoutingHelper
+            $this->entityRoutingHelper,
+            $this->formFactory
         );
     }
 
     public function testProcessUnsupportedRequest()
     {
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->will($this->returnValue(null));
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->will($this->returnValue($this->form));
 
         $this->form->expects($this->never())
             ->method('submit');
@@ -85,9 +103,13 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessSupportedRequest($method)
     {
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->will($this->returnValue(null));
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->will($this->returnValue($this->form));
 
         $this->request->setMethod($method);
 
@@ -110,9 +132,13 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod('POST');
 
-        $this->form->expects($this->once())
-            ->method('setData')
-            ->with($this->entity);
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->will($this->returnValue(null));
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->will($this->returnValue($this->form));
 
         $this->form->expects($this->once())
             ->method('submit')
@@ -121,10 +147,6 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
-
-        $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->will($this->returnValue(null));
 
         $this->manager->expects($this->once())
             ->method('persist')

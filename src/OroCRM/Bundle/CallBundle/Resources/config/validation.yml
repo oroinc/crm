@@ -14,3 +14,5 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - NotBlank: ~
             - Length:
                 max: 255
+        organization:
+            - NotBlank: ~

@@ -69,8 +69,9 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addIndex(['call_direction_name'], 'IDX_1FBD1A249F3E257D', []);
         $table->addIndex(['call_date_time'], 'call_dt_idx');
 
-        //$this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_account', true);
-        //$this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contact', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'oro_user', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_account', true);
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contact', true);
     }
 
     /**

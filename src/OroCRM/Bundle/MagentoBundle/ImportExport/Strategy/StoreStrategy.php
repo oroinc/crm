@@ -19,7 +19,7 @@ class StoreStrategy extends BaseStrategy
     public function process($entity)
     {
         // do not allow to change code/website name by imported entity
-        $doNotUpdateFields = ['id', 'code', 'website'];
+        $doNotUpdateFields = ['id', 'code', 'website', 'channel'];
 
         return $this->getEntityFromCache('storeEntityCache', $entity, $doNotUpdateFields);
     }
@@ -46,7 +46,7 @@ class StoreStrategy extends BaseStrategy
             }
 
             if ($entity instanceof Store) {
-                $notImportedAttrs = ['id', 'code'];
+                $notImportedAttrs = ['id', 'code', 'channel'];
                 $website          = $this->{$storage}[$code]->getWebsite();
                 $website          = $this->getEntityFromCache('websiteEntityCache', $website, $notImportedAttrs);
                 $this->{$storage}[$code]->setWebsite($website);

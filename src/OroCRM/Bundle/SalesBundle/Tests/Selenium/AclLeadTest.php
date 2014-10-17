@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 class AclLeadTest extends Selenium2TestCase
@@ -11,10 +13,11 @@ class AclLeadTest extends Selenium2TestCase
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
-            ->setEntity('Lead', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'Organization')
+            ->setEntity('Lead', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
@@ -34,6 +37,7 @@ class AclLeadTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - User Management - System')
@@ -114,6 +118,7 @@ class AclLeadTest extends Selenium2TestCase
 
     public function deleteAcl($login, $roleName, $username, $leadName)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -122,8 +127,9 @@ class AclLeadTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openLeads('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Leads $login */
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
             ->checkActionMenu('Delete')
             ->open(array($leadName))
@@ -132,6 +138,7 @@ class AclLeadTest extends Selenium2TestCase
 
     public function updateAcl($login, $roleName, $username, $leadName)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -140,8 +147,9 @@ class AclLeadTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openLeads('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Leads $login */
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
             ->checkActionMenu('Update')
             ->open(array($leadName))
@@ -150,6 +158,7 @@ class AclLeadTest extends Selenium2TestCase
 
     public function createAcl($login, $roleName, $username)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -158,8 +167,9 @@ class AclLeadTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openLeads('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Leads $login */
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->assertElementNotPresent(
                 "//div[@class='pull-right title-buttons-container']//a[contains(., 'Create Lead')]"
             );
@@ -167,6 +177,7 @@ class AclLeadTest extends Selenium2TestCase
 
     public function viewAcl($login, $username, $roleName)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -175,8 +186,9 @@ class AclLeadTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openLeads('OroCRM\Bundle\SalesBundle')
+            ->submit();
+        /** @var Leads $login */
+        $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->assertTitle('403 - Forbidden');
     }
 

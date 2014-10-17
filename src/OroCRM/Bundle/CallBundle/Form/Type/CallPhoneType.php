@@ -23,8 +23,9 @@ class CallPhoneType extends AbstractType
 
         $resolver->setDefaults(
             [
-                'suggestions' => [],
-                'configs'     => $defaultConfigs
+                'suggestions'           => [],
+                'configs'               => $defaultConfigs,
+                'suggestion_default'    => null,
             ]
         );
         $resolver->setNormalizers(
@@ -46,6 +47,9 @@ class CallPhoneType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
+        if (!$view->vars['value']) {
+            $view->vars['value'] = $options['suggestion_default'];
+        }
         $view->vars['suggestions'] = $options['suggestions'];
     }
 

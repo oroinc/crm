@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEmailBundle::actions.html.twig' as EmailActions %}
 
 {% set uniqueSuffix = '_customer_' ~ customer.id ~ '_channel_' ~ channel.id %}
 {% set tabs = [] %}
@@ -35,27 +36,7 @@
 
         {{ UI.renderHtmlProperty('orocrm.magento.customer.name.label'|trans, customer_name_link) }}
 
-        {% set customer_email %}
-            <a class="contact-box-link" data-url="{{ path('oro_email_email_create', { 'to': customer.email }) }}"
-                href="javascript:void(0);"
-                {{ UI.renderWidgetDataAttributes({
-                    'type' : 'dialog',
-                    'multiple' : true,
-                    'options' : {
-                        'alias': 'email-dialog',
-                        'dialogOptions' : {
-                            'title' : 'oro.email.send_email'|trans,
-                            'allowMaximize': true,
-                            'allowMinimize': true,
-                            'dblclick': 'maximize',
-                            'maximizedHeightDecreaseBy': 'minimize-bar',
-                            'width': 1000
-                        }
-                    }
-                }) }}
-            >{{ customer.email }}</a>
-        {% endset %}
-        {{ UI.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, customer_email) }}
+        {{ UI.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, EmailActions.sendEmailLink(customer.email, customer)) }}
         {{ UI.renderProperty('orocrm.magento.customer.group.label'|trans, customer.group.name) }}
         {{ UI.renderProperty('orocrm.magento.customer.website.label'|trans, customer.website.name) }}
         {{ UI.renderProperty('orocrm.magento.customer.store.label'|trans, customer.store.name) }}

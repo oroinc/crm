@@ -44,7 +44,7 @@ class DashboardController extends Controller
             $this->get('oro_security.acl_helper')
         );
 
-        $widgetAttr = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($data)
             ->setOptions(
@@ -73,7 +73,7 @@ class DashboardController extends Controller
      */
     public function averageOrderAmountAction()
     {
-        $widgetAttributes = $this->get('oro_dashboard.widget_attributes');
+        $widgetAttributes = $this->get('oro_dashboard.widget_configs');
         $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
         $chartViewBuilder = $this->get('oro_chart.view_builder');
 
@@ -93,7 +93,7 @@ class DashboardController extends Controller
      */
     public function newCustomersAction()
     {
-        $widgetAttributes     = $this->get('oro_dashboard.widget_attributes');
+        $widgetAttributes     = $this->get('oro_dashboard.widget_configs');
         $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
         $chartViewBuilder     = $this->get('oro_chart.view_builder');
 
