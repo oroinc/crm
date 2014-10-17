@@ -30,7 +30,6 @@ class CallControllerTest extends WebTestCase
             "callStatus"    => 'in_progress',
             "duration"      => new \DateTime('00:00:00', new \DateTimeZone('UTC')),
             "direction"     => 'incoming',
-
         );
         $result = $this->soapClient->createCall($request);
 
