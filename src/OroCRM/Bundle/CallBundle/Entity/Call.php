@@ -10,8 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * Call
@@ -45,8 +43,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "immutable"=true,
  *              "route"="orocrm_call_activity_view",
  *              "acl"="orocrm_call_view",
-*               "action_button_widget"="orocrm_log_call_button",
-*               "action_link_widget"="orocrm_log_call_link"
+ *              "action_button_widget"="orocrm_log_call_button",
+ *              "action_link_widget"="orocrm_log_call_link"
  *          }
  *      }
  * )
