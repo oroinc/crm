@@ -38,8 +38,8 @@ class AddressTest extends AbstractEntityTestCase
         $address->setContactPhone(new ContactPhone('123-123'));
         $this->assertEquals('123-123', $address->getPrimaryPhoneNumber());
 
-        $address->setPhone(new ContactPhone('456-456'));
-        $this->assertEquals('456-456', $address->getPrimaryPhoneNumber());
+        $address->setPhone('456-456');
+        $this->assertSame('456-456', $address->getPrimaryPhoneNumber());
     }
 
     public function testGetPhoneNumbers()
@@ -51,7 +51,10 @@ class AddressTest extends AbstractEntityTestCase
         $address->setContactPhone(new ContactPhone('123-123'));
         $this->assertSame(['123-123'], $address->getPhoneNumbers());
 
-        $address->setPhone(new ContactPhone('456-456'));
+        $address->setPhone('456-456');
         $this->assertEquals(['456-456', '123-123'], $address->getPhoneNumbers());
+
+        $address->getContactPhone()->setPhone('456-456');
+        $this->assertSame(['456-456'], $address->getPhoneNumbers());
     }
 }
