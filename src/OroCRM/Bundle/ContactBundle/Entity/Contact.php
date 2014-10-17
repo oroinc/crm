@@ -1561,7 +1561,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Ph
     {
         $primaryPhone = $this->getPrimaryPhone();
 
-        return  $primaryPhone ? $primaryPhone->getPhone() : null;
+        return $primaryPhone ? $primaryPhone->getPhone() : null;
     }
 
     /**

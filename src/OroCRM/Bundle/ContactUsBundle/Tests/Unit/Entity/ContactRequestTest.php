@@ -115,4 +115,34 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('DateTime', $request->getUpdatedAt());
         $this->assertNotSame($updatedAt, $request->getUpdatedAt());
     }
+
+    public function testGetEmail()
+    {
+        $request = new ContactRequest();
+
+        $this->assertNull($request->getEmail());
+
+        $request->setEmailAddress('email@example.com');
+        $this->assertEquals('email@example.com', $request->getEmail());
+    }
+
+    public function testGetPrimaryPhoneNumber()
+    {
+        $request = new ContactRequest();
+
+        $this->assertNull($request->getPrimaryPhoneNumber());
+
+        $request->setPhone('123-123');
+        $this->assertEquals('123-123', $request->getPrimaryPhoneNumber());
+    }
+
+    public function testGetPhoneNumbers()
+    {
+        $request = new ContactRequest();
+
+        $this->assertSame([], $request->getPhoneNumbers());
+
+        $request->setPhone('123-123');
+        $this->assertSame(['123-123'], $request->getPhoneNumbers());
+    }
 }
