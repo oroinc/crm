@@ -15,21 +15,16 @@ class CallType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add(
-                'relatedAccount',
-                'orocrm_account_select',
-                array('required' => false, 'label' => 'orocrm.call.related_account.label')
-            )
             ->add('subject', 'text', array('required' => true, 'label' => 'orocrm.call.subject.label'))
-            ->add(
-                'relatedContact',
-                'orocrm_contact_select',
-                array('required' => false, 'label' => 'orocrm.call.related_contact.label')
-            )
             ->add(
                 'phoneNumber',
                 'orocrm_call_phone',
-                array('required' => true, 'label' => 'orocrm.call.phone_number.label')
+                array(
+                    'required' => true,
+                    'label' => 'orocrm.call.phone_number.label',
+                    'suggestions' => $options['phone_suggestions'],
+                    'suggestion_default' => $options['phone_default'],
+                )
             )
             ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
             ->add(
@@ -69,7 +64,9 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call'
+                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'phone_suggestions' => [],
+                'phone_default' => null,
             )
         );
     }

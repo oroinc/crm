@@ -4,6 +4,8 @@ parameters:
 services:
     orocrm_crm.listener.migration.release_data_fixture:
         class: %orocrm_crm.listener.migration.release_data_fixture.class%
+        arguments:
+            - @kernel
         tags:
             - { name: kernel.event_listener, event: oro_migration.pre_up, method: onPreUp }
             - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp }

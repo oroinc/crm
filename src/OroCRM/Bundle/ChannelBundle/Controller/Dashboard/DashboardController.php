@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $label      = $translator->trans('orocrm.channel.dashboard.average_lifetime_sales_chart.axis_label');
         $data       = $this->get('orocrm_channel.provider.lifetime.average_widget_provider')->getChartData();
 
-        $widgetAttr              = $this->get('oro_dashboard.widget_attributes')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($data)
             ->setOptions(

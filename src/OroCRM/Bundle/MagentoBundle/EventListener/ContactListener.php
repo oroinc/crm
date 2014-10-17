@@ -6,11 +6,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
+use Oro\Bundle\PlatformBundle\EventListener\OptionalListenerInterface;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class ContactListener
+class ContactListener implements OptionalListenerInterface
 {
     /**
      * @var ServiceLink
@@ -59,6 +60,11 @@ class ContactListener
     protected $processIds = [];
 
     /**
+     * @var bool
+     */
+    protected $enabled = true;
+
+    /**
      * @param ServiceLink $securityFacadeLink
      * @param ServiceLink $schedulerServiceLink
      */
@@ -71,8 +77,20 @@ class ContactListener
     /**
      * {@inheritdoc}
      */
+    public function setEnabled($enabled = true)
+    {
+        $this->enabled = $enabled;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function onFlush(OnFlushEventArgs $event)
     {
+        if (!$this->enabled) {
+            return;
+        }
+
         // check for logged user is for confidence that data changes comes from UI, not from sync process.
         if ($this->securityFacadeLink->getService()->hasLoggedUser()) {
             $em = $event->getEntityManager();

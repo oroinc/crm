@@ -86,7 +86,7 @@ class CommentController extends SoapController
     /**
      * @return CaseApiEntityManager
      */
-    public function getCaseManager()
+    protected function getCaseManager()
     {
         return $this->container->get('orocrm_case.manager.api');
     }

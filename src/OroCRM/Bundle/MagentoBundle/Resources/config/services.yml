@@ -258,3 +258,8 @@ services:
             - @doctrine
             - @translator
             - @oro_security.acl_helper
+
+    orocrm_magento.provider.enitity_state:
+        parent: orocrm_channel.provider.utils.entity_state_provider
+        arguments:
+            - 'OroCRM\Bundle\MagentoBundle\Entity'
