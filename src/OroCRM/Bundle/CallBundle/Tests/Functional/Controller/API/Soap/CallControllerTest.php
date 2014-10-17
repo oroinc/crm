@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\CallBundle\Tests\Functional\Controller\API\Soap;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\CallBundle\Tests\Functional\DataFixtures\LoadCallDataFixtures;
 
 /**
  * @outputBuffering enabled
@@ -14,7 +13,6 @@ class CallControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateWsseAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\CallBundle\Tests\Functional\DataFixtures\LoadCallDataFixtures']);
         $this->initSoapClient();
     }
 
@@ -24,10 +22,14 @@ class CallControllerTest extends WebTestCase
     public function testCreate()
     {
         $request = array (
+            "owner"         => '1',
             "subject"       => 'Call Subject ' . mt_rand(),
             "phoneNumber"   => mt_rand(),
-            "callStatus"    => LoadCallDataFixtures::STATUS_NAME,
-            "direction"     => LoadCallDataFixtures::DIRECTION_NAME,
+            "notes"         => 'notes',
+            "callDateTime"  => new \DateTime('now', new \DateTimeZone('UTC')),
+            "callStatus"    => 'in_progress',
+            "duration"      => new \DateTime('00:00:00', new \DateTimeZone('UTC')),
+            "direction"     => 'incoming',
 
         );
         $result = $this->soapClient->createCall($request);

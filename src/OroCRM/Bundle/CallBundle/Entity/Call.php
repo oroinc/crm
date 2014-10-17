@@ -300,7 +300,7 @@ class Call extends ExtendCall
      * @param User $owner
      * @return Call
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner)
     {
         $this->owner = $owner;
 
@@ -323,7 +323,7 @@ class Call extends ExtendCall
      * @param CallStatus $callStatus
      * @return Call
      */
-    public function setCallStatus($callStatus = null)
+    public function setCallStatus($callStatus)
     {
         $this->callStatus = $callStatus;
 
