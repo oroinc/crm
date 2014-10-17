@@ -45,7 +45,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "immutable"=true,
  *              "route"="orocrm_call_activity_view",
  *              "acl"="orocrm_call_view",
-*               "action_widget"="orocrm_log_call_button"
+*               "action_button_widget"="orocrm_log_call_button",
+*               "action_link_widget"="orocrm_log_call_link"
  *          }
  *      }
  * )
