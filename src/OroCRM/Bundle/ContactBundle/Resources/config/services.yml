@@ -156,6 +156,7 @@ services:
             - "orocrm_contact_address_form"
             - "oro_typed_address"
             - ~
+            - { data_class: %orocrm_contact.contact_address.entity.class% }
 
     orocrm_contact.form.handler.contact_address:
         class: %oro_address.form.handler.address.class%
