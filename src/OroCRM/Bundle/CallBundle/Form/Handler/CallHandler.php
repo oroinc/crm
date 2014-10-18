@@ -8,52 +8,37 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
+use Oro\Bundle\AddressBundle\Tools\PhoneHolderHelper;
+use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 
 class CallHandler
 {
-    /**
-     * @var FormInterface
-     */
+    /** @var FormInterface */
     protected $form;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $formName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $formType;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var ObjectManager
-     */
+    /** @var ObjectManager */
     protected $manager;
 
-    /**
-     * @var CallActivityManager
-     */
+    /** @var CallActivityManager */
     protected $callActivityManager;
 
-    /**
-     * @var EntityRoutingHelper
-     */
+    /** @var EntityRoutingHelper */
     protected $entityRoutingHelper;
 
-    /**
-     * @var FormFactory
-     */
+    /** @var FormFactory */
     protected $formFactory;
 
     /**
@@ -61,6 +46,7 @@ class CallHandler
      * @param string              $formType
      * @param Request             $request
      * @param ObjectManager       $manager
+     * @param PhoneHolderHelper   $phoneHolderHelper
      * @param CallActivityManager $callActivityManager
      * @param EntityRoutingHelper $entityRoutingHelper
      * @param FormFactory         $formFactory
@@ -70,6 +56,7 @@ class CallHandler
         $formType,
         Request $request,
         ObjectManager $manager,
+        PhoneHolderHelper $phoneHolderHelper,
         CallActivityManager $callActivityManager,
         EntityRoutingHelper $entityRoutingHelper,
         FormFactory $formFactory
@@ -78,6 +65,7 @@ class CallHandler
         $this->formType            = $formType;
         $this->request             = $request;
         $this->manager             = $manager;
+        $this->phoneHolderHelper   = $phoneHolderHelper;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
         $this->formFactory         = $formFactory;
@@ -98,11 +86,11 @@ class CallHandler
         $options = [];
         if ($targetEntityClass && $this->request->getMethod() === 'GET') {
             $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
+            if (!$entity->getId()) {
+                $entity->setPhoneNumber($this->phoneHolderHelper->getPhoneNumber($targetEntity));
+            }
             if ($targetEntity instanceof PhoneHolderInterface) {
                 $options = ['phone_suggestions' => $targetEntity->getPhoneNumbers()];
-                if (!$entity->getId()) {
-                    $entity->setPhoneNumber($targetEntity->getPrimaryPhoneNumber());
-                }
             }
         }
 

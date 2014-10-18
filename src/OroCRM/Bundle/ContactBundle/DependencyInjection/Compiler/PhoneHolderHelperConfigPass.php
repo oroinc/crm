@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class EmailHolderHelperConfigPass implements CompilerPassInterface
+class PhoneHolderHelperConfigPass implements CompilerPassInterface
 {
-    const SERVICE_KEY = 'oro_email.email_holder_helper';
+    const SERVICE_KEY = 'oro_address.phone_holder_helper';
 
     /**
      * {@inheritdoc}

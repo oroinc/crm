@@ -18,40 +18,29 @@ use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestTarget;
 
 class CallHandlerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormInterface
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|FormInterface */
     protected $form;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     protected $request;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager */
     protected $manager;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CallActivityManager
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $phoneHolderHelper;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|CallActivityManager */
     protected $callActivityManager;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityRoutingHelper
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityRoutingHelper */
     protected $entityRoutingHelper;
 
-    /**
-     * @var CallHandler
-     */
-    protected $handler;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormFactory
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|FormFactory */
     protected $formFactory;
+
+    /** @var CallHandler */
+    protected $handler;
 
     /**
      * @var Call
@@ -65,6 +54,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->request             = new Request();
         $this->manager             = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->phoneHolderHelper   = $this->getMockBuilder('Oro\Bundle\AddressBundle\Tools\PhoneHolderHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->callActivityManager = $this->getMockBuilder(
@@ -85,6 +77,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             'orocrm_call_form',
             $this->request,
             $this->manager,
+            $this->phoneHolderHelper,
             $this->callActivityManager,
             $this->entityRoutingHelper,
             $this->formFactory
@@ -93,6 +86,8 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessGetRequestWithoutTargetEntity()
     {
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
 
@@ -109,11 +104,14 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessGetRequestWithNoPhoneHolderTargetEntity()
     {
+        $this->setId($this->entity, 123);
         $targetEntity = new TestTarget(123);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
 
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->once())
             ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
@@ -132,11 +130,14 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessGetRequestWithPhoneHolderTargetEntity()
     {
+        $this->setId($this->entity, 123);
         $targetEntity = new TestPhoneHolderTarget(123, ['phone1', 'phone2']);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
 
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->once())
             ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
@@ -160,6 +161,41 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
+    public function testProcessGetRequestWithNewTargetEntity()
+    {
+        $targetEntity = new TestPhoneHolderTarget(123, ['phone1', 'phone2']);
+
+        $this->request->query->set('entityClass', get_class($targetEntity));
+        $this->request->query->set('entityId', $targetEntity->getId());
+
+        $this->phoneHolderHelper->expects($this->once())
+            ->method('getPhoneNumber')
+            ->with($this->identicalTo($targetEntity))
+            ->will($this->returnValue($targetEntity->getPrimaryPhoneNumber()));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntity')
+            ->with(get_class($targetEntity), $targetEntity->getId())
+            ->will($this->returnValue($targetEntity));
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->with(
+                'orocrm_call_form',
+                'orocrm_call_form',
+                $this->entity,
+                [
+                    'phone_suggestions' => ['phone1', 'phone2']
+                ]
+            )
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->never())
+            ->method('submit');
+
+        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertEquals($targetEntity->getPrimaryPhoneNumber(), $this->entity->getPhoneNumber());
+    }
+
     /**
      * @dataProvider supportedMethods
      *
@@ -179,6 +215,8 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(false));
 
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
         $this->entityRoutingHelper->expects($this->never())
@@ -210,6 +248,8 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
         $this->entityRoutingHelper->expects($this->never())
@@ -253,6 +293,8 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
+        $this->phoneHolderHelper->expects($this->never())
+            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
         $this->entityRoutingHelper->expects($this->once())
@@ -281,5 +323,18 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             array('POST'),
             array('PUT')
         );
+    }
+
+    /**
+     * @param mixed $obj
+     * @param mixed $val
+     */
+    protected function setId($obj, $val)
+    {
+        $class = new \ReflectionClass($obj);
+        $prop = $class->getProperty('id');
+        $prop->setAccessible(true);
+
+        $prop->setValue($obj, $val);
     }
 }
