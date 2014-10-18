@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\CallBundle\Controller;
 
-use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
@@ -104,6 +103,21 @@ class CallController extends Controller
         return [
             'entity' => $entity,
         ];
+    }
+
+    /**
+     * @Route("/widget", name="orocrm_call_widget_calls")
+     * @Template
+     * @AclAncestor("orocrm_call_view")
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function callsAction(Request $request)
+    {
+        return array(
+            'datagridParameters' => $request->query->all()
+        );
     }
 
     /**

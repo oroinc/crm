@@ -125,6 +125,20 @@ datagrid:
                 turnOffToolbarRecordsNumber: 10
                 addResetAction: false
 
+    widget-calls-grid:
+        extends: widget-base-calls-grid
+        filters:
+            columns:
+                subject:
+                    type: string
+                    data_name: call.subject
+                phone:
+                    type: string
+                    data_name: phone
+                dateTime:
+                    type: datetime
+                    data_name: call.callDateTime
+
     activity-call-grid:
         extends: widget-base-calls-grid
         filters:
