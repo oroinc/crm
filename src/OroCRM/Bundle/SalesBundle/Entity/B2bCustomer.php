@@ -5,12 +5,14 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -48,7 +50,12 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      }
  * )
  */
-class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface, CustomerIdentityInterface
+class B2bCustomer extends ExtendB2bCustomer implements
+    Taggable,
+    EmailHolderInterface,
+    PhoneHolderInterface,
+    ChannelAwareInterface,
+    CustomerIdentityInterface
 {
     use ChannelEntityTrait;
 
@@ -561,5 +568,65 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * Get the primary email address of the related contact or account
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getEmail();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getEmail();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the primary phone of the related contact or account
+     *
+     * @return string|null
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getPrimaryPhoneNumber();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getPrimaryPhoneNumber();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get phones of the related contact or account
+     *
+     * @return string[]
+     */
+    public function getPhoneNumbers()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getPhoneNumbers();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getPhoneNumbers();
+        }
+
+        return [];
     }
 }

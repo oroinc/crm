@@ -6,13 +6,14 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -56,7 +57,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  * @Oro\Loggable
  */
-class Customer extends ExtendCustomer implements ChannelAwareInterface, CustomerIdentityInterface
+class Customer extends ExtendCustomer implements
+    PhoneHolderInterface,
+    ChannelAwareInterface,
+    CustomerIdentityInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
 
@@ -578,5 +582,45 @@ class Customer extends ExtendCustomer implements ChannelAwareInterface, Customer
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * Get the primary phone of the related contact or account
+     *
+     * @return string|null
+     */
+    public function getPrimaryPhoneNumber()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getPrimaryPhoneNumber();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getPrimaryPhoneNumber();
+        }
+
+        return null;
+    }
+
+    /**
+     * Get phones of the related contact or account
+     *
+     * @return string[]
+     */
+    public function getPhoneNumbers()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getPhoneNumbers();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getPhoneNumbers();
+        }
+
+        return [];
     }
 }
