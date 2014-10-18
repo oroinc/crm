@@ -99,10 +99,10 @@ class CallHandler
         if ($targetEntityClass && $this->request->getMethod() === 'GET') {
             $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
             if ($targetEntity instanceof PhoneHolderInterface) {
-                $options = [
-                    'phone_suggestions' => $targetEntity->getPhoneNumbers(),
-                    'phone_default'     => $targetEntity->getPrimaryPhoneNumber(),
-                ];
+                $options = ['phone_suggestions' => $targetEntity->getPhoneNumbers()];
+                if (!$entity->getId()) {
+                    $entity->setPhoneNumber($targetEntity->getPrimaryPhoneNumber());
+                }
             }
         }
 

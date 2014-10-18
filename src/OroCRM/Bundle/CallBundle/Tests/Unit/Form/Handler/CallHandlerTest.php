@@ -149,8 +149,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
                 'orocrm_call_form',
                 $this->entity,
                 [
-                    'phone_suggestions' => ['phone1', 'phone2'],
-                    'phone_default'     => 'phone1'
+                    'phone_suggestions' => ['phone1', 'phone2']
                 ]
             )
             ->will($this->returnValue($this->form));

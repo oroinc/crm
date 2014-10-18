@@ -59,8 +59,7 @@ class CallTypeTest extends FormIntegrationTestCase
             $counter++;
         }
         $options = [
-            'phone_suggestions' => [],
-            'phone_default' => null,
+            'phone_suggestions' => []
         ];
         $this->type->buildForm($builder, $options);
     }

@@ -15,17 +15,16 @@ class CallPhoneType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $defaultConfigs = array(
+        $defaultConfigs = [
             'allowClear'   => true,
             'placeholder'  => 'orocrm.call.form.choose_or_enter_phone',
             'extra_config' => 'call_phone'
-        );
+        ];
 
         $resolver->setDefaults(
             [
-                'suggestions'           => [],
-                'configs'               => $defaultConfigs,
-                'suggestion_default'    => null,
+                'suggestions' => [],
+                'configs'     => $defaultConfigs,
             ]
         );
         $resolver->setNormalizers(
@@ -47,9 +46,6 @@ class CallPhoneType extends AbstractType
      */
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$view->vars['value']) {
-            $view->vars['value'] = $options['suggestion_default'];
-        }
         $view->vars['suggestions'] = $options['suggestions'];
     }
 

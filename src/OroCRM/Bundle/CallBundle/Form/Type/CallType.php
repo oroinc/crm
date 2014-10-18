@@ -10,50 +10,69 @@ class CallType extends AbstractType
 {
     /**
      * @param FormBuilderInterface $builder
-     * @param array $options
+     * @param array                $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('subject', 'text', array('required' => true, 'label' => 'orocrm.call.subject.label'))
+            ->add(
+                'subject',
+                'text',
+                [
+                    'required' => true,
+                    'label'    => 'orocrm.call.subject.label'
+                ]
+            )
             ->add(
                 'phoneNumber',
                 'orocrm_call_phone',
-                array(
-                    'required' => true,
-                    'label' => 'orocrm.call.phone_number.label',
-                    'suggestions' => $options['phone_suggestions'],
-                    'suggestion_default' => $options['phone_default'],
-                )
+                [
+                    'required'    => true,
+                    'label'       => 'orocrm.call.phone_number.label',
+                    'suggestions' => $options['phone_suggestions']
+                ]
             )
-            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.call.notes.label'))
+            ->add(
+                'notes',
+                'textarea',
+                [
+                    'required' => false,
+                    'label'    => 'orocrm.call.notes.label'
+                ]
+            )
             ->add(
                 'callDateTime',
                 'oro_datetime',
-                array('required' => true, 'label' => 'orocrm.call.call_date_time.label')
+                [
+                    'required' => true,
+                    'label'    => 'orocrm.call.call_date_time.label'
+                ]
             )
             ->add(
                 'callStatus',
                 'entity',
-                array(
-                    'label' => 'orocrm.call.call_status.label',
-                    'class' => 'OroCRM\Bundle\CallBundle\Entity\CallStatus',
-                    'required' => true
-                )
+                [
+                    'required' => true,
+                    'label'    => 'orocrm.call.call_status.label',
+                    'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallStatus'
+                ]
             )
             ->add(
                 'duration',
                 'oro_time_interval',
-                array('required' => false, 'label' => 'orocrm.call.duration.label')
+                [
+                    'required' => false,
+                    'label'    => 'orocrm.call.duration.label'
+                ]
             )
             ->add(
                 'direction',
                 'entity',
-                array(
+                [
+                    'required' => true,
                     'label'    => 'orocrm.call.direction.label',
-                    'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection',
-                    'required' => true
-                )
+                    'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection'
+                ]
             );
     }
 
@@ -63,11 +82,10 @@ class CallType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'data_class' => 'OroCRM\Bundle\CallBundle\Entity\Call',
-                'phone_suggestions' => [],
-                'phone_default' => null,
-            )
+            [
+                'data_class'        => 'OroCRM\Bundle\CallBundle\Entity\Call',
+                'phone_suggestions' => []
+            ]
         );
     }
 
