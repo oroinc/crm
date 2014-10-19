@@ -20,7 +20,7 @@ class TestPhoneHolderTarget implements PhoneHolderInterface
         return $this->id;
     }
 
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         return !empty($this->phones) ? $this->phones[0] : null;
     }

@@ -510,14 +510,14 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, P
      *
      * @return string|null
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $contact = $this->getDefaultContact();
         if (!$contact) {
             return null;
         }
 
-        return $contact->getPrimaryPhoneNumber();
+        return $contact->getPhoneNumber();
     }
 
     /**

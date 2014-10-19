@@ -92,7 +92,7 @@ class CustomerTest extends AbstractEntityTestCase
         $this->assertEquals($expectedValue, $website->getStoreName());
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
             ->disableOriginalConstructor()
@@ -101,19 +101,19 @@ class CustomerTest extends AbstractEntityTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertNull($this->entity->getPrimaryPhoneNumber());
+        $this->assertNull($this->entity->getPhoneNumber());
 
         $this->entity->setAccount($account);
         $account->expects($this->once())
-            ->method('getPrimaryPhoneNumber')
+            ->method('getPhoneNumber')
             ->will($this->returnValue('123-123'));
-        $this->assertEquals('123-123', $this->entity->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $this->entity->getPhoneNumber());
 
         $this->entity->setContact($contact);
         $contact->expects($this->once())
-            ->method('getPrimaryPhoneNumber')
+            ->method('getPhoneNumber')
             ->will($this->returnValue('456-456'));
-        $this->assertEquals('456-456', $this->entity->getPrimaryPhoneNumber());
+        $this->assertEquals('456-456', $this->entity->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

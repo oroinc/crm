@@ -595,16 +595,16 @@ class B2bCustomer extends ExtendB2bCustomer implements
      *
      * @return string|null
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $contact = $this->getContact();
         if ($contact) {
-            return $contact->getPrimaryPhoneNumber();
+            return $contact->getPhoneNumber();
         }
 
         $account = $this->getAccount();
         if ($account) {
-            return $account->getPrimaryPhoneNumber();
+            return $account->getPhoneNumber();
         }
 
         return null;

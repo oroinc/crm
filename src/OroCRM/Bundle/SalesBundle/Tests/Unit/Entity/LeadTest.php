@@ -54,14 +54,14 @@ class LeadTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $lead = new Lead();
 
-        $this->assertNull($lead->getPrimaryPhoneNumber());
+        $this->assertNull($lead->getPhoneNumber());
 
         $lead->setPhoneNumber('123-123');
-        $this->assertEquals('123-123', $lead->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $lead->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

@@ -41,20 +41,20 @@ class OpportunityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('email@example.com', $opportunity->getEmail());
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $opportunity = new Opportunity();
         $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertNull($opportunity->getPrimaryPhoneNumber());
+        $this->assertNull($opportunity->getPhoneNumber());
 
         $opportunity->setContact($contact);
         $contact->expects($this->once())
-            ->method('getPrimaryPhoneNumber')
+            ->method('getPhoneNumber')
             ->will($this->returnValue('123-123'));
-        $this->assertEquals('123-123', $opportunity->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $opportunity->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

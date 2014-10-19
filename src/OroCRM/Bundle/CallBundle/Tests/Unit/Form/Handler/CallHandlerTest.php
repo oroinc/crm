@@ -171,7 +171,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->phoneHolderHelper->expects($this->once())
             ->method('getPhoneNumber')
             ->with($this->identicalTo($targetEntity))
-            ->will($this->returnValue($targetEntity->getPrimaryPhoneNumber()));
+            ->will($this->returnValue($targetEntity->getPhoneNumber()));
         $this->entityRoutingHelper->expects($this->once())
             ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
@@ -193,7 +193,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('submit');
 
         $this->assertFalse($this->handler->process($this->entity));
-        $this->assertEquals($targetEntity->getPrimaryPhoneNumber(), $this->entity->getPhoneNumber());
+        $this->assertEquals($targetEntity->getPhoneNumber(), $this->entity->getPhoneNumber());
     }
 
     /**

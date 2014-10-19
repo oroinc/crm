@@ -1557,7 +1557,7 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, Ph
     /**
      * {@inheritdoc}
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $primaryPhone = $this->getPrimaryPhone();
 

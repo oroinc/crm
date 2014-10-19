@@ -632,14 +632,14 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface, Phone
      *
      * @return string|null
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $contact = $this->getRelatedContact();
         if (!$contact) {
             return null;
         }
 
-        return $contact->getPrimaryPhoneNumber();
+        return $contact->getPhoneNumber();
     }
 
     /**

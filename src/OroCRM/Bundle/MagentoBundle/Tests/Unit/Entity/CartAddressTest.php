@@ -6,14 +6,14 @@ use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
 class CartAddressTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $address = new CartAddress();
 
-        $this->assertNull($address->getPrimaryPhoneNumber());
+        $this->assertNull($address->getPhoneNumber());
 
         $address->setPhone('123-123');
-        $this->assertEquals('123-123', $address->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $address->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

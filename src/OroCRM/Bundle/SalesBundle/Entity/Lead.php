@@ -1118,14 +1118,6 @@ class Lead extends ExtendLead implements
     /**
      * {@inheritdoc}
      */
-    public function getPrimaryPhoneNumber()
-    {
-        return !empty($this->phoneNumber) ? $this->phoneNumber : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getPhoneNumbers()
     {
         $phones = [];

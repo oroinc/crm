@@ -431,18 +431,18 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('email@example.com', $contact->getEmail());
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $contact = new Contact();
 
-        $this->assertNull($contact->getPrimaryPhoneNumber());
+        $this->assertNull($contact->getPhoneNumber());
 
         $phone1 = new ContactPhone('123-123');
         $contact->addPhone($phone1);
         $phone2 = new ContactPhone('456-456');
         $phone2->setPrimary(true);
         $contact->addPhone($phone2);
-        $this->assertEquals('456-456', $contact->getPrimaryPhoneNumber());
+        $this->assertEquals('456-456', $contact->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

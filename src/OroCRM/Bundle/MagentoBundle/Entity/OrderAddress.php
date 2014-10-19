@@ -143,7 +143,7 @@ class OrderAddress extends ExtendOrderAddress implements PhoneHolderInterface
     /**
      * {@inheritdoc}
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         return !empty($this->phone) ? $this->phone : null;
     }

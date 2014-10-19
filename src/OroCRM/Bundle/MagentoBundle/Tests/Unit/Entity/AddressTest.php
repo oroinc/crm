@@ -29,17 +29,17 @@ class AddressTest extends AbstractEntityTestCase
         ];
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $address = new Address();
 
-        $this->assertNull($address->getPrimaryPhoneNumber());
+        $this->assertNull($address->getPhoneNumber());
 
         $address->setContactPhone(new ContactPhone('123-123'));
-        $this->assertEquals('123-123', $address->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $address->getPhoneNumber());
 
         $address->setPhone('456-456');
-        $this->assertSame('456-456', $address->getPrimaryPhoneNumber());
+        $this->assertSame('456-456', $address->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

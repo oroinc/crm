@@ -98,20 +98,20 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('email@example.com', $account->getEmail());
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $account = new Account();
         $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertNull($account->getPrimaryPhoneNumber());
+        $this->assertNull($account->getPhoneNumber());
 
         $account->setDefaultContact($contact);
         $contact->expects($this->once())
-            ->method('getPrimaryPhoneNumber')
+            ->method('getPhoneNumber')
             ->will($this->returnValue('123-123'));
-        $this->assertEquals('123-123', $account->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $account->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

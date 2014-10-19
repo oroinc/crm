@@ -299,7 +299,7 @@ class Address extends ExtendAddress implements PhoneHolderInterface
     /**
      * {@inheritdoc}
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $phone = $this->phone;
         if (empty($phone) && $this->getContactPhone()) {

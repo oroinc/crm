@@ -80,20 +80,20 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($comment, $this->case->getComments()->get(0));
     }
 
-    public function testGetPrimaryPhoneNumber()
+    public function testGetPhoneNumber()
     {
         $case = new CaseEntity();
         $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->assertNull($case->getPrimaryPhoneNumber());
+        $this->assertNull($case->getPhoneNumber());
 
         $case->setRelatedContact($contact);
         $contact->expects($this->once())
-            ->method('getPrimaryPhoneNumber')
+            ->method('getPhoneNumber')
             ->will($this->returnValue('123-123'));
-        $this->assertEquals('123-123', $case->getPrimaryPhoneNumber());
+        $this->assertEquals('123-123', $case->getPhoneNumber());
     }
 
     public function testGetPhoneNumbers()

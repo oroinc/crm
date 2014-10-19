@@ -712,14 +712,14 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @return string|null
      */
-    public function getPrimaryPhoneNumber()
+    public function getPhoneNumber()
     {
         $contact = $this->getContact();
         if (!$contact) {
             return null;
         }
 
-        return $contact->getPrimaryPhoneNumber();
+        return $contact->getPhoneNumber();
     }
 
     /**
