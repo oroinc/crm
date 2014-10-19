@@ -2,10 +2,9 @@
 
 namespace OroCRM\Bundle\CallBundle\Model;
 
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
 
-class ExtendCall implements ActivityInterface
+class ExtendCall
 {
     use ExtendActivity;
 
