@@ -98,6 +98,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 name:
                     type: string
                     data_name: o.name
@@ -123,6 +124,7 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                        is_translated_choices: true
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -286,6 +288,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                  statusLabel:
                     type: entity
                     data_name: status.name
@@ -294,6 +297,7 @@ datagrid:
                         field_options:
                           class: OroCRMSalesBundle:LeadStatus
                           property: label
+                        is_translated_choices: true
                  firstName:
                     type: string
                     data_name: l.firstName
@@ -315,6 +319,7 @@ datagrid:
                           class: OroAddressBundle:Country
                           property: name
                           query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                        is_translated_choices: true
                  regionLabel:
                     type: string
                     data_name: regionLabel
@@ -444,6 +449,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -469,6 +475,7 @@ datagrid:
                         field_type: oro_workflow_step_select
                         field_options:
                             workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
+                        is_translated_choices: true
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -578,6 +585,7 @@ datagrid:
                              class: OroAddressBundle:Country
                              property: name
                              query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                         is_translated_choices: true
                  regionLabel:
                      type: string
                      data_name: regionLabel
@@ -701,6 +709,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                  name:
                     type:      string
                     data_name: c.name
@@ -867,6 +876,7 @@ datagrid:
                           class: OroAddressBundle:Country
                           property: name
                           query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                        is_translated_choices: true
                  regionLabel:
                     type: string
                     data_name: regionLabel

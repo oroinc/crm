@@ -82,7 +82,7 @@ class CallType extends AbstractType
             )
             ->add(
                 'direction',
-                'entity',
+                'translatable_entity',
                 array(
                     'label'    => 'orocrm.call.direction.label',
                     'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection',

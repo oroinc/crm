@@ -42,7 +42,7 @@ class TaskType extends AbstractType
             )
             ->add(
                 'taskPriority',
-                'entity',
+                'translatable_entity',
                 [
                     'label' => 'orocrm.task.task_priority.label',
                     'class' => 'OroCRM\Bundle\TaskBundle\Entity\TaskPriority',

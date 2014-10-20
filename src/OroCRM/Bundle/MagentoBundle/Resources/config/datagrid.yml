@@ -84,6 +84,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -91,6 +92,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                        is_translated_choices: true
                     enabled: false
                 firstName:
                     type: string
@@ -109,6 +111,7 @@ datagrid:
                             class: OroAddressBundle:Country
                             property: name
                             query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                        is_translated_choices: true
                 regionName:
                     type: string
                     data_name: regionName
@@ -239,6 +242,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -282,6 +286,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
+                        is_translated_choices: true
                 stepLabel:
                     type: entity
                     data_name: c.workflowStep
@@ -497,6 +502,7 @@ datagrid:
                             class: OroCRMMagentoBundle:Website
                             multiple: true
                             property: name
+                        is_translated_choices: true
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -635,6 +641,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -642,6 +649,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                        is_translated_choices: true
                     enabled:   false
                 incrementId:
                     type:             string
@@ -679,6 +687,7 @@ datagrid:
                           class: OroAddressBundle:Country
                           property: name
                           query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                        is_translated_choices: true
                 regionName:
                     type:      string
                     data_name: regionName

@@ -81,7 +81,7 @@ class ContactType extends AbstractType
         // contact source
         $builder->add(
             'source',
-            'entity',
+            'translatable_entity',
             array(
                 'label'       => 'orocrm.contact.source.label',
                 'class'       => 'OroCRMContactBundle:Source',
@@ -108,7 +108,7 @@ class ContactType extends AbstractType
         // contact method
         $builder->add(
             'method',
-            'entity',
+            'translatable_entity',
             array(
                 'label'       => 'orocrm.contact.method.label',
                 'class'       => 'OroCRMContactBundle:Method',
@@ -164,6 +164,9 @@ class ContactType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
+                'translation'   => array(
+                    'is_translated_option' => true
+                )
             )
         );
 

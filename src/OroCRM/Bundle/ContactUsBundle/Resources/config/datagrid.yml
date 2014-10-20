@@ -57,6 +57,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                        is_translated_choices: true
                 firstName:
                     type:      string
                     data_name: cr.firstName
