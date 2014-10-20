@@ -8,8 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
-use Oro\Bundle\AddressBundle\Tools\PhoneHolderHelper;
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
@@ -32,6 +31,9 @@ class CallHandler
     /** @var ObjectManager */
     protected $manager;
 
+    /** @var PhoneProviderInterface */
+    protected $phoneProvider;
+
     /** @var CallActivityManager */
     protected $callActivityManager;
 
@@ -42,21 +44,21 @@ class CallHandler
     protected $formFactory;
 
     /**
-     * @param string              $formName
-     * @param string              $formType
-     * @param Request             $request
-     * @param ObjectManager       $manager
-     * @param PhoneHolderHelper   $phoneHolderHelper
-     * @param CallActivityManager $callActivityManager
-     * @param EntityRoutingHelper $entityRoutingHelper
-     * @param FormFactory         $formFactory
+     * @param string                 $formName
+     * @param string                 $formType
+     * @param Request                $request
+     * @param ObjectManager          $manager
+     * @param PhoneProviderInterface $phoneProvider
+     * @param CallActivityManager    $callActivityManager
+     * @param EntityRoutingHelper    $entityRoutingHelper
+     * @param FormFactory            $formFactory
      */
     public function __construct(
         $formName,
         $formType,
         Request $request,
         ObjectManager $manager,
-        PhoneHolderHelper $phoneHolderHelper,
+        PhoneProviderInterface $phoneProvider,
         CallActivityManager $callActivityManager,
         EntityRoutingHelper $entityRoutingHelper,
         FormFactory $formFactory
@@ -65,7 +67,7 @@ class CallHandler
         $this->formType            = $formType;
         $this->request             = $request;
         $this->manager             = $manager;
-        $this->phoneHolderHelper   = $phoneHolderHelper;
+        $this->phoneProvider       = $phoneProvider;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
         $this->formFactory         = $formFactory;
@@ -87,11 +89,18 @@ class CallHandler
         if ($targetEntityClass && $this->request->getMethod() === 'GET') {
             $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
             if (!$entity->getId()) {
-                $entity->setPhoneNumber($this->phoneHolderHelper->getPhoneNumber($targetEntity));
+                $entity->setPhoneNumber($this->phoneProvider->getPhoneNumber($targetEntity));
             }
-            if ($targetEntity instanceof PhoneHolderInterface) {
-                $options = ['phone_suggestions' => $targetEntity->getPhoneNumbers()];
-            }
+            $options = [
+                'phone_suggestions' => array_unique(
+                    array_map(
+                        function ($item) {
+                            return $item[0];
+                        },
+                        $this->phoneProvider->getPhoneNumbers($targetEntity)
+                    )
+                )
+            ];
         }
 
         $this->form = $this->formFactory->createNamed($this->formName, $this->formType, $entity, $options);
@@ -101,10 +110,14 @@ class CallHandler
 
             if ($this->form->isValid()) {
                 if ($targetEntityClass) {
-                    $this->callActivityManager->addAssociation(
-                        $entity,
-                        $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
-                    );
+                    $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
+                    $this->callActivityManager->addAssociation($entity, $targetEntity);
+                    $phones = $this->phoneProvider->getPhoneNumbers($targetEntity);
+                    foreach ($phones as $phone) {
+                        if ($entity->getPhoneNumber() === $phone[0]) {
+                            $this->callActivityManager->addAssociation($entity, $phone[1]);
+                        }
+                    }
                 }
                 $this->onSuccess($entity);
 

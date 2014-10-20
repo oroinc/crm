@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
@@ -17,8 +16,7 @@ use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 abstract class AbstractContactRequest implements
     FirstNameInterface,
     LastNameInterface,
-    EmailHolderInterface,
-    PhoneHolderInterface
+    EmailHolderInterface
 {
     /**
      * @var integer
@@ -249,12 +247,11 @@ abstract class AbstractContactRequest implements
      */
     public function getPhoneNumbers()
     {
-        $phones = [];
-
+        $result = [];
         if (!empty($this->phone)) {
-            $phones[] = $this->phone;
+            $result[] = [$this->phone, $this];
         }
 
-        return $phones;
+        return $result;
     }
 }

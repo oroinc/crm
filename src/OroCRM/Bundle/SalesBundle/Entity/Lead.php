@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -68,7 +67,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    PhoneHolderInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
@@ -1113,19 +1111,5 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPhoneNumbers()
-    {
-        $phones = [];
-
-        if (!empty($this->phoneNumber)) {
-            $phones[] = $this->phoneNumber;
-        }
-
-        return $phones;
     }
 }

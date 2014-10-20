@@ -2,18 +2,18 @@
 
 namespace OroCRM\Bundle\CallBundle\Tests\Unit\Form\Handler;
 
-use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
+use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
-use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestPhoneHolderTarget;
 use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestTarget;
 
 class CallHandlerTest extends \PHPUnit_Framework_TestCase
@@ -27,8 +27,8 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager */
     protected $manager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $phoneHolderHelper;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|PhoneProviderInterface */
+    protected $phoneProvider;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|CallActivityManager */
     protected $callActivityManager;
@@ -56,9 +56,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->manager             = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->phoneHolderHelper   = $this->getMockBuilder('Oro\Bundle\AddressBundle\Tools\PhoneHolderHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->phoneProvider       = $this->getMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
         $this->callActivityManager = $this->getMockBuilder(
             'OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager'
         )
@@ -77,7 +75,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             'orocrm_call_form',
             $this->request,
             $this->manager,
-            $this->phoneHolderHelper,
+            $this->phoneProvider,
             $this->callActivityManager,
             $this->entityRoutingHelper,
             $this->formFactory
@@ -86,7 +84,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function testProcessGetRequestWithoutTargetEntity()
     {
-        $this->phoneHolderHelper->expects($this->never())
+        $this->phoneProvider->expects($this->never())
             ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
@@ -102,42 +100,30 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    public function testProcessGetRequestWithNoPhoneHolderTargetEntity()
+    public function testProcessGetRequestWithTargetEntity()
     {
         $this->setId($this->entity, 123);
-        $targetEntity = new TestTarget(123);
+        $targetEntity  = new TestTarget(123);
+        $targetEntity1 = new TestTarget(456);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
 
-        $this->phoneHolderHelper->expects($this->never())
+        $this->phoneProvider->expects($this->never())
             ->method('getPhoneNumber');
-        $this->entityRoutingHelper->expects($this->once())
-            ->method('getEntity')
-            ->with(get_class($targetEntity), $targetEntity->getId())
-            ->will($this->returnValue($targetEntity));
+        $this->phoneProvider->expects($this->once())
+            ->method('getPhoneNumbers')
+            ->with($this->identicalTo($targetEntity))
+            ->will(
+                $this->returnValue(
+                    [
+                        ['phone1', $targetEntity],
+                        ['phone2', $targetEntity],
+                        ['phone1', $targetEntity1]
+                    ]
+                )
+            );
 
-        $this->formFactory->expects($this->once())
-            ->method('createNamed')
-            ->with('orocrm_call_form', 'orocrm_call_form', $this->entity, [])
-            ->will($this->returnValue($this->form));
-
-        $this->form->expects($this->never())
-            ->method('submit');
-
-        $this->assertFalse($this->handler->process($this->entity));
-    }
-
-    public function testProcessGetRequestWithPhoneHolderTargetEntity()
-    {
-        $this->setId($this->entity, 123);
-        $targetEntity = new TestPhoneHolderTarget(123, ['phone1', 'phone2']);
-
-        $this->request->query->set('entityClass', get_class($targetEntity));
-        $this->request->query->set('entityId', $targetEntity->getId());
-
-        $this->phoneHolderHelper->expects($this->never())
-            ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->once())
             ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
@@ -161,17 +147,31 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->handler->process($this->entity));
     }
 
-    public function testProcessGetRequestWithNewTargetEntity()
+    public function testProcessGetRequestWithNewEntity()
     {
-        $targetEntity = new TestPhoneHolderTarget(123, ['phone1', 'phone2']);
+        $targetEntity  = new TestTarget(123);
+        $targetEntity1 = new TestTarget(456);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
 
-        $this->phoneHolderHelper->expects($this->once())
+        $this->phoneProvider->expects($this->once())
             ->method('getPhoneNumber')
             ->with($this->identicalTo($targetEntity))
-            ->will($this->returnValue($targetEntity->getPhoneNumber()));
+            ->will($this->returnValue('phone2'));
+        $this->phoneProvider->expects($this->once())
+            ->method('getPhoneNumbers')
+            ->with($this->identicalTo($targetEntity))
+            ->will(
+                $this->returnValue(
+                    [
+                        ['phone1', $targetEntity],
+                        ['phone2', $targetEntity],
+                        ['phone1', $targetEntity1]
+                    ]
+                )
+            );
+
         $this->entityRoutingHelper->expects($this->once())
             ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
@@ -193,7 +193,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('submit');
 
         $this->assertFalse($this->handler->process($this->entity));
-        $this->assertEquals($targetEntity->getPhoneNumber(), $this->entity->getPhoneNumber());
+        $this->assertEquals('phone2', $this->entity->getPhoneNumber());
     }
 
     /**
@@ -215,7 +215,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(false));
 
-        $this->phoneHolderHelper->expects($this->never())
+        $this->phoneProvider->expects($this->never())
             ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
@@ -248,7 +248,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->phoneHolderHelper->expects($this->never())
+        $this->phoneProvider->expects($this->never())
             ->method('getPhoneNumber');
         $this->entityRoutingHelper->expects($this->never())
             ->method('getEntity');
@@ -276,7 +276,10 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessValidDataWithTargetEntity($method)
     {
-        $targetEntity = new TestTarget(123);
+        $this->entity->setPhoneNumber('phone1');
+
+        $targetEntity  = new TestTarget(123);
+        $targetEntity1 = new TestTarget(456);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
@@ -293,17 +296,37 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->phoneHolderHelper->expects($this->never())
+        $this->phoneProvider->expects($this->never())
             ->method('getPhoneNumber');
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntity');
+        $this->phoneProvider->expects($this->once())
+            ->method('getPhoneNumbers')
+            ->with($this->identicalTo($targetEntity))
+            ->will(
+                $this->returnValue(
+                    [
+                        ['phone1', $targetEntity],
+                        ['phone2', $targetEntity],
+                        ['phone1', $targetEntity1]
+                    ]
+                )
+            );
+
         $this->entityRoutingHelper->expects($this->once())
-            ->method('getEntityReference')
+            ->method('getEntity')
             ->with(get_class($targetEntity), $targetEntity->getId())
             ->will($this->returnValue($targetEntity));
-        $this->callActivityManager->expects($this->once())
+        // phone1, $targetEntity
+        $this->callActivityManager->expects($this->at(0))
             ->method('addAssociation')
             ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
+        // phone2, $targetEntity
+        $this->callActivityManager->expects($this->at(1))
+            ->method('addAssociation')
+            ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
+        // phone1, $targetEntity1
+        $this->callActivityManager->expects($this->at(2))
+            ->method('addAssociation')
+            ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity1));
 
         $this->manager->expects($this->once())
             ->method('persist')

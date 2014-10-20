@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -53,7 +52,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 class B2bCustomer extends ExtendB2bCustomer implements
     Taggable,
     EmailHolderInterface,
-    PhoneHolderInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -588,45 +586,5 @@ class B2bCustomer extends ExtendB2bCustomer implements
         }
 
         return null;
-    }
-
-    /**
-     * Get the primary phone of the related contact or account
-     *
-     * @return string|null
-     */
-    public function getPhoneNumber()
-    {
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getPhoneNumber();
-        }
-
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getPhoneNumber();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get phones of the related contact or account
-     *
-     * @return string[]
-     */
-    public function getPhoneNumbers()
-    {
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getPhoneNumbers();
-        }
-
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getPhoneNumbers();
-        }
-
-        return [];
     }
 }

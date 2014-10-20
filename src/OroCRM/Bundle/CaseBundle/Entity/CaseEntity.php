@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -48,7 +47,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *      }
  * )
  */
-class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface, PhoneHolderInterface
+class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
 {
     /**
      * @var integer
@@ -175,7 +174,7 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface, Phone
     protected $relatedContact;
 
     /**
-     * @var Contact
+     * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
@@ -625,36 +624,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface, Phone
         }
 
         return $contact->getEmail();
-    }
-
-    /**
-     * Get the primary phone of the related contact
-     *
-     * @return string|null
-     */
-    public function getPhoneNumber()
-    {
-        $contact = $this->getRelatedContact();
-        if (!$contact) {
-            return null;
-        }
-
-        return $contact->getPhoneNumber();
-    }
-
-    /**
-     * Get phones of the related contact
-     *
-     * @return string[]
-     */
-    public function getPhoneNumbers()
-    {
-        $contact = $this->getRelatedContact();
-        if (!$contact) {
-            return [];
-        }
-
-        return $contact->getPhoneNumbers();
     }
 
     /**

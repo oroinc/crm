@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -61,7 +60,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  */
 class Opportunity extends ExtendOpportunity implements
     EmailHolderInterface,
-    PhoneHolderInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
@@ -705,36 +703,6 @@ class Opportunity extends ExtendOpportunity implements
         }
 
         return $contact->getEmail();
-    }
-
-    /**
-     * Get the primary phone of the related contact
-     *
-     * @return string|null
-     */
-    public function getPhoneNumber()
-    {
-        $contact = $this->getContact();
-        if (!$contact) {
-            return null;
-        }
-
-        return $contact->getPhoneNumber();
-    }
-
-    /**
-     * Get phones of the related contact
-     *
-     * @return string[]
-     */
-    public function getPhoneNumbers()
-    {
-        $contact = $this->getContact();
-        if (!$contact) {
-            return [];
-        }
-
-        return $contact->getPhoneNumbers();
     }
 
     public function __toString()
