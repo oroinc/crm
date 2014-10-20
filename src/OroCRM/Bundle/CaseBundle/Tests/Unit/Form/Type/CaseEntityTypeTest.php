@@ -55,6 +55,7 @@ class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
                     'relatedContact',
                     'relatedAccount',
                     'assignedTo',
+                    'tags'
                 ]
             ]
         ];

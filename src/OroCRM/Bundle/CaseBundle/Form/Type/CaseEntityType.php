@@ -94,6 +94,13 @@ class CaseEntityType extends AbstractType
                     'required'      => false,
                     'label'         => 'orocrm.case.caseentity.assigned_to.label',
                 ]
+            )
+            ->add(
+                'tags',
+                'oro_tag_select',
+                array(
+                    'label' => 'oro.tag.entity_plural_label'
+                )
             );
     }
 
