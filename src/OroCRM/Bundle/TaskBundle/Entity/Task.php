@@ -53,8 +53,13 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "reminder_template_name"="task_reminder",
  *              "reminder_flash_template_identifier"="task_template"
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "route"="orocrm_task_activity_view",
+ *              "acl"="orocrm_task_view",
+ *              "action_widget"="orocrm_task_activity_button"
  *          }
  *      }
  * )

@@ -1,0 +1,27 @@
+{{ UI.clientButton({
+    'dataUrl': path(
+        'orocrm_task_create', {
+            entityClass: oro_class_name(entity, true),
+            entityId: entity.id
+    }) ,
+    'aCss': 'no-hash',
+    'iCss': 'icon-envelope',
+    'dataId': entity.id,
+    'label' : 'orocrm.task.add_entity'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name' : 'activity-task-grid',
+        'options' : {
+            'alias': 'task-dialog',
+            'dialogOptions' : {
+                'title' : 'orocrm.task.add_entity'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

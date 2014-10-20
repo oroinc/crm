@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller;
 
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -145,7 +146,10 @@ class TaskController extends Controller
             $task->setReporter($reporter);
         }
 
-        return $this->update($task);
+        $formAction = $this->get('oro_entity.routing_helper')
+            ->generateUrlByRequest('orocrm_task_create', $this->getRequest());
+
+        return $this->update($task, $formAction);
     }
 
     /**
@@ -169,6 +173,25 @@ class TaskController extends Controller
     }
 
     /**
+     * This action is used to render the list of tasks associated with the given entity
+     * on the view page of this entity
+     *
+     * @Route(
+     *      "/activity/view/{entityClass}/{entityId}",
+     *      name="orocrm_task_activity_view"
+     * )
+     *
+     * @AclAncestor("orocrm_task_view")
+     * @Template
+     */
+    public function activityAction($entityClass, $entityId)
+    {
+        return array(
+            'entity' => $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId)
+        );
+    }
+
+    /**
      * @Route("/update/{id}", name="orocrm_task_update", requirements={"id"="\d+"})
      * @Template
      * @Acl(
@@ -180,51 +203,40 @@ class TaskController extends Controller
      */
     public function updateAction(Task $task)
     {
-        return $this->update($task);
+        $formAction = $this->get('router')->generate('orocrm_task_update', ['id' => $task->getId()]);
+
+        return $this->update($task, $formAction);
     }
 
     /**
      * @param Task $task
+     * @param string $formAction
      * @return array
      */
-    protected function update(Task $task)
+    protected function update(Task $task, $formAction)
     {
         $saved = false;
-        $request = $this->getRequest();
-        $form = $this->createForm($this->getFormType(), $task);
+        if ($this->get('orocrm_task.form.handler.task')->process($task)) {
+            if (!$this->getRequest()->get('_widgetContainer')) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    $this->get('translator')->trans('orocrm.task.saved_message')
+                );
 
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-            if ($form->isValid()) {
-                $this->getDoctrine()->getManager()->persist($task);
-                $this->getDoctrine()->getManager()->flush();
-
-                $saved =  true;
-
-                if (!$this->getRequest()->request->has('_widgetContainer')) {
-                    $this->get('session')->getFlashBag()->add(
-                        'success',
-                        $this->get('translator')->trans('orocrm.task.saved_message')
-                    );
-
-                    return $this->get('oro_ui.router')->redirectAfterSave(
-                        array(
-                            'route' => 'orocrm_task_update',
-                            'parameters' => array('id' => $task->getId()),
-                        ),
-                        array(
-                            'route' => 'orocrm_task_view',
-                            'parameters' => array('id' => $task->getId()),
-                        )
-                    );
-                }
+                return $this->get('oro_ui.router')->redirectAfterSave(
+                    ['route' => 'orocrm_task_update', 'parameters' => ['id' => $task->getId()]],
+                    ['route' => 'orocrm_task_index'],
+                    $task
+                );
             }
+            $saved = true;
         }
 
         return array(
-            'saved' => $saved,
-            'entity' => $task,
-            'form' => $form->createView()
+            'entity'     => $task,
+            'saved'      => $saved,
+            'form'       => $this->get('orocrm_task.form.handler.task')->getForm()->createView(),
+            'formAction' => $formAction,
         );
     }
 
