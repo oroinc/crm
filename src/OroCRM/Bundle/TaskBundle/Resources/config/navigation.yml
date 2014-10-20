@@ -9,25 +9,11 @@ oro_menu_config:
                 description: 'orocrm.task.menu.task_list.description'
 
         orocrm_task_user_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
+            label: 'orocrm.task.widgets.user_tasks'
             extras:
                 position: 10
                 widgetAcl: 'orocrm_task_view'
                 widgetRoute: 'orocrm_task_widget_user_tasks'
-
-        orocrm_task_account_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
-            extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_account_tasks'
-
-        orocrm_task_contact_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
-            extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_contact_tasks'
 
     tree:
         application_menu:
@@ -39,14 +25,6 @@ oro_menu_config:
         user_activity_tab_panel:
             children:
                 orocrm_task_user_tasks_tab: ~
-
-        account_activity_tab_panel:
-            children:
-                orocrm_task_account_tasks_tab: ~
-
-        contact_activity_tab_panel:
-            children:
-                orocrm_task_contact_tasks_tab: ~
 
 oro_titles:
     orocrm_task_index: ~

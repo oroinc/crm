@@ -14,7 +14,6 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
@@ -85,16 +84,6 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/widget/contact-tasks/{id}", name="orocrm_task_widget_contact_tasks", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_view")
-     * @Template
-     */
-    public function contactTasksAction(Contact $contact)
-    {
-        return array('contact' => $contact);
-    }
-
-    /**
      * @Route("/create", name="orocrm_task_create")
      * @Acl(
      *      id="orocrm_task_create",
@@ -120,15 +109,6 @@ class TaskController extends Controller
                 throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
             }
             $task->setRelatedAccount($account);
-        }
-
-        $contactId = $this->getRequest()->get('contactId');
-        if ($contactId) {
-            $contact = $this->getRepository('OroCRMContactBundle:Contact')->find($contactId);
-            if (!$contact) {
-                throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
-            }
-            $task->setRelatedContact($contact);
         }
 
         $assignedToId = $this->getRequest()->get('assignedToId');
