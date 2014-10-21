@@ -33,6 +33,13 @@ class CallController extends Controller
         $contactId = $this->getRequest()->get('contactId');
         $accountId = $this->getRequest()->get('accountId');
 
+        $shouldGetContactIdFromAccount = !is_null($accountId) && is_null($contactId);
+        if ($shouldGetContactIdFromAccount) {
+            $account = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account')->find($accountId);
+
+            $contactId = $account->getDefaultContactId();
+        }
+
         $entity = $this->initEntity($contactId, $accountId);
         return $this->update($entity, $redirect);
     }
