@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -53,13 +54,19 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "reminder_template_name"="task_reminder",
  *              "reminder_flash_template_identifier"="task_template"
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "route"="orocrm_task_activity_view",
+ *              "acl"="orocrm_task_view",
+ *              "action_button_widget"="orocrm_add_task_button",
+ *              "action_link_widget"="orocrm_add_task_link"
  *          }
  *      }
  * )
  */
-class Task extends ExtendTask implements RemindableInterface
+class Task extends ExtendTask implements RemindableInterface, ActivityInterface
 {
     /**
      * @var integer

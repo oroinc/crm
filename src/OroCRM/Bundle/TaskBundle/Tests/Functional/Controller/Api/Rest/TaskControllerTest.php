@@ -30,9 +30,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreate()
     {
-        $request = [
-            'task' => $this->task
-        ];
+        $request = $this->task;
 
         $this->client->request(
             'POST',
@@ -92,7 +90,7 @@ class TaskControllerTest extends WebTestCase
         $this->client->request(
             'PUT',
             $this->getUrl('orocrm_api_put_task', ['id' => $id]),
-            ['task' =>$updatedTask],
+            $updatedTask,
             [],
             $this->generateWsseAuthHeader()
         );

@@ -3,8 +3,6 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.task.entity_label'|trans }}) %}
 {% set entityId = entity.id %}
 
-{% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}
-
 {% block navButtons %}
     {% set html = UI.saveAndCloseButton() %}
     {% if resource_granted('orocrm_task_update') %}
