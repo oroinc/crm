@@ -86,6 +86,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
             - Valid: ~
         dataChannel:
             - NotBlank: ~
+        organization:
+            - NotBlank: ~
 
 OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup:
     properties:
@@ -140,6 +142,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Cart:
         paymentDetails:
             - Length: { max: 255 }
         dataChannel:
+            - NotBlank: ~
+        organization:
             - NotBlank: ~
 
 OroCRM\Bundle\MagentoBundle\Entity\CartAddress:
@@ -236,6 +240,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Order:
             - DateTime: ~
             - NotBlank: ~
         dataChannel:
+            - NotBlank: ~
+        organization:
             - NotBlank: ~
 
 OroCRM\Bundle\MagentoBundle\Entity\OrderItem:

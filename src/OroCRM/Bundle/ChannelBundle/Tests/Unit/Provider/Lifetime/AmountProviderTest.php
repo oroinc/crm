@@ -47,6 +47,10 @@ class AmountProviderTest extends OrmTestCase
 
     /**
      * @dataProvider lifetimeValueProvider
+     *
+     * @param string $expectedSQL
+     * @param string $result
+     * @param null   $channel
      */
     public function testGetAccountLifetime($expectedSQL, $result, $channel = null)
     {
@@ -71,12 +75,14 @@ class AmountProviderTest extends OrmTestCase
         return [
             'get account summary lifetime'    => [
                 'SELECT SUM(l0_.amount) AS sclr0 FROM LifetimeValueHistory l0_ ' .
-                'WHERE o1_.account_id = ? AND l0_.status = ? LIMIT 1',
+                'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
+                'WHERE l0_.account_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
                 100.00
             ],
             'get account lifetime in channel' => [
                 'SELECT SUM(l0_.amount) AS sclr0 FROM LifetimeValueHistory l0_ ' .
-                'WHERE o1_.account_id = ? AND o1_.data_channel_id = ? AND l0_.status = ? LIMIT 1',
+                'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
+                'WHERE l0_.account_id = ? AND l0_.data_channel_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
                 100.00,
                 $channel
             ]

@@ -64,7 +64,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface, ChannelAwareInterface
+class Lead extends ExtendLead implements
+    FullNameInterface,
+    EmailHolderInterface,
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
 
@@ -400,8 +403,7 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity",
-     *      mappedBy="lead", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", mappedBy="lead")
      * @ConfigField(
      *  defaultValues={
      *      "importexport"={
@@ -965,9 +967,25 @@ class Lead extends ExtendLead implements FullNameInterface, EmailHolderInterface
      */
     public function addOpportunity(Opportunity $opportunity)
     {
-        $this->opportunities[] = $opportunity;
+        if (!$this->opportunities->contains($opportunity)) {
+            $opportunity->setLead($this);
+            $this->opportunities->add($opportunity);
+        }
 
-        $opportunity->setLead($this);
+        return $this;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     *
+     * @return Lead
+     */
+    public function removeOpportunity(Opportunity $opportunity)
+    {
+        if ($this->opportunities->contains($opportunity)) {
+            $this->opportunities->removeElement($opportunity);
+            $opportunity->setLead(null);
+        }
 
         return $this;
     }

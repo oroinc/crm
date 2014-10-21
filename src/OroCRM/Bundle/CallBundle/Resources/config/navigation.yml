@@ -19,33 +19,6 @@ oro_menu_config:
             extras:
                 description: 'orocrm.call.menu.shortcut_call_list.description'
 
-        user_calls_tab:
-            label: 'orocrm.call.entity_plural_label'
-            extras:
-                position: 30
-                widgetRoute: 'orocrm_call_widget_calls'
-                widgetAcl: 'orocrm_call_view'
-                widgetRouteParametersMap:
-                    userId: id
-
-        account_calls_tab:
-            label: 'orocrm.call.entity_plural_label'
-            extras:
-                position: 30
-                widgetRoute: 'orocrm_call_widget_calls'
-                widgetAcl: 'orocrm_call_view'
-                widgetRouteParametersMap:
-                    accountId: id
-
-        contact_calls_tab:
-            label: 'orocrm.call.entity_plural_label'
-            extras:
-                position: 30
-                widgetRoute: 'orocrm_call_widget_calls'
-                widgetAcl: 'orocrm_call_view'
-                widgetRouteParametersMap:
-                    contactId: id
-
     tree:
         application_menu:
             children:
@@ -56,18 +29,6 @@ oro_menu_config:
             children:
                 # shortcut_new_call: ~
                 shortcut_call_list: ~
-
-        user_activity_tab_panel:
-            children:
-                user_calls_tab: ~
-
-        account_activity_tab_panel:
-            children:
-                account_calls_tab: ~
-
-        contact_activity_tab_panel:
-            children:
-                contact_calls_tab: ~
 
 oro_titles:
     orocrm_call_index: ~

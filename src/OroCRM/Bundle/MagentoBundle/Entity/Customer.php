@@ -6,13 +6,13 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -56,7 +56,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  * @Oro\Loggable
  */
-class Customer extends ExtendCustomer implements ChannelAwareInterface, CustomerIdentityInterface
+class Customer extends ExtendCustomer implements
+    ChannelAwareInterface,
+    CustomerIdentityInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
 
