@@ -11,18 +11,11 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
-use OroCRM\Bundle\TaskBundle\Entity\Manager\TaskActivityManager;
 
 class TaskHandler
 {
     /** @var FormInterface */
     protected $form;
-
-    /** @var string */
-    protected $formName;
-
-    /** @var string */
-    protected $formType;
 
     /** @var Request */
     protected $request;
@@ -30,40 +23,25 @@ class TaskHandler
     /** @var ObjectManager */
     protected $manager;
 
-    /** @var TaskActivityManager */
-    protected $taskActivityManager;
-
     /** @var EntityRoutingHelper */
     protected $entityRoutingHelper;
 
-    /** @var FormFactory */
-    protected $formFactory;
-
     /**
-     * @param string              $formName
-     * @param string              $formType
+     * @param FormInterface       $form
      * @param Request             $request
      * @param ObjectManager       $manager
-     * @param taskActivityManager $taskActivityManager
      * @param EntityRoutingHelper $entityRoutingHelper
-     * @param FormFactory         $formFactory
      */
     public function __construct(
-        $formName,
-        $formType,
+        FormInterface $form,
         Request $request,
         ObjectManager $manager,
-        TaskActivityManager $taskActivityManager,
-        EntityRoutingHelper $entityRoutingHelper,
-        FormFactory $formFactory
+        EntityRoutingHelper $entityRoutingHelper
     ) {
-        $this->formName            = $formName;
-        $this->formType            = $formType;
+        $this->form                = $form;
         $this->request             = $request;
         $this->manager             = $manager;
-        $this->taskActivityManager = $taskActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
-        $this->formFactory         = $formFactory;
     }
 
     /**
@@ -80,15 +58,12 @@ class TaskHandler
 
         $options = [];
 
-        $this->form = $this->formFactory->createNamed($this->formName, $this->formType, $entity, $options);
-
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
                 if ($targetEntityClass) {
-                    $this->taskActivityManager->addAssociation(
-                        $entity,
+                    $entity->addActivityTarget(
                         $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
                     );
                 }

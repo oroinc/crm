@@ -1,18 +1,9 @@
 parameters:
     orocrm_task.entity.class:         OroCRM\Bundle\TaskBundle\Entity\Task
 
-    orocrm_task.event_listener.datagrid.task.class: OroCRM\Bundle\TaskBundle\EventListener\Datagrid\TaskListener
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
-    orocrm_task.task.activity.manager.class:        OroCRM\Bundle\TaskBundle\Entity\Manager\TaskActivityManager
 
 services:
-    orocrm_task.event_listener.datagrid.task:
-        class: %orocrm_task.event_listener.datagrid.task.class%
-        arguments:
-          - @doctrine.orm.entity_manager
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.widget-base-tasks-grid, method: onBuildAfter }
-
     orocrm_task.listener.datagrid.activity:
         class: %orocrm_task.listener.datagrid.activity.class%
         arguments:
@@ -20,6 +11,3 @@ services:
             - @oro_entity.routing_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-task-grid, method: onBuildAfter }
-
-    orocrm_task.task.activity.manager:
-        class: %orocrm_task.task.activity.manager.class%

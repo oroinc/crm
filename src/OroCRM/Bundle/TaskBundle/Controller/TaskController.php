@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Controller;
 
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -224,9 +223,14 @@ class TaskController extends Controller
                 );
 
                 return $this->get('oro_ui.router')->redirectAfterSave(
-                    ['route' => 'orocrm_task_update', 'parameters' => ['id' => $task->getId()]],
-                    ['route' => 'orocrm_task_index'],
-                    $task
+                    array(
+                        'route' => 'orocrm_task_update',
+                        'parameters' => array('id' => $task->getId()),
+                    ),
+                    array(
+                        'route' => 'orocrm_task_view',
+                        'parameters' => array('id' => $task->getId()),
+                    )
                 );
             }
             $saved = true;

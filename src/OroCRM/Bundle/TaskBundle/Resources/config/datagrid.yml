@@ -166,8 +166,5 @@ datagrid:
             bind_parameters:
                 - userId
 
-    widget-base-tasks-grid:
-        extends: tasks-grid
-
     activity-task-grid:
-        extends: widget-base-tasks-grid
+        extends: tasks-grid
