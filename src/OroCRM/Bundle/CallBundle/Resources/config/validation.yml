@@ -10,12 +10,9 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - NotBlank: ~
         direction:
             - NotBlank: ~
-        contactPhoneNumber:
+        phoneNumber:
+            - NotBlank: ~
             - Length:
                 max: 255
         organization:
             - NotBlank: ~
-
-    constraints:
-        - Callback:
-            methods: [isPhoneValid]

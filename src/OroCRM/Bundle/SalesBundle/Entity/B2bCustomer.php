@@ -5,12 +5,13 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TagBundle\Entity\Taggable;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -48,7 +49,11 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      }
  * )
  */
-class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInterface, CustomerIdentityInterface
+class B2bCustomer extends ExtendB2bCustomer implements
+    Taggable,
+    EmailHolderInterface,
+    ChannelAwareInterface,
+    CustomerIdentityInterface
 {
     use ChannelEntityTrait;
 
@@ -561,5 +566,25 @@ class B2bCustomer extends ExtendB2bCustomer implements Taggable, ChannelAwareInt
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * Get the primary email address of the related contact or account
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $contact = $this->getContact();
+        if ($contact) {
+            return $contact->getEmail();
+        }
+
+        $account = $this->getAccount();
+        if ($account) {
+            return $account->getEmail();
+        }
+
+        return null;
     }
 }

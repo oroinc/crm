@@ -5,6 +5,7 @@ parameters:
     orocrm_case.manager.api.class:         OroCRM\Bundle\CaseBundle\Model\CaseApiEntityManager
     orocrm_case.manager.comment.api.class: OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager
     orocrm_case.view_factory.class:        OroCRM\Bundle\CaseBundle\Model\ViewFactory
+    orocrm_case.provider.phone.case.class: OroCRM\Bundle\CaseBundle\Provider\CasePhoneProvider
 
 services:
     orocrm_case.manager:
@@ -37,3 +38,8 @@ services:
             - @oro_locale.formatter.name
             - @oro_locale.formatter.date_time
             - @oro_attachment.manager
+
+    orocrm_case.provider.phone.case:
+        class: %orocrm_case.provider.phone.case.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_case.entity.class% }

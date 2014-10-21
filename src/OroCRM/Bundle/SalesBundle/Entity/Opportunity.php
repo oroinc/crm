@@ -56,8 +56,11 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Opportunity extends ExtendOpportunity implements EmailHolderInterface, ChannelAwareInterface
+class Opportunity extends ExtendOpportunity implements
+    EmailHolderInterface,
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
 
