@@ -51,7 +51,7 @@ class CallTypeTest extends FormIntegrationTestCase
             'callDateTime' => 'oro_datetime',
             'callStatus' => 'entity',
             'duration' => 'oro_time_interval',
-            'direction' => 'entity'
+            'direction' => 'translatable_entity'
         );
 
         $builder = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
