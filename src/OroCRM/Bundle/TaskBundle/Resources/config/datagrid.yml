@@ -136,26 +136,6 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
-    task-account-tasks-grid:
-        extends: tasks-grid
-        source:
-            query:
-                where:
-                      and:
-                        - task.relatedAccount = :accountId
-            bind_parameters:
-                - accountId
-
-    task-contact-tasks-grid:
-        extends: tasks-grid
-        source:
-            query:
-                where:
-                      and:
-                        - task.relatedContact = :contactId
-            bind_parameters:
-                - contactId
-
     task-user-tasks-grid:
         extends: tasks-grid
         source:

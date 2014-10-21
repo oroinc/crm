@@ -13,8 +13,6 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
@@ -65,16 +63,6 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/widget/account-tasks/{id}", name="orocrm_task_widget_account_tasks", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_view")
-     * @Template
-     */
-    public function accountTasksAction(Account $account)
-    {
-        return array('account' => $account);
-    }
-
-    /**
      * @Route("/widget/user-tasks/{id}", name="orocrm_task_widget_user_tasks", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_task_view")
      * @Template
@@ -82,16 +70,6 @@ class TaskController extends Controller
     public function userTasksAction(User $user)
     {
         return array('user' => $user);
-    }
-
-    /**
-     * @Route("/widget/contact-tasks/{id}", name="orocrm_task_widget_contact_tasks", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_view")
-     * @Template
-     */
-    public function contactTasksAction(Contact $contact)
-    {
-        return array('contact' => $contact);
     }
 
     /**
@@ -111,24 +89,6 @@ class TaskController extends Controller
         $defaultPriority = $this->getRepository('OroCRMTaskBundle:TaskPriority')->find('normal');
         if ($defaultPriority) {
             $task->setTaskPriority($defaultPriority);
-        }
-
-        $accountId = $this->getRequest()->get('accountId');
-        if ($accountId) {
-            $account = $this->getRepository('OroCRMAccountBundle:Account')->find($accountId);
-            if (!$account) {
-                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
-            }
-            $task->setRelatedAccount($account);
-        }
-
-        $contactId = $this->getRequest()->get('contactId');
-        if ($contactId) {
-            $contact = $this->getRepository('OroCRMContactBundle:Contact')->find($contactId);
-            if (!$contact) {
-                throw new NotFoundHttpException(sprintf('Contact with ID %s is not found', $contactId));
-            }
-            $task->setRelatedContact($contact);
         }
 
         $assignedToId = $this->getRequest()->get('assignedToId');

@@ -14,8 +14,6 @@ orocrm:
         workflow_step.label:        Status
         task_priority.label:        Priority
         owner.label:                Assigned To
-        related_account.label:      Account
-        related_contact.label:      Contact
         reporter.label:             Reporter
         id.label:                   Id
         workflow_item.label:        Workflow item
@@ -24,9 +22,6 @@ orocrm:
         add_entity: Add task
         saved_message: Task saved
 
-        widgets:
-            account_tasks: Tasks
-        contact_tasks_section: Tasks
         user_tasks_section: Tasks
         assigned_tasks_widget:
             no_task_exist: You have no tasks pending

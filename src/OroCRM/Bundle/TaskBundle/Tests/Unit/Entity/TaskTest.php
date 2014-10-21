@@ -77,58 +77,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getWorkflowStepName(), $expected);
     }
 
-    public function testSetRelatedContact()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedContact());
-
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $entity->setRelatedContact($contact);
-
-        $this->assertEquals($contact, $entity->getRelatedContact());
-    }
-
-    public function testGetRelatedContactId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccountId());
-
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $expected = 42;
-        $contact->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setRelatedContact($contact);
-
-        $this->assertEquals($expected, $entity->getRelatedContactId());
-    }
-
-    public function testSetRelatedAccount()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccount());
-
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $entity->setRelatedAccount($account);
-
-        $this->assertEquals($account, $entity->getRelatedAccount());
-    }
-
-    public function testGetRelatedAccountId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccountId());
-
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $expected = 42;
-        $account->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setRelatedAccount($account);
-
-        $this->assertEquals($expected, $entity->getRelatedAccountId());
-    }
-
     public function testSetOwner()
     {
         $entity = new Task();
