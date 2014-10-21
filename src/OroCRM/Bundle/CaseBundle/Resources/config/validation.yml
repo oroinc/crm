@@ -6,8 +6,6 @@ OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
                 max: 255
         source:
             - NotBlank: ~
-        status:
-            - NotBlank: ~
         priority:
             - NotBlank: ~
         organization:

@@ -1,0 +1,3 @@
+workflows:
+    case_flow:
+        attributes: ~

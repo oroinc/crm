@@ -13,7 +13,6 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
 /**
@@ -149,9 +148,7 @@ class CaseController extends RestController implements ClassResourceInterface
         switch ($field) {
             case 'source':
             case 'priority':
-            case 'status':
                 if ($value) {
-                    /** @var CaseSource|CaseStatus $value */
                     $value = $value->getName();
                 }
                 break;
@@ -159,6 +156,8 @@ class CaseController extends RestController implements ClassResourceInterface
             case 'assignedTo':
             case 'relatedContact':
             case 'relatedAccount':
+            case 'workflowItem':
+            case 'workflowStep':
                 if ($value) {
                     $value = $value->getId();
                 }

@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Functional\Controller\Api\Rest;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 
 /**
@@ -90,7 +89,6 @@ class CaseControllerTest extends WebTestCase
             [
                 'subject' => $this->casePostData['subject'],
                 'description' => $this->casePostData['description'],
-                'status' => CaseStatus::STATUS_OPEN,
                 'priority' => CasePriority::PRIORITY_NORMAL,
                 'source' => CaseSource::SOURCE_OTHER,
                 'relatedContact' => null,
@@ -99,6 +97,8 @@ class CaseControllerTest extends WebTestCase
                 'owner' => self::$adminUserId,
                 'updatedAt' => null,
                 'closedAt' => null,
+                'workflowItem' => null,
+                'workflowStep' => null,
             ],
             $cases[3]
         );
@@ -125,7 +125,6 @@ class CaseControllerTest extends WebTestCase
             [
                 'subject' => $this->casePostData['subject'],
                 'description' => $this->casePostData['description'],
-                'status' => CaseStatus::STATUS_OPEN,
                 'priority' => CasePriority::PRIORITY_NORMAL,
                 'source' => CaseSource::SOURCE_OTHER,
                 'relatedContact' => null,
@@ -134,6 +133,8 @@ class CaseControllerTest extends WebTestCase
                 'owner' => self::$adminUserId,
                 'updatedAt' => null,
                 'closedAt' => null,
+                'workflowItem' => null,
+                'workflowStep' => null,
             ],
             $case
         );
@@ -154,7 +155,6 @@ class CaseControllerTest extends WebTestCase
             'subject' => 'Updated subject',
             'description' => 'Updated description',
             'resolution' => 'Updated resolution',
-            'status' => CaseStatus::STATUS_CLOSED,
             'priority' => CasePriority::PRIORITY_LOW,
             'source' => CaseSource::SOURCE_WEB,
             'relatedContact' => self::$contactId,
@@ -234,9 +234,6 @@ class CaseControllerTest extends WebTestCase
         $this->assertArrayHasKey('source', $actual);
         $this->assertNotEmpty($actual['source']);
 
-        $this->assertArrayHasKey('status', $actual);
-        $this->assertNotEmpty($actual['status']);
-
         $this->assertArrayHasKey('priority', $actual);
         $this->assertNotEmpty($actual['priority']);
 
@@ -257,6 +254,9 @@ class CaseControllerTest extends WebTestCase
         $this->assertNotEmpty($actual['reportedAt']);
 
         $this->assertArrayHasKey('closedAt', $actual);
+
+        $this->assertArrayHasKey('workflowItem', $actual);
+        $this->assertArrayHasKey('workflowStep', $actual);
 
         $this->assertArrayIntersectEquals($expected, $actual);
     }

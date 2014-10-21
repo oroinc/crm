@@ -6,7 +6,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 use OroCRM\Bundle\CaseBundle\Model\CaseEntityManager;
 
 /**
@@ -41,7 +40,6 @@ class CaseEntityManagerTest extends WebTestCase
     {
         $case = $this->manager->createCase();
         $this->assertInstanceOf('OroCRM\Bundle\CaseBundle\Entity\CaseEntity', $case);
-        $this->assertEquals(CaseStatus::STATUS_OPEN, $case->getStatus()->getName());
         $this->assertEquals(CaseSource::SOURCE_OTHER, $case->getSource()->getName());
         $this->assertEquals(CasePriority::PRIORITY_NORMAL, $case->getPriority()->getName());
     }

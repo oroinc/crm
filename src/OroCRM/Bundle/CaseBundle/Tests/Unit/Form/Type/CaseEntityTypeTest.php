@@ -50,11 +50,12 @@ class CaseEntityTypeTest extends \PHPUnit_Framework_TestCase
                     'description',
                     'resolution',
                     'source',
-                    'status',
                     'priority',
                     'relatedContact',
                     'relatedAccount',
                     'assignedTo',
+                    'workflowItem',
+                    'workflowStep'
                 ]
             ]
         ];

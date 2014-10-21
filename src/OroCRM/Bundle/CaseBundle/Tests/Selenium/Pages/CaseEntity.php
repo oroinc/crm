@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
+use Oro\Bundle\TestFrameworkBundle\Pages\Workflow;
 
 /**
  * Class Case
@@ -19,8 +20,9 @@ class CaseEntity extends AbstractPageEntity
     protected $description;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $resolution;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element_Select */
-    protected $status;
+
+    /** @var  Workflow */
+    protected $workflow;
 
     public function __construct($testCase, $redirect = true)
     {
@@ -33,7 +35,6 @@ class CaseEntity extends AbstractPageEntity
         $this->subject = $this->test->byId('orocrm_case_entity_form_subject');
         $this->description = $this->test->byId('orocrm_case_entity_form_description');
         $this->resolution = $this->test->byId('orocrm_case_entity_form_resolution');
-        $this->status = $this->test->select($this->test->byId('orocrm_case_entity_form_status'));
 
         return $this;
     }
@@ -62,13 +63,6 @@ class CaseEntity extends AbstractPageEntity
         return $this->description->value();
     }
 
-    public function setStatus($status)
-    {
-        $this->status->selectOptionByLabel($status);
-
-        return $this;
-    }
-
     public function delete()
     {
         $this->test->byXpath("//a[@title = 'Delete Case']")->click();
@@ -87,6 +81,16 @@ class CaseEntity extends AbstractPageEntity
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
+        return $this;
+    }
+
+    public function process(array $steps)
+    {
+        if (!isset($this->workflow)) {
+            $this->workflow = new Workflow();
+        }
+        $this->workflow->process($this, $steps);
+
         return $this;
     }
 }

@@ -49,11 +49,6 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     /**
      * @Soap\ComplexType("string", nillable=true)
      */
-    protected $status;
-
-    /**
-     * @Soap\ComplexType("string", nillable=true)
-     */
     protected $priority;
 
     /**
@@ -77,6 +72,16 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
     protected $closedAt;
 
     /**
+     * @Soap\ComplexType("int", nillable=true)
+     */
+    protected $workflowItem;
+
+    /**
+     * @Soap\ComplexType("int", nillable=true)
+     */
+    protected $workflowStep;
+
+    /**
      * @param CaseEntity $case
      */
     public function soapInit($case)
@@ -89,12 +94,13 @@ class CaseEntitySoap extends CaseEntity implements SoapEntityInterface
         $this->relatedContact = $this->getEntityId($case->getRelatedContact());
         $this->relatedAccount = $this->getEntityId($case->getRelatedAccount());
         $this->source         = $case->getSource() ? $case->getSource()->getName() : null;
-        $this->status         = $case->getStatus() ? $case->getStatus()->getName() : null;
         $this->priority       = $case->getPriority() ? $case->getPriority()->getName() : null;
         $this->createdAt      = $case->getCreatedAt();
         $this->updatedAt      = $case->getUpdatedAt();
         $this->reportedAt     = $case->getReportedAt();
         $this->closedAt       = $case->getClosedAt();
+        $task->workflowItem   = $this->getEntityId($task->workflowItem);
+        $task->workflowStep   = $this->getEntityId($task->workflowStep);
     }
 
     /**

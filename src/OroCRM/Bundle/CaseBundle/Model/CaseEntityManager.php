@@ -10,7 +10,6 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 class CaseEntityManager
 {
@@ -41,7 +40,6 @@ class CaseEntityManager
     public function createCase()
     {
         return $this->createCaseObject()
-            ->setStatus($this->getDefaultCaseStatus())
             ->setPriority($this->getDefaultCasePriority())
             ->setSource($this->getDefaultCaseSource());
     }
@@ -55,17 +53,7 @@ class CaseEntityManager
     }
 
     /**
-     * @return CaseStatus|null
-     */
-    protected function getDefaultCaseStatus()
-    {
-        return $this->entityManager
-            ->getRepository('OroCRMCaseBundle:CaseStatus')
-            ->findOneByName(CaseStatus::STATUS_OPEN);
-    }
-
-    /**
-     * @return CaseStatus|null
+     * @return CasePriority|null
      */
     protected function getDefaultCasePriority()
     {
@@ -75,7 +63,7 @@ class CaseEntityManager
     }
 
     /**
-     * @return CaseStatus|null
+     * @return CaseSource|null
      */
     protected function getDefaultCaseSource()
     {

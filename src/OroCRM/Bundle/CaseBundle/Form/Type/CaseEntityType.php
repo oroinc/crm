@@ -48,18 +48,6 @@ class CaseEntityType extends AbstractType
                 ]
             )
             ->add(
-                'status',
-                'entity',
-                [
-                    'label'         => 'orocrm.case.caseentity.status.label',
-                    'class'         => 'OroCRMCaseBundle:CaseStatus',
-                    'query_builder' => function (EntityRepository $entityRepository) {
-                        return $entityRepository->createQueryBuilder('status')
-                            ->orderBy('status.order', 'ASC');
-                    }
-                ]
-            )
-            ->add(
                 'priority',
                 'entity',
                 [

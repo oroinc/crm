@@ -64,42 +64,16 @@ class CasesTest extends Selenium2TestCase
     /**
      * @depends testUpdate
      * @param $subject
-     * @param $status
-     * @dataProvider statusProvider
      */
-    public function testManage($status, $subject)
+    public function testWorkflow($subject)
     {
         $login = $this->login();
-        /** @var Cases $login */
-        $login->openCases('OroCRM\Bundle\CaseBundle')
+        /** @var Tasks $login */
+        $login->openTasks('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->open(array($subject))
-            ->edit()
-            ->assertTitle($subject . ' - Edit - Cases - Activities')
-            ->setStatus($status['status']) //Open, Resolved, Closed
-            ->save()
-            ->assertMessage('Case saved')
-            ->toGrid()
-            ->assertTitle('Cases - Activities');
-
-        $data = $login->openCases('OroCRM\Bundle\CaseBundle')
-            ->filterBy('Subject', $subject)
-            ->getAllData();
-        $this->assertEquals($data[0]['STATUS'], $status['status']);
-        if ($status['closed'] == "") {
-            $this->assertEquals($data[0]['CLOSED ON'], $status['closed']);
-        } else {
-            $this->assertNotEquals($data[0]['CLOSED ON'], "");
-        }
-    }
-
-    public function statusProvider()
-    {
-        return array(
-            array('In Progress' => array('status' => 'In Progress', 'closed' => '')),
-            array('Resolved' => array('status' => 'Resolved',  'closed'  => '')),
-            array('Closed' => array('status' => 'Closed',  'closed' => date('c'))),
-        );
+            ->process(array('Start progress' => 'In progress', 'Resolve' => null, 'Close' => null, 'Reopen' => null))
+            ->process(array('Start progress' => null, 'Stop progress' => null, 'Close' => null));
     }
 
     /**
