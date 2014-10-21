@@ -41,6 +41,7 @@ services:
             - @orocrm_task.form
             - @request
             - @doctrine.orm.entity_manager
+            - @oro_activity.manager
             - @oro_entity.routing_helper
 
     orocrm_task.form.handler.task_api:
