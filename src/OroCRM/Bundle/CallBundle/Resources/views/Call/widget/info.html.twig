@@ -8,23 +8,8 @@
         {{ ui.renderProperty('orocrm.call.call_date_time.label'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
-        {% set accountView = entity.relatedAccount ? entity.relatedAccount.__toString() : null %}
-        {%- if accountView and resource_granted('orocrm_account_view') -%}
-            {% set accountView = '<a href="' ~ path('orocrm_account_view', {'id': entity.relatedAccount.id}) ~ '">' ~ accountView|escape ~ '</a>' %}
-        {%- endif -%}
-        {{ ui.renderHtmlProperty('orocrm.call.related_account.label'|trans, accountView) }}
-
-        {% set contactView = entity.relatedContact ? entity.relatedContact|oro_format_name : null %}
-        {%- if contactView and resource_granted('orocrm_contact_view') -%}
-            {% set contactView = '<a href="' ~ path('orocrm_contact_view', {'id': entity.relatedContact.id}) ~ '">' ~ contactView|escape ~ '</a>' %}
-        {%- endif -%}
-        {{ ui.renderHtmlProperty('orocrm.call.related_contact.label'|trans, contactView) }}
-
-        {% set phoneNumber = entity.contactPhoneNumber ? entity.contactPhoneNumber.phone : entity.phoneNumber %}
-        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhone(phoneNumber)) }}
-
+        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhone(entity.phoneNumber)) }}
         {{ ui.renderProperty('orocrm.call.direction.label'|trans, entity.direction ? entity.direction.label : null) }}
-
         {# Don't use time formatting here because it's a time interval #}
         {{ ui.renderProperty('orocrm.call.duration.label'|trans, entity.duration|oro_format_duration) }}
     </div>

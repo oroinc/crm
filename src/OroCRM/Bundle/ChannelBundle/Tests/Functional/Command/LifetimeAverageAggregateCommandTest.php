@@ -52,7 +52,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
                 '$params'          => []
             ],
             'should show success output and info about force run' => [
-                '$expectedContent' => "Removing existing data...\nCompleted!",
+                '$expectedContent' => "Removing existing data..." . PHP_EOL . "Completed!",
                 '$params'          => ['-f' => true, '--use-delete' => true]
             ]
         ];

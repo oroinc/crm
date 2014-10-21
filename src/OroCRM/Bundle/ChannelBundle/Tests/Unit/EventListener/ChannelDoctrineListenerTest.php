@@ -127,8 +127,8 @@ class ChannelDoctrineListenerTest extends OrmTestCase
 
         $queue = [
             'OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer' => [
-                uniqid('accountId__channelId') => ['account' => $account, 'channel' => $channel],
-                uniqid('accountId__channelId') => ['account' => $account2, 'channel' => $channel],
+                uniqid('accountId__channelId', true) => ['account' => $account, 'channel' => $channel],
+                uniqid('accountId__channelId', true) => ['account' => $account2, 'channel' => $channel],
             ]
         ];
 

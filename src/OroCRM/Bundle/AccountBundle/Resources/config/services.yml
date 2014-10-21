@@ -9,6 +9,8 @@ parameters:
 
     orocrm_account.activity_widget_provider.class:  %oro_activity.widget_provider.activities.menu.class%
 
+    orocrm_account.provider.phone.account.class:    OroCRM\Bundle\AccountBundle\Provider\AccountPhoneProvider
+
 services:
     orocrm_account.form.account:
         class:                                      Symfony\Component\Form\Form
@@ -91,3 +93,8 @@ services:
            - %orocrm_account.account.entity.class%
         tags:
            - { name: oro_activity.activity_widget_provider, priority: -10 }
+
+    orocrm_account.provider.phone.account:
+        class: %orocrm_account.provider.phone.account.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_account.account.entity.class% }

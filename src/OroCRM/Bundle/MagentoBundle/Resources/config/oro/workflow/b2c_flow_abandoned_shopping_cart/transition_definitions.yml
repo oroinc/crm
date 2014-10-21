@@ -33,8 +33,9 @@ workflows:
                         class: OroCRM\Bundle\CallBundle\Entity\Call
                         attribute: $call
                         data:
-                            relatedContact: $contact
-                            relatedAccount: $account
+                            # remove commented relatedContact and relatedAccount in BAP-5485
+                            # relatedContact: $contact
+                            # relatedAccount: $account
                             subject: $call_subject
                             phoneNumber: $phone_number
                             notes: $notes

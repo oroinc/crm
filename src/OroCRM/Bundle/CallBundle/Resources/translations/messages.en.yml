@@ -5,7 +5,6 @@
 'Log': 'Log'
 'Call logged successfully': 'Call saved'
 'Call deleted successfully': 'Call deleted successfully'
-'Phone number is required field': 'Phone number is required field'
 
 orocrm:
     dashboard:
@@ -20,17 +19,23 @@ orocrm:
             call_list.description: List of calls
             shortcut_call_list.label: Show calls list
             shortcut_call_list.description: List of calls
-        phone.required.message: Phone number is required field
-        form.call.other: Other...
+        form:
+            choose_or_enter_phone: Choose or enter a phone number ...
 
         controller:
             call.saved.message: Call saved
             call.deleted.message: Call deleted successfully
 
         datagrid:
-            contact_name: Contact name
-            account_name: Account name
             date_time:    Call date
+
+        sections:
+            general: General
+
+        widget:
+            call_information: Call Information
+
+        log_call:              Log call
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
@@ -38,11 +43,8 @@ orocrm:
         entity_label:          Call
         entity_plural_label:   Calls
         entity_description:    Represent call
-        log_call:              Log call
         id.label:              Id
         subject.label:         Subject
-        related_contact.label: Related contact
-        related_account.label: Related to
         phone_number.label:    Phone number
         owner.label:           Owner
         notes.label:           Additional comments
@@ -50,5 +52,4 @@ orocrm:
         direction.label:       Direction
         call_status.label:     Call status
         call_date_time.label:  Call date & time
-        contact_phone_number.label: Phone number
         organization.label:    Organization

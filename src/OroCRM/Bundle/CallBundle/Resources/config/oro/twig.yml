@@ -1,0 +1,2 @@
+bundles:
+    - OroCRMCallBundle:Form:fields.html.twig

@@ -152,4 +152,28 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->entity->setName(self::TEST_NAME);
         $this->assertSame(self::TEST_NAME, (string)$this->entity);
     }
+
+    public function testGetEmail()
+    {
+        $account = $this->getMockBuilder('OroCRM\Bundle\AccountBundle\Entity\Account')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($this->entity->getEmail());
+
+        $this->entity->setAccount($account);
+        $account->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email1@example.com'));
+        $this->assertEquals('email1@example.com', $this->entity->getEmail());
+
+        $this->entity->setContact($contact);
+        $contact->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email2@example.com'));
+        $this->assertEquals('email2@example.com', $this->entity->getEmail());
+    }
 }

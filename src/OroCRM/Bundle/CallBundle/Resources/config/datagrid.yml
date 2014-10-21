@@ -6,23 +6,12 @@ datagrid:
             query:
                 select:
                     - call.id
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
-                join:
-                    left:
-                        - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
-                        - { join: call.relatedAccount, alias: account }
         columns:
-            contactName:
-                label: orocrm.call.datagrid.contact_name
-            accountName:
-                label: orocrm.call.datagrid.account_name
             subject:
                 label: orocrm.call.subject.label
             phone:
@@ -33,12 +22,6 @@ datagrid:
                 frontend_type: datetime
         filters:
             columns:
-                contactName:
-                    type: string
-                    data_name: contactName
-                accountName:
-                    type: string
-                    data_name: account.name
                 subject:
                     type: string
                     data_name: call.subject
@@ -50,10 +33,6 @@ datagrid:
                     data_name: call.callDateTime
         sorters:
             columns:
-                contactName:
-                    data_name: contactName
-                accountName:
-                    data_name: account.name
                 subject:
                     data_name: call.subject
                 phone:
@@ -64,6 +43,10 @@ datagrid:
                 dateTime: DESC
         properties:
             id: ~
+            view_link:
+                type:       url
+                route:      orocrm_call_view
+                params:     [ id ]
             update_link:
                 type:       url
                 route:      orocrm_call_update
@@ -73,20 +56,25 @@ datagrid:
                 route:      oro_api_delete_call
                 params:     [ id ]
         actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_call_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
             update:
                 type:          navigate
                 acl_resource:  orocrm_call_create
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
-                rowAction:     true
             delete:
                 type:          delete
                 acl_resource:  orocrm_call_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
-                rowAction:     true
         options:
             entityHint: calls
             export: true
@@ -98,34 +86,15 @@ datagrid:
             query:
                 select:
                     - call.id
-                    - contact.id as contactId
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - account.id as accountId
-                    - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
-                join:
-                    left:
-                        - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
-                        - { join: call.relatedAccount, alias: account }
         columns:
             dateTime:
                 label: orocrm.call.call_date_time.label
                 frontend_type: datetime
-            contactName:
-                label: orocrm.call.datagrid.contact_name
-                type: twig
-                template: OroCRMCallBundle:Datagrid:Column/contactName.html.twig
-                frontend_type: html
-            accountName:
-                label: orocrm.call.datagrid.account_name
-                type: twig
-                template: OroCRMCallBundle:Datagrid:Column/accountName.html.twig
-                frontend_type: html
             subject:
                 label: orocrm.call.subject.label
                 type: twig
@@ -136,10 +105,6 @@ datagrid:
                 frontend_type: phone
         sorters:
             columns:
-                contactName:
-                    data_name: contactName
-                accountName:
-                    data_name: account.name
                 subject:
                     data_name: call.subject
                 phone:
@@ -150,8 +115,6 @@ datagrid:
                 dateTime: DESC
         properties:
             id: ~
-            contactId: ~
-            accountId: ~
         options:
             entityHint: calls
 
@@ -166,14 +129,20 @@ datagrid:
         extends: widget-base-calls-grid
         filters:
             columns:
-                contactName:
+                subject:
                     type: string
-                    enabled: false
-                    data_name: contactName
-                accountName:
+                    data_name: call.subject
+                phone:
                     type: string
-                    enabled: false
-                    data_name: account.name
+                    data_name: phone
+                dateTime:
+                    type: datetime
+                    data_name: call.callDateTime
+
+    activity-call-grid:
+        extends: widget-base-calls-grid
+        filters:
+            columns:
                 subject:
                     type: string
                     data_name: call.subject
@@ -193,20 +162,14 @@ datagrid:
             query:
                 select:
                     - call.id
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - contact.id as contactId
-                    - account.name as accountName
                     - call.subject
-                    - CONCAT(CASE WHEN call.phoneNumber IS NOT NULL THEN call.phoneNumber ELSE contactPhone.phone END, '') as phone
+                    - CONCAT(call.phoneNumber, '') as phone
                     - call.callDateTime as dateTime
                     - directionType.name as callDirection
                 from:
                     - { table: %orocrm_call.call.entity.class%, alias: call }
                 join:
                     left:
-                        - { join: call.relatedContact, alias: contact }
-                        - { join: call.contactPhoneNumber, alias: contactPhone }
-                        - { join: call.relatedAccount, alias: account }
                         - { join: call.direction, alias: directionType }
                     inner:
                         - { join: call.owner, alias: ownerUser }
@@ -222,11 +185,6 @@ datagrid:
             dateTime:
                 label: orocrm.call.datagrid.date_time
                 frontend_type: datetime
-            contactName:
-                type: twig
-                label: orocrm.call.datagrid.contact_name
-                frontend_type: html
-                template: OroCRMCallBundle:Datagrid:Column/contactName.html.twig
             subject:
                 type: twig
                 label: orocrm.call.subject.label
