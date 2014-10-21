@@ -467,6 +467,14 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     }
 
     /**
+     * @return int|null
+     */
+    public function getDefaultContactId()
+    {
+        return is_object($this->defaultContact) ? $this->defaultContact->getId() : null;
+    }
+
+    /**
      * Get the primary email address of the default contact
      *
      * @return string
