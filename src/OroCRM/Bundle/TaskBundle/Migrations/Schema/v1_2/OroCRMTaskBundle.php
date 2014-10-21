@@ -14,10 +14,14 @@ class OroCRMTaskBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_task');
-        $table->removeForeignKey('FK_814DEE3F11A6570A');
-        $table->dropColumn('related_account_id');
-        $table->removeForeignKey('FK_814DEE3F6D6C2DFA');
-        $table->dropColumn('related_contact_id');
+        $taskTable = $schema->getTable('orocrm_task');
+
+        // relation with account
+        $taskTable->removeForeignKey('FK_814DEE3F11A6570A');
+        $taskTable->dropColumn('related_account_id');
+
+        // relation with contact
+        $taskTable->removeForeignKey('FK_814DEE3F6D6C2DFA');
+        $taskTable->dropColumn('related_contact_id');
     }
 }
