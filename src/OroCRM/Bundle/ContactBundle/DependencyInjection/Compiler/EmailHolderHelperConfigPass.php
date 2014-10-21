@@ -7,7 +7,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class EmailHolderHelperConfigPass implements CompilerPassInterface
 {
-    const SERVICE_KEY = 'oro_email.email.holder.helper';
+    const SERVICE_KEY = 'oro_email.email_holder_helper';
 
     /**
      * {@inheritdoc}

@@ -1,0 +1,28 @@
+{% block oro_combobox_dataconfig_call_phone %}
+    select2Config.minimumResultsForSearch = 0;
+    {% if value is not empty %}
+    select2Config.initSelection = function (element, callback) {
+        callback({id: element.val(), text: element.val()});
+    };
+    {% endif %}
+    select2Config.query = function (options) {
+        var data = {results: []},
+            items = {{ suggestions|json_encode|raw }},
+            initialVal = $.trim({{ value|json_encode|raw }}),
+            currentVal = $.trim(options.element.val()),
+            term = $.trim(options.term);
+        if (initialVal && _.indexOf(items, initialVal) === -1) {
+            items.unshift(initialVal);
+        }
+        if (currentVal && _.indexOf(items, currentVal) === -1) {
+            items.unshift(currentVal);
+        }
+        if (term && _.indexOf(items, term) === -1) {
+            items.unshift(term);
+        }
+        _.each(items, function (item) {
+            data.results.push({id: item, text: item});
+        });
+        options.callback(data);
+    };
+{% endblock %}
