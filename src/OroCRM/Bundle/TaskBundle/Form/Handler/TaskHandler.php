@@ -56,7 +56,7 @@ class TaskHandler
         $targetEntityClass = $this->request->get('entityClass');
         $targetEntityId    = $this->request->get('entityId');
 
-        $options = [];
+        $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
