@@ -43,7 +43,6 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *              "groups"={"activity"}
  *          },
  *          "activity"={
- *              "immutable"=true,
  *              "route"="orocrm_call_activity_view",
  *              "acl"="orocrm_call_view",
  *              "action_button_widget"="orocrm_log_call_button",

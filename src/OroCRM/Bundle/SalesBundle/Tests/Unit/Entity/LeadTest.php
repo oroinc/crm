@@ -52,25 +52,4 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'organization'      => array('organization', $organization, $organization)
         ];
     }
-
-
-    public function testGetPhoneNumber()
-    {
-        $lead = new Lead();
-
-        $this->assertNull($lead->getPhoneNumber());
-
-        $lead->setPhoneNumber('123-123');
-        $this->assertEquals('123-123', $lead->getPhoneNumber());
-    }
-
-    public function testGetPhoneNumbers()
-    {
-        $lead = new Lead();
-
-        $this->assertSame([], $lead->getPhoneNumbers());
-
-        $lead->setPhoneNumber('123-123');
-        $this->assertSame(['123-123'], $lead->getPhoneNumbers());
-    }
 }

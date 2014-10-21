@@ -125,24 +125,4 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $request->setEmailAddress('email@example.com');
         $this->assertEquals('email@example.com', $request->getEmail());
     }
-
-    public function testGetPhoneNumber()
-    {
-        $request = new ContactRequest();
-
-        $this->assertNull($request->getPhoneNumber());
-
-        $request->setPhone('123-123');
-        $this->assertEquals('123-123', $request->getPhoneNumber());
-    }
-
-    public function testGetPhoneNumbers()
-    {
-        $request = new ContactRequest();
-
-        $this->assertSame([], $request->getPhoneNumbers());
-
-        $request->setPhone('123-123');
-        $this->assertSame(['123-123'], $request->getPhoneNumbers());
-    }
 }

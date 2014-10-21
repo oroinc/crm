@@ -6,7 +6,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 use OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler\EmailHolderHelperConfigPass;
-use OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler\PhoneHolderHelperConfigPass;
+use OroCRM\Bundle\ContactBundle\DependencyInjection\Compiler\PhoneProviderConfigPass;
 
 class OroCRMContactBundle extends Bundle
 {
@@ -18,6 +18,6 @@ class OroCRMContactBundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new EmailHolderHelperConfigPass());
-        $container->addCompilerPass(new PhoneHolderHelperConfigPass());
+        $container->addCompilerPass(new PhoneProviderConfigPass());
     }
 }

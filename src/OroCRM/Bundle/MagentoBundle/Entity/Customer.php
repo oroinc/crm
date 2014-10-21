@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -58,7 +57,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @Oro\Loggable
  */
 class Customer extends ExtendCustomer implements
-    PhoneHolderInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -582,45 +580,5 @@ class Customer extends ExtendCustomer implements
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * Get the primary phone of the related contact or account
-     *
-     * @return string|null
-     */
-    public function getPhoneNumber()
-    {
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getPhoneNumber();
-        }
-
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getPhoneNumber();
-        }
-
-        return null;
-    }
-
-    /**
-     * Get phones of the related contact or account
-     *
-     * @return string[]
-     */
-    public function getPhoneNumbers()
-    {
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getPhoneNumbers();
-        }
-
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getPhoneNumbers();
-        }
-
-        return [];
     }
 }

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\AddressBundle\Model\PhoneHolderInterface;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
@@ -31,7 +30,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class CartAddress extends ExtendCartAddress implements PhoneHolderInterface
+class CartAddress extends ExtendCartAddress
 {
     use OriginTrait;
 
@@ -56,27 +55,5 @@ class CartAddress extends ExtendCartAddress implements PhoneHolderInterface
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPhoneNumber()
-    {
-        return !empty($this->phone) ? $this->phone : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPhoneNumbers()
-    {
-        $phones = [];
-
-        if (!empty($this->phone)) {
-            $phones[] = $this->phone;
-        }
-
-        return $phones;
     }
 }

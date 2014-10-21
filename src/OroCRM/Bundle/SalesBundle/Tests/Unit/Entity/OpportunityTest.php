@@ -40,36 +40,4 @@ class OpportunityTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('email@example.com'));
         $this->assertEquals('email@example.com', $opportunity->getEmail());
     }
-
-    public function testGetPhoneNumber()
-    {
-        $opportunity = new Opportunity();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertNull($opportunity->getPhoneNumber());
-
-        $opportunity->setContact($contact);
-        $contact->expects($this->once())
-            ->method('getPhoneNumber')
-            ->will($this->returnValue('123-123'));
-        $this->assertEquals('123-123', $opportunity->getPhoneNumber());
-    }
-
-    public function testGetPhoneNumbers()
-    {
-        $opportunity = new Opportunity();
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertSame([], $opportunity->getPhoneNumbers());
-
-        $opportunity->setContact($contact);
-        $contact->expects($this->once())
-            ->method('getPhoneNumbers')
-            ->will($this->returnValue(['123-123', '456-456']));
-        $this->assertSame(['123-123', '456-456'], $opportunity->getPhoneNumbers());
-    }
 }
