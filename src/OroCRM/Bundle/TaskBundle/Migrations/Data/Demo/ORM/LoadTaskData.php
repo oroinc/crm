@@ -76,8 +76,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
         );
     }
@@ -113,16 +111,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
-
-            $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
-            if ($contact) {
-                $task->setRelatedContact($contact);
-            }
-
-            $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
-            if ($account) {
-                $task->setRelatedAccount($account);
-            }
 
             $manager->persist($task);
         }

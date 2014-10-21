@@ -22,8 +22,6 @@
         "oro/user-bundle": "dev-master",
         "oro/workflow-bundle": "dev-master",
 
-        "orocrm/account-bundle": "dev-master",
-        "orocrm/contact-bundle": "dev-master",
         "orocrm/sales-bundle": "dev-master"
     },
     "autoload": {

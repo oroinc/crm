@@ -17,8 +17,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
@@ -111,22 +109,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedAccount;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedContact;
 
     /**
      * @var User
@@ -326,54 +308,6 @@ class Task extends ExtendTask implements RemindableInterface
     public function setOwner($owner = null)
     {
         $this->owner = $owner;
-    }
-
-    /**
-     * @return Account
-     */
-    public function getRelatedAccount()
-    {
-        return $this->relatedAccount;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function getRelatedAccountId()
-    {
-        return $this->getRelatedAccount() ? $this->getRelatedAccount()->getId() : null;
-    }
-
-    /**
-     * @param Account $account
-     */
-    public function setRelatedAccount($account = null)
-    {
-        $this->relatedAccount = $account;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getRelatedContact()
-    {
-        return $this->relatedContact;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getRelatedContactId()
-    {
-        return $this->getRelatedContact() ? $this->getRelatedContact()->getId() : null;
-    }
-
-    /**
-     * @param Contact $contact
-     */
-    public function setRelatedContact($contact = null)
-    {
-        $this->relatedContact = $contact;
     }
 
     /**
