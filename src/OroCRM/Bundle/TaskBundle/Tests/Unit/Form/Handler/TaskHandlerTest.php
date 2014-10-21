@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
@@ -24,6 +24,9 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager */
     protected $manager;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ActivityManager */
+    protected $activityManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntityRoutingHelper */
     protected $entityRoutingHelper;
@@ -43,6 +46,9 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
         $this->manager             = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->activityManager     = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->entityRoutingHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper')
             ->disableOriginalConstructor()
             ->getMock();
@@ -52,6 +58,7 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             $this->form,
             $this->request,
             $this->manager,
+            $this->activityManager,
             $this->entityRoutingHelper
         );
     }
