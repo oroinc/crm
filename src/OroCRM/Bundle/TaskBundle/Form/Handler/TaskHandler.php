@@ -59,16 +59,15 @@ class TaskHandler
      */
     public function process(Task $entity)
     {
-        $targetEntityClass = $this->request->get('entityClass');
-        $targetEntityId    = $this->request->get('entityId');
-
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
+                $targetEntityClass = $this->request->get('entityClass');
                 if ($targetEntityClass) {
+                    $targetEntityId = $this->request->get('entityId');
                     $this->activityManager->addActivityTarget(
                         $entity,
                         $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)

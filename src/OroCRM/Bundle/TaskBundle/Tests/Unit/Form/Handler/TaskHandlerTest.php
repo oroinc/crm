@@ -23,7 +23,7 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager */
-    protected $manager;
+    protected $om;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|ActivityManager */
     protected $activityManager;
@@ -43,7 +43,7 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request             = new Request();
-        $this->manager             = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+        $this->om                 = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->activityManager     = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
@@ -57,21 +57,20 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
         $this->handler = new TaskHandler(
             $this->form,
             $this->request,
-            $this->manager,
+            $this->om,
             $this->activityManager,
             $this->entityRoutingHelper
         );
     }
 
-    public function testProcessGetRequestWithoutTargetEntity()
+    public function testProcessGetRequest()
     {
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntity');
-
         $this->form->expects($this->never())
             ->method('submit');
 
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse(
+            $this->handler->process($this->entity)
+        );
     }
 
     /**
@@ -81,21 +80,25 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessInvalidData($method)
     {
+        $this->request->setMethod($method);
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
         $this->form->expects($this->once())
             ->method('submit')
-            ->with($this->request);
+            ->with($this->identicalTo($this->request));
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(false));
+        $this->om->expects($this->never())
+            ->method('persist');
+        $this->om->expects($this->never())
+            ->method('flush');
 
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntity');
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntityReference');
-
-        $this->request->setMethod($method);
-
-        $this->assertFalse($this->handler->process($this->entity));
+        $this->assertFalse(
+            $this->handler->process($this->entity)
+        );
     }
 
     /**
@@ -105,28 +108,26 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessValidDataWithoutTargetEntity($method)
     {
+        $this->request->setMethod($method);
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
         $this->form->expects($this->once())
             ->method('submit')
-            ->with($this->request);
+            ->with($this->identicalTo($this->request));
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
-
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntity');
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntityReference');
-
-        $this->manager->expects($this->once())
+        $this->om->expects($this->once())
             ->method('persist')
-            ->with($this->entity);
-
-        $this->manager->expects($this->once())
+            ->with($this->identicalTo($this->entity));
+        $this->om->expects($this->once())
             ->method('flush');
 
-        $this->request->setMethod($method);
-
-        $this->assertTrue($this->handler->process($this->entity));
+        $this->assertTrue(
+            $this->handler->process($this->entity)
+        );
     }
 
     /**
@@ -136,29 +137,41 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcessValidDataWithTargetEntity($method)
     {
-        $targetEntity  = new TestTarget(123);
-        $targetEntity1 = new TestTarget(456);
+        $targetEntity = new TestTarget(123);
 
         $this->request->query->set('entityClass', get_class($targetEntity));
         $this->request->query->set('entityId', $targetEntity->getId());
 
+        $this->request->setMethod($method);
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
         $this->form->expects($this->once())
             ->method('submit')
-            ->with($this->request);
+            ->with($this->identicalTo($this->request));
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
 
-        $this->manager->expects($this->once())
-            ->method('persist')
-            ->with($this->entity);
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityReference')
+            ->with(get_class($targetEntity), $targetEntity->getId())
+            ->will($this->returnValue($targetEntity));
 
-        $this->manager->expects($this->once())
+        $this->activityManager->expects($this->at(0))
+            ->method('addActivityTarget')
+            ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
+
+        $this->om->expects($this->once())
+            ->method('persist')
+            ->with($this->identicalTo($this->entity));
+        $this->om->expects($this->once())
             ->method('flush');
 
-        $this->request->setMethod($method);
-
-        $this->assertTrue($this->handler->process($this->entity));
+        $this->assertTrue(
+            $this->handler->process($this->entity)
+        );
     }
 
     public function supportedMethods()
@@ -167,18 +180,5 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             array('POST'),
             array('PUT')
         );
-    }
-
-    /**
-     * @param mixed $obj
-     * @param mixed $val
-     */
-    protected function setId($obj, $val)
-    {
-        $class = new \ReflectionClass($obj);
-        $prop = $class->getProperty('id');
-        $prop->setAccessible(true);
-
-        $prop->setValue($obj, $val);
     }
 }
