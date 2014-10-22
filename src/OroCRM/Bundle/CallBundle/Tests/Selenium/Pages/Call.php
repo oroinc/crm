@@ -35,9 +35,11 @@ class Call extends AbstractPageEntity
      */
     public function setPhoneNumber($phone)
     {
-        $this->$phone = $this->test->byId('orocrm_call_form_phoneNumber');
-        $this->$phone->clear();
-        $this->$phone->value($phone);
+        $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_call_form_phoneNumber')]/a")->click();
+        $this->waitForAjax();
+        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($phone);
+        $this->waitForAjax();
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$phone}')]")->click();
 
         return $this;
     }
