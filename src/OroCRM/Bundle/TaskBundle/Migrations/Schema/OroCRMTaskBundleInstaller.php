@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\TaskBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 
 class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
@@ -40,6 +40,7 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         $this->addOrocrmTaskForeignKeys($schema);
 
         /** Add activity association */
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'oro_user');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }

@@ -136,15 +136,5 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
-    task-user-tasks-grid:
-        extends: tasks-grid
-        source:
-            query:
-                where:
-                      and:
-                        - task.owner = :userId
-            bind_parameters:
-                - userId
-
     activity-task-grid:
         extends: tasks-grid

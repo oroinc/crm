@@ -1,10 +1,11 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\Migrations\Data\Demo\ORM;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
@@ -75,6 +76,8 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
         );
     }
@@ -82,20 +85,32 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $om)
+    {
+        $this->persistDemoTasks($om);
+
+        $om->flush();
+    }
+
+    protected function persistDemoTasks(ObjectManager $om)
     {
         $organization = $this->getReference('default_organization');
+        $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $contactCount = count($contacts);
+        $accountCount = count($accounts);
+
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
-            $reporter = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $taskPriority = $this->getRandomEntity('OroCRMTaskBundle:TaskPriority', $manager);
+            $reporter = $this->getRandomEntity('OroUserBundle:User', $om);
+            $assignedTo = $this->getRandomEntity('OroUserBundle:User', $om);
+            $taskPriority = $this->getRandomEntity('OroCRMTaskBundle:TaskPriority', $om);
 
             if (!$reporter || !$taskPriority || !$assignedTo) {
                 // If we don't have users and task statuses we cannot load fixture tasks
                 break;
             }
 
-            if ($manager->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($om->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }
@@ -111,20 +126,41 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
 
-            $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
-            if ($contact && $task->supportActivityTarget(get_class($contact))) {
-                $task->addActivityTarget($contact);
+            $contactRandom = rand(0, $contactCount - 1);
+            $accountRandom = rand(0, $accountCount - 1);
+            /** @var Contact $contact */
+            $contact = $contacts[$contactRandom];
+            /** @var Account $account */
+            $account = $accounts[$accountRandom];
+
+            if ($task->supportActivityTarget(get_class($contact->getOwner()))) {
+                $task->addActivityTarget($contact->getOwner());
             }
 
-            $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
-            if ($account && $task->supportActivityTarget(get_class($account))) {
-                $task->addActivityTarget($account);
+            $randomPath = rand(1, 10);
+
+            if ($randomPath > 2) {
+                if ($task->supportActivityTarget(get_class($contact))) {
+                    $task->addActivityTarget($contact);
+                }
             }
 
-            $manager->persist($task);
+            if ($randomPath > 3) {
+                /** @var Contact[] $relatedContacts */
+                $relatedContacts = $task->getActivityTargets('OroCRM\Bundle\ContactBundle\Entity\Contact');
+                if ($relatedContacts) {
+                    if ($task->supportActivityTarget(get_class($relatedContacts[0]->getAccounts()[0]))) {
+                        $task->addActivityTarget($relatedContacts[0]->getAccounts()[0]);
+                    }
+                } else {
+                    if ($task->supportActivityTarget(get_class($account))) {
+                        $task->addActivityTarget($account);
+                    }
+                }
+            }
+
+            $om->persist($task);
         }
-
-        $manager->flush();
     }
 
     /**

@@ -57,6 +57,7 @@ class OroCRMTaskBundle implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        $queries->addPreQuery($this->getFillUserActivityQuery());
         $queries->addPreQuery($this->getFillAccountActivityQuery());
         $queries->addPreQuery($this->getFillContactActivityQuery());
 
@@ -103,6 +104,19 @@ class OroCRMTaskBundle implements
             . ' WHERE related_contact_id IS NOT NULL';
 
         return sprintf($sql, $this->getAssociationTableName('orocrm_contact'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFillUserActivityQuery()
+    {
+        $sql = 'INSERT INTO %s (task_id, user_id)'
+            . ' SELECT id, reporter_id'
+            . ' FROM orocrm_task'
+            . ' WHERE reporter_id IS NOT NULL';
+
+        return sprintf($sql, $this->getAssociationTableName('oro_user'));
     }
 
     /**

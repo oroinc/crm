@@ -3,10 +3,6 @@ placeholders:
         items:
             task_reminder_template: ~
 
-    view_navButtons_before:
-        items:
-            create_task_user_button: ~
-
     orocrm_user_tasks:
         items:
             orocrm_user_tasks_grid: ~
@@ -14,10 +10,6 @@ placeholders:
 items:
     task_reminder_template:
         template: OroCRMTaskBundle:Task:reminderTemplate.html.twig
-
-    create_task_user_button:
-        template: OroCRMTaskBundle:Entities:createUserTaskButton.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
 
     orocrm_add_task_button:
         template: OroCRMTaskBundle:Task:activityButton.html.twig
