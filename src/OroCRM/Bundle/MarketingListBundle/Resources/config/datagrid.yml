@@ -217,6 +217,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.remove_dialog.content
                     success:         orocrm.marketinglist.remove_dialog.success
 
@@ -242,6 +243,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.unremove_dialog.content
                     success:         orocrm.marketinglist.unremove_dialog.success
 
@@ -384,6 +386,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.remove_dialog.content
                     success:         orocrm.marketinglist.remove_dialog.success
 
@@ -409,6 +412,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.unremove_dialog.content
                     success:         orocrm.marketinglist.unremove_dialog.success
 
