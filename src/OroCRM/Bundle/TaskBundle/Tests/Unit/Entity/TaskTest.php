@@ -11,22 +11,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         new Task();
     }
 
-    public function testPrePersist()
-    {
-        $entity = new Task();
-        $entity->prePersist();
-
-        $this->assertEquals($entity->getCreatedAt()->format("m/d/Y"), date("m/d/Y"));
-    }
-
-    public function testPreUpdate()
-    {
-        $entity = new Task();
-        $entity->preUpdate();
-
-        $this->assertEquals($entity->getUpdatedAt()->format("m/d/Y H:i"), date("m/d/Y H:i"));
-    }
-
     public function testGetSetWorkflowItem()
     {
         $entity = new Task();
@@ -176,5 +160,27 @@ class TaskTest extends \PHPUnit_Framework_TestCase
             array('updatedAt', new \DateTime()),
             array('organization', $organization, $organization)
         );
+    }
+
+    public function testPrePersist()
+    {
+        $obj = new Task();
+
+        $this->assertNull($obj->getCreatedAt());
+        $this->assertNull($obj->getUpdatedAt());
+
+        $obj->prePersist();
+        $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
+        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
+    }
+
+    public function testPreUpdate()
+    {
+        $obj = new Task();
+
+        $this->assertNull($obj->getUpdatedAt());
+
+        $obj->preUpdate();
+        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
     }
 }
