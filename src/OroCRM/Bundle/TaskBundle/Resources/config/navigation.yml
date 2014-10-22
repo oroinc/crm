@@ -8,23 +8,12 @@ oro_menu_config:
                 routes: ['orocrm_task_*']
                 description: 'orocrm.task.menu.task_list.description'
 
-        orocrm_task_user_tasks_tab:
-            label: 'orocrm.task.widgets.user_tasks'
-            extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_user_tasks'
-
     tree:
         application_menu:
             children:
                 activities_tab:
                     children:
                         task_list: ~
-
-        user_activity_tab_panel:
-            children:
-                orocrm_task_user_tasks_tab: ~
 
 oro_titles:
     orocrm_task_index: ~

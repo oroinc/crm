@@ -60,6 +60,9 @@ class OroCRMTaskBundle implements
         $queries->addPreQuery($this->getFillAccountActivityQuery());
         $queries->addPreQuery($this->getFillContactActivityQuery());
 
+        // fill empty updatedAt of orocrm_task
+        $queries->addPreQuery('UPDATE orocrm_task SET updatedAt = createdAt WHERE updatedAt IS NULL');
+
         $taskTable = $schema->getTable('orocrm_task');
 
         // relation with account
@@ -71,11 +74,6 @@ class OroCRMTaskBundle implements
         $taskTable->removeForeignKey('FK_814DEE3F6D6C2DFA');
         $taskTable->dropColumn('related_contact_id');
         $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedContact'));
-
-        // fill empty updatedAt of orocrm_task
-        $queries->addPreQuery('UPDATE orocrm_task SET updatedAt = createdAt WHERE updatedAt IS NULL');
-
-        $taskTable = $schema->getTable('orocrm_task');
 
         // make updatedAt NOT NULL
         $taskTable->getColumn('updatedAt')->setOptions(['notnull' => true]);

@@ -112,12 +112,12 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setOrganization($organization);
 
             $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
-            if ($contact) {
+            if ($contact && $task->supportActivityTarget(get_class($contact))) {
                 $task->addActivityTarget($contact);
             }
 
             $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
-            if ($account) {
+            if ($account && $task->supportActivityTarget(get_class($account))) {
                 $task->addActivityTarget($account);
             }
 
