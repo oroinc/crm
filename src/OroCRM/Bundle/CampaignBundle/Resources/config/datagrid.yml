@@ -382,6 +382,8 @@ datagrid:
                     and:
                         - mlr.id IS NULL
                 groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+            bind_parameters:
+                - emailCampaign
         columns:
             campaignContactedTimes:
                 label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
@@ -415,6 +417,8 @@ datagrid:
                     and:
                         - mlr.id IS NULL
                 groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+            bind_parameters:
+                - emailCampaign
         columns:
             campaignContactedTimes:
                 label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
