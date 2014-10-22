@@ -74,20 +74,6 @@ class CallListener
                 ->setParameter('user', $user);
         }
 
-        if ($parameters->has('contactId')) {
-            $contact = $this->entityManager->find('OroCRMContactBundle:Contact', $parameters->get('contactId'));
-            $queryBuilder
-                ->andWhere('call.relatedContact = :contact')
-                ->setParameter('contact', $contact);
-        }
-
-        if ($parameters->has('accountId')) {
-            $account = $this->entityManager->find('OroCRMAccountBundle:Account', $parameters->get('accountId'));
-            $queryBuilder
-                ->andWhere('(call.relatedAccount = :account OR :account MEMBER OF contact.accounts)')
-                ->setParameter('account', $account);
-        }
-
         if ($parameters->has('callIds')) {
             $callIds = $parameters->get('callIds');
             if (!is_array($callIds)) {

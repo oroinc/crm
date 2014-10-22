@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractEmail;
+use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EmailBundle\Entity\EmailInterface;
+use OroCRM\Bundle\ContactBundle\Model\ExtendContactEmail;
 
 /**
  * @ORM\Entity
@@ -31,7 +32,7 @@ use Oro\Bundle\EmailBundle\Entity\EmailInterface;
  *      }
  * )
  */
-class ContactEmail extends AbstractEmail implements EmailInterface
+class ContactEmail extends ExtendContactEmail implements EmailInterface
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="emails")

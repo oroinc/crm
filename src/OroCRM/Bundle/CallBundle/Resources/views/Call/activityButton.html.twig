@@ -1,0 +1,27 @@
+{{ UI.clientButton({
+    'dataUrl': path(
+        'orocrm_call_create', {
+            entityClass: oro_class_name(entity, true),
+            entityId: entity.id
+    }),
+    'aCss': 'no-hash',
+    'iCss': 'icon-phone-sign',
+    'dataId': entity.id,
+    'label' : 'orocrm.call.log_call'|trans,
+    'widget' : {
+        'type' : 'dialog',
+        'multiple' : true,
+        'reload-grid-name' : 'activity-call-grid',
+        'options' : {
+            'alias': 'call-dialog',
+            'dialogOptions' : {
+                'title' : 'orocrm.call.log_call'|trans,
+                'allowMaximize': true,
+                'allowMinimize': true,
+                'dblclick': 'maximize',
+                'maximizedHeightDecreaseBy': 'minimize-bar',
+                'width': 1000
+            }
+        }
+    }
+}) }}

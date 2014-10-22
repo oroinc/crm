@@ -24,4 +24,20 @@ class OpportunityTest extends \PHPUnit_Framework_TestCase
             'organization' => array('organization', $organization, $organization)
         );
     }
+
+    public function testGetEmail()
+    {
+        $opportunity = new Opportunity();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($opportunity->getEmail());
+
+        $opportunity->setContact($contact);
+        $contact->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email@example.com'));
+        $this->assertEquals('email@example.com', $opportunity->getEmail());
+    }
 }

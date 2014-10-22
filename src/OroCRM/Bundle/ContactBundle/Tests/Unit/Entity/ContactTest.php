@@ -417,4 +417,17 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $contact->addPhone($phone);
         $this->assertTrue($contact->hasPhone($phone));
     }
+
+    public function testGetEmail()
+    {
+        $contact = new Contact();
+        $this->assertNull($contact->getEmail());
+
+        $email = new ContactEmail('email@example.com');
+        $contact->addEmail($email);
+        $this->assertNull($contact->getEmail());
+
+        $contact->setPrimaryEmail($email);
+        $this->assertEquals('email@example.com', $contact->getEmail());
+    }
 }

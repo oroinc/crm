@@ -21,20 +21,14 @@ class CallTest extends \PHPUnit_Framework_TestCase
     {
         $now = new \DateTime('now');
         $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $contactPhoneNumber = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\ContactPhone');
         $callStatus = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallStatus', array(), array(), '', false);
         $callDirection = $this->getMock('OroCRM\Bundle\CallBundle\Entity\CallDirection', array(), array(), '', false);
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return array(
             'owner' => array('owner', $user, $user),
-            'relatedContact' => array('relatedContact', $contact, $contact),
-            'relatedAccount' => array('relatedAccount', $account , $account),
             'subject' => array('subject', 'test', 'test'),
             'phoneNumber' => array('phoneNumber', 'test', 'test'),
-            'contactPhoneNumber' => array('contactPhoneNumber', $contactPhoneNumber, $contactPhoneNumber),
             'notes' => array('notes', 'test', 'test'),
             'callDateTime' => array('callDateTime', $now, $now),
             'callStatus' => array('callStatus', $callStatus, $callStatus),
