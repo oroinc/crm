@@ -32,7 +32,7 @@ class OroCRMCallBundle implements Migration, OrderedMigrationInterface
                 ['date' => Type::DATETIME]
             )
         );
-        $table = $schema->getTable('oro_calendar_event');
+        $table = $schema->getTable('orocrm_call');
         $table->getColumn('created_at')->setOptions(['notnull' => true]);
         $table->getColumn('updated_at')->setOptions(['notnull' => true]);
     }
