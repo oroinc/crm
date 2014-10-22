@@ -2,11 +2,9 @@
 
 namespace OroCRM\Bundle\CampaignBundle\EventListener;
 
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
@@ -32,91 +30,131 @@ class CampaignStatisticDatagridListener
     }
 
     /**
-     * Add fields that are not mentioned in aggregate functions to GROUP BY.
-     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
     {
-        $config     = $event->getConfig();
+        $config = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName   = $config->offsetGetByPath(self::PATH_NAME);
+        $gridName = $config->offsetGetByPath(self::PATH_NAME);
 
         if (!$this->isApplicable($gridName, $parameters)) {
             return;
         }
 
-        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
-        $groupBy = [];
-        foreach ($selects as $select) {
-            $select = trim($select);
-            // Do not add fields with aggregate functions
-            preg_match('/(MIN|MAX|AVG|COUNT|SUM)\(/i', $select, $matches);
-            if ($matches) {
-                continue;
-            }
-
-            // Search for field alias if applicable or field name to use in group by
-            preg_match('/([^\s]+)\s+as\s+(\w+)$/i', $select, $parts);
-            if (!empty($parts[2])) {
-                // Add alias
-                $groupBy[] = $parts[2];
-            } elseif (!$parts && strpos($select, ' ') === false) {
-                // Add field itself when there is no alias
-                $groupBy[] = $select;
-            }
-        }
-
-        if (empty($groupBy)) {
-            return;
-        }
-
-        // Add existing group by statement to group by list
-        if ($existingGroupBy = $config->offsetGetByPath(self::PATH_GROUPBY)) {
-            $groupBy[] = $existingGroupBy;
-        }
-
-        // Update group by fields list
-        $config->offsetSetByPath(self::PATH_GROUPBY, implode(', ', $groupBy));
+        $this->fixBrokenDataGridGroupBy($config);
     }
 
     /**
-     * @param BuildAfter $event
-     */
-    public function onBuildAfter(BuildAfter $event)
-    {
-        $datagrid   = $event->getDatagrid();
-        $parameters = $datagrid->getParameters();
-
-        if (!$this->isApplicable($datagrid->getName(), $parameters)) {
-            return;
-        }
-
-        if (!$emailCampaign = $parameters->get('emailCampaign', false)) {
-            throw new \InvalidArgumentException('Parameter "emailCampaign" is missing');
-        }
-
-        $datasource = $datagrid->getDatasource();
-        if ($datasource instanceof OrmDatasource) {
-            $datasource
-                ->getQueryBuilder()
-                ->setParameter('emailCampaign', $emailCampaign);
-        }
-    }
-
-    /**
-     * @param string       $gridName
+     * This listener is applicable for marketing list grids that has emailCampaign parameter set.
+     *
+     * @param string $gridName
      * @param ParameterBag $parameterBag
      *
      * @return bool
      */
     public function isApplicable($gridName, ParameterBag $parameterBag)
     {
-        $gridMixin = $parameterBag->get(MarketingListItemsListener::MIXIN, false);
-        if ($gridMixin !== self::MIXIN_NAME && $gridMixin !== self::MANUAL_MIXIN_NAME) {
+        if (!$parameterBag->has('emailCampaign')) {
             return false;
         }
 
         return (bool)$this->marketingListHelper->getMarketingListIdByGridName($gridName);
+    }
+
+    /**
+     * Add fields that are not mentioned in aggregate functions to GROUP BY.
+     *
+     * @param DatagridConfiguration $config
+     */
+    protected function fixBrokenDataGridGroupBy(DatagridConfiguration $config)
+    {
+        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
+        $groupBy = $config->offsetGetByPath(self::PATH_GROUPBY);
+
+        $groupBy = $this->getGroupByFields($groupBy, $selects);
+        if ($groupBy) {
+            $config->offsetSetByPath(self::PATH_GROUPBY, implode(',', $groupBy));
+        }
+    }
+
+    /**
+     * Get fields that must appear in GROUP BY.
+     *
+     * @param string|array $groupBy
+     * @param array $selects
+     * @return array
+     */
+    protected function getGroupByFields($groupBy, $selects)
+    {
+        $groupBy = $this->getPreparedGroupBy($groupBy);
+
+        foreach ($selects as $select) {
+            $select = trim((string)$select);
+            // Do not add fields with aggregate functions
+            if ($this->hasAggregate($select)) {
+                continue;
+            }
+
+            if ($field = $this->getFieldForGroupBy($select)) {
+                $groupBy[] = $field;
+            }
+        }
+
+        return array_unique($groupBy);
+    }
+
+    /**
+     * Get GROUP BY statements as array of trimmed parts.
+     *
+     * @param string|array $groupBy
+     * @return array
+     */
+    protected function getPreparedGroupBy($groupBy)
+    {
+        if (!is_array($groupBy)) {
+            $groupBy = explode(',', $groupBy);
+        }
+
+        $result = [];
+        foreach ($groupBy as $groupByPart) {
+            $groupByPart = trim((string)$groupByPart);
+            if ($groupByPart) {
+                $result[] = $groupByPart;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $select
+     * @return bool
+     */
+    protected function hasAggregate($select)
+    {
+        preg_match('/(MIN|MAX|AVG|COUNT|SUM)\(/i', $select, $matches);
+
+        return (bool)$matches;
+    }
+
+    /**
+     * Search for field alias if applicable or field name to use in group by
+     *
+     * @param string $select
+     * @return string|null
+     */
+    protected function getFieldForGroupBy($select)
+    {
+        preg_match('/([^\s]+)\s+as\s+(\w+)$/i', $select, $parts);
+        if (!empty($parts[2])) {
+            // Add alias
+            return $parts[2];
+        } elseif (!$parts && strpos($select, ' ') === false) {
+            // Add field itself when there is no alias
+            return $select;
+        }
+
+        return null;
     }
 }
