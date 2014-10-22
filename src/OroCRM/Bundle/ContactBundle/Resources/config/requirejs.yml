@@ -1,6 +1,3 @@
 config:
     paths:
-        'orocrm/contactphone/collection': 'bundles/orocrmcontact/js/contactphone/collection.js'
-        'orocrm/contactphone/model': 'bundles/orocrmcontact/js/contactphone/model.js'
-        'orocrm/contactphone/view': 'bundles/orocrmcontact/js/contactphone/view.js'
         'orocrm/contact/widgets/account-contacts-widget': 'bundles/orocrmcontact/js/widgets/account-contacts-widget.js'

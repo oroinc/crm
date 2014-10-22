@@ -75,8 +75,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return array(
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
-            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
         );
     }

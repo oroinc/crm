@@ -145,3 +145,6 @@ datagrid:
                         - task.owner = :userId
             bind_parameters:
                 - userId
+
+    activity-task-grid:
+        extends: tasks-grid

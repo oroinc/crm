@@ -24,6 +24,7 @@ orocrm:
 
         widgets:
             user_tasks: Tasks
+
         user_tasks_section: Tasks
         assigned_tasks_widget:
             no_task_exist: You have no tasks pending

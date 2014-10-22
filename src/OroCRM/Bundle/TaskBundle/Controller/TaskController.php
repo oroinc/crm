@@ -13,7 +13,6 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Type\TaskType;
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
@@ -64,16 +63,6 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/widget/account-tasks/{id}", name="orocrm_task_widget_account_tasks", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_view")
-     * @Template
-     */
-    public function accountTasksAction(Account $account)
-    {
-        return array('account' => $account);
-    }
-
-    /**
      * @Route("/widget/user-tasks/{id}", name="orocrm_task_widget_user_tasks", requirements={"id"="\d+"})
      * @AclAncestor("orocrm_task_view")
      * @Template
@@ -102,15 +91,6 @@ class TaskController extends Controller
             $task->setTaskPriority($defaultPriority);
         }
 
-        $accountId = $this->getRequest()->get('accountId');
-        if ($accountId) {
-            $account = $this->getRepository('OroCRMAccountBundle:Account')->find($accountId);
-            if (!$account) {
-                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
-            }
-            $task->setRelatedAccount($account);
-        }
-
         $assignedToId = $this->getRequest()->get('assignedToId');
         if ($assignedToId) {
             $assignedTo = $this->getRepository('OroUserBundle:User')->find($assignedToId);
@@ -125,7 +105,10 @@ class TaskController extends Controller
             $task->setReporter($reporter);
         }
 
-        return $this->update($task);
+        $formAction = $this->get('oro_entity.routing_helper')
+            ->generateUrlByRequest('orocrm_task_create', $this->getRequest());
+
+        return $this->update($task, $formAction);
     }
 
     /**
@@ -149,6 +132,25 @@ class TaskController extends Controller
     }
 
     /**
+     * This action is used to render the list of tasks associated with the given entity
+     * on the view page of this entity
+     *
+     * @Route(
+     *      "/activity/view/{entityClass}/{entityId}",
+     *      name="orocrm_task_activity_view"
+     * )
+     *
+     * @AclAncestor("orocrm_task_view")
+     * @Template
+     */
+    public function activityAction($entityClass, $entityId)
+    {
+        return array(
+            'entity' => $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId)
+        );
+    }
+
+    /**
      * @Route("/update/{id}", name="orocrm_task_update", requirements={"id"="\d+"})
      * @Template
      * @Acl(
@@ -160,51 +162,45 @@ class TaskController extends Controller
      */
     public function updateAction(Task $task)
     {
-        return $this->update($task);
+        $formAction = $this->get('router')->generate('orocrm_task_update', ['id' => $task->getId()]);
+
+        return $this->update($task, $formAction);
     }
 
     /**
      * @param Task $task
+     * @param string $formAction
      * @return array
      */
-    protected function update(Task $task)
+    protected function update(Task $task, $formAction)
     {
         $saved = false;
-        $request = $this->getRequest();
-        $form = $this->createForm($this->getFormType(), $task);
+        if ($this->get('orocrm_task.form.handler.task')->process($task)) {
+            if (!$this->getRequest()->get('_widgetContainer')) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    $this->get('translator')->trans('orocrm.task.saved_message')
+                );
 
-        if ($request->isMethod('POST')) {
-            $form->submit($request);
-            if ($form->isValid()) {
-                $this->getDoctrine()->getManager()->persist($task);
-                $this->getDoctrine()->getManager()->flush();
-
-                $saved =  true;
-
-                if (!$this->getRequest()->request->has('_widgetContainer')) {
-                    $this->get('session')->getFlashBag()->add(
-                        'success',
-                        $this->get('translator')->trans('orocrm.task.saved_message')
-                    );
-
-                    return $this->get('oro_ui.router')->redirectAfterSave(
-                        array(
-                            'route' => 'orocrm_task_update',
-                            'parameters' => array('id' => $task->getId()),
-                        ),
-                        array(
-                            'route' => 'orocrm_task_view',
-                            'parameters' => array('id' => $task->getId()),
-                        )
-                    );
-                }
+                return $this->get('oro_ui.router')->redirectAfterSave(
+                    array(
+                        'route' => 'orocrm_task_update',
+                        'parameters' => array('id' => $task->getId()),
+                    ),
+                    array(
+                        'route' => 'orocrm_task_view',
+                        'parameters' => array('id' => $task->getId()),
+                    )
+                );
             }
+            $saved = true;
         }
 
         return array(
-            'saved' => $saved,
-            'entity' => $task,
-            'form' => $form->createView()
+            'entity'     => $task,
+            'saved'      => $saved,
+            'form'       => $this->get('orocrm_task.form.handler.task')->getForm()->createView(),
+            'formAction' => $formAction,
         );
     }
 
@@ -213,7 +209,7 @@ class TaskController extends Controller
      */
     protected function getFormType()
     {
-        return $this->get('orocrm_task.form.type.task');
+        return $this->get('orocrm_task.form.handler.task')->getForm();
     }
 
     /**

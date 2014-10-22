@@ -51,8 +51,14 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "reminder_template_name"="task_reminder",
  *              "reminder_flash_template_identifier"="task_template"
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "route"="orocrm_task_activity_view",
+ *              "acl"="orocrm_task_view",
+ *              "action_button_widget"="orocrm_add_task_button",
+ *              "action_link_widget"="orocrm_add_task_link"
  *          }
  *      }
  * )
@@ -151,7 +157,7 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -420,7 +426,8 @@ class Task extends ExtendTask implements RemindableInterface
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**
@@ -428,7 +435,7 @@ class Task extends ExtendTask implements RemindableInterface
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

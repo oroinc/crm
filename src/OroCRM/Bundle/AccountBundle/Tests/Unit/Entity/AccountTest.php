@@ -81,4 +81,20 @@ class AccountTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($user, $entity->getOwner());
     }
+
+    public function testGetEmail()
+    {
+        $account = new Account();
+        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertNull($account->getEmail());
+
+        $account->setDefaultContact($contact);
+        $contact->expects($this->once())
+            ->method('getEmail')
+            ->will($this->returnValue('email@example.com'));
+        $this->assertEquals('email@example.com', $account->getEmail());
+    }
 }
