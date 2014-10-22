@@ -40,6 +40,7 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         $this->addOrocrmTaskForeignKeys($schema);
 
         /** Add activity association */
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'oro_user');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }

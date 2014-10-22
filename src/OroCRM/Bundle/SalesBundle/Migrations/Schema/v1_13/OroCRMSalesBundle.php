@@ -40,5 +40,7 @@ class OroCRMSalesBundle implements Migration, ActivityExtensionAwareInterface
     {
         $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
         $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_opportunity');
     }
 }
