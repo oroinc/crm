@@ -4,17 +4,30 @@ namespace OroCRM\Bundle\TaskBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMTaskBundleInstaller implements Installation
+class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
+    /** @var ActivityExtension */
+    protected $activityExtension;
+
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
         return 'v1_2';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
     }
 
     /**
@@ -56,6 +69,10 @@ class OroCRMTaskBundleInstaller implements Installation
         $table->addIndex(['due_date'], 'task_due_date_idx');
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_814DEE3F1023C4EE');
         $table->addIndex(['workflow_step_id'], 'IDX_814DEE3F71FE882C', []);
+
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'oro_user');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }
 
     /**

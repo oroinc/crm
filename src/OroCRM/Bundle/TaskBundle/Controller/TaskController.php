@@ -63,16 +63,6 @@ class TaskController extends Controller
     }
 
     /**
-     * @Route("/widget/user-tasks/{id}", name="orocrm_task_widget_user_tasks", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_task_view")
-     * @Template
-     */
-    public function userTasksAction(User $user)
-    {
-        return array('user' => $user);
-    }
-
-    /**
      * @Route("/create", name="orocrm_task_create")
      * @Acl(
      *      id="orocrm_task_create",
