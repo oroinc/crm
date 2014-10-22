@@ -51,20 +51,20 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $obj = new Call();
 
         $this->assertNull($obj->getCreatedAt());
+        $this->assertNull($obj->getUpdatedAt());
 
         $obj->prePersist();
         $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
+        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
     }
 
     public function testPreUpdate()
     {
         $obj = new Call();
 
-        $this->assertNull($obj->getCreatedAt());
         $this->assertNull($obj->getUpdatedAt());
 
-        $obj->prePersist();
-        $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
+        $obj->preUpdate();
         $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
     }
 }
