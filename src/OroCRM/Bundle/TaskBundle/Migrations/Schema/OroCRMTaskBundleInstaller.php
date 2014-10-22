@@ -6,9 +6,19 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 
-class OroCRMTaskBundleInstaller implements Installation
+class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
+    /** @var ActivityExtension */
+    protected $activityExtension;
+
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,6 +38,10 @@ class OroCRMTaskBundleInstaller implements Installation
 
         /** Foreign keys generation **/
         $this->addOrocrmTaskForeignKeys($schema);
+
+        /** Add activity association */
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }
 
     /**

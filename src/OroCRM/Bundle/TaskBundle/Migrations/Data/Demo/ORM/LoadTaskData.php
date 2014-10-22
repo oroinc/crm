@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\TaskBundle\Migrations\Data\Demo\ORM;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
@@ -112,6 +111,16 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
 
+            $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
+            if ($contact && $task->supportActivityTarget(get_class($contact))) {
+                $task->addActivityTarget($contact);
+            }
+
+            $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
+            if ($account && $task->supportActivityTarget(get_class($account))) {
+                $task->addActivityTarget($account);
+            }
+
             $manager->persist($task);
         }
 
@@ -120,10 +129,10 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param string $entityName
-     * @param EntityManager $manager
+     * @param ObjectManager $manager
      * @return object|null
      */
-    protected function getRandomEntity($entityName, EntityManager $manager)
+    protected function getRandomEntity($entityName, ObjectManager $manager)
     {
         $count = $this->getEntityCount($entityName, $manager);
 
@@ -143,10 +152,10 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param string $entityName
-     * @param EntityManager $manager
+     * @param ObjectManager $manager
      * @return int
      */
-    protected function getEntityCount($entityName, EntityManager $manager)
+    protected function getEntityCount($entityName, ObjectManager $manager)
     {
         if (!isset($this->entitiesCount[$entityName])) {
             $this->entitiesCount[$entityName] = (int)$manager->createQueryBuilder()
