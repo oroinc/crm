@@ -6,7 +6,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -51,7 +50,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      }
  * )
  */
-class Call extends ExtendCall implements ActivityInterface
+class Call extends ExtendCall
 {
     /**
      * @var integer
