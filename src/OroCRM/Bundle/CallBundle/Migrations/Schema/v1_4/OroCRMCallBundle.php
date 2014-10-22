@@ -27,12 +27,13 @@ class OroCRMCallBundle implements Migration, OrderedMigrationInterface
     {
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
-                'UPDATE orocrm_call SET createdAt = :date',
+                'UPDATE orocrm_call SET created_at = :date, updated_at = :date',
                 ['date' => new \DateTime('now', new \DateTimeZone('UTC'))],
                 ['date' => Type::DATETIME]
             )
         );
-        $table = $schema->createTable('oro_calendar_event');
-        $table->getColumn('createdAt')->setOptions(['notnull' => true]);
+        $table = $schema->getTable('oro_calendar_event');
+        $table->getColumn('created_at')->setOptions(['notnull' => true]);
+        $table->getColumn('updated_at')->setOptions(['notnull' => true]);
     }
 }
