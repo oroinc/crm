@@ -21,6 +21,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      indexes={@ORM\Index(name="call_dt_idx",columns={"call_date_time"})}
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="orocrm_call_index",
  *      defaultValues={
@@ -127,6 +128,34 @@ class Call extends ExtendCall
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $direction;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
 
     /**
      * @var Organization
@@ -339,6 +368,38 @@ class Call extends ExtendCall
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
      * Set organization
      *
      * @param Organization $organization
@@ -359,5 +420,21 @@ class Call extends ExtendCall
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime();
     }
 }
