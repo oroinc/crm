@@ -212,12 +212,10 @@ class ContactAddressController extends RestController implements ClassResourceIn
             $addressTypesData[] = parent::getPreparedItem($addressType);
         }
 
-        $country = $entity->getCountry();
-
         $result                = parent::getPreparedItem($entity);
         $result['types']       = $addressTypesData;
-        $result['countryIso2'] = $country ? $country->getIso2Code() : '';
-        $result['countryIso3'] = $country ? $country->getIso3Code() : '';
+        $result['countryIso2'] = $entity->getCountryIso2();
+        $result['countryIso3'] = $entity->getCountryIso2();
         $result['regionCode']  = $entity->getRegionCode();
 
         unset($result['owner']);
