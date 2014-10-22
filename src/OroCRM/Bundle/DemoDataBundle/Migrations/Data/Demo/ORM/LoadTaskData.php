@@ -3,14 +3,11 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -74,11 +71,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     protected $entitiesCount;
 
     /**
-     * @var Organization
-     */
-    protected $organization;
-
-    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -95,7 +87,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $om)
     {
-        $this->organization = $this->getReference('default_organization');
         $this->persistDemoTasks($om);
 
         $om->flush();
@@ -103,6 +94,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 
     protected function persistDemoTasks(ObjectManager $om)
     {
+        $organization = $this->getReference('default_organization');
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
         $contactCount = count($contacts);
@@ -132,7 +124,7 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $task->setReporter($reporter);
             $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
-            $task->setOrganization($this->organization);
+            $task->setOrganization($organization);
 
             $contactRandom = rand(0, $contactCount - 1);
             $accountRandom = rand(0, $accountCount - 1);
@@ -173,10 +165,10 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param string $entityName
-     * @param EntityManager $manager
+     * @param ObjectManager $manager
      * @return object|null
      */
-    protected function getRandomEntity($entityName, EntityManager $manager)
+    protected function getRandomEntity($entityName, ObjectManager $manager)
     {
         $count = $this->getEntityCount($entityName, $manager);
 
@@ -196,10 +188,10 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param string $entityName
-     * @param EntityManager $manager
+     * @param ObjectManager $manager
      * @return int
      */
-    protected function getEntityCount($entityName, EntityManager $manager)
+    protected function getEntityCount($entityName, ObjectManager $manager)
     {
         if (!isset($this->entitiesCount[$entityName])) {
             $this->entitiesCount[$entityName] = (int)$manager->createQueryBuilder()

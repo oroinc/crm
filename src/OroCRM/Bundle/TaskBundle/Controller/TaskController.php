@@ -199,7 +199,7 @@ class TaskController extends Controller
      */
     protected function getFormType()
     {
-        return $this->get('orocrm_task.form.type.task');
+        return $this->get('orocrm_task.form.handler.task')->getForm();
     }
 
     /**

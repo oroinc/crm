@@ -14,20 +14,17 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
     /** @var ActivityExtension */
     protected $activityExtension;
 
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
         return 'v1_2';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityExtension(ActivityExtension $activityExtension)
-    {
-        $this->activityExtension = $activityExtension;
     }
 
     /**
@@ -41,6 +38,10 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
 
         /** Foreign keys generation **/
         $this->addOrocrmTaskForeignKeys($schema);
+
+        /** Add activity association */
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }
 
     /**
@@ -69,10 +70,6 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addIndex(['due_date'], 'task_due_date_idx');
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_814DEE3F1023C4EE');
         $table->addIndex(['workflow_step_id'], 'IDX_814DEE3F71FE882C', []);
-
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'oro_user');
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }
 
     /**

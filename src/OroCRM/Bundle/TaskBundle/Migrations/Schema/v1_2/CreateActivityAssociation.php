@@ -18,17 +18,17 @@ class CreateActivityAssociation implements Migration, OrderedMigrationInterface,
     /**
      * {@inheritdoc}
      */
-    public function getOrder()
+    public function setActivityExtension(ActivityExtension $activityExtension)
     {
-        return 1;
+        $this->activityExtension = $activityExtension;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setActivityExtension(ActivityExtension $activityExtension)
+    public function getOrder()
     {
-        $this->activityExtension = $activityExtension;
+        return 1;
     }
 
     /**
