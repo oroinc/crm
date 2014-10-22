@@ -46,8 +46,8 @@ class OroCRMTaskBundleInstaller implements Installation
         $table->addColumn('reporter_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
-        $table->addColumn('createdAt', 'datetime');
-        $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
+        $table->addColumn('createdAt', 'datetime', []);
+        $table->addColumn('updatedAt', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['task_priority_name'], 'IDX_814DEE3FD34C1E8E', []);
         $table->addIndex(['owner_id'], 'IDX_814DEE3F7E3C61F9', []);
