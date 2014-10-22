@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_13;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_14;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -38,7 +38,7 @@ class OroCRMSalesBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_opportunity');
     }
 }

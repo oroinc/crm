@@ -40,6 +40,5 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_customer');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
     }
 }

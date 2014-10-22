@@ -59,6 +59,7 @@ class OroCRMTaskBundle implements
     {
         $queries->addPreQuery($this->getFillAccountActivityQuery());
         $queries->addPreQuery($this->getFillContactActivityQuery());
+        $queries->addPreQuery($this->getFillUserActivityQuery());
 
         // fill empty updatedAt of orocrm_task
         $queries->addPreQuery('UPDATE orocrm_task SET updatedAt = createdAt WHERE updatedAt IS NULL');
@@ -103,6 +104,18 @@ class OroCRMTaskBundle implements
             . ' WHERE related_contact_id IS NOT NULL';
 
         return sprintf($sql, $this->getAssociationTableName('orocrm_contact'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFillUserActivityQuery()
+    {
+        $sql = 'INSERT INTO %s (task_id, user_id)'
+            . ' SELECT id, owner_id'
+            . ' FROM orocrm_task';
+
+        return sprintf($sql, $this->getAssociationTableName('oro_user'));
     }
 
     /**
