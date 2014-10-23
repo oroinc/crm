@@ -6,16 +6,16 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
 {
     const PATH_NAME = '[name]';
-    const PATH_DATAGRID_MIXIN = '[]';
-    const PATH_DATAGRID_WHERE = '[]';
+    const PATH_DATAGRID_WHERE = '[source][query][where]';
 
-    const MIXIN_NAME = 'orocrm-email-campaign-marketing-list-items-mixin';
-    const MANUAL_MIXIN_NAME = 'orocrm-email-campaign-marketing-list-manual-items-mixin';
+    const MIXIN_SENT_NAME = 'orocrm-email-campaign-marketing-list-sent-items-mixin';
+    const MIXIN_UNSET_NAME = 'orocrm-email-campaign-marketing-list-unsent-items-mixin';
 
     /**
      * @var ManagerRegistry
@@ -28,13 +28,13 @@ class CampaignStatisticDatagridListener
     protected $marketingListHelper;
 
     /**
-     * @param ManagerRegistry $registry
      * @param MarketingListHelper $marketingListHelper
+     * @param ManagerRegistry $registry
      */
-    public function __construct(ManagerRegistry $registry, MarketingListHelper $marketingListHelper)
+    public function __construct(MarketingListHelper $marketingListHelper, ManagerRegistry $registry)
     {
+        $this->marketingListHelper = $marketingListHelper;
         $this->registry = $registry;
-        $this->marktingListHelper = $marketingListHelper;
     }
 
     /**
@@ -50,28 +50,18 @@ class CampaignStatisticDatagridListener
             return;
         }
 
-        $emailCampaign = $parameters->get('emailCampaign');
-        if (!is_object($emailCampaign)) {
-            $emailCampaign = $this->registry->getRepository('OroCRMCampaignBundle:EmailCampaign')
-                ->find($emailCampaign);
-        }
-
+        $emailCampaignId = $parameters->get('emailCampaign');
+        $emailCampaign = $this->registry->getRepository('OroCRMCampaignBundle:EmailCampaign')
+            ->find($emailCampaignId);
 
         if ($emailCampaign->isSent()) {
             $config->offsetUnsetByPath(self::PATH_DATAGRID_WHERE);
-
+            $mixin = self::MIXIN_SENT_NAME;
         } else {
-            $marketingListId = $this->marketingListHelper->getMarketingListIdByGridName($gridName);
-            $marketingList = $this->marktingListHelper->getMarketingList($marketingListId);
-
-            if ($marketingList->isManual()) {
-                $mixin = self::MANUAL_MIXIN_NAME;
-            } else {
-                $mixin = self::MIXIN_NAME;
-            }
-
-
+            $mixin = self::MIXIN_UNSET_NAME;
         }
+
+        $parameters->set(MarketingListItemsListener::MIXIN, $mixin);
     }
 
     /**
