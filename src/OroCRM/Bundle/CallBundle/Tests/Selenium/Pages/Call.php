@@ -16,6 +16,15 @@ class Call extends AbstractPageEntity
         parent::__construct($testCase, $redirect);
     }
 
+    public function edit()
+    {
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Call']")->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
+
+        return $this;
+    }
+
     /**
      * @param string $call
      * @return $this

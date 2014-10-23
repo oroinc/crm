@@ -53,6 +53,8 @@ class CreateCallTest extends Selenium2TestCase
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
             ->open(array($callSubject))
+            ->assertTitle($callSubject . ' - Calls - Activities')
+            ->edit()
             ->assertTitle($callSubject . ' - Edit - Calls - Activities')
             ->setCallSubject($newCallSubject)
             ->save()
