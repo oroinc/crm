@@ -5,10 +5,9 @@ namespace OroCRM\Bundle\TaskBundle\Entity\Manager;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
-
 use Doctrine\ORM\UnitOfWork;
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskActivityManager
