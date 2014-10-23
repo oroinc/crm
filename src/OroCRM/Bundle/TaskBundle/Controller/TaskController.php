@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\TaskBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -81,13 +80,19 @@ class TaskController extends Controller
             $task->setTaskPriority($defaultPriority);
         }
 
-        $assignedToId = $this->getRequest()->get('assignedToId');
-        if ($assignedToId) {
-            $assignedTo = $this->getRepository('OroUserBundle:User')->find($assignedToId);
-            if (!$assignedTo) {
-                throw new NotFoundHttpException(sprintf('User with ID %s is not found', $assignedToId));
+        // set predefined assignedTo
+        $entityClass = $this->getRequest()->get('entityClass');
+        if ($entityClass) {
+            $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName($entityClass);
+            $entityId    = $this->getRequest()->get('entityId');
+            if ($entityId && $entityClass === $this->container->getParameter('oro_user.entity.class')) {
+                $assignedTo = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
+                if ($assignedTo) {
+                    $task->setOwner($assignedTo);
+                } else {
+                    throw new NotFoundHttpException(sprintf('User with ID %s is not found', $entityId));
+                }
             }
-            $task->setOwner($assignedTo);
         }
 
         $reporter = $this->getCurrentUser();
