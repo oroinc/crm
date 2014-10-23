@@ -14,11 +14,12 @@ parameters:
     orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
     orocrm_campaign.email_campaign.sender.builder.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder
 
-    orocrm_campaign.listener.email_campaign_statistic.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener
+    orocrm_campaign.listener.email_campaign_statistic_fix.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticFixDatagridListener
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
     orocrm_campaign.form.handler.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler
+    orocrm_campaign.group_by_helper.class: OroCRM\Bundle\CampaignBundle\Model\GroupByHelper
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -115,12 +116,13 @@ services:
         arguments:
             - @orocrm_campaign.email_campaign.sender
 
-    orocrm_campaign.listener.email_campaign_statistic:
-        class: %orocrm_campaign.listener.email_campaign_statistic.class%
+    orocrm_campaign.listener.email_campaign_statistic_fix:
+        class: %orocrm_campaign.listener.email_campaign_statistic_fix.class%
         arguments:
             - @orocrm_marketing_list.model.helper
+            - @orocrm_campaign.group_by_helper
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: -10 }
 
     orocrm_campaign.form.type.internal_transport_settings:
         class: %orocrm_campaign.form.type.internal_transport_settings.class%
@@ -150,3 +152,6 @@ services:
             - @request
             - @orocrm_campaign.email_campaign.form
             - @doctrine
+
+    orocrm_campaign.group_by_helper:
+        class: %orocrm_campaign.group_by_helper.class%
