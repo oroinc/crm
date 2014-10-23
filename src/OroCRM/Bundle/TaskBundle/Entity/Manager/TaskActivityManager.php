@@ -63,7 +63,7 @@ class TaskActivityManager
                 $hasChanges = false;
                 $changeSet  = $uow->getEntityChangeSet($entity);
                 foreach ($changeSet as $field => $values) {
-                    if ($field === 'reporter') {
+                    if ($field === 'owner') {
                         list($oldValue, $newValue) = $values;
                         if ($oldValue !== $newValue) {
                             if ($this->activityManager->removeActivityTarget($entity, $oldValue)) {

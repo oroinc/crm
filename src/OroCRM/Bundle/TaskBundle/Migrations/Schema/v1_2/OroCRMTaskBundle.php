@@ -112,9 +112,9 @@ class OroCRMTaskBundle implements
     protected function getFillUserActivityQuery()
     {
         $sql = 'INSERT INTO %s (task_id, user_id)'
-            . ' SELECT id, reporter_id'
+            . ' SELECT id, owner_id'
             . ' FROM orocrm_task'
-            . ' WHERE reporter_id IS NOT NULL';
+            . ' WHERE owner_id IS NOT NULL';
 
         return sprintf($sql, $this->getAssociationTableName('oro_user'));
     }
