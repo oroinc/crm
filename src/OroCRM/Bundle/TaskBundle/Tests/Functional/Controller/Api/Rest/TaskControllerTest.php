@@ -65,6 +65,35 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * @depends testCreate
+     */
+    public function testCgetFiltering()
+    {
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_api_get_tasks') . '?createdAt>2014-03-04T20:00:00+0000',
+            [],
+            [],
+            $this->generateWsseAuthHeader()
+        );
+
+        $tasks = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
+        $this->assertCount(1, $tasks);
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_api_get_tasks') . '?createdAt>2050-03-04T20:00:00+0000',
+            [],
+            [],
+            $this->generateWsseAuthHeader()
+        );
+
+        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEmpty($entities);
+    }
+
+    /**
+     * @depends testCreate
      * @param integer $id
      */
     public function testGet($id)
