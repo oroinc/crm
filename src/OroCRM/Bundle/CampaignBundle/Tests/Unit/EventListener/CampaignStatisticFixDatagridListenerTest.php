@@ -4,16 +4,14 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
-use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
+use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticFixDatagridListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
-class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
+class CampaignStatisticFixDatagridListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CampaignStatisticDatagridListener
+     * @var CampaignStatisticFixDatagridListener
      */
     protected $listener;
 
@@ -22,14 +20,23 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected $marketingListHelper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $groupByHelper;
+
     protected function setUp()
     {
         $this->marketingListHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->groupByHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\GroupByHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->listener = new CampaignStatisticDatagridListener($this->marketingListHelper);
+        $this->listener = new CampaignStatisticFixDatagridListener($this->marketingListHelper, $this->groupByHelper);
     }
 
     /**
@@ -69,16 +76,16 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $gridName
-     * @param array  $parameters
      * @param array  $select
      * @param string $groupBy
      * @param string $expected
      *
      * @dataProvider preBuildDataProvider
      */
-    public function testOnPreBuild($gridName, array $parameters, array $select, $groupBy, $expected)
+    public function testOnPreBuild(array $select, $groupBy, $expected)
     {
+        $gridName = ConfigurationProvider::GRID_PREFIX;
+        $parameters = ['emailCampaign' => 1];
         $config = DatagridConfiguration::create(
             [
                 'name'   => $gridName,
@@ -98,76 +105,59 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getMarketingListIdByGridName')
             ->with($this->equalTo($gridName))
             ->will($this->returnValue(1));
+        $this->groupByHelper->expects($this->once())
+            ->method('getGroupByFields')
+            ->with($groupBy, $select)
+            ->will($this->returnValue(explode(',', $expected)));
 
         $this->listener->onPreBuild($event);
 
-        $this->assertEquals($expected, $config->offsetGetByPath(CampaignStatisticDatagridListener::PATH_GROUPBY));
+        $this->assertEquals($expected, $config->offsetGetByPath(CampaignStatisticFixDatagridListener::PATH_GROUPBY));
+    }
+
+    public function testOnPreBuildNotApplicable()
+    {
+        $gridName = ConfigurationProvider::GRID_PREFIX;
+        $config = DatagridConfiguration::create([]);
+
+        $event = new PreBuild($config, new ParameterBag([]));
+
+        $this->marketingListHelper
+            ->expects($this->any())
+            ->method('getMarketingListIdByGridName')
+            ->with($this->equalTo($gridName));
+        $this->groupByHelper->expects($this->never())
+            ->method('getGroupByFields');
+
+        $this->listener->onPreBuild($event);
     }
 
     /**
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function preBuildDataProvider()
     {
         return [
-            'no emailCampaign' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => [],
-                'selects'    => [],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
             'no fields' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
                 'selects'    => [],
                 'groupBy'    => null,
                 'expected'   => null,
             ],
-            'group by no fields' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
+            'group by no selects' => [
                 'selects'    => [],
                 'groupBy'    => 'alias.existing',
                 'expected'   => 'alias.existing',
             ],
-            'field without alias' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
+            'select no group by' => [
                 'selects'    => ['alias.field'],
                 'groupBy'    => null,
                 'expected'   => 'alias.field',
             ],
-            'aliases and without' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
-                'selects'    => ['alias.field', 'alias.matchedFields  as  c1', 'alias.secondMatched aS someAlias3'],
-                'groupBy'    => null,
-                'expected'   => 'alias.field,c1,someAlias3',
-            ],
-            'mixed fields and group by' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
+            'select and group by' => [
                 'selects'    => ['alias.field', 'alias.matchedFields as c1'],
                 'groupBy'    => 'alias.existing',
                 'expected'   => 'alias.existing,alias.field,c1',
-            ],
-            'wrong field definition' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
-                'selects'    => ['alias.matchedFields wrongas c1'],
-                'groupBy'    => null,
-                'expected'   => null,
-            ],
-            'with aggregate' => [
-                'gridName'   => ConfigurationProvider::GRID_PREFIX,
-                'parameters' => ['emailCampaign' => 1],
-                'selects'    => ['MAX(t1.f0)', 'AvG(t10.F19) as agF1', 'alias.matchedFields AS c1'],
-                'groupBy'    => null,
-                'expected'   => 'c1',
-            ],
+            ]
         ];
     }
 }
