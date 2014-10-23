@@ -158,6 +158,16 @@ class TaskController extends Controller
     }
 
     /**
+     * @Route("/widget/info/{id}", name="orocrm_task_widget_info", requirements={"id"="\d+"})
+     * @Template
+     * @AclAncestor("orocrm_call_view")
+     */
+    public function infoAction(Task $entity)
+    {
+        return array('entity' => $entity);
+    }
+
+    /**
      * @param Task $task
      * @param string $formAction
      * @return array

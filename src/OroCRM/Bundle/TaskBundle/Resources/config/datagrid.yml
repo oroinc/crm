@@ -136,5 +136,94 @@ datagrid:
                 icon:          trash
                 link:          delete_link
 
+    widget-base-tasks-grid:
+        source:
+            type: orm
+            acl_resource: orocrm_task_view
+            query:
+                select:
+                    - task.id
+                    - task.subject
+                    - task.dueDate
+                    - taskPriority.label as priorityLabel
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - owner.id as ownerId
+                    - CONCAT(reporter.firstName, CONCAT(' ', reporter.lastName)) as reporterName
+                    - reporter.id as reporterId
+                    - workflowStep.label as workflowStepLabel
+                from:
+                    - { table: %orocrm_task.entity.class%, alias: task }
+                join:
+                    left:
+                        - { join: task.taskPriority, alias: taskPriority }
+                        - { join: task.owner, alias: owner }
+                        - { join: task.reporter, alias: reporter }
+                        - { join: task.workflowStep, alias: workflowStep }
+        columns:
+            subject:
+                label:         orocrm.task.subject.label
+                type:          twig
+                template:      OroCRMTaskBundle:Task:Datagrid/Property/subject.html.twig
+                frontend_type: html
+            dueDate:
+                label:         orocrm.task.due_date.label
+                frontend_type: datetime
+            workflowStepLabel:
+                label:         orocrm.task.workflow_step.label
+            priorityLabel:
+                label:         orocrm.task.task_priority.label
+            ownerName:
+                type:          twig
+                label:         orocrm.task.owner.label
+                frontend_type: html
+                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+            reporterName:
+                type:          twig
+                label:         orocrm.task.reporter.label
+                frontend_type: html
+                template:      OroCRMTaskBundle:Task:Datagrid/Property/reporter.html.twig
+        sorters:
+            columns:
+                subject:
+                    data_name: task.subject
+                dueDate:
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    data_name: workflowStep.stepOrder
+                priorityLabel:
+                    data_name: taskPriority.order
+                ownerName:
+                    data_name: ownerName
+                reporterName:
+                    data_name: reporterName
+            default:
+                dueDate: ASC
+        properties:
+            id: ~
+
     activity-task-grid:
-        extends: tasks-grid
+        extends: widget-base-tasks-grid
+        filters:
+            columns:
+                subject:
+                    type:      string
+                    data_name: task.subject
+                dueDate:
+                    type:      datetime
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    type:      entity
+                    data_name: task.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_task.entity.class%
+                priorityLabel:
+                    type:      string
+                    data_name: priorityLabel
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+                reporterName:
+                    type:      string
+                    data_name: reporterName
