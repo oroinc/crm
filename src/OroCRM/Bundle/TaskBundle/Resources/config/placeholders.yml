@@ -14,7 +14,13 @@ items:
     orocrm_add_task_button:
         template: OroCRMTaskBundle:Task:activityButton.html.twig
         acl: orocrm_task_create
+        data:
+            label: @orocrm_task.label_provider.action_button->getLabel($entity$)
+            widget_title: @orocrm_task.label_provider.action_button->getWidgetTitle($entity$)
 
     orocrm_add_task_link:
         template: OroCRMTaskBundle:Task:activityLink.html.twig
         acl: orocrm_task_create
+        data:
+            label: @orocrm_task.label_provider.action_button->getLabel($entity$)
+            widget_title: @orocrm_task.label_provider.action_button->getWidgetTitle($entity$)
