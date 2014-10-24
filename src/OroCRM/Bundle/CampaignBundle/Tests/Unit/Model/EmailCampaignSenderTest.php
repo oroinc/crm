@@ -31,7 +31,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $marketingListConnector;
+    protected $statisticsConnector;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -70,8 +70,8 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->marketingListConnector = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector')
+        $this->statisticsConnector = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -91,7 +91,7 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->sender = new EmailCampaignSender(
             $this->marketingListProvider,
             $this->configManager,
-            $this->marketingListConnector,
+            $this->statisticsConnector,
             $this->contactInformationFieldsProvider,
             $this->registry,
             $this->transportProvider
@@ -180,8 +180,6 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->once())
             ->method('getManager')
             ->will($this->returnValue($manager));
-        $manager->expects($this->exactly($itCount + 1))
-            ->method('persist');
         $manager->expects($this->atLeastOnce())
             ->method('flush');
         $manager->expects($this->exactly($itCount))
@@ -204,14 +202,23 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
                 ->disableOriginalConstructor()
                 ->getMock();
-            $this->marketingListConnector
-                ->expects($this->exactly($itCount))
-                ->method('contact')
-                ->with(
-                    $this->equalTo($marketingList),
-                    $this->equalTo(self::ENTITY_ID)
-                )
+            $marketingListItem->expects($this->exactly($itCount))
+                ->method('contact');
+
+            $statisticsRecord = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $statisticsRecord->expects($this->exactly($itCount))
+                ->method('getMarketingListItem')
                 ->will($this->returnValue($marketingListItem));
+            $this->statisticsConnector
+                ->expects($this->exactly($itCount))
+                ->method('getStatisticsRecord')
+                ->with(
+                    $this->equalTo($campaign),
+                    $this->isInstanceOf('stdClass')
+                )
+                ->will($this->returnValue($statisticsRecord));
         }
 
         $this->transport->expects($this->exactly($itCount))
@@ -281,20 +288,15 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
                 )
                 ->will($this->returnValue($to));
 
-            $this->marketingListConnector
+            $this->statisticsConnector
                 ->expects($this->exactly($itCount))
-                ->method('contact')
+                ->method('getStatisticsRecord')
                 ->with(
-                    $this->equalTo($marketingList),
-                    $this->equalTo(self::ENTITY_ID)
+                    $this->equalTo($campaign),
+                    $this->isInstanceOf('stdClass')
                 )
-                ->will(
-                    $this->returnCallback(
-                        function () {
-                            throw new \Exception('Error');
-                        }
-                    )
-                );
+                ->willThrowException(new \Exception('Error'));
+
             $this->logger->expects($this->exactly($itCount))
                 ->method('error');
         }
