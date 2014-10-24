@@ -48,7 +48,6 @@ class TaskHandler
         $this->manager             = $manager;
         $this->activityManager     = $activityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
-
     }
 
     /**
