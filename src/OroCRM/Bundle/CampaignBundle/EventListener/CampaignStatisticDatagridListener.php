@@ -15,7 +15,7 @@ class CampaignStatisticDatagridListener
     const PATH_DATAGRID_WHERE = '[source][query][where]';
 
     const MIXIN_SENT_NAME = 'orocrm-email-campaign-marketing-list-sent-items-mixin';
-    const MIXIN_UNSET_NAME = 'orocrm-email-campaign-marketing-list-unsent-items-mixin';
+    const MIXIN_UNSENT_NAME = 'orocrm-email-campaign-marketing-list-unsent-items-mixin';
 
     /**
      * @var ManagerRegistry
@@ -58,7 +58,7 @@ class CampaignStatisticDatagridListener
             $config->offsetUnsetByPath(self::PATH_DATAGRID_WHERE);
             $mixin = self::MIXIN_SENT_NAME;
         } else {
-            $mixin = self::MIXIN_UNSET_NAME;
+            $mixin = self::MIXIN_UNSENT_NAME;
         }
 
         $parameters->set(MarketingListItemsListener::MIXIN, $mixin);
