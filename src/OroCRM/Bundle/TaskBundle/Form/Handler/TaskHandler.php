@@ -48,6 +48,7 @@ class TaskHandler
         $this->manager             = $manager;
         $this->activityManager     = $activityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
+
     }
 
     /**
@@ -67,11 +68,14 @@ class TaskHandler
             if ($this->form->isValid()) {
                 $targetEntityClass = $this->request->get('entityClass');
                 if ($targetEntityClass) {
-                    $targetEntityId = $this->request->get('entityId');
-                    $this->activityManager->addActivityTarget(
-                        $entity,
-                        $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
-                    );
+                    $targetEntityClass = $this->entityRoutingHelper->decodeClassName($targetEntityClass);
+                    if (!is_a($targetEntityClass, 'Oro\Bundle\UserBundle\Entity\User', true)) {
+                        $targetEntityId = $this->request->get('entityId');
+                        $this->activityManager->addActivityTarget(
+                            $entity,
+                            $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
+                        );
+                    }
                 }
                 $this->onSuccess($entity);
 

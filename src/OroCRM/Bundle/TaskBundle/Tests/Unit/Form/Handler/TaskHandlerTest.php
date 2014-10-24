@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Unit\Form\Handler;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -155,6 +156,10 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->with(get_class($targetEntity))
+            ->will($this->returnValue(get_class($targetEntity)));
+        $this->entityRoutingHelper->expects($this->once())
             ->method('getEntityReference')
             ->with(get_class($targetEntity), $targetEntity->getId())
             ->will($this->returnValue($targetEntity));
@@ -162,6 +167,51 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
         $this->activityManager->expects($this->at(0))
             ->method('addActivityTarget')
             ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
+
+        $this->om->expects($this->once())
+            ->method('persist')
+            ->with($this->identicalTo($this->entity));
+        $this->om->expects($this->once())
+            ->method('flush');
+
+        $this->assertTrue(
+            $this->handler->process($this->entity)
+        );
+    }
+
+    /**
+     * @dataProvider supportedMethods
+     *
+     * @param string $method
+     */
+    public function testProcessValidDataWithUserAsTargetEntity($method)
+    {
+        $targetEntity = new User();
+
+        $this->request->query->set('entityClass', get_class($targetEntity));
+        $this->request->query->set('entityId', $targetEntity->getId());
+
+        $this->request->setMethod($method);
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
+        $this->form->expects($this->once())
+            ->method('submit')
+            ->with($this->identicalTo($this->request));
+        $this->form->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('decodeClassName')
+            ->with(get_class($targetEntity))
+            ->will($this->returnValue(get_class($targetEntity)));
+        $this->entityRoutingHelper->expects($this->never())
+            ->method('getEntityReference');
+
+        $this->activityManager->expects($this->never())
+            ->method('addActivityTarget');
 
         $this->om->expects($this->once())
             ->method('persist')
