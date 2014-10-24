@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TaskBundle\Unit\Form\Handler;
 
-use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -10,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler;
