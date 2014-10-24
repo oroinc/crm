@@ -62,7 +62,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_5';
+        return 'v1_6';
     }
 
     /**
@@ -80,6 +80,7 @@ class OroCRMAccountBundleInstaller implements
 
         $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
+        $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
         $this->attachmentExtension->addAttachmentAssociation(
             $schema,
             'orocrm_account',
