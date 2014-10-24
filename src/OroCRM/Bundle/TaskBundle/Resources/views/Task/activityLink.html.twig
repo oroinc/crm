@@ -7,7 +7,7 @@
     'aCss': 'no-hash',
     'iCss': 'icon-list-alt',
     'dataId': entity.id,
-    'label' : 'orocrm.task.add_entity'|trans,
+    'label' : data.label,
     'widget' : {
         'type' : 'dialog',
         'multiple' : true,
@@ -15,7 +15,7 @@
         'options' : {
             'alias': 'task-dialog',
             'dialogOptions' : {
-                'title' : 'orocrm.task.add_entity'|trans,
+                'title' : data.widget_title,
                 'allowMaximize': true,
                 'allowMinimize': true,
                 'dblclick': 'maximize',

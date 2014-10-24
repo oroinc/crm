@@ -20,6 +20,7 @@ orocrm:
         organization.label:         Organization
 
         add_entity: Add task
+        assign_entity: Assign task
         saved_message: Task saved
 
         user_tasks_section: Tasks

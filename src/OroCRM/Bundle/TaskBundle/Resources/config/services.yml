@@ -24,3 +24,10 @@ services:
         class: %orocrm_task.task.activity.manager.class%
         arguments:
             - @oro_activity.manager
+
+    orocrm_task.label_provider.action_button:
+        parent: oro_ui.label_provider.action_button.abstract
+        arguments:
+            - # labels
+                '': { label: orocrm.task.add_entity }
+                '%oro_user.entity.class%': { label: orocrm.task.assign_entity }
