@@ -3,7 +3,7 @@
     {{ oro_widget_render({
         'widgetType': 'block',
         'url': path('orocrm_task_user_tasks', { userId: entity.id }),
-        'title': 'orocrm.task.entity_plural_label'|trans
+        'title': 'orocrm.task.user_tasks'|trans
     }) }}
 {% endset %}
 {{ UI.scrollSubblock(null, [widgetContent]) }}
