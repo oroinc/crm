@@ -76,6 +76,11 @@ class OroCRMTaskBundle implements
         $taskTable->dropColumn('related_contact_id');
         $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('relatedContact'));
 
+        // reporter
+        $taskTable->removeForeignKey('fk_orocrm_task_reporter_id');
+        $taskTable->dropColumn('reporter_id');
+        $queries->addPostQuery($this->getDropEntityConfigManyToOneRelationQuery('reporter'));
+
         // make updatedAt NOT NULL
         $taskTable->getColumn('updatedAt')->setOptions(['notnull' => true]);
     }
@@ -112,15 +117,9 @@ class OroCRMTaskBundle implements
     protected function getFillUserActivityQuery()
     {
         $sql = 'INSERT INTO %s (task_id, user_id)'
-            . ' SELECT DISTINCT id, user_id FROM ('
-            . ' SELECT id, owner_id as user_id'
+            . ' SELECT id, owner_id'
             . ' FROM orocrm_task'
-            . ' WHERE owner_id IS NOT NULL'
-            . ' UNION'
-            . ' SELECT id, reporter_id as user_id'
-            . ' FROM orocrm_task'
-            . ' WHERE reporter_id IS NOT NULL'
-            . ') as subq';
+            . ' WHERE owner_id IS NOT NULL';
 
         return sprintf($sql, $this->getAssociationTableName('oro_user'));
     }

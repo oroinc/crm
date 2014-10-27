@@ -80,26 +80,6 @@ class TaskController extends Controller
             $task->setTaskPriority($defaultPriority);
         }
 
-        // set predefined assignedTo
-        $entityClass = $this->getRequest()->get('entityClass');
-        if ($entityClass) {
-            $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName($entityClass);
-            $entityId    = $this->getRequest()->get('entityId');
-            if ($entityId && $entityClass === $this->container->getParameter('oro_user.entity.class')) {
-                $assignedTo = $this->getDoctrine()->getRepository($entityClass)->find($entityId);
-                if ($assignedTo) {
-                    $task->setOwner($assignedTo);
-                } else {
-                    throw new NotFoundHttpException(sprintf('User with ID %s is not found', $entityId));
-                }
-            }
-        }
-
-        $reporter = $this->getCurrentUser();
-        if ($reporter) {
-            $task->setReporter($reporter);
-        }
-
         $formAction = $this->get('oro_entity.routing_helper')
             ->generateUrlByRequest('orocrm_task_create', $this->getRequest());
 
@@ -170,6 +150,26 @@ class TaskController extends Controller
     public function infoAction(Task $entity)
     {
         return array('entity' => $entity);
+    }
+
+    /**
+     * @Route("/user/{userId}", name="orocrm_task_user_tasks", requirements={"userId"="\d+"})
+     * @AclAncestor("orocrm_call_view")
+     * @Template
+     */
+    public function userTasksAction($userId)
+    {
+        return ['userId' => $userId];
+    }
+
+    /**
+     * @Route("/my", name="orocrm_task_my_tasks")
+     * @AclAncestor("orocrm_call_view")
+     * @Template
+     */
+    public function myTasksAction()
+    {
+        return [];
     }
 
     /**

@@ -50,7 +50,6 @@ class TaskControllerACLTest extends WebTestCase
             'dueDate' => '2014-03-04T20:00:00+0000',
             'taskPriority' => 'high',
             'owner' => '1',
-            'reporter' => '1'
         ];
 
         $this->client->request(

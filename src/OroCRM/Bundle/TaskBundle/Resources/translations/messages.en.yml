@@ -2,6 +2,8 @@ orocrm:
     task:
         menu:
             task_list.description:  List of tasks
+            my_tasks: My Tasks
+
         #
         # OroCRM/Bundle/TaskBundle/Entity/Task
         #
@@ -14,13 +16,14 @@ orocrm:
         workflow_step.label:        Status
         task_priority.label:        Priority
         owner.label:                Assigned To
-        reporter.label:             Reporter
         id.label:                   Id
         workflow_item.label:        Workflow item
         organization.label:         Organization
 
         add_entity: Add task
+        add_entity.title: Add a task related to this entity
         assign_entity: Assign task
+        assign_entity.title: Create a task for this user
         saved_message: Task saved
 
         user_tasks_section: Tasks
