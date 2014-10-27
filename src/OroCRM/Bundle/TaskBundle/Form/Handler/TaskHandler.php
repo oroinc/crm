@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Form\Handler;
 
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -59,22 +60,33 @@ class TaskHandler
      */
     public function process(Task $entity)
     {
+        $action            = $this->entityRoutingHelper->getAction($this->request);
+        $targetEntityClass = $this->entityRoutingHelper->getEntityClassName($this->request);
+        $targetEntityId    = $this->entityRoutingHelper->getEntityId($this->request);
+
+        if ($targetEntityClass
+            && !$entity->getId()
+            && $this->request->getMethod() === 'GET'
+            && $action === 'assign'
+            && is_a($targetEntityClass, 'Oro\Bundle\UserBundle\Entity\User', true)
+        ) {
+            $entity->setOwner(
+                $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId)
+            );
+            FormUtils::replaceField($this->form, 'owner', ['read_only' => true]);
+        }
+
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                $targetEntityClass = $this->request->get('entityClass');
-                if ($targetEntityClass) {
-                    $targetEntityClass = $this->entityRoutingHelper->decodeClassName($targetEntityClass);
-                    if (!is_a($targetEntityClass, 'Oro\Bundle\UserBundle\Entity\User', true)) {
-                        $targetEntityId = $this->request->get('entityId');
-                        $this->activityManager->addActivityTarget(
-                            $entity,
-                            $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
-                        );
-                    }
+                if ($targetEntityClass && $action === 'activity') {
+                    $this->activityManager->addActivityTarget(
+                        $entity,
+                        $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)
+                    );
                 }
                 $this->onSuccess($entity);
 

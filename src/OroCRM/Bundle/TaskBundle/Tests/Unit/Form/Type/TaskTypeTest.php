@@ -27,7 +27,7 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(7))
+        $builder->expects($this->exactly(6))
             ->method('add')
             ->will($this->returnSelf());
 
@@ -51,7 +51,6 @@ class TaskTypeTest extends \PHPUnit_Framework_TestCase
                     'dueDate',
                     'taskPriority',
                     'owner',
-                    'reporter',
                 ]
             ]
         ];

@@ -87,32 +87,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $entity->getOwnerId());
     }
 
-    public function testSetReporter()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getReporter());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $entity->setReporter($user);
-
-        $this->assertSame($user, $entity->getReporter());
-    }
-
-    public function testGetReporterId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getReporterId());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setReporter($user);
-
-        $this->assertEquals($expected, $entity->getReporterId());
-    }
-
     public function testDueDateExpired()
     {
         $entity = new Task();

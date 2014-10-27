@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Unit\Form\Handler;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -9,7 +10,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
-use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler;
@@ -44,7 +44,7 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->request             = new Request();
-        $this->om                 = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
+        $this->om                  = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectManager')
             ->disableOriginalConstructor()
             ->getMock();
         $this->activityManager     = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
@@ -61,6 +61,88 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             $this->om,
             $this->activityManager,
             $this->entityRoutingHelper
+        );
+    }
+
+    public function testProcessGetRequestAssignNotUser()
+    {
+        $targetEntity = new TestTarget(123);
+        $action       = 'assign';
+
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getAction')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($action));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityClassName')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue(get_class($targetEntity)));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityId')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($targetEntity->getId()));
+        $this->entityRoutingHelper->expects($this->never())
+            ->method('getEntity');
+
+        $this->form->expects($this->never())
+            ->method('submit');
+
+        $this->assertFalse(
+            $this->handler->process($this->entity)
+        );
+    }
+
+    public function testProcessGetRequestAssignToUser()
+    {
+        $targetEntity = new User();
+        $this->setId($targetEntity, 123);
+        $action = 'assign';
+
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getAction')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($action));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityClassName')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue(get_class($targetEntity)));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityId')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($targetEntity->getId()));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntity')
+            ->with(get_class($targetEntity), $targetEntity->getId())
+            ->will($this->returnValue($targetEntity));
+
+        $ownerField = $this->getMock('Symfony\Component\Form\FormInterface');
+        $ownerFieldConfig = $this->getMock('Symfony\Component\Form\FormConfigInterface');
+        $ownerFieldType = $this->getMock('Symfony\Component\Form\ResolvedFormTypeInterface');
+        $this->form->expects($this->once())
+            ->method('get')
+            ->with('owner')
+            ->will($this->returnValue($ownerField));
+        $ownerField->expects($this->once())
+            ->method('getConfig')
+            ->will($this->returnValue($ownerFieldConfig));
+        $ownerFieldConfig->expects($this->once())
+            ->method('getOptions')
+            ->will($this->returnValue([]));
+        $ownerFieldConfig->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue($ownerFieldType));
+        $ownerFieldType->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('some_type'));
+        $this->form->expects($this->once())
+            ->method('add')
+            ->with('owner', 'some_type', ['read_only' => true]);
+
+        $this->form->expects($this->never())
+            ->method('submit');
+
+        $this->assertFalse(
+            $this->handler->process($this->entity)
         );
     }
 
@@ -111,6 +193,19 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->request->setMethod($method);
 
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getAction')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue(null));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityClassName')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue(null));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityId')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue(null));
+
         $this->form->expects($this->once())
             ->method('setData')
             ->with($this->identicalTo($this->entity));
@@ -139,9 +234,7 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
     public function testProcessValidDataWithTargetEntity($method)
     {
         $targetEntity = new TestTarget(123);
-
-        $this->request->query->set('entityClass', get_class($targetEntity));
-        $this->request->query->set('entityId', $targetEntity->getId());
+        $action       = 'assign';
 
         $this->request->setMethod($method);
 
@@ -156,17 +249,22 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->with(get_class($targetEntity))
+            ->method('getAction')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($action));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityClassName')
+            ->with($this->identicalTo($this->request))
             ->will($this->returnValue(get_class($targetEntity)));
         $this->entityRoutingHelper->expects($this->once())
-            ->method('getEntityReference')
-            ->with(get_class($targetEntity), $targetEntity->getId())
-            ->will($this->returnValue($targetEntity));
+            ->method('getEntityId')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($targetEntity->getId()));
+        $this->entityRoutingHelper->expects($this->never())
+            ->method('getEntityReference');
 
-        $this->activityManager->expects($this->at(0))
-            ->method('addActivityTarget')
-            ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
+        $this->activityManager->expects($this->never())
+            ->method('addActivityTarget');
 
         $this->om->expects($this->once())
             ->method('persist')
@@ -184,12 +282,10 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $method
      */
-    public function testProcessValidDataWithUserAsTargetEntity($method)
+    public function testProcessValidDataWithTargetEntityActivity($method)
     {
-        $targetEntity = new User();
-
-        $this->request->query->set('entityClass', get_class($targetEntity));
-        $this->request->query->set('entityId', $targetEntity->getId());
+        $targetEntity = new TestTarget(123);
+        $action       = 'activity';
 
         $this->request->setMethod($method);
 
@@ -204,14 +300,25 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->entityRoutingHelper->expects($this->once())
-            ->method('decodeClassName')
-            ->with(get_class($targetEntity))
+            ->method('getAction')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($action));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityClassName')
+            ->with($this->identicalTo($this->request))
             ->will($this->returnValue(get_class($targetEntity)));
-        $this->entityRoutingHelper->expects($this->never())
-            ->method('getEntityReference');
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityId')
+            ->with($this->identicalTo($this->request))
+            ->will($this->returnValue($targetEntity->getId()));
+        $this->entityRoutingHelper->expects($this->once())
+            ->method('getEntityReference')
+            ->with(get_class($targetEntity), $targetEntity->getId())
+            ->will($this->returnValue($targetEntity));
 
-        $this->activityManager->expects($this->never())
-            ->method('addActivityTarget');
+        $this->activityManager->expects($this->once())
+            ->method('addActivityTarget')
+            ->with($this->identicalTo($this->entity), $this->identicalTo($targetEntity));
 
         $this->om->expects($this->once())
             ->method('persist')
@@ -230,5 +337,18 @@ class TaskHandlerTest extends \PHPUnit_Framework_TestCase
             array('POST'),
             array('PUT')
         );
+    }
+
+    /**
+     * @param mixed $obj
+     * @param mixed $val
+     */
+    protected function setId($obj, $val)
+    {
+        $class = new \ReflectionClass($obj);
+        $prop  = $class->getProperty('id');
+        $prop->setAccessible(true);
+
+        $prop->setValue($obj, $val);
     }
 }

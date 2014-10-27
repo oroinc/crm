@@ -61,14 +61,6 @@ class TaskType extends AbstractType
                 ]
             )
             ->add(
-                'reporter',
-                'oro_user_select',
-                [
-                    'required' => true,
-                    'label' => 'orocrm.task.reporter.label'
-                ]
-            )
-            ->add(
                 'reminders',
                 'oro_reminder_collection',
                 [

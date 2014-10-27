@@ -1,33 +1,29 @@
 parameters:
     orocrm_task.entity.class:                       OroCRM\Bundle\TaskBundle\Entity\Task
+    orocrm_task.listener.datagrid.user_tasks.class: OroCRM\Bundle\TaskBundle\EventListener\Datagrid\UserTaskGridListener
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
-    orocrm_task.listener.entity_listener.class:     OroCRM\Bundle\TaskBundle\EventListener\EntityListener
-    orocrm_task.task.activity.manager.class:        OroCRM\Bundle\TaskBundle\Entity\Manager\TaskActivityManager
 
 services:
+    orocrm_task.listener.datagrid.user_tasks:
+        class: %orocrm_task.listener.datagrid.user_tasks.class%
+        arguments:
+            - @oro_security.security_facade
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.user-tasks-grid, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-tasks-grid, method: onBuildAfter }
+
     orocrm_task.listener.datagrid.activity:
         class: %orocrm_task.listener.datagrid.activity.class%
         arguments:
             - @oro_activity.manager
             - @oro_entity.routing_helper
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-task-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-tasks-grid, method: onBuildAfter }
 
-    orocrm_task.listener.entity_listener:
-        class: %orocrm_task.listener.entity_listener.class%
+    orocrm_task.widget_provider.actions.assign_task:
+        parent: oro_ui.widget_provider.action_button.abstract
         arguments:
-            - @orocrm_task.task.activity.manager
+            - orocrm_assign_task_button
+            - orocrm_assign_task_link
         tags:
-            - { name: doctrine.event_listener, event: onFlush }
-
-    orocrm_task.task.activity.manager:
-        class: %orocrm_task.task.activity.manager.class%
-        arguments:
-            - @oro_activity.manager
-
-    orocrm_task.label_provider.action_button:
-        parent: oro_ui.label_provider.action_button.abstract
-        arguments:
-            - # labels
-                '': { label: orocrm.task.add_entity }
-                '%oro_user.entity.class%': { label: orocrm.task.assign_entity }
+            - { name: oro_ui.view_action_provider, group: activity }

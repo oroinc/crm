@@ -24,7 +24,6 @@ class TaskControllersTest extends WebTestCase
         $form['orocrm_task[description]'] = 'New description';
         $form['orocrm_task[dueDate]'] = '2014-03-04T20:00:00+0000';
         $form['orocrm_task[owner]'] = '1';
-        $form['orocrm_task[reporter]'] = '1';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -41,7 +40,7 @@ class TaskControllersTest extends WebTestCase
     {
         $response = $this->client->requestGrid(
             'tasks-grid',
-            array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
+            array('tasks-grid[_filter][ownerName][value]' => 'John Doe')
         );
 
         $result = $this->getJsonResponseContent($response, 200);
@@ -71,7 +70,7 @@ class TaskControllersTest extends WebTestCase
     {
         $response = $this->client->requestGrid(
             'tasks-grid',
-            array('tasks-grid[_filter][reporterName][value]' => 'John Doe')
+            array('tasks-grid[_filter][ownerName][value]' => 'John Doe')
         );
 
         $result = $this->getJsonResponseContent($response, 200);
