@@ -135,6 +135,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     task-account-tasks-grid:
         extends: tasks-grid
@@ -145,6 +147,8 @@ datagrid:
                         - task.relatedAccount = :accountId
             bind_parameters:
                 - accountId
+        options:
+            entity_pagination: false
 
     task-contact-tasks-grid:
         extends: tasks-grid
@@ -155,6 +159,8 @@ datagrid:
                         - task.relatedContact = :contactId
             bind_parameters:
                 - contactId
+        options:
+            entity_pagination: false
 
     task-user-tasks-grid:
         extends: tasks-grid
@@ -165,3 +171,5 @@ datagrid:
                         - task.owner = :userId
             bind_parameters:
                 - userId
+        options:
+            entity_pagination: false

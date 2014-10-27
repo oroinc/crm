@@ -107,6 +107,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     # Segment based grids mixins:
     orocrm-marketing-list-items-base-mixin:

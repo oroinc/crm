@@ -173,6 +173,7 @@ datagrid:
         options:
             entityHint: account
             export: true
+            entity_pagination: true
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%

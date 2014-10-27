@@ -86,3 +86,5 @@ datagrid:
                 acl_resource: orocrm_channel_delete
                 icon:         trash
                 label:        oro.grid.action.delete
+        options:
+            entity_pagination: true
