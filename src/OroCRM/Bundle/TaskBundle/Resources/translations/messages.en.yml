@@ -21,9 +21,9 @@ orocrm:
         organization.label:         Organization
 
         add_entity: Add task
-        add_entity.title: Add a task related to this entity
+        add_entity.title: Create a task related to this record
         assign_entity: Assign task
-        assign_entity.title: Create a task for this user
+        assign_entity.title: Create a task and assign it to this user
         saved_message: Task saved
 
         user_tasks_section: Tasks
