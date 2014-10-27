@@ -15,7 +15,6 @@ orocrm:
 
     call:
         menu:
-            activities_tab.label: Activities
             call_list.description: List of calls
             shortcut_call_list.label: Show calls list
             shortcut_call_list.description: List of calls
