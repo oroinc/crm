@@ -66,6 +66,9 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->listener->isApplicable($gridName, $parametersBag));
     }
 
+    /**
+     * @return array
+     */
     public function applicableDataProvider()
     {
         return [
@@ -131,6 +134,10 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    /**
+     * @param int $id
+     * @param object $entity
+     */
     protected function assertEntityFind($id, $entity)
     {
         $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')

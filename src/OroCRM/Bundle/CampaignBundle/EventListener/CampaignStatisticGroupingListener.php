@@ -7,7 +7,7 @@ use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\CampaignBundle\Model\GroupByHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
-class CampaignStatisticFixDatagridListener
+class CampaignStatisticGroupingListener
 {
     const PATH_GROUPBY = '[source][query][groupBy]';
     const PATH_NAME = '[name]';
@@ -28,6 +28,7 @@ class CampaignStatisticFixDatagridListener
 
     /**
      * @param MarketingListHelper $marketingListHelper
+     * @param GroupByHelper $groupByHelper
      */
     public function __construct(MarketingListHelper $marketingListHelper, GroupByHelper $groupByHelper)
     {

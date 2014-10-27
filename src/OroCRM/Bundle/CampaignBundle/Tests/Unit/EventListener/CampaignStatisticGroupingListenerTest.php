@@ -5,13 +5,13 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticFixDatagridListener;
+use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
-class CampaignStatisticFixDatagridListenerTest extends \PHPUnit_Framework_TestCase
+class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CampaignStatisticFixDatagridListener
+     * @var CampaignStatisticGroupingListener
      */
     protected $listener;
 
@@ -36,7 +36,7 @@ class CampaignStatisticFixDatagridListenerTest extends \PHPUnit_Framework_TestCa
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new CampaignStatisticFixDatagridListener($this->marketingListHelper, $this->groupByHelper);
+        $this->listener = new CampaignStatisticGroupingListener($this->marketingListHelper, $this->groupByHelper);
     }
 
     /**
@@ -66,6 +66,9 @@ class CampaignStatisticFixDatagridListenerTest extends \PHPUnit_Framework_TestCa
         $this->assertEquals($expected, $this->listener->isApplicable($gridName, $parametersBag));
     }
 
+    /**
+     * @return array
+     */
     public function applicableDataProvider()
     {
         return [
@@ -112,7 +115,7 @@ class CampaignStatisticFixDatagridListenerTest extends \PHPUnit_Framework_TestCa
 
         $this->listener->onPreBuild($event);
 
-        $this->assertEquals($expected, $config->offsetGetByPath(CampaignStatisticFixDatagridListener::PATH_GROUPBY));
+        $this->assertEquals($expected, $config->offsetGetByPath(CampaignStatisticGroupingListener::PATH_GROUPBY));
     }
 
     public function testOnPreBuildNotApplicable()
