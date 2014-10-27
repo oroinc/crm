@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_22;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_15;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
+class OroCRMSalesBundle implements Migration, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -32,13 +31,15 @@ class OroCrmMagentoBundle implements Migration, ActivityExtensionAwareInterface
     }
 
     /**
-     * Enables Email activity for Customer entity
+     * Enables Email activity for Lead and Opportunity entities
      *
      * @param Schema            $schema
      * @param ActivityExtension $activityExtension
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_opportunity');
+        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_b2bcustomer');
     }
 }
