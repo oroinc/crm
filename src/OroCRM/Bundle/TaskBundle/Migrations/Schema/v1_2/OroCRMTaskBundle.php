@@ -3,10 +3,13 @@
 namespace OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_2;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\Table;
 
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
@@ -64,6 +67,7 @@ class OroCRMTaskBundle implements
         $queries->addPreQuery('UPDATE orocrm_task SET updatedAt = createdAt WHERE updatedAt IS NULL');
 
         $taskTable = $schema->getTable('orocrm_task');
+        $this->enableDataAudit($taskTable);
 
         // relation with account
         $taskTable->removeForeignKey('FK_814DEE3F11A6570A');
@@ -82,6 +86,45 @@ class OroCRMTaskBundle implements
 
         // make updatedAt NOT NULL
         $taskTable->getColumn('updatedAt')->setOptions(['notnull' => true]);
+    }
+
+    /**
+     * @param Table $taskTable
+     */
+    protected function enableDataAudit(Table $taskTable)
+    {
+        $taskTable->addOption(OroOptions::KEY, ['dataaudit' => ['auditable' => true]]);
+        $taskTable->getColumn('subject')
+            ->setOptions([OroOptions::KEY => ['dataaudit' => ['auditable' => true]]]);
+        $taskTable->getColumn('description')
+            ->setOptions([OroOptions::KEY => ['dataaudit' => ['auditable' => true]]]);
+        $taskTable->getColumn('due_date')
+            ->setOptions(
+                [
+                    OroOptions::KEY => [
+                        ExtendOptionsManager::FIELD_NAME_OPTION => 'dueDate',
+                        'dataaudit'                             => ['auditable' => true]
+                    ]
+                ]
+            );
+        $taskTable->getColumn('task_priority_name')
+            ->setOptions(
+                [
+                    OroOptions::KEY => [
+                        ExtendOptionsManager::FIELD_NAME_OPTION => 'taskPriority',
+                        'dataaudit'                             => ['auditable' => true]
+                    ]
+                ]
+            );
+        $taskTable->getColumn('owner_id')
+            ->setOptions(
+                [
+                    OroOptions::KEY => [
+                        ExtendOptionsManager::FIELD_NAME_OPTION => 'owner',
+                        'dataaudit'                             => ['auditable' => true]
+                    ]
+                ]
+            );
     }
 
     /**
@@ -148,7 +191,7 @@ class OroCRMTaskBundle implements
             . ' FROM oro_entity_config AS oec'
             . ' WHERE oec.class_name = :class'
             . ' ))';
-        $dropFieldSql = 'DELETE FROM oro_entity_config_field'
+        $dropFieldSql      = 'DELETE FROM oro_entity_config_field'
             . ' WHERE field_name = :field'
             . ' AND entity_id IN ('
             . ' SELECT id'
