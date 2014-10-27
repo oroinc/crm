@@ -14,7 +14,7 @@ parameters:
     orocrm_campaign.email_transport.provider.class: OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider
     orocrm_campaign.email_campaign.sender.builder.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignSenderBuilder
 
-    orocrm_campaign.listener.email_campaign_statistic_fix.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticFixDatagridListener
+    orocrm_campaign.listener.email_campaign_statistic_groupping.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener
     orocrm_campaign.listener.email_campaign_statistic.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
@@ -125,8 +125,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: 10 }
 
-    orocrm_campaign.listener.email_campaign_statistic_fix:
-        class: %orocrm_campaign.listener.email_campaign_statistic_fix.class%
+    orocrm_campaign.listener.email_campaign_statistic_groupping:
+        class: %orocrm_campaign.listener.email_campaign_statistic_groupping.class%
         arguments:
             - @orocrm_marketing_list.model.helper
             - @orocrm_campaign.group_by_helper
