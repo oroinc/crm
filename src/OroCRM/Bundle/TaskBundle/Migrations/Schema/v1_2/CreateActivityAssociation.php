@@ -36,7 +36,6 @@ class CreateActivityAssociation implements Migration, OrderedMigrationInterface,
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'oro_user');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
     }
