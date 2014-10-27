@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\TaskBundle\Model;
 
+use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\ActivityBundle\Model\ExtendActivity;
 
-class ExtendTask
+class ExtendTask implements ActivityInterface
 {
+    use ExtendActivity;
+
     /**
      * Constructor
      *

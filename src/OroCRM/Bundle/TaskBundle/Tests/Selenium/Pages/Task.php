@@ -22,13 +22,7 @@ class Task extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $prioty;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $account;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $contact;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $assignedTo;
-    /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $reporter;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $reminders;
 

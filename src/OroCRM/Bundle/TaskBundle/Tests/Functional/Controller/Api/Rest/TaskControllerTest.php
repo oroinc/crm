@@ -20,7 +20,6 @@ class TaskControllerTest extends WebTestCase
         'dueDate' => '2014-03-04T20:00:00+0000',
         'taskPriority' => 'high',
         'owner' => 1,
-        'reporter' => 1
     ];
 
     protected function setUp()
@@ -30,9 +29,7 @@ class TaskControllerTest extends WebTestCase
 
     public function testCreate()
     {
-        $request = [
-            'task' => $this->task
-        ];
+        $request = $this->task;
 
         $this->client->request(
             'POST',
@@ -121,7 +118,7 @@ class TaskControllerTest extends WebTestCase
         $this->client->request(
             'PUT',
             $this->getUrl('orocrm_api_put_task', ['id' => $id]),
-            ['task' =>$updatedTask],
+            $updatedTask,
             [],
             $this->generateWsseAuthHeader()
         );

@@ -88,7 +88,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_13';
+        return 'v1_14';
     }
 
     /**
@@ -119,6 +119,9 @@ class OroCRMSalesBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_b2bcustomer');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_lead');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_opportunity');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_sales_b2bcustomer');
         OpportunityAttachment::addOpportunityAttachment($schema, $this->attachmentExtension);
 
         SalesOrganizations::addOrganization($schema);

@@ -1,13 +1,16 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\Migrations\Data\Demo\ORM;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
+use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
 
 class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
 {
@@ -66,11 +69,6 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     );
 
     /**
-     * @var array
-     */
-    protected $entitiesCount;
-
-    /**
      * {@inheritdoc}
      */
     public function getDependencies()
@@ -85,20 +83,40 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     /**
      * {@inheritdoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $om)
+    {
+        $this->persistDemoTasks($om);
+
+        $om->flush();
+    }
+
+    /**
+     * @param ObjectManager $om
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function persistDemoTasks(ObjectManager $om)
     {
         $organization = $this->getReference('default_organization');
+
+        $priorities = $om->getRepository('OroCRMTaskBundle:TaskPriority')->findAll();
+        if (empty($priorities)) {
+            return;
+        }
+        $users = $om->getRepository('OroUserBundle:User')->findAll();
+        if (empty($users)) {
+            return;
+        }
+        $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
+        $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+
         for ($i = 0; $i < self::FIXTURES_COUNT; ++$i) {
-            $reporter = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $assignedTo = $this->getRandomEntity('OroUserBundle:User', $manager);
-            $taskPriority = $this->getRandomEntity('OroCRMTaskBundle:TaskPriority', $manager);
+            /** @var User $assignedTo */
+            $assignedTo = $this->getRandomEntity($users);
+            /** @var TaskPriority $taskPriority */
+            $taskPriority = $this->getRandomEntity($priorities);
 
-            if (!$reporter || !$taskPriority || !$assignedTo) {
-                // If we don't have users and task statuses we cannot load fixture tasks
-                break;
-            }
-
-            if ($manager->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
+            if ($om->getRepository('OroCRMTaskBundle:Task')->findOneBySubject(self::$fixtureSubjects[$i])) {
                 // Task with this title is already exist
                 continue;
             }
@@ -109,65 +127,59 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
             $dueDate = new \DateTime();
             $dueDate->add(new \DateInterval(sprintf('P%dDT%dM', rand(0, 30), rand(0, 1440))));
             $task->setDueDate($dueDate);
-            $task->setReporter($reporter);
             $task->setOwner($assignedTo);
             $task->setTaskPriority($taskPriority);
             $task->setOrganization($organization);
 
-            $contact = $this->getRandomEntity('OroCRMContactBundle:Contact', $manager);
-            if ($contact) {
-                $task->setRelatedContact($contact);
+            $randomPath = rand(1, 10);
+
+            if ($randomPath > 2) {
+                $contact = $this->getRandomEntity($contacts);
+                if ($contact) {
+                    $this->addActivityTarget($task, $contact);
+                }
             }
 
-            $account = $this->getRandomEntity('OroCRMAccountBundle:Account', $manager);
-            if ($account) {
-                $task->setRelatedAccount($account);
+            if ($randomPath > 3) {
+                $account = $this->getRandomEntity($accounts);
+                if ($account) {
+                    $this->addActivityTarget($task, $account);
+                }
             }
 
-            $manager->persist($task);
+            if ($randomPath > 4) {
+                $user = $this->getRandomEntity($users);
+                if ($user) {
+                    $this->addActivityTarget($task, $user);
+                }
+            }
+
+            $om->persist($task);
         }
-
-        $manager->flush();
     }
 
     /**
-     * @param string $entityName
-     * @param EntityManager $manager
+     * @param object[] $entities
+     *
      * @return object|null
      */
-    protected function getRandomEntity($entityName, EntityManager $manager)
+    protected function getRandomEntity($entities)
     {
-        $count = $this->getEntityCount($entityName, $manager);
-
-        if ($count) {
-            return $manager->createQueryBuilder()
-                ->select('e')
-                ->from($entityName, 'e')
-                ->setFirstResult(rand(0, $count - 1))
-                ->setMaxResults(1)
-                ->orderBy('e.' . $manager->getClassMetadata($entityName)->getSingleIdentifierFieldName())
-                ->getQuery()
-                ->getSingleResult();
+        if (empty($entities)) {
+            return null;
         }
 
-        return null;
+        return $entities[rand(0, count($entities) - 1)];
     }
 
     /**
-     * @param string $entityName
-     * @param EntityManager $manager
-     * @return int
+     * @param Task   $task
+     * @param object $target
      */
-    protected function getEntityCount($entityName, EntityManager $manager)
+    protected function addActivityTarget(Task $task, $target)
     {
-        if (!isset($this->entitiesCount[$entityName])) {
-            $this->entitiesCount[$entityName] = (int)$manager->createQueryBuilder()
-                ->select('COUNT(e)')
-                ->from($entityName, 'e')
-                ->getQuery()
-                ->getSingleScalarResult();
+        if ($task->supportActivityTarget(get_class($target))) {
+            $task->addActivityTarget($target);
         }
-
-        return $this->entitiesCount[$entityName];
     }
 }
