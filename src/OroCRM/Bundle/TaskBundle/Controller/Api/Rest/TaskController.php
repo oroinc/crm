@@ -39,6 +39,18 @@ class TaskController extends RestController implements ClassResourceInterface
      *      nullable=true,
      *      description="Number of items per page. defaults to 10."
      * )
+     * @QueryParam(
+     *     name="createdAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
+     * )
+     * @QueryParam(
+     *     name="updatedAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
+     * )
      * @ApiDoc(
      *      description="Get all task items",
      *      resource=true
@@ -51,7 +63,27 @@ class TaskController extends RestController implements ClassResourceInterface
         $page = (int) $this->getRequest()->get('page', 1);
         $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        return $this->handleGetListRequest($page, $limit);
+        $dateClosure = function ($value) {
+            // datetime value hack due to the fact that some clients pass + encoded as %20 and not %2B,
+            // so it becomes space on symfony side due to parse_str php function in HttpFoundation\Request
+            $value = str_replace(' ', '+', $value);
+
+            // The timezone is ignored when DateTime value specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
+            return new \DateTime($value, new \DateTimeZone('UTC'));
+        };
+
+        $filterParameters = [
+            'createdAt' => [
+                'closure' => $dateClosure,
+            ],
+            'updatedAt' => [
+                'closure' => $dateClosure,
+            ],
+        ];
+
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+
+        return $this->handleGetListRequest($page, $limit, $criteria);
     }
 
     /**
