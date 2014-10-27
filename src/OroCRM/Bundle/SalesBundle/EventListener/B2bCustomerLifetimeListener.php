@@ -88,7 +88,7 @@ class B2bCustomerLifetimeListener
      */
     public function postFlush(PostFlushEventArgs $args)
     {
-        if ($this->isInProgress) {
+        if ($this->isInProgress || empty($this->queued)) {
             return;
         }
 
