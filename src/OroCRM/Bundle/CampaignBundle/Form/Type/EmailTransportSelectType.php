@@ -6,6 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
+use OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
 
 class EmailTransportSelectType extends AbstractType
 {
@@ -42,7 +43,9 @@ class EmailTransportSelectType extends AbstractType
         $transports = $this->emailTransportProvider->getTransports();
         $choices = array();
         foreach ($transports as $transport) {
-            $choices[$transport->getName()] = $transport->getLabel();
+            if ($this->isVisibleInForm($transport)) {
+                $choices[$transport->getName()] = $transport->getLabel();
+            }
         }
 
         return $choices;
@@ -62,5 +65,18 @@ class EmailTransportSelectType extends AbstractType
     public function getName()
     {
         return 'orocrm_campaign_email_transport_select';
+    }
+
+    /**
+     * @param $transport
+     * @return bool
+     */
+    protected function isVisibleInForm($transport)
+    {
+        if ($transport instanceof VisibilityTransportInterface && !$transport->isVisibleInForm()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }
