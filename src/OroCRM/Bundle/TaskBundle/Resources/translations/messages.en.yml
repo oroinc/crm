@@ -20,10 +20,12 @@ orocrm:
         workflow_item.label:        Workflow item
         organization.label:         Organization
 
+        user_tasks: User Tasks
         add_entity: Add task
-        add_entity.title: Create a task related to this record
+        add_entity.title: Add a task to this record
         assign_entity: Assign task
-        assign_entity.title: Create a task and assign it to this user
+        assign_entity.title: Assign a task to this user
+        assign_entity.widget_title: Assign task to %username%
         saved_message: Task saved
 
         user_tasks_section: Tasks
