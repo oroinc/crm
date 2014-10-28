@@ -122,6 +122,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     widget-base-tasks-grid:
         source:
@@ -204,3 +206,5 @@ datagrid:
 
     user-tasks-grid:
         extends: tasks-grid
+        options:
+            entity_pagination: false

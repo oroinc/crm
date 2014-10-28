@@ -78,6 +78,7 @@ datagrid:
         options:
             entityHint: calls
             export: true
+            entity_pagination: true
 
     widget-base-calls-grid:
         source:

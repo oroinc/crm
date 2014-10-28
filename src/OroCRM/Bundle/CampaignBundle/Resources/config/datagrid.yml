@@ -90,6 +90,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     campaign-tracking-total-report-grid:
         source:
@@ -363,6 +365,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     orocrm-email-campaign-marketing-list-items-mixin:
         extends: orocrm-marketing-list-items-base-unsubscribe-mixin
