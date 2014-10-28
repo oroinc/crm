@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Model\Condition;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
+use Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException;
 use Oro\Bundle\WorkflowBundle\Model\Condition\AbstractCondition;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
@@ -68,7 +69,7 @@ class HasContactInformation extends AbstractCondition
         $type = $this->contextAccessor->getValue($context, $this->type);
 
         if (!$marketingList instanceof MarketingList) {
-            throw new ConditionException(
+            throw new InvalidParameterException(
                 'Option "marketing_list" must be instance of "OroCRM\Bundle\MarketingListBundle\Entity\MarketingList"'
             );
         }
@@ -94,5 +95,7 @@ class HasContactInformation extends AbstractCondition
         } elseif (isset($options[1])) {
             $this->type = $options[1];
         }
+
+        return $this;
     }
 }
