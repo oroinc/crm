@@ -73,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v1_10';
     }
 
     /**
@@ -152,6 +152,8 @@ class OroCRMContactBundleInstaller implements
         $table->addIndex(['created_by_user_id'], 'IDX_403263ED7D182D95', []);
         $table->addIndex(['updated_by_user_id'], 'IDX_403263ED2793CC5E', []);
         $table->addIndex(['last_name', 'first_name'], 'contact_name_idx', []);
+        $table->addIndex(['createdAt'], 'contact_created_at_idx', []);
+        $table->addIndex(['updatedAt'], 'contact_updated_at_idx', []);
     }
 
     /**
