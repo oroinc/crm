@@ -16,6 +16,15 @@ class Call extends AbstractPageEntity
         parent::__construct($testCase, $redirect);
     }
 
+    public function edit()
+    {
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Call']")->click();
+        $this->waitPageToLoad();
+        $this->waitForAjax();
+
+        return $this;
+    }
+
     /**
      * @param string $call
      * @return $this
@@ -35,9 +44,11 @@ class Call extends AbstractPageEntity
      */
     public function setPhoneNumber($phone)
     {
-        $this->$phone = $this->test->byId('orocrm_call_form_phoneNumber');
-        $this->$phone->clear();
-        $this->$phone->value($phone);
+        $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_call_form_phoneNumber')]/a")->click();
+        $this->waitForAjax();
+        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($phone);
+        $this->waitForAjax();
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$phone}')]")->click();
 
         return $this;
     }

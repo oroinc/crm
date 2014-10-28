@@ -32,5 +32,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_call_index: ~
+    orocrm_call_view: '%%subject%%'
     orocrm_call_update: '%%subject%% - Edit'
     orocrm_call_create: 'Log Call'
