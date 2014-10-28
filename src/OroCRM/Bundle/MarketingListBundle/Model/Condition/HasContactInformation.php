@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Model\Condition;
 
+use Symfony\Component\PropertyAccess\PropertyPath;
+
 use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
 use Oro\Bundle\WorkflowBundle\Model\Condition\AbstractCondition;
 use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
@@ -38,12 +40,12 @@ class HasContactInformation extends AbstractCondition
     protected $fieldsProvider;
 
     /**
-     * @var MarketingList
+     * @var PropertyPath|MarketingList
      */
     protected $marketingList;
 
     /**
-     * @var string
+     * @var PropertyPath|string
      */
     protected $type;
 
