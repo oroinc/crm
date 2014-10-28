@@ -19,16 +19,6 @@
             'entity_label': 'orocrm.account.entity_label'|trans
         }) }}
     {% endif %}
-
-    {% set html %}
-        {% placeholder orocrm_account_action_dropdown with {'entity': entity} %}
-    {% endset %}
-
-    {{ UI.dropdownButton({
-        'label': 'orocrm.account.account_actions'|trans,
-        'aCss': 'pull-right',
-        'html': html
-    }) }}
 {% endblock navButtons %}
 
 {% block pageHeader %}

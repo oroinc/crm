@@ -4,7 +4,7 @@ oro_menu_config:
             label: 'orocrm.campaign.menu.marketing_tab.label'
             uri: '#'
             extras:
-                position: 30
+                position: 40
                 icon: icon-sitemap
         campaigns_list:
             label: 'orocrm.campaign.entity_plural_label'

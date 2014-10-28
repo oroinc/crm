@@ -12,7 +12,6 @@ orocrm:
         menu:
             contact_group_list.description:         List of contact groups
             contact_list.description:               List of contacts
-            customers_tab.label:                    Customers
             shortcut_list_contacts.description:     List of contacts
             shortcut_list_contacts.label:           Show contacts list
             shortcut_new_contact.description:       Create new contact instance
