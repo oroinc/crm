@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CampaignBundle\Provider;
 
 use OroCRM\Bundle\CampaignBundle\Transport\TransportInterface;
+use OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface;
 
 class EmailTransportProvider
 {
@@ -47,5 +48,19 @@ class EmailTransportProvider
     public function hasTransport($name)
     {
         return isset($this->transports[$name]);
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function isVisibleInForm($name)
+    {
+        $transport = $this->getTransportByName($name);
+        if ($transport instanceof VisibilityTransportInterface && !$transport->isVisibleInForm()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

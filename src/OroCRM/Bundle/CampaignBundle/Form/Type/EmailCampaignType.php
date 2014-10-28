@@ -91,15 +91,6 @@ class EmailCampaignType extends AbstractType
                 ['label' => 'orocrm.campaign.emailcampaign.marketing_list.label', 'required' => true]
             )
             ->add(
-                'transport',
-                'orocrm_campaign_email_transport_select',
-                [
-                    'label'    => 'orocrm.campaign.emailcampaign.transport.label',
-                    'required' => true,
-                    'mapped'   => false
-                ]
-            )
-            ->add(
                 'description',
                 'textarea',
                 [

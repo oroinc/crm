@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\EventListener;
 
+use OroCRM\Bundle\CampaignBundle\Form\Type\EmailTransportSelectType;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormEvents;
 use OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener;
 
@@ -77,12 +79,38 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $transport->expects($this->once())
             ->method('getSettingsFormType')
             ->will($this->returnValue('test_type'));
+
+        $formOptionsResolver = $this->getMockBuilder('Symfony\Component\OptionsResolver\OptionsResolver')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formType = $this->getMockBuilder('Symfony\Component\Form\ResolvedFormType')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formType->expects($this->once())
+            ->method('getOptionsResolver')
+            ->will($this->returnValue($formOptionsResolver));
+
+        $formConfig = $this->getMockBuilder('Symfony\Component\Form\FormBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $formConfig->expects($this->once())
+            ->method('getType')
+            ->will($this->returnValue($formType));
+        $formConfig->expects($this->once())
+            ->method('getOptions')
+            ->will($this->returnValue([]));
+
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
-        $form->expects($this->once())
-            ->method('add')
-            ->with('transportSettings', 'test_type', ['required' => true]);
+        $form->expects($this->exactly(2))
+            ->method('add');
+        $form->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue($formConfig));
+        $form->expects($this->exactly(2))
+            ->method('get')
+            ->will($this->returnValue($form));
 
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
             ->disableOriginalConstructor()
@@ -228,9 +256,8 @@ class TransportSettingsListenerTest extends \PHPUnit_Framework_TestCase
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
-        $form->expects($this->once())
-            ->method('add')
-            ->with('transportSettings', 'test_type', ['required' => true]);
+        $form->expects($this->exactly(2))
+            ->method('add');
 
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')
             ->disableOriginalConstructor()
