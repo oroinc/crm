@@ -2,25 +2,19 @@
 
 namespace OroCRM\Bundle\CampaignBundle\EventListener;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
+use OroCRM\Bundle\CampaignBundle\Model\GroupByHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
-class CampaignStatisticDatagridListener
+class CampaignStatisticGroupingListener
 {
+    const PATH_GROUPBY = '[source][query][groupBy]';
     const PATH_NAME = '[name]';
-    const PATH_DATAGRID_WHERE = '[source][query][where]';
+    const PATH_SELECT = '[source][query][select]';
 
-    const MIXIN_SENT_NAME = 'orocrm-email-campaign-marketing-list-sent-items-mixin';
-    const MIXIN_UNSENT_NAME = 'orocrm-email-campaign-marketing-list-unsent-items-mixin';
-
-    /**
-     * @var ManagerRegistry
-     */
-    protected $registry;
+    const MIXIN_NAME = 'orocrm-email-campaign-marketing-list-items-mixin';
+    const MANUAL_MIXIN_NAME = 'orocrm-email-campaign-marketing-list-manual-items-mixin';
 
     /**
      * @var MarketingListHelper
@@ -28,16 +22,23 @@ class CampaignStatisticDatagridListener
     protected $marketingListHelper;
 
     /**
-     * @param MarketingListHelper $marketingListHelper
-     * @param ManagerRegistry $registry
+     * @var GroupByHelper
      */
-    public function __construct(MarketingListHelper $marketingListHelper, ManagerRegistry $registry)
+    protected $groupByHelper;
+
+    /**
+     * @param MarketingListHelper $marketingListHelper
+     * @param GroupByHelper $groupByHelper
+     */
+    public function __construct(MarketingListHelper $marketingListHelper, GroupByHelper $groupByHelper)
     {
         $this->marketingListHelper = $marketingListHelper;
-        $this->registry = $registry;
+        $this->groupByHelper = $groupByHelper;
     }
 
     /**
+     * Add fields that are not mentioned in aggregate functions to GROUP BY.
+     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
@@ -50,18 +51,13 @@ class CampaignStatisticDatagridListener
             return;
         }
 
-        $emailCampaignId = $parameters->get('emailCampaign');
-        $emailCampaign = $this->registry->getRepository('OroCRMCampaignBundle:EmailCampaign')
-            ->find($emailCampaignId);
+        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
+        $groupBy = $config->offsetGetByPath(self::PATH_GROUPBY);
 
-        if ($emailCampaign->isSent()) {
-            $config->offsetUnsetByPath(self::PATH_DATAGRID_WHERE);
-            $mixin = self::MIXIN_SENT_NAME;
-        } else {
-            $mixin = self::MIXIN_UNSENT_NAME;
+        $groupBy = $this->groupByHelper->getGroupByFields($groupBy, $selects);
+        if ($groupBy) {
+            $config->offsetSetByPath(self::PATH_GROUPBY, implode(',', $groupBy));
         }
-
-        $parameters->set(MarketingListItemsListener::MIXIN, $mixin);
     }
 
     /**
