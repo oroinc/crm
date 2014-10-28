@@ -61,7 +61,10 @@ class TransportSettingsListener implements EventSubscriberInterface
 
         $selectedTransport = $this->getSelectedTransport($data->getTransport());
         if ($selectedTransport) {
-            $this->addTransportSettingsForm($selectedTransport, $event->getForm());
+            $form = $event->getForm();
+            $this->addTransportSelector($form);
+            $this->addInvisibleTransport($form, $selectedTransport);
+            $this->addTransportSettingsForm($selectedTransport, $form);
             $data->setTransport($selectedTransport->getName());
         }
         $event->setData($data);
@@ -82,6 +85,7 @@ class TransportSettingsListener implements EventSubscriberInterface
         }
 
         $form = $event->getForm();
+        $this->addTransportSelector($form);
         $form->get('transport')->setData($data->getTransport());
     }
 
@@ -122,11 +126,28 @@ class TransportSettingsListener implements EventSubscriberInterface
     }
 
     /**
+     * @param FormInterface $form
+     */
+    protected function addTransportSelector(FormInterface $form)
+    {
+        $form->add(
+            'transport',
+            'orocrm_campaign_email_transport_select',
+            [
+                'label'    => 'orocrm.campaign.emailcampaign.transport.label',
+                'required' => true,
+                'mapped'   => false
+            ]
+        );
+    }
+
+    /**
      * @param TransportInterface $selectedTransport
      * @param FormInterface $form
      */
     protected function addTransportSettingsForm(TransportInterface $selectedTransport, FormInterface $form)
     {
+
         if ($selectedTransport) {
             $transportSettingsFormType = $selectedTransport->getSettingsFormType();
 
@@ -152,5 +173,28 @@ class TransportSettingsListener implements EventSubscriberInterface
         }
 
         return $selectedTransport;
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param $transport
+     */
+    protected function addInvisibleTransport(FormInterface $form, TransportInterface $transport)
+    {
+        if (!$this->emailTransportProvider->isVisibleInForm($transport->getName())) {
+            if ($form->get('transport')) {
+                $formTypeTransportConfig = $form->get('transport')->getConfig();
+                $formTypeOptionResolver = $formTypeTransportConfig->getType()->getOptionsResolver();
+                $options = $formTypeTransportConfig->getOptions();
+                $choices = [];
+                $choices[$transport->getName()] = $transport->getLabel();
+                if (isset($options['choices'])) {
+                    $choices =  array_merge($options['choices'], $choices);
+                }
+                $formTypeOptionResolver->setDefaults(
+                    ['choices' => $choices]
+                );
+            }
+        }
     }
 }
