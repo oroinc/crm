@@ -61,7 +61,7 @@ class TransportSettingsListener implements EventSubscriberInterface
 
         $selectedTransport = $this->getSelectedTransport($data->getTransport());
         if ($selectedTransport) {
-            $this->addTransportSettingsForm($selectedTransport,  $event->getForm());
+            $this->addTransportSettingsForm($selectedTransport, $event->getForm());
             $data->setTransport($selectedTransport->getName());
         }
         $event->setData($data);
