@@ -15,11 +15,6 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registry;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $doctrineHelper;
 
     /**
@@ -33,15 +28,12 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
-            ->getMock();
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->connector = new EmailCampaignStatisticsConnector(
             $this->marketingListItemConnector,
-            $this->registry,
             $this->doctrineHelper
         );
     }
@@ -54,6 +46,7 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new \stdClass();
         $entityId = 1;
+        $entityClass = get_class($entity);
 
         $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
@@ -86,6 +79,18 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $manager = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
+            ->disableArgumentCloning()
+            ->getMock();
+        $manager->expects($this->once())
+            ->method('getRepository')
+            ->with($entityClass)
+            ->will($this->returnValue($repository));
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityManager')
+            ->with($entityClass)
+            ->will($this->returnValue($manager));
+
         if ($existing) {
             $repository->expects($this->once())
                 ->method('findOneBy')
@@ -97,23 +102,12 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
                 ->with(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem])
                 ->will($this->returnValue(null));
 
-            $manager = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
-                ->disableArgumentCloning()
-                ->getMock();
             $manager->expects($this->once())
                 ->method('persist')
                 ->with($this->isInstanceOf('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'));
-            $this->registry->expects($this->once())
-                ->method('getManagerForClass')
-                ->with(EmailCampaignStatisticsConnector::EMAIL_CAMPAIGN_STATISTICS_ENTITY)
-                ->will($this->returnValue($manager));
         }
 
-        $this->registry->expects($this->once())
-            ->method('getRepository')
-            ->with(EmailCampaignStatisticsConnector::EMAIL_CAMPAIGN_STATISTICS_ENTITY)
-            ->will($this->returnValue($repository));
-
+        $this->connector->setEntityName($entityClass);
         $actualRecord = $this->connector->getStatisticsRecord($emailCampaign, $entity);
 
         if (!$existing) {
@@ -128,6 +122,9 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    /**
+     * @return array
+     */
     public function existingDataProvider()
     {
         return [

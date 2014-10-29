@@ -1,5 +1,6 @@
 parameters:
     orocrm_campaign.entity.class:                  OroCRM\Bundle\CampaignBundle\Entity\Campaign
+    orocrm_campaign.email_campaign_statistics.class: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics
     orocrm_campaign.email_campaign.entity.class:   OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
     orocrm_campaign.campaign.form.type.class:      OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType
     orocrm_campaign.campaign.manager.api.class:    Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -21,6 +22,8 @@ parameters:
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
     orocrm_campaign.form.handler.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler
     orocrm_campaign.group_by_helper.class: OroCRM\Bundle\CampaignBundle\Model\GroupByHelper
+
+    orocrm_campaign.email_campaign.statistics_connector.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -97,12 +100,20 @@ services:
         tags:
             - { name: "orocrm_campaign.email_transport" }
 
+    orocrm_campaign.email_campaign.statistics_connector:
+        class: %orocrm_campaign.email_campaign.statistics_connector.class%
+        arguments:
+            - @orocrm_marketing_list.model.marketing_list_item_connector
+            - @oro_entity.doctrine_helper
+        calls:
+            - [setEntityName, [%orocrm_campaign.email_campaign_statistics.class%]]
+
     orocrm_campaign.email_campaign.sender:
         class: %orocrm_campaign.email_campaign.sender.class%
         arguments:
             - @orocrm_marketing_list.provider.marketing_list
             - @oro_config.global
-            - @orocrm_marketing_list.model.marketing_list_item_connector
+            - @orocrm_campaign.email_campaign.statistics_connector
             - @orocrm_marketing_list.provider.contact_information_fields
             - @doctrine
             - @orocrm_campaign.email_transport.provider
