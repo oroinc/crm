@@ -30,7 +30,7 @@ class EmailTransportProvider
 
     /**
      * @param string $name
-     * @return TransportInterface
+     * @return TransportInterface|VisibilityTransportInterface
      */
     public function getTransportByName($name)
     {
@@ -57,10 +57,6 @@ class EmailTransportProvider
     public function isVisibleInForm($name)
     {
         $transport = $this->getTransportByName($name);
-        if ($transport instanceof VisibilityTransportInterface && !$transport->isVisibleInForm()) {
-            return false;
-        } else {
-            return true;
-        }
+        return !$transport instanceof VisibilityTransportInterface || $transport->isVisibleInForm();
     }
 }
