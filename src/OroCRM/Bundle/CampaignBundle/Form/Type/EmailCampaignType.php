@@ -143,15 +143,25 @@ class EmailCampaignType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
+                $transports = $this->emailTransportProvider->getTransports();
+                $choices = [];
+                foreach ($transports as $transport) {
+                    if ($this->emailTransportProvider->isVisibleInForm($transport->getName())) {
+                        $choices[$transport->getName()] = $transport->getLabel();
+                    }
+                }
+
+                /** @var EmailCampaign $data */
                 $data = $event->getData();
-                if ($data === null) {
-                    return;
+                if ($data) {
+                    $currentTransportName = $data->getTransport();
+                    if (!array_key_exists($currentTransportName, $choices)) {
+                        $currentTransport = $this->emailTransportProvider
+                            ->getTransportByName($currentTransportName);
+                        $choices[$currentTransport->getName()] = $currentTransport->getLabel();
+                    }
                 }
-                if (!$this->emailTransportProvider->isVisibleInForm($data->getTransport())) {
-                    $this->emailTransportProvider
-                        ->getTransportByName($data->getTransport())
-                        ->setVisibility(true);
-                }
+
                 $form = $event->getForm();
                 $form->add(
                     'transport',
@@ -159,7 +169,8 @@ class EmailCampaignType extends AbstractType
                     [
                         'label' => 'orocrm.campaign.emailcampaign.transport.label',
                         'required' => true,
-                        'mapped' => false
+                        'mapped' => false,
+                        'choices' => $choices
                     ]
                 );
             }

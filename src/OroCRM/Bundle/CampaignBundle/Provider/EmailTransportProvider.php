@@ -30,7 +30,7 @@ class EmailTransportProvider
 
     /**
      * @param string $name
-     * @return TransportInterface|VisibilityTransportInterface
+     * @return TransportInterface
      */
     public function getTransportByName($name)
     {
