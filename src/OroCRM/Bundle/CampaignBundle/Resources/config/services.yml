@@ -44,6 +44,8 @@ services:
             - [addSubscriber, [@orocrm_campaign.form.subscriber.transport_settings]]
         tags:
             - { name: form.type, alias: orocrm_email_campaign }
+        arguments:
+            - @orocrm_campaign.email_transport.provider
 
     orocrm_campaign.email_campaign.form:
         class: Symfony\Component\Form\Form

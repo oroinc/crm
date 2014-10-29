@@ -27,31 +27,13 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
     public function testTransportIsVisibleInForm()
     {
         $provider = new EmailTransportProvider();
-        $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface');
-        $transport->expects($this->once())
-            ->method('isVisibleInForm')
-            ->will($this->returnValue(true));
+        $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
         $transport->expects($this->once())
             ->method('getName')
             ->will($this->returnValue('t1'));
 
         $provider->addTransport($transport);
         $this->assertTrue($provider->isVisibleInForm('t1'));
-    }
-
-    public function testTransportIsInvisibleInForm()
-    {
-        $provider = new EmailTransportProvider();
-        $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\VisibilityTransportInterface');
-        $transport->expects($this->once())
-            ->method('isVisibleInForm')
-            ->will($this->returnValue(false));
-        $transport->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue('t1'));
-
-        $provider->addTransport($transport);
-        $this->assertFalse($provider->isVisibleInForm('t1'));
     }
 
     /**

@@ -15,8 +15,13 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\EmailBundle\Form\EventListener\BuildTemplateFormSubscriber')
             ->disableOriginalConstructor()
             ->getMock();
+        $transportProvider = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->type = new EmailCampaignType($subscriber);
+        $this->type = new EmailCampaignType($transportProvider);
+        $this->type->addSubscriber($subscriber);
     }
 
     protected function tearDown()
