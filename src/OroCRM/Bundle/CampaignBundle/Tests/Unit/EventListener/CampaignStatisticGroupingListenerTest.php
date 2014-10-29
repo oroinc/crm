@@ -5,14 +5,13 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
+use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 
-class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
+class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var CampaignStatisticDatagridListener
+     * @var CampaignStatisticGroupingListener
      */
     protected $listener;
 
@@ -24,7 +23,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $registry;
+    protected $groupByHelper;
 
     protected function setUp()
     {
@@ -32,11 +31,12 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this
-            ->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
+        $this->groupByHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\GroupByHelper')
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new CampaignStatisticDatagridListener($this->marketingListHelper, $this->registry);
+        $this->listener = new CampaignStatisticGroupingListener($this->marketingListHelper, $this->groupByHelper);
     }
 
     /**
@@ -79,79 +79,43 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param array  $select
+     * @param string $groupBy
+     * @param string $expected
      *
      * @dataProvider preBuildDataProvider
-     * @param bool $isSent
-     * @param string $expectedMixin
      */
-    public function testOnPreBuildSentCampaign($isSent, $expectedMixin)
+    public function testOnPreBuild(array $select, $groupBy, $expected)
     {
-        $id = 1;
         $gridName = ConfigurationProvider::GRID_PREFIX;
-        $parameters = new ParameterBag(['emailCampaign' => $id]);
+        $parameters = ['emailCampaign' => 1];
         $config = DatagridConfiguration::create(
             [
                 'name'   => $gridName,
                 'source' => [
                     'query' => [
-                        'where' => '1 = 0'
+                        'select'  => $select,
+                        'groupBy' => $groupBy
                     ]
                 ]
             ]
         );
 
+        $event = new PreBuild($config, new ParameterBag($parameters));
+
         $this->marketingListHelper
             ->expects($this->any())
             ->method('getMarketingListIdByGridName')
             ->with($this->equalTo($gridName))
-            ->will($this->returnValue($id));
+            ->will($this->returnValue(1));
+        $this->groupByHelper->expects($this->once())
+            ->method('getGroupByFields')
+            ->with($groupBy, $select)
+            ->will($this->returnValue(explode(',', $expected)));
 
-        $marketingList = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $marketingList->expects($this->once())
-            ->method('isSent')
-            ->will($this->returnValue($isSent));
-        $this->assertEntityFind($id, $marketingList);
+        $this->listener->onPreBuild($event);
 
-        $this->listener->onPreBuild(new PreBuild($config, $parameters));
-
-        if ($isSent) {
-            $this->assertEmpty($config->offsetGetByPath(CampaignStatisticDatagridListener::PATH_DATAGRID_WHERE));
-        }
-
-        $this->assertEquals($expectedMixin, $parameters->get(MarketingListItemsListener::MIXIN));
-    }
-
-    /**
-     * @return array
-     */
-    public function preBuildDataProvider()
-    {
-        return [
-            'not sent' => [false, CampaignStatisticDatagridListener::MIXIN_UNSENT_NAME],
-            'sent' => [true, CampaignStatisticDatagridListener::MIXIN_SENT_NAME],
-        ];
-    }
-
-    /**
-     * @param int $id
-     * @param object $entity
-     */
-    protected function assertEntityFind($id, $entity)
-    {
-        $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repository->expects($this->once())
-            ->method('find')
-            ->with($id)
-            ->will($this->returnValue($entity));
-
-        $this->registry->expects($this->once())
-            ->method('getRepository')
-            ->with('OroCRMCampaignBundle:EmailCampaign')
-            ->will($this->returnValue($repository));
+        $this->assertEquals($expected, $config->offsetGetByPath(CampaignStatisticGroupingListener::PATH_GROUPBY));
     }
 
     public function testOnPreBuildNotApplicable()
@@ -165,9 +129,38 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getMarketingListIdByGridName')
             ->with($this->equalTo($gridName));
-        $this->registry->expects($this->never())
-            ->method('getRepository');
+        $this->groupByHelper->expects($this->never())
+            ->method('getGroupByFields');
 
         $this->listener->onPreBuild($event);
+    }
+
+    /**
+     * @return array
+     */
+    public function preBuildDataProvider()
+    {
+        return [
+            'no fields' => [
+                'selects'    => [],
+                'groupBy'    => null,
+                'expected'   => null,
+            ],
+            'group by no selects' => [
+                'selects'    => [],
+                'groupBy'    => 'alias.existing',
+                'expected'   => 'alias.existing',
+            ],
+            'select no group by' => [
+                'selects'    => ['alias.field'],
+                'groupBy'    => null,
+                'expected'   => 'alias.field',
+            ],
+            'select and group by' => [
+                'selects'    => ['alias.field', 'alias.matchedFields as c1'],
+                'groupBy'    => 'alias.existing',
+                'expected'   => 'alias.existing,alias.field,c1',
+            ]
+        ];
     }
 }
