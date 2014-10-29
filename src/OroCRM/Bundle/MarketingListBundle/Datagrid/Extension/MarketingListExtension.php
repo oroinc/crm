@@ -28,6 +28,11 @@ class MarketingListExtension extends AbstractExtension
     protected $marketingListHelper;
 
     /**
+     * @var string[]
+     */
+    protected $appliedFor;
+
+    /**
      * @param MarketingListHelper $marketingListHelper
      */
     public function __construct(MarketingListHelper $marketingListHelper)
@@ -40,6 +45,12 @@ class MarketingListExtension extends AbstractExtension
      */
     public function isApplicable(DatagridConfiguration $config)
     {
+        $gridName = $config->offsetGetByPath(self::NAME_PATH);
+
+        if (!empty($this->appliedFor[$gridName])) {
+            return false;
+        }
+
         if ($config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) !== OrmDatasource::TYPE) {
             return false;
         }
@@ -48,8 +59,7 @@ class MarketingListExtension extends AbstractExtension
             return false;
         }
 
-        $marketingListId = $this->marketingListHelper
-            ->getMarketingListIdByGridName($config->offsetGetByPath(self::NAME_PATH));
+        $marketingListId = $this->marketingListHelper->getMarketingListIdByGridName($gridName);
         if (!$marketingListId) {
             return false;
         }
@@ -100,14 +110,16 @@ class MarketingListExtension extends AbstractExtension
             $qb->andWhere($part);
         }
 
+        $gridName = $config->offsetGetByPath(self::NAME_PATH);
+
         if ($addParameter) {
             $qb->setParameter(
                 'marketingListId',
-                $this->marketingListHelper->getMarketingListIdByGridName(
-                    $config->offsetGetByPath(self::NAME_PATH)
-                )
+                $this->marketingListHelper->getMarketingListIdByGridName($gridName)
             );
         }
+
+        $this->appliedFor[$gridName] = true;
     }
 
     /**
