@@ -143,36 +143,27 @@ class EmailCampaignType extends AbstractType
         $builder->addEventListener(
             FormEvents::PRE_SET_DATA,
             function (FormEvent $event) {
-                $transports = $this->emailTransportProvider->getTransports();
-                $choices = [];
-                foreach ($transports as $transport) {
-                    if ($this->emailTransportProvider->isVisibleInForm($transport->getName())) {
-                        $choices[$transport->getName()] = $transport->getLabel();
-                    }
-                }
+                $options = [
+                    'label' => 'orocrm.campaign.emailcampaign.transport.label',
+                    'required' => true,
+                    'mapped' => false
+                ];
 
                 /** @var EmailCampaign $data */
                 $data = $event->getData();
                 if ($data) {
+                    $choices = $this->emailTransportProvider->getVisibleTransportChoices();
                     $currentTransportName = $data->getTransport();
                     if (!array_key_exists($currentTransportName, $choices)) {
                         $currentTransport = $this->emailTransportProvider
                             ->getTransportByName($currentTransportName);
                         $choices[$currentTransport->getName()] = $currentTransport->getLabel();
+                        $options['choices'] = $choices;
                     }
                 }
 
                 $form = $event->getForm();
-                $form->add(
-                    'transport',
-                    'orocrm_campaign_email_transport_select',
-                    [
-                        'label' => 'orocrm.campaign.emailcampaign.transport.label',
-                        'required' => true,
-                        'mapped' => false,
-                        'choices' => $choices
-                    ]
-                );
+                $form->add('transport', 'orocrm_campaign_email_transport_select', $options);
             }
         );
     }

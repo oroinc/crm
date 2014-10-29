@@ -10,7 +10,7 @@ class EmailTransportProvider
     /**
      * @var array
      */
-    protected $transports = array();
+    protected $transports = [];
 
     /**
      * @param TransportInterface $transport
@@ -51,12 +51,25 @@ class EmailTransportProvider
     }
 
     /**
-     * @param string $name
+     * @return array
+     */
+    public function getVisibleTransportChoices()
+    {
+        $choices = [];
+        foreach ($this->getTransports() as $transport) {
+            if ($this->isVisibleInForm($transport)) {
+                $choices[$transport->getName()] = $transport->getLabel();
+            }
+        }
+        return $choices;
+    }
+
+    /**
+     * @param $transport
      * @return bool
      */
-    public function isVisibleInForm($name)
+    protected function isVisibleInForm($transport)
     {
-        $transport = $this->getTransportByName($name);
         return !$transport instanceof VisibilityTransportInterface || $transport->isVisibleInForm();
     }
 }
