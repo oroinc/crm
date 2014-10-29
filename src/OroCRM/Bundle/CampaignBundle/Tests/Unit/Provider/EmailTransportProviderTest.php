@@ -24,16 +24,28 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transport, $provider->getTransportByName($name));
     }
 
-    public function testTransportIsVisibleInForm()
+    public function testTransportActualChoices()
     {
+        $choices = ['t1' => 'Transport 1', 't2' => 'Transport 2'];
         $provider = new EmailTransportProvider();
-        $transport = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
-        $transport->expects($this->once())
+        $transportOne = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportOne->expects($this->exactly(2))
             ->method('getName')
             ->will($this->returnValue('t1'));
+        $transportOne->expects($this->once())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 1'));
+        $transportTwo = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportTwo->expects($this->exactly(2))
+            ->method('getName')
+            ->will($this->returnValue('t2'));
+        $transportTwo->expects($this->once())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 2'));
 
-        $provider->addTransport($transport);
-        $this->assertTrue($provider->isVisibleInForm('t1'));
+        $provider->addTransport($transportOne);
+        $provider->addTransport($transportTwo);
+        $this->assertEquals($provider->getVisibleTransportChoices(), $choices);
     }
 
     /**
