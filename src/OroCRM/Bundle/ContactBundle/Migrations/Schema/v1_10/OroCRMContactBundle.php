@@ -9,7 +9,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class OroCRMContactBundle implements Migration
 {
-
     /**
      * {@inheritdoc}
      */
