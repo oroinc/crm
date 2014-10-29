@@ -5,18 +5,10 @@ namespace Oro\Bundle\CalendarBundle\Migrations\Schema\v1_10;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMContactBundle implements Migration, OrderedMigrationInterface
+class OroCRMContactBundle implements Migration
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrder()
-    {
-        return 1;
-    }
 
     /**
      * {@inheritdoc}
