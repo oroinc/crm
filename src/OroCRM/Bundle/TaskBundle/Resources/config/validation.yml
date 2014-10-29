@@ -11,5 +11,3 @@ OroCRM\Bundle\TaskBundle\Entity\Task:
             - NotBlank: ~
         owner:
             - NotBlank: ~
-        reporter:
-            - NotBlank: ~

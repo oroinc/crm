@@ -55,13 +55,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     protected function loadCalendars()
     {
+        /** @var \Oro\Bundle\OrganizationBundle\Entity\Organization $organization */
         $organization = $this->getReference('default_organization');
         /** @var \Oro\Bundle\UserBundle\Entity\User[] $users */
         $users = $this->user->findAll();
         foreach ($users as $user) {
             //get default calendar, each user has default calendar after creation
-            $calendar = $this->calendar->findByUser($user->getId());
-            $calendar->setOrganization($organization);
+            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $organization->getId());
             /** @var CalendarEvent $event */
             $days = $this->getDatePeriod();
             foreach ($days as $day) {
@@ -144,17 +144,20 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         /** @var \Oro\Bundle\UserBundle\Entity\User[] $users */
         $users = $this->user->findAll();
         // first user is admin, often
-        $adminId = $this->user->find(1)->getId();
+        /** @var \Oro\Bundle\UserBundle\Entity\User $admin */
+        $admin = $this->user->find(1);
         /** @var Calendar $calendarAdmin */
-        $calendarAdmin = $this->calendar->findByUser($adminId);
+        $calendarAdmin = $this->calendar->findDefaultCalendar($admin->getId(), $admin->getOrganization()->getId());
 
-        $saleId = $this->user->findOneBy(array('username' => 'sale'))->getId();
+        /** @var \Oro\Bundle\UserBundle\Entity\User $sale */
+        $sale = $this->user->findOneBy(array('username' => 'sale'));
         /** @var Calendar $calendarSale */
-        $calendarSale = $this->calendar->findByUser($saleId);
+        $calendarSale = $this->calendar->findDefaultCalendar($sale->getId(), $sale->getOrganization()->getId());
 
-        $marketId = $this->user->findOneBy(array('username' => 'marketing'))->getId();
+        /** @var \Oro\Bundle\UserBundle\Entity\User $market */
+        $market = $this->user->findOneBy(array('username' => 'marketing'));
         /** @var Calendar $calendarMarket */
-        $calendarMarket = $this->calendar->findByUser($marketId);
+        $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
         $i = 0;
         while ($i <= 5) {
@@ -163,12 +166,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $user = $users[$userId];
             unset($users[$userId]);
             $users = array_values($users);
-            if (in_array($user->getId(), array($adminId, $saleId, $marketId))) {
+            if (in_array($user->getId(), array($admin->getId(), $sale->getId(), $market->getId()))) {
                 //to prevent self assignment
                 continue;
             }
             /** @var Calendar $calendar */
-            $calendar = $this->calendar->findByUser($user->getId());
+            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $user->getOrganization()->getId());
 
             if (mt_rand(0, 1)) {
                 /** @var CalendarConnection $connection */

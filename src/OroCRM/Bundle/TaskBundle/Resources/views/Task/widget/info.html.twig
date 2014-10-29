@@ -1,0 +1,11 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+<div class="widget-content form-horizontal box-content row-fluid">
+    <div class="responsive-block">
+        {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
+        {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
+        {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+        {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
+        {{ UI.renderProperty('orocrm.task.owner.label'|trans, entity.owner|oro_format_name|escape) }}
+    </div>
+</div>

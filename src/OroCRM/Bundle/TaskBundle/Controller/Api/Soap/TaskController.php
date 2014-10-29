@@ -83,7 +83,7 @@ class TaskController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_task.form.api');
+        return $this->container->get('orocrm_task.form.api.soap');
     }
 
     /**
@@ -91,7 +91,7 @@ class TaskController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_task.form.handler.task_api');
+        return $this->container->get('orocrm_task.form.handler.task_api.soap');
     }
 
     /**

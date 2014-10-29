@@ -19,7 +19,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_4';
     }
 
     /**
@@ -62,6 +62,8 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('call_date_time', 'datetime', []);
         $table->addColumn('duration', 'time', ['notnull' => false]);
+        $table->addColumn('created_at', 'datetime', []);
+        $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['organization_id'], 'IDX_1FBD1A2432C8A3DE', []);
         $table->addIndex(['owner_id'], 'IDX_1FBD1A247E3C61F9', []);
