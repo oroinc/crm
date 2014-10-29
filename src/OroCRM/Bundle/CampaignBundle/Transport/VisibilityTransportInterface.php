@@ -10,9 +10,4 @@ interface VisibilityTransportInterface
      * @return bool
      */
     public function isVisibleInForm();
-
-    /**
-     * @param $visible
-     */
-    public function setVisibility($visible);
 }
