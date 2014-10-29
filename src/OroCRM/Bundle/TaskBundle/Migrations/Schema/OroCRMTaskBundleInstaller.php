@@ -68,7 +68,6 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addIndex(['due_date'], 'task_due_date_idx');
         $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_814DEE3F1023C4EE');
         $table->addIndex(['workflow_step_id'], 'IDX_814DEE3F71FE882C', []);
-        $table->addIndex(['createdAt'], 'task_created_at_idx', []);
         $table->addIndex(['updatedAt'], 'task_updated_at_idx', []);
     }
 

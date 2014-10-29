@@ -24,7 +24,6 @@ class OroCRMTaskBundle implements Migration, OrderedMigrationInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_task');
-        $table->addIndex(['createdAt'], 'task_created_at_idx', []);
         $table->addIndex(['updatedAt'], 'task_updated_at_idx', []);
     }
 }

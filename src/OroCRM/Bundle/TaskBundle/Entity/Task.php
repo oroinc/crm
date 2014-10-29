@@ -24,7 +24,6 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      name="orocrm_task",
  *      indexes={
  *          @ORM\Index(name="task_due_date_idx",columns={"due_date"}),
- *          @ORM\Index(name="task_created_at_idx",columns={"createdAt"}),
  *          @ORM\Index(name="task_updated_at_idx",columns={"updatedAt"}),
  *      }
  * )

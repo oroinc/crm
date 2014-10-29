@@ -24,7 +24,6 @@ class OroCRMContactBundle implements Migration, OrderedMigrationInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact');
-        $table->addIndex(['createdAt'], 'contact_created_at_idx', []);
         $table->addIndex(['updatedAt'], 'contact_updated_at_idx', []);
     }
 }
