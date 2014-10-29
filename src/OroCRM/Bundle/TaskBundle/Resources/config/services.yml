@@ -1,43 +1,29 @@
 parameters:
-    #entity
-    orocrm_task.entity.class:         OroCRM\Bundle\TaskBundle\Entity\Task
-
-    #form
-    orocrm_task.form.type.task.class:        OroCRM\Bundle\TaskBundle\Form\Type\TaskType
-    orocrm_task.form.type.task_api.class:    OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
-    orocrm_task.form.handler.task_api.class: OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
-    orocrm_task.manager.api.class:           Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_task.entity.class:                       OroCRM\Bundle\TaskBundle\Entity\Task
+    orocrm_task.listener.datagrid.user_tasks.class: OroCRM\Bundle\TaskBundle\EventListener\Datagrid\UserTaskGridListener
+    orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
 
 services:
-    orocrm_task.form.type.task:
-        class: %orocrm_task.form.type.task.class%
+    orocrm_task.listener.datagrid.user_tasks:
+        class: %orocrm_task.listener.datagrid.user_tasks.class%
+        arguments:
+            - @oro_security.security_facade
         tags:
-            - { name: form.type, alias: orocrm_task }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.user-tasks-grid, method: onBuildBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-tasks-grid, method: onBuildAfter }
 
-    orocrm_task.form.type.task_api:
-        class: %orocrm_task.form.type.task_api.class%
+    orocrm_task.listener.datagrid.activity:
+        class: %orocrm_task.listener.datagrid.activity.class%
+        arguments:
+            - @oro_activity.manager
+            - @oro_entity.routing_helper
         tags:
-            - { name: form.type, alias: task }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-tasks-grid, method: onBuildAfter }
 
-    orocrm_task.manager.api:
-        class: %orocrm_task.manager.api.class%
-        parent: oro_soap.manager.entity_manager.abstract
+    orocrm_task.widget_provider.actions.assign_task:
+        parent: oro_ui.widget_provider.action_button.abstract
         arguments:
-            - %orocrm_task.entity.class%
-            - @doctrine.orm.entity_manager
-
-    orocrm_task.form.handler.task_api:
-        class: %orocrm_task.form.handler.task_api.class%
-        scope: request
-        arguments:
-            - @orocrm_task.form.api
-            - @request
-            - @doctrine.orm.entity_manager
-
-    orocrm_task.form.api:
-        class: Symfony\Component\Form\Form
-        factory_method: createNamed
-        factory_service: form.factory
-        arguments:
-            - 'task'
-            - 'task'
+            - orocrm_assign_task_button
+            - orocrm_assign_task_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }

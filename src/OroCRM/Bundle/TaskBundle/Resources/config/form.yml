@@ -1,0 +1,76 @@
+parameters:
+    orocrm_task.form.type.task.class:               OroCRM\Bundle\TaskBundle\Form\Type\TaskType
+    orocrm_task.form.type.task_api.class:           OroCRM\Bundle\TaskBundle\Form\Type\TaskApiType
+    orocrm_task.form.handler.task.class:            OroCRM\Bundle\TaskBundle\Form\Handler\TaskHandler
+    orocrm_task.form.handler.task_api.class:        OroCRM\Bundle\TaskBundle\Form\Handler\TaskApiHandler
+    orocrm_task.manager.api.class:                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+services:
+    orocrm_task.form.type.task:
+        class: %orocrm_task.form.type.task.class%
+        tags:
+            - { name: form.type, alias: orocrm_task }
+
+    orocrm_task.form.type.task_api:
+        class: %orocrm_task.form.type.task_api.class%
+        tags:
+            - { name: form.type, alias: task }
+
+    orocrm_task.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'orocrm_task'
+            - 'orocrm_task'
+
+    orocrm_task.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - ~
+            - 'task'
+
+    orocrm_task.form.api.soap:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - 'task'
+            - 'task'
+
+    orocrm_task.form.handler.task:
+        class: %orocrm_task.form.handler.task.class%
+        scope: request
+        arguments:
+            - @orocrm_task.form
+            - @request
+            - @doctrine.orm.entity_manager
+            - @oro_activity.manager
+            - @oro_entity.routing_helper
+
+    orocrm_task.form.handler.task_api:
+        class: %orocrm_task.form.handler.task_api.class%
+        scope: request
+        arguments:
+            - @orocrm_task.form.api
+            - @request
+            - @doctrine.orm.entity_manager
+            - @oro_entity.routing_helper
+
+    orocrm_task.form.handler.task_api.soap:
+        class: %orocrm_task.form.handler.task_api.class%
+        scope: request
+        arguments:
+            - @orocrm_task.form.api.soap
+            - @request
+            - @doctrine.orm.entity_manager
+            - @oro_entity.routing_helper
+
+    orocrm_task.manager.api:
+        class: %orocrm_task.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_task.entity.class%
+            - @doctrine.orm.entity_manager

@@ -194,9 +194,6 @@ class TaskController extends RestController implements ClassResourceInterface
                 }
                 break;
             case 'owner':
-            case 'relatedAccount':
-            case 'relatedContact':
-            case 'reporter':
             case 'workflowItem':
             case 'workflowStep':
                 if ($value) {
