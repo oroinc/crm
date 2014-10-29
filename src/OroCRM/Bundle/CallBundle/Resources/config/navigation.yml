@@ -1,11 +1,5 @@
 oro_menu_config:
     items:
-        activities_tab:
-            label: 'orocrm.call.menu.activities_tab.label'
-            uri: '#'
-            extras:
-                icon: icon-puzzle-piece
-                position: 30
         call_list:
             label: 'orocrm.call.entity_plural_label'
             route: 'orocrm_call_index'
@@ -32,5 +26,6 @@ oro_menu_config:
 
 oro_titles:
     orocrm_call_index: ~
+    orocrm_call_view: '%%subject%%'
     orocrm_call_update: '%%subject%% - Edit'
     orocrm_call_create: 'Log Call'

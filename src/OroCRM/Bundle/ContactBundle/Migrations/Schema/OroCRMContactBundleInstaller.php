@@ -17,6 +17,7 @@ use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_4\OroCRMContactBundle as No
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_5\OroCRMContactBundle as AttachmentMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_6\OroCRMContactBundle as ActivityMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_8\OroCRMContactBundle as ContactOrganizations;
+use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_9\CreateActivityAssociation as ActivityCalendarEventMigration;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -72,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -104,6 +105,7 @@ class OroCRMContactBundleInstaller implements
         NoteMigration::addNoteAssociations($schema, $this->noteExtension);
         AttachmentMigration::addPhotoToContact($schema, $this->attachmentExtension);
         ActivityMigration::addActivityAssociations($schema, $this->activityExtension);
+        ActivityCalendarEventMigration::addActivityAssociations($schema, $this->activityExtension);
         ContactOrganizations::addOrganization($schema);
     }
 

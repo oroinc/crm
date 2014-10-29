@@ -28,6 +28,9 @@ parameters:
 
     orocrm_marketing_list.datagrid.configuration.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider
 
+    # Workflow actions and conditions
+    orocrm_marketing_list.workflow.condition.has_contact_information.class: OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation
+
 services:
     orocrm_marketing_list.entity_provider:
         alias: oro_entity.entity_provider
@@ -165,3 +168,12 @@ services:
             - @orocrm_marketing_list.model.helper
         tags:
             - { name: oro_datagrid.configuration.provider, priority: -10 }
+
+    # Workflow actions and conditions
+    orocrm_marketing_list.workflow.condition.has_contact_information:
+        class: %orocrm_marketing_list.workflow.condition.has_contact_information.class%
+        arguments:
+            - @oro_workflow.context_accessor
+            - @orocrm_marketing_list.provider.contact_information_fields
+        tags:
+            - { name: oro_workflow.condition, alias: has_contact_information }

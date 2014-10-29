@@ -30,11 +30,11 @@ class ContactInformationFieldsProvider
     /**
      * @param AbstractQueryDesigner $abstractQueryDesigner
      * @param string $entityClass
-     * @param string $type
+     * @param string|null $type
      *
      * @return array
      */
-    public function getQueryTypedFields(AbstractQueryDesigner $abstractQueryDesigner, $entityClass, $type)
+    public function getQueryTypedFields(AbstractQueryDesigner $abstractQueryDesigner, $entityClass, $type = null)
     {
         $typedFields = $this->getEntityTypedFields($entityClass, $type);
 
@@ -61,10 +61,10 @@ class ContactInformationFieldsProvider
 
     /**
      * @param string|object $entityOrClass
-     * @param string $type
+     * @param string|null $type
      * @return array
      */
-    public function getEntityTypedFields($entityOrClass, $type)
+    public function getEntityTypedFields($entityOrClass, $type = null)
     {
         $entityOrClass = ClassUtils::getRealClass($entityOrClass);
 
@@ -76,22 +76,19 @@ class ContactInformationFieldsProvider
             return [];
         }
 
-        return array_keys(
-            array_filter(
-                $contactInformationFields,
-                function ($contactInformationField) use ($type) {
-                    return $contactInformationField === $type;
-                }
-            )
-        );
+        if ($type) {
+            $contactInformationFields = $this->filterByType($contactInformationFields, $type);
+        }
+
+        return $contactInformationFields;
     }
 
     /**
      * @param MarketingList $marketingList
-     * @param string $type
+     * @param string|null $type
      * @return array
      */
-    public function getMarketingListTypedFields(MarketingList $marketingList, $type)
+    public function getMarketingListTypedFields(MarketingList $marketingList, $type = null)
     {
         if ($marketingList->isManual()) {
             $typedFields = $this->getEntityTypedFields(
@@ -123,6 +120,23 @@ class ContactInformationFieldsProvider
                 return (string)$propertyAccessor->getValue($entity, $typedField);
             },
             $typedFields
+        );
+    }
+
+    /**
+     * @param array $contactInformationFields
+     * @param string $type
+     * @return array
+     */
+    protected function filterByType(array $contactInformationFields, $type)
+    {
+        return array_keys(
+            array_filter(
+                $contactInformationFields,
+                function ($contactInformationField) use ($type) {
+                    return $contactInformationField === $type;
+                }
+            )
         );
     }
 }

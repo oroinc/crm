@@ -11,22 +11,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         new Task();
     }
 
-    public function testPrePersist()
-    {
-        $entity = new Task();
-        $entity->prePersist();
-
-        $this->assertEquals($entity->getCreatedAt()->format("m/d/Y"), date("m/d/Y"));
-    }
-
-    public function testPreUpdate()
-    {
-        $entity = new Task();
-        $entity->preUpdate();
-
-        $this->assertEquals($entity->getUpdatedAt()->format("m/d/Y H:i"), date("m/d/Y H:i"));
-    }
-
     public function testGetSetWorkflowItem()
     {
         $entity = new Task();
@@ -77,58 +61,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getWorkflowStepName(), $expected);
     }
 
-    public function testSetRelatedContact()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedContact());
-
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $entity->setRelatedContact($contact);
-
-        $this->assertEquals($contact, $entity->getRelatedContact());
-    }
-
-    public function testGetRelatedContactId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccountId());
-
-        $contact = $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact');
-        $expected = 42;
-        $contact->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setRelatedContact($contact);
-
-        $this->assertEquals($expected, $entity->getRelatedContactId());
-    }
-
-    public function testSetRelatedAccount()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccount());
-
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $entity->setRelatedAccount($account);
-
-        $this->assertEquals($account, $entity->getRelatedAccount());
-    }
-
-    public function testGetRelatedAccountId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getRelatedAccountId());
-
-        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
-        $expected = 42;
-        $account->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setRelatedAccount($account);
-
-        $this->assertEquals($expected, $entity->getRelatedAccountId());
-    }
-
     public function testSetOwner()
     {
         $entity = new Task();
@@ -153,32 +85,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $entity->setOwner($user);
 
         $this->assertEquals($expected, $entity->getOwnerId());
-    }
-
-    public function testSetReporter()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getReporter());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $entity->setReporter($user);
-
-        $this->assertSame($user, $entity->getReporter());
-    }
-
-    public function testGetReporterId()
-    {
-        $entity = new Task();
-
-        $this->assertNull($entity->getReporterId());
-
-        $user = $this->getMock('Oro\Bundle\UserBundle\Entity\User');
-        $expected = 42;
-        $user->expects($this->once())->method('getId')->will($this->returnValue($expected));
-        $entity->setReporter($user);
-
-        $this->assertEquals($expected, $entity->getReporterId());
     }
 
     public function testDueDateExpired()
@@ -228,5 +134,27 @@ class TaskTest extends \PHPUnit_Framework_TestCase
             array('updatedAt', new \DateTime()),
             array('organization', $organization, $organization)
         );
+    }
+
+    public function testPrePersist()
+    {
+        $obj = new Task();
+
+        $this->assertNull($obj->getCreatedAt());
+        $this->assertNull($obj->getUpdatedAt());
+
+        $obj->prePersist();
+        $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
+        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
+    }
+
+    public function testPreUpdate()
+    {
+        $obj = new Task();
+
+        $this->assertNull($obj->getUpdatedAt());
+
+        $obj->preUpdate();
+        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
     }
 }

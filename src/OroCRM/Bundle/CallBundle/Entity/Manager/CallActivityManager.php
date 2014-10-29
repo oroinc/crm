@@ -66,12 +66,11 @@ class CallActivityManager
                     if ($field === 'owner') {
                         list($oldValue, $newValue) = $values;
                         if ($oldValue !== $newValue) {
-                            if ($this->activityManager->removeActivityTarget($entity, $oldValue)) {
-                                $hasChanges = true;
-                            }
-                            if ($this->activityManager->addActivityTarget($entity, $newValue)) {
-                                $hasChanges = true;
-                            }
+                            $hasChanges |= $this->activityManager->replaceActivityTarget(
+                                $entity,
+                                $oldValue,
+                                $newValue
+                            );
                         }
                         break;
                     }

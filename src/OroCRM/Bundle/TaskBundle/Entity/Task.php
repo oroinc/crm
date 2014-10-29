@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ReminderBundle\Entity\RemindableInterface;
 use Oro\Bundle\ReminderBundle\Model\ReminderData;
@@ -17,8 +16,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
 /**
@@ -46,6 +43,9 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *          "security"={
  *              "type"="ACL"
  *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
  *          "workflow"={
  *              "active_workflow"="task_flow"
  *          },
@@ -53,8 +53,14 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "reminder_template_name"="task_reminder",
  *              "reminder_flash_template_identifier"="task_template"
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "route"="orocrm_task_activity_view",
+ *              "acl"="orocrm_task_view",
+ *              "action_button_widget"="orocrm_add_task_button",
+ *              "action_link_widget"="orocrm_add_task_link"
  *          }
  *      }
  * )
@@ -74,6 +80,13 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $subject;
 
@@ -81,6 +94,13 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $description;
 
@@ -88,6 +108,13 @@ class Task extends ExtendTask implements RemindableInterface
      * @var \DateTime
      *
      * @ORM\Column(name="due_date", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $dueDate;
 
@@ -96,6 +123,13 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $taskPriority;
 
@@ -104,32 +138,15 @@ class Task extends ExtendTask implements RemindableInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
      */
     protected $owner;
-
-    /**
-     * @var Account
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedAccount;
-
-    /**
-     * @var Contact
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $relatedContact;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="reporter_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $reporter;
 
     /**
      * @var WorkflowItem
@@ -169,7 +186,7 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="datetime")
      * @ConfigField(
      *      defaultValues={
      *          "entity"={
@@ -324,83 +341,11 @@ class Task extends ExtendTask implements RemindableInterface
     }
 
     /**
-     * @return Account
-     */
-    public function getRelatedAccount()
-    {
-        return $this->relatedAccount;
-    }
-
-    /**
-     * @return mixed|null
-     */
-    public function getRelatedAccountId()
-    {
-        return $this->getRelatedAccount() ? $this->getRelatedAccount()->getId() : null;
-    }
-
-    /**
-     * @param Account $account
-     */
-    public function setRelatedAccount($account = null)
-    {
-        $this->relatedAccount = $account;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getRelatedContact()
-    {
-        return $this->relatedContact;
-    }
-
-    /**
-     * @return Contact
-     */
-    public function getRelatedContactId()
-    {
-        return $this->getRelatedContact() ? $this->getRelatedContact()->getId() : null;
-    }
-
-    /**
-     * @param Contact $contact
-     */
-    public function setRelatedContact($contact = null)
-    {
-        $this->relatedContact = $contact;
-    }
-
-    /**
      * @return string
      */
     public function getWorkflowStepName()
     {
         return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
-    }
-
-    /**
-     * @return User
-     */
-    public function getReporter()
-    {
-        return $this->reporter;
-    }
-
-    /**
-     * @return int
-     */
-    public function getReporterId()
-    {
-        return $this->getReporter() ? $this->getReporter()->getId() : null;
-    }
-
-    /**
-     * @param User $reporter
-     */
-    public function setReporter($reporter = null)
-    {
-        $this->reporter = $reporter;
     }
 
     /**
@@ -486,7 +431,8 @@ class Task extends ExtendTask implements RemindableInterface
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
     }
 
     /**
@@ -494,7 +440,7 @@ class Task extends ExtendTask implements RemindableInterface
      */
     public function preUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -518,5 +464,13 @@ class Task extends ExtendTask implements RemindableInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getSubject();
     }
 }

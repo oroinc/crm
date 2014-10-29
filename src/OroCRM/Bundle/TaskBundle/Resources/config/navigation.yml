@@ -5,29 +5,14 @@ oro_menu_config:
             route: 'orocrm_task_index'
             extras:
                 position: 10
-                routes: ['orocrm_task_*']
+                routes: ['orocrm_task_update', 'orocrm_task_create', 'orocrm_task_view']
                 description: 'orocrm.task.menu.task_list.description'
 
-        orocrm_task_user_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
+        orocrm_task_my_tasks:
+            label: 'orocrm.task.menu.my_tasks'
+            route: 'orocrm_task_my_tasks'
             extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_user_tasks'
-
-        orocrm_task_account_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
-            extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_account_tasks'
-
-        orocrm_task_contact_tasks_tab:
-            label: 'orocrm.task.widgets.account_tasks'
-            extras:
-                position: 10
-                widgetAcl: 'orocrm_task_view'
-                widgetRoute: 'orocrm_task_widget_contact_tasks'
+                position: 15
 
     tree:
         application_menu:
@@ -35,21 +20,13 @@ oro_menu_config:
                 activities_tab:
                     children:
                         task_list: ~
-
-        user_activity_tab_panel:
+        usermenu:
             children:
-                orocrm_task_user_tasks_tab: ~
-
-        account_activity_tab_panel:
-            children:
-                orocrm_task_account_tasks_tab: ~
-
-        contact_activity_tab_panel:
-            children:
-                orocrm_task_contact_tasks_tab: ~
+                orocrm_task_my_tasks: ~
 
 oro_titles:
     orocrm_task_index: ~
     orocrm_task_view: '%%entity.subject%%'
     orocrm_task_create: oro.ui.create_entity
     orocrm_task_update: '%%entity.subject%% - Edit'
+    orocrm_task_my_tasks: "My Tasks - %%username%%"
