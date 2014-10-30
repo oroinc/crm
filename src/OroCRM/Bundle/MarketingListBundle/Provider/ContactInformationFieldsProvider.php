@@ -108,16 +108,20 @@ class ContactInformationFieldsProvider
 
     /**
      * @param array $typedFields
-     * @param object $entity
+     * @param object|array $source
      * @return array
      */
-    public function getTypedFieldsValues(array $typedFields, $entity)
+    public function getTypedFieldsValues(array $typedFields, $source)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         return array_map(
-            function ($typedField) use ($propertyAccessor, $entity) {
-                return (string)$propertyAccessor->getValue($entity, $typedField);
+            function ($typedField) use ($propertyAccessor, $source) {
+                if (is_array($source)) {
+                    $typedField = sprintf('[%s]', $typedField);
+                }
+
+                return (string)$propertyAccessor->getValue($source, $typedField);
             },
             $typedFields
         );
