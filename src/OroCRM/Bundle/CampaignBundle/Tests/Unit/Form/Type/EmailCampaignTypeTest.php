@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\Form\Type;
 
 use OroCRM\Bundle\CampaignBundle\Form\Type\EmailCampaignType;
+use Symfony\Component\Form\FormEvents;
 
 class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,17 +12,12 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $subscriber = $this
-            ->getMockBuilder('Oro\Bundle\EmailBundle\Form\EventListener\BuildTemplateFormSubscriber')
-            ->disableOriginalConstructor()
-            ->getMock();
         $transportProvider = $this
             ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->type = new EmailCampaignType($transportProvider);
-        $this->type->addSubscriber($subscriber);
     }
 
     protected function tearDown()
@@ -40,6 +36,16 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->with($this->isType('string'), $this->isType('string'))
             ->will($this->returnSelf());
 
+        $builder->expects($this->once())
+            ->method('addEventListener')
+            ->with(FormEvents::PRE_SET_DATA);
+
+        $subscriber = $this->getMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
+        $builder->expects($this->once())
+            ->method('addEventSubscriber')
+            ->with($subscriber);
+
+        $this->type->addSubscriber($subscriber);
         $this->type->buildForm($builder, []);
     }
 
@@ -64,12 +70,5 @@ class EmailCampaignTypeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->type->setDefaultOptions($resolver);
-    }
-
-    public function testAddProvider()
-    {
-        $subscriber = $this->getMock('Symfony\Component\EventDispatcher\EventSubscriberInterface');
-
-        $this->type->addSubscriber($subscriber);
     }
 }
