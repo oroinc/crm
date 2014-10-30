@@ -24,6 +24,9 @@ class EmailCampaignType extends AbstractType
      */
     protected $emailTransportProvider;
 
+    /**
+     * @param EmailTransportProvider $emailTransportProvider
+     */
     public function __construct(EmailTransportProvider $emailTransportProvider)
     {
         $this->emailTransportProvider = $emailTransportProvider;
