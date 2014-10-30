@@ -42,10 +42,21 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
         $transportTwo->expects($this->once())
             ->method('getLabel')
             ->will($this->returnValue('Transport 2'));
+        $transportTree = $this->getMock('OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider\TransportStub');
+        $transportTree->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('t3'));
+        $transportTree->expects($this->never())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 3'));
+        $transportTree->expects($this->once())
+            ->method('isVisibleInForm')
+            ->will($this->returnValue(false));
 
         $provider->addTransport($transportOne);
         $provider->addTransport($transportTwo);
-        $this->assertEquals($provider->getVisibleTransportChoices(), $choices);
+        $provider->addTransport($transportTree);
+        $this->assertEquals($choices, $provider->getVisibleTransportChoices());
     }
 
     /**

@@ -65,7 +65,7 @@ class EmailTransportProvider
     }
 
     /**
-     * @param $transport
+     * @param TransportInterface $transport
      * @return bool
      */
     protected function isVisibleInForm($transport)
