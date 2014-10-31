@@ -62,6 +62,7 @@ orocrm:
             general: General Information
             items: Items
             removed: Removed Items
+            syncstatus: Synchronization Info
 
         action:
             subscribe: Subscribe

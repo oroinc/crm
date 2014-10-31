@@ -117,6 +117,10 @@
         {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': removedItemsMixin}) }}
     {%- endset -%}
 
+    {%- set syncStatusData -%}
+        {% placeholder view_sync_status_data with {entity: entity} %}
+    {%- endset -%}
+
     {% set generalSectionBlocks = [{'data' : [listInformation]}]%}
     {% if syncStatusData is not empty %}
         {% set generalSectionBlocks = generalSectionBlocks|merge(
