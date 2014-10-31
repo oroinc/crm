@@ -17,7 +17,7 @@ class OroCRMCampaignBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_6';
     }
 
     /**
@@ -48,6 +48,7 @@ class OroCRMCampaignBundleInstaller implements Installation
     {
         $table = $schema->createTable('orocrm_campaign');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('code', 'string', ['length' => 255]);
@@ -64,6 +65,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('report_period', 'string', ['length' => 25]);
         $table->addIndex(['owner_id'], 'idx_55153cad7e3c61f9', []);
+        $table->addIndex(['organization_id'], 'idx_e9a0640332c8a3de', []);
         $table->addUniqueIndex(['code'], 'uniq_e9a0640377153098');
         $table->setPrimaryKey(['id']);
     }
@@ -80,6 +82,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('campaign_id', 'integer', ['notnull' => false]);
         $table->addColumn('transport_settings_id', 'integer', ['notnull' => false]);
         $table->addColumn('marketing_list_id', 'integer', ['notnull' => false]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('description', 'text', ['notnull' => false]);
@@ -95,6 +98,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addUniqueIndex(['transport_settings_id'], 'uniq_6cd4c1e1cffa7b8f');
         $table->addIndex(['marketing_list_id'], 'idx_6cd4c1e196434d04', []);
         $table->addIndex(['owner_id'], 'idx_6cd4c1e17e3c61f9', []);
+        $table->addIndex(['organization_id'], 'idx_6cd4c1e132c8a3de', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['campaign_id'], 'idx_6cd4c1e1f639f774', []);
     }
@@ -111,9 +115,15 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('email_campaign_id', 'integer', []);
         $table->addColumn('marketing_list_item_id', 'integer', []);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
+        $table->addColumn('open_count', 'integer', ['notnull' => false]);
+        $table->addColumn('click_count', 'integer', ['notnull' => false]);
+        $table->addColumn('bounce_count', 'integer', ['notnull' => false]);
+        $table->addColumn('abuse_count', 'integer', ['notnull' => false]);
+        $table->addColumn('unsubscribe_count', 'integer', ['notnull' => false]);
+        $table->addIndex(['email_campaign_id'], 'idx_31465f07e0f98bc3', []);
         $table->addIndex(['marketing_list_item_id'], 'idx_31465f07d530662', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['email_campaign_id'], 'idx_31465f07e0f98bc3', []);
+        $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'orocrm_ec_litem_unq');
     }
 
     /**
@@ -149,6 +159,12 @@ class OroCRMCampaignBundleInstaller implements Installation
     protected function addOrocrmCampaignForeignKeys(Schema $schema)
     {
         $table = $schema->getTable('orocrm_campaign');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
+        );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['owner_id'],
@@ -186,6 +202,12 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
             ['owner_id'],
+            ['id'],
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );

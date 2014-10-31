@@ -2,6 +2,10 @@ parameters:
     # entities
     orocrm_magento.entity.order.class:                                      OroCRM\Bundle\MagentoBundle\Entity\Order
     orocrm_magento.entity.cart.class:                                       OroCRM\Bundle\MagentoBundle\Entity\Cart
+    orocrm_magento.entity.address.class:                                    OroCRM\Bundle\MagentoBundle\Entity\Address
+    orocrm_magento.entity.cart_address.class:                               OroCRM\Bundle\MagentoBundle\Entity\CartAddress
+    orocrm_magento.entity.order_address.class:                              OroCRM\Bundle\MagentoBundle\Entity\OrderAddress
+    orocrm_magento.entity.customer.class:                                   OroCRM\Bundle\MagentoBundle\Entity\Customer
 
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
@@ -50,9 +54,14 @@ parameters:
 
     orocrm_magento.converter.region.class:                                  OroCRM\Bundle\MagentoBundle\Converter\RegionConverter
 
-    # dahsboard
+    # dashboard
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
+
+    orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
+    orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
+    orocrm_magento.provider.phone.order_address.class:                      OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
+    orocrm_magento.provider.phone.customer.class:                           OroCRM\Bundle\MagentoBundle\Provider\CustomerPhoneProvider
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -194,7 +203,7 @@ services:
         class: %orocrm_magento.customer.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
-            - OroCRM\Bundle\MagentoBundle\Entity\Customer
+            - %orocrm_magento.entity.customer.class%
             - @doctrine.orm.entity_manager
 
     orocrm_magento.datagrid_helper:
@@ -263,3 +272,23 @@ services:
         parent: orocrm_channel.provider.utils.entity_state_provider
         arguments:
             - 'OroCRM\Bundle\MagentoBundle\Entity'
+
+    orocrm_magento.provider.phone.address:
+        class: %orocrm_magento.provider.phone.address.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_magento.entity.address.class% }
+
+    orocrm_magento.provider.phone.cart_address:
+        class: %orocrm_magento.provider.phone.cart_address.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_magento.entity.cart_address.class% }
+
+    orocrm_magento.provider.phone.order_address:
+        class: %orocrm_magento.provider.phone.order_address.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_magento.entity.order_address.class% }
+
+    orocrm_magento.provider.phone.customer:
+        class: %orocrm_magento.provider.phone.customer.class%
+        tags:
+            - { name: oro_address.phone_provider, class: %orocrm_magento.entity.customer.class% }

@@ -1,11 +1,5 @@
 oro_menu_config:
     items:
-        marketing_tab:
-            label: 'orocrm.campaign.menu.marketing_tab.label'
-            uri: '#'
-            extras:
-                position: 30
-                icon: icon-sitemap
         marketing_lists_list:
             label: 'orocrm.marketinglist.entity_plural_label'
             route: 'orocrm_marketing_list_index'

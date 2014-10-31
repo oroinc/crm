@@ -174,7 +174,7 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     protected $relatedContact;
 
     /**
-     * @var Contact
+     * @var Account
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL")

@@ -45,7 +45,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
     }
 
     /**
-     * @param ObjectManager                                     $om
+     * @param ObjectManager $om
      */
     protected function persistDemoCalls(
         ObjectManager $om
@@ -72,22 +72,40 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
             $call->setDuration(
                 new \DateTime(rand(0, 1) . ':' . rand(0, 59) . ':' . rand(0, 59), new \DateTimeZone('UTC'))
             );
+
+            if ($call->supportActivityTarget(get_class($contact->getOwner()))) {
+                $call->addActivityTarget($contact->getOwner());
+            }
+
             $randomPath = rand(1, 10);
+
             if ($randomPath > 2) {
-                $call->setRelatedContact($contact);
-                $call->setContactPhoneNumber($contact->getPrimaryPhone());
+                if ($call->supportActivityTarget(get_class($contact))) {
+                    $call->addActivityTarget($contact);
+                }
+                $contactPrimaryPhone = $contact->getPrimaryPhone();
+                if ($contactPrimaryPhone) {
+                    $call->setPhoneNumber($contactPrimaryPhone->getPhone());
+                }
                 $call->setDirection($directions['outgoing']);
             }
 
             if ($randomPath > 3) {
-                if ($call->getRelatedContact()) {
-                    $call->setRelatedAccount($call->getRelatedContact()->getAccounts()[0]);
+                /** @var Contact[] $relatedContacts */
+                $relatedContacts = $call->getActivityTargets('OroCRM\Bundle\ContactBundle\Entity\Contact');
+                if ($relatedContacts) {
+                    if ($call->supportActivityTarget(get_class($relatedContacts[0]->getAccounts()[0]))) {
+                        $call->addActivityTarget($relatedContacts[0]->getAccounts()[0]);
+                    }
                 } else {
-                    $call->setRelatedAccount($account);
+                    if ($call->supportActivityTarget(get_class($account))) {
+                        $call->addActivityTarget($account);
+                    }
                 }
             }
 
-            if (is_null($call->getContactPhoneNumber())) {
+            $phone = $call->getPhoneNumber();
+            if (empty($phone)) {
                 $phone = rand(1000000000, 9999999999);
                 $phone = sprintf(
                     "%s-%s-%s",

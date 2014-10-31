@@ -8,8 +8,6 @@ use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use OroCRM\Bundle\CallBundle\EventListener\Datagrid\CallListener;
 use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class CallListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -109,8 +107,6 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
     public function onBuildAfterDataProvider()
     {
         $user = new User();
-        $contact = new Contact();
-        $account = new Account();
 
         return array(
             'no filters' => array(
@@ -135,51 +131,6 @@ class CallListenerTest extends \PHPUnit_Framework_TestCase
                     1 => array(
                         'method' => 'setParameter',
                         'parameters' => array('user', $user),
-                    )
-                ),
-            ),
-            'filter by contact' => array(
-                'parameters' => array(
-                    'contactId' => 13,
-                ),
-                'entityManagerExpectations' => array(
-                    0 => array(
-                        'method' => 'find',
-                        'parameters' => array('OroCRMContactBundle:Contact', 13),
-                        'return' => $contact,
-                    )
-                ),
-                'queryBuilderExpectations' => array(
-                    0 => array(
-                        'method' => 'andWhere',
-                        'parameters' => array('call.relatedContact = :contact'),
-                    ),
-                    1 => array(
-                        'method' => 'setParameter',
-                        'parameters' => array('contact', $contact),
-                    )
-                ),
-            ),
-            'filter by account' => array(
-                'parameters' => array(
-                    'accountId' => 14,
-                ),
-                'entityManagerExpectations' => array(
-                    0 => array(
-                        'method' => 'find',
-                        'parameters' => array('OroCRMAccountBundle:Account', 14),
-                        'return' => $account,
-                    )
-                ),
-                'queryBuilderExpectations' => array(
-                    0 => array(
-                        'method' => 'andWhere',
-                        'parameters'
-                        => array('(call.relatedAccount = :account OR :account MEMBER OF contact.accounts)'),
-                    ),
-                    1 => array(
-                        'method' => 'setParameter',
-                        'parameters' => array('account', $account),
                     )
                 ),
             ),

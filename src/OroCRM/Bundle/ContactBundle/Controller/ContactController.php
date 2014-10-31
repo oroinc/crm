@@ -68,18 +68,22 @@ class ContactController extends Controller
     public function createAction()
     {
         // add predefined account to contact
-        $contact   = null;
-        $accountId = $this->getRequest()->get('account');
-        if ($accountId) {
-            $repository = $this->getDoctrine()->getRepository('OroCRMAccountBundle:Account');
-            /** @var Account $account */
-            $account = $repository->find($accountId);
-            if ($account) {
-                /** @var Contact $contact */
-                $contact = $this->getManager()->createEntity();
-                $contact->addAccount($account);
-            } else {
-                throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $accountId));
+        $contact     = null;
+        $entityClass = $this->getRequest()->get('entityClass');
+        if ($entityClass) {
+            $entityClass = $this->get('oro_entity.routing_helper')->decodeClassName($entityClass);
+            $entityId    = $this->getRequest()->get('entityId');
+            if ($entityId && $entityClass === $this->container->getParameter('orocrm_account.account.entity.class')) {
+                $repository = $this->getDoctrine()->getRepository($entityClass);
+                /** @var Account $account */
+                $account = $repository->find($entityId);
+                if ($account) {
+                    /** @var Contact $contact */
+                    $contact = $this->getManager()->createEntity();
+                    $contact->addAccount($account);
+                } else {
+                    throw new NotFoundHttpException(sprintf('Account with ID %s is not found', $entityId));
+                }
             }
         }
 

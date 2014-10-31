@@ -2,16 +2,17 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
-use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Symfony\Component\Validator\ExecutionContext;
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+
+use OroCRM\Bundle\CallBundle\Model\ExtendCall;
+use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
 
 /**
  * Call
@@ -21,6 +22,7 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *      indexes={@ORM\Index(name="call_dt_idx",columns={"call_date_time"})}
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="orocrm_call_index",
  *      defaultValues={
@@ -38,13 +40,19 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "grouping"={
+ *              "groups"={"activity"}
+ *          },
  *          "activity"={
- *              "immutable"=true
+ *              "route"="orocrm_call_activity_view",
+ *              "acl"="orocrm_call_view",
+ *              "action_button_widget"="orocrm_log_call_button",
+ *              "action_link_widget"="orocrm_log_call_link"
  *          }
  *      }
  * )
  */
-class Call implements ActivityListInterface
+class Call extends ExtendCall implements ActivityListInterface
 {
     /**
      * @var integer
@@ -52,6 +60,7 @@ class Call implements ActivityListInterface
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $id;
 
@@ -59,28 +68,15 @@ class Call implements ActivityListInterface
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $owner;
-
-    /**
-     * @var Contact
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
-     * @ORM\JoinColumn(name="related_contact_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     */
-    protected $relatedContact;
-
-    /**
-     * @var Account
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
-     * @ORM\JoinColumn(name="related_account_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(defaultValues={"merge"={"inverse_display"=true, "inverse_cast_method"="getSubject"}})
-     */
-    protected $relatedAccount;
 
     /**
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255)
+     * @Soap\ComplexType("string")
      */
     protected $subject;
 
@@ -88,21 +84,15 @@ class Call implements ActivityListInterface
      * @var string
      *
      * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $phoneNumber;
-
-    /**
-     * @var ContactPhone
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
-     * @ORM\JoinColumn(name="contact_phone_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     */
-    protected $contactPhoneNumber;
 
     /**
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $notes;
 
@@ -110,6 +100,7 @@ class Call implements ActivityListInterface
      * @var \DateTime
      *
      * @ORM\Column(name="call_date_time", type="datetime")
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $callDateTime;
 
@@ -118,6 +109,7 @@ class Call implements ActivityListInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallStatus")
      * @ORM\JoinColumn(name="call_status_name", referencedColumnName="name", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $callStatus;
 
@@ -125,6 +117,7 @@ class Call implements ActivityListInterface
      * @var \DateTime
      *
      * @ORM\Column(name="duration", type="time", nullable=true)
+     * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $duration;
 
@@ -133,19 +126,50 @@ class Call implements ActivityListInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
      * @ORM\JoinColumn(name="call_direction_name", referencedColumnName="name", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $direction;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
 
     /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @Soap\ComplexType("string", nillable=true)
      */
     protected $organization;
 
     public function __construct()
     {
+        parent::__construct();
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
     }
@@ -304,7 +328,7 @@ class Call implements ActivityListInterface
      * @param User $owner
      * @return Call
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner)
     {
         $this->owner = $owner;
 
@@ -322,81 +346,12 @@ class Call implements ActivityListInterface
     }
 
     /**
-     * Set relatedContact
-     *
-     * @param Contact $relatedContact
-     * @return Call
-     */
-    public function setRelatedContact(Contact $relatedContact = null)
-    {
-        $this->relatedContact = $relatedContact;
-
-        return $this;
-    }
-
-    /**
-     * Get relatedContact
-     *
-     * @return Contact
-     */
-    public function getRelatedContact()
-    {
-        return $this->relatedContact;
-    }
-
-    /**
-     * Set relatedAccount
-     *
-     * @param Account $relatedAccount
-     * @return Call
-     */
-    public function setRelatedAccount(Account $relatedAccount = null)
-    {
-        $this->relatedAccount = $relatedAccount;
-
-        return $this;
-    }
-
-    /**
-     * Get relatedAccount
-     *
-     * @return Account
-     */
-    public function getRelatedAccount()
-    {
-        return $this->relatedAccount;
-    }
-
-    /**
-     * Set contactPhoneNumber
-     *
-     * @param ContactPhone $contactPhoneNumber
-     * @return Call
-     */
-    public function setContactPhoneNumber(ContactPhone $contactPhoneNumber = null)
-    {
-        $this->contactPhoneNumber = $contactPhoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get contactPhoneNumber
-     *
-     * @return ContactPhone
-     */
-    public function getContactPhoneNumber()
-    {
-        return $this->contactPhoneNumber;
-    }
-
-    /**
      * Set callStatus
      *
      * @param CallStatus $callStatus
      * @return Call
      */
-    public function setCallStatus(CallStatus $callStatus = null)
+    public function setCallStatus($callStatus)
     {
         $this->callStatus = $callStatus;
 
@@ -413,15 +368,36 @@ class Call implements ActivityListInterface
         return $this->callStatus;
     }
 
-    public function isPhoneValid(ExecutionContext $context)
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
     {
-        if (!$this->getPhoneNumber() && !$this->getContactPhoneNumber()) {
-            $propertyPath = $context->getPropertyPath() . '.contactPhoneNumber';
-            $context->addViolationAt(
-                $propertyPath,
-                'orocrm.call.phone.required.message'
-            );
-        }
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     /**
@@ -445,6 +421,23 @@ class Call implements ActivityListInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
