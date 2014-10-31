@@ -22,6 +22,7 @@ class UpdateSalesEntitiesWithOrganization extends UpdateWithOrganization impleme
      */
     public function load(ObjectManager $manager)
     {
+        $this->update($manager, 'OroCRMSalesBundle:B2bCustomer');
         $this->update($manager, 'OroCRMSalesBundle:Lead');
         $this->update($manager, 'OroCRMSalesBundle:Opportunity');
         $this->update($manager, 'OroCRMSalesBundle:SalesFunnel');
