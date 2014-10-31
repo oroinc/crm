@@ -83,11 +83,12 @@ class MarketingListExtension extends AbstractExtension
         $qb       = $datasource->getQueryBuilder();
         $dqlParts = $qb->getDQLParts();
 
-        /** @var Andx $conditions */
-        $conditions = $dqlParts['where'];
-        if (empty($conditions)) {
+        if (empty($dqlParts['where'])) {
             return;
         }
+
+        /** @var Andx $conditions */
+        $conditions = $dqlParts['where'];
 
         $parts = $conditions->getParts();
         if (empty($parts)) {
