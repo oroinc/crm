@@ -51,6 +51,11 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    {% placeholder view_sync_status_badge with {entity: entity} %}
+{% endblock breadcrumbs %}
+
 {% block content_data %}
     {%- set listInformation -%}
         <div class="row-fluid form-horizontal">
@@ -113,6 +118,10 @@
         {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': removedItemsMixin}) }}
     {%- endset -%}
 
+    {%- set syncStatusData -%}
+        {% placeholder view_sync_status_data with {entity: entity} %}
+    {%- endset -%}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.marketinglist.block.general'|trans,
@@ -134,6 +143,19 @@
             ]
         }
     ] %}
+    {% if syncStatusData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([
+            {
+                'title' : 'orocrm.marketinglist.block.syncstatus'|trans,
+                'subblocks': [
+                    {
+                        'spanClass': 'empty',
+                        'data' : [syncStatusData]
+                    }
+                ]
+            }
+        ]) %}
+    {% endif %}
 
     <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
          data-page-component-options="{{ [
