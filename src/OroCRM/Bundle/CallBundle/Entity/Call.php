@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
+use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\Validator\ExecutionContext;
 use Doctrine\ORM\Mapping as ORM;
@@ -43,7 +44,7 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
  *      }
  * )
  */
-class Call
+class Call implements ActivityListInterface
 {
     /**
      * @var integer
@@ -444,5 +445,13 @@ class Call
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActivityListSubject()
+    {
+        return $this->subject;
     }
 }
