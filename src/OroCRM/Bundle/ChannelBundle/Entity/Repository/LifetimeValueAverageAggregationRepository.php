@@ -53,7 +53,7 @@ class LifetimeValueAverageAggregationRepository extends EntityRepository
                     $this->doMonthAggregation($channel, $date);
                 }
             } else {
-                    $this->doMonthAggregation($channel, $now, true);
+                $this->doMonthAggregation($channel, $now, true);
             }
         }
 

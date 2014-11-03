@@ -19,7 +19,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
     {
         /** @var BuilderFactory $builderFactory */
         $builderFactory = $this->container->get('orocrm_channel.builder.factory');
-        $channel = $builderFactory
+        $channel        = $builderFactory
             ->createBuilder()
             ->setChannelType(self::B2B_CHANNEL_TYPE)
             ->setStatus(Channel::STATUS_ACTIVE)
@@ -45,6 +45,8 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
             foreach ($entities as $entity) {
                 $this->fillChannelToEntity($channel, $entity);
             }
+
+            $this->updateLifetimeForAccounts($channel);
         }
     }
 }
