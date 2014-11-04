@@ -53,7 +53,7 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    {% placeholder view_sync_status_badge with {entity: entity} %}
+    {% placeholder view_sync_status_badge with {id: entity.id, entity: entity} %}
 {% endblock breadcrumbs %}
 
 {% block content_data %}
@@ -119,7 +119,7 @@
     {%- endset -%}
 
     {%- set syncStatusData -%}
-        {% placeholder view_sync_status_data with {entity: entity} %}
+        {% placeholder view_sync_status_data with {id: entity.id, entity: entity} %}
     {%- endset -%}
 
     {% set dataBlocks = [
