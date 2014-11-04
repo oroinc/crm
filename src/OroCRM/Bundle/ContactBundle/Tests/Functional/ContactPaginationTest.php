@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
-use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
@@ -13,7 +14,7 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class ContactPaginationTest extends WebTestCase
 {
-    protected static $gridParams = ['contacts-grid' => 'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'];
+    protected $gridParams = ['contacts-grid' => 'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'];
 
     protected function setUp()
     {
@@ -57,7 +58,7 @@ class ContactPaginationTest extends WebTestCase
                 $route,
                 [
                     'id' => $this->getContactByName($name)->getId(),
-                    'grid' => self::$gridParams
+                    'grid' => $this->gridParams
                 ]
             )
         );
@@ -92,27 +93,15 @@ class ContactPaginationTest extends WebTestCase
      */
     protected function assertPositionEntity(Crawler $crawler, $isFirst = false, $isLast = false)
     {
-        if ($isFirst && $isLast) {
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } elseif ($isFirst) {
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } elseif ($isLast) {
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } else {
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        }
+        $showFirst = !$isFirst;
+        $showPrev  = !$isFirst;
+        $showLast  = !$isLast;
+        $showNext  = !$isLast;
+
+        $this->assertEquals((int)$showFirst, $crawler->filter('.user-info-state a:contains("First")')->count());
+        $this->assertEquals((int)$showPrev, $crawler->filter('.user-info-state a:contains("Prev")')->count());
+        $this->assertEquals((int)$showNext, $crawler->filter('.user-info-state a:contains("Next")')->count());
+        $this->assertEquals((int)$showLast, $crawler->filter('.user-info-state a:contains("Last")')->count());
     }
 
     /**
