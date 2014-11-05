@@ -315,7 +315,7 @@ class Call extends ExtendCall implements ActivityListInterface
     /**
      * Get direction
      *
-     * @return boolean
+     * @return CallDirection
      */
     public function getDirection()
     {

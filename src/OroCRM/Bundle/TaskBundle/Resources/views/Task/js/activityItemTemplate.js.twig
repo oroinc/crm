@@ -20,30 +20,20 @@
                 </div>
             </div>
             <div class="actions">
-                <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %> title="{{ 'oro.note.action.edit'|trans|e('html_attr')|raw }}"><i class="icon-edit hide-text">{{ 'oro.note.action.edit'|trans|e('html')|raw }}</i></button>
-                <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %> title="{{ 'oro.note.action.remove'|trans|e('html_attr')|raw }}"><i class="icon-trash hide-text">{{ 'oro.note.action.remove'|trans|e('html')|raw }}</i></button>
+                <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
+                    title="{{ 'oro.note.action.edit'|trans|e('html_attr')|raw }}">
+                    <i class="icon-edit hide-text">{{ 'oro.note.action.edit'|trans|e('html')|raw }}</i>
+                </button>
+                <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %>
+                    title="{{ 'oro.note.action.remove'|trans|e('html_attr')|raw }}">
+                    <i class="icon-trash hide-text">{{ 'oro.note.action.remove'|trans|e('html')|raw }}</i>
+                </button>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="message">
-                <%= subject %>
+                <%= data %>
             </div>
-            <% if (hasUpdate) { %>
-            <div class="details">
-                <div>
-                    <%= _.template(
-                    {{ 'oro.note.updated_by'|trans|json_encode|raw }},
-                    {
-                    user: updatedBy_url
-                    ? '<a class="user" href="' + updatedBy_url + '">' +  _.escape(updatedBy) + '</a>'
-                    : '<i class="user">' +  _.escape(updatedBy) + '</i>',
-                    date: '<i class="date">' + updatedAt + '</i>'
-                    },
-                    { interpolate: /\{\{(.+?)\}\}/g }
-                    ) %>
-                </div>
-            </div>
-            <% } %>
         </div>
     </div>
 </script>

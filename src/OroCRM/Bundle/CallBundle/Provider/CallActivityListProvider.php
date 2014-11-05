@@ -3,9 +3,9 @@
 namespace OroCRM\Bundle\CallBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\CallBundle\Entity\Call;
-
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallActivityListProvider implements ActivityListProviderInterface
 {
@@ -24,7 +24,6 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getTargets()
     {
-        // TODO: Implement getTargets() method.
     }
 
     /**
@@ -45,30 +44,17 @@ class CallActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * @param Call $entity
-     *
-     * @return array
-     */
-    public function getBriefData($entity)
-    {
-        return [
-            'subject'   => $entity->getSubject(),
-            'createdAt' => $entity->getCreatedAt(),
-            'updated'   => $entity->getUpdatedAt()
-        ];
-    }
-
-    /**
-     * @param Call $entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($entity)
     {
+        /** @var Call $entity */
         return [
-            'subject'   => $entity->getSubject(),
-            'createdAt' => $entity->getCreatedAt(),
-            'updated'   => $entity->getUpdatedAt()
+            'id'             => $entity->getId(),
+            'owner_id'       => $entity->getOwner()->getId(),
+            'subject'        => $entity->getSubject(),
+            'direction'      => $entity->getDirection()->getLabel(),
+            'call_date_time' => $entity->getCallDateTime(),
         ];
     }
 
@@ -85,7 +71,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getFullTemplate()
     {
-        //return 'OroCRMCallBundle:Call:activity-list/fullTemplate.js.twig';
+        return 'OroCRMCallBundle:Call:widget/info.html.twig';
     }
 
     /**
