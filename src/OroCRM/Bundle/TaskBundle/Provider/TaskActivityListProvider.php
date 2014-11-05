@@ -1,15 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Provider;
+namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 
-class CallActivityListProvider implements ActivityListProviderInterface
+class TaskActivityListProvider implements ActivityListProviderInterface
 {
-    const ACTIVITY_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
+    const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
@@ -77,7 +77,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getBriefTemplate()
     {
-        return 'OroCRMCallBundle:Call:js/activityItemTemplate.js.twig';
+        return 'OroCRMTaskBundle:Task:js/activityItemTemplate.js.twig';
     }
 
     /**

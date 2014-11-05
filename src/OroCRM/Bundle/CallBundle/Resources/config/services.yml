@@ -42,4 +42,4 @@ services:
         arguments:
            - @oro_entity.doctrine_helper
         tags:
-           - {name: oro.activity_list.provider}
+           - {name: oro.activity_list.provider, priority: 10 }

@@ -1,0 +1,49 @@
+{% set entityClass = 'OroCRM\\Bundle\\TaskBundle\\Entity\\Task' %}
+{% set entityLabel = oro_entity_config_value(entityClass, 'label')|trans  %}
+{% set entityIcon =  oro_entity_config_value(entityClass, 'icon')|raw  %}
+<script type="text/html" id="{{ id|e('html_attr')|raw }}">
+    <div class="accordion-group">
+        <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
+            <div class="title-item">
+                <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
+                <span class="visual">
+                    <i class="{{ entityIcon|raw }}"></i>
+                    <span>{{ entityLabel }}</span>
+                </span>
+                <span class="details">
+                    <i class="date"><%= updatedAt %></i>
+                </span>
+            </div>
+            <div class="message-item">
+                <div class="message">
+                    <%= subject %>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %> title="{{ 'oro.note.action.edit'|trans|e('html_attr')|raw }}"><i class="icon-edit hide-text">{{ 'oro.note.action.edit'|trans|e('html')|raw }}</i></button>
+                <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %> title="{{ 'oro.note.action.remove'|trans|e('html_attr')|raw }}"><i class="icon-trash hide-text">{{ 'oro.note.action.remove'|trans|e('html')|raw }}</i></button>
+            </div>
+        </div>
+        <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
+            <div class="message">
+                <%= subject %>
+            </div>
+            <% if (hasUpdate) { %>
+            <div class="details">
+                <div>
+                    <%= _.template(
+                    {{ 'oro.note.updated_by'|trans|json_encode|raw }},
+                    {
+                    user: updatedBy_url
+                    ? '<a class="user" href="' + updatedBy_url + '">' +  _.escape(updatedBy) + '</a>'
+                    : '<i class="user">' +  _.escape(updatedBy) + '</i>',
+                    date: '<i class="date">' + updatedAt + '</i>'
+                    },
+                    { interpolate: /\{\{(.+?)\}\}/g }
+                    ) %>
+                </div>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</script>
