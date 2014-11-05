@@ -53,7 +53,6 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    {% placeholder view_sync_status_badge with {id: entity.id, entity: entity} %}
 {% endblock breadcrumbs %}
 
 {% block content_data %}
@@ -103,6 +102,10 @@
         </div>
     {%- endset -%}
 
+    {%- set syncStatusData -%}
+        {% placeholder view_sync_status_data with {id: entity.id, entity: entity} %}
+    {%- endset -%}
+    
     {% set itemsGridName = gridName ~ '_items' %}
     {% set removedItemsGridName = gridName ~ '_removed_items' %}
     {% set itemsMixin = 'orocrm-marketing-list-items-mixin' %}
@@ -118,17 +121,17 @@
         {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': removedItemsMixin}) }}
     {%- endset -%}
 
-    {%- set syncStatusData -%}
-        {% placeholder view_sync_status_data with {id: entity.id, entity: entity} %}
-    {%- endset -%}
-
+    {% set generalSectionBlocks = [{'data' : [listInformation]}]%}
+    {% if syncStatusData is not empty %}
+        {% set generalSectionBlocks = generalSectionBlocks|merge(
+            [{'data': [syncStatusData]}]
+        ) %}
+    {% endif %}
     {% set dataBlocks = [
         {
             'title': 'orocrm.marketinglist.block.general'|trans,
             'class': 'active',
-            'subblocks': [
-                {'data' : [listInformation]}
-            ]
+            'subblocks': generalSectionBlocks
         },
         {
             'title': config.plural_label,
@@ -143,19 +146,6 @@
             ]
         }
     ] %}
-    {% if syncStatusData is not empty %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title' : 'orocrm.marketinglist.block.syncstatus'|trans,
-                'subblocks': [
-                    {
-                        'spanClass': 'empty',
-                        'data' : [syncStatusData]
-                    }
-                ]
-            }
-        ]) %}
-    {% endif %}
 
     <div data-page-component-module="orocrmmarketinglist/js/app/components/grid-linker"
          data-page-component-options="{{ [
