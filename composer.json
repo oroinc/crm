@@ -22,12 +22,7 @@
     },
     "require": {
         "php": ">=5.4.9",
-        "oro/platform": "1.x-dev"
+        "oro/platform": "1.4"
     },
-    "minimum-stability": "dev",
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
-        }
-    }
+    "minimum-stability": "dev"
 }
