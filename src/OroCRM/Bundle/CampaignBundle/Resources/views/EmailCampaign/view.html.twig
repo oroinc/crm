@@ -66,6 +66,12 @@
         {% endif %}
     {%- endset -%}
 
+    {%- set emailCampaignStatisticsData -%}
+        {% if show_stats %}
+            {% include 'OroCRMCampaignBundle:EmailCampaign:widget/stats.html.twig' %}
+        {% endif %}
+    {%- endset -%}
+
     {% set dataBlocks = [
         {
             'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
@@ -81,6 +87,18 @@
             ]
         }
     ] %}
+
+    {% if emailCampaignStatisticsData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+        'title': 'orocrm.campaign.emailcampaignstatistics.block.label'|trans,
+            'subblocks': [
+                {
+                    'spanClass': 'empty',
+                    'data': [emailCampaignStatisticsData]
+                }
+            ]
+        }]) %}
+    {% endif %}
 
     {% set id = 'emailCampaignView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}
