@@ -153,6 +153,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementOpenCount()
+    {
+        $this->openCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getClickCount()
@@ -167,6 +177,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     public function setClickCount($clickCount)
     {
         $this->clickCount = $clickCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementClickCount()
+    {
+        $this->clickCount++;
 
         return $this;
     }
@@ -191,6 +211,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementBounceCount()
+    {
+        $this->bounceCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getAbuseCount()
@@ -210,6 +240,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementAbuseCount()
+    {
+        $this->abuseCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getUnsubscribeCount()
@@ -224,6 +264,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     public function setUnsubscribeCount($unsubscribeCount)
     {
         $this->unsubscribeCount = $unsubscribeCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementUnsubscribeCount()
+    {
+        $this->unsubscribeCount++;
 
         return $this;
     }

@@ -45,11 +45,20 @@ class ContactInformationColumnValidator extends ConstraintValidator
             throw new UnexpectedTypeException($value, 'AbstractQueryDesigner');
         }
 
-        if (!$this->assertContactInformationFields($value)) {
-            if ($constraint->field) {
-                $this->context->addViolationAt($constraint->field, $constraint->message);
+        $type = $constraint->type;
+        if (!$this->assertContactInformationFields($value, $type)) {
+            $parameters = [];
+            if ($constraint->type) {
+                $message = $constraint->typeMessage;
+                $parameters['%type%'] = $constraint->type;
             } else {
-                $this->context->addViolation($constraint->message);
+                $message = $constraint->message;
+            }
+
+            if ($constraint->field) {
+                $this->context->addViolationAt($constraint->field, $message, $parameters);
+            } else {
+                $this->context->addViolation($message, $parameters);
             }
         }
     }
@@ -58,10 +67,16 @@ class ContactInformationColumnValidator extends ConstraintValidator
      * Assert that value has contact information column in it's definition.
      *
      * @param AbstractQueryDesigner $value
+     * @param string $type
      * @return bool
      */
-    protected function assertContactInformationFields(AbstractQueryDesigner $value)
+    protected function assertContactInformationFields(AbstractQueryDesigner $value, $type)
     {
-        return count($this->contactInformationFieldHelper->getQueryContactInformationColumns($value)) > 0;
+        $contactInformationFields = $this->contactInformationFieldHelper->getQueryContactInformationColumns($value);
+        if ($type) {
+            return array_key_exists($type, $contactInformationFields) && count($contactInformationFields[$type]) > 0;
+        } else {
+            return count($contactInformationFields) > 0;
+        }
     }
 }

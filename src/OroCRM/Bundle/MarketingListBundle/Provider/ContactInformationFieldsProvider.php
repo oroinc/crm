@@ -28,18 +28,18 @@ class ContactInformationFieldsProvider
     }
 
     /**
-     * @param AbstractQueryDesigner $abstractQueryDesigner
-     * @param string $entityClass
+     * @param AbstractQueryDesigner $queryDesigner
      * @param string|null $type
      *
      * @return array
      */
-    public function getQueryTypedFields(AbstractQueryDesigner $abstractQueryDesigner, $entityClass, $type = null)
+    public function getQueryTypedFields(AbstractQueryDesigner $queryDesigner, $type = null)
     {
+        $entityClass = $queryDesigner->getEntity();
         $typedFields = $this->getEntityTypedFields($entityClass, $type);
 
         $definitionColumns = [];
-        $definition = $abstractQueryDesigner->getDefinition();
+        $definition = $queryDesigner->getDefinition();
         if ($definition) {
             $definition = json_decode($definition, JSON_OBJECT_AS_ARRAY);
             if (!empty($definition['columns'])) {
@@ -98,7 +98,6 @@ class ContactInformationFieldsProvider
         } else {
             $typedFields = $this->getQueryTypedFields(
                 $marketingList->getSegment(),
-                $marketingList->getEntity(),
                 $type
             );
         }
