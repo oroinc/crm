@@ -387,6 +387,12 @@ datagrid:
     orocrm-email-campaign-marketing-list-sent-items-mixin:
         source:
             query:
+                select:
+                    - (CASE WHEN (cs.openCount = 0) THEN '' ELSE cs.openCount END) as openCount
+                    - (CASE WHEN (cs.clickCount = 0) THEN '' ELSE cs.clickCount END) as clickCount
+                    - (CASE WHEN (cs.bounceCount = 0) THEN '' ELSE cs.bounceCount END) as bounceCount
+                    - (CASE WHEN (cs.abuseCount = 0) THEN '' ELSE cs.abuseCount END) as abuseCount
+                    - (CASE WHEN (cs.unsubscribeCount = 0) THEN '' ELSE cs.unsubscribeCount END) as unsubscribeCount
                 join:
                     inner:
                         -
@@ -401,3 +407,40 @@ datagrid:
                             condition: 'cs.marketingListItem = mli.id AND cs.emailCampaign = :emailCampaign'
             bind_parameters:
                 - emailCampaign
+        columns:
+            openCount:
+                label: Opened
+            clickCount:
+                label: Clicked
+            bounceCount:
+                label: Bounced
+            abuseCount:
+                label: Abuse reported
+            unsubscribeCount:
+                label: Unsubscribed
+        filters:
+            columns:
+                openCount:
+                    type:        number
+                    data_name:   cs.openCount
+                clickCount:
+                    type:        number
+                    data_name:   cs.clickCount
+                bounceCount:
+                    type:        number
+                    data_name:   cs.bounceCount
+                abuseCount:
+                    type:        number
+                    data_name:   cs.abuseCount
+                unsubscribeCount:
+                    type:        number
+                    data_name:   cs.unsubscribeCount
+        sorters:
+            columns:
+                openCount:        { data_name: cs.openCount }
+                clickCount:       { data_name: cs.clickCount }
+                bounceCount:      { data_name: cs.bounceCount }
+                abuseCount:       { data_name: cs.abuseCount }
+                unsubscribeCount: { data_name: cs.unsubscribeCount }
+            default:
+                name: ASC
