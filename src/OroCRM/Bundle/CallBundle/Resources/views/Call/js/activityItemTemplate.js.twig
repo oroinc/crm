@@ -10,10 +10,12 @@
                     <span>{{ oro_entity_config_value(entityClass, 'label')|trans }}</span>
                     <span>logged by "ADMIN" on <i class="date"><%= updatedAt %></i></span>
                 </span>
-                {#<span class="details">#}
-                {#</span>#}
             </div>
             <div class="actions">
+                <button class="btn item-view-button"
+                    title="{{ 'View call log'|trans|e('html_attr')|raw }}">
+                    <i class="icon-eye-open hide-text">{{ 'View call log'|trans|e('html')|raw }}</i>
+                </button>
                 <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
                     title="{{ 'Update call log'|trans|e('html_attr')|raw }}">
                     <i class="icon-edit hide-text">{{ 'Update call log'|trans|e('html')|raw }}</i>
@@ -31,9 +33,7 @@
             <div class="message">
                 <%= subject %>
                 <% if (data != null) { %>
-                    <% _.each(data, function(value, key) {
-                        console.log(value, key);
-                    %>
+                    <% _.each(data, function(value, key) { %>
                         <%= _.template(
                             '<div class="control-group">' +
                                 '<label class="control-label">[[ label ]]</label>' +
@@ -41,30 +41,11 @@
                                     '<div class="control-label">[[ val ]]</div>' +
                                 '</div>' +
                             '</div>',
-                            {
-                                label: key,
-                                val: value
-                            },
+                            {label: key, val: value},
                             { interpolate: /\[\[(.+?)\]\]/g }
                         ) %>
                     <% }) %>
-
-                {{ ui.renderProperty('key', 'value') }}
                 <% } %>
-
-                <% if (hasUpdate) { %>
-                <%= _.template(
-                {{ 'oro.note.updated_by'|trans|json_encode|raw }},
-                {
-                user: updatedBy_url
-                    ? '<a class="user" href="' + updatedBy_url + '">' +  _.escape(updatedBy) + '</a>'
-                    : '<i class="user">' +  _.escape(updatedBy) + '</i>',
-                date: '<i class="date">' + updatedAt + '</i>'
-                },
-                { interpolate: /\{\{(.+?)\}\}/g }
-                ) %>
-                <% } %>
-
             </div>
         </div>
     </div>

@@ -49,7 +49,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
      *
      * @return array
      */
-    public function getBriefData($entity)
+    public function getData($entity)
     {
         return [
             'subject'   => $entity->getSubject(),
@@ -59,17 +59,11 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * @param Call $entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getData($entity)
+    public function getRoutes()
     {
-        return [
-            'subject'   => $entity->getSubject(),
-            'createdAt' => $entity->getCreatedAt(),
-            'updated'   => $entity->getUpdatedAt()
-        ];
+        return [];
     }
 
     /**

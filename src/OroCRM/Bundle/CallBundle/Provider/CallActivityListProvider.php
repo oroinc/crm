@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CallBundle\Provider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallActivityListProvider implements ActivityListProviderInterface
@@ -14,9 +15,12 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var DateTimeFormatter */
+    protected $dateTimeFormatter;
+
     public function __construct(DoctrineHelper $doctrineHelper)
     {
-        $this->doctrineHelper = $doctrineHelper;
+        $this->doctrineHelper    = $doctrineHelper;
     }
 
     /**
@@ -50,11 +54,10 @@ class CallActivityListProvider implements ActivityListProviderInterface
     {
         /** @var Call $entity */
         return [
-            'id'             => $entity->getId(),
             'owner_id'       => $entity->getOwner()->getId(),
             'subject'        => $entity->getSubject(),
             'direction'      => $entity->getDirection()->getLabel(),
-            'call_date_time' => $entity->getCallDateTime(),
+            //'call_date_time' => $this->dateTimeFormatter->formatTime($entity->getCallDateTime()),
         ];
     }
 
@@ -72,6 +75,15 @@ class CallActivityListProvider implements ActivityListProviderInterface
     public function getFullTemplate()
     {
         return 'OroCRMCallBundle:Call:widget/info.html.twig';
+    }
+
+    public function getRoutes()
+    {
+        return [
+            'itemView'   => 'orocrm_call_widget_info',
+            'itemEdit'   => 'orocrm_call_update',
+            'itemDelete' => 'oro_api_delete_call'
+        ];
     }
 
     /**
