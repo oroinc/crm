@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\CallBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
-
-use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallActivityListProvider implements ActivityListProviderInterface
@@ -15,12 +13,9 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /** @var DateTimeFormatter */
-    protected $dateTimeFormatter;
-
     public function __construct(DoctrineHelper $doctrineHelper)
     {
-        $this->doctrineHelper    = $doctrineHelper;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -28,6 +23,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getTargets()
     {
+        // TODO: Implement getTargets() method.
     }
 
     /**
@@ -54,27 +50,19 @@ class CallActivityListProvider implements ActivityListProviderInterface
     {
         /** @var Call $entity */
         return [
-            'owner_id'       => $entity->getOwner()->getId(),
-            'subject'        => $entity->getSubject(),
+            'notes'          => $entity->getNotes(),
+            'call_date_time' => $entity->getCallDateTime(),
+            'duration'       => $entity->getDuration(),
             'direction'      => $entity->getDirection()->getLabel(),
-            //'call_date_time' => $this->dateTimeFormatter->formatTime($entity->getCallDateTime()),
         ];
     }
 
     /**
      * {@inheritdoc
      */
-    public function getBriefTemplate()
+    public function getTemplate()
     {
         return 'OroCRMCallBundle:Call:js/activityItemTemplate.js.twig';
-    }
-
-    /**
-     * {@inheritdoc
-     */
-    public function getFullTemplate()
-    {
-        return 'OroCRMCallBundle:Call:widget/info.html.twig';
     }
 
     public function getRoutes()

@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -68,7 +69,7 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      }
  * )
  */
-class Task extends ExtendTask implements RemindableInterface
+class Task extends ExtendTask implements RemindableInterface, ActivityListInterface
 {
     /**
      * @var integer
@@ -475,5 +476,13 @@ class Task extends ExtendTask implements RemindableInterface
     public function __toString()
     {
         return (string)$this->getSubject();
+    }
+
+    /**
+     * @return string
+     */
+    public function getActivityListSubject()
+    {
+        return $this->subject;
     }
 }

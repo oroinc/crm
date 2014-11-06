@@ -3,9 +3,8 @@
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\CallBundle\Entity\Call;
-
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskActivityListProvider implements ActivityListProviderInterface
 {
@@ -24,7 +23,6 @@ class TaskActivityListProvider implements ActivityListProviderInterface
      */
     public function getTargets()
     {
-        // TODO: Implement getTargets() method.
     }
 
     /**
@@ -40,12 +38,12 @@ class TaskActivityListProvider implements ActivityListProviderInterface
      */
     public function getSubject($entity)
     {
-        /** @var $entity Call */
+        /** @var $entity Task */
         return $entity->getSubject();
     }
 
     /**
-     * @param Call $entity
+     * @param Task $entity
      *
      * @return array
      */
@@ -54,7 +52,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
         return [
             'subject'   => $entity->getSubject(),
             'createdAt' => $entity->getCreatedAt(),
-            'updated'   => $entity->getUpdatedAt()
+            'updatedAt'   => $entity->getUpdatedAt()
         ];
     }
 
@@ -63,23 +61,19 @@ class TaskActivityListProvider implements ActivityListProviderInterface
      */
     public function getRoutes()
     {
-        return [];
+        return [
+            'itemView'   => 'orocrm_task_widget_info',
+            'itemEdit'   => 'orocrm_task_update',
+            'itemDelete' => 'oro_api_delete_task'
+        ];
     }
 
     /**
      * {@inheritdoc
      */
-    public function getBriefTemplate()
+    public function getTemplate()
     {
         return 'OroCRMTaskBundle:Task:js/activityItemTemplate.js.twig';
-    }
-
-    /**
-     * {@inheritdoc
-     */
-    public function getFullTemplate()
-    {
-        //return 'OroCRMCallBundle:Call:activity-list/fullTemplate.js.twig';
     }
 
     /**

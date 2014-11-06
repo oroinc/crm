@@ -7,32 +7,46 @@
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <span class="visual">
-                    <i class="{{ entityIcon|raw }}"></i>
-                    <span>{{ entityLabel }}</span>
+                    <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
+                    <span>{{ oro_entity_config_value(entityClass, 'label')|trans }}</span>
+                    <span>logged by "ADMIN" on <i class="date"><%= updatedAt %></i></span>
                 </span>
-                <span class="details">
-                    <i class="date"><%= updatedAt %></i>
-                </span>
-            </div>
-            <div class="message-item">
-                <div class="message">
-                    <%= subject %>
-                </div>
             </div>
             <div class="actions">
+                <button class="btn item-view-button"
+                        title="{{ 'View task'|trans|e('html_attr')|raw }}">
+                    <i class="icon-eye-open hide-text">{{ 'View call log'|trans|e('html')|raw }}</i>
+                </button>
                 <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
-                    title="{{ 'oro.note.action.edit'|trans|e('html_attr')|raw }}">
+                    title="{{ 'Edit task'|trans|e('html_attr')|raw }}">
                     <i class="icon-edit hide-text">{{ 'oro.note.action.edit'|trans|e('html')|raw }}</i>
                 </button>
                 <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %>
-                    title="{{ 'oro.note.action.remove'|trans|e('html_attr')|raw }}">
+                    title="{{ 'Delete task'|trans|e('html_attr')|raw }}">
                     <i class="icon-trash hide-text">{{ 'oro.note.action.remove'|trans|e('html')|raw }}</i>
                 </button>
+            </div>
+            <div class="message-item">
+                <div class="message"><%= subject %></div>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="message">
-                <%= data %>
+                <%= subject %>
+                <% if (data != null) { %>
+                    <% _.each(data, function(value, key) { %>
+                        <%= _.template(
+                            '<div class="control-group">' +
+                                '<label class="control-label">[[ label ]]</label>' +
+                                '<div class="controls">' +
+                                    '<div class="control-label">[[ val ]]</div>' +
+                                    '</div>' +
+                                '</div>',
+                            {label: key, val: value},
+                            { interpolate: /\[\[(.+?)\]\]/g }
+                        ) %>
+                    <% }) %>
+                <% } %>
             </div>
         </div>
     </div>
