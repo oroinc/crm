@@ -13,6 +13,7 @@ class TaskCalendarNormalizer
      */
     public function getTasks($calendarId, QueryBuilder $qb)
     {
+        $result = [];
         $items = $qb->getQuery()->getArrayResult();
         foreach ($items as $item) {
             $resultItem = [];
