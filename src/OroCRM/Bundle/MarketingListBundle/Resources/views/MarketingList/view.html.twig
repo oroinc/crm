@@ -51,10 +51,6 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
-{% block breadcrumbs %}
-    {{ parent() }}
-{% endblock breadcrumbs %}
-
 {% block content_data %}
     {%- set listInformation -%}
         <div class="row-fluid form-horizontal">
@@ -103,7 +99,7 @@
     {%- endset -%}
 
     {%- set syncStatusData -%}
-        {% placeholder view_sync_status_data with {id: entity.id, entity: entity} %}
+        {% placeholder marketing_list_sync_info with {id: entity.id, marketingList: entity} %}
     {%- endset -%}
     
     {% set itemsGridName = gridName ~ '_items' %}
