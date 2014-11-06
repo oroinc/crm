@@ -55,6 +55,12 @@
         {% include 'OroCRMCampaignBundle:EmailCampaign:widget/view.html.twig' %}
     {% endset %}
 
+    {%- set emailCampaignStatisticsData -%}
+        {% if show_stats %}
+            {% include 'OroCRMCampaignBundle:EmailCampaign:widget/stats.html.twig' %}
+        {% endif %}
+    {%- endset -%}
+
     {%- set listData -%}
         {% if entity.marketingList is not empty %}
             {{ dataGrid.renderGrid(
@@ -66,24 +72,12 @@
         {% endif %}
     {%- endset -%}
 
-    {%- set emailCampaignStatisticsData -%}
-        {% if show_stats %}
-            {% include 'OroCRMCampaignBundle:EmailCampaign:widget/stats.html.twig' %}
-        {% endif %}
-    {%- endset -%}
-
     {% set dataBlocks = [
         {
             'title': 'orocrm.campaign.emailcampaign.block.general'|trans,
             'class': 'active',
             'subblocks': [
                 {'data' : [campaignInformationWidget]}
-            ]
-        },
-        {
-            'title': 'orocrm.campaign.emailcampaign.block.recipients'|trans,
-            'subblocks': [
-                {'data' : [listData]}
             ]
         }
     ] %}
@@ -99,6 +93,15 @@
             ]
         }]) %}
     {% endif %}
+    {% set dataBlocks = dataBlocks|merge([{
+        'title': 'orocrm.campaign.emailcampaign.block.recipients'|trans,
+        'subblocks': [
+            {
+                'spanClass': 'empty',
+                'data': [listData]
+            }
+        ]
+    }]) %}
 
     {% set id = 'emailCampaignView' %}
     {% set data = { 'dataBlocks': dataBlocks } %}
