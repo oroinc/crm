@@ -19,14 +19,14 @@ class OroCRMSalesBundle implements Migration
     {
         $sql = <<<SQL
                 UPDATE
-                    orocrm_sales_b2bcustomer c
+                    orocrm_sales_b2bcustomer
                 SET
-                    c.lifetime = (
+                    lifetime = (
                       SELECT
                         SUM(o.close_revenue) lifetime
                       FROM
                         orocrm_sales_opportunity o
-                      WHERE o.status_name = '%s' AND o.customer_id = c.id
+                      WHERE o.status_name = '%s' AND o.customer_id = id
                       GROUP BY o.customer_id
                 )
 SQL;
