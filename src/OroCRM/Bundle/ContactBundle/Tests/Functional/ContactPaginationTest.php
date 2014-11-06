@@ -3,152 +3,119 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+
 use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class ContactPaginationTest extends WebTestCase
+class ContactPaginationTest extends AbstractContactPaginationTestCase
 {
-    protected static $gridParams = ['contacts-grid' => 'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'];
-
-    protected function setUp()
-    {
-        $this->initClient(array(), $this->generateBasicAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData']);
-    }
-
     public function testView()
     {
         $this->client->followRedirects(true);
-        $this->assertEntityGrid();
-        $crawler = $this->openEntity('orocrm_contact_view', LoadContactEntitiesData::FIRST_ENTITY_NAME);
+        $crawler = $this->openEntity(
+            'orocrm_contact_view',
+            LoadContactEntitiesData::FIRST_ENTITY_NAME,
+            $this->gridParams
+        );
         $this->checkPaginationLinks($crawler);
     }
 
     public function testEdit()
     {
         $this->client->followRedirects(true);
-        $this->assertEntityGrid();
-        $crawler = $this->openEntity('orocrm_contact_update', LoadContactEntitiesData::FIRST_ENTITY_NAME);
+        $crawler = $this->openEntity(
+            'orocrm_contact_update',
+            LoadContactEntitiesData::FIRST_ENTITY_NAME,
+            $this->gridParams
+        );
         $this->checkPaginationLinks($crawler);
     }
 
-    protected function assertEntityGrid()
+    public function testViewEditTrek()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_contact_index'));
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-    }
-
-    /**
-     * @param string $route
-     * @param string $name
-     * @return Crawler
-     */
-    protected function openEntity($route, $name)
-    {
-        return $this->client->request(
-            'GET',
-            $this->getUrl(
-                $route,
-                [
-                    'id' => $this->getContactByName($name)->getId(),
-                    'grid' => self::$gridParams
-                ]
-            )
+        $this->client->followRedirects(true);
+        $crawler = $this->openEntity(
+            'orocrm_contact_view',
+            LoadContactEntitiesData::SECOND_ENTITY_NAME,
+            $this->gridParams
         );
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+
+        // click edit button
+        $edit    = $crawler->filter('.pull-right .edit-button')->link();
+        $crawler = $this->client->click($edit);
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+
+        // save entity and stay on page
+        $save    = $crawler->selectButton('Save and Close')->form();
+        $save->setValues(['input_action' => 'save_and_stay']);
+        $crawler = $this->client->submit($save);
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+
+        // save entity and go to view page
+        $saveAndClose = $crawler->selectButton('Save and Close')->form();
+        $crawler      = $this->client->submit($saveAndClose);
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
     }
 
     /**
-     * @param string $name
-     * @return Contact
+     * @param bool $gridVisit
+     * @param string $expected
+     *
+     * @dataProvider storageRebuildDataProvider
      */
-    protected function getContactByName($name)
+    public function testStorageRebuild($gridVisit, $expected)
     {
-        return $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMContactBundle:Contact')
-            ->findOneBy(['firstName' => $name]);
-    }
+        $this->client->followRedirects(true);
+        $crawler = $this->openEntity(
+            'orocrm_contact_view',
+            LoadContactEntitiesData::FIRST_ENTITY_NAME,
+            $this->gridParams
+        );
+        $this->checkPaginationLinks($crawler);
 
-    /**
-     * @param Crawler $crawler
-     * @param string $name
-     */
-    protected function assertCurrentContactName(Crawler $crawler, $name)
-    {
-        $result = $this->client->getResponse();
-        $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains($name, $crawler->filter('h1.user-name')->html());
-    }
-
-    /**
-     * @param Crawler $crawler
-     * @param bool $isFirst
-     * @param bool $isLast
-     */
-    protected function assertPositionEntity(Crawler $crawler, $isFirst = false, $isLast = false)
-    {
-        if ($isFirst && $isLast) {
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } elseif ($isFirst) {
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } elseif ($isLast) {
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(0, $crawler->filter('.user-info-state a:contains("Last")')->count());
-        } else {
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("First")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Prev")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Next")')->count());
-            $this->assertEquals(1, $crawler->filter('.user-info-state a:contains("Last")')->count());
+        if ($gridVisit) {
+            $this->assertContactEntityGrid([]);
         }
+
+        $crawler = $this->openEntity(
+            'orocrm_contact_view',
+            LoadContactEntitiesData::FOURTH_ENTITY_NAME,
+            $this->gridParamsFiltered
+        );
+        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FOURTH_ENTITY_NAME);
+        $this->assertPositionEntity($crawler, $expected);
+    }
+
+    /**
+     * @return array
+     */
+    public function storageRebuildDataProvider()
+    {
+        return [
+            'visit grid' => [
+                'gridVisit' => true,
+                'expected'  => '1 of 1'
+            ],
+            'shared link' => [
+                'gridVisit' => false,
+                'expected'  => '1 of 1'
+            ],
+        ];
     }
 
     /**
      * @param Crawler $crawler
+     * @param $name
+     * @param string $position
      */
-    protected function checkPaginationLinks(Crawler $crawler)
+    protected function checkViewEditPagination(Crawler $crawler, $name, $position)
     {
-        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
-        $this->assertPositionEntity($crawler, true);
-
-        // click next link
-        $next = $crawler->filter('.user-info-state a:contains("Next")')->link();
-        $crawler = $this->client->click($next);
-
-        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME);
-        $this->assertPositionEntity($crawler);
-
-        // click last link
-        $last = $crawler->filter('.user-info-state a:contains("Last")')->link();
-        $crawler = $this->client->click($last);
-
-        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FOURTH_ENTITY_NAME);
-        $this->assertPositionEntity($crawler, false, true);
-
-        // click previous link
-        $previous = $crawler->filter('.user-info-state a:contains("Prev")')->link();
-        $crawler = $this->client->click($previous);
-
-        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
-        $this->assertPositionEntity($crawler);
-
-        // click first link
-        $first = $crawler->filter('.user-info-state a:contains("First")')->link();
-        $crawler = $this->client->click($first);
-
-        $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
-        $this->assertPositionEntity($crawler, true);
+        $this->assertCurrentContactName($crawler, $name);
+        $this->assertPositionEntityLinks($crawler);
+        $this->assertPositionEntity($crawler, $position);
     }
 }
