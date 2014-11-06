@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
