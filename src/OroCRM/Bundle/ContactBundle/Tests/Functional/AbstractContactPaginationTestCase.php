@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
+use Symfony\Component\DomCrawler\Crawler;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-
 use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * @outputBuffering enabled
@@ -15,7 +15,17 @@ use Symfony\Component\DomCrawler\Crawler;
  */
 class AbstractContactPaginationTestCase extends WebTestCase
 {
-    protected $gridParams         = ['contacts-grid' => 'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'];
+    /**
+     * @var array
+     */
+    protected $gridParams         = [
+        'contacts-grid' =>
+            'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1'
+    ];
+
+    /**
+     * @var array
+     */
     protected $gridParamsFiltered = [
         'contacts-grid' =>
             'i=1&p=25&s%5BlastName%5D=-1&s%5BfirstName%5D=-1&f%5BfirstName%5D%5Bvalue%5D=f&f%5BfirstName%5D%5Btype%5D=1'

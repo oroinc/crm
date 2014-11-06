@@ -15,7 +15,7 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
     {
         $this->client->followRedirects(true);
 
-        // open first contact prepare entity pagination set
+        // open first contact to generate entity pagination set
         $crawler = $this->openEntity(
             'orocrm_contact_view',
             LoadContactEntitiesData::FIRST_ENTITY_NAME,
