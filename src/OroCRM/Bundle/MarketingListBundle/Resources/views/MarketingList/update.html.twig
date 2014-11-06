@@ -168,7 +168,7 @@
 
     {# TODO: remove this check after full support of manual marketing lists CRM-1878 #}
     {% if not form.vars.value.manual %}
-    {{ QD.query_designer_column_chain_template('column-chain-template') }}
-    {{ segmentQD.initJsWidgets(type, form, entities, metadata, {'with-relations': false}) }}
+        {{ QD.query_designer_column_chain_template('column-chain-template') }}
+        {{ segmentQD.initJsWidgets(type, form, entities, metadata) }}
     {% endif %}
 {% endblock content_data %}
