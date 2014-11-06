@@ -91,16 +91,6 @@ class LoadUserData extends AbstractFixture implements ContainerAwareInterface
 
         $userManager->updateUser($user);
 
-        // need to pass internal connection to support DB isolation
-        $aclProvider = $aclManager->getAclProvider();
-
-        $connectionReflection = new \ReflectionProperty(
-            'Oro\Bundle\SecurityBundle\Acl\Dbal\MutableAclProvider',
-            'connection'
-        );
-        $connectionReflection->setAccessible(true);
-        $connectionReflection->setValue($aclProvider, $this->container->get('doctrine.dbal.default_connection'));
-
         $aclManager->flush();
         $manager->flush();
     }
