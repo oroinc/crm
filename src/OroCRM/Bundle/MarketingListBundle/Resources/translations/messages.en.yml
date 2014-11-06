@@ -62,7 +62,6 @@ orocrm:
             general: General Information
             items: Items
             removed: Removed Items
-            syncstatus: Mailchimp Synchronization Info
 
         action:
             subscribe: Subscribe
@@ -101,7 +100,3 @@ orocrm:
             entity_id.label: Entity Id
             id.label: Id
             marketing_list.label: Marketing List
-
-        status:
-            synced: synced with MailChimp
-            not_synced: not synced with MailChimp
