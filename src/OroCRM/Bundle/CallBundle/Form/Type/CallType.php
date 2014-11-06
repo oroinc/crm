@@ -73,6 +73,27 @@ class CallType extends AbstractType
                     'label'    => 'orocrm.call.direction.label',
                     'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection'
                 ]
+            )
+            ->add(
+                'opportunity_c1908b8f',
+                'entity',
+                [
+                    'required' => true,
+                    'multiple' => true,
+
+                    'label'    => 'opportunities',
+                    'class'    => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                ]
+            )->add(
+                'contact_cdc90e7a',
+                'entity',
+                [
+                    'required' => true,
+                    'multiple' => true,
+
+                    'label'    => 'contacts',
+                    'class'    => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
+                ]
             );
     }
 

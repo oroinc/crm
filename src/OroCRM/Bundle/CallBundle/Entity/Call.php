@@ -12,7 +12,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
-use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
 
 /**
  * Call
@@ -52,7 +51,7 @@ use Oro\Bundle\ActivityListBundle\Model\ActivityListInterface;
  *      }
  * )
  */
-class Call extends ExtendCall implements ActivityListInterface
+class Call extends ExtendCall
 {
     /**
      * @var integer
@@ -438,13 +437,5 @@ class Call extends ExtendCall implements ActivityListInterface
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * @return string
-     */
-    public function getActivityListSubject()
-    {
-        return $this->subject;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Provider;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use OroCRM\Bundle\CallBundle\Entity\Call;
@@ -13,9 +14,22 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    public function __construct(DoctrineHelper $doctrineHelper)
+    /** @var ActivityManager */
+    protected $activityManager;
+
+    public function __construct(DoctrineHelper $doctrineHelper, ActivityManager $activityManager)
     {
         $this->doctrineHelper = $doctrineHelper;
+        $this->activityManager = $activityManager;
+    }
+
+    /**
+     * @param $entity
+     * @return array
+     */
+    public function getRelatedEntities($entity)
+    {
+        return $entity->getActivityTargetEntities();
     }
 
     /**
@@ -23,9 +37,9 @@ class CallActivityListProvider implements ActivityListProviderInterface
      *
      * @return array
      */
-    public function getTargets()
+    public function getTargets($entity)
     {
-        // TODO: Implement getTargets() method.
+        return $entity->getActivityTargetEntities();
     }
 
     /**
@@ -84,7 +98,16 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function isApplicable($entity)
     {
-       return $this->doctrineHelper->getEntityClass($entity) == $this::ACTIVITY_CLASS;
+       return $this->doctrineHelper->getEntityClass($entity) == self::ACTIVITY_CLASS;
     }
 
+    public function getTargetEntityClasses()
+    {
+        $associacions = $this->activityManager->getActivityAssociations(self::ACTIVITY_CLASS);
+        $a = 1;
+        return [
+            'OroCRM\Bundle\AccountBundle\Entity\Account',
+            'OroCRM\Bundle\ContactBundle\Entity\Contact'
+        ];
+    }
 }
