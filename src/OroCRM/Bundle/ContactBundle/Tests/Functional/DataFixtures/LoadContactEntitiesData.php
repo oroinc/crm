@@ -13,6 +13,8 @@ class LoadContactEntitiesData extends AbstractFixture
     const THIRD_ENTITY_NAME  = 'Shawn';
     const FOURTH_ENTITY_NAME = 'Faye';
 
+    public static $owner = 'admin';
+
     /**
      * @var array
      */
@@ -41,12 +43,12 @@ class LoadContactEntitiesData extends AbstractFixture
      */
     public function load(ObjectManager $manager)
     {
-        $adminUser = $manager->getRepository('OroUserBundle:User')->findOneByUsername('admin');
+        $user = $manager->getRepository('OroUserBundle:User')->findOneByUsername(self::$owner);
         $organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         foreach ($this->contactsData as $contactData) {
             $contact = new Contact();
-            $contact->setOwner($adminUser);
+            $contact->setOwner($user);
             $contact->setOrganization($organization);
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
