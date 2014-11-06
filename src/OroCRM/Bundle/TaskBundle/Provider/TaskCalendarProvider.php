@@ -22,7 +22,6 @@ class TaskCalendarProvider implements CalendarProviderInterface
 
     /**
      * @param DoctrineHelper          $doctrineHelper
-     * @param NameFormatter           $nameFormatter
      * @param TaskCalendarNormalizer $taskCalendarNormalizer
      * @param bool                    $enabled
      */
