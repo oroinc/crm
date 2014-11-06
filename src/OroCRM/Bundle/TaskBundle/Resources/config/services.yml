@@ -3,6 +3,8 @@ parameters:
     orocrm_task.listener.datagrid.user_tasks.class: OroCRM\Bundle\TaskBundle\EventListener\Datagrid\UserTaskGridListener
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
     orocrm_task.calendar_provider.task.class:       OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
+    orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
+    orocrm_task.calendar_provider.enabled:          true
 
 services:
     orocrm_task.listener.datagrid.user_tasks:
@@ -33,7 +35,10 @@ services:
         class: %orocrm_task.calendar_provider.task.class%
         arguments:
             - @oro_entity.doctrine_helper
-            - @oro_locale.formatter.name
-            - @oro_calendar.calendar_event.normalizer
+            - @orocrm_task.task.normalizer
+            - %orocrm_task.calendar_provider.enabled%
         tags:
             - { name: oro_calendar.calendar_provider, alias: task }
+
+    orocrm_task.task.normalizer:
+        class: %orocrm_task.task.normalizer.class%
