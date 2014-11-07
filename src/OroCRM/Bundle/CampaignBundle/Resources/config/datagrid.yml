@@ -388,11 +388,11 @@ datagrid:
         source:
             query:
                 select:
-                    - (CASE WHEN (cs.openCount = 0) THEN '' ELSE cs.openCount END) as openCount
-                    - (CASE WHEN (cs.clickCount = 0) THEN '' ELSE cs.clickCount END) as clickCount
-                    - (CASE WHEN (cs.bounceCount = 0) THEN '' ELSE cs.bounceCount END) as bounceCount
-                    - (CASE WHEN (cs.abuseCount = 0) THEN '' ELSE cs.abuseCount END) as abuseCount
-                    - (CASE WHEN (cs.unsubscribeCount = 0) THEN '' ELSE cs.unsubscribeCount END) as unsubscribeCount
+                    - cs.openCount as openCount
+                    - cs.clickCount as clickCount
+                    - cs.bounceCount as bounceCount
+                    - cs.abuseCount as abuseCount
+                    - cs.unsubscribeCount as unsubscribeCount
                 join:
                     inner:
                         -
@@ -409,15 +409,30 @@ datagrid:
                 - emailCampaign
         columns:
             openCount:
-                label: Opened
+                label: orocrm.campaign.emailcampaign.sent.mixin.open.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
             clickCount:
-                label: Clicked
+                label: orocrm.campaign.emailcampaign.sent.mixin.click.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
             bounceCount:
-                label: Bounced
+                label: orocrm.campaign.emailcampaign.sent.mixin.bounce.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
             abuseCount:
-                label: Abuse reported
+                label: orocrm.campaign.emailcampaign.sent.mixin.abuse.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
             unsubscribeCount:
-                label: Unsubscribed
+                label: orocrm.campaign.emailcampaign.sent.mixin.unsubscribe.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
         filters:
             columns:
                 openCount:
