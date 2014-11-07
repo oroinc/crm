@@ -110,14 +110,19 @@ orocrm:
                 title: Campaign Configuration
             transport:
                 internal: OroCRM
-
             stats:
                 open.label: Open
                 click.label: Click
                 bounce.label: Bounce
                 abuse.label: Abuse
                 unsubscribe.label: Unsubscribe
-
+            sent:
+                mixin:
+                    open.label: Open
+                    click.label: Click
+                    bounce.label: Bounce
+                    abuse.label: Abuse
+                    unsubscribe.label: Unsubscribe
         acl:
             send_emails: Send campaign emails
 
