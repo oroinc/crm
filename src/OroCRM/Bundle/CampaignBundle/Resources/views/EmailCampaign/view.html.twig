@@ -55,11 +55,8 @@
         {% include 'OroCRMCampaignBundle:EmailCampaign:widget/view.html.twig' %}
     {% endset %}
 
-    {%- set emailCampaignStatusPositiveData -%}
-        {% placeholder view_content_data_email_campaign_status_positive with {entityId: entity.id, entity: entity} %}
-    {%- endset -%}
-    {%- set emailCampaignStatusNegativeData -%}
-        {% placeholder view_content_data_email_campaign_status_negative with {entityId: entity.id, entity: entity} %}
+    {%- set emailCampaignStatusData -%}
+        {% placeholder view_content_data_email_campaign_status with {entity: entity} %}
     {%- endset -%}
 
     {%- set listData -%}
@@ -82,22 +79,24 @@
             ]
         }]
     %}
-    {% set generalSectionBlocks = [] %}
-    {% if emailCampaignStatusPositiveData is not empty %}
-        {% set generalSectionBlocks = generalSectionBlocks|merge(
-                [{'data': [emailCampaignStatusPositiveData]}]
-        ) %}
-    {% endif %}
-    {% if emailCampaignStatusNegativeData is not empty %}
-        {% set generalSectionBlocks = generalSectionBlocks|merge(
-                [{'data': [emailCampaignStatusNegativeData]}]
-        ) %}
-    {% endif %}
-    {% if emailCampaignStatusPositiveData is not empty %}
+    {#{% set generalSectionBlocks = [] %}#}
+    {#{% if emailCampaignStatusPositiveData is not empty %}#}
+        {#{% set generalSectionBlocks = generalSectionBlocks|merge(#}
+                {#[{'data': [emailCampaignStatusPositiveData]}]#}
+        {#) %}#}
+    {#{% endif %}#}
+    {#{% if emailCampaignStatusNegativeData is not empty %}#}
+        {#{% set generalSectionBlocks = generalSectionBlocks|merge(#}
+                {#[{'data': [emailCampaignStatusNegativeData]}]#}
+        {#) %}#}
+    {#{% endif %}#}
+    {% if emailCampaignStatusData is not empty %}
         {% set dataBlocks = dataBlocks|merge([
                 {
                     'title': 'orocrm.campaign.emailcampaign.block.status'|trans,
-                    'subblocks': generalSectionBlocks
+                    'subblocks': [
+                        {'data' : [emailCampaignStatusData]}
+                    ]
                 }
             ])
         %}
