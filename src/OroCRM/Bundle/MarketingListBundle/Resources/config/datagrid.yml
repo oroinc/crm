@@ -111,6 +111,8 @@ datagrid:
                 link:          delete_link
                 launcherOptions:
                     className: 'no-hash mobile-hide'
+        options:
+            entity_pagination: true
 
     # Segment based grids mixins:
     orocrm-marketing-list-items-base-mixin:
