@@ -99,7 +99,7 @@
     {%- endset -%}
 
     {%- set syncStatusData -%}
-        {% placeholder marketing_list_sync_info with {id: entity.id, marketingList: entity} %}
+        {% placeholder marketing_list_sync_info with {marketingList: entity} %}
     {%- endset -%}
     
     {% set itemsGridName = gridName ~ '_items' %}
