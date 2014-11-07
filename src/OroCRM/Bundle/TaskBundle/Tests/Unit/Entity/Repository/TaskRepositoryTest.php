@@ -11,9 +11,7 @@ use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 class TaskRepositoryTest extends OrmTestCase
 {
-    /**
-     * @var EntityManagerMock
-     */
+    /** @var EntityManagerMock */
     protected $em;
 
     protected function setUp()
@@ -35,17 +33,23 @@ class TaskRepositoryTest extends OrmTestCase
 
     public function testGetTaskListByTimeIntervalQueryBuilder()
     {
+        $userId    = 123;
+        $startDate = new \DateTime();
+        $endDate   = new \DateTime('+1');
+        $endDate->add(new \DateInterval('P1D'));
+
         /** @var TaskRepository $repo */
         $repo = $this->em->getRepository('OroCRMTaskBundle:Task');
-
-        $qb = $repo->getTaskListByTimeIntervalQueryBuilder(1, new \DateTime(), new \DateTime());
+        $qb   = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $startDate, $endDate);
 
         $this->assertEquals(
-            'SELECT t.id, t.subject, t.description, t.dueDate, t.createdAt, t.updatedAt '
-            . 'FROM OroCRM\Bundle\TaskBundle\Entity\Task t INNER JOIN t.workflowStep step '
-            . 'WHERE (t.owner = :assignedTo AND step.name != :step) AND (t.dueDate >= :start AND t.dueDate <= :end)',
-            $qb->getDQL());
+            'SELECT t.id, t.subject, t.description, t.dueDate, t.createdAt, t.updatedAt'
+            . ' FROM OroCRM\Bundle\TaskBundle\Entity\Task t'
+            . ' WHERE t.owner = :assignedTo AND t.dueDate >= :start AND t.dueDate <= :end',
+            $qb->getDQL()
+        );
+        $this->assertEquals($userId, $qb->getParameter('assignedTo')->getValue());
+        $this->assertEquals($startDate, $qb->getParameter('start')->getValue());
+        $this->assertEquals($endDate, $qb->getParameter('end')->getValue());
     }
-
-
 }

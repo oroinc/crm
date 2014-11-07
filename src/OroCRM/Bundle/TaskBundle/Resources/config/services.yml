@@ -2,7 +2,7 @@ parameters:
     orocrm_task.entity.class:                       OroCRM\Bundle\TaskBundle\Entity\Task
     orocrm_task.listener.datagrid.user_tasks.class: OroCRM\Bundle\TaskBundle\EventListener\Datagrid\UserTaskGridListener
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
-    orocrm_task.calendar_provider.task.class:       OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
+    orocrm_task.calendar_provider.class:            OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
     orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
     orocrm_task.calendar_provider.enabled:          true
 
@@ -31,14 +31,17 @@ services:
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
 
-    orocrm_task.calendar_provider.task:
-        class: %orocrm_task.calendar_provider.task.class%
+    orocrm_task.calendar_provider:
+        class: %orocrm_task.calendar_provider.class%
         arguments:
             - @oro_entity.doctrine_helper
             - @orocrm_task.task.normalizer
+            - @translator
             - %orocrm_task.calendar_provider.enabled%
         tags:
-            - { name: oro_calendar.calendar_provider, alias: task }
+            - { name: oro_calendar.calendar_provider, alias: tasks }
 
     orocrm_task.task.normalizer:
         class: %orocrm_task.task.normalizer.class%
+        arguments:
+            - @oro_reminder.entity.manager

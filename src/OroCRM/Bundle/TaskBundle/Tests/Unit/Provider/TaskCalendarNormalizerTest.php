@@ -6,12 +6,19 @@ use OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer;
 
 class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $reminderManager;
+
     /** @var TaskCalendarNormalizer */
     protected $normalizer;
 
     protected function setUp()
     {
-        $this->normalizer = new TaskCalendarNormalizer();
+        $this->reminderManager = $this->getMockBuilder('Oro\Bundle\ReminderBundle\Entity\Manager\ReminderManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->normalizer = new TaskCalendarNormalizer($this->reminderManager);
     }
 
     /**
@@ -19,8 +26,8 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetTasks($tasks, $expected)
     {
-        $userId = 1;
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+        $calendarId = 123;
+        $qb         = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
         $query      = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
@@ -34,7 +41,11 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
             ->method('getArrayResult')
             ->will($this->returnValue($tasks));
 
-        $result = $this->normalizer->getTasks($userId, $qb);
+        $this->reminderManager->expects($this->once())
+            ->method('applyReminders')
+            ->with($expected, 'OroCRM\Bundle\TaskBundle\Entity\Task');
+
+        $result = $this->normalizer->getTasks($calendarId, $qb);
         $this->assertEquals($expected, $result);
     }
 
@@ -43,35 +54,34 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
         $createdDate = new \DateTime();
         $updatedDate = $createdDate->add(new \DateInterval('PT10S'));
         $startDate   = $createdDate->add(new \DateInterval('PT1H'));
-        $end = clone($startDate);
+        $end         = clone($startDate);
         $endDate     = $end->add(new \DateInterval('PT30M'));
 
         return [
             [
-                'tasks' => [
+                'tasks'    => [
                     [
-                        'id'            => 1,
-                        'subject'       => 'test_subject',
-                        'description'   => 'test_description',
-                        'dueDate'       => $startDate,
-                        'createdAt'     => $createdDate,
-                        'updatedAt'     => $updatedDate,
+                        'id'          => 1,
+                        'subject'     => 'test_subject',
+                        'description' => 'test_description',
+                        'dueDate'     => $startDate,
+                        'createdAt'   => $createdDate,
+                        'updatedAt'   => $updatedDate,
                     ]
                 ],
                 'expected' => [
                     [
-                        'calendar'      => 1,
-                        'id'            => 'task_1',
-                        'title'         => 'test_subject',
-                        'description'   => 'test_description',
-                        'start'         => $startDate->format('c'),
-                        'end'           => $endDate->format('c'),
-                        'allDay'        => false,
-                        'createdAt'     => $createdDate->format('c'),
-                        'updatedAt'     => $updatedDate->format('c'),
-                        'editable'      => true,
-                        'removable'     => true,
-                        'reminders'     => [],
+                        'calendar'    => 123,
+                        'id'          => 1,
+                        'title'       => 'test_subject',
+                        'description' => 'test_description',
+                        'start'       => $startDate->format('c'),
+                        'end'         => $endDate->format('c'),
+                        'allDay'      => false,
+                        'createdAt'   => $createdDate->format('c'),
+                        'updatedAt'   => $updatedDate->format('c'),
+                        'editable'    => false,
+                        'removable'   => false,
                     ]
                 ],
             ],
