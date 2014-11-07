@@ -1,5 +1,5 @@
-{% import 'OroUIBundle::macros.html.twig' as ui %}
 {% set entityClass = 'OroCRM\\Bundle\\CallBundle\\Entity\\Call' %}
+{% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
         <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
@@ -7,22 +7,36 @@
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <span class="visual">
                     <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
-                    <span>{{ oro_entity_config_value(entityClass, 'label')|trans }}</span>
-                    <span>logged by "ADMIN" on <i class="date"><%= updatedAt %></i></span>
+                    <span>{{ entityName }}</span>
+                    <span>
+                        <% var template = (verb == 'create')
+                            ? {{ 'orocrm.call.created_by'|trans|json_encode|raw }}
+                            : {{ 'orocrm.call.changed_by'|trans|json_encode|raw }};
+                        %>
+                        <%= _.template(
+                            template,
+                            {
+                                user: '<a class="user" href="' + actor_url + '">' +  _.escape(owner) + '</a>',
+                                date: '<i class="date">' + updatedAt + '</i>'
+                            },
+                            { interpolate: /\{\{(.+?)\}\}/g }
+                        ) %>
+                    </span>
+
                 </span>
             </div>
             <div class="actions">
                 <button class="btn item-view-button"
-                    title="{{ 'View call log'|trans|e('html_attr')|raw }}">
-                    <i class="icon-eye-open hide-text">{{ 'View call log'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.call.view_call'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-eye-open hide-text">{{ 'orocrm.call.view_call'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
                 <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
-                    title="{{ 'Update call log'|trans|e('html_attr')|raw }}">
-                    <i class="icon-edit hide-text">{{ 'Update call log'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.call.update_call'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-edit hide-text">{{ 'orocrm.call.update_call'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
                 <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %>
-                    title="{{ 'Delete call log'|trans|e('html_attr')|raw }}">
-                    <i class="icon-trash hide-text">{{ 'Delete call log'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.call.delete_call'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-trash hide-text">{{ 'orocrm.call.delete_call'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
             </div>
             <div class="message-item">
@@ -30,18 +44,20 @@
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
-            <div class="message">
+            <div class="subject">
                 <%= subject %>
+            </div>
+            <div class="message">
                 <% if (data != null) { %>
-                    <% _.each(data, function(value, key) { %>
+                    <% _.each(data, function(val, key) { %>
                         <%= _.template(
                             '<div class="control-group">' +
                                 '<label class="control-label">[[ label ]]</label>' +
                                 '<div class="controls">' +
-                                    '<div class="control-label">[[ val ]]</div>' +
+                                    '<div class="control-label">[[ value ]]</div>' +
                                 '</div>' +
                             '</div>',
-                            {label: key, val: value},
+                            {label: key, value: val},
                             { interpolate: /\[\[(.+?)\]\]/g }
                         ) %>
                     <% }) %>

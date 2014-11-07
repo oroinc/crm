@@ -43,16 +43,16 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * @param Task $entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getData($entity)
     {
+        /** @var $entity Task */
         return [
-            'subject'   => $entity->getSubject(),
-            'createdAt' => $entity->getCreatedAt(),
-            'updatedAt'   => $entity->getUpdatedAt()
+            'description'        => $entity->getDescription(),
+            'due_date'           => $entity->getDueDate(),
+            'task_priority_name' => $entity->getTaskPriority(),
+            'owner_id'           => $entity->getOwnerId(),
         ];
     }
 
