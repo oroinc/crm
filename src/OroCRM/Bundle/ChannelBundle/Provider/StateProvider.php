@@ -7,8 +7,8 @@ use Doctrine\Common\Cache\Cache;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class StateProvider
@@ -30,27 +30,27 @@ class StateProvider
     /** @var AclHelper */
     protected $aclHelper;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
+    /** @var ServiceLink */
+    protected $securityFacadeLink;
 
     /**
      * @param SettingsProvider  $settingsProvider
      * @param Cache             $cache
      * @param RegistryInterface $registry
-     * @param SecurityFacade    $securityFacade
+     * @param ServiceLink       $securityFacadeLink
      * @param AclHelper         $aclHelper
      */
     public function __construct(
         SettingsProvider $settingsProvider,
         Cache $cache,
         RegistryInterface $registry,
-        SecurityFacade $securityFacade,
+        ServiceLink $securityFacadeLink,
         AclHelper $aclHelper
     ) {
         $this->settingsProvider = $settingsProvider;
         $this->cache = $cache;
         $this->registry = $registry;
-        $this->securityFacade = $securityFacade;
+        $this->securityFacadeLink = $securityFacadeLink;
         $this->aclHelper = $aclHelper;
     }
 
@@ -180,6 +180,6 @@ class StateProvider
      */
     protected function getCacheId()
     {
-        return self::CACHE_ID . '_' . $this->securityFacade->getOrganizationId();
+        return self::CACHE_ID . '_' . $this->securityFacadeLink->getService()->getOrganizationId();
     }
 }
