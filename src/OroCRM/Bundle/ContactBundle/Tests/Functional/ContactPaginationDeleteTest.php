@@ -31,11 +31,11 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
         $em->flush();
 
         // click next link
-        $next = $crawler->filter('.user-info-state a:contains("Next")')->link();
+        $next = $crawler->filter('#entity-pagination a .icon-chevron-right')->parents()->link();
         $crawler = $this->client->click($next);
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
-        $this->assertPositionEntity($crawler, '2 of 3');
+        $this->assertPositionEntity($crawler, 2, 3);
         $this->assertContains(
             "Some of the records are no longer available. You are now viewing 3 number of records.",
             $crawler->html()

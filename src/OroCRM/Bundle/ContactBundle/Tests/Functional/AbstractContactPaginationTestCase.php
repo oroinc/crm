@@ -110,19 +110,33 @@ class AbstractContactPaginationTestCase extends WebTestCase
         $showLast  = !$isLast;
         $showNext  = !$isLast;
 
-        $this->assertEquals((int)$showFirst, $crawler->filter('.entity-pagination a:contains("First")')->count());
-        $this->assertEquals((int)$showPrev, $crawler->filter('.entity-pagination a:contains("Prev")')->count());
-        $this->assertEquals((int)$showNext, $crawler->filter('.entity-pagination a:contains("Next")')->count());
-        $this->assertEquals((int)$showLast, $crawler->filter('.entity-pagination a:contains("Last")')->count());
+        $this->assertEquals(
+            (int)$showFirst,
+            $crawler->filter('#entity-pagination li:not(.disabled) a:contains("First")')->count()
+        );
+        $this->assertEquals(
+            (int)$showPrev,
+            $crawler->filter('#entity-pagination li:not(.disabled) a .icon-chevron-left')->count()
+        );
+        $this->assertEquals(
+            (int)$showNext,
+            $crawler->filter('#entity-pagination li:not(.disabled) a .icon-chevron-right')->count()
+        );
+        $this->assertEquals(
+            (int)$showLast,
+            $crawler->filter('#entity-pagination li:not(.disabled) a:contains("Last")')->count()
+        );
     }
 
     /**
      * @param Crawler $crawler
-     * @param string $position
+     * @param int $position
+     * @param int $total
      */
-    protected function assertPositionEntity(Crawler $crawler, $position)
+    protected function assertPositionEntity(Crawler $crawler, $position, $total)
     {
-        $this->assertEquals($position, $crawler->filter('.entity-pagination span')->html());
+        $this->assertEquals((string)$position, $crawler->filter('#entity-pagination .pagination-current')->html());
+        $this->assertContains((string)$total, $crawler->filter('#entity-pagination .pagination-total')->html());
     }
 
     /**
@@ -132,38 +146,38 @@ class AbstractContactPaginationTestCase extends WebTestCase
     {
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, true);
-        $this->assertPositionEntity($crawler, '1 of 4');
+        $this->assertPositionEntity($crawler, 1, 4);
 
         // click next link
-        $next = $crawler->filter('.entity-pagination a:contains("Next")')->link();
+        $next = $crawler->filter('#entity-pagination a .icon-chevron-right')->parents()->link();
         $crawler = $this->client->click($next);
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler);
-        $this->assertPositionEntity($crawler, '2 of 4');
+        $this->assertPositionEntity($crawler, 2, 4);
 
         // click last link
-        $last = $crawler->filter('.entity-pagination a:contains("Last")')->link();
+        $last = $crawler->filter('#entity-pagination a:contains("Last")')->link();
         $crawler = $this->client->click($last);
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FOURTH_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, false, true);
-        $this->assertPositionEntity($crawler, '4 of 4');
+        $this->assertPositionEntity($crawler, 4, 4);
 
         // click previous link
-        $previous = $crawler->filter('.entity-pagination a:contains("Prev")')->link();
+        $previous = $crawler->filter('#entity-pagination a .icon-chevron-left')->parents()->link();
         $crawler = $this->client->click($previous);
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler);
-        $this->assertPositionEntity($crawler, '3 of 4');
+        $this->assertPositionEntity($crawler, 3, 4);
 
         // click first link
-        $first = $crawler->filter('.entity-pagination a:contains("First")')->link();
+        $first = $crawler->filter('#entity-pagination a:contains("First")')->link();
         $crawler = $this->client->click($first);
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, true);
-        $this->assertPositionEntity($crawler, '1 of 4');
+        $this->assertPositionEntity($crawler, 1, 4);
     }
 }

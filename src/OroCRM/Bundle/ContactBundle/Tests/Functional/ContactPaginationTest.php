@@ -42,23 +42,23 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
             LoadContactEntitiesData::SECOND_ENTITY_NAME,
             $this->gridParams
         );
-        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
 
         // click edit button
         $edit    = $crawler->filter('.pull-right .edit-button')->link();
         $crawler = $this->client->click($edit);
-        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
 
         // save entity and stay on page
         $save    = $crawler->selectButton('Save and Close')->form();
         $save->setValues(['input_action' => 'save_and_stay']);
         $crawler = $this->client->submit($save);
-        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
 
         // save entity and go to view page
         $saveAndClose = $crawler->selectButton('Save and Close')->form();
         $crawler      = $this->client->submit($saveAndClose);
-        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, '2 of 4');
+        $this->checkViewEditPagination($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME, 2, 4);
     }
 
     /**
@@ -87,7 +87,7 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
             $this->gridParamsFiltered
         );
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FOURTH_ENTITY_NAME);
-        $this->assertPositionEntity($crawler, $expected);
+        $this->assertPositionEntity($crawler, $expected['position'], $expected['total']);
     }
 
     /**
@@ -98,11 +98,17 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
         return [
             'visit grid' => [
                 'gridVisit' => true,
-                'expected'  => '1 of 1'
+                'expected'  => [
+                    'position' => 1,
+                    'total'    => 1
+                ]
             ],
             'shared link' => [
                 'gridVisit' => false,
-                'expected'  => '1 of 1'
+                'expected'  => [
+                    'position' => 1,
+                    'total'    => 1
+                ]
             ],
         ];
     }
@@ -110,12 +116,13 @@ class ContactPaginationTest extends AbstractContactPaginationTestCase
     /**
      * @param Crawler $crawler
      * @param $name
-     * @param string $position
+     * @param int $position
+     * @param int $total
      */
-    protected function checkViewEditPagination(Crawler $crawler, $name, $position)
+    protected function checkViewEditPagination(Crawler $crawler, $name, $position, $total)
     {
         $this->assertCurrentContactName($crawler, $name);
         $this->assertPositionEntityLinks($crawler);
-        $this->assertPositionEntity($crawler, $position);
+        $this->assertPositionEntity($crawler, $position, $total);
     }
 }
