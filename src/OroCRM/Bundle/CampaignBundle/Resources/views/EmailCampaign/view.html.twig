@@ -79,17 +79,6 @@
             ]
         }]
     %}
-    {#{% set generalSectionBlocks = [] %}#}
-    {#{% if emailCampaignStatusPositiveData is not empty %}#}
-        {#{% set generalSectionBlocks = generalSectionBlocks|merge(#}
-                {#[{'data': [emailCampaignStatusPositiveData]}]#}
-        {#) %}#}
-    {#{% endif %}#}
-    {#{% if emailCampaignStatusNegativeData is not empty %}#}
-        {#{% set generalSectionBlocks = generalSectionBlocks|merge(#}
-                {#[{'data': [emailCampaignStatusNegativeData]}]#}
-        {#) %}#}
-    {#{% endif %}#}
     {% if emailCampaignStatusData is not empty %}
         {% set dataBlocks = dataBlocks|merge([
                 {
