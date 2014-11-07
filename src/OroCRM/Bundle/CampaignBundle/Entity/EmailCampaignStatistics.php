@@ -11,10 +11,10 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 /**
  * Email Campaign Statistics.
  *
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignStatisticsRepository")
  * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
  *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
  * })
- * @ORM\Entity
  * @Config()
  * @ORM\HasLifecycleCallbacks
  */
