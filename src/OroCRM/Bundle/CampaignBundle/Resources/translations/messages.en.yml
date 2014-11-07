@@ -93,6 +93,7 @@ orocrm:
                 general: General Information
                 email_settings: Email Settings
                 recipients: Recipients
+                status: Campaign Results
             controller:
                 saved.message: "Email campaign saved"
                 sent: "Email campaign was sent"
