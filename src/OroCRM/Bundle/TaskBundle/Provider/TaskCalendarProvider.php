@@ -2,15 +2,17 @@
 
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
+use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarPropertyRepository;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\CalendarBundle\Provider\CalendarProviderInterface;
-
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
-use Symfony\Component\Translation\TranslatorInterface;
 
 class TaskCalendarProvider implements CalendarProviderInterface
 {
+    const ALIAS = 'tasks';
     const MY_TASKS_CALENDAR_ID = 1;
 
     /** @var DoctrineHelper */
@@ -22,8 +24,8 @@ class TaskCalendarProvider implements CalendarProviderInterface
     /** @var TranslatorInterface */
     protected $translator;
 
-    /** @var  bool */
-    protected $enabled;
+    /** @var bool */
+    protected $myTasksEnabled;
 
     /** @var  bool */
     protected $calendarLabels = [
@@ -34,18 +36,18 @@ class TaskCalendarProvider implements CalendarProviderInterface
      * @param DoctrineHelper         $doctrineHelper
      * @param TaskCalendarNormalizer $taskCalendarNormalizer
      * @param TranslatorInterface    $translator
-     * @param bool                   $enabled
+     * @param bool                   $myTasksEnabled
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         TaskCalendarNormalizer $taskCalendarNormalizer,
         TranslatorInterface $translator,
-        $enabled
+        $myTasksEnabled
     ) {
         $this->doctrineHelper         = $doctrineHelper;
         $this->taskCalendarNormalizer = $taskCalendarNormalizer;
         $this->translator             = $translator;
-        $this->enabled                = $enabled;
+        $this->myTasksEnabled         = $myTasksEnabled;
     }
 
     /**
@@ -53,12 +55,10 @@ class TaskCalendarProvider implements CalendarProviderInterface
      */
     public function getCalendarDefaultValues($userId, $calendarId, array $calendarIds)
     {
-        if (!$this->enabled) {
-            return [];
-        }
+        $result = [];
 
-        return [
-            self::MY_TASKS_CALENDAR_ID => [
+        if ($this->myTasksEnabled || in_array(self::MY_TASKS_CALENDAR_ID, $calendarIds)) {
+            $result[self::MY_TASKS_CALENDAR_ID] = [
                 'calendarName'    => $this->translator->trans($this->calendarLabels[self::MY_TASKS_CALENDAR_ID]),
                 'removable'       => false,
                 'position'        => -1,
@@ -70,8 +70,10 @@ class TaskCalendarProvider implements CalendarProviderInterface
                         'width' => 600
                     ]
                 ]
-            ]
-        ];
+            ];
+        }
+
+        return $result;
     }
 
     /**
@@ -87,14 +89,45 @@ class TaskCalendarProvider implements CalendarProviderInterface
      */
     public function getCalendarEvents($userId, $calendarId, $start, $end, $subordinate)
     {
-        if (!$this->enabled) {
+        if (!$this->myTasksEnabled) {
             return [];
         }
 
-        /** @var TaskRepository $repo */
-        $repo = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
-        $qb   = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end);
+        /** @var CalendarPropertyRepository $connectionRepo */
+        $connectionRepo = $this->doctrineHelper->getEntityRepository('OroCalendarBundle:CalendarProperty');
+        $connections    = $connectionRepo->getConnectionsByTargetCalendarQueryBuilder($calendarId, self::ALIAS)
+            ->select('connection.calendar, connection.visible')
+            ->getQuery()
+            ->getArrayResult();
 
-        return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $qb);
+        if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
+            /** @var TaskRepository $repo */
+            $repo = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
+            $qb   = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end);
+
+            return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $qb);
+        }
+
+        return [];
+    }
+
+    /**
+     * @param array $connections
+     * @param int   $calendarId
+     * @param bool  $default
+     *
+     * @return bool
+     */
+    protected function isCalendarVisible($connections, $calendarId, $default = true)
+    {
+        $connection = null;
+        foreach ($connections as $c) {
+            if ($c['calendar'] === $calendarId) {
+                $connection = $c;
+                break;
+            }
+        }
+
+        return $connection ? $connection['visible'] : $default;
     }
 }

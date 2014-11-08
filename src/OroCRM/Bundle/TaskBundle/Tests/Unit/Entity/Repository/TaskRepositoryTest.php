@@ -16,18 +16,17 @@ class TaskRepositoryTest extends OrmTestCase
 
     protected function setUp()
     {
-        $reader         = new AnnotationReader();
         $metadataDriver = new AnnotationDriver(
-            $reader,
+            new AnnotationReader(),
             'OroCRM\Bundle\TaskBundle\Entity'
         );
 
         $this->em = $this->getTestEntityManager();
         $this->em->getConfiguration()->setMetadataDriverImpl($metadataDriver);
         $this->em->getConfiguration()->setEntityNamespaces(
-            array(
+            [
                 'OroCRMTaskBundle' => 'OroCRM\Bundle\TaskBundle\Entity'
-            )
+            ]
         );
     }
 
@@ -35,7 +34,7 @@ class TaskRepositoryTest extends OrmTestCase
     {
         $userId    = 123;
         $startDate = new \DateTime();
-        $endDate   = new \DateTime('+1');
+        $endDate   = clone $startDate;
         $endDate->add(new \DateInterval('P1D'));
 
         /** @var TaskRepository $repo */

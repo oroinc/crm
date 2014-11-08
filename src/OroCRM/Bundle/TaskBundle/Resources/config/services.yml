@@ -4,7 +4,6 @@ parameters:
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
     orocrm_task.calendar_provider.class:            OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
     orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
-    orocrm_task.calendar_provider.enabled:          true
 
 services:
     orocrm_task.listener.datagrid.user_tasks:
@@ -37,7 +36,7 @@ services:
             - @oro_entity.doctrine_helper
             - @orocrm_task.task.normalizer
             - @translator
-            - %orocrm_task.calendar_provider.enabled%
+            - %orocrm_task.calendar_provider.my_tasks.enabled%
         tags:
             - { name: oro_calendar.calendar_provider, alias: tasks }
 
