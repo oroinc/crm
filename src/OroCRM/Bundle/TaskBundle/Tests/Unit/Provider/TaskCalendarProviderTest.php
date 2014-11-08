@@ -61,7 +61,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
                     'backgroundColor' => 'F83A22',
                     'widgetRoute'     => 'orocrm_task_widget_info',
                     'widgetOptions'   => [
-                        'title'         => 'orocrm.task.view_entity',
+                        'title'         => 'orocrm.task.info_widget_title',
                         'dialogOptions' => [
                             'width' => 600
                         ]
@@ -178,7 +178,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         $start       = new \DateTime();
         $end         = new \DateTime();
         $subordinate = true;
-        $connections = ['calendar' => TaskCalendarProvider::MY_TASKS_CALENDAR_ID, 'visible' => false];
+        $connections = [['calendar' => TaskCalendarProvider::MY_TASKS_CALENDAR_ID, 'visible' => false]];
 
         $connectionQuery = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
             ->disableOriginalConstructor()
@@ -206,26 +206,10 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getArrayResult')
             ->will($this->returnValue($connections));
 
-        $qb   = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repo = $this->getMockBuilder('OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repo->expects($this->once())
-            ->method('getTaskListByTimeIntervalQueryBuilder')
-            ->with($userId, $this->identicalTo($start), $this->identicalTo($end))
-            ->will($this->returnValue($qb));
-
         $this->doctrineHelper->expects($this->once())
             ->method('getEntityRepository')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['OroCalendarBundle:CalendarProperty', $connectionRepo],
-                    ]
-                )
-            );
+            ->with('OroCalendarBundle:CalendarProperty')
+            ->will($this->returnValue($connectionRepo));
 
         $this->taskCalendarNormalizer->expects($this->never())
             ->method('getTasks');

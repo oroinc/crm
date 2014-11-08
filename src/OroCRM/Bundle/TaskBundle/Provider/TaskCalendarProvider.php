@@ -65,7 +65,7 @@ class TaskCalendarProvider implements CalendarProviderInterface
                 'backgroundColor' => 'F83A22',
                 'widgetRoute'     => 'orocrm_task_widget_info',
                 'widgetOptions'   => [
-                    'title'         => $this->translator->trans('orocrm.task.view_entity'),
+                    'title'         => $this->translator->trans('orocrm.task.info_widget_title'),
                     'dialogOptions' => [
                         'width' => 600
                     ]
