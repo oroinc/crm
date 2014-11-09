@@ -158,6 +158,8 @@ datagrid:
                     type: string
                     data_name: relatedAccountName
                     enabled: false
+        options:
+            entity_pagination: true
     account-cases-grid:
         extends: base-case-grid
         filters:
@@ -201,3 +203,5 @@ datagrid:
                         - (assignedTo.id = :id OR owner.id = :id)
             bind_parameters:
                 - id
+        options:
+            entity_pagination: false

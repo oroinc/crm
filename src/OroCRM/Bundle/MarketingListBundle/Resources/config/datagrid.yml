@@ -101,12 +101,18 @@ datagrid:
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
+                launcherOptions:
+                    className: 'no-hash mobile-hide'
             delete:
                 type:          delete
                 acl_resource:  orocrm_marketing_list_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+                launcherOptions:
+                    className: 'no-hash mobile-hide'
+        options:
+            entity_pagination: true
 
     # Segment based grids mixins:
     orocrm-marketing-list-items-base-mixin:
