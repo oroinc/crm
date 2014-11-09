@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\CallBundle\Provider;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallActivityListProvider implements ActivityListProviderInterface
@@ -21,6 +23,11 @@ class CallActivityListProvider implements ActivityListProviderInterface
     {
         $this->doctrineHelper = $doctrineHelper;
         $this->activityManager = $activityManager;
+    }
+
+    public function getTemplate()
+    {
+        // TODO: Implement getTemplate() method.
     }
 
     /**
@@ -101,11 +108,12 @@ class CallActivityListProvider implements ActivityListProviderInterface
        return $this->doctrineHelper->getEntityClass($entity) == self::ACTIVITY_CLASS;
     }
 
-    public function getTargetEntityClasses()
+    /**
+     * {@inheritdoc}
+     */
+    public function isApplicableTarget(ConfigIdInterface $configId, ConfigManager $configManager)
     {
-        return [
-            'OroCRM\Bundle\AccountBundle\Entity\Account',
-            'OroCRM\Bundle\ContactBundle\Entity\Contact'
-        ];
+        $provider = $configManager->getProvider('activity');
+        return $provider->hasConfigById($configId) && $provider->getConfigById($configId)->has('activities');
     }
 }
