@@ -6,7 +6,6 @@ use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
@@ -18,17 +17,12 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    /** @var ActivityManager */
-    protected $activityManager;
-
     /**
      * @param DoctrineHelper  $doctrineHelper
-     * @param ActivityManager $activityManager
      */
-    public function __construct(DoctrineHelper $doctrineHelper, ActivityManager $activityManager)
+    public function __construct(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper  = $doctrineHelper;
-        $this->activityManager = $activityManager;
     }
 
     /**
@@ -106,5 +100,13 @@ class CallActivityListProvider implements ActivityListProviderInterface
         }
 
         return $entity == self::ACTIVITY_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargetEntities($entity)
+    {
+        return $entity->getActivityTargetEntities();
     }
 }

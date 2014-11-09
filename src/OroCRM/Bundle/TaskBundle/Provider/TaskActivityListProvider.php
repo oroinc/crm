@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskActivityListProvider implements ActivityListProviderInterface
@@ -19,18 +21,12 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
-    public function getTargets()
+    public function isApplicableTarget(ConfigIdInterface $configId, ConfigManager $configManager)
     {
-    }
-
-    /**
-     * {@inheritdoc
-     */
-    public function getActivityClass()
-    {
-        return self::ACTIVITY_CLASS;
+        $provider = $configManager->getProvider('activity');
+        return $provider->hasConfigById($configId) && $provider->getConfigById($configId)->has('activities');
     }
 
     /**
@@ -57,6 +53,14 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
+     * {@inheritdoc
+     */
+    public function getTemplate()
+    {
+        return 'OroCRMTaskBundle:Task:js/activityItemTemplate.js.twig';
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getRoutes()
@@ -69,15 +73,15 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
-    public function getTemplate()
+    public function getActivityClass()
     {
-        return 'OroCRMTaskBundle:Task:js/activityItemTemplate.js.twig';
+        return self::ACTIVITY_CLASS;
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function getActivityId($entity)
     {
@@ -85,7 +89,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function isApplicable($entity)
     {
@@ -94,5 +98,13 @@ class TaskActivityListProvider implements ActivityListProviderInterface
         }
 
         return $entity == self::ACTIVITY_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTargetEntities($entity)
+    {
+        return $entity->getActivityTargetEntities();
     }
 }
