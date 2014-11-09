@@ -9,10 +9,10 @@
         {{ UI.renderProperty('orocrm.task.owner.label'|trans, entity.owner|oro_format_name|escape) }}
     </div>
     <div class="widget-actions form-actions" style="display: none;">
-        <a class="action" href="{{ path('orocrm_task_view', {id: entity.id}) }}">
+        <a class="action btn" href="{{ path('orocrm_task_view', {id: entity.id}) }}">
             {{- 'oro.ui.view_entity'|trans({'%entityName%': oro_entity_config_value(oro_class_name(entity), 'label')|trans}) -}}
         </a>
-        <a class="action" href="{{ path('orocrm_task_update', {id: entity.id}) }}">
+        <a class="action btn" href="{{ path('orocrm_task_update', {id: entity.id}) }}">
             {{- 'oro.ui.edit_entity'|trans({'%entityName%': oro_entity_config_value(oro_class_name(entity), 'label')|trans}) -}}
         </a>
     </div>

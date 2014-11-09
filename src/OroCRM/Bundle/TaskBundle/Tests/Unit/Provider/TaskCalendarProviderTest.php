@@ -66,11 +66,13 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
                     'removable'       => false,
                     'position'        => -1,
                     'backgroundColor' => 'F83A22',
-                    'widgetRoute'     => 'orocrm_task_widget_info',
-                    'widgetOptions'   => [
-                        'title'         => 'orocrm.task.info_widget_title',
-                        'dialogOptions' => [
-                            'width' => 600
+                    'options' => [
+                        'widgetRoute'     => 'orocrm_task_widget_info',
+                        'widgetOptions'   => [
+                            'title'         => 'orocrm.task.info_widget_title',
+                            'dialogOptions' => [
+                                'width' => 600
+                            ]
                         ]
                     ]
                 ]
