@@ -34,6 +34,7 @@ services:
         class: %orocrm_task.calendar_provider.class%
         arguments:
             - @oro_entity.doctrine_helper
+            - @oro_security.acl_helper
             - @orocrm_task.task.normalizer
             - @translator
             - %orocrm_task.calendar_provider.my_tasks.enabled%

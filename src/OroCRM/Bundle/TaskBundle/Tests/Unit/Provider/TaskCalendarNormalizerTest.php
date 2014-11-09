@@ -27,16 +27,11 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
     public function testGetTasks($tasks, $expected)
     {
         $calendarId = 123;
-        $qb         = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $query      = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+
+        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
             ->disableOriginalConstructor()
             ->setMethods(['getArrayResult'])
             ->getMockForAbstractClass();
-        $qb->expects($this->once())
-            ->method('getQuery')
-            ->will($this->returnValue($query));
         $query->expects($this->once())
             ->method('getArrayResult')
             ->will($this->returnValue($tasks));
@@ -45,7 +40,7 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
             ->method('applyReminders')
             ->with($expected, 'OroCRM\Bundle\TaskBundle\Entity\Task');
 
-        $result = $this->normalizer->getTasks($calendarId, $qb);
+        $result = $this->normalizer->getTasks($calendarId, $query);
         $this->assertEquals($expected, $result);
     }
 

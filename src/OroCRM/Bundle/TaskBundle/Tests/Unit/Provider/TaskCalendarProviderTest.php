@@ -13,6 +13,9 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
     protected $doctrineHelper;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $aclHelper;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $taskCalendarNormalizer;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -29,6 +32,9 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHelper         = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->aclHelper              = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->taskCalendarNormalizer =
             $this->getMockBuilder('OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer')
                 ->disableOriginalConstructor()
@@ -37,6 +43,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->provider = new TaskCalendarProvider(
             $this->doctrineHelper,
+            $this->aclHelper,
             $this->taskCalendarNormalizer,
             $this->translator,
             $this->enabled
@@ -135,6 +142,15 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
             ->with($userId, $this->identicalTo($start), $this->identicalTo($end))
             ->will($this->returnValue($qb));
 
+        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->aclHelper->expects($this->once())
+            ->method('apply')
+            ->with($this->identicalTo($qb))
+            ->will($this->returnValue($query));
+
+
         $this->doctrineHelper->expects($this->exactly(2))
             ->method('getEntityRepository')
             ->will(
@@ -148,7 +164,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->taskCalendarNormalizer->expects($this->once())
             ->method('getTasks')
-            ->with(TaskCalendarProvider::MY_TASKS_CALENDAR_ID, $this->identicalTo($qb))
+            ->with(TaskCalendarProvider::MY_TASKS_CALENDAR_ID, $this->identicalTo($query))
             ->will($this->returnValue($tasks));
 
         $result = $this->provider->getCalendarEvents($userId, $calendarId, $start, $end, $subordinate);
@@ -158,7 +174,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
     public function getCalendarEventsProvider()
     {
         return [
-            'no connections' => [
+            'no connections'          => [
                 'connections' => [],
                 'tasks'       => [['id' => 1]]
             ],

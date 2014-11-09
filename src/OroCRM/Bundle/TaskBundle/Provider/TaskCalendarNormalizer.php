@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
-use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\AbstractQuery;
 
 use Oro\Bundle\ReminderBundle\Entity\Manager\ReminderManager;
 
@@ -20,16 +20,16 @@ class TaskCalendarNormalizer
     }
 
     /**
-     * @param int          $calendarId
-     * @param QueryBuilder $qb
+     * @param int           $calendarId
+     * @param AbstractQuery $query
      *
      * @return array
      */
-    public function getTasks($calendarId, QueryBuilder $qb)
+    public function getTasks($calendarId, AbstractQuery $query)
     {
         $result = [];
 
-        $items  = $qb->getQuery()->getArrayResult();
+        $items  = $query->getArrayResult();
         foreach ($items as $item) {
             /** @var \DateTime $start */
             $start = $item['dueDate'];

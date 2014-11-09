@@ -6,8 +6,9 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
 use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarPropertyRepository;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\CalendarBundle\Provider\CalendarProviderInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 class TaskCalendarProvider implements CalendarProviderInterface
@@ -17,6 +18,9 @@ class TaskCalendarProvider implements CalendarProviderInterface
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
+
+    /** @var AclHelper */
+    protected $aclHelper;
 
     /** @var TaskCalendarNormalizer */
     protected $taskCalendarNormalizer;
@@ -34,17 +38,20 @@ class TaskCalendarProvider implements CalendarProviderInterface
 
     /**
      * @param DoctrineHelper         $doctrineHelper
+     * @param AclHelper              $aclHelper
      * @param TaskCalendarNormalizer $taskCalendarNormalizer
      * @param TranslatorInterface    $translator
      * @param bool                   $myTasksEnabled
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
+        AclHelper $aclHelper,
         TaskCalendarNormalizer $taskCalendarNormalizer,
         TranslatorInterface $translator,
         $myTasksEnabled
     ) {
         $this->doctrineHelper         = $doctrineHelper;
+        $this->aclHelper              = $aclHelper;
         $this->taskCalendarNormalizer = $taskCalendarNormalizer;
         $this->translator             = $translator;
         $this->myTasksEnabled         = $myTasksEnabled;
@@ -102,10 +109,11 @@ class TaskCalendarProvider implements CalendarProviderInterface
 
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
-            $repo = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
-            $qb   = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end);
+            $repo  = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
+            $qb    = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end);
+            $query = $this->aclHelper->apply($qb);
 
-            return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $qb);
+            return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $query);
         }
 
         return [];
