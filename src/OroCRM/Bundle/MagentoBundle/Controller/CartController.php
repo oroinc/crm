@@ -109,16 +109,24 @@ class CartController extends Controller
 
         try {
             $processor = $this->get('oro_integration.sync.processor');
-            $processor->process(
+            $result = $processor->process(
                 $cart->getChannel(),
                 $connector->getType(),
                 ['filters' => ['entity_id' => $cart->getOriginId()]]
             );
 
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
-            );
+            if ($result === true) {
+                $this->get('session')->getFlashBag()->add(
+                    'success',
+                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+                );
+            } else {
+                $this->get('session')->getFlashBag()->add(
+                    'error',
+                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
+                );
+            }
+
         } catch (\LogicException $e) {
             $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
 
