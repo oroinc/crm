@@ -3,7 +3,12 @@
 namespace OroCRM\Bundle\CallBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallActivityListProvider implements ActivityListProviderInterface
@@ -13,29 +18,30 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
-    public function __construct(DoctrineHelper $doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-    }
+    /** @var ActivityManager */
+    protected $activityManager;
 
     /**
-     * {@inheritdoc
+     * @param DoctrineHelper  $doctrineHelper
+     * @param ActivityManager $activityManager
      */
-    public function getTargets()
+    public function __construct(DoctrineHelper $doctrineHelper, ActivityManager $activityManager)
     {
-        // TODO: Implement getTargets() method.
+        $this->doctrineHelper  = $doctrineHelper;
+        $this->activityManager = $activityManager;
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
-    public function getActivityClass()
+    public function isApplicableTarget(ConfigIdInterface $configId, ConfigManager $configManager)
     {
-        return self::ACTIVITY_CLASS;
+        $provider = $configManager->getProvider('activity');
+        return $provider->hasConfigById($configId) && $provider->getConfigById($configId)->has('activities');
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function getSubject($entity)
     {
@@ -75,7 +81,15 @@ class CallActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
+     */
+    public function getActivityClass()
+    {
+        return self::ACTIVITY_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function getActivityId($entity)
     {
@@ -83,7 +97,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function isApplicable($entity)
     {
