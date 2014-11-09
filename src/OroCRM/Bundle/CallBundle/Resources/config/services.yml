@@ -43,4 +43,4 @@ services:
            - @oro_entity.doctrine_helper
            - @oro_activity.manager
         tags:
-           - {name: oro.activity_list.provider}
+           - {name: oro_activity_list.provider}
