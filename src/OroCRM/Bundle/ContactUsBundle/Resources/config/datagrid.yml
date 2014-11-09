@@ -108,3 +108,4 @@ datagrid:
                 link:         delete_link
         options:
             entityHint: contact request
+            entity_pagination: true

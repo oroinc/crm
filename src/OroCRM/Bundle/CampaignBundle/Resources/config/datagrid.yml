@@ -90,6 +90,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     campaign-tracking-total-report-grid:
         source:
@@ -178,7 +180,7 @@ datagrid:
                         - e.code = :code
                 groupBy: e.name, logTime
             bind_parameters:
-                - :code
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label
@@ -363,6 +365,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     orocrm-email-campaign-marketing-list-unsent-items-mixin:
         source:
