@@ -86,14 +86,6 @@ class TaskCalendarProvider implements CalendarProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCalendarName(CalendarProperty $connection)
-    {
-        return $this->translator->trans($this->calendarLabels[$connection->getCalendar()]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCalendarEvents($userId, $calendarId, $start, $end, $subordinate)
     {
         if (!$this->myTasksEnabled) {

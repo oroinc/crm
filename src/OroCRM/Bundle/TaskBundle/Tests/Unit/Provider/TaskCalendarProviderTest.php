@@ -79,21 +79,6 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetCalendarName()
-    {
-        $connection = new CalendarProperty();
-        $connection->setCalendar(TaskCalendarProvider::MY_TASKS_CALENDAR_ID);
-
-        $this->translator->expects($this->once())
-            ->method('trans')
-            ->will($this->returnArgument(0));
-
-        $this->assertEquals(
-            'orocrm.task.menu.my_tasks',
-            $this->provider->getCalendarName($connection)
-        );
-    }
-
     /**
      * @dataProvider getCalendarEventsProvider
      */
