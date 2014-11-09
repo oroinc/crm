@@ -103,8 +103,6 @@ class CallActivityListProvider implements ActivityListProviderInterface
 
     public function getTargetEntityClasses()
     {
-        $associacions = $this->activityManager->getActivityAssociations(self::ACTIVITY_CLASS);
-        $a = 1;
         return [
             'OroCRM\Bundle\AccountBundle\Entity\Account',
             'OroCRM\Bundle\ContactBundle\Entity\Contact'
