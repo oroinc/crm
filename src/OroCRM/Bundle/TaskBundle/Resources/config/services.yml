@@ -4,6 +4,8 @@ parameters:
     orocrm_task.listener.datagrid.activity.class:   OroCRM\Bundle\TaskBundle\EventListener\Datagrid\ActivityGridListener
     orocrm_task.calendar_provider.class:            OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
     orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
+    orocrm_task.placeholder.filter.class:           OroCRM\Bundle\TaskBundle\Placeholder\PlaceholderFilter
+
 
 services:
     orocrm_task.listener.datagrid.user_tasks:
@@ -45,3 +47,8 @@ services:
         class: %orocrm_task.task.normalizer.class%
         arguments:
             - @oro_reminder.entity.manager
+
+    orocrm_task.placeholder.filter:
+        class: %orocrm_task.placeholder.filter.class%
+        arguments:
+            - %orocrm_task.calendar_provider.my_tasks.enabled%
