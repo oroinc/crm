@@ -15,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
 
 class MagentoUrlGenerator
 {
-    const GATEWAY_ROUTE   = 'oro_gateway/do';
+    const GATEWAY_ROUTE = 'oro_gateway/do';
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
     const CHECKOUT_ROUTE = 'oro_sales/checkout';
     const EXTENSION_REQUIRED_ERROR_MESSAGE = 'orocrm.magento.controller.extension_required';
