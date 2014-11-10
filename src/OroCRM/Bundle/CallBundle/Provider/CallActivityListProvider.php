@@ -57,13 +57,16 @@ class CallActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function getTemplate()
     {
         return 'OroCRMCallBundle:Call:js/activityItemTemplate.js.twig';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRoutes()
     {
         return [
