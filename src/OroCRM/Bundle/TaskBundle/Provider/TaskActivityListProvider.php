@@ -1,28 +1,26 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Provider;
+namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+use OroCRM\Bundle\TaskBundle\Entity\Task;
 
-use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
-
-use OroCRM\Bundle\CallBundle\Entity\Call;
-
-class CallActivityListProvider implements ActivityListProviderInterface
+class TaskActivityListProvider implements ActivityListProviderInterface
 {
-    const ACTIVITY_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
+    const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
     /**
-     * @param DoctrineHelper  $doctrineHelper
+     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(DoctrineHelper $doctrineHelper)
     {
-        $this->doctrineHelper  = $doctrineHelper;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -39,7 +37,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getSubject($entity)
     {
-        /** @var $entity Call */
+        /** @var $entity Task */
         return $entity->getSubject();
     }
 
@@ -48,20 +46,20 @@ class CallActivityListProvider implements ActivityListProviderInterface
      */
     public function getData($entity)
     {
-        /** @var Call $entity */
+        /** @var $entity Task */
         return [
-            'notes'          => $entity->getNotes(),
-            'call_date_time' => $entity->getCallDateTime()->format('c'),
-            'direction'      => $entity->getDirection()->getLabel(),
+            'description'        => $entity->getDescription(),
+            'due_date'           => $entity->getDueDate()->format('c'),
+            'task_priority_name' => $entity->getTaskPriority()->getLabel(),
         ];
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritdoc
      */
     public function getTemplate()
     {
-        return 'OroCRMCallBundle:Call:js/activityItemTemplate.js.twig';
+        return 'OroCRMTaskBundle:Task:js/activityItemTemplate.js.twig';
     }
 
     /**
@@ -70,9 +68,9 @@ class CallActivityListProvider implements ActivityListProviderInterface
     public function getRoutes()
     {
         return [
-            'itemView'   => 'orocrm_call_widget_info',
-            'itemEdit'   => 'orocrm_call_update',
-            'itemDelete' => 'oro_api_delete_call'
+            'itemView'   => 'orocrm_task_widget_info',
+            'itemEdit'   => 'orocrm_task_update',
+            'itemDelete' => 'oro_api_delete_task'
         ];
     }
 
