@@ -5,10 +5,12 @@
         <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
             <div class="title-item">
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
-                <span class="visual">
+                <span class="icon">
                     <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
-                    <span>{{ entityName }}</span>
-                    <span>
+                </span>
+                <span class="visual">
+                    <span class="details">
+                        {{ entityName }}
                         <% var template = (verb == 'create')
                             ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
                             : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
@@ -21,6 +23,9 @@
                             },
                             { interpolate: /\{\{(.+?)\}\}/g }
                         ) %>
+                    </span>
+                    <span class="message-item message">
+                        <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
                     </span>
                 </span>
             </div>
@@ -37,11 +42,6 @@
                     title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
                     <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
-            </div>
-            <div class="message-item">
-                <div class="message">
-                    <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
-                </div>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">

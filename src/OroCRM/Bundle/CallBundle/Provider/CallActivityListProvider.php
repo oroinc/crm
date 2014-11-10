@@ -51,7 +51,7 @@ class CallActivityListProvider implements ActivityListProviderInterface
         /** @var Call $entity */
         return [
             'notes'          => $entity->getNotes(),
-            'call_date_time' => $entity->getCallDateTime(),
+            'call_date_time' => $entity->getCallDateTime()->format('c'),
             'direction'      => $entity->getDirection()->getLabel(),
         ];
     }
