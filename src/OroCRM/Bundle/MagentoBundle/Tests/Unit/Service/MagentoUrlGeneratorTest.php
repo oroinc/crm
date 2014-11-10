@@ -86,13 +86,15 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
     {
         $error = 'Some error text';
         $flowName = 'some flow name';
+        $newOrderRoute = MagentoUrlGenerator::NEW_ORDER_ROUTE;
         $origin = 'customer';
 
         return [
-            'channel'  => ['channel', $this->channel, $this->channel],
-            'error'    => ['error', $error, $error],
-            'flowName' => ['flowName', $flowName, $flowName],
-            'origin'   => ['origin', $origin, $origin],
+            'channel'      => ['channel', $this->channel, $this->channel],
+            'error'        => ['error', $error, $error],
+            'flowName'     => ['flowName', $flowName, $flowName],
+            'magentoRoute' => ['magentoRoute', $newOrderRoute, $newOrderRoute],
+            'origin'       => ['origin', $origin, $origin],
         ];
     }
 
@@ -148,6 +150,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
      * @param string $successUrl
      * @param string $errorUrl
      * @param string $flowName
+     * @param string $magentoRoute
      * @param string $origin
      */
     public function testGenerate(
@@ -158,12 +161,13 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $successUrl,
         $errorUrl,
         $flowName,
+        $magentoRoute,
         $origin
     ) {
         $result = $adminUrl .
                   '/oro_gateway/do?'.$origin.'=' .
                   $id .
-                  '&route=oro_sales/newOrder' .
+                  '&route=' . $magentoRoute .
                   '&workflow=' . $flowName .
                   '&success_url=' . urlencode($successUrl) .
                   '&error_url=' . urlencode($errorUrl);
@@ -187,6 +191,7 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlGenerator = new MagentoUrlGenerator($this->router);
         $urlGenerator->setChannel($this->channel);
         $urlGenerator->setFlowName($flowName);
+        $urlGenerator->setMagentoRoute($magentoRoute);
         $urlGenerator->setOrigin($origin);
         $urlGenerator->generate($id, $successRoute, $errorRoute);
         $this->assertEquals(
@@ -203,14 +208,16 @@ class MagentoUrlGeneratorTest extends \PHPUnit_Framework_TestCase
         $successUrl = 'http://localhost/magento/success';
         $errorUrl = 'http://localhost/magento/error';
         $flowName = 'flowName';
+        $newOrderRoute = MagentoUrlGenerator::NEW_ORDER_ROUTE;
+        $checkoutRoute = MagentoUrlGenerator::CHECKOUT_ROUTE;
         $origin = 'customer';
         $exception = new ExtensionRequiredException;
 
         return [
-            [144, $successRoute, $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
-            [356, $successRoute, $errorRoute, $exception, $successUrl, $errorUrl, $flowName, $origin],
-            [543, $exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
-            [632, $successRoute, $exception,  $adminUrl,  $successUrl, $errorUrl, $flowName, $origin],
+            [144, $successRoute, $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $newOrderRoute, $origin],
+            [356, $successRoute, $errorRoute, $exception, $successUrl, $errorUrl, $flowName, $checkoutRoute, $origin],
+            [543, $exception,    $errorRoute, $adminUrl,  $successUrl, $errorUrl, $flowName, $newOrderRoute, $origin],
+            [632, $successRoute, $exception,  $adminUrl,  $successUrl, $errorUrl, $flowName, $newOrderRoute, $origin],
         ];
     }
 }
