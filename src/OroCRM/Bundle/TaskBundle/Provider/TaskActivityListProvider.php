@@ -15,6 +15,9 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     */
     public function __construct(DoctrineHelper $doctrineHelper)
     {
         $this->doctrineHelper = $doctrineHelper;
@@ -30,7 +33,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     }
 
     /**
-     * {@inheritdoc
+     * {@inheritdoc}
      */
     public function getSubject($entity)
     {
@@ -48,7 +51,6 @@ class TaskActivityListProvider implements ActivityListProviderInterface
             'description'        => $entity->getDescription(),
             'due_date'           => $entity->getDueDate(),
             'task_priority_name' => $entity->getTaskPriority(),
-            'owner_id'           => $entity->getOwnerId(),
         ];
     }
 

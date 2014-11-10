@@ -1,4 +1,5 @@
 {% set entityClass = 'OroCRM\\Bundle\\TaskBundle\\Entity\\Task' %}
+{% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
         <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
@@ -6,46 +7,72 @@
                 <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <span class="visual">
                     <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
-                    <span>{{ oro_entity_config_value(entityClass, 'label')|trans }}</span>
-                    <span>updated by "ADMIN" on <i class="date"><%= updatedAt %></i></span>
+                    <span>{{ entityName }}</span>
+                    <span>
+                        <% var template = (verb == 'create')
+                            ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
+                            : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
+                        %>
+                        <%= _.template(
+                            template,
+                            {
+                                user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
+                                date: '<i class="date">' + updatedAt + '</i>'
+                            },
+                            { interpolate: /\{\{(.+?)\}\}/g }
+                        ) %>
+                    </span>
                 </span>
             </div>
             <div class="actions">
                 <button class="btn item-view-button"
-                        title="{{ 'View task'|trans|e('html_attr')|raw }}">
-                    <i class="icon-eye-open hide-text">{{ 'View call log'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.task.view_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-eye-open hide-text">{{ 'orocrm.task.view_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
                 <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
-                    title="{{ 'Edit task'|trans|e('html_attr')|raw }}">
-                    <i class="icon-edit hide-text">{{ 'oro.note.action.edit'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
                 <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %>
-                    title="{{ 'Delete task'|trans|e('html_attr')|raw }}">
-                    <i class="icon-trash hide-text">{{ 'oro.note.action.remove'|trans|e('html')|raw }}</i>
+                    title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
+                    <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
                 </button>
             </div>
             <div class="message-item">
-                <div class="message"><%= subject %></div>
+                <div class="message">
+                    <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
+                </div>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="subject">
-                <%= subject %>
+                <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
             </div>
             <div class="message">
-                <% if (data != null) { %>
-                    <% _.each(data, function(value, key) { %>
-                        <%= _.template(
-                            '<div class="control-group">' +
-                                '<label class="control-label">[[ label ]]</label>' +
-                                '<div class="controls">' +
-                                    '<div class="control-label">[[ val ]]</div>' +
-                                    '</div>' +
-                                '</div>',
-                            {label: key, val: value},
-                            { interpolate: /\[\[(.+?)\]\]/g }
-                        ) %>
-                    <% }) %>
+                <% if (data != null) {
+                    var dateTimeFormatter = require('orolocale/js/formatter/datetime');
+                    var templateCall = '<div class="control-group">' +
+                        '<label class="control-label">[[ label ]]</label>' +
+                        '<div class="controls">' +
+                            '<div class="control-label">[[ value ]]</div>' +
+                            '</div>' +
+                        '</div>';
+                %>
+                    <%= _.template(templateCall,
+                        {label: '{{ 'orocrm.task.description.label'|trans|raw }}', value: data['description']},
+                        {interpolate: /\[\[(.+?)\]\]/g}
+                    ) %>
+                    <%= _.template(templateCall,
+                        {
+                            label: '{{ 'orocrm.task.due_date.label'|trans|raw }}',
+                            value: dateTimeFormatter.formatDateTime(data['due_date'])
+                        },
+                        {interpolate: /\[\[(.+?)\]\]/g}
+                    ) %>
+                    <%= _.template(templateCall,
+                        {label: '{{ 'orocrm.task.task_priority.label'|trans|raw }}', value: data['task_priority_name']},
+                        {interpolate: /\[\[(.+?)\]\]/g}
+                    ) %>
                 <% } %>
             </div>
         </div>

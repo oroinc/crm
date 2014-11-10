@@ -1,7 +1,6 @@
 {% set entityClass = 'OroCRM\\Bundle\\CallBundle\\Entity\\Call' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
-    <% var dateTimeFormatter = require('orolocale/js/formatter/datetime'); %>
     <div class="accordion-group">
         <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
             <div class="title-item">
@@ -51,6 +50,7 @@
             </div>
             <div class="message">
                 <% if (data != null) {
+                    var dateTimeFormatter = require('orolocale/js/formatter/datetime');
                     var templateCall = '<div class="control-group">' +
                         '<label class="control-label">[[ label ]]</label>' +
                         '<div class="controls">' +
