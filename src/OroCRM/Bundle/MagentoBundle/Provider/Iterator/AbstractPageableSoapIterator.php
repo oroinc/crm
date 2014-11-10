@@ -223,7 +223,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function findEntitiesToProcess()
     {
-        $now      = new \DateTime('now', new \DateTimeZone('UTC'));
+        $now      = new \DateTime($this->transport->getServerTime(), new \DateTimeZone('UTC'));
         $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
 
         $this->logger->info('Looking for batch');
@@ -342,8 +342,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     protected function logAppliedFilters(BatchFilterBag $filterBag)
     {
         $filters  = $filterBag->getAppliedFilters();
-        $filters = $filters['filters'];
-        $filters = array_merge(
+        $filters  = $filters['filters'];
+        $filters  = array_merge(
             !empty($filters[BatchFilterBag::FILTER_TYPE_COMPLEX]) ? $filters[BatchFilterBag::FILTER_TYPE_COMPLEX] : [],
             !empty($filters[BatchFilterBag::FILTER_TYPE_SIMPLE]) ? $filters[BatchFilterBag::FILTER_TYPE_SIMPLE] : []
         );

@@ -18,7 +18,7 @@ class CustomerConnectorTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new CustomerConnector($contextRegistry, $logger, $contextMediator);
+        return new CustomerConnector($contextRegistry, $logger, $contextMediator, $this->config);
     }
 
     /**
