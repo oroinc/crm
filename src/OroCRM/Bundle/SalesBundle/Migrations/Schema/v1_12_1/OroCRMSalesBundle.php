@@ -27,7 +27,6 @@ class OroCRMSalesBundle implements Migration
                       FROM
                         orocrm_sales_opportunity o
                       WHERE o.status_name = '%s' AND o.customer_id = c.id
-                      GROUP BY o.customer_id
                 )
 SQL;
         $queries->addPostQuery(new SqlMigrationQuery(sprintf($sql, B2bCustomerRepository::VALUABLE_STATUS)));
