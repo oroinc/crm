@@ -105,6 +105,7 @@ class CartController extends Controller
      */
     public function actualizeAction(Cart $cart)
     {
+        $result = false;
         $connector = $this->get('orocrm_magento.mage.cart_connector');
 
         try {
@@ -114,22 +115,16 @@ class CartController extends Controller
                 $connector->getType(),
                 ['filters' => ['entity_id' => $cart->getOriginId()]]
             );
-
-            if ($result === true) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
-                );
-            }
-
         } catch (\LogicException $e) {
             $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
+        }
 
+        if ($result === true) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+            );
+        } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')

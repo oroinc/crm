@@ -103,6 +103,8 @@ class OrderController extends Controller
      */
     public function actualizeAction(Order $order)
     {
+        $result = false;
+
         try {
             $processor = $this->get('oro_integration.sync.processor');
             $result = $processor->process(
@@ -110,22 +112,16 @@ class OrderController extends Controller
                 'order',
                 ['filters' => ['increment_id' => $order->getIncrementId()]]
             );
-
-            if ($result === true) {
-                $this->get('session')->getFlashBag()->add(
-                    'success',
-                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
-                );
-            } else {
-                $this->get('session')->getFlashBag()->add(
-                    'error',
-                    $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
-                );
-            }
-
         } catch (\LogicException $e) {
             $this->get('logger')->addCritical($e->getMessage(), ['exception' => $e]);
+        }
 
+        if ($result === true) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.magento.controller.synchronization_success')
+            );
+        } else {
             $this->get('session')->getFlashBag()->add(
                 'error',
                 $this->get('translator')->trans('orocrm.magento.controller.synchronization_error')
