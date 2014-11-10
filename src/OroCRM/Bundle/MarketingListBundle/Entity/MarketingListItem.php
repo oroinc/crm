@@ -35,7 +35,7 @@ class MarketingListItem
 
     /**
      * @var int
-     * @ORM\Column(name="contacted_times", type="integer")
+     * @ORM\Column(name="contacted_times", type="integer", nullable=true)
      */
     protected $contactedTimes;
 
