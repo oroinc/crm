@@ -29,10 +29,22 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
     public function processConfigurationDataProvider()
     {
         return array(
-            'empty' => array(
-                'configs'  => array(array()),
-                'expected' => array()
-            )
+            'empty' => [
+                'configs'  => [[]],
+                'expected' => [
+                    'my_tasks_in_calendar' => true
+                ]
+            ],
+            'filled' => [
+                'configs'  => [
+                    [
+                        'my_tasks_in_calendar' => false
+                    ]
+                ],
+                'expected' => [
+                    'my_tasks_in_calendar' => false
+                ]
+            ],
         );
     }
 }

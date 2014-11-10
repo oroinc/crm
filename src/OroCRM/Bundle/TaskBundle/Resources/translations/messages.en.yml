@@ -21,6 +21,7 @@ orocrm:
         organization.label:         Organization
 
         user_tasks: User Tasks
+        info_widget_title: Task Information
         add_entity: Add task
         add_entity.title: Add a task to this record
         assign_entity: Assign task
