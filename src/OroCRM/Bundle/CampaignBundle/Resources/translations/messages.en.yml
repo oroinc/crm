@@ -117,13 +117,7 @@ orocrm:
                 bounce.label: Bounce
                 abuse.label: Abuse
                 unsubscribe.label: Unsubscribe
-            sent:
-                mixin:
-                    open.label: Open
-                    click.label: Click
-                    bounce.label: Bounce
-                    abuse.label: Abuse
-                    unsubscribe.label: Unsubscribe
+
         acl:
             send_emails: Send campaign emails
 
@@ -135,6 +129,11 @@ orocrm:
             id.label: Id
             marketing_list_item.label: Marketing List Item
             block.label: Email Campaign Statistics
+            abuse_count.label: Abuse Count
+            bounce_count.label: Bounce Count
+            click_count.label: Click Count
+            open_count.label: Open Count
+            unsubscribe_count.label: Unsubscribe Count
 
         internaltransportsettings:
             entity_label: Email Campaign Internal Transport Settings
