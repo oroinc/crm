@@ -74,9 +74,9 @@ class ContactInformationColumnValidator extends ConstraintValidator
     {
         $contactInformationFields = $this->contactInformationFieldHelper->getQueryContactInformationColumns($value);
         if ($type) {
-            return array_key_exists($type, $contactInformationFields) && count($contactInformationFields[$type]) > 0;
-        } else {
-            return count($contactInformationFields) > 0;
+            return array_key_exists($type, $contactInformationFields) && (bool)count($contactInformationFields[$type]);
         }
+
+        return (bool)count($contactInformationFields);
     }
 }
