@@ -4,8 +4,13 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\ClassUtils;
+
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_ID = 12;
+
     /**
      * @var CaseEntity
      */
