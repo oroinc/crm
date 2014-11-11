@@ -51,25 +51,25 @@
             <div class="message">
                 <% if (data != null) {
                     var dateTimeFormatter = require('orolocale/js/formatter/datetime');
-                    var templateCall = '<div class="control-group">' +
+                    var templateTask = '<div class="control-group">' +
                         '<label class="control-label">[[ label ]]</label>' +
                         '<div class="controls">' +
                             '<div class="control-label">[[ value ]]</div>' +
                             '</div>' +
                         '</div>';
                 %>
-                    <%= _.template(templateCall,
+                    <%= _.template(templateTask,
                         {label: '{{ 'orocrm.task.description.label'|trans|raw }}', value: data['description']},
                         {interpolate: /\[\[(.+?)\]\]/g}
                     ) %>
-                    <%= _.template(templateCall,
+                    <%= _.template(templateTask,
                         {
                             label: '{{ 'orocrm.task.due_date.label'|trans|raw }}',
                             value: dateTimeFormatter.formatDateTime(data['due_date'])
                         },
                         {interpolate: /\[\[(.+?)\]\]/g}
                     ) %>
-                    <%= _.template(templateCall,
+                    <%= _.template(templateTask,
                         {label: '{{ 'orocrm.task.task_priority.label'|trans|raw }}', value: data['task_priority_name']},
                         {interpolate: /\[\[(.+?)\]\]/g}
                     ) %>
