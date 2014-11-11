@@ -18,7 +18,7 @@ class CartConnectorTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new CartConnector($contextRegistry, $logger, $contextMediator);
+        return new CartConnector($contextRegistry, $logger, $contextMediator, $this->config);
     }
 
     /**
