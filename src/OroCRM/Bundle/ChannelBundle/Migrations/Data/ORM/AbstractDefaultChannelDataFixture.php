@@ -171,8 +171,8 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
             . ' (account_id, data_channel_id, status, amount, created_at)'
             . sprintf(
                 ' SELECT e.account_id AS hist_account_id, e.data_channel_id AS hist_data_channel_id,'
-                . ' :status as hist_status, SUM(COALESCE(e.%s, 0)) AS hist_amount,'
-                . ' :created_at AS hist_created_at',
+                . ' e.account_id > 0 as hist_status, SUM(COALESCE(e.%s, 0)) AS hist_amount,'
+                . ' TIMESTAMP :created_at AS hist_created_at',
                 $lifetimeColumnName
             )
             . sprintf(' FROM %s AS e', $customerMetadata->getTableName())
@@ -182,8 +182,10 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
                 implode(',', $accountIds)
             )
             . ' GROUP BY hist_account_id, hist_data_channel_id, hist_status, hist_created_at',
-            ['status' => true, 'created_at' => new \DateTime(null, new \DateTimeZone('UTC'))],
-            ['status' => Type::BOOLEAN, 'created_at' => Type::DATETIME]
+            ['created_at' => new \DateTime(null, new \DateTimeZone('UTC'))],
+            ['created_at' => Type::DATETIME]
+            // dirty workaround due to http://www.doctrine-project.org/jira/browse/DBAL-630
+            // TODO revert changes when doctrine version >= 2.5 in scope of BAP-5577
         );
     }
 }
