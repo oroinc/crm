@@ -2,9 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\PredefinedFiltersAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
@@ -14,6 +17,25 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
 {
     /** @var MagentoTransportInterface */
     protected $transport;
+
+    /** @var array */
+    protected $bundleConfiguration;
+
+    /**
+     * @param ContextRegistry          $contextRegistry
+     * @param LoggerStrategy           $logger
+     * @param ConnectorContextMediator $contextMediator
+     * @param array                    $bundleConfiguration
+     */
+    public function __construct(
+        ContextRegistry $contextRegistry,
+        LoggerStrategy $logger,
+        ConnectorContextMediator $contextMediator,
+        array $bundleConfiguration
+    ) {
+        parent::__construct($contextRegistry, $logger, $contextMediator);
+        $this->bundleConfiguration = $bundleConfiguration;
+    }
 
     /**
      * {@inheritdoc}
@@ -60,17 +82,24 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $data = $status->getData();
 
             if (!empty($data['lastSyncItemDate'])) {
-                $iterator->setStartDate(new \DateTime($data['lastSyncItemDate']));
+                $startDate = new \DateTime($data['lastSyncItemDate'], new \DateTimeZone('UTC'));
             } else {
-                $iterator->setStartDate($status->getDate());
+                $startDate = clone $status->getDate();
             }
+
+            // use assumption interval in order to prevent mistiming issues
+            $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
+            $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
+            $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
+            $startDate->sub(\DateInterval::createFromDateString($intervalString));
+            $iterator->setStartDate($startDate);
         }
 
         // pass filters from connector
         if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
             if ($iterator instanceof PredefinedFiltersAwareInterface) {
-                $filters           = $context->getOption('filters') ? : [];
-                $complexFilters    = $context->getOption('complex_filters') ? : [];
+                $filters           = $context->getOption('filters') ?: [];
+                $complexFilters    = $context->getOption('complex_filters') ?: [];
                 $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
 
                 $iterator->setPredefinedFiltersBag($predefinedFilters);
