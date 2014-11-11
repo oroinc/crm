@@ -130,7 +130,8 @@ class DoctrineHelper
         if ($em->getUnitOfWork()->getEntityState($entity) !== UnitOfWork::STATE_MANAGED) {
             $id = $em->getClassMetadata($cn)->getIdentifierValues($entity);
             if ($id) {
-                $entity = $em->find($cn, $id);
+                // even if ID exists, it's possible to be after rollback
+                $entity = $em->find($cn, $id) ?: $entity;
             }
         }
 
