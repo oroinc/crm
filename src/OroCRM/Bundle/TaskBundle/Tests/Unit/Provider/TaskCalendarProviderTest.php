@@ -54,7 +54,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         $userId     = 123;
         $calendarId = 456;
 
-        $this->translator->expects($this->exactly(3))
+        $this->translator->expects($this->exactly(2))
             ->method('trans')
             ->will($this->returnArgument(0));
 
