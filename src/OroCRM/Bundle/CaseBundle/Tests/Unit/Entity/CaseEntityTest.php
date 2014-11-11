@@ -23,20 +23,20 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
 
     public function testTaggableInterface()
     {
-        $this->assertInstanceOf('Oro\Bundle\TagBundle\Entity\Taggable', $this->entity);
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->entity->getTags());
+        $this->assertInstanceOf('Oro\Bundle\TagBundle\Entity\Taggable', $this->case);
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->case->getTags());
 
-        $this->assertNull($this->entity->getTaggableId());
+        $this->assertNull($this->case->getTaggableId());
 
-        $ref = new \ReflectionProperty(ClassUtils::getClass($this->entity), 'id');
+        $ref = new \ReflectionProperty(ClassUtils::getClass($this->case), 'id');
         $ref->setAccessible(true);
-        $ref->setValue($this->entity, self::TEST_ID);
+        $ref->setValue($this->case, self::TEST_ID);
 
-        $this->assertSame(self::TEST_ID, $this->entity->getTaggableId());
+        $this->assertSame(self::TEST_ID, $this->case->getTaggableId());
 
         $newCollection = new ArrayCollection();
-        $this->entity->setTags($newCollection);
-        $this->assertSame($newCollection, $this->entity->getTags());
+        $this->case->setTags($newCollection);
+        $this->assertSame($newCollection, $this->case->getTags());
     }
 
     /**
