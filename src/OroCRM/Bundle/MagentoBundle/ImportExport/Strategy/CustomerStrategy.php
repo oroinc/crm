@@ -10,18 +10,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\ContactImportHelper;
 
 class CustomerStrategy extends BaseStrategy
 {
-    /** @var array */
-    protected $storeEntityCache = [];
-
-    /** @var array */
-    protected $websiteEntityCache = [];
-
     /** @var array */
     protected $groupEntityCache = [];
 
@@ -46,6 +39,17 @@ class CustomerStrategy extends BaseStrategy
         'dataChannel'
     ];
 
+    /** @var StoreStrategy */
+    protected $storeStrategy;
+
+    /**
+     * @param StoreStrategy $storeStrategy
+     */
+    public function setStoreStrategy(StoreStrategy $storeStrategy)
+    {
+        $this->storeStrategy = $storeStrategy;
+    }
+
     /**
      * Update/Create customer and related entities based on remote data
      *
@@ -68,21 +72,13 @@ class CustomerStrategy extends BaseStrategy
             $this->defaultOwnerHelper->populateChannelOwner($localEntity, $localEntity->getChannel());
         }
 
-        // update all related entities
-        $this->updateStoresAndGroup(
-            $localEntity,
-            $remoteEntity->getStore(),
-            $remoteEntity->getWebsite(),
-            $remoteEntity->getGroup()
-        );
+        // update store/website/customerGroup related entities
+        $this->updateStoresAndGroup($localEntity, $remoteEntity->getStore(), $remoteEntity->getGroup());
 
         // account and contact for new customer should be created automatically
         // by the appropriate queued process to improve initial import performance
         if ($localEntity->getId()) {
             $this->updateContact($remoteEntity, $localEntity, $remoteEntity->getContact());
-            if ($localEntity->getAccount()) {
-                $localEntity->getAccount()->setDefaultContact($localEntity->getContact());
-            }
         } else {
             $localEntity->setContact(null);
             $localEntity->setAccount(null);
@@ -108,41 +104,12 @@ class CustomerStrategy extends BaseStrategy
      *
      * @param Customer      $entity
      * @param Store         $store
-     * @param Website       $website
      * @param CustomerGroup $group
      *
      * @return $this
      */
-    protected function updateStoresAndGroup(Customer $entity, Store $store, Website $website, CustomerGroup $group)
+    protected function updateStoresAndGroup(Customer $entity, Store $store, CustomerGroup $group)
     {
-        if (!isset($this->websiteEntityCache[$website->getCode()])) {
-            $this->websiteEntityCache[$website->getCode()] = $this->findAndReplaceEntity(
-                $website,
-                MagentoConnectorInterface::WEBSITE_TYPE,
-                [
-                    'code'     => $website->getCode(),
-                    'channel'  => $website->getChannel(),
-                    'originId' => $website->getOriginId()
-                ],
-                ['id', 'code', 'channel']
-            );
-        }
-        $this->websiteEntityCache[$website->getCode()] = $this->merge($this->websiteEntityCache[$website->getCode()]);
-
-        if (!isset($this->storeEntityCache[$store->getCode()])) {
-            $this->storeEntityCache[$store->getCode()] = $this->findAndReplaceEntity(
-                $store,
-                MagentoConnectorInterface::STORE_TYPE,
-                [
-                    'code'     => $store->getCode(),
-                    'channel'  => $store->getChannel(),
-                    'originId' => $store->getOriginId()
-                ],
-                ['id', 'code', 'website', 'channel']
-            );
-        }
-        $this->storeEntityCache[$store->getCode()] = $this->merge($this->storeEntityCache[$store->getCode()]);
-
         if (!isset($this->groupEntityCache[$group->getName()])) {
             $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
                 $group,
@@ -157,12 +124,12 @@ class CustomerStrategy extends BaseStrategy
         }
         $this->groupEntityCache[$group->getName()] = $this->merge($this->groupEntityCache[$group->getName()]);
 
-        $entity
-            ->setWebsite($this->websiteEntityCache[$website->getCode()])
-            ->setStore($this->storeEntityCache[$store->getCode()])
-            ->setGroup($this->groupEntityCache[$group->getName()]);
+        $store = $this->storeStrategy->process($store);
 
-        $entity->getStore()->setWebsite($entity->getWebsite());
+        $entity
+            ->setStore($store)
+            ->setWebsite($store->getWebsite())
+            ->setGroup($this->groupEntityCache[$group->getName()]);
     }
 
     /**
@@ -255,7 +222,7 @@ class CustomerStrategy extends BaseStrategy
 
         $processedRemote = [];
 
-        /** $address - imported address */
+        /** @var $address - imported address */
         foreach ($addresses as $address) {
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
