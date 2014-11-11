@@ -18,7 +18,7 @@ class OrderConnectorTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new OrderConnector($contextRegistry, $logger, $contextMediator);
+        return new OrderConnector($contextRegistry, $logger, $contextMediator, $this->config);
     }
 
     /**

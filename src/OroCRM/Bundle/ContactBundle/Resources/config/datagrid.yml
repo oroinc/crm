@@ -97,6 +97,7 @@ datagrid:
                 link:          delete_link
         options:
             entityHint: group
+            entity_pagination: true
 
     # contacts assigned to group, shown on orocrm_contact_group_update route
     contact-group-contacts-grid:
@@ -331,6 +332,7 @@ datagrid:
         options:
             entityHint: contact
             export: true
+            entity_pagination: true
 
     # assigned accounts grid
     contact-accounts-grid:
