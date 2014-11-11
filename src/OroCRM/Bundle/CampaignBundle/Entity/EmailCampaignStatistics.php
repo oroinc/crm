@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
@@ -15,7 +14,6 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
  *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
  * })
- * @Config()
  * @ORM\HasLifecycleCallbacks
  */
 class EmailCampaignStatistics extends ExtendEmailCampaignStatistics

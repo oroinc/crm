@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Marketing list unsubscribed item.
@@ -13,7 +12,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @Config()
  */
 class MarketingListUnsubscribedItem implements MarketingListStateItemInterface
 {
