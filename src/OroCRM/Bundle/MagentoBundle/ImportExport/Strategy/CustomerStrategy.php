@@ -116,6 +116,7 @@ class CustomerStrategy extends BaseStrategy
             );
         }
         $this->groupEntityCache[$group->getName()] = $this->merge($this->groupEntityCache[$group->getName()]);
+        $this->groupEntityCache[$group->getName()]->setChannel($this->merge($group->getChannel()));
 
         $store = $this->storeStrategy->process($store);
 
