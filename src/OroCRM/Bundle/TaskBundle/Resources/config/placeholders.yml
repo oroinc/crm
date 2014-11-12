@@ -7,6 +7,10 @@ placeholders:
         items:
             orocrm_user_tasks: ~
 
+    view_navButtons_before:
+        items:
+            orocrm_my_tasks_button: ~
+
 items:
     task_reminder_template:
         template: OroCRMTaskBundle:Task:reminderTemplate.html.twig
@@ -33,3 +37,8 @@ items:
     orocrm_add_task_link:
         template: OroCRMTaskBundle:Task:activityLink.html.twig
         acl: orocrm_task_create
+
+    orocrm_my_tasks_button:
+        template: OroCRMTaskBundle:Task:myTasksButton.html.twig
+        applicable: @orocrm_task.placeholder.filter->isCalendarTasksVisible($entity$)
+        acl: orocrm_task_view

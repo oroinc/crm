@@ -8,13 +8,13 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\CalendarBundle\Entity\CalendarConnection;
-use Oro\Bundle\CalendarBundle\Entity\Calendar;
-use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
-use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\CalendarBundle\Entity\Calendar;
+use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
+use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
+use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -174,23 +174,30 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $user->getOrganization()->getId());
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarAdmin->addConnection($connection);
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarAdmin)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarSale->addConnection($connection);
-
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarSale)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarMarket->addConnection($connection);
-
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarMarket)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendar);

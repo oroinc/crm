@@ -25,6 +25,18 @@ class OroCRMTaskExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $this->extension->load(array(), $this->container);
+        $this->extension->load([], $this->container);
+        $this->assertTrue($this->container->getParameter('orocrm_task.calendar_provider.my_tasks.enabled'));
+    }
+
+    public function testLoadWithConfigs()
+    {
+        $this->extension->load(
+            [
+                ['my_tasks_in_calendar' => false]
+            ],
+            $this->container
+        );
+        $this->assertFalse($this->container->getParameter('orocrm_task.calendar_provider.my_tasks.enabled'));
     }
 }

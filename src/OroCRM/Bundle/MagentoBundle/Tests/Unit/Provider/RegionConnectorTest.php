@@ -18,7 +18,7 @@ class RegionConnectorTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new RegionConnector($contextRegistry, $logger, $contextMediator);
+        return new RegionConnector($contextRegistry, $logger, $contextMediator, $this->config);
     }
 
     /**
