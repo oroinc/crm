@@ -38,7 +38,7 @@ class MarketingListSegmentVoter extends AbstractEntityVoter
         if (empty($this->marketingListBySegment[$segmentId])) {
             $segment = $this->doctrineHelper->getEntityReference($this->className, $segmentId);
             $marketingList = $this->doctrineHelper
-                ->getRepository('OroCRMMarketingListBundle:MarketingList')
+                ->getEntityRepository('OroCRMMarketingListBundle:MarketingList')
                 ->findOneBy(['segment' => $segment]);
             $this->marketingListBySegment[$segmentId] = $marketingList;
         }
