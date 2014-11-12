@@ -114,7 +114,7 @@ class ContactInformationFieldsProvider
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-        return array_map(
+        $fieldValues = array_map(
             function ($typedField) use ($propertyAccessor, $source) {
                 if (is_array($source)) {
                     $typedField = sprintf('[%s]', $typedField);
@@ -124,6 +124,8 @@ class ContactInformationFieldsProvider
             },
             $typedFields
         );
+
+        return array_unique($fieldValues);
     }
 
     /**
