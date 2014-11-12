@@ -116,6 +116,9 @@ class B2bCustomerLifetimeListener
      */
     protected function scheduleUpdate(B2bCustomer $b2bCustomer)
     {
+        if ($this->uow->isScheduledForDelete($b2bCustomer)) {
+            return;
+        }
         $this->queued[$b2bCustomer->getId()] = $b2bCustomer;
     }
 
