@@ -47,11 +47,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     public function getData($entity)
     {
         /** @var $entity Task */
-        return [
-            'description'        => $entity->getDescription(),
-            'due_date'           => $entity->getDueDate()->format('c'),
-            'task_priority_name' => $entity->getTaskPriority()->getLabel(),
-        ];
+        return [];
     }
 
     /**

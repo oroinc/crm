@@ -10,7 +10,7 @@
                 </span>
                 <span class="visual">
                     <span class="details">
-                        {{ entityName }}
+                        {{ entityName|raw }}
                         <% var template = (verb == 'create')
                             ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
                             : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
