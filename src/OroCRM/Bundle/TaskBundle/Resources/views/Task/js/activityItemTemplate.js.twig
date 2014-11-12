@@ -10,7 +10,7 @@
                 </span>
                 <span class="visual">
                     <span class="details">
-                        {{ entityName }}
+                        {{ entityName|raw }}
                         <% var template = (verb == 'create')
                             ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
                             : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
@@ -32,10 +32,6 @@
                 </span>
             </div>
             <div class="actions">
-                <button class="btn item-view-button"
-                    title="{{ 'orocrm.task.view_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
-                    <i class="icon-eye-open hide-text">{{ 'orocrm.task.view_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
-                </button>
                 <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
                     title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
                     <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
@@ -51,31 +47,7 @@
                 <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
             </div>
             <div class="message">
-                <% if (data != null) {
-                    var dateTimeFormatter = require('orolocale/js/formatter/datetime');
-                    var templateCall = '<div class="control-group">' +
-                        '<label class="control-label">[[ label ]]</label>' +
-                        '<div class="controls">' +
-                            '<div class="control-label">[[ value ]]</div>' +
-                            '</div>' +
-                        '</div>';
-                %>
-                    <%= _.template(templateCall,
-                        {label: '{{ 'orocrm.task.description.label'|trans|raw }}', value: data['description']},
-                        {interpolate: /\[\[(.+?)\]\]/g}
-                    ) %>
-                    <%= _.template(templateCall,
-                        {
-                            label: '{{ 'orocrm.task.due_date.label'|trans|raw }}',
-                            value: dateTimeFormatter.formatDateTime(data['due_date'])
-                        },
-                        {interpolate: /\[\[(.+?)\]\]/g}
-                    ) %>
-                    <%= _.template(templateCall,
-                        {label: '{{ 'orocrm.task.task_priority.label'|trans|raw }}', value: data['task_priority_name']},
-                        {interpolate: /\[\[(.+?)\]\]/g}
-                    ) %>
-                <% } %>
+                <!-- Do NOT remove. Placeholder for activity view -->
             </div>
         </div>
     </div>

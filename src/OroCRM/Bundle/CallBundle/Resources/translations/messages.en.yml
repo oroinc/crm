@@ -34,6 +34,7 @@ orocrm:
             call_information: Call Information
 
         log_call:    Log call
+        update_log_call: Update call
         view_call:   View {{ entity }} log
         update_call: Update {{ entity }} log
         delete_call: Delete {{ entity }} log
