@@ -1,10 +1,9 @@
 connector:
     name: oro_importexport
     jobs:
-        # Customer import job
         mage_customer_import:
-            title: "Customer Import from Magento"
-            type: import
+            title: "Customer import from Magento"
+            type:  import
             steps:
                 import:
                     title:     import
@@ -12,14 +11,13 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.customer_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    oro_integration.writer.persistent_batch_writer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
 
-        # Customer export job
         mage_customer_reverse_sync:
             title: "Customer's updates push to Magento"
-            type:  export
+            type:   export
             steps:
                 export:
                     title: export
@@ -31,10 +29,9 @@ connector:
                     parameters:
                         batch_size: 100
 
-        # Region import job
         mage_region_import:
-            title: "Import Magento regions via SOAP API"
-            type: import
+            title: "Region import from Magento"
+            type:  import
             steps:
                 import:
                     title:     import
@@ -42,13 +39,13 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.region_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    oro_integration.writer.persistent_batch_writer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 100
-        # Order import job
+
         mage_order_import:
-            title: "Order Import from Magento"
-            type: import
+            title: "Order import from Magento"
+            type:  import
             steps:
                 import:
                     title:     import
@@ -56,13 +53,13 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.order_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    oro_integration.writer.persistent_batch_writer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
-        # Cart import job
+
         mage_cart_import:
-            title: "Import Magento carts (quote) from Magento"
-            type: import
+            title: "Cart(quote) import from Magento"
+            type:  import
             steps:
                 import:
                     title:     import
@@ -70,6 +67,6 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.cart_connector
                         processor: oro_importexport.processor.import_delegate
-                        writer:    oro_integration.writer.persistent_batch_writer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
