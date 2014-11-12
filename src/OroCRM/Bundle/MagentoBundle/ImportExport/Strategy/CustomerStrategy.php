@@ -83,12 +83,6 @@ class CustomerStrategy extends BaseStrategy
             $localEntity->setAccount(null);
         }
 
-        // VAT must be stored in percent representation
-        $vat = $remoteEntity->getVat();
-        if (null !== $vat) {
-            $remoteEntity->setVat((float)$vat / 100);
-        }
-
         // modify local entity after all relations done
         $this->strategyHelper->importEntity($localEntity, $remoteEntity, self::$fieldsForManualUpdate);
 
