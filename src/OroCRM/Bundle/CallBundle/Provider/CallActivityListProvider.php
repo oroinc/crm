@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CallBundle\Provider;
 
+use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
+use Oro\Bundle\ActivityListBundle\Entity\Manager\CollectListManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
@@ -46,14 +48,28 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity)
+    public function setData(ActivityList $activityList, $activityEntity)
     {
-        /** @var Call $entity */
-        return [
-            'notes'          => $entity->getNotes(),
-            'call_date_time' => $entity->getCallDateTime()->format('c'),
-            'direction'      => $entity->getDirection()->getLabel(),
-        ];
+        if ($activityList->getVerb() === CollectListManager::STATE_CREATE) {
+            $activityList->setOwner($activityEntity->getOwner());
+        } else {
+            $activityList->setEditor($activityEntity->getOwner());
+        }
+        $activityList->setData(
+            [
+                'notes'          => $activityEntity->getNotes(),
+                'call_date_time' => $activityEntity->getCallDateTime()->format('c'),
+                'direction'      => $activityEntity->getDirection()->getLabel(),
+            ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataForView(ActivityList $activityEntity)
+    {
+        return $activityEntity->getData();
     }
 
     /**

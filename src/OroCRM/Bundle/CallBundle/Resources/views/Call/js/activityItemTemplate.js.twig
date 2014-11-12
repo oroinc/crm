@@ -19,7 +19,9 @@
                             template,
                             {
                                 user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
-                                date: '<i class="date">' + updatedAt + '</i>'
+                                date: '<i class="date">' + createdAt + '</i>',
+                                editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
+                                editor_date: '<i class="date">' + updatedAt + '</i>'
                             },
                             { interpolate: /\{\{(.+?)\}\}/g }
                         ) %>

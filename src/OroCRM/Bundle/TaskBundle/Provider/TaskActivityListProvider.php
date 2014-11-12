@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
+use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
+use Oro\Bundle\ActivityListBundle\Entity\Manager\CollectListManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -44,14 +46,29 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity)
+    public function setData(ActivityList $activityList, $activityEntity)
     {
-        /** @var $entity Task */
-        return [
-            'description'        => $entity->getDescription(),
-            'due_date'           => $entity->getDueDate()->format('c'),
-            'task_priority_name' => $entity->getTaskPriority()->getLabel(),
-        ];
+        /** @var Task $activityEntity */
+        if ($activityList->getVerb() === CollectListManager::STATE_CREATE) {
+            $activityList->setOwner($activityEntity->getOwner());
+        } else {
+            $activityList->setEditor($activityEntity->getOwner());
+        }
+        $activityList->setData(
+            [
+                'description'        => $activityEntity->getDescription(),
+                'due_date'           => $activityEntity->getDueDate()->format('c'),
+                'task_priority_name' => $activityEntity->getTaskPriority()->getLabel(),
+            ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDataForView(ActivityList $activityEntity)
+    {
+        return $activityEntity->getData();
     }
 
     /**

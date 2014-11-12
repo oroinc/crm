@@ -38,7 +38,7 @@ orocrm:
         update_call: Update {{ entity }} log
         delete_call: Delete {{ entity }} log
         created_by:  logged by {{ user }} on {{ date }}
-        changed_by:  updated by {{ user }} on {{ date }}
+        changed_by:  added by {{ user }} at {{ date }}, updated by {{ editor }} at {{ editor_date }}
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
