@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
+use Doctrine\ORM\Mapping as ORM;
+
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use OroCRM\Bundle\ContactBundle\Model\ExtendContactPhone;
 
 /**
  * @ORM\Entity
@@ -31,7 +32,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractPhone;
  *      }
  * )
  */
-class ContactPhone extends AbstractPhone
+class ContactPhone extends ExtendContactPhone
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="phones")

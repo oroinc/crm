@@ -178,7 +178,7 @@ datagrid:
                         - e.code = :code
                 groupBy: e.name, logTime
             bind_parameters:
-                - :code
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label

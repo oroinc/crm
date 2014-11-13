@@ -60,7 +60,7 @@ class Lead extends AbstractPageEntity
         $this->employees = $this->test->byId('orocrm_sales_lead_form_numberOfEmployees');
         $this->industry = $this->test->byId('orocrm_sales_lead_form_industry');
         $this->campaign = $this->test->byXpath(
-            "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_additional_campaign')]/a"
+            "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_campaign')]/a"
         );
 
         return $this;

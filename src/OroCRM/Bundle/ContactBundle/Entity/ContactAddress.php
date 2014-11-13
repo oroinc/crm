@@ -7,9 +7,9 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use OroCRM\Bundle\ContactBundle\Model\ExtendContactAddress;
 
 /**
  * @ORM\Table("orocrm_contact_address")
@@ -32,7 +32,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * )
  * @ORM\Entity
  */
-class ContactAddress extends AbstractTypedAddress
+class ContactAddress extends ExtendContactAddress
 {
     /**
      * @ORM\ManyToOne(targetEntity="Contact", inversedBy="addresses", cascade={"persist"})
