@@ -6,7 +6,9 @@ use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Func;
 use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
+use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,10 +39,72 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $config
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('offsetGetByPath')
-            ->with(Builder::DATASOURCE_TYPE_PATH)
-            ->will($this->returnValue((Builder::DATASOURCE_TYPE_PATH . 'INCORRECT')));
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [Builder::DATASOURCE_TYPE_PATH, null, 'INCORRECT'],
+                        ['[name]', null, 'grid'],
+                    ]
+                )
+            );
+
+        $this->assertFalse($this->extension->isApplicable($config));
+    }
+
+    public function testIsApplicableVisitTwice()
+    {
+        $config = $this
+            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $config
+            ->expects($this->any())
+            ->method('offsetGetByPath')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        ['[name]', null, ConfigurationProvider::GRID_PREFIX . '1'],
+                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
+                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, true]
+                    ]
+                )
+            );
+
+        $this->marketingListHelper->expects($this->any())
+            ->method('getMarketingListIdByGridName')
+            ->with(ConfigurationProvider::GRID_PREFIX . '1')
+            ->will($this->returnValue(1));
+
+        $this->marketingListHelper->expects($this->any())
+            ->method('getMarketingList')
+            ->with(1)
+            ->will($this->returnValue(new MarketingList()));
+
+        $this->assertTrue($this->extension->isApplicable($config));
+
+        $qb = $this->getQbMock();
+        $dataSource = $this
+            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $condition = new Andx();
+        $condition->add('argument');
+
+        $qb
+            ->expects($this->once())
+            ->method('getDQLParts')
+            ->will($this->returnValue(['where' => $condition]));
+
+        $dataSource
+            ->expects($this->once())
+            ->method('getQueryBuilder')
+            ->will($this->returnValue($qb));
+
+        $this->extension->visitDatasource($config, $dataSource);
         $this->assertFalse($this->extension->isApplicable($config));
     }
 

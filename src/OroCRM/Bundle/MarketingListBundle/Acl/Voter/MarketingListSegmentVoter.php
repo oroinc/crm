@@ -7,25 +7,15 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 class MarketingListSegmentVoter extends AbstractEntityVoter
 {
-    const SEGMENT_ENTITY = 'Oro\Bundle\SegmentBundle\Entity\Segment';
+    /**
+     * @var array
+     */
+    protected $supportedAttributes = ['EDIT', 'DELETE'];
 
     /**
      * @var array
      */
-    protected $supportedAttributes = array('EDIT', 'DELETE');
-
-    /**
-     * @var array
-     */
-    protected $marketingListBySegment = array();
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsClass($class)
-    {
-        return $class === self::SEGMENT_ENTITY;
-    }
+    protected $marketingListBySegment = [];
 
     /**
      * {@inheritdoc}
@@ -46,10 +36,10 @@ class MarketingListSegmentVoter extends AbstractEntityVoter
     protected function getMarketingListBySegment($segmentId)
     {
         if (empty($this->marketingListBySegment[$segmentId])) {
-            $segment = $this->doctrineHelper->getEntityReference(self::SEGMENT_ENTITY, $segmentId);
-            $marketingList = $this->registry->getManager()
-                ->getRepository('OroCRMMarketingListBundle:MarketingList')
-                ->findOneBy(array('segment' => $segment));
+            $segment = $this->doctrineHelper->getEntityReference($this->className, $segmentId);
+            $marketingList = $this->doctrineHelper
+                ->getEntityRepository('OroCRMMarketingListBundle:MarketingList')
+                ->findOneBy(['segment' => $segment]);
             $this->marketingListBySegment[$segmentId] = $marketingList;
         }
 

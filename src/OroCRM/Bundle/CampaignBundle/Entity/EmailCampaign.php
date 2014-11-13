@@ -8,6 +8,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaign;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 
 /**
@@ -36,7 +37,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *      }
  * )
  */
-class EmailCampaign
+class EmailCampaign extends ExtendEmailCampaign
 {
     const SCHEDULE_MANUAL = 'manual';
     const SCHEDULE_DEFERRED = 'deferred';

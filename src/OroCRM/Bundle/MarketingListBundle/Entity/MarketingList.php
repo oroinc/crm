@@ -11,6 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
 
 /**
  * Marketing list
@@ -45,7 +46,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class MarketingList
+class MarketingList extends ExtendMarketingList
 {
     /**
      * @ORM\Id
@@ -74,7 +75,7 @@ class MarketingList
     /**
      * @var MarketingListType
      *
-     * @ORM\ManyToOne(targetEntity="MarketingListType")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType")
      * @ORM\JoinColumn(name="type", referencedColumnName="name", nullable=false)
      **/
     protected $type;

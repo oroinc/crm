@@ -37,11 +37,11 @@ class MarketingListItemConnector
      * @param int $entityId
      * @return MarketingListItem
      */
-    public function contact(MarketingList $marketingList, $entityId)
+    public function getMarketingListItem(MarketingList $marketingList, $entityId)
     {
         $marketingListItemRepository = $this->registry->getRepository(self::MARKETING_LIST_ITEM_ENTITY);
         $marketingListItem = $marketingListItemRepository->findOneBy(
-            array('marketingList' => $marketingList, 'entityId' => $entityId)
+            ['marketingList' => $marketingList, 'entityId' => $entityId]
         );
 
         if (!$marketingListItem) {
@@ -53,6 +53,17 @@ class MarketingListItemConnector
             $manager->persist($marketingListItem);
         }
 
+        return $marketingListItem;
+    }
+
+    /**
+     * @param MarketingList $marketingList
+     * @param int $entityId
+     * @return MarketingListItem
+     */
+    public function contact(MarketingList $marketingList, $entityId)
+    {
+        $marketingListItem = $this->getMarketingListItem($marketingList, $entityId);
         $marketingListItem->contact();
 
         return $marketingListItem;

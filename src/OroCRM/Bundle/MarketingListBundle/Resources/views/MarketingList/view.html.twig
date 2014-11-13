@@ -98,6 +98,10 @@
         </div>
     {%- endset -%}
 
+    {%- set syncStatusData -%}
+        {% placeholder marketing_list_sync_info with {marketingList: entity} %}
+    {%- endset -%}
+    
     {% set itemsGridName = gridName ~ '_items' %}
     {% set removedItemsGridName = gridName ~ '_removed_items' %}
     {% set itemsMixin = 'orocrm-marketing-list-items-mixin' %}
@@ -113,13 +117,17 @@
         {{  dataGrid.renderGrid(removedItemsGridName, {'grid-mixin': removedItemsMixin}) }}
     {%- endset -%}
 
+    {% set generalSectionBlocks = [{'data' : [listInformation]}]%}
+    {% if syncStatusData is not empty %}
+        {% set generalSectionBlocks = generalSectionBlocks|merge(
+            [{'data': [syncStatusData]}]
+        ) %}
+    {% endif %}
     {% set dataBlocks = [
         {
             'title': 'orocrm.marketinglist.block.general'|trans,
             'class': 'active',
-            'subblocks': [
-                {'data' : [listInformation]}
-            ]
+            'subblocks': generalSectionBlocks
         },
         {
             'title': config.plural_label,

@@ -28,18 +28,18 @@ class ContactInformationFieldsProvider
     }
 
     /**
-     * @param AbstractQueryDesigner $abstractQueryDesigner
-     * @param string $entityClass
-     * @param string $type
+     * @param AbstractQueryDesigner $queryDesigner
+     * @param string|null $type
      *
      * @return array
      */
-    public function getQueryTypedFields(AbstractQueryDesigner $abstractQueryDesigner, $entityClass, $type)
+    public function getQueryTypedFields(AbstractQueryDesigner $queryDesigner, $type = null)
     {
+        $entityClass = $queryDesigner->getEntity();
         $typedFields = $this->getEntityTypedFields($entityClass, $type);
 
         $definitionColumns = [];
-        $definition = $abstractQueryDesigner->getDefinition();
+        $definition = $queryDesigner->getDefinition();
         if ($definition) {
             $definition = json_decode($definition, JSON_OBJECT_AS_ARRAY);
             if (!empty($definition['columns'])) {
@@ -61,10 +61,10 @@ class ContactInformationFieldsProvider
 
     /**
      * @param string|object $entityOrClass
-     * @param string $type
+     * @param string|null $type
      * @return array
      */
-    public function getEntityTypedFields($entityOrClass, $type)
+    public function getEntityTypedFields($entityOrClass, $type = null)
     {
         $entityOrClass = ClassUtils::getRealClass($entityOrClass);
 
@@ -76,22 +76,19 @@ class ContactInformationFieldsProvider
             return [];
         }
 
-        return array_keys(
-            array_filter(
-                $contactInformationFields,
-                function ($contactInformationField) use ($type) {
-                    return $contactInformationField === $type;
-                }
-            )
-        );
+        if ($type) {
+            $contactInformationFields = $this->filterByType($contactInformationFields, $type);
+        }
+
+        return $contactInformationFields;
     }
 
     /**
      * @param MarketingList $marketingList
-     * @param string $type
+     * @param string|null $type
      * @return array
      */
-    public function getMarketingListTypedFields(MarketingList $marketingList, $type)
+    public function getMarketingListTypedFields(MarketingList $marketingList, $type = null)
     {
         if ($marketingList->isManual()) {
             $typedFields = $this->getEntityTypedFields(
@@ -101,7 +98,6 @@ class ContactInformationFieldsProvider
         } else {
             $typedFields = $this->getQueryTypedFields(
                 $marketingList->getSegment(),
-                $marketingList->getEntity(),
                 $type
             );
         }
@@ -111,18 +107,41 @@ class ContactInformationFieldsProvider
 
     /**
      * @param array $typedFields
-     * @param object $entity
+     * @param object|array $source
      * @return array
      */
-    public function getTypedFieldsValues(array $typedFields, $entity)
+    public function getTypedFieldsValues(array $typedFields, $source)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-        return array_map(
-            function ($typedField) use ($propertyAccessor, $entity) {
-                return (string)$propertyAccessor->getValue($entity, $typedField);
+        $fieldValues = array_map(
+            function ($typedField) use ($propertyAccessor, $source) {
+                if (is_array($source)) {
+                    $typedField = sprintf('[%s]', $typedField);
+                }
+
+                return (string)$propertyAccessor->getValue($source, $typedField);
             },
             $typedFields
+        );
+
+        return array_unique($fieldValues);
+    }
+
+    /**
+     * @param array $contactInformationFields
+     * @param string $type
+     * @return array
+     */
+    protected function filterByType(array $contactInformationFields, $type)
+    {
+        return array_keys(
+            array_filter(
+                $contactInformationFields,
+                function ($contactInformationField) use ($type) {
+                    return $contactInformationField === $type;
+                }
+            )
         );
     }
 }

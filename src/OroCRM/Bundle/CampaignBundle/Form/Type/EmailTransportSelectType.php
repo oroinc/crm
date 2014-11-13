@@ -29,23 +29,9 @@ class EmailTransportSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'choices' => $this->getChoices()
+                'choices' => $this->emailTransportProvider->getVisibleTransportChoices()
             ]
         );
-    }
-
-    /**
-     * @return array
-     */
-    protected function getChoices()
-    {
-        $transports = $this->emailTransportProvider->getTransports();
-        $choices = array();
-        foreach ($transports as $transport) {
-            $choices[$transport->getName()] = $transport->getLabel();
-        }
-
-        return $choices;
     }
 
     /**
