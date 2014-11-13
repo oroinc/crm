@@ -24,5 +24,6 @@
         "php": ">=5.4.9",
         "oro/platform": "1.4.x-dev"
     },
-    "minimum-stability": "dev"
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
