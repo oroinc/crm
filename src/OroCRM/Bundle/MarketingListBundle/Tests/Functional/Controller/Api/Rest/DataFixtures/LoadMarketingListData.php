@@ -39,7 +39,7 @@ class LoadMarketingListData extends AbstractFixture implements ContainerAwareInt
         $entity
             ->setType($type)
             ->setName('list_name')
-            ->setEntity('entity')
+            ->setEntity('OroCRM\Bundle\ContactBundle\Entity\Contact')
             ->setOrganization($manager->getRepository('OroOrganizationBundle:Organization')->getFirst());
 
         $manager->persist($entity);
