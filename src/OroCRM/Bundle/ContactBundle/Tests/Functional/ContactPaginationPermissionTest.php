@@ -46,7 +46,7 @@ class ContactPaginationPermissionTest extends AbstractContactPaginationTestCase
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $this->assertPositionEntity($crawler, 2, 3);
         $this->assertContains(
-            "You do not have sufficient permissions to access records. You are now viewing 3 number of records.",
+            "You do not have sufficient permissions to access records. You are now viewing 3 records.",
             $crawler->html()
         );
     }

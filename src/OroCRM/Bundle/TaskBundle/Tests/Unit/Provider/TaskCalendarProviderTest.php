@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\TaskBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\Query\Expr;
 
-use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
 use OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider;
 
 class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
@@ -66,9 +65,9 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
                     'removable'       => false,
                     'position'        => -1,
                     'backgroundColor' => 'F83A22',
-                    'options' => [
-                        'widgetRoute'     => 'orocrm_task_widget_info',
-                        'widgetOptions'   => [
+                    'options'         => [
+                        'widgetRoute'   => 'orocrm_task_widget_info',
+                        'widgetOptions' => [
                             'title'         => 'orocrm.task.info_widget_title',
                             'dialogOptions' => [
                                 'width' => 600
