@@ -37,7 +37,7 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $this->assertPositionEntity($crawler, 2, 3);
         $this->assertContains(
-            "Some of the records are no longer available. You are now viewing 3 number of records.",
+            "Some of the records are no longer available. You are now viewing 3 records.",
             $crawler->html()
         );
     }

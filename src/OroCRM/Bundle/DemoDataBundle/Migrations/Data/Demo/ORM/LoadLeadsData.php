@@ -166,6 +166,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
         $securityContext->setToken($token);
     }
+
     /**
      * @param  array $data
      * @param User $user

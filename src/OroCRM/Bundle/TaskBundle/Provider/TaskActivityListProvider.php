@@ -46,29 +46,18 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function setData(ActivityList $activityList, $activityEntity)
+    public function getData(ActivityList $activityListEntity)
     {
-        /** @var Task $activityEntity */
-        if ($activityList->getVerb() === CollectListManager::STATE_CREATE) {
-            $activityList->setOwner($activityEntity->getOwner());
-        } else {
-            $activityList->setEditor($activityEntity->getOwner());
-        }
-        $activityList->setData(
-            [
-                'description'        => $activityEntity->getDescription(),
-                'due_date'           => $activityEntity->getDueDate()->format('c'),
-                'task_priority_name' => $activityEntity->getTaskPriority()->getLabel(),
-            ]
-        );
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDataForView(ActivityList $activityEntity)
+    public function getOrganization($activityEntity)
     {
-        return $activityEntity->getData();
+        /** @var $activityEntity Task */
+        return $activityEntity->getOrganization();
     }
 
     /**

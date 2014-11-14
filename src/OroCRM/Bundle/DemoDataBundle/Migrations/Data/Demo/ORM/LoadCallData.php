@@ -6,25 +6,34 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class LoadCallData extends AbstractFixture implements DependentFixtureInterface
+class LoadCallData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    protected $subjects = array(
+    protected $subjects = [
         'Cold Call', 'Reminder of our scheduled meeting', 'Happy Birthday', 'The lease of office space'
-    );
+    ];
 
-    protected $notes = array(
+    protected $notes = [
         'note1', 'note2'
-    );
+    ];
 
     /**
      * @var Organization
      */
     protected $organization;
+
+    /** @var ContainerInterface */
+    protected $container;
 
     /**
      * {@inheritdoc}
@@ -32,6 +41,14 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return ['OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -52,10 +69,10 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $directions = array(
-            'incoming' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(array('name' => 'incoming')),
-            'outgoing' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(array('name' => 'outgoing'))
-        );
+        $directions = [
+            'incoming' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(['name' => 'incoming']),
+            'outgoing' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(['name' => 'outgoing'])
+        ];
         $contactCount = count($contacts);
         $accountCount = count($accounts);
         for ($i = 0; $i < 100; ++$i) {
@@ -81,6 +98,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
 
             if ($randomPath > 2) {
                 if ($call->supportActivityTarget(get_class($contact))) {
+                    $this->setSecurityContext($contact->getOwner());
                     $call->addActivityTarget($contact);
                 }
                 $contactPrimaryPhone = $contact->getPrimaryPhone();
@@ -137,5 +155,15 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface
 
         // Convert back to desired date format
         return date('Y-m-d H:i:s', $val);
+    }
+
+    /**
+     * @param User $user
+     */
+    protected function setSecurityContext($user)
+    {
+        $securityContext = $this->container->get('security.context');
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $securityContext->setToken($token);
     }
 }

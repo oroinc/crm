@@ -48,28 +48,18 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function setData(ActivityList $activityList, $activityEntity)
+    public function getData(ActivityList $activityListEntity)
     {
-        if ($activityList->getVerb() === CollectListManager::STATE_CREATE) {
-            $activityList->setOwner($activityEntity->getOwner());
-        } else {
-            $activityList->setEditor($activityEntity->getOwner());
-        }
-        $activityList->setData(
-            [
-                'notes'          => $activityEntity->getNotes(),
-                'call_date_time' => $activityEntity->getCallDateTime()->format('c'),
-                'direction'      => $activityEntity->getDirection()->getLabel(),
-            ]
-        );
+        return [];
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDataForView(ActivityList $activityEntity)
+    public function getOrganization($activityEntity)
     {
-        return $activityEntity->getData();
+        /** @var $activityEntity Call */
+        return $activityEntity->getOrganization();
     }
 
     /**
