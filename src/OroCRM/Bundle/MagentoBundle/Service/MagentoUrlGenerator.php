@@ -220,11 +220,10 @@ class MagentoUrlGenerator
     {
         try {
             $this->sourceUrl = sprintf(
-                '%s/%s?' .
-                $this->getOrigin() .
-                '=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
+                '%s/%s?%s=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
                 rtrim($this->getAdminUrl(), '/'),
                 self::GATEWAY_ROUTE,
+                $this->getOrigin(),
                 $id,
                 $this->getMagentoRoute(),
                 $this->getFlowName(),
