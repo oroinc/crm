@@ -4,18 +4,16 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
 /**
  * Email Campaign Statistics.
  *
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignStatisticsRepository")
  * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
  *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
  * })
- * @ORM\Entity
- * @Config()
  * @ORM\HasLifecycleCallbacks
  */
 class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
@@ -153,6 +151,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementOpenCount()
+    {
+        $this->openCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getClickCount()
@@ -167,6 +175,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     public function setClickCount($clickCount)
     {
         $this->clickCount = $clickCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementClickCount()
+    {
+        $this->clickCount++;
 
         return $this;
     }
@@ -191,6 +209,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementBounceCount()
+    {
+        $this->bounceCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getAbuseCount()
@@ -210,6 +238,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     }
 
     /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementAbuseCount()
+    {
+        $this->abuseCount++;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getUnsubscribeCount()
@@ -224,6 +262,16 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     public function setUnsubscribeCount($unsubscribeCount)
     {
         $this->unsubscribeCount = $unsubscribeCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementUnsubscribeCount()
+    {
+        $this->unsubscribeCount++;
 
         return $this;
     }

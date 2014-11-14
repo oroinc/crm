@@ -5,8 +5,11 @@ namespace OroCRM\Bundle\CampaignBundle\Form\Type;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use OroCRM\Bundle\CampaignBundle\Provider\EmailTransportProvider;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 
 class EmailCampaignType extends AbstractType
@@ -15,6 +18,19 @@ class EmailCampaignType extends AbstractType
      * @var EventSubscriberInterface[]
      */
     protected $subscribers = [];
+
+    /**
+     * @var EmailTransportProvider
+     */
+    protected $emailTransportProvider;
+
+    /**
+     * @param EmailTransportProvider $emailTransportProvider
+     */
+    public function __construct(EmailTransportProvider $emailTransportProvider)
+    {
+        $this->emailTransportProvider = $emailTransportProvider;
+    }
 
     /**
      * @param EventSubscriberInterface $subscriber
@@ -91,15 +107,6 @@ class EmailCampaignType extends AbstractType
                 ['label' => 'orocrm.campaign.emailcampaign.marketing_list.label', 'required' => true]
             )
             ->add(
-                'transport',
-                'orocrm_campaign_email_transport_select',
-                [
-                    'label'    => 'orocrm.campaign.emailcampaign.transport.label',
-                    'required' => true,
-                    'mapped'   => false
-                ]
-            )
-            ->add(
                 'description',
                 'textarea',
                 [
@@ -107,6 +114,7 @@ class EmailCampaignType extends AbstractType
                     'required' => false,
                 ]
             );
+        $this->addTransport($builder);
     }
 
     /**
@@ -128,5 +136,38 @@ class EmailCampaignType extends AbstractType
     public function getName()
     {
         return 'orocrm_email_campaign';
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    protected function addTransport(FormBuilderInterface $builder)
+    {
+        $builder->addEventListener(
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                $options = [
+                    'label' => 'orocrm.campaign.emailcampaign.transport.label',
+                    'required' => true,
+                    'mapped' => false
+                ];
+
+                /** @var EmailCampaign $data */
+                $data = $event->getData();
+                if ($data) {
+                    $choices = $this->emailTransportProvider->getVisibleTransportChoices();
+                    $currentTransportName = $data->getTransport();
+                    if (!array_key_exists($currentTransportName, $choices)) {
+                        $currentTransport = $this->emailTransportProvider
+                            ->getTransportByName($currentTransportName);
+                        $choices[$currentTransport->getName()] = $currentTransport->getLabel();
+                        $options['choices'] = $choices;
+                    }
+                }
+
+                $form = $event->getForm();
+                $form->add('transport', 'orocrm_campaign_email_transport_select', $options);
+            }
+        );
     }
 }

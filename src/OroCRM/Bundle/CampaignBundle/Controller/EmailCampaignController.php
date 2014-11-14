@@ -82,7 +82,10 @@ class EmailCampaignController extends Controller
      */
     public function viewAction(EmailCampaign $entity)
     {
-        return ['entity' => $entity];
+        $stats = $this->getDoctrine()
+            ->getRepository("OroCRMCampaignBundle:EmailCampaignStatistics")
+            ->getEmailCampaignStats($entity);
+        return ['entity' => $entity, 'stats' => $stats, 'show_stats' => (bool) array_sum($stats)];
     }
 
     /**

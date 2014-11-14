@@ -112,8 +112,9 @@ services:
     orocrm_marketing_list.security.acl.voter.segment:
         class: %orocrm_marketing_list.security.acl.voter.segment.class%
         arguments:
-            - @doctrine
             - @oro_entity.doctrine_helper
+        calls:
+            - [setClassName, [%oro_segment.segment.entity.class%]]
         tags:
             - { name: security.voter, priority: 500 }
 
