@@ -39,9 +39,15 @@
                     </div>
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
+                        {% if form.vars.value.id %}
+                        <button class="btn btn-primary" type="submit">
+                            {{ 'oro.ui.update_entity'|trans({'%entityName%': 'orocrm.task.entity_label'|trans}) }}
+                        </button>
+                        {% else %}
                         <button class="btn btn-primary" type="submit">
                             {{ 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.task.entity_label'|trans}) }}
                         </button>
+                        {% endif %}
                     </div>
                 </fieldset>
             </form>
