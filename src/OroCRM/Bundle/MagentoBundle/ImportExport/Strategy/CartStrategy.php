@@ -11,7 +11,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CartStrategy extends BaseStrategy implements LoggerAwareInterface
 {
@@ -65,7 +64,8 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
         );
         if ($existingEntity) {
             $this->strategyHelper->importEntity($existingEntity, $newEntity, self::$fieldsForManualUpdate);
-            $this->removeErrorMessage($existingEntity);
+            // force unset "status error message" that might be set during manual sync form UI
+            $existingEntity->setStatusMessage(null);
         } else {
             $hasContactInfo = ($newEntity->getBillingAddress() && $newEntity->getBillingAddress()->getPhone())
                 || $newEntity->getEmail();
@@ -236,21 +236,6 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
             $status = $existingEntity->getStatus();
         }
 
-        $status = $this->strategyHelper->getEntityManager(MagentoConnectorInterface::CART_STATUS_TYPE)->getReference(
-            MagentoConnectorInterface::CART_STATUS_TYPE,
-            $status->getName()
-        );
-        $existingEntity->setStatus($status);
-    }
-
-    /**
-     * @param Cart $existingEntity
-     *
-     * @return $this
-     */
-    protected function removeErrorMessage(Cart $existingEntity)
-    {
-        $existingEntity->setStatusMessage(null);
-        return $this;
+        $existingEntity->setStatus($this->doctrineHelper->merge($status));
     }
 }
