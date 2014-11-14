@@ -6,20 +6,23 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 use OroCRM\Bundle\TaskBundle\Entity\TaskPriority;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
+class LoadTaskData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     const FIXTURES_COUNT = 20;
 
     /**
      * @var array
      */
-    static protected $fixtureSubjects = array(
+    static protected $fixtureSubjects = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit',
         'Aenean commodo ligula eget dolor',
         'Aenean massa',
@@ -40,12 +43,12 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
         'Integer ante arcu',
         'Curabitur ligula sapien',
         'Donec posuere vulputate'
-    );
+    ];
 
     /**
      * @var array
      */
-    static protected $fixtureDescriptions = array(
+    static protected $fixtureDescriptions = [
         'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.',
         'Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
         'Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.',
@@ -66,18 +69,31 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
         'Sed lectus. Donec mollis hendrerit risus. Phasellus nec sem in justo pellentesque facilisis. Etiam imperdiet.',
         'Phasellus leo dolor, tempus non, auctor et, hendrerit quis, nisi. Curabitur ligula sapien, tincidunt non.',
         'Praesent congue erat at massa. Sed cursus turpis vitae tortor. Donec posuere vulputate arcu.',
-    );
+    ];
+
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
 
     /**
      * {@inheritdoc}
      */
     public function getDependencies()
     {
-        return array(
+        return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadAccountData',
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadUsersData',
-        );
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
     }
 
     /**
@@ -179,6 +195,15 @@ class LoadTaskData extends AbstractFixture implements DependentFixtureInterface
     protected function addActivityTarget(Task $task, $target)
     {
         if ($task->supportActivityTarget(get_class($target))) {
+            $securityContext = $this->container->get('security.context');
+            $user = $task->getOwner();
+            $token = new UsernamePasswordOrganizationToken(
+                $user,
+                $user->getUsername(),
+                'main',
+                $this->getReference('default_organization')
+            );
+            $securityContext->setToken($token);
             $task->addActivityTarget($target);
         }
     }

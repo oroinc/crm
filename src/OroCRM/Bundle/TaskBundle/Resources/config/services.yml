@@ -5,9 +5,7 @@ parameters:
     orocrm_task.calendar_provider.class:            OroCRM\Bundle\TaskBundle\Provider\TaskCalendarProvider
     orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
     orocrm_task.placeholder.filter.class:           OroCRM\Bundle\TaskBundle\Placeholder\PlaceholderFilter
-
-    orocrm_task.activity_list.provider.class: OroCRM\Bundle\TaskBundle\Provider\TaskActivityListProvider
-
+    orocrm_task.activity_list.provider.class:       OroCRM\Bundle\TaskBundle\Provider\TaskActivityListProvider
 
 services:
     orocrm_task.listener.datagrid.user_tasks:
