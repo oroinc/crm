@@ -15,9 +15,9 @@ class EmbeddedFormListener
     protected $request;
 
     /**
-     * @param Request $request
+     * @param Request|null $request
      */
-    public function setRequest(Request $request)
+    public function setRequest(Request $request = null)
     {
         $this->request = $request;
     }
