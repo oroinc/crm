@@ -69,7 +69,7 @@ class TaskCalendarProvider implements CalendarProviderInterface
                 'calendarName'    => $this->translator->trans($this->calendarLabels[self::MY_TASKS_CALENDAR_ID]),
                 'removable'       => false,
                 'position'        => -1,
-                'backgroundColor' => 'F83A22',
+                'backgroundColor' => '#F83A22',
                 'options'         => [
                     'widgetRoute'   => 'orocrm_task_widget_info',
                     'widgetOptions' => [
