@@ -15,9 +15,9 @@ class EmbeddedFormListener
     protected $request;
 
     /**
-     * @param Request $request
+     * @param Request|null $request
      */
-    public function __construct(Request $request)
+    public function setRequest(Request $request = null)
     {
         $this->request = $request;
     }
@@ -29,6 +29,10 @@ class EmbeddedFormListener
      */
     public function addDataChannelField(BeforeFormRenderEvent $event)
     {
+        if (!$this->request) {
+            return;
+        }
+
         $routename = $this->request->attributes->get('_route');
 
         if (strrpos($routename, 'oro_embedded_form_') === 0) {
