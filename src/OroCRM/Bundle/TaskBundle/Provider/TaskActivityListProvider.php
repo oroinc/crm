@@ -76,7 +76,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
         return [
             'itemView'   => 'orocrm_task_widget_info',
             'itemEdit'   => 'orocrm_task_update',
-            'itemDelete' => 'oro_api_delete_task'
+            'itemDelete' => 'orocrm_api_delete_task'
         ];
     }
 
