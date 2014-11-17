@@ -6,31 +6,31 @@ oro_menu_config:
             extras:
                 position: 30
                 routes: ['orocrm_case_update', 'orocrm_case_create', 'orocrm_case_view']
-#        orocrm_case_account_cases_tab:
-#            label: 'orocrm.case.widgets.account_cases'
-#            extras:
-#                position: 100
-#                widgetAcl: 'orocrm_case_view'
-#                widgetRoute: 'orocrm_case_account_widget_cases'
-#
-#        orocrm_case_contact_cases_tab:
-#            label: 'orocrm.case.widgets.contact_cases'
-#            extras:
-#                position: 100
-#                widgetAcl: 'orocrm_case_view'
-#                widgetRoute: 'orocrm_case_contact_widget_cases'
+        orocrm_case_account_cases_tab:
+            label: 'orocrm.case.widgets.account_cases'
+            extras:
+                position: 100
+                widgetAcl: 'orocrm_case_view'
+                widgetRoute: 'orocrm_case_account_widget_cases'
+
+        orocrm_case_contact_cases_tab:
+            label: 'orocrm.case.widgets.contact_cases'
+            extras:
+                position: 100
+                widgetAcl: 'orocrm_case_view'
+                widgetRoute: 'orocrm_case_contact_widget_cases'
     tree:
         application_menu:
             children:
                 activities_tab:
                     children:
                         orocrm_case_index: ~
-#        account_activity_tab_panel:
-#            children:
-#                orocrm_case_account_cases_tab: ~
-#        contact_activity_tab_panel:
-#            children:
-#                orocrm_case_contact_cases_tab: ~
+        account_activity_tab_panel:
+            children:
+                orocrm_case_account_cases_tab: ~
+        contact_activity_tab_panel:
+            children:
+                orocrm_case_contact_cases_tab: ~
 oro_titles:
     orocrm_case_index: ~
     orocrm_case_view: '%%entity.subject%%'
