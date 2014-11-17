@@ -170,6 +170,7 @@ class CustomerStrategy extends BaseStrategy
                     // set remote data for further processing
                     $existingAddress->setRegion($address->getRegion());
                     $existingAddress->setCountry($address->getCountry());
+                    $this->addressHelper->mergeAddressTypes($existingAddress, $address);
 
                     $address = $existingAddress;
                 }
