@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Acl\Voter;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\MarketingListBundle\Acl\Voter\MarketingListSegmentVoter;
 
 class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
@@ -12,32 +15,22 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
     protected $voter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
     protected function setUp()
     {
-        $this->registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->voter = new MarketingListSegmentVoter($this->registry, $this->doctrineHelper);
+        $this->voter = new MarketingListSegmentVoter($this->doctrineHelper);
     }
 
     protected function tearDown()
     {
         unset($this->voter);
-        unset($this->registry);
         unset($this->doctrineHelper);
     }
 
@@ -51,33 +44,42 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->voter->supportsAttribute($attribute));
     }
 
+    /**
+     * @return array
+     */
     public function supportsAttributeDataProvider()
     {
-        return array(
-            'VIEW' => array('VIEW', false),
-            'CREATE' => array('CREATE', false),
-            'EDIT' => array('EDIT', true),
-            'DELETE' => array('DELETE', true),
-            'ASSIGN' => array('ASSIGN', false),
-        );
+        return [
+            'VIEW' => ['VIEW', false],
+            'CREATE' => ['CREATE', false],
+            'EDIT' => ['EDIT', true],
+            'DELETE' => ['DELETE', true],
+            'ASSIGN' => ['ASSIGN', false],
+        ];
     }
 
     /**
      * @param string $class
+     * @param string $actualClass
      * @param bool $expected
      * @dataProvider supportsClassDataProvider
      */
-    public function testSupportsClass($class, $expected)
+    public function testSupportsClass($class, $actualClass, $expected)
     {
+        $this->voter->setClassName($actualClass);
+
         $this->assertEquals($expected, $this->voter->supportsClass($class));
     }
 
+    /**
+     * @return array
+     */
     public function supportsClassDataProvider()
     {
-        return array(
-            'supported class' => array(MarketingListSegmentVoter::SEGMENT_ENTITY, true),
-            'not supported class' => array('NotSupportedClass', false),
-        );
+        return [
+            'supported class' => ['stdClass', 'stdClass', true],
+            'not supported class' => ['NotSupportedClass', 'stdClass', false],
+        ];
     }
 
     /**
@@ -95,7 +97,10 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHelper->expects($this->once())
             ->method('getEntityClass')
             ->with($object)
-            ->will($this->returnValue(MarketingListSegmentVoter::SEGMENT_ENTITY));
+            ->will($this->returnValue('\stdClass'));
+
+        $this->voter->setClassName('\stdClass');
+
         $this->doctrineHelper->expects($this->once())
             ->method('getSingleEntityIdentifier')
             ->with($object, false)
@@ -105,6 +110,7 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
             $this->assertMarketingListLoad($marketingList);
         }
 
+        /** @var TokenInterface $token */
         $token = $this->getMock('Symfony\Component\Security\Core\Authentication\Token\TokenInterface');
         $this->assertEquals(
             $expected,
@@ -112,44 +118,47 @@ class MarketingListSegmentVoterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @return array
+     */
     public function attributesDataProvider()
     {
         $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
 
-        return array(
-            array(array('VIEW'), null, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('CREATE'), null, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('EDIT'), null, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('DELETE'), null, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('ASSIGN'), null, MarketingListSegmentVoter::ACCESS_ABSTAIN),
+        return [
+            [['VIEW'], null, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['CREATE'], null, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['EDIT'], null, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['DELETE'], null, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['ASSIGN'], null, MarketingListSegmentVoter::ACCESS_ABSTAIN],
 
-            array(array('VIEW'), $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('CREATE'), $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-            array(array('EDIT'), $marketingList, MarketingListSegmentVoter::ACCESS_DENIED),
-            array(array('DELETE'), $marketingList, MarketingListSegmentVoter::ACCESS_DENIED),
-            array(array('ASSIGN'), $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN),
-        );
+            [['VIEW'], $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['CREATE'], $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+            [['EDIT'], $marketingList, MarketingListSegmentVoter::ACCESS_DENIED],
+            [['DELETE'], $marketingList, MarketingListSegmentVoter::ACCESS_DENIED],
+            [['ASSIGN'], $marketingList, MarketingListSegmentVoter::ACCESS_ABSTAIN],
+        ];
     }
 
+    /**
+     * @param $marketingList
+     */
     protected function assertMarketingListLoad($marketingList)
     {
         $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $repository->expects($this->once())
+
+        $repository
+            ->expects($this->once())
             ->method('findOneBy')
             ->will($this->returnValue($marketingList));
-        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $em->expects($this->once())
-            ->method('getRepository')
-            ->with('OroCRMMarketingListBundle:MarketingList')
+
+        $this->doctrineHelper
+            ->expects($this->once())
+            ->method('getEntityRepository')
             ->will($this->returnValue($repository));
-        $this->registry->expects($this->once())
-            ->method('getManager')
-            ->will($this->returnValue($em));
     }
 }

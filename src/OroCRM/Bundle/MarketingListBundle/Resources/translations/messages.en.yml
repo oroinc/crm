@@ -68,3 +68,35 @@ orocrm:
             unsubscribe: Unsubscribe
             unremove: Undo remove
             remove: Remove
+
+        marketinglistitem:
+            entity_label: Marketing List Item
+            entity_plural_label: Marketing List Items
+            contacted_times.label: Contacted Times
+            created_at.label: Created At
+            entity_id.label: Entity Id
+            id.label: Id
+            last_contacted_at.label: Last Contacted At
+            marketing_list.label: Marketing List
+
+        marketinglistunsubscribeditem:
+            entity_label: Marketing List Unsubscribed Item
+            entity_plural_label: Marketing List Unsubscribed Items
+            created_at.label: Created At
+            entity_id.label: Entity Id
+            id.label: Id
+            marketing_list.label: Marketing List
+
+        marketinglisttype:
+            entity_label: Marketing List Type
+            entity_plural_label: Marketing List Types
+            label.label: Label
+            name.label: Name
+
+        marketinglistremoveditem:
+            entity_label: Marketing List Removed Item
+            entity_plural_label: Marketing List Removed Items
+            created_at.label: Created At
+            entity_id.label: Entity Id
+            id.label: Id
+            marketing_list.label: Marketing List

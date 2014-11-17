@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
  */
-class MarketingListUnsubscribedItem
+class MarketingListUnsubscribedItem implements MarketingListStateItemInterface
 {
     /**
      * @var int
@@ -35,7 +35,10 @@ class MarketingListUnsubscribedItem
     /**
      * @var MarketingList
      *
-     * @ORM\ManyToOne(targetEntity="MarketingList", inversedBy="marketingListUnsubscribedItems")
+     * @ORM\ManyToOne(
+     *     targetEntity="OroCRM\Bundle\MarketingListBundle\Entity\MarketingList",
+     *     inversedBy="marketingListUnsubscribedItems"
+     * )
      * @ORM\JoinColumn(name="marketing_list_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $marketingList;
@@ -56,7 +59,8 @@ class MarketingListUnsubscribedItem
     }
 
     /**
-     * @param int $entityId
+     * {@inheritdoc}
+     *
      * @return MarketingListUnsubscribedItem
      */
     public function setEntityId($entityId)
@@ -67,7 +71,7 @@ class MarketingListUnsubscribedItem
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getEntityId()
     {
@@ -75,7 +79,8 @@ class MarketingListUnsubscribedItem
     }
 
     /**
-     * @param MarketingList $marketingList
+     * {@inheritdoc}
+     *
      * @return MarketingListUnsubscribedItem
      */
     public function setMarketingList(MarketingList $marketingList)
@@ -86,7 +91,7 @@ class MarketingListUnsubscribedItem
     }
 
     /**
-     * @return MarketingList
+     * {@inheritdoc}
      */
     public function getMarketingList()
     {
