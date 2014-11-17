@@ -3,11 +3,11 @@
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
-use Oro\Bundle\ActivityListBundle\Entity\Manager\CollectListManager;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskActivityListProvider implements ActivityListProviderInterface
