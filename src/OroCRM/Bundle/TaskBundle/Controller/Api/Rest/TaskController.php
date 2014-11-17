@@ -64,10 +64,8 @@ class TaskController extends RestController implements ClassResourceInterface
         $page  = (int)$this->getRequest()->get('page', 1);
         $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        $filterParameters = [
-            'createdAt' => new HttpDateTimeParameterFilter(),
-            'updatedAt' => new HttpDateTimeParameterFilter()
-        ];
+        $dateParamFilter  = new HttpDateTimeParameterFilter();
+        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
 
