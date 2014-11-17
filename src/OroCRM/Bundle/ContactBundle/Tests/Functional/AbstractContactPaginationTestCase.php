@@ -77,6 +77,26 @@ class AbstractContactPaginationTestCase extends WebTestCase
     }
 
     /**
+     * @param string|null $expectedMessage
+     * @return Crawler
+     */
+    protected function redirectViaFrontend($expectedMessage = null)
+    {
+        $response = $this->client->getResponse();
+        $this->assertEquals('application/json', $response->headers->get('Content-Type'));
+
+        $data = json_decode($response->getContent(), true);
+        $this->assertArrayHasKey('url', $data);
+
+        if ($expectedMessage) {
+            $this->assertArrayHasKey('message', $data);
+            $this->assertEquals($expectedMessage, $data['message']);
+        }
+
+        return $this->client->request('GET', $data['url']);
+    }
+
+    /**
      * @param string $name
      * @return Contact
      */
@@ -150,7 +170,8 @@ class AbstractContactPaginationTestCase extends WebTestCase
 
         // click next link
         $next = $crawler->filter('#entity-pagination a .icon-chevron-right')->parents()->link();
-        $crawler = $this->client->click($next);
+        $this->client->click($next);
+        $crawler = $this->redirectViaFrontend();
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::SECOND_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler);
@@ -158,7 +179,8 @@ class AbstractContactPaginationTestCase extends WebTestCase
 
         // click last link
         $last = $crawler->filter('#entity-pagination a:contains("Last")')->link();
-        $crawler = $this->client->click($last);
+        $this->client->click($last);
+        $crawler = $this->redirectViaFrontend();
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FOURTH_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, false, true);
@@ -166,7 +188,8 @@ class AbstractContactPaginationTestCase extends WebTestCase
 
         // click previous link
         $previous = $crawler->filter('#entity-pagination a .icon-chevron-left')->parents()->link();
-        $crawler = $this->client->click($previous);
+        $this->client->click($previous);
+        $crawler = $this->redirectViaFrontend();
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler);
@@ -174,7 +197,8 @@ class AbstractContactPaginationTestCase extends WebTestCase
 
         // click first link
         $first = $crawler->filter('#entity-pagination a:contains("First")')->link();
-        $crawler = $this->client->click($first);
+        $this->client->click($first);
+        $crawler = $this->redirectViaFrontend();
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::FIRST_ENTITY_NAME);
         $this->assertPositionEntityLinks($crawler, true);

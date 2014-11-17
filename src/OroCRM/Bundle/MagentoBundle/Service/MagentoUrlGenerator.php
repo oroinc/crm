@@ -15,40 +15,46 @@ use OroCRM\Bundle\MagentoBundle\Exception\Exception as MagentoBundleException;
 
 class MagentoUrlGenerator
 {
-    const GATEWAY_ROUTE   = 'oro_gateway/do';
+    const GATEWAY_ROUTE = 'oro_gateway/do';
     const NEW_ORDER_ROUTE = 'oro_sales/newOrder';
+    const CHECKOUT_ROUTE = 'oro_sales/checkout';
     const EXTENSION_REQUIRED_ERROR_MESSAGE = 'orocrm.magento.controller.extension_required';
     const DEFAULT_ERROR_MESSAGE = 'orocrm.magento.controller.transport_not_configure';
 
     /**
      * @var Channel
      */
-    private $channel;
+    protected $channel;
 
     /**
      * @var string
      */
-    private $error;
+    protected $error;
 
     /**
      * @var string
      */
-    private $sourceUrl;
+    protected $sourceUrl;
 
     /**
      * @var string
      */
-    private $flowName;
+    protected $flowName;
+
+    /**
+     * @var string
+     */
+    protected $magentoRoute;
 
     /**
      * @var Router
      */
-    private $router;
+    protected $router;
 
     /**
      * @var string
      */
-    private $origin;
+    protected $origin;
 
     /**
      * @param Router $router
@@ -129,6 +135,24 @@ class MagentoUrlGenerator
     }
 
     /**
+     * @param string $magentoRoute
+     * @return $this
+     */
+    public function setMagentoRoute($magentoRoute)
+    {
+        $this->magentoRoute = $magentoRoute;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMagentoRoute()
+    {
+        return $this->magentoRoute ? : self::NEW_ORDER_ROUTE;
+    }
+
+    /**
      * @return Router
      */
     public function getRouter()
@@ -196,13 +220,12 @@ class MagentoUrlGenerator
     {
         try {
             $this->sourceUrl = sprintf(
-                '%s/%s?' .
-                $this->getOrigin() .
-                '=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
+                '%s/%s?%s=%d&route=%s&workflow=%s&success_url=%s&error_url=%s',
                 rtrim($this->getAdminUrl(), '/'),
                 self::GATEWAY_ROUTE,
+                $this->getOrigin(),
                 $id,
-                self::NEW_ORDER_ROUTE,
+                $this->getMagentoRoute(),
                 $this->getFlowName(),
                 urlencode($this->generateUrl($successRoute, [], UrlGeneratorInterface::ABSOLUTE_URL)),
                 urlencode($this->generateUrl($errorRoute, [], UrlGeneratorInterface::ABSOLUTE_URL))
@@ -228,7 +251,7 @@ class MagentoUrlGenerator
      *
      * @see UrlGeneratorInterface
      */
-    private function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
+    protected function generateUrl($route, $parameters = array(), $referenceType = UrlGeneratorInterface::ABSOLUTE_PATH)
     {
         $url = $this->getRouter()->generate($route, $parameters, $referenceType);
         if (empty($url)) {

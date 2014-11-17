@@ -32,13 +32,12 @@ class ContactPaginationDeleteTest extends AbstractContactPaginationTestCase
 
         // click next link
         $next = $crawler->filter('#entity-pagination a .icon-chevron-right')->parents()->link();
-        $crawler = $this->client->click($next);
+        $this->client->click($next);
+        $crawler = $this->redirectViaFrontend(
+            'Some of the records are no longer available. You are now viewing 3 records.'
+        );
 
         $this->assertCurrentContactName($crawler, LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $this->assertPositionEntity($crawler, 2, 3);
-        $this->assertContains(
-            "Some of the records are no longer available. You are now viewing 3 number of records.",
-            $crawler->html()
-        );
     }
 }
