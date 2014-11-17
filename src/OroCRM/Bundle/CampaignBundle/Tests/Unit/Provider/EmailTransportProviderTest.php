@@ -24,6 +24,41 @@ class EmailTransportProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($transport, $provider->getTransportByName($name));
     }
 
+    public function testTransportActualChoices()
+    {
+        $choices = ['t1' => 'Transport 1', 't2' => 'Transport 2'];
+        $provider = new EmailTransportProvider();
+        $transportOne = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportOne->expects($this->exactly(2))
+            ->method('getName')
+            ->will($this->returnValue('t1'));
+        $transportOne->expects($this->once())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 1'));
+        $transportTwo = $this->getMock('OroCRM\Bundle\CampaignBundle\Transport\TransportInterface');
+        $transportTwo->expects($this->exactly(2))
+            ->method('getName')
+            ->will($this->returnValue('t2'));
+        $transportTwo->expects($this->once())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 2'));
+        $transportTree = $this->getMock('OroCRM\Bundle\CampaignBundle\Tests\Unit\Provider\TransportStub');
+        $transportTree->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('t3'));
+        $transportTree->expects($this->never())
+            ->method('getLabel')
+            ->will($this->returnValue('Transport 3'));
+        $transportTree->expects($this->once())
+            ->method('isVisibleInForm')
+            ->will($this->returnValue(false));
+
+        $provider->addTransport($transportOne);
+        $provider->addTransport($transportTwo);
+        $provider->addTransport($transportTree);
+        $this->assertEquals($choices, $provider->getVisibleTransportChoices());
+    }
+
     /**
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Transport test is unknown

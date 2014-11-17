@@ -14,14 +14,24 @@ class ContactInformationColumnConstraint extends Constraint
     /**
      * @var string
      */
+    public $typeMessage = 'orocrm.marketinglist.contact_information_type';
+
+    /**
+     * @var string
+     */
     public $field;
+
+    /**
+     * @var string
+     */
+    public $type;
 
     /**
      * {@inheritdoc}
      */
     public function getTargets()
     {
-        return array(self::CLASS_CONSTRAINT, self::PROPERTY_CONSTRAINT);
+        return [self::CLASS_CONSTRAINT, self::PROPERTY_CONSTRAINT];
     }
 
     /**
