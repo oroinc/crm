@@ -31,15 +31,24 @@
                     </span>
                 </span>
             </div>
-            <div class="actions">
-                <button class="btn item-edit-button<% if (!editable) { %> disabled<% } %>" <% if (!editable) { %> disabled="disabled"<% } %>
-                    title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
-                    <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
-                </button>
-                <button class="btn item-remove-button<% if (!removable) { %> disabled<% } %>" <% if (!removable) { %> disabled="disabled"<% } %>
-                    title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html_attr')|raw }}">
-                    <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|e('html')|raw }}</i>
-                </button>
+            <div class="actions action-cell">
+                <div class="more-bar-holder">
+                    <div class="dropdown">
+                        <a data-toggle="dropdown" class="dropdown-toggle" href="javascript:void(0);">...</a>
+                        <ul class="dropdown-menu pull-right launchers-dropdown-menu nav nav-pills icons-holder launchers-list">
+                            <li class="launcher-item">
+                                <a href="javascript:void(0);" class="action no-hash item-edit-button" title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
+                                    <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+                                </a>
+                            </li>
+                            <li class="launcher-item">
+                                <a href="javascript:void(0);" class="action no-hash item-remove-button" title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
+                                    <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
