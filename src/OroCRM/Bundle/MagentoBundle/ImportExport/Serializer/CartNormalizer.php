@@ -63,6 +63,7 @@ class CartNormalizer extends ConfigurableEntityNormalizer
         $cart->setDataChannel($this->channelImportHelper->getChannel($integration));
         if ($cart->getStore()) {
             $cart->getStore()->setChannel($integration);
+            $cart->getStore()->getWebsite()->setChannel($integration);
         }
 
         if (!empty($data['email'])) {
