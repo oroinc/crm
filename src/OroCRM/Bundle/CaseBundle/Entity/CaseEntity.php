@@ -286,13 +286,6 @@ class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterf
 
     /**
      * @var ArrayCollection $tags
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true
-     *          }
-     *      }
-     * )
      */
     protected $tags;
 
