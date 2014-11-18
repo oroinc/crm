@@ -74,4 +74,4 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                 -
                     name: phones
                     target_type: text
-                    target_fields: [phoneNumbers]
+                    target_fields: [phones]
