@@ -38,4 +38,4 @@ orocrm:
         update_task: Update {{ entity }}
         delete_task: Delete {{ entity }}
         created_by:  assigned by {{ user }} on {{ date }}
-        changed_by:  updated by {{ user }} on {{ date }}
+        changed_by:  assigned by {{ user }} at {{ date }}, updated by {{ editor }} at {{ editor_date }}

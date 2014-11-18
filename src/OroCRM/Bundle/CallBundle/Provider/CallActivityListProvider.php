@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\CallBundle\Provider;
 
+use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
+use Oro\Bundle\ActivityListBundle\Entity\Manager\CollectListManager;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
@@ -46,14 +48,18 @@ class CallActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity)
+    public function getData(ActivityList $activityListEntity)
     {
-        /** @var Call $entity */
-        return [
-            'notes'          => $entity->getNotes(),
-            'call_date_time' => $entity->getCallDateTime()->format('c'),
-            'direction'      => $entity->getDirection()->getLabel(),
-        ];
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganization($activityEntity)
+    {
+        /** @var $activityEntity Call */
+        return $activityEntity->getOrganization();
     }
 
     /**

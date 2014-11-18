@@ -2,10 +2,12 @@
 
 namespace OroCRM\Bundle\TaskBundle\Provider;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskActivityListProvider implements ActivityListProviderInterface
@@ -44,14 +46,18 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getData($entity)
+    public function getData(ActivityList $activityListEntity)
     {
-        /** @var $entity Task */
-        return [
-            'description'        => $entity->getDescription(),
-            'due_date'           => $entity->getDueDate()->format('c'),
-            'task_priority_name' => $entity->getTaskPriority()->getLabel(),
-        ];
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrganization($activityEntity)
+    {
+        /** @var $activityEntity Task */
+        return $activityEntity->getOrganization();
     }
 
     /**
@@ -70,7 +76,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface
         return [
             'itemView'   => 'orocrm_task_widget_info',
             'itemEdit'   => 'orocrm_task_update',
-            'itemDelete' => 'oro_api_delete_task'
+            'itemDelete' => 'orocrm_api_delete_task'
         ];
     }
 
