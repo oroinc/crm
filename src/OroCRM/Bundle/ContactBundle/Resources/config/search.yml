@@ -67,3 +67,11 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             name:                   googlePlus
             target_type:            text
             target_fields:          [googlePlus]
+        -
+            name: phoneNumbers
+            relation_type: one-to-many
+            relation_fields:
+                -
+                    name: phones
+                    target_type: text
+                    target_fields: [phones]
