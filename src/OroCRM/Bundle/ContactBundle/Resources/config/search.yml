@@ -71,7 +71,7 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             name: phoneNumbers
             relation_type: one-to-many
             relation_fields:
-            -
-                name: phones
-                target_type: text
-                target_fields: [phones]
+                -
+                    name: phones
+                    target_type: text
+                    target_fields: [phones]
