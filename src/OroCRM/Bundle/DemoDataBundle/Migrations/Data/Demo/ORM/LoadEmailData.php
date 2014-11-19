@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -77,7 +78,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
         $handle = fopen($dictionaryDir . DIRECTORY_SEPARATOR. "emails.csv", "r");
         if ($handle) {
-            $headers = array();
+            $headers = [];
             if (($data = fgetcsv($handle, 1000, ",")) !== false) {
                 //read headers
                 $headers = $data;
@@ -115,6 +116,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
                 new \DateTime('now')
             );
 
+            $this->setSecurityContext($owner);
             $email->addFolder($origin->getFolder(FolderType::SENT));
 
             $emailBody = $this->emailEntityBuilder->body(
@@ -127,5 +129,20 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
             $this->emailEntityBuilder->getBatch()->persist($om);
         }
+    }
+
+    /**
+     * @param User $user
+     */
+    protected function setSecurityContext($user)
+    {
+        $securityContext = $this->container->get('security.context');
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->getReference('default_organization')
+        );
+        $securityContext->setToken($token);
     }
 }
