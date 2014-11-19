@@ -3,9 +3,9 @@
 namespace OroCRM\Bundle\TaskBundle\Controller\Api\Soap;
 
 use Symfony\Component\Form\FormInterface;
+
 use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
-use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Controller\Api\Soap\SoapController;
@@ -83,7 +83,7 @@ class TaskController extends SoapController
      */
     public function getForm()
     {
-        return $this->container->get('orocrm_task.form.api');
+        return $this->container->get('orocrm_task.form.api.soap');
     }
 
     /**
@@ -91,7 +91,7 @@ class TaskController extends SoapController
      */
     public function getFormHandler()
     {
-        return $this->container->get('orocrm_task.form.handler.task_api');
+        return $this->container->get('orocrm_task.form.handler.task_api.soap');
     }
 
     /**

@@ -96,7 +96,7 @@ class AclLeadTest extends Selenium2TestCase
      *
      * @dataProvider columnTitle
      */
-    public function testTaskAcl($aclCase, $username, $role, $leadName)
+    public function testLeadAcl($aclCase, $username, $role, $leadName)
     {
         $roleName = 'Label_' . $role;
         $login = $this->login();

@@ -4,18 +4,19 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
 /**
  * Email Campaign Statistics.
  *
- * @ORM\Table(name="orocrm_campaign_email_stats")
- * @ORM\Entity
- * @Config()
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\EmailCampaignStatisticsRepository")
+ * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
+ *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
+ * })
  * @ORM\HasLifecycleCallbacks
  */
-class EmailCampaignStatistics
+class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
 {
     /**
      * @var int
@@ -41,6 +42,41 @@ class EmailCampaignStatistics
      * @ORM\JoinColumn(name="email_campaign_id", referencedColumnName="id", onDelete="CASCADE", nullable=false)
      */
     protected $emailCampaign;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="open_count", type="integer", nullable=true)
+     */
+    protected $openCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="click_count", type="integer", nullable=true)
+     */
+    protected $clickCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="bounce_count", type="integer", nullable=true)
+     */
+    protected $bounceCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="abuse_count", type="integer", nullable=true)
+     */
+    protected $abuseCount;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="unsubscribe_count", type="integer", nullable=true)
+     */
+    protected $unsubscribeCount;
 
     /**
      * @var \DateTime
@@ -91,6 +127,151 @@ class EmailCampaignStatistics
     public function setEmailCampaign(EmailCampaign $emailCampaign)
     {
         $this->emailCampaign = $emailCampaign;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getOpenCount()
+    {
+        return $this->openCount;
+    }
+
+    /**
+     * @param int $openCount
+     * @return EmailCampaignStatistics
+     */
+    public function setOpenCount($openCount)
+    {
+        $this->openCount = $openCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementOpenCount()
+    {
+        $this->openCount++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getClickCount()
+    {
+        return $this->clickCount;
+    }
+
+    /**
+     * @param int $clickCount
+     * @return EmailCampaignStatistics
+     */
+    public function setClickCount($clickCount)
+    {
+        $this->clickCount = $clickCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementClickCount()
+    {
+        $this->clickCount++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getBounceCount()
+    {
+        return $this->bounceCount;
+    }
+
+    /**
+     * @param int $bounceCount
+     * @return EmailCampaignStatistics
+     */
+    public function setBounceCount($bounceCount)
+    {
+        $this->bounceCount = $bounceCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementBounceCount()
+    {
+        $this->bounceCount++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAbuseCount()
+    {
+        return $this->abuseCount;
+    }
+
+    /**
+     * @param int $abuseCount
+     * @return EmailCampaignStatistics
+     */
+    public function setAbuseCount($abuseCount)
+    {
+        $this->abuseCount = $abuseCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementAbuseCount()
+    {
+        $this->abuseCount++;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getUnsubscribeCount()
+    {
+        return $this->unsubscribeCount;
+    }
+
+    /**
+     * @param int $unsubscribeCount
+     * @return EmailCampaignStatistics
+     */
+    public function setUnsubscribeCount($unsubscribeCount)
+    {
+        $this->unsubscribeCount = $unsubscribeCount;
+
+        return $this;
+    }
+
+    /**
+     * @return EmailCampaignStatistics
+     */
+    public function incrementUnsubscribeCount()
+    {
+        $this->unsubscribeCount++;
 
         return $this;
     }

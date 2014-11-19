@@ -4,6 +4,7 @@ datagrid:
         options:
             entityHint: opportunities
             export: true
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_opportunity_view
@@ -154,6 +155,7 @@ datagrid:
         options:
             entityHint: leads
             export: true
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_lead_view
@@ -333,6 +335,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
             entityHint: sales process
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_salesfunnel_view
@@ -750,6 +753,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%

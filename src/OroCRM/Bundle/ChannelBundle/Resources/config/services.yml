@@ -197,13 +197,17 @@ services:
         calls:
             - [setExclusionProvider, [@orocrm_channel.provider.channel_entity_exclusion_provider]]
 
+    oro_security.security_facade.link:
+        tags:
+            - { name: oro_service_link,  service: oro_security.security_facade }
+
     orocrm_channel.provider.state_provider:
         class: %orocrm_channel.provider.state_provider.class%
         arguments:
             - @orocrm_channel.provider.settings_provider
             - @orocrm_channel.state_cache
             - @doctrine
-            - @oro_security.security_facade
+            - @oro_security.security_facade.link
             - @oro_security.acl_helper
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
@@ -277,9 +281,8 @@ services:
 
     orocrm_channel.event_listener.embedded_form:
         class: %orocrm_channel.event_listener.embedded_form.class%
-        scope: request
-        arguments:
-            - @request
+        calls:
+            - [setRequest, [@?request=]]
         tags:
             - { name: kernel.event_listener, event: entity_form.render.before, method: addDataChannelField }
             - { name: kernel.event_listener, event: oro_embedded_form.form_submit.before, method: onEmbeddedFormSubmit }

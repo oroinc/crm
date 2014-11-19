@@ -2,6 +2,8 @@ orocrm:
     task:
         menu:
             task_list.description:  List of tasks
+            my_tasks: My Tasks
+
         #
         # OroCRM/Bundle/TaskBundle/Entity/Task
         #
@@ -14,19 +16,19 @@ orocrm:
         workflow_step.label:        Status
         task_priority.label:        Priority
         owner.label:                Assigned To
-        related_account.label:      Account
-        related_contact.label:      Contact
-        reporter.label:             Reporter
         id.label:                   Id
         workflow_item.label:        Workflow item
         organization.label:         Organization
 
+        user_tasks: User Tasks
+        info_widget_title: Task Information
         add_entity: Add task
+        add_entity.title: Add a task to this record
+        assign_entity: Assign task
+        assign_entity.title: Assign a task to this user
+        assign_entity.widget_title: Assign task to %username%
         saved_message: Task saved
 
-        widgets:
-            account_tasks: Tasks
-        contact_tasks_section: Tasks
         user_tasks_section: Tasks
         assigned_tasks_widget:
             no_task_exist: You have no tasks pending

@@ -30,6 +30,11 @@ class EmailCampaignStatisticsTest extends AbstractEntityTestCase
             'createdAt' => ['createdAt', $date, $date],
             'emailCampaign' => ['emailCampaign', $campaign, $campaign],
             'marketingListItem' => ['marketingListItem', $marketingListItem, $marketingListItem],
+            'openCount' => ['openCount', 1, 1],
+            'clickCount' => ['clickCount', 2, 2],
+            'bounceCount' => ['bounceCount', 3, 3],
+            'abuseCount' => ['abuseCount', 4, 4],
+            'unsubscribeCount' => ['unsubscribeCount', 5, 5]
         ];
     }
 

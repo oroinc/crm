@@ -12,6 +12,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -46,8 +47,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
+class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterface
 {
     /**
      * @var integer
@@ -282,6 +284,11 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var bool
      */
     private $updateClosedAt = null;
+
+    /**
+     * @var ArrayCollection $tags
+     */
+    protected $tags;
 
     /**
      * @var Organization
@@ -655,6 +662,34 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function __toString()
     {
         return (string)$this->subject;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 
     /**

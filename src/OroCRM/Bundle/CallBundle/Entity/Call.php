@@ -6,7 +6,6 @@ use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\ActivityBundle\Model\ActivityInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -22,6 +21,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      indexes={@ORM\Index(name="call_dt_idx",columns={"call_date_time"})}
  * )
  * @ORM\Entity
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      routeName="orocrm_call_index",
  *      defaultValues={
@@ -51,7 +51,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      }
  * )
  */
-class Call extends ExtendCall implements ActivityInterface
+class Call extends ExtendCall
 {
     /**
      * @var integer
@@ -128,6 +128,34 @@ class Call extends ExtendCall implements ActivityInterface
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $direction;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
 
     /**
      * @var Organization
@@ -340,6 +368,38 @@ class Call extends ExtendCall implements ActivityInterface
     }
 
     /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
      * Set organization
      *
      * @param Organization $organization
@@ -360,5 +420,22 @@ class Call extends ExtendCall implements ActivityInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

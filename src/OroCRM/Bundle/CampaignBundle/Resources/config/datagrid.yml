@@ -90,6 +90,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     campaign-tracking-total-report-grid:
         source:
@@ -178,7 +180,7 @@ datagrid:
                         - e.code = :code
                 groupBy: e.name, logTime
             bind_parameters:
-                - :code
+                - code
         columns:
             name:
                 label: oro.tracking.trackingevent.name.label
@@ -363,69 +365,99 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
-    orocrm-email-campaign-marketing-list-items-mixin:
-        extends: orocrm-marketing-list-items-base-unsubscribe-mixin
+    orocrm-email-campaign-marketing-list-unsent-items-mixin:
+        source:
+            query:
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            alias: 'mlr'
+                            conditionType: 'WITH'
+                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            alias: 'mlu'
+                            conditionType: 'WITH'
+                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
+                where:
+                    and:
+                        - mlr.id IS NULL
+                        - mlu.id IS NULL
+
+    orocrm-email-campaign-marketing-list-sent-items-mixin:
         source:
             query:
                 select:
-                    - COUNT(cs.id) as campaignContactedTimes
-                    - MAX(cs.createdAt) as campaignLastContactedAt
+                    - cs.openCount as openCount
+                    - cs.clickCount as clickCount
+                    - cs.bounceCount as bounceCount
+                    - cs.abuseCount as abuseCount
+                    - cs.unsubscribeCount as unsubscribeCount
                 join:
-                    left:
+                    inner:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            alias: 'mli'
+                            conditionType: 'WITH'
+                            condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
                         -
                             join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
                             alias: 'cs'
                             conditionType: 'WITH'
-                            condition: 'mli.id = cs.marketingListItem AND cs.emailCampaign = :emailCampaign'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
+                            condition: 'cs.marketingListItem = mli.id AND cs.emailCampaign = :emailCampaign'
+            bind_parameters:
+                - emailCampaign
         columns:
-            campaignContactedTimes:
-                label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
-            campaignLastContactedAt:
-                label: orocrm.campaign.emailcampaign.datagrid.campaignLastContactedAt
-                frontend_type: datetime
+            openCount:
+                label: orocrm.campaign.emailcampaign.stats.open.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            clickCount:
+                label: orocrm.campaign.emailcampaign.stats.click.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            bounceCount:
+                label: orocrm.campaign.emailcampaign.stats.bounce.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            abuseCount:
+                label: orocrm.campaign.emailcampaign.stats.abuse.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            unsubscribeCount:
+                label: orocrm.campaign.emailcampaign.stats.unsubscribe.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
         filters:
             columns:
-                campaignContactedTimes:  { type: number,   data_name: campaignContactedTimes }
-                campaignLastContactedAt: { type: datetime, data_name: campaignLastContactedAt }
+                openCount:
+                    type:        number
+                    data_name:   cs.openCount
+                clickCount:
+                    type:        number
+                    data_name:   cs.clickCount
+                bounceCount:
+                    type:        number
+                    data_name:   cs.bounceCount
+                abuseCount:
+                    type:        number
+                    data_name:   cs.abuseCount
+                unsubscribeCount:
+                    type:        number
+                    data_name:   cs.unsubscribeCount
         sorters:
             columns:
-                campaignContactedTimes:  { data_name: campaignContactedTimes }
-                campaignLastContactedAt: { data_name: campaignLastContactedAt }
-
-    orocrm-email-campaign-marketing-list-manual-items-mixin:
-        extends: orocrm-marketing-list-manual-items-base-unsubscribe-mixin
-        source:
-            query:
-                select:
-                    - COUNT(cs.id) as campaignContactedTimes
-                    - MAX(cs.createdAt) as campaignLastContactedAt
-                join:
-                    left:
-                        -
-                            join: 'OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'
-                            alias: 'cs'
-                            conditionType: 'WITH'
-                            condition: 'mli.id = cs.marketingListItem AND cs.emailCampaign = :emailCampaign'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                groupBy: __root_entity__.id, mlu.id, mli.contactedTimes, mli.lastContactedAt
-        columns:
-            campaignContactedTimes:
-                label: orocrm.campaign.emailcampaign.datagrid.campaignContactedTimes
-            campaignLastContactedAt:
-                label: orocrm.campaign.emailcampaign.datagrid.campaignLastContactedAt
-                frontend_type: datetime
-        filters:
-            columns:
-                campaignContactedTimes:  { type: number,   data_name: campaignContactedTimes }
-                campaignLastContactedAt: { type: datetime, data_name: campaignLastContactedAt }
-        sorters:
-            columns:
-                campaignContactedTimes:  { data_name: campaignContactedTimes }
-                campaignLastContactedAt: { data_name: campaignLastContactedAt }
+                openCount:        { data_name: cs.openCount }
+                clickCount:       { data_name: cs.clickCount }
+                bounceCount:      { data_name: cs.bounceCount }
+                abuseCount:       { data_name: cs.abuseCount }
+                unsubscribeCount: { data_name: cs.unsubscribeCount }

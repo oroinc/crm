@@ -17,6 +17,7 @@ use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_4\OroCRMContactBundle as No
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_5\OroCRMContactBundle as AttachmentMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_6\OroCRMContactBundle as ActivityMigration;
 use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_8\OroCRMContactBundle as ContactOrganizations;
+use OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_9\CreateActivityAssociation as ActivityCalendarEventMigration;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -72,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_10';
     }
 
     /**
@@ -104,6 +105,7 @@ class OroCRMContactBundleInstaller implements
         NoteMigration::addNoteAssociations($schema, $this->noteExtension);
         AttachmentMigration::addPhotoToContact($schema, $this->attachmentExtension);
         ActivityMigration::addActivityAssociations($schema, $this->activityExtension);
+        ActivityCalendarEventMigration::addActivityAssociations($schema, $this->activityExtension);
         ContactOrganizations::addOrganization($schema);
     }
 
@@ -150,6 +152,7 @@ class OroCRMContactBundleInstaller implements
         $table->addIndex(['created_by_user_id'], 'IDX_403263ED7D182D95', []);
         $table->addIndex(['updated_by_user_id'], 'IDX_403263ED2793CC5E', []);
         $table->addIndex(['last_name', 'first_name'], 'contact_name_idx', []);
+        $table->addIndex(['updatedAt'], 'contact_updated_at_idx', []);
     }
 
     /**

@@ -137,6 +137,7 @@ datagrid:
         options:
             entityHint: customer
             export: true
+            entity_pagination: true
 
     magento-cart-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
@@ -314,6 +315,7 @@ datagrid:
         options:
             entityHint: cart
             export: true
+            entity_pagination: true
 
     magento-cartitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
@@ -722,6 +724,7 @@ datagrid:
         options:
             entityHint: order
             export: true
+            entity_pagination: true
 
     magento-orderitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem

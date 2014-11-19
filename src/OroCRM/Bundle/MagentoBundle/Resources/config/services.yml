@@ -44,10 +44,6 @@ parameters:
 
     orocrm_magento.listener.customer_listener.class:                        OroCRM\Bundle\MagentoBundle\EventListener\ContactListener
 
-    # processors
-    orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
-    orocrm_magento.importexport.customer.reverse.writer.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter
-
     # helpers
     orocrm_magento.importexport.address_import_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
@@ -226,18 +222,6 @@ services:
             - @oro_integration.sync_scheduler.link
         tags:
             - { name: doctrine.event_listener, event: onFlush, connection: default }
-
-    orocrm_magento.importexport.customer.reverse.processor:
-        class: %orocrm_magento.importexport.customer.reverse.processor.class%
-
-    orocrm_magento.importexport.customer.reverse.writer:
-        class: %orocrm_magento.importexport.customer.reverse.writer.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @orocrm_magento.importexport.denormalizer.customer
-            - @orocrm_magento.transport.soap_transport
-            - @orocrm_magento.importexport.address_import_helper
-            - @orocrm_magento.converter.region
 
     orocrm_magento.importexport.address_import_helper:
         class: %orocrm_magento.importexport.address_import_helper.class%

@@ -17,6 +17,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
 
 /**
  * @RouteResource("task")
@@ -39,6 +40,18 @@ class TaskController extends RestController implements ClassResourceInterface
      *      nullable=true,
      *      description="Number of items per page. defaults to 10."
      * )
+     * @QueryParam(
+     *     name="createdAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
+     * )
+     * @QueryParam(
+     *     name="updatedAt",
+     *     requirements="\d{4}(-\d{2}(-\d{2}([T ]\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|([-+]\d{2}(:?\d{2})?))?)?)?)?",
+     *     nullable=true,
+     *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
+     * )
      * @ApiDoc(
      *      description="Get all task items",
      *      resource=true
@@ -48,10 +61,15 @@ class TaskController extends RestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        $page = (int) $this->getRequest()->get('page', 1);
-        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page  = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        return $this->handleGetListRequest($page, $limit);
+        $dateParamFilter  = new HttpDateTimeParameterFilter();
+        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
+
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+
+        return $this->handleGetListRequest($page, $limit, $criteria);
     }
 
     /**
@@ -162,9 +180,6 @@ class TaskController extends RestController implements ClassResourceInterface
                 }
                 break;
             case 'owner':
-            case 'relatedAccount':
-            case 'relatedContact':
-            case 'reporter':
             case 'workflowItem':
             case 'workflowStep':
                 if ($value) {

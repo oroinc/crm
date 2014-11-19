@@ -123,6 +123,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
         // @codingStandardsIgnoreEnd
         $report->setDefinition(json_encode($definition));
         $report->setOrganization($manager->getRepository('OroOrganizationBundle:Organization')->getFirst());
+        $report->setOwner($manager->getRepository('OroOrganizationBundle:BusinessUnit')->getFirst());
         $em->persist($report);
         $em->flush($report);
     }
