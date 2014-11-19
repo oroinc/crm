@@ -164,9 +164,7 @@ class ContactType extends AbstractType
                 'multiple' => true,
                 'expanded' => true,
                 'required' => false,
-                'translation'   => array(
-                    'is_translated_option' => true
-                )
+                'is_translated_choices' => true
             )
         );
 
