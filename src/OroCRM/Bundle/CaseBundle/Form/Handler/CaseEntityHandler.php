@@ -11,13 +11,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use OroCRM\Bundle\CaseBundle\Event\Events;
 use OroCRM\Bundle\CaseBundle\Event\FormHandlerEvent;
+use Oro\Bundle\TagBundle\Entity\TagManager;
+use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 
-class CaseEntityHandler extends ApiFormHandler
+class CaseEntityHandler extends ApiFormHandler implements TagHandlerInterface
 {
     /**
      * @var EventDispatcherInterface
      */
     protected $dispatcher;
+
+    /**
+     * @var TagManager
+     */
+    protected $tagManager;
 
     /**
      * @param FormInterface $form
@@ -48,5 +55,17 @@ class CaseEntityHandler extends ApiFormHandler
         );
 
         $this->entityManager->flush();
+
+        if ($this->tagManager) {
+            $this->tagManager->saveTagging($entity);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTagManager(TagManager $tagManager)
+    {
+        $this->tagManager = $tagManager;
     }
 }
