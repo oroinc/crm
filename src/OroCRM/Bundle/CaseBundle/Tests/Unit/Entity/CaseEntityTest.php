@@ -4,8 +4,13 @@ namespace OroCRM\Bundle\CaseBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Util\ClassUtils;
+
 class CaseEntityTest extends \PHPUnit_Framework_TestCase
 {
+    const TEST_ID = 12;
+
     /**
      * @var CaseEntity
      */
@@ -14,6 +19,24 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->case = new CaseEntity();
+    }
+
+    public function testTaggableInterface()
+    {
+        $this->assertInstanceOf('Oro\Bundle\TagBundle\Entity\Taggable', $this->case);
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->case->getTags());
+
+        $this->assertNull($this->case->getTaggableId());
+
+        $ref = new \ReflectionProperty(ClassUtils::getClass($this->case), 'id');
+        $ref->setAccessible(true);
+        $ref->setValue($this->case, self::TEST_ID);
+
+        $this->assertSame(self::TEST_ID, $this->case->getTaggableId());
+
+        $newCollection = new ArrayCollection();
+        $this->case->setTags($newCollection);
+        $this->assertSame($newCollection, $this->case->getTags());
     }
 
     /**
