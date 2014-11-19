@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MarketingListBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Marketing list removed items.
@@ -13,9 +12,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * })
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks
- * @Config()
  */
-class MarketingListRemovedItem
+class MarketingListRemovedItem implements MarketingListStateItemInterface
 {
     /**
      * @var int
@@ -60,7 +58,8 @@ class MarketingListRemovedItem
     }
 
     /**
-     * @param int $entityId
+     * {@inheritdoc}
+     *
      * @return MarketingListRemovedItem
      */
     public function setEntityId($entityId)
@@ -71,7 +70,7 @@ class MarketingListRemovedItem
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getEntityId()
     {
@@ -79,7 +78,8 @@ class MarketingListRemovedItem
     }
 
     /**
-     * @param MarketingList $marketingList
+     * {@inheritdoc}
+     *
      * @return MarketingListRemovedItem
      */
     public function setMarketingList(MarketingList $marketingList)
@@ -90,7 +90,7 @@ class MarketingListRemovedItem
     }
 
     /**
-     * @return MarketingList
+     * {@inheritdoc}
      */
     public function getMarketingList()
     {

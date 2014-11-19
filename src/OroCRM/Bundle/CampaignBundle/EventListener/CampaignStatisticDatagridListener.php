@@ -2,21 +2,25 @@
 
 namespace OroCRM\Bundle\CampaignBundle\EventListener;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
-use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
-use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
 {
-    const PATH_GROUPBY = '[source][query][groupBy]';
     const PATH_NAME = '[name]';
-    const PATH_SELECT = '[source][query][select]';
+    const PATH_DATAGRID_WHERE = '[source][query][where]';
 
-    const MIXIN_NAME = 'orocrm-email-campaign-marketing-list-items-mixin';
-    const MANUAL_MIXIN_NAME = 'orocrm-email-campaign-marketing-list-manual-items-mixin';
+    const MIXIN_SENT_NAME = 'orocrm-email-campaign-marketing-list-sent-items-mixin';
+    const MIXIN_UNSENT_NAME = 'orocrm-email-campaign-marketing-list-unsent-items-mixin';
+
+    /**
+     * @var ManagerRegistry
+     */
+    protected $registry;
 
     /**
      * @var MarketingListHelper
@@ -25,95 +29,52 @@ class CampaignStatisticDatagridListener
 
     /**
      * @param MarketingListHelper $marketingListHelper
+     * @param ManagerRegistry $registry
      */
-    public function __construct(MarketingListHelper $marketingListHelper)
+    public function __construct(MarketingListHelper $marketingListHelper, ManagerRegistry $registry)
     {
         $this->marketingListHelper = $marketingListHelper;
+        $this->registry = $registry;
     }
 
     /**
-     * Add fields that are not mentioned in aggregate functions to GROUP BY.
-     *
      * @param PreBuild $event
      */
     public function onPreBuild(PreBuild $event)
     {
-        $config     = $event->getConfig();
+        $config = $event->getConfig();
         $parameters = $event->getParameters();
-        $gridName   = $config->offsetGetByPath(self::PATH_NAME);
+        $gridName = $config->offsetGetByPath(self::PATH_NAME);
 
         if (!$this->isApplicable($gridName, $parameters)) {
             return;
         }
 
-        $selects = $config->offsetGetByPath(self::PATH_SELECT, []);
-        $groupBy = [];
-        foreach ($selects as $select) {
-            $select = trim($select);
-            // Do not add fields with aggregate functions
-            preg_match('/(MIN|MAX|AVG|COUNT|SUM)\(/i', $select, $matches);
-            if ($matches) {
-                continue;
-            }
+        $emailCampaignId = $parameters->get('emailCampaign');
+        $emailCampaign = $this->registry->getRepository('OroCRMCampaignBundle:EmailCampaign')
+            ->find($emailCampaignId);
 
-            // Search for field alias if applicable or field name to use in group by
-            preg_match('/([^\s]+)\s+as\s+(\w+)$/i', $select, $parts);
-            if (!empty($parts[2])) {
-                // Add alias
-                $groupBy[] = $parts[2];
-            } elseif (!$parts && strpos($select, ' ') === false) {
-                // Add field itself when there is no alias
-                $groupBy[] = $select;
-            }
+        if ($emailCampaign->isSent()) {
+            $config->offsetUnsetByPath(self::PATH_DATAGRID_WHERE);
+            $mixin = self::MIXIN_SENT_NAME;
+        } else {
+            $mixin = self::MIXIN_UNSENT_NAME;
         }
 
-        if (empty($groupBy)) {
-            return;
-        }
-
-        // Add existing group by statement to group by list
-        if ($existingGroupBy = $config->offsetGetByPath(self::PATH_GROUPBY)) {
-            $groupBy[] = $existingGroupBy;
-        }
-
-        // Update group by fields list
-        $config->offsetSetByPath(self::PATH_GROUPBY, implode(', ', $groupBy));
+        $parameters->set(MarketingListItemsListener::MIXIN, $mixin);
     }
 
     /**
-     * @param BuildAfter $event
-     */
-    public function onBuildAfter(BuildAfter $event)
-    {
-        $datagrid   = $event->getDatagrid();
-        $parameters = $datagrid->getParameters();
-
-        if (!$this->isApplicable($datagrid->getName(), $parameters)) {
-            return;
-        }
-
-        if (!$emailCampaign = $parameters->get('emailCampaign', false)) {
-            throw new \InvalidArgumentException('Parameter "emailCampaign" is missing');
-        }
-
-        $datasource = $datagrid->getDatasource();
-        if ($datasource instanceof OrmDatasource) {
-            $datasource
-                ->getQueryBuilder()
-                ->setParameter('emailCampaign', $emailCampaign);
-        }
-    }
-
-    /**
-     * @param string       $gridName
+     * This listener is applicable for marketing list grids that has emailCampaign parameter set.
+     *
+     * @param string $gridName
      * @param ParameterBag $parameterBag
      *
      * @return bool
      */
     public function isApplicable($gridName, ParameterBag $parameterBag)
     {
-        $gridMixin = $parameterBag->get(MarketingListItemsListener::MIXIN, false);
-        if ($gridMixin !== self::MIXIN_NAME && $gridMixin !== self::MANUAL_MIXIN_NAME) {
+        if (!$parameterBag->has('emailCampaign')) {
             return false;
         }
 

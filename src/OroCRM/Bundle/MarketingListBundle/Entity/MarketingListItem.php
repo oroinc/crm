@@ -35,7 +35,7 @@ class MarketingListItem
 
     /**
      * @var int
-     * @ORM\Column(name="contacted_times", type="integer")
+     * @ORM\Column(name="contacted_times", type="integer", nullable=true)
      */
     protected $contactedTimes;
 
@@ -51,7 +51,7 @@ class MarketingListItem
 
     /**
      * @var \DateTime
-     * @ORM\Column(name="last_contacted_at", type="datetime")
+     * @ORM\Column(name="last_contacted_at", type="datetime", nullable=true)
      */
     protected $lastContactedAt;
 

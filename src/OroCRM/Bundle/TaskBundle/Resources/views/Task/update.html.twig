@@ -3,8 +3,6 @@
 {% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.task.entity_label'|trans }}) %}
 {% set entityId = entity.id %}
 
-{% set formAction = entityId ? path('orocrm_task_update', { 'id': entityId}) : path('orocrm_task_create') %}
-
 {% block navButtons %}
     {% set html = UI.saveAndCloseButton() %}
     {% if resource_granted('orocrm_task_update') %}
@@ -43,10 +41,7 @@
                     form_row(form.description),
                     form_row(form.dueDate),
                     form_row(form.taskPriority),
-                    form_row(form.relatedAccount),
-                    form_row(form.relatedContact),
                     form.owner is defined ? form_row(form.owner) : '',
-                    form_row(form.reporter),
                     form_row(form.reminders)
                 ]
             }

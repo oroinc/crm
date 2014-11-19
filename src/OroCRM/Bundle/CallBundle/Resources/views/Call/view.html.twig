@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% oro_title_set({params : {"%entity.name%": entity.subject|default('N/A') }}) %}
+{% oro_title_set({params : {"%subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
@@ -30,9 +30,6 @@
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
-
-{% block stats %}
-{% endblock stats %}
 
 {% block content_data %}
     {% set callInformationWidget %}

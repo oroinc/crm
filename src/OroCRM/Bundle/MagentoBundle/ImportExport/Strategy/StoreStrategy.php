@@ -2,58 +2,67 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
 class StoreStrategy extends BaseStrategy
 {
     /** @var array */
-    protected $storeEntityCache = [];
+    protected $identityMap = [];
 
     /** @var array */
-    protected $websiteEntityCache = [];
+    protected $skipAttributes = ['id', 'code', 'website', 'channel'];
 
     /**
      * {@inheritdoc}
      */
     public function process($entity)
     {
-        // do not allow to change code/website name by imported entity
-        $doNotUpdateFields = ['id', 'code', 'website', 'channel'];
-
-        return $this->getEntityFromCache('storeEntityCache', $entity, $doNotUpdateFields);
+        return $this->getEntityFromCache($entity);
     }
 
     /**
-     * @param string        $storage
      * @param Website|Store $entity
-     * @param array         $notImportedAttrs
      *
      * @return mixed
      */
-    protected function getEntityFromCache($storage, $entity, $notImportedAttrs = [])
+    protected function getEntityFromCache($entity)
     {
-        $code     = $entity->getCode();
-        $criteria = ['code' => $code, 'channel' => $entity->getChannel()];
-        if (empty($this->{$storage}[$code])) {
-            $this->{$storage}[$code] = $this->getEntityByCriteria($criteria, $entity);
+        $className = ClassUtils::getClass($entity);
+        $code      = $entity->getCode();
+        $channel   = $entity->getChannel();
+        $criteria  = ['code' => $code, 'channel' => $channel];
+
+        // first time trying to found in DB and update
+        if (empty($this->identityMap[$className][$channel->getId()][$code])) {
+            $existingEntity = $this->getEntityByCriteria($criteria, $entity);
 
             // if loaded from db just update
-            if (null !== $this->{$storage}[$code]) {
-                $this->strategyHelper->importEntity($this->{$storage}[$code], $entity, $notImportedAttrs);
+            if (null !== $existingEntity) {
+                $this->strategyHelper->importEntity($existingEntity, $entity, $this->skipAttributes);
+                $entity = $existingEntity;
             } else {
-                $this->{$storage}[$code] = $entity->setId(null);
+                $entity->setId(null);
             }
-
-            if ($entity instanceof Store) {
-                $notImportedAttrs = ['id', 'code', 'channel'];
-                $website          = $this->{$storage}[$code]->getWebsite();
-                $website          = $this->getEntityFromCache('websiteEntityCache', $website, $notImportedAttrs);
-                $this->{$storage}[$code]->setWebsite($website);
-            }
+        } else {
+            // use prepared entity
+            $entity = $this->identityMap[$className][$channel->getId()][$code];
         }
-        $this->{$storage}[$code] = $this->merge($this->{$storage}[$code]);
 
-        return $this->{$storage}[$code];
+        /*
+         * Always merge website and channel in order to be sure that they are managed
+         */
+
+        if ($entity instanceof Store) {
+            $website = $entity->getWebsite();
+            $entity->setWebsite($this->getEntityFromCache($website));
+        }
+
+        $entity = $this->merge($entity);
+        $entity->setChannel($this->merge($channel));
+
+        return $this->identityMap[$className][$channel->getId()][$code] = $entity;
     }
 }
