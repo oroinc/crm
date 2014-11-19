@@ -64,7 +64,7 @@ class ChannelSelectType extends AbstractType
                     'placeholder' => 'orocrm.channel.form.select_channel_type.label'
                 ],
                 'entities'      => [],
-                'is_translated_choices' => true
+                'translatable_options' => false
             ]
         );
 

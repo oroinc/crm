@@ -50,10 +50,10 @@ datagrid:
                     type:      choice
                     data_name: ml.entity
                     options:
-                        is_translated_choices: true
                         field_options:
                             multiple:          true
                             choices:           @oro_entity.datagrid_helper->getEntityNames
+                            translatable_options: false
                 listType:
                     type:               choice
                     data_name:          ml.type
