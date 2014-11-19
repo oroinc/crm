@@ -206,6 +206,8 @@ services:
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         parent: orocrm_magento.import.strategy.base_strategy
+        calls:
+             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%

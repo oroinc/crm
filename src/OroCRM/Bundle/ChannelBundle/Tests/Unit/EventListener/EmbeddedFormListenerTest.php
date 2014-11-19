@@ -2,11 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
-use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
-
-use OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
-
 use Symfony\Component\HttpFoundation\Request;
+
+use Oro\Bundle\EmbeddedFormBundle\Event\EmbeddedFormSubmitBeforeEvent;
+use OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener;
 
 class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,12 +14,12 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->request = new Request([], [], ['_route'=>'oro_embedded_form_']);
+        $this->request = new Request([], [], ['_route' => 'oro_embedded_form_']);
     }
 
     public function testAddDataChannelField()
     {
-        $env      = $this->getMockBuilder('Twig_Environment')
+        $env = $this->getMockBuilder('Twig_Environment')
             ->disableOriginalConstructor()
             ->getMock();
         $newField = "<input>";
@@ -29,11 +28,11 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('render')
             ->will($this->returnValue($newField));
 
-        $formView        = $this->getMockBuilder('Symfony\Component\Form\FormView')
+        $formView = $this->getMockBuilder('Symfony\Component\Form\FormView')
             ->disableOriginalConstructor()
             ->getMock();
         $currentFormData = 'someHTML';
-        $formData        = [
+        $formData = [
             'dataBlocks' => [
                 [
                     'subblocks' => [
@@ -61,7 +60,19 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setFormData')
             ->with($formData);
 
-        $listener = new EmbeddedFormListener($this->request);
+        $listener = new EmbeddedFormListener();
+        $listener->setRequest($this->request);
+        $listener->addDataChannelField($event);
+    }
+
+    public function testAddDataChannelFieldNoRequest()
+    {
+        $listener = new EmbeddedFormListener();
+        $event = $this->getMockBuilder('Oro\Bundle\UIBundle\Event\BeforeFormRenderEvent')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $event->expects($this->never())
+            ->method($this->anything());
         $listener->addDataChannelField($event);
     }
 
@@ -73,7 +84,8 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent([], $formEntity);
 
-        $listener = new EmbeddedFormListener($this->request);
+        $listener = new EmbeddedFormListener();
+        $listener->setRequest($this->request);
         $listener->onEmbeddedFormSubmit($event);
     }
 
@@ -91,7 +103,8 @@ class EmbeddedFormListenerTest extends \PHPUnit_Framework_TestCase
             ->method('setDataChannel');
         $event = new EmbeddedFormSubmitBeforeEvent($data, $formEntity);
 
-        $listener = new EmbeddedFormListener($this->request);
+        $listener = new EmbeddedFormListener();
+        $listener->setRequest($this->request);
         $listener->onEmbeddedFormSubmit($event);
     }
 }
