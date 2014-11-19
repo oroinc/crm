@@ -6,7 +6,6 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 use OroCRM\Bundle\CaseBundle\Entity\CaseSource;
-use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 /**
  * @outputBuffering enabled
@@ -84,7 +83,6 @@ class CaseControllerTest extends WebTestCase
                 'relatedContact' => null,
                 'relatedAccount' => null,
                 'source' => CaseSource::SOURCE_OTHER,
-                'status' => CaseStatus::STATUS_OPEN,
                 'priority' => CasePriority::PRIORITY_NORMAL,
                 'updatedAt' => null,
                 'closedAt' => null,
@@ -115,7 +113,6 @@ class CaseControllerTest extends WebTestCase
                 'relatedContact' => null,
                 'relatedAccount' => null,
                 'source' => CaseSource::SOURCE_OTHER,
-                'status' => CaseStatus::STATUS_OPEN,
                 'priority' => CasePriority::PRIORITY_NORMAL,
                 'updatedAt' => null,
                 'closedAt' => null,
@@ -142,7 +139,6 @@ class CaseControllerTest extends WebTestCase
             'subject' => 'Updated subject',
             'description' => 'Updated description',
             'resolution' => 'Updated resolution',
-            'status' => CaseStatus::STATUS_CLOSED,
             'priority' => CasePriority::PRIORITY_LOW,
             'source' => CaseSource::SOURCE_WEB,
             'relatedContact' => self::$contactId,

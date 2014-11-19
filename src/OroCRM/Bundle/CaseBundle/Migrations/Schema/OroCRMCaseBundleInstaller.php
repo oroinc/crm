@@ -9,6 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_0\OroCRMCaseBundle;
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_1\OroCRMCaseBundle as OroCRMCaseBundle11;
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_2\OroCRMCaseBundle as OroCRMCaseBundle12;
+use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_3\OroCRMCaseBundle as OroCRMCaseBundle13;
 
 class OroCRMCaseBundleInstaller implements Installation
 {
@@ -17,7 +18,7 @@ class OroCRMCaseBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_3';
     }
 
     /**
@@ -32,5 +33,8 @@ class OroCRMCaseBundleInstaller implements Installation
         $migration11->up($schema, $queries);
 
         OroCRMCaseBundle12::addOrganization($schema);
+
+        $migration13 = new OroCRMCaseBundle13();
+        $migration13->up($schema, $queries);
     }
 }

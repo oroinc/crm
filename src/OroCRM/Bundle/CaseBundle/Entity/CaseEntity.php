@@ -13,6 +13,9 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -43,6 +46,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *          },
  *          "security"={
  *              "type"="ACL"
+ *          },
+ *          "workflow"={
+ *              "active_workflow"="case_flow"
  *          }
  *      }
  * )
@@ -125,22 +131,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * )
      */
     protected $source;
-
-    /**
-     * @var CaseStatus
-     *
-     * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
-     * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
-     * @Oro\Versioned
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $status;
 
     /**
      * @var CasePriority
@@ -284,6 +274,22 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     private $updateClosedAt = null;
 
     /**
+     * @var WorkflowItem
+     *
+     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
+     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowItem;
+
+    /**
+     * @var WorkflowStep
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
+     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $workflowStep;
+
+    /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
@@ -378,42 +384,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function getSource()
     {
         return $this->source;
-    }
-
-    /**
-     * @param CaseStatus|null $status
-     * @return CaseEntity
-     */
-    public function setStatus($status)
-    {
-        $this->updateClosedAt($status, $this->status);
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $newStatus
-     * @param mixed $oldStatus
-     */
-    protected function updateClosedAt($newStatus, $oldStatus)
-    {
-        if ($newStatus instanceof CaseStatus &&
-            $newStatus->getName() == CaseStatus::STATUS_CLOSED &&
-            !$newStatus->isEqualTo($oldStatus)
-        ) {
-            $this->updateClosedAt = true;
-        } else {
-            $this->updateClosedAt = null;
-        }
-    }
-
-    /**
-     * @return CaseStatus
-     */
-    public function getStatus()
-    {
-        return $this->status;
     }
 
     /**
@@ -655,6 +625,67 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function __toString()
     {
         return (string)$this->subject;
+    }
+
+    /**
+     * @return string
+     */
+    public function getWorkflowStepName()
+    {
+        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
+    }
+
+    /**
+     * @param WorkflowItem $workflowItem
+     */
+    public function setWorkflowItem($workflowItem)
+    {
+        $this->workflowItem = $workflowItem;
+
+        return $this;
+    }
+
+    /**
+     * @return WorkflowItem
+     */
+    public function getWorkflowItem()
+    {
+        return $this->workflowItem;
+    }
+
+    /**
+     * @param WorkflowStep $workflowStep
+     */
+    public function setWorkflowStep($workflowStep)
+    {
+        $this->updateClosedAt($workflowStep, $this->workflowStep);
+        $this->workflowStep = $workflowStep;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $newWorkflowStep
+     * @param mixed $oldWorkflowStep
+     */
+     protected function updateClosedAt($newWorkflowStep, $oldWorkflowStep)
+     {
+         if ($newWorkflowStep instanceof WorkflowStep &&
+             strtolower($newWorkflowStep->getName()) == 'closed' &&
+             !$newWorkflowStep->isEqualTo($oldWorkflowStep)
+         ) {
+             $this->updateClosedAt = true;
+         } else {
+             $this->updateClosedAt = null;
+         }
+     }
+
+    /**
+     * @return WorkflowStep
+     */
+    public function getWorkflowStep()
+    {
+        return $this->workflowStep;
     }
 
     /**

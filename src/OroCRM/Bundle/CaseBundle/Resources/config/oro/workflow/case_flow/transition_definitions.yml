@@ -1,0 +1,8 @@
+workflows:
+    case_flow:
+        transition_definitions:
+            start_progress_definition: ~
+            stop_progress_definition: ~
+            resolved_definition: ~
+            closed_definition: ~
+            reopen_definition: ~

@@ -14,8 +14,8 @@ orocrm:
             reported_on.label:              Reported On
             closed_on.label:                Closed On
             source.label:                   Source
-            status.label:                   Status
             priority.label:                 Priority
+            workflow_step.label:            Status
 
         menu:
             index.label: Cases
@@ -37,10 +37,11 @@ orocrm:
             related_contact.label:          Related Contact
             related_account.label:          Related Account
             source.label:                   Source
-            status.label:                   Status
             priority.label:                 Priority
             comments.label:                 Comments
             id.label:                       Id
+            workflow_step.label:            Status
+            workflow_item.label:            Workflow item
             organization.label:             Organization
 
         casecomment:
@@ -90,14 +91,6 @@ orocrm:
             entity_description:             Represent case source
             name.label:                     Name
             label.label:                    Label
-
-        casestatus:
-            entity_label:                   Case Status
-            entity_plural_label:            Case Statuses
-            entity_description:             Represent case status
-            name.label:                     Name
-            label.label:                    Label
-            order.label:                    Order
 
         block:
             additional: Additional

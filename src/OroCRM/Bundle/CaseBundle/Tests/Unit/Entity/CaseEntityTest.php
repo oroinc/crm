@@ -34,10 +34,6 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $status = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CaseStatus')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $priority = $this->getMockBuilder('OroCRM\Bundle\CaseBundle\Entity\CasePriority')
             ->disableOriginalConstructor()
             ->getMock();
@@ -49,7 +45,6 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('assignedTo', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('owner', $this->getMock('Oro\Bundle\UserBundle\Entity\User')),
             array('source', $source),
-            array('status', $status),
             array('priority', $priority),
             array('createdAt', new \DateTime()),
             array('updatedAt', new \DateTime()),
@@ -57,6 +52,8 @@ class CaseEntityTest extends \PHPUnit_Framework_TestCase
             array('closedAt', new \DateTime()),
             array('relatedContact', $this->getMock('OroCRM\Bundle\ContactBundle\Entity\Contact')),
             array('relatedAccount', $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account')),
+            array('workflowItem', $this->getMock('OroCRM\Bundle\WorkflowBundle\Entity\WorkflowItem')),
+            array('workflowStep', $this->getMock('OroCRM\Bundle\WorkflowBundle\Entity\WorkflowStep')),
             array('organization', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'))
         );
     }
