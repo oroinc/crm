@@ -66,6 +66,8 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+        tags:
+            - { name: oro_tag.tag_manager }
 
     orocrm_case.form.handler.entity.api:
         class: %orocrm_case.form.handler.entity.class%
@@ -75,6 +77,8 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+        tags:
+            - { name: oro_tag.tag_manager }
 
     orocrm_case.form.handler.comment:
         class: %orocrm_case.form.handler.entity.class%

@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
@@ -116,6 +117,10 @@
                     {%- endif -%}
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_account.label'|trans, relatedAccount) }}
+
+                {% if resource_granted('oro_tag_view_tag_cloud') %}
+                    {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+                {% endif %}
             </div>
             <div class="responsive-block">
                 {{ entityConfig.renderDynamicFields(entity) }}
