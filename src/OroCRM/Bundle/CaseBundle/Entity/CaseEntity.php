@@ -47,6 +47,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterface
 {

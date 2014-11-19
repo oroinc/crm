@@ -56,7 +56,9 @@ class CaseEntityHandler extends ApiFormHandler implements TagHandlerInterface
 
         $this->entityManager->flush();
 
-        $this->tagManager->saveTagging($entity);
+        if ($this->tagManager) {
+            $this->tagManager->saveTagging($entity);
+        }
     }
 
     /**
