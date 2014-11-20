@@ -68,10 +68,10 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
             target_type:            text
             target_fields:          [googlePlus]
         -
-            name: phoneNumbers
+            name: phones
             relation_type: one-to-many
             relation_fields:
                 -
-                    name: phones
+                    name: phone
                     target_type: text
-                    target_fields: [phones]
+                    target_fields: [contactPhones]

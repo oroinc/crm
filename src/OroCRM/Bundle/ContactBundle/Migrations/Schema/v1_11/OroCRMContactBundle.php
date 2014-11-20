@@ -3,8 +3,10 @@
 namespace OroCRM\Bundle\ContactBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
 class OroCRMContactBundle implements Migration
 {
     /**
@@ -13,6 +15,6 @@ class OroCRMContactBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_contact_phone');
-        $table->addIndex(array('phone'), 'phone_idx');
+        $table->addIndex(['phone'], 'phone_idx');
     }
 }
