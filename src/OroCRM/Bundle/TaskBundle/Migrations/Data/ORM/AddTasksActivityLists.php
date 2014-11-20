@@ -14,7 +14,7 @@ class AddTasksActivityLists extends AddActivityListsData implements DependentFix
      */
     public function getDependencies()
     {
-        return ['Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'];
+        return ['OroCRM\Bundle\TaskBundle\Migrations\Data\ORM\UpdateTaskWithOrganization'];
     }
 
     /**
