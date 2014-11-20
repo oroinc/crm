@@ -14,7 +14,7 @@ class AddCallsActivityLists extends AddActivityListsData implements DependentFix
      */
     public function getDependencies()
     {
-        return ['Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData'];
+        return ['OroCRM\Bundle\CallBundle\Migrations\Data\ORM\UpdateCallWithOrganization'];
     }
 
     /**
