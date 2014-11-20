@@ -9,10 +9,12 @@ orocrm:
         remove_dialog:
             confirm_title: Remove Confirmation
             confirm_ok: Yes
+            confirm_cancel: Cancel
             content: Are you sure you want to remove this item?
             success: Removed.
         unremove_dialog:
             confirm_title: Undo Remove Confirmation
             confirm_ok: Yes
+            confirm_cancel: Cancel
             content: Are you sure you want to undo remove for this item?
             success: Removed.
