@@ -84,6 +84,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -91,6 +92,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                            translatable_options: false
                     enabled: false
                 firstName:
                     type: string
@@ -109,6 +111,7 @@ datagrid:
                             class: OroAddressBundle:Country
                             property: name
                             query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type: string
                     data_name: regionName
@@ -240,6 +243,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -269,9 +273,10 @@ datagrid:
                     enabled:          false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type:      string
                     data_name: regionName
@@ -283,6 +288,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
+                            translatable_options: false
                 stepLabel:
                     type: entity
                     data_name: c.workflowStep
@@ -499,6 +505,7 @@ datagrid:
                             class: OroCRMMagentoBundle:Website
                             multiple: true
                             property: name
+                            translatable_options: false
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -637,6 +644,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -644,6 +652,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                            translatable_options: false
                     enabled:   false
                 incrementId:
                     type:             string
@@ -678,9 +687,10 @@ datagrid:
                     enabled:   false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type:      string
                     data_name: regionName

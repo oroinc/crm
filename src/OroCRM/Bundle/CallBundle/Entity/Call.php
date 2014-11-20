@@ -314,7 +314,7 @@ class Call extends ExtendCall
     /**
      * Get direction
      *
-     * @return boolean
+     * @return CallDirection
      */
     public function getDirection()
     {

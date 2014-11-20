@@ -35,7 +35,7 @@ class LoadBusinessUnitData extends AbstractFixture implements ContainerAwareInte
     {
         $this->container = $container;
 
-        $this->organizationManager = $container->get('doctrine.orm.entity_manager');
+        $this->organizationManager = $container->get('doctrine')->getManager();
 
         $this->businessUnitRepository = $this->organizationManager->getRepository('OroOrganizationBundle:BusinessUnit');
         $this->organizationRepository = $this->organizationManager->getRepository('OroOrganizationBundle:Organization');
