@@ -42,7 +42,8 @@ orocrm:
 
         contactreason:
             entity_label: Contact Reason
-            entity_plural_labe: Contact Reasons
+            entity_plural_label: Contact Reasons
+            entity_description: Represents contact reason
             id:
                 label: ID
             label:

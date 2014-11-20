@@ -53,10 +53,10 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'linkedIn' => 'text',
             'picture' => 'oro_image',
 
-            'source' => 'entity',
+            'source' => 'translatable_entity',
             'assignedTo' => 'oro_user_select',
             'reportsTo' => 'orocrm_contact_select',
-            'method' => 'entity',
+            'method' => 'translatable_entity',
             'tags' => 'oro_tag_select',
             'addresses' => 'oro_address_collection',
             'emails' => 'oro_email_collection',

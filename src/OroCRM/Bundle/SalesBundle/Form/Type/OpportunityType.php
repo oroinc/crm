@@ -17,13 +17,14 @@ class OpportunityType extends AbstractType
     {
         $builder->add(
             'closeReason',
-            'entity',
+            'translatable_entity',
             array(
                 'label' => 'orocrm.sales.opportunity.close_reason.label',
                 'class' => 'OroCRMSalesBundle:OpportunityCloseReason',
                 'property' => 'label',
                 'required' => false,
                 'disabled' => false,
+                'empty_value' => 'orocrm.sales.form.choose_close_rsn'
             )
         );
 
