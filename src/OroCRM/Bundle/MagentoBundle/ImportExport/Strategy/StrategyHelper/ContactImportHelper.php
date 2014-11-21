@@ -139,7 +139,7 @@ class ContactImportHelper
                     }
 
                     if ($this->isRemotePrioritized() || !$isLocalTypesChanged) {
-                        $address->setTypes($remoteAddress->getTypes());
+                        $this->addressImportHelper->mergeAddressTypes($address, $remoteAddress);
                     }
 
                     $contactPhone = null;

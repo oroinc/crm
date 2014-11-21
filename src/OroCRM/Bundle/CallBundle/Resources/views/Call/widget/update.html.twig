@@ -13,7 +13,6 @@
             });
         </script>
     {% else %}
-
         {% if not form.vars.valid and form.vars.errors|length %}
             <div class="alert alert-error">
                 <div class="message">
@@ -41,7 +40,11 @@
                     {{ form_rest(form) }}
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
-                        <button class="btn btn-primary" type="submit">{{ 'Log call'|trans }}</button>
+                        {% if form.vars.value.id %}
+                        <button class="btn btn-primary" type="submit">{{ 'orocrm.call.update_log_call'|trans }}</button>
+                        {% else %}
+                        <button class="btn btn-primary" type="submit">{{ 'orocrm.call.log_call'|trans }}</button>
+                        {% endif %}
                     </div>
                 </fieldset>
             </form>

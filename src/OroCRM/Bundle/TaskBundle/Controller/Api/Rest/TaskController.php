@@ -17,6 +17,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
 
 /**
  * @RouteResource("task")
@@ -60,26 +61,11 @@ class TaskController extends RestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        $page = (int) $this->getRequest()->get('page', 1);
-        $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page  = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        $dateClosure = function ($value) {
-            // datetime value hack due to the fact that some clients pass + encoded as %20 and not %2B,
-            // so it becomes space on symfony side due to parse_str php function in HttpFoundation\Request
-            $value = str_replace(' ', '+', $value);
-
-            // The timezone is ignored when DateTime value specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
-            return new \DateTime($value, new \DateTimeZone('UTC'));
-        };
-
-        $filterParameters = [
-            'createdAt' => [
-                'closure' => $dateClosure,
-            ],
-            'updatedAt' => [
-                'closure' => $dateClosure,
-            ],
-        ];
+        $dateParamFilter  = new HttpDateTimeParameterFilter();
+        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
 

@@ -277,15 +277,17 @@ datagrid:
                         field_options:
                             class: OroCRMContactBundle:Source
                             property: label
+                            translatable_options: false
                 countryName:
                     type: entity
                     data_name: address.country
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionLabel:
                     type: string
                     data_name: regionLabel
@@ -534,15 +536,17 @@ datagrid:
                         field_options:
                             class: OroCRMContactBundle:Source
                             property: label
+                            translatable_options: false
                 countryName:
                     type: entity
                     data_name: address.country
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionLabel:
                     type: string
                     data_name: regionLabel

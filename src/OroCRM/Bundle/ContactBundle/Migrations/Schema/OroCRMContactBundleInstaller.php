@@ -73,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_11';
     }
 
     /**
@@ -265,6 +265,7 @@ class OroCRMContactBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_9087C36A7E3C61F9', []);
         $table->addIndex(['phone', 'is_primary'], 'primary_phone_idx', []);
+        $table->addIndex(['phone'], 'phone_idx');
     }
 
     /**

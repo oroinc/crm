@@ -12,7 +12,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContactPhone;
 /**
  * @ORM\Entity
  * @ORM\Table("orocrm_contact_phone", indexes={
- *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"})
+ *      @ORM\Index(name="primary_phone_idx", columns={"phone", "is_primary"}),
+ *      @ORM\Index(name="phone_idx", columns={"phone"})
  * })
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactPhoneRepository")
  * @Config(
