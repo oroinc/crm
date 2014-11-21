@@ -115,7 +115,7 @@ class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterf
     /**
      * @var CaseSource
      *
-     * @ORM\ManyToOne(targetEntity="CaseSource", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseSource")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -131,7 +131,7 @@ class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterf
     /**
      * @var CaseStatus
      *
-     * @ORM\ManyToOne(targetEntity="CaseStatus", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CaseStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -147,7 +147,7 @@ class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterf
     /**
      * @var CasePriority
      *
-     * @ORM\ManyToOne(targetEntity="CasePriority", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="CasePriority")
      * @ORM\JoinColumn(name="priority_name", referencedColumnName="name", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
