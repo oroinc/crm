@@ -34,7 +34,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const VAT              = 0.0838;
+    const TAX              = 0.0838;
     const INTEGRATION_NAME = 'Demo Web store';
 
     /** @var array */
@@ -335,7 +335,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $origin = $i+1;
             $price = rand(10, 200);
             $price = $price + rand(0, 99)/100.0;
-            $taxAmount = $price * self::VAT;
+            $taxAmount = $price * self::TAX;
             $totalTaxAmount = $totalTaxAmount + $taxAmount;
             $total = $total + $price + $taxAmount;
             $cartItem = new CartItem();
@@ -351,7 +351,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $cartItem->setQty(1);
             $cartItem->setPrice($price);
             $cartItem->setDiscountAmount(0);
-            $cartItem->setTaxPercent(self::VAT);
+            $cartItem->setTaxPercent(self::TAX);
             $cartItem->setCreatedAt(new \DateTime('now'));
             $cartItem->setUpdatedAt(new \DateTime('now'));
             $cartItem->setOriginId($origin);
@@ -424,7 +424,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setLastName($contact->getLastName())
                 ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
-                ->setVat(self::VAT)
+                ->setVat(rand(10000000,99999999))
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))
