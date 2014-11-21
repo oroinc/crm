@@ -25,9 +25,9 @@ class OroCRMMagentoBundle implements Migration, OrderedMigrationInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         // Copy values from VAT to temp auxiliary column with correction
-        $query = 'UPDATE orocrm_magento_customer customer ' .
-            'SET customer.vat_temp = ROUND(customer.vat*100.0) ' .
-            'WHERE customer.vat IS NOT NULL';
+        $query = 'UPDATE orocrm_magento_customer ' .
+            'SET vat_temp = ROUND(vat * 100.0) ' .
+            'WHERE vat IS NOT NULL';
         $queries->addPreQuery($query);
 
         // Change data type of the VAT column
@@ -37,9 +37,9 @@ class OroCRMMagentoBundle implements Migration, OrderedMigrationInterface
             ->setType(Type::getType(Type::STRING));
 
         // Copy values back to VAT column
-        $query = 'UPDATE orocrm_magento_customer customer ' .
-            'SET customer.vat = customer.vat_temp ' .
-            'WHERE customer.vat IS NOT NULL';
+        $query = 'UPDATE orocrm_magento_customer ' .
+            'SET vat = vat_temp ' .
+            'WHERE vat IS NOT NULL';
         $queries->addPostQuery($query);
     }
 }
