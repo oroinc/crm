@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\CaseBundle\Model;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -14,24 +15,19 @@ use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
 
 class CaseEntityManager
 {
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
-    /**
-     * @var AclHelper
-     */
+    /** @var ManagerRegistry */
+    protected $registry;
+
+    /** @var AclHelper */
     protected $aclHelper;
 
     /**
-     * @param EntityManager $entityManager
-     * @param AclHelper $aclHelper
+     * @param ManagerRegistry $registry
+     * @param AclHelper       $aclHelper
      */
-    public function __construct(
-        EntityManager $entityManager,
-        AclHelper $aclHelper
-    ) {
-        $this->entityManager = $entityManager;
+    public function __construct(ManagerRegistry $registry, AclHelper $aclHelper)
+    {
+        $this->registry  = $registry;
         $this->aclHelper = $aclHelper;
     }
 
@@ -59,33 +55,28 @@ class CaseEntityManager
      */
     protected function getDefaultCaseStatus()
     {
-        return $this->entityManager
-            ->getRepository('OroCRMCaseBundle:CaseStatus')
-            ->findOneByName(CaseStatus::STATUS_OPEN);
+        return $this->registry->getManager()->find('OroCRMCaseBundle:CaseStatus', CaseStatus::STATUS_OPEN);
     }
 
     /**
-     * @return CaseStatus|null
+     * @return CasePriority|null
      */
     protected function getDefaultCasePriority()
     {
-        return $this->entityManager
-            ->getRepository('OroCRMCaseBundle:CasePriority')
-            ->findOneByName(CasePriority::PRIORITY_NORMAL);
+        return $this->registry->getManager()->find('OroCRMCaseBundle:CasePriority', CasePriority::PRIORITY_NORMAL);
     }
 
     /**
-     * @return CaseStatus|null
+     * @return CaseSource|null
      */
     protected function getDefaultCaseSource()
     {
-        return $this->entityManager
-            ->getRepository('OroCRMCaseBundle:CaseSource')
-            ->findOneByName(CaseSource::SOURCE_OTHER);
+        return $this->registry->getManager()->find('OroCRMCaseBundle:CaseSource', CaseSource::SOURCE_OTHER);
     }
 
     /**
      * @param CaseEntity $case
+     *
      * @return CaseComment
      */
     public function createComment(CaseEntity $case = null)
@@ -111,13 +102,15 @@ class CaseEntityManager
      * Get ordered list of case comments
      *
      * @param CaseEntity $case
-     * @param string $order
+     * @param string     $order
+     *
      * @return CaseComment[]
      */
     public function getCaseComments(CaseEntity $case, $order = 'DESC')
     {
         $order = (strtoupper($order) == 'ASC') ? $order : 'DESC';
-        $repository = $this->entityManager->getRepository('OroCRMCaseBundle:CaseComment');
+        /** @var EntityRepository $repository */
+        $repository   = $this->registry->getRepository('OroCRMCaseBundle:CaseComment');
         $queryBuilder = $repository->createQueryBuilder('comment')
             ->where('comment.case = :case')
             ->orderBy('comment.createdAt', $order)
