@@ -37,7 +37,7 @@ class DefaultChannelData extends AbstractDefaultChannelDataFixture
                 ->createBuilderForIntegration($integration);
             $builder->setOwner($integration->getOrganization());
             $builder->setDataSource($integration);
-            $builder->setStatus($integration->getEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
+            $builder->setStatus($integration->isEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
             $builder->setName($integration->getName() . ' channel');
 
             $channel = $builder->getChannel();

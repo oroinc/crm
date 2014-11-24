@@ -212,8 +212,10 @@ class ContactListener implements OptionalListenerInterface
      */
     protected function isTwoWaySyncEnabled($magentoCustomer)
     {
-        return ($magentoCustomer
-        && $magentoCustomer->getChannel()->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled', false)
-        && $magentoCustomer->getChannel()->getEnabled());
+        return (
+            $magentoCustomer
+            && $magentoCustomer->getChannel()->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled', false)
+            && $magentoCustomer->getChannel()->isEnabled()
+        );
     }
 }
