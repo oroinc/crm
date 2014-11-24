@@ -194,6 +194,11 @@ services:
         arguments:
             - @doctrine
 
+    orocrm_magento.event_listener.after_job_execution:
+        class: OroCRM\Bundle\MagentoBundle\EventListener\AfterJobExecutionEventListener
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.after_job_execution.event, method: process }
+
     # Customer API
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
