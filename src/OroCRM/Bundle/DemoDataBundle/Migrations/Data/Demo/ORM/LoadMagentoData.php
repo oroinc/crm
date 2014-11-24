@@ -424,7 +424,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setLastName($contact->getLastName())
                 ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
-                ->setVat(rand(10000000,99999999))
+                ->setVat(mt_rand(10000000, 99999999))
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))
