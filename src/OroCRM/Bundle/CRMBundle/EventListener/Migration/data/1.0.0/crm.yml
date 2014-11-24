@@ -7,8 +7,7 @@ OroCRMMagentoBundle:
             - OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM\UpdateWorkflowStartStep
         v1_2:
             - OroCRM\Bundle\MagentoContactUsBundle\Migrations\Data\ORM\LoadWorkflowData
-        v1_3:
-            - OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM\UpdateCustomerVat
+
     demo:
         v1_0:
             - OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadMagentoData
