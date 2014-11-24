@@ -13,8 +13,6 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseEntity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -264,30 +262,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $closedAt;
-
-    /**
-     * Flag to update closedAt field when status is set to closed.
-     * Use null instead of false because of behaviour of BeSimpleSoapBundle.
-     *
-     * @var bool
-     */
-    private $updateClosedAt = null;
-
-    /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
 
     /**
      * @var Organization
@@ -566,10 +540,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     {
         $this->closedAt = $closedAt;
 
-        if ($this->closedAt) {
-            unset($this->updateClosedAt);
-        }
-
         return $this;
     }
 
@@ -603,9 +573,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     {
         $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
         $this->reportedAt = $this->reportedAt? $this->reportedAt : new \DateTime('now', new \DateTimeZone('UTC'));
-        if ($this->updateClosedAt && !$this->closedAt) {
-            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        }
     }
 
     /**
@@ -614,9 +581,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        if ($this->updateClosedAt) {
-            $this->setClosedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        }
     }
 
     /**
@@ -625,67 +589,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
     public function __toString()
     {
         return (string)$this->subject;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWorkflowStepName()
-    {
-        return $this->getWorkflowStep() ? $this->getWorkflowStep()->getName() : null;
-    }
-
-    /**
-     * @param WorkflowItem $workflowItem
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowStep $workflowStep
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->updateClosedAt($workflowStep, $this->workflowStep);
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @param mixed $newWorkflowStep
-     * @param mixed $oldWorkflowStep
-     */
-     protected function updateClosedAt($newWorkflowStep, $oldWorkflowStep)
-     {
-         if ($newWorkflowStep instanceof WorkflowStep &&
-             strtolower($newWorkflowStep->getName()) == 'closed' &&
-             !$newWorkflowStep->isEqualTo($oldWorkflowStep)
-         ) {
-             $this->updateClosedAt = true;
-         } else {
-             $this->updateClosedAt = null;
-         }
-     }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
     }
 
     /**

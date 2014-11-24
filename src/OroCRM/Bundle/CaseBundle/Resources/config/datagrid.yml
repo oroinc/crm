@@ -15,7 +15,6 @@ datagrid:
                     - relatedAccount.name as relatedAccountName
                     - assignedTo.id as assignedToId
                     - priority.label as priorityLabel
-                    - workflowStep.label as workflowStepLabel
                 from:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
@@ -26,7 +25,6 @@ datagrid:
                         - { join: caseEntity.owner, alias: owner }
                         - { join: caseEntity.source, alias: source }
                         - { join: caseEntity.priority, alias: priority }
-                        - { join: caseEntity.workflowStep, alias: workflowStep }
         columns:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
@@ -46,8 +44,6 @@ datagrid:
             closedAt:
                 label: orocrm.case.datagrid.closed_on.label
                 frontend_type: datetime
-            workflowStepLabel:
-                label: orocrm.case.datagrid.workflow_step.label
             priorityLabel:
                 label: orocrm.case.datagrid.priority.label
         sorters:
@@ -62,8 +58,6 @@ datagrid:
                     data_name: caseEntity.reportedAt
                 closedAt:
                     data_name: caseEntity.closedAt
-                workflowStepLabel:
-                    data_name: workflowStep.stepOrder
                 priorityLabel:
                     data_name: priority.order
             default:
@@ -85,13 +79,6 @@ datagrid:
                 closedAt:
                     type: datetime
                     data_name: caseEntity.closedAt
-                workflowStepLabel:
-                    type:      entity
-                    data_name: caseEntity.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: OroCRMCaseBundle:CaseEntity
                 priorityLabel:
                     label: orocrm.case.datagrid.priority.label
                     type: entity

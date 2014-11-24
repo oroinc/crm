@@ -15,7 +15,6 @@ orocrm:
             closed_on.label:                Closed On
             source.label:                   Source
             priority.label:                 Priority
-            workflow_step.label:            Status
 
         menu:
             index.label: Cases
@@ -40,8 +39,6 @@ orocrm:
             priority.label:                 Priority
             comments.label:                 Comments
             id.label:                       Id
-            workflow_step.label:            Status
-            workflow_item.label:            Workflow item
             organization.label:             Organization
 
         casecomment:
