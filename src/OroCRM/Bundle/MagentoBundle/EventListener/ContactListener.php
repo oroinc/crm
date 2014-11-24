@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
@@ -122,6 +123,7 @@ class ContactListener implements OptionalListenerInterface
             $unitOfWork->getScheduledCollectionDeletions()
         );
 
+        /** @var PersistentCollection $collection */
         foreach ($collections as $collection) {
             $owner = $collection->getOwner();
             if (!in_array($owner, $entities, true)) {
@@ -173,8 +175,8 @@ class ContactListener implements OptionalListenerInterface
                         $changed       = false;
                         $contactEntity = $entity;
 
-                        $chaneSet = $unitOfWork->getEntityChangeSet($contactEntity);
-                        foreach (array_keys($chaneSet) as $fieldName) {
+                        $changeSet = $unitOfWork->getEntityChangeSet($contactEntity);
+                        foreach (array_keys($changeSet) as $fieldName) {
                             if (in_array($fieldName, $classMapConfig['fields'])) {
                                 $changed = true;
                                 break;
@@ -199,6 +201,7 @@ class ContactListener implements OptionalListenerInterface
         if ($contactEntity->getId() && !isset($this->processIds[$contactEntity->getId()])) {
             $magentoCustomer = $em->getRepository('OroCRMMagentoBundle:Customer')
                 ->findOneBy(['contact' => $contactEntity]);
+
             if ($this->isTwoWaySyncEnabled($magentoCustomer)) {
                 $this->processIds[$contactEntity->getId()] = $magentoCustomer;
             }
