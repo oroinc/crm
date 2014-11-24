@@ -361,10 +361,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
         }
 
-        if (!empty($mappedData['taxvat'])) {
-            $mappedData['taxvat'] = (float)$mappedData['taxvat'] / 100;
-        }
-
         $integration = $this->getIntegrationFromContext($context);
         $resultObject->setChannel($integration);
         $resultObject->setDataChannel($this->channelImportHelper->getChannel($integration));

@@ -21,7 +21,7 @@ class OroCRMMagentoBundle implements Migration
             ['order_address_id'],
             ['id'],
             ['onDelete' => 'CASCADE'],
-            'IDX_E927A18F466D5220'
+            'FK_E927A18F466D5220'
         );
 
         $table = $schema->getTable('orocrm_magento_cust_addr_type');

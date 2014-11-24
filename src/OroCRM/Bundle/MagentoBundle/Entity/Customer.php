@@ -247,7 +247,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var float
      *
-     * @ORM\Column(name="vat", type="float", nullable=true)
+     * @ORM\Column(name="vat", type="string", length=255, nullable=true)
      * @Oro\Versioned
      */
     protected $vat;
@@ -409,7 +409,7 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param float $vat
+     * @param string $vat
      *
      * @return Customer
      */
@@ -421,7 +421,7 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getVat()
     {
