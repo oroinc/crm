@@ -51,7 +51,7 @@ class ChangeChannelStatusListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new ChangeChannelStatusListener($this->registry);
         $listener->onChannelStatusChange(new ChannelChangeStatusEvent($entity));
-        $this->assertEquals($integration->getEnabled(), $isEnabled);
+        $this->assertEquals($integration->isEnabled(), $isEnabled);
     }
 
     /**

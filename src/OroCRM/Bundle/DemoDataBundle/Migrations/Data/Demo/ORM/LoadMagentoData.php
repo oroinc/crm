@@ -109,7 +109,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $builder = $this->factory->createBuilderForIntegration($integration);
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
-        $builder->setStatus($integration->getEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
+        $builder->setStatus($integration->isEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
         $this->dataChannel = $builder->getChannel();
 
         $om->persist($this->dataChannel);
