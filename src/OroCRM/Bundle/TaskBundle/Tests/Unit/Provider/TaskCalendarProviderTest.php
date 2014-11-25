@@ -51,8 +51,9 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCalendarDefaultValues()
     {
-        $userId     = 123;
-        $calendarId = 456;
+        $organizationId = 1;
+        $userId         = 123;
+        $calendarId     = 10;
 
         $this->translator->expects($this->exactly(2))
             ->method('trans')
@@ -63,7 +64,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
                 TaskCalendarProvider::MY_TASKS_CALENDAR_ID => [
                     'calendarName'    => 'orocrm.task.menu.my_tasks',
                     'removable'       => false,
-                    'position'        => -1,
+                    'position'        => -100,
                     'backgroundColor' => '#F83A22',
                     'options'         => [
                         'widgetRoute'   => 'orocrm_task_widget_info',
@@ -76,7 +77,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
                     ]
                 ]
             ],
-            $this->provider->getCalendarDefaultValues($userId, $calendarId, [])
+            $this->provider->getCalendarDefaultValues($organizationId, $userId, $calendarId, [])
         );
     }
 
@@ -85,37 +86,11 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCalendarEvents($connections, $tasks)
     {
-        $userId      = 123;
-        $calendarId  = 456;
-        $start       = new \DateTime();
-        $end         = new \DateTime();
-        $subordinate = true;
-
-        $connectionQuery = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-            ->disableOriginalConstructor()
-            ->setMethods(['getArrayResult'])
-            ->getMockForAbstractClass();
-        $connectionQb    = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionRepo  = $this
-            ->getMockBuilder('Oro\Bundle\CalendarBundle\Entity\Repository\CalendarPropertyRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionRepo->expects($this->once())
-            ->method('getConnectionsByTargetCalendarQueryBuilder')
-            ->with($calendarId, TaskCalendarProvider::ALIAS)
-            ->will($this->returnValue($connectionQb));
-        $connectionQb->expects($this->once())
-            ->method('select')
-            ->with('connection.calendar, connection.visible')
-            ->will($this->returnSelf());
-        $connectionQb->expects($this->once())
-            ->method('getQuery')
-            ->will($this->returnValue($connectionQuery));
-        $connectionQuery->expects($this->once())
-            ->method('getArrayResult')
-            ->will($this->returnValue($connections));
+        $organizationId = 1;
+        $userId         = 123;
+        $calendarId     = 10;
+        $start          = new \DateTime();
+        $end            = new \DateTime();
 
         $qb   = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
@@ -136,24 +111,17 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->identicalTo($qb))
             ->will($this->returnValue($query));
 
-
-        $this->doctrineHelper->expects($this->exactly(2))
+        $this->doctrineHelper->expects($this->once())
             ->method('getEntityRepository')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['OroCalendarBundle:CalendarProperty', $connectionRepo],
-                        ['OroCRMTaskBundle:Task', $repo],
-                    ]
-                )
-            );
+            ->with('OroCRMTaskBundle:Task')
+            ->will($this->returnValue($repo));
 
         $this->taskCalendarNormalizer->expects($this->once())
             ->method('getTasks')
             ->with(TaskCalendarProvider::MY_TASKS_CALENDAR_ID, $this->identicalTo($query))
             ->will($this->returnValue($tasks));
 
-        $result = $this->provider->getCalendarEvents($userId, $calendarId, $start, $end, $subordinate);
+        $result = $this->provider->getCalendarEvents($organizationId, $userId, $calendarId, $start, $end, $connections);
         $this->assertEquals($tasks, $result);
     }
 
@@ -166,7 +134,7 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
             ],
             'with visible connection' => [
                 'connections' => [
-                    ['calendar' => TaskCalendarProvider::MY_TASKS_CALENDAR_ID, 'visible' => true]
+                    [TaskCalendarProvider::MY_TASKS_CALENDAR_ID => true]
                 ],
                 'tasks'       => [['id' => 1]]
             ],
@@ -175,48 +143,17 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetCalendarEventsWithInvisibleConnection()
     {
-        $userId      = 123;
-        $calendarId  = 456;
-        $start       = new \DateTime();
-        $end         = new \DateTime();
-        $subordinate = true;
-        $connections = [['calendar' => TaskCalendarProvider::MY_TASKS_CALENDAR_ID, 'visible' => false]];
-
-        $connectionQuery = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-            ->disableOriginalConstructor()
-            ->setMethods(['getArrayResult'])
-            ->getMockForAbstractClass();
-        $connectionQb    = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionRepo  = $this
-            ->getMockBuilder('Oro\Bundle\CalendarBundle\Entity\Repository\CalendarPropertyRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $connectionRepo->expects($this->once())
-            ->method('getConnectionsByTargetCalendarQueryBuilder')
-            ->with($calendarId, TaskCalendarProvider::ALIAS)
-            ->will($this->returnValue($connectionQb));
-        $connectionQb->expects($this->once())
-            ->method('select')
-            ->with('connection.calendar, connection.visible')
-            ->will($this->returnSelf());
-        $connectionQb->expects($this->once())
-            ->method('getQuery')
-            ->will($this->returnValue($connectionQuery));
-        $connectionQuery->expects($this->once())
-            ->method('getArrayResult')
-            ->will($this->returnValue($connections));
-
-        $this->doctrineHelper->expects($this->once())
-            ->method('getEntityRepository')
-            ->with('OroCalendarBundle:CalendarProperty')
-            ->will($this->returnValue($connectionRepo));
+        $organizationId = 1;
+        $userId         = 123;
+        $calendarId     = 10;
+        $start          = new \DateTime();
+        $end            = new \DateTime();
+        $connections    = [TaskCalendarProvider::MY_TASKS_CALENDAR_ID => false];
 
         $this->taskCalendarNormalizer->expects($this->never())
             ->method('getTasks');
 
-        $result = $this->provider->getCalendarEvents($userId, $calendarId, $start, $end, $subordinate);
+        $result = $this->provider->getCalendarEvents($organizationId, $userId, $calendarId, $start, $end, $connections);
         $this->assertEquals([], $result);
     }
 }
