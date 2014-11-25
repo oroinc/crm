@@ -45,6 +45,11 @@ class OrderStrategy extends BaseStrategy
      */
     public function process($importingOrder)
     {
+        /** @var Order $importingOrder */
+        if (!$importingOrder->getUpdatedAt() && $importingOrder->getCreatedAt()) {
+            $importingOrder->setUpdatedAt($importingOrder->getCreatedAt());
+        }
+
         $criteria = ['incrementId' => $importingOrder->getIncrementId(), 'channel' => $importingOrder->getChannel()];
         $order    = $this->getEntityByCriteria($criteria, $importingOrder);
 
