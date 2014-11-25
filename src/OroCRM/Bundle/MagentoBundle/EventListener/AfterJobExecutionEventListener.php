@@ -16,16 +16,9 @@ class AfterJobExecutionEventListener
         $exceptionCollection = [];
 
         foreach ($exceptions as $exception) {
-            $replaced = preg_replace('/<apiKey.*?>(.*)<\/apiKey>/i', '', $exception);
-
-            if ($exception !== $replaced) {
-                $exceptionCollection[] = ['remove' => $exception, 'insert' => $replaced];
-            }
+            $exceptionCollection[] = preg_replace('/<apiKey.*?>(.*)<\/apiKey>/i', '', $exception);
         }
 
-        foreach ($exceptionCollection as $forRemove) {
-            $jobResult->removeFailureException($forRemove['remove']);
-            $jobResult->addFailureException($forRemove['insert']);
-        }
+        $jobResult->setFailureException($exceptionCollection);
     }
 }
