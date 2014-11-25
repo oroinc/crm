@@ -21,7 +21,7 @@ class OroCRMSalesBundle implements Migration
             [
                 OroOptions::KEY => [
                     ExtendOptionsManager::FIELD_NAME_OPTION => 'customer',
-                    'form'                                  => ['form_type' => ['orocrm_sales_b2bcustomer_select']]
+                    'form'                                  => ['form_type' => 'orocrm_sales_b2bcustomer_select']
                 ],
             ]
         );
