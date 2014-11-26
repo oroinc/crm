@@ -1,0 +1,29 @@
+{
+    "name": "orocrm/analytics-bundle",
+    "type": "symfony-bundle",
+    "description": "Oro CRM Analytics",
+    "keywords": ["CRM", "Analytics"],
+    "homepage": "https://github.com/orocrm/AnalyticsBundle",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.3.3",
+        "symfony/symfony": "2.3.*",
+        "friendsofsymfony/rest-bundle": "0.11.*",
+        "nelmio/api-doc-bundle": "dev-master",
+
+        "oro/ui-bundle": "dev-master",
+        "oro/user-bundle": "dev-master",
+        "oro/dashboard-bundle": "dev-master",
+        "orocrm/contact-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "target-dir": "OroCRM/Bundle/AnalyticsBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
