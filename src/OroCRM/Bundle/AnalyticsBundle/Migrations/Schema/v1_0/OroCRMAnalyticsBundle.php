@@ -3,17 +3,14 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- */
 class OroCRMAnalyticsBundle implements Migration
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema, QueryBag $queries)
@@ -33,7 +30,7 @@ class OroCRMAnalyticsBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('type', 'string', ['length' => 16]);
-        $table->addColumn('idx', 'integer', ['notnull' => false]);
+        $table->addColumn('index', 'integer', ['notnull' => false]);
         $table->addColumn('max_value', 'integer', ['notnull' => true]);
         $table->addColumn('min_value', 'integer', ['notnull' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => true]);

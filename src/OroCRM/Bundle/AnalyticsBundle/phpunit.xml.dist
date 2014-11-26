@@ -9,8 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="Tests/bootstrap.php"
-        >
+         bootstrap="Tests/bootstrap.php">
 
     <testsuites>
         <testsuite name="Analytics Bundle Unit Test Suite">

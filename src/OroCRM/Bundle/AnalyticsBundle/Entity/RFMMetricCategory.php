@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @ORM\Entity
@@ -61,9 +61,9 @@ class RFMMetricCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="idx", type="integer", nullable=false)
+     * @ORM\Column(name="index", type="integer", nullable=false)
      */
-    protected $idx;
+    protected $index;
 
     /**
      * @var int
@@ -86,7 +86,6 @@ class RFMMetricCategory
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $channel;
-
 
     /**
      * Get id
@@ -122,26 +121,26 @@ class RFMMetricCategory
     }
 
     /**
-     * Set idx
+     * Set index
      *
-     * @param integer $idx
+     * @param integer $index
      * @return RFMMetricCategory
      */
-    public function setIdx($idx)
+    public function setIndex($index)
     {
-        $this->idx = $idx;
+        $this->index = $index;
 
         return $this;
     }
 
     /**
-     * Get idx
+     * Get index
      *
-     * @return integer 
+     * @return integer
      */
-    public function getIdx()
+    public function getIndex()
     {
-        return $this->idx;
+        return $this->index;
     }
 
     /**
@@ -216,7 +215,7 @@ class RFMMetricCategory
     /**
      * Set channel
      *
-     * @param \OroCRM\Bundle\ChannelBundle\Entity\Channel $channel
+     * @param Channel $channel
      * @return RFMMetricCategory
      */
     public function setChannel(Channel $channel = null)
@@ -229,7 +228,7 @@ class RFMMetricCategory
     /**
      * Get channel
      *
-     * @return \OroCRM\Bundle\ChannelBundle\Entity\Channel 
+     * @return Channel
      */
     public function getChannel()
     {

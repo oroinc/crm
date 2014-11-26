@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Entity;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
@@ -9,25 +11,25 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var RFMMetricCategory
      */
-    protected $target;
+    protected $entity;
 
     public function setUp()
     {
-        $this->target = new RFMMetricCategory();
+        $this->entity = new RFMMetricCategory();
     }
 
     /**
      * @dataProvider settersAndGettersDataProvider
      * @param string $property
      * @param mixed $value
+     * @param mixed $default
      */
-    public function testSettersAndGetters($property, $value)
+    public function testSettersAndGetters($property, $value, $default = null)
     {
-        $method = 'set' . ucfirst($property);
-        $result = $this->target->$method($value);
-
-        $this->assertInstanceOf(get_class($this->target), $result);
-        $this->assertEquals($value, $this->target->{'get' . $property}());
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->assertEquals($default, $propertyAccessor->getValue($this->entity, $property));
+        $propertyAccessor->setValue($this->entity, $property, $value);
+        $this->assertEquals($value, $propertyAccessor->getValue($this->entity, $property));
     }
 
     /**
@@ -39,7 +41,7 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
             ['channel', $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel')],
             ['owner', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
             ['type', RFMMetricCategory::TYPE_RECENCY],
-            ['idx', 1],
+            ['index', 1],
             ['maxValue', 123],
         ];
     }
