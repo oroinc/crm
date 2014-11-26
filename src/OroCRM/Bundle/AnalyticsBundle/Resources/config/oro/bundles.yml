@@ -1,2 +1,2 @@
 bundles:
-    - { name: OroCRM\Bundle\AnalyticsBundle\OroCRMAnalyticsBundle, priority: 20 }
+    - { name: OroCRM\Bundle\AnalyticsBundle\OroCRMAnalyticsBundle, priority: 40 }
