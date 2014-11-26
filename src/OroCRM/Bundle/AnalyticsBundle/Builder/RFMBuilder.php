@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 
@@ -43,11 +43,19 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         if (!in_array($type, RFMMetricCategory::$types)) {
             throw new \InvalidArgumentException(
-                sprintf('Expected one of "" type, "" given', implode(',', RFMMetricCategory::$types, $type))
+                sprintf('Expected one of "%s" type, "%s" given', implode(',', RFMMetricCategory::$types), $type)
             );
         }
 
         $this->providers[] = $provider;
+    }
+
+    /**
+     * @return RFMProviderInterface[]
+     */
+    public function getProviders()
+    {
+        return $this->providers;
     }
 
     /**
@@ -93,7 +101,15 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     protected function getIndex(AnalyticsAwareInterface $entity, $type, $value)
     {
-        $channelId = $this->doctrineHelper->getSingleEntityIdentifier($entity->getDataChannel());
+        $channel = $entity->getDataChannel();
+        if (!$channel) {
+            return null;
+        }
+
+        $channelId = $this->doctrineHelper->getSingleEntityIdentifier($channel);
+        if (!$channelId) {
+            return null;
+        }
 
         $categories = $this->getCategories($channelId, $type);
         if (!$categories) {
@@ -101,9 +117,16 @@ class RFMBuilder implements AnalyticsBuilderInterface
         }
 
         foreach ($categories as $category) {
-            if ($value > $category->getMinValue()) {
-                return $category->getIndex();
+            $maxValue = $category->getMaxValue();
+            if ($maxValue && $value > $maxValue) {
+                continue;
             }
+
+            if ($value <= $category->getMinValue()) {
+                continue;
+            }
+
+            return $category->getIndex();
         }
 
         return null;
