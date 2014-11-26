@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_25';
+        return 'v1_26';
     }
 
     /**
@@ -328,6 +328,9 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('currency', 'string', ['notnull' => false, 'length' => 10, 'precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('rfm_recency', 'integer', ['notnull' => false]);
+        $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
+        $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
