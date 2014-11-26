@@ -29,6 +29,7 @@ parameters:
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
+    orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -193,6 +194,11 @@ services:
         class: %orocrm_magento.service.import_helper.class%
         arguments:
             - @doctrine
+
+    orocrm_magento.event_listener.after_job_execution:
+        class: %orocrm_magento.event_listener.integration_sync_after.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: process }
 
     # Customer API
     orocrm_magento.customer.manager.api:
