@@ -11,7 +11,6 @@ class OroCRMAnalyticsBundle implements Migration
 {
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function up(Schema $schema, QueryBag $queries)
     {
