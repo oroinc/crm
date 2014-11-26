@@ -1,3 +1,16 @@
 parameters:
+    orocrm_analytics.builder.class: OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
 
+    orocrm_analytics.builder.rfm.class: OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder
 services:
+    orocrm_analytics.builder:
+        class: %orocrm_analytics.builder.class%
+        arguments:
+            - []
+
+    orocrm_analytics.builder.rfm:
+        class: %orocrm_analytics.builder.rfm.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+        tags:
+            - { name: orocrm_analytics.builder }

@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\AnalyticsBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
@@ -33,6 +32,15 @@ class RFMMetricCategory
     const TYPE_RECENCY = 'recency';
     const TYPE_FREQUENCY = 'frequency';
     const TYPE_MONETARY = 'monetary';
+
+    /**
+     * @var array
+     */
+    public static $types = [
+        self::TYPE_RECENCY,
+        self::TYPE_FREQUENCY,
+        self::TYPE_MONETARY
+    ];
 
     /**
      * @var int
