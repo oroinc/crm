@@ -119,7 +119,11 @@ class ContactImportHelper
             if (!$localAddress && $this->isRemotePrioritized()) {
                  $contact->removeAddress($address);
             } elseif ($localAddress) {
-                 $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+                $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+                $contactPhone = $localAddress->getContactPhone();
+                if ($contactPhone) {
+                    $contactPhone = $this->getContactPhoneFromContact($contact, $contactPhone);
+                }
 
                 if ($remoteAddress) {
                     // do update
@@ -142,15 +146,12 @@ class ContactImportHelper
                         $this->addressImportHelper->mergeAddressTypes($address, $remoteAddress);
                     }
 
-                    $contactPhone = null;
-
-                    if ($localAddress->getContactPhone()) {
-                        $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
-                    }
-
                     if ($contactPhone) {
                         $this->mergeScalars(['phone'], $remoteAddress, $localAddress, $contactPhone);
-                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone() !== 'no phone') {
+                        if (!$contactPhone->getPhone()) {
+                            $contact->removePhone($contactPhone);
+                        }
+                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone()) {
                         $contactPhone = new ContactPhone();
                         $contactPhone->setPhone($remoteAddress->getPhone());
                         $contactPhone->setPrimary(!$contact->getPrimaryPhone());
@@ -161,9 +162,15 @@ class ContactImportHelper
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
+                        if ($contactPhone) {
+                            $contact->removePhone($contactPhone);
+                        }
                     }
                 } else {
-                     $contact->removeAddress($address);
+                    $contact->removeAddress($address);
+                    if ($contactPhone) {
+                        $contact->removePhone($contactPhone);
+                    }
                 }
             }
         }
