@@ -36,18 +36,21 @@ class CustomerTest extends AbstractEntityTestCase
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
-            'createdAt'   => ['createdAt', $date, $date],
-            'updatedAt'   => ['updatedAt', $date, $date],
-            'group'       => ['group', $group, $group],
-            'website'     => ['website', $website, $website],
-            'store'       => ['store', $store, $store],
-            'contact'     => ['contact', $contact, $contact],
-            'account'     => ['account', $account, $account],
-            'originId'    => ['originId', self::TEST_ORIGIN_ID, self::TEST_ORIGIN_ID],
-            'vat'         => ['vat', self::TEST_STRING . 'vat', self::TEST_STRING . 'vat'],
-            'isActive'    => ['isActive', self::TEST_IS_ACTIVE, self::TEST_IS_ACTIVE],
-            'owner'       => ['owner', $owner, $owner],
-            'organization'  => ['organization', $organization, $organization],
+            'createdAt'    => ['createdAt', $date, $date],
+            'updatedAt'    => ['updatedAt', $date, $date],
+            'group'        => ['group', $group, $group],
+            'website'      => ['website', $website, $website],
+            'store'        => ['store', $store, $store],
+            'contact'      => ['contact', $contact, $contact],
+            'account'      => ['account', $account, $account],
+            'originId'     => ['originId', self::TEST_ORIGIN_ID, self::TEST_ORIGIN_ID],
+            'vat'          => ['vat', self::TEST_STRING . 'vat', self::TEST_STRING . 'vat'],
+            'isActive'     => ['isActive', self::TEST_IS_ACTIVE, self::TEST_IS_ACTIVE],
+            'owner'        => ['owner', $owner, $owner],
+            'organization' => ['organization', $organization, $organization],
+            'recency'      => ['recency', 1, 1],
+            'frequency'    => ['frequency', 2, 2],
+            'monetary'     => ['monetary', 3, 3],
         ];
     }
 
