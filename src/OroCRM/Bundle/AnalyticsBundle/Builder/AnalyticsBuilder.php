@@ -20,6 +20,14 @@ class AnalyticsBuilder
     }
 
     /**
+     * @return AnalyticsBuilderInterface[]
+     */
+    public function getBuilders()
+    {
+        return $this->builders;
+    }
+
+    /**
      * @param AnalyticsAwareInterface $entity
      *
      * @return bool Build was performed
@@ -30,7 +38,7 @@ class AnalyticsBuilder
 
         foreach ($this->builders as $builder) {
             if ($builder->supports($entity)) {
-                $update = $update && $builder->build($entity);
+                $update = $update || $builder->build($entity);
             }
         }
 
