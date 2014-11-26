@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_21';
+        return 'v1_22';
     }
 
     /**
@@ -139,7 +139,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -409,7 +409,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -461,7 +461,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
