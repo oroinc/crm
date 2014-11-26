@@ -42,7 +42,8 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
             ['owner', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
             ['type', RFMMetricCategory::TYPE_RECENCY],
             ['index', 1],
-            ['maxValue', 123],
+            ['minValue', 123],
+            ['maxValue', 321],
         ];
     }
 }

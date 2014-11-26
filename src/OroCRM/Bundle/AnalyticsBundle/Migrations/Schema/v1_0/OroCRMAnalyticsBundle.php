@@ -31,8 +31,8 @@ class OroCRMAnalyticsBundle implements Migration
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('type', 'string', ['length' => 16]);
         $table->addColumn('index', 'integer', ['notnull' => false]);
-        $table->addColumn('max_value', 'integer', ['notnull' => true]);
         $table->addColumn('min_value', 'integer', ['notnull' => true]);
+        $table->addColumn('max_value', 'integer', ['notnull' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => true]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['channel_id'], 'idx_channel', []);

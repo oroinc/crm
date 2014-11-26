@@ -68,16 +68,16 @@ class RFMMetricCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="max_value", type="integer", nullable=true)
+     * @ORM\Column(name="min_value", type="integer", nullable=true)
      */
-    protected $maxValue;
+    protected $minValue;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="min_value", type="integer", nullable=true)
+     * @ORM\Column(name="max_value", type="integer", nullable=true)
      */
-    protected $minValue;
+    protected $maxValue;
 
     /**
      * @var Channel
