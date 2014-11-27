@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\DependencyInjection\Compiler;
+namespace OroCRM\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass;
 
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

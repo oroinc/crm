@@ -5,8 +5,8 @@ namespace OroCRM\Bundle\AnalyticsBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-use OroCRM\Bundle\AnalyticsBundle\DependencyInjection\Compiler\RFMBuilderPass;
-use OroCRM\Bundle\AnalyticsBundle\DependencyInjection\Compiler\AnalyticsBuilderPass;
+use OroCRM\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass\RFMBuilderPass;
+use OroCRM\Bundle\AnalyticsBundle\DependencyInjection\CompilerPass\AnalyticsBuilderPass;
 
 class OroCRMAnalyticsBundle extends Bundle
 {
