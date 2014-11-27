@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Model;
 
-interface RFMAwareInterface
+interface RFMAwareInterface extends AnalyticsAwareInterface
 {
     /**
      * @return int
