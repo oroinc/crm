@@ -45,8 +45,8 @@ class CustomerFrequencyProvider implements RFMProviderInterface
     public function supports($entity)
     {
         return $entity instanceof RFMAwareInterface
-        && $entity instanceof CustomerIdentityInterface
-        && $entity instanceof $this->className;
+            && $entity instanceof CustomerIdentityInterface
+            && $entity instanceof $this->className;
     }
 
     /**

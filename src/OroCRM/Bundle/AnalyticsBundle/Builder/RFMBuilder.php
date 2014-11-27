@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Doctrine\Common\Collections\Criteria;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
