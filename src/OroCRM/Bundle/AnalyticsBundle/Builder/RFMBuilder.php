@@ -79,11 +79,15 @@ class RFMBuilder implements AnalyticsBuilderInterface
             if ($provider->supports($entity)) {
                 $value = $provider->getValue($entity);
 
-                $propertyAccessor->setValue(
-                    $entity,
-                    $provider->getType(),
-                    $this->getIndex($entity, $provider->getType(), $value)
-                );
+                $type = $provider->getType();
+                $entityIndex = $propertyAccessor->getValue($entity, $type);
+                $index = $this->getIndex($entity, $type, $value);
+
+                if ($index === $entityIndex) {
+                    return false;
+                }
+
+                $propertyAccessor->setValue($entity, $type, $index);
 
                 return true;
             }

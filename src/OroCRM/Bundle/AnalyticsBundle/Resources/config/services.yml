@@ -2,6 +2,8 @@ parameters:
     orocrm_analytics.builder.class: OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
 
     orocrm_analytics.builder.rfm.class: OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder
+
+    orocrm_analytics.model.analytics_aware_interface.interface: OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
 services:
     orocrm_analytics.builder:
         class: %orocrm_analytics.builder.class%
