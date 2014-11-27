@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class RFMBuilderTest extends \PHPUnit_Framework_TestCase
