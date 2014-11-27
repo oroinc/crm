@@ -133,7 +133,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
     }
 
     /**
-     * @param string $channelId
+     * @param int $channelId
      * @param string $type
      *
      * @return RFMMetricCategory[]

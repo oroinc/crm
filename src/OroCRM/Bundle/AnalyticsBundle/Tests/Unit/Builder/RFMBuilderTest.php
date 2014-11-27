@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 
 use Doctrine\ORM\EntityRepository;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
@@ -11,7 +12,7 @@ use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class OroCRMAnalyticsBundle extends \PHPUnit_Framework_TestCase
+class RFMBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var RFMBuilder
@@ -86,6 +87,7 @@ class OroCRMAnalyticsBundle extends \PHPUnit_Framework_TestCase
             [null, false],
             [new \stdClass(), false],
             [new Customer(), true],
+            [$this->getMock('OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface'), true],
         ];
     }
 
