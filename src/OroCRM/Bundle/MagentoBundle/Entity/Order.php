@@ -62,6 +62,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Order extends ExtendOrder implements ChannelAwareInterface
 {
     const STATUS_CANCELED = 'canceled';
+    const STATUS_SUCCESSFUL = 'completed';
 
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
 
