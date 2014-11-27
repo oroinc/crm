@@ -8,13 +8,12 @@
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.3.*",
-        "friendsofsymfony/rest-bundle": "0.11.*",
-        "nelmio/api-doc-bundle": "dev-master",
+        "doctrine/orm": ">=2.3,<2.4-dev",
 
+        "oro/entity-config-bundle": "dev-master",
+        "oro/organization-bundle": "dev-master",
         "oro/ui-bundle": "dev-master",
-        "oro/user-bundle": "dev-master",
-        "oro/dashboard-bundle": "dev-master",
-        "orocrm/contact-bundle": "dev-master"
+        "orocrm/channel-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": { "": "src/" }
