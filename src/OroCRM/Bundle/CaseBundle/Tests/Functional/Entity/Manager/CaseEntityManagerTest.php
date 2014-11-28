@@ -59,7 +59,7 @@ class CaseEntityManagerTest extends WebTestCase
      */
     public function testGetComments($caseSubject, $order, $expectedCommentsMessage)
     {
-        $case = $this->getContainer()->get('doctrine.orm.entity_manager')
+        $case = $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMCaseBundle:CaseEntity')
             ->findOneBySubject($caseSubject);
 

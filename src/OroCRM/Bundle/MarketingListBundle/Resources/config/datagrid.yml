@@ -259,24 +259,10 @@ datagrid:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
-                            alias: 'mlu'
-                            conditionType: 'WITH'
-                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
-                            alias: 'mlr'
-                            conditionType: 'WITH'
-                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
-                        -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                        - mlu.id IS NULL
         options:
             export: false
             skip_count_walker: true
@@ -432,21 +418,6 @@ datagrid:
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
-                    left:
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
-                            alias: 'mlu'
-                            conditionType: 'WITH'
-                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
-                            alias: 'mlr'
-                            conditionType: 'WITH'
-                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                        - mlu.id IS NULL
         options:
             export: false
             skip_count_walker: true
