@@ -1,0 +1,208 @@
+<?php
+
+namespace OroCRM\Bundle\AnalyticsBundle\Command;
+
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
+
+class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
+{
+    /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
+
+    /**
+     * @var AnalyticsBuilder
+     */
+    protected $analyticsBuilder;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultDefinition()
+    {
+        return '0 0 * * *';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configure()
+    {
+        $this
+            ->setName('oro:cron:build-analytics')
+            ->setDescription('Build analytics')
+            ->addOption(
+                'ids',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Entity ids to update'
+            )
+            ->addOption(
+                'channel',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Entity ids to update'
+            );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(InputInterface $input, OutputInterface $output)
+    {
+        $channel = $input->getOption('channel');
+        $ids = $input->getOption('ids');
+
+        if (!$channel && $ids) {
+            $output->writeln('<error>Option "ids" does not work without "channel"</error>');
+
+            return;
+        }
+
+        $channels = $this->getChannels($channel);
+
+        foreach ($channels as $channel) {
+            $customerIdentityClass = $channel->getCustomerIdentity();
+            $analyticsInterface = $this->getAnalyticsAwareInterface();
+            if (!in_array($analyticsInterface, class_implements($customerIdentityClass))) {
+                $output->writeln(
+                    [
+                        sprintf(
+                            '<error>Channel #%s: %s skipped.</error>',
+                            $channel->getId(),
+                            $channel->getName()
+                        ),
+                        sprintf('    %s does not implements %s.', $customerIdentityClass, $analyticsInterface)
+                    ]
+                );
+
+                continue;
+            }
+
+            $output->writeln(
+                sprintf('<info>Channel #%s: %s processing.</info>', $channel->getId(), $channel->getName())
+            );
+
+            $em = $this->doctrineHelper->getEntityManager($customerIdentityClass);
+            $entities = $this->getEntities($customerIdentityClass, $ids);
+            $entitiesToSave = [];
+
+            foreach ($entities as $entity) {
+                if ($this->getAnalyticsBuilder()->build($entity)) {
+                    $entitiesToSave[] = $entity;
+
+                    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+                        $output->writeln(
+                            sprintf(
+                                '    %s #%s.',
+                                $customerIdentityClass,
+                                $this->getDoctrineHelper()->getSingleEntityIdentifier($entity)
+                            )
+                        );
+                    }
+                }
+            }
+
+            $em->flush($entitiesToSave);
+
+            $output->writeln(
+                sprintf(
+                    '    <info>Done. %s/%s updated.</info>',
+                    count($entitiesToSave),
+                    $entities->count()
+                )
+            );
+        }
+    }
+
+    /**
+     * @return DoctrineHelper
+     */
+    protected function getDoctrineHelper()
+    {
+        if (!$this->doctrineHelper) {
+            $this->doctrineHelper = $this->getContainer()->get('oro_entity.doctrine_helper');
+        }
+
+        return $this->doctrineHelper;
+    }
+
+    /**
+     * @return AnalyticsBuilder
+     */
+    protected function getAnalyticsBuilder()
+    {
+        if (!$this->analyticsBuilder) {
+            $this->analyticsBuilder = $this->getContainer()->get('orocrm_analytics.builder');
+        }
+
+        return $this->analyticsBuilder;
+    }
+
+    /**
+     * @param int $channelId
+     *
+     * @return BufferedQueryResultIterator|Channel[]
+     */
+    protected function getChannels($channelId = null)
+    {
+        $className = $this->getContainer()->getParameter('orocrm_channel.entity.class');
+        $qb = $this->getDoctrineHelper()
+            ->getEntityRepository($className)
+            ->createQueryBuilder('c');
+
+        $where = $qb->expr()->andX(
+            $qb->expr()->eq('c.status', ':status')
+        );
+        $qb->setParameter('status', Channel::STATUS_ACTIVE);
+
+        if ($channelId) {
+            $where->add($qb->expr()->eq('c.id', ':id'));
+            $qb->setParameter('id', $channelId);
+        }
+
+        $qb->andWhere($where);
+
+        return new BufferedQueryResultIterator($qb);
+    }
+
+    /**
+     * @param string $className
+     * @param array $ids
+     *
+     * @return BufferedQueryResultIterator|CustomerIdentity[]
+     */
+    protected function getEntities($className, $ids = [])
+    {
+        $qb = $this->getDoctrineHelper()
+            ->getEntityRepository($className)
+            ->createQueryBuilder('e');
+
+        if ($ids) {
+            $qb
+                ->where($qb->expr()->in('e.id', ':ids'))
+                ->setParameter('ids', $ids);
+        }
+
+        return new BufferedQueryResultIterator($qb);
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAnalyticsAwareInterface()
+    {
+        return $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface.interface');
+    }
+}

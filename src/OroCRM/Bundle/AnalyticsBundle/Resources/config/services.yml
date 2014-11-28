@@ -7,6 +7,7 @@ parameters:
     orocrm_analytics.form.type.category.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategoryType
     orocrm_analytics.form.type.category_settings.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
 
+    orocrm_analytics.model.analytics_aware_interface.interface: OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
 services:
     orocrm_analytics.builder:
         class: %orocrm_analytics.builder.class%
