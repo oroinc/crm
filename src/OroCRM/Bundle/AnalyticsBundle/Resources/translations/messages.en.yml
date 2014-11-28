@@ -1,0 +1,7 @@
+orocrm:
+    analytics:
+        rfm:
+            recency.label: R
+            frequency.label: F
+            monetary.label: M
+            score.label: RFM score
