@@ -69,7 +69,7 @@ class RFMMetricCategory
     /**
      * @var int
      *
-     * @ORM\Column(name="index", type="integer", nullable=false)
+     * @ORM\Column(name="`index`", type="integer", nullable=false)
      */
     protected $index;
 

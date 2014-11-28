@@ -82,6 +82,17 @@
         }
     ] %}
 
+    {% set additional %}{% placeholder orocrm_channel_additional_block with {entity: entity, form: form} %}{% endset %}
+    {% if additional|trim %}
+        {% set dataBlocks = dataBlocks|merge([{
+            'title': 'Additional'|trans,
+            'subblocks': [{
+                'title': '',
+                'data':  [ additional ]
+            }]
+        }]) %}
+    {% endif %}
+
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
         'dataBlocks': dataBlocks,

@@ -10,13 +10,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class RFMCategorySettingsType extends AbstractType
 {
     const NAME = 'orocrm_analytics_rfm_category_settings';
+    const TYPE_OPTION = 'rfm_type';
 
     /**
      * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setRequired(['rfm_type']);
+        $resolver->setRequired([self::TYPE_OPTION]);
         $resolver->setDefaults(
             [
                 'type' => RFMCategoryType::NAME,

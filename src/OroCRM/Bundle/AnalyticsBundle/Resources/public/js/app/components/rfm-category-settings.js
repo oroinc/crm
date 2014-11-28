@@ -52,7 +52,7 @@ define(function (require) {
 
         var setupChangeVal = function($row) {
             if (!$row.data('initialized')) {
-                getVisibleInput($row).change(function () {
+                getVisibleInput($row).keyup(function () {
                     var nextRow = $row.next(),
                         nextInput = getInvisibleInput(nextRow),
                         val = $(this).val();
@@ -139,7 +139,7 @@ define(function (require) {
         };
 
         var refresh = function() {
-            $el.find('input').trigger('change');
+            $el.find('input').trigger('keyup');
             recalculateIdx();
         };
 
