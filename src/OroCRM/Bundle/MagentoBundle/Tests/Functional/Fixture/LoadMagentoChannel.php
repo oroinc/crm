@@ -358,6 +358,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $this->em->persist($store);
         $this->store = $store;
+        $this->setReference('store', $store);
 
         return $this;
     }

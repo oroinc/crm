@@ -62,14 +62,14 @@ class RFMMetricCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=16, nullable=false)
+     * @ORM\Column(name="`type`", type="string", length=16, nullable=false)
      */
     protected $type;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="index", type="integer", nullable=false)
+     * @ORM\Column(name="`index`", type="integer", nullable=false)
      */
     protected $index;
 
