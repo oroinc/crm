@@ -1,0 +1,5 @@
+orocrm:
+    analytics:
+        title:
+            add_row: Add row
+            delete_row: Delete row
