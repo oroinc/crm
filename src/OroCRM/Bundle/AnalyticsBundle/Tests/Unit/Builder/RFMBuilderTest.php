@@ -268,7 +268,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($maxValue));
 
         $category->expects($this->any())
-            ->method('getIndex')
+            ->method('getCategoryIndex')
             ->will($this->returnValue($index));
 
         return $category;

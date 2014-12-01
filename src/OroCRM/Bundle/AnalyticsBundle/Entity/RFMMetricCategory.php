@@ -62,16 +62,16 @@ class RFMMetricCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="`type`", type="string", length=16, nullable=false)
+     * @ORM\Column(name="category_type", type="string", length=16, nullable=false)
      */
-    protected $type;
+    protected $categoryType;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="`index`", type="integer", nullable=false)
+     * @ORM\Column(name="category_index", type="integer", nullable=false)
      */
-    protected $index;
+    protected $categoryIndex;
 
     /**
      * @var int
@@ -106,49 +106,49 @@ class RFMMetricCategory
     }
 
     /**
-     * Set type
+     * Set category type
      *
-     * @param string $type
+     * @param string $categoryType
      * @return RFMMetricCategory
      */
-    public function setType($type)
+    public function setCategoryType($categoryType)
     {
-        $this->type = $type;
+        $this->categoryType = $categoryType;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get category type
      *
      * @return string 
      */
-    public function getType()
+    public function getCategoryType()
     {
-        return $this->type;
+        return $this->categoryType;
     }
 
     /**
-     * Set index
+     * Set category index
      *
-     * @param integer $index
+     * @param integer $categoryIndex
      * @return RFMMetricCategory
      */
-    public function setIndex($index)
+    public function setCategoryIndex($categoryIndex)
     {
-        $this->index = $index;
+        $this->categoryIndex = $categoryIndex;
 
         return $this;
     }
 
     /**
-     * Get index
+     * Get category index
      *
      * @return integer
      */
-    public function getIndex()
+    public function getCategoryIndex()
     {
-        return $this->index;
+        return $this->categoryIndex;
     }
 
     /**
