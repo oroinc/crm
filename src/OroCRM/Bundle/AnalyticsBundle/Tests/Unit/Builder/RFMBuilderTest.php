@@ -246,6 +246,16 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
                 2,
                 [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
             ],
+            'null match' => [
+                true,
+                true,
+                null,
+                null,
+                2,
+                $channel,
+                2,
+                [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+            ],
         ];
     }
 
