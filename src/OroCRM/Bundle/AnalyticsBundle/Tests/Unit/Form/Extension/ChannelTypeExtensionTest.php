@@ -202,6 +202,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                         $this->equalTo(
                             [
                                 'rfm_type' => 'recency',
+                                'label' => 'orocrm.analytics.form.recency.label',
                                 'mapped' => false,
                                 'required' => false,
                                 'is_increasing' => true,
@@ -215,6 +216,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                         $this->equalTo(
                             [
                                 'rfm_type' => 'frequency',
+                                'label' => 'orocrm.analytics.form.frequency.label',
                                 'mapped' => false,
                                 'required' => false,
                                 'is_increasing' => false,
@@ -230,6 +232,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                         $this->equalTo(
                             [
                                 'rfm_type' => 'monetary',
+                                'label' => 'orocrm.analytics.form.monetary.label',
                                 'mapped' => false,
                                 'required' => false,
                                 'is_increasing' => false,
