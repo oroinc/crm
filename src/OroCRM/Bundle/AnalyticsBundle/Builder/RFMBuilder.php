@@ -123,7 +123,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
         }
 
         // null value must be ranked with worse index
-        if (!$value) {
+        if ($value === null) {
             /** @var RFMMetricCategory $category */
             $category = end($categories);
             reset($categories);
@@ -137,7 +137,8 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 continue;
             }
 
-            if ($value <= $category->getMinValue()) {
+            $minValue = $category->getMinValue();
+            if ($minValue !== null && $value <= $category->getMinValue()) {
                 continue;
             }
 
