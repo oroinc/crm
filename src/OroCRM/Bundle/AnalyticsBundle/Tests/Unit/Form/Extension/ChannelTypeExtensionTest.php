@@ -204,6 +204,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'rfm_type' => 'recency',
                                 'mapped' => false,
                                 'required' => false,
+                                'is_increasing' => true,
                                 'data' => $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
                             ]
                         )
@@ -216,6 +217,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'rfm_type' => 'frequency',
                                 'mapped' => false,
                                 'required' => false,
+                                'is_increasing' => false,
                                 'data' => $this->getCollection(
                                     [1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]
                                 ),
@@ -230,6 +232,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'rfm_type' => 'monetary',
                                 'mapped' => false,
                                 'required' => false,
+                                'is_increasing' => false,
                                 'data' => $this->getCollection([]),
                             ]
                         )

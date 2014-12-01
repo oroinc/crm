@@ -148,6 +148,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                     RFMCategorySettingsType::TYPE_OPTION => $type,
                     'mapped' => false,
                     'required' => false,
+                    'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
                     'data' => $collection,
                 ]
             );
