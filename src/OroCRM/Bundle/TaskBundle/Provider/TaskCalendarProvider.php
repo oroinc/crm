@@ -62,7 +62,7 @@ class TaskCalendarProvider implements CalendarProviderInterface
     {
         $result = [];
 
-        if ($this->myTasksEnabled || in_array(self::MY_TASKS_CALENDAR_ID, $calendarIds)) {
+        if ($this->myTasksEnabled) {
             $result[self::MY_TASKS_CALENDAR_ID] = [
                 'calendarName'    => $this->translator->trans($this->calendarLabels[self::MY_TASKS_CALENDAR_ID]),
                 'removable'       => false,
@@ -78,6 +78,8 @@ class TaskCalendarProvider implements CalendarProviderInterface
                     ]
                 ]
             ];
+        } elseif (in_array(self::MY_TASKS_CALENDAR_ID, $calendarIds)) {
+            $result[self::MY_TASKS_CALENDAR_ID] = null;
         }
 
         return $result;

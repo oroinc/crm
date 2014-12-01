@@ -49,6 +49,30 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testGetCalendarDefaultValuesDisabled()
+    {
+        $organizationId = 1;
+        $userId         = 123;
+        $calendarId     = 10;
+        $calendarIds    = [TaskCalendarProvider::MY_TASKS_CALENDAR_ID];
+
+        $provider = new TaskCalendarProvider(
+            $this->doctrineHelper,
+            $this->aclHelper,
+            $this->taskCalendarNormalizer,
+            $this->translator,
+            false
+        );
+
+        $result = $provider->getCalendarDefaultValues($organizationId, $userId, $calendarId, $calendarIds);
+        $this->assertEquals(
+            [
+                TaskCalendarProvider::MY_TASKS_CALENDAR_ID => null
+            ],
+            $result
+        );
+    }
+
     public function testGetCalendarDefaultValues()
     {
         $organizationId = 1;
