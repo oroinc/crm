@@ -146,6 +146,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 RFMCategorySettingsType::NAME,
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
+                    'label' => sprintf('orocrm.analytics.form.%s.label', $type),
                     'mapped' => false,
                     'required' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
