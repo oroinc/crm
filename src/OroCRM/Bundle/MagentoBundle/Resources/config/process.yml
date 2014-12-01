@@ -101,51 +101,26 @@ definitions:
                             organization:   $organization
                     - @unset_value: [$.accountName]
 
-    magento_analytics_customer_create:
+    magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
         order:   30
         actions_configuration:
-            - @tree:
-                actions:
-                    - @format_string:
-                        attribute: $.channelArguments
-                        string: '--channel=%channel_id% --id=%id%'
-                        arguments:
-                            id: $customer.id
-                            channel_id: $dataChannel.id
-                    - @create_entity:
-                        class: JMS\JobQueueBundle\Entity\Job
-                        attribute: $.syncJob
-                        flush: true
-                        arguments:
-                            - 'oro:cron:build-analytics'
-                            - [$.channelArguments]
-                            - [$.idArguments]
-
-    magento_analytics_customer_update:
-        label:   'Recalculate RFM analytics for Magento Customer'
-        enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
-        order:   30
-        actions_configuration:
-            - @tree:
-                actions:
-                    - @format_string:
-                        attribute: $.channelArguments
-                        string: '--channel=%channel_id% --id=%id%'
-                        arguments:
-                            id: $customer.id
-                            channel_id: $dataChannel.id
-                    - @create_entity:
-                        class: JMS\JobQueueBundle\Entity\Job
-                        attribute: $.syncJob
-                        flush: true
-                        arguments:
-                            - 'oro:cron:build-analytics'
-                            - [$.channelArguments]
-                            - [$.idArguments]
+            actions:
+                - @format_string:
+                    attribute: $.channelArguments
+                    string: '--channel=%channel_id% --id=%id%'
+                    arguments:
+                        id: $customer.id
+                        channel_id: $dataChannel.id
+                - @create_entity:
+                    class: JMS\JobQueueBundle\Entity\Job
+                    attribute: $.syncJob
+                    flush: true
+                    arguments:
+                        - 'oro:cron:build-analytics'
+                        - [$.channelArguments]
 
 triggers:
     magento_customer_creation:
@@ -154,13 +129,11 @@ triggers:
             priority: 5
             queued:   true
 
-    magento_analytics_customer_create:
-        -
-            event:    create
-            priority: 10
-            queued:   true
-
-    magento_analytics_customer_update:
+    magento_analytics_customer_calculate:
+#        -
+#            event:    create
+#            priority: 10
+#            queued:   true
         -
             event:    update
             priority: 10
