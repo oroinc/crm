@@ -8,6 +8,7 @@ parameters:
     orocrm_analytics.form.type.category_settings.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
 
     orocrm_analytics.model.analytics_aware_interface: OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
+    orocrm_analytics.model.rfm_aware_interface: OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface
     orocrm_analytics.form.channel_type_extension.class: OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
 
     orocrm_analytics.placeholder.rfm_filter.class: OroCRM\Bundle\AnalyticsBundle\Placeholder\FRMAwareFilter
@@ -38,7 +39,8 @@ services:
         class: %orocrm_analytics.form.channel_type_extension.class%
         arguments:
             - @oro_entity.doctrine_helper
-            - %orocrm_analytics.model.analytics_aware_interface%
+            - %orocrm_analytics.model.rfm_aware_interface%
+            - %orocrm_analytics.entity.rfm_category.class%
         tags:
             - { name: form.type_extension, alias: orocrm_channel_form }
 

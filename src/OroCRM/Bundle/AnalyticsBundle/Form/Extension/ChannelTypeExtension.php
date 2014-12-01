@@ -33,11 +33,13 @@ class ChannelTypeExtension extends AbstractTypeExtension
     /**
      * @param DoctrineHelper $doctrineHelper
      * @param string $interface
+     * @param string $rfmCategoryClass
      */
-    public function __construct(DoctrineHelper $doctrineHelper, $interface)
+    public function __construct(DoctrineHelper $doctrineHelper, $interface, $rfmCategoryClass)
     {
         $this->doctrineHelper = $doctrineHelper;
         $this->interface = $interface;
+        $this->rfmCategoryClass = $rfmCategoryClass;
     }
 
     /**
@@ -62,17 +64,24 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function postSubmit(FormEvent $event)
     {
-        $em = $this->doctrineHelper->getEntityManager('OroCRMAnalyticsBundle:RFMMetricCategory');
-        $form = $event->getForm();
         /** @var Channel $channel */
-        $channel = $this->doctrineHelper->getEntityReference(
-            $this->doctrineHelper->getEntityClass($event->getData()),
-            $this->doctrineHelper->getSingleEntityIdentifier($event->getData())
-        );
+        $channel = $event->getData();
+
+        if (!$this->isApplicable($channel)) {
+            return;
+        }
+
+        $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
+        $form = $event->getForm();
 
         foreach (RFMMetricCategory::$types as $type) {
             /** @var PersistentCollection $categories */
-            $categories = $form->get($type)->getData();
+            $child = $form->get($type);
+            $categories = $child->getData();
+
+            if (!$categories->isDirty()) {
+                continue;
+            }
 
             /** @var RFMMetricCategory $category */
             foreach ($categories->getInsertDiff() as $category) {
@@ -95,17 +104,13 @@ class ChannelTypeExtension extends AbstractTypeExtension
     {
         /** @var Channel $channel */
         $channel = $event->getData();
-        if (!$channel) {
-            return;
-        }
 
-        $customerIdentity = $channel->getCustomerIdentity();
-        if (!in_array($this->interface, class_implements($customerIdentity))) {
+        if (!$this->isApplicable($channel)) {
             return;
         }
 
         $categories = $this->doctrineHelper
-            ->getEntityRepository('OroCRMAnalyticsBundle:RFMMetricCategory')
+            ->getEntityRepository($this->rfmCategoryClass)
             ->findBy(
                 ['channel' => $channel],
                 ['index' => Criteria::ASC]
@@ -129,8 +134,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
             );
 
             $collection = new PersistentCollection(
-                $this->doctrineHelper->getEntityManager('OroCRMAnalyticsBundle:RFMMetricCategory'),
-                $this->doctrineHelper->getEntityMetadata('OroCRMAnalyticsBundle:RFMMetricCategory'),
+                $this->doctrineHelper->getEntityManager($this->rfmCategoryClass),
+                $this->doctrineHelper->getEntityMetadata($this->rfmCategoryClass),
                 new ArrayCollection($typeCategories)
             );
 
@@ -141,11 +146,32 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 RFMCategorySettingsType::NAME,
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
+                    'label' => sprintf('orocrm.analytics.form.%s.label', $type),
                     'mapped' => false,
                     'required' => false,
+                    'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
                     'data' => $collection,
                 ]
             );
         }
+    }
+
+    /**
+     * @param Channel $channel
+     *
+     * @return bool
+     */
+    protected function isApplicable(Channel $channel = null)
+    {
+        if (!$channel) {
+            return false;
+        }
+
+        $customerIdentity = $channel->getCustomerIdentity();
+        if (!$customerIdentity) {
+            return false;
+        }
+
+        return in_array($this->interface, class_implements($customerIdentity));
     }
 }

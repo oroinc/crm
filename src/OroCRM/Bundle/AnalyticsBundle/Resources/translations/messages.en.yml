@@ -8,3 +8,7 @@ orocrm:
             frequency.label: F
             monetary.label: M
             score.label: RFM score
+        form:
+            recency.label: Recency, days
+            frequency.label: Frequency
+            monetary.label: Monetary
