@@ -361,10 +361,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
         }
 
-        if (!empty($mappedData['taxvat'])) {
-            $mappedData['taxvat'] = (float)$mappedData['taxvat'] / 100;
-        }
-
         $integration = $this->getIntegrationFromContext($context);
         $resultObject->setChannel($integration);
         $resultObject->setDataChannel($this->channelImportHelper->getChannel($integration));
@@ -595,7 +591,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             if (!empty($address['telephone'])) {
                 $phone = $address['telephone'];
                 $bapAddress['contactPhone'] = array('phone' => $phone);
-                if (!$this->arrayHasValueForKey($contact, 'phones', $phone)) {
+                if (!$this->arrayHasValueForKey($contact['phones'], 'phone', $phone)) {
                     $contact['phones'][] = array('phone' => $phone);
                 }
             }
@@ -610,6 +606,15 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         return $contact;
     }
 
+    /**
+     * Check if specific value is present in any of the array items at the given key
+     *
+     * @param array $array
+     * @param mixed $key
+     * @param mixed $value
+     *
+     * @return bool
+     */
     protected function arrayHasValueForKey($array, $key, $value)
     {
         foreach ($array as $item) {

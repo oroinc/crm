@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_18';
+        return 'v1_22';
     }
 
     /**
@@ -139,7 +139,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -236,6 +236,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('updated_at', 'datetime', ['precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -244,6 +245,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addIndex(['user_owner_id'], 'IDX_4D09F3059EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_4D09F30572F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
+        $table->addIndex(['organization_id'], 'IDX_4D09F30532C8A3DE', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['created_at'], 'mageorder_created_idx', []);
         $table->addUniqueIndex(['increment_id', 'channel_id'], 'unq_increment_id_channel_id');
@@ -323,10 +325,11 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('created_at', 'datetime', ['precision' => 0]);
         $table->addColumn('updated_at', 'datetime', ['precision' => 0]);
         $table->addColumn('is_active', 'boolean', ['precision' => 0]);
-        $table->addColumn('vat', 'float', ['notnull' => false, 'precision' => 0]);
+        $table->addColumn('vat', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('lifetime', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('currency', 'string', ['notnull' => false, 'length' => 10, 'precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -335,6 +338,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addIndex(['user_owner_id'], 'IDX_2A61EE7D9EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_2A61EE7D72F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_2A61EE7DBDC09B73', []);
+        $table->addIndex(['organization_id'], 'IDX_2A61EE7D32C8A3DE', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['first_name', 'last_name'], 'magecustomer_name_idx', []);
         $table->addIndex(['last_name', 'first_name'], 'magecustomer_rev_name_idx', []);
@@ -405,7 +409,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -457,7 +461,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('phone', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500, 'precision' => 0]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20, 'precision' => 0]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
@@ -594,6 +598,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_96661A809395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_96661A80B092A811', []);
         $table->addIndex(['shipping_address_id'], 'IDX_96661A804D4CFF2B', []);
@@ -605,6 +610,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addIndex(['user_owner_id'], 'IDX_96661A809EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_96661A8072F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_96661A80BDC09B73', []);
+        $table->addIndex(['organization_id'], 'IDX_96661A8032C8A3DE', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecart_origin_idx', []);
         $table->addIndex(['updatedAt'], 'magecart_updated_idx', []);
@@ -803,6 +809,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_4D09F305BDC09B73'
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_4D09F30532C8A3DE'
+        );
     }
 
     /**
@@ -922,6 +935,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_2A61EE7DBDC09B73'
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_2A61EE7D32C8A3DE'
+        );
     }
 
     /**
@@ -991,7 +1011,9 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_customer_addr'),
             ['customer_address_id'],
-            ['id']
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'FK_308A31F187EABF7'
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
@@ -1040,7 +1062,9 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_magento_order_address'),
             ['order_address_id'],
-            ['id']
+            ['id'],
+            ['onDelete' => 'CASCADE'],
+            'FK_E927A18F466D5220'
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_address_type'),
@@ -1178,6 +1202,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_96661A80BDC09B73'
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['organization_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL', 'onUpdate' => null],
+            'FK_96661A8032C8A3DE'
         );
     }
 

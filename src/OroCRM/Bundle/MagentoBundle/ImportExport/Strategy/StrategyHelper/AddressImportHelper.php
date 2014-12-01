@@ -102,6 +102,23 @@ class AddressImportHelper
     }
 
     /**
+     * @param AbstractTypedAddress $localAddress
+     * @param AbstractTypedAddress $remoteAddress
+     */
+    public function mergeAddressTypes(AbstractTypedAddress $localAddress, AbstractTypedAddress $remoteAddress)
+    {
+        $newAddressTypes     = array_diff($remoteAddress->getTypeNames(), $localAddress->getTypeNames());
+        $deletedAddressTypes = array_diff($localAddress->getTypeNames(), $remoteAddress->getTypeNames());
+
+        foreach ($deletedAddressTypes as $addressType) {
+            $localAddress->removeType($localAddress->getTypeByName($addressType));
+        }
+        foreach ($newAddressTypes as $addressType) {
+            $localAddress->addType($remoteAddress->getTypeByName($addressType));
+        }
+    }
+
+    /**
      * @param $mageRegionId
      *
      * @return object

@@ -72,7 +72,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -169,7 +169,7 @@ class OroCRMContactBundleInstaller implements
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
