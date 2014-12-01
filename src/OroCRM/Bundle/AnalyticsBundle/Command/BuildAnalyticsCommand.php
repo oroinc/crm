@@ -16,6 +16,8 @@ use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
 
 class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
+    const COMMAND_NAME = 'oro:cron:build-analytics';
+
     /**
      * @var DoctrineHelper
      */
@@ -40,7 +42,7 @@ class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommand
     protected function configure()
     {
         $this
-            ->setName('oro:cron:build-analytics')
+            ->setName(self::COMMAND_NAME)
             ->setDescription('Build analytics')
             ->addOption(
                 'ids',
