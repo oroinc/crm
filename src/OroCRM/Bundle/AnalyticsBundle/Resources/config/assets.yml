@@ -1,3 +1,4 @@
 css:
-    'orocrmanalytics':
-        - 'bundles/orocrmanalytics/css/styles.css'
+    orocrmanalytics:
+        - bundles/orocrmanalytics/css/analytics.css
+        - bundles/orocrmanalytics/css/styles.css

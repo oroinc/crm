@@ -62,7 +62,7 @@ class RFMMetricCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=16, nullable=false)
+     * @ORM\Column(name="`type`", type="string", length=16, nullable=false)
      */
     protected $type;
 

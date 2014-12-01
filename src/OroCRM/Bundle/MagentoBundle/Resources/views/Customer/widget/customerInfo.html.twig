@@ -28,6 +28,7 @@
 
 <div class="widget-content row-fluid {% if hasTabs %}row-fluid-divider{% endif %}">
     <div class="responsive-cell form-horizontal">
+        {% include 'OroCRMAnalyticsBundle::macros.html.twig' with {entity: customer, margin: true} %}
         {% set customer_name_link %}
             <a href="{{ path('orocrm_magento_customer_view', {'id':customer.id}) }}">
                 {{ customer|oro_format_name|escape }}
