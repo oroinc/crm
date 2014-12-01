@@ -113,7 +113,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             ->getEntityRepository($this->rfmCategoryClass)
             ->findBy(
                 ['channel' => $channel],
-                ['index' => Criteria::ASC]
+                ['categoryIndex' => Criteria::ASC]
             );
 
         $this->addRFMTypes($event->getForm(), $categories);
