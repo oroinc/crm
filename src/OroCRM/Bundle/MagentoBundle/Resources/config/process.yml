@@ -104,7 +104,7 @@ definitions:
     magento_analytics_customer_create:
         label:   'Calculate RFM analytics for Magento Customer'
         enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
         order:   30
         actions_configuration:
             - @tree:
@@ -113,7 +113,7 @@ definitions:
                         attribute: $.channelArguments
                         string: '--channel=%channel_id% --id=%id%'
                         arguments:
-                            id: $id
+                            id: $customer.id
                             channel_id: $dataChannel.id
                     - @create_entity:
                         class: JMS\JobQueueBundle\Entity\Job
@@ -127,7 +127,7 @@ definitions:
     magento_analytics_customer_update:
         label:   'Recalculate RFM analytics for Magento Customer'
         enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
         order:   30
         actions_configuration:
             - @tree:
@@ -136,7 +136,7 @@ definitions:
                         attribute: $.channelArguments
                         string: '--channel=%channel_id% --id=%id%'
                         arguments:
-                            id: $id
+                            id: $customer.id
                             channel_id: $dataChannel.id
                     - @create_entity:
                         class: JMS\JobQueueBundle\Entity\Job
