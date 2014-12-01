@@ -16,6 +16,8 @@ use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
 
 class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
+    const FLUSH_BATCH_SIZE = 25;
+
     const COMMAND_NAME = 'oro:cron:build-analytics';
 
     /**
@@ -114,6 +116,11 @@ class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommand
                         );
                     }
                 }
+
+                if (count($entitiesToSave) % self::FLUSH_BATCH_SIZE === 0) {
+                    $em->flush($entitiesToSave);
+                    $entitiesToSave = [];
+                }
             }
 
             $em->flush($entitiesToSave);
@@ -205,6 +212,6 @@ class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommand
      */
     protected function getAnalyticsAwareInterface()
     {
-        return $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface.interface');
+        return $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface');
     }
 }

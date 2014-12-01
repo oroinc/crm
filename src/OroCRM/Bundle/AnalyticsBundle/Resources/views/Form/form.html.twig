@@ -1,0 +1,11 @@
+{% if form is defined %}
+    {% if form.recency is defined %}
+        {{ form_row(form.recency) }}
+    {% endif %}
+    {% if form.frequency is defined %}
+        {{ form_row(form.frequency) }}
+    {% endif %}
+    {% if form.monetary is defined %}
+        {{ form_row(form.monetary) }}
+    {% endif %}
+{% endif %}
