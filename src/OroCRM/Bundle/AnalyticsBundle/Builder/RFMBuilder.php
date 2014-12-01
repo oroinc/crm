@@ -127,7 +127,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
             /** @var RFMMetricCategory $category */
             $category = end($categories);
             reset($categories);
-            return $category->getIndex();
+            return $category->getCategoryIndex();
         }
 
         // Search for RFM category that match current value
