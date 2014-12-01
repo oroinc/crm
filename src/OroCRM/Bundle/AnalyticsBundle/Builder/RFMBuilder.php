@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
+use Doctrine\Common\Collections\Criteria;
+
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -73,23 +75,27 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function build(AnalyticsAwareInterface $entity)
     {
+        $update = false;
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->providers as $provider) {
             if ($provider->supports($entity)) {
                 $value = $provider->getValue($entity);
 
-                $propertyAccessor->setValue(
-                    $entity,
-                    $provider->getType(),
-                    $this->getIndex($entity, $provider->getType(), $value)
-                );
+                $type = $provider->getType();
+                $entityIndex = $propertyAccessor->getValue($entity, $type);
+                $index = $this->getIndex($entity, $type, $value);
 
-                return true;
+                if ($index === $entityIndex) {
+                    continue;
+                }
+
+                $propertyAccessor->setValue($entity, $type, $index);
+                $update = true;
             }
         }
 
-        return false;
+        return $update;
     }
 
     /**
@@ -140,15 +146,18 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     protected function getCategories($channelId, $type)
     {
-        if (array_key_exists($channelId, $this->categories)) {
-            return $this->categories[$channelId];
+        if (
+            array_key_exists($channelId, $this->categories)
+            && array_key_exists($type, $this->categories[$channelId])
+        ) {
+            return $this->categories[$channelId][$type];
         }
 
         $categories = $this->doctrineHelper
             ->getEntityRepository('OroCRMAnalyticsBundle:RFMMetricCategory')
-            ->findBy(['channel' => $channelId, 'type' => $type], ['maxValue' => 'ASC']);
+            ->findBy(['channel' => $channelId, 'type' => $type], ['index' => Criteria::ASC]);
 
-        $this->categories[$channelId] = $categories;
+        $this->categories[$channelId][$type] = $categories;
 
         return $categories;
     }

@@ -1,7 +1,13 @@
 parameters:
-    orocrm_analytics.builder.class: OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
+    orocrm_analytics.entity.rfm_category.class: OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory
 
+    orocrm_analytics.builder.class: OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder
     orocrm_analytics.builder.rfm.class: OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder
+
+    orocrm_analytics.form.type.category.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategoryType
+    orocrm_analytics.form.type.category_settings.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
+
+    orocrm_analytics.model.analytics_aware_interface.interface: OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
 services:
     orocrm_analytics.builder:
         class: %orocrm_analytics.builder.class%
@@ -14,3 +20,13 @@ services:
             - @oro_entity.doctrine_helper
         tags:
             - { name: orocrm_analytics.builder }
+
+    orocrm_analytics.form.type.category:
+        class: %orocrm_analytics.form.type.category.class%
+        tags:
+            - { name: form.type, alias: "orocrm_analytics_rfm_category" }
+
+    orocrm_analytics.form.type.category_settings:
+        class: %orocrm_analytics.form.type.category_settings.class%
+        tags:
+            - { name: form.type, alias: "orocrm_analytics_rfm_category_settings" }

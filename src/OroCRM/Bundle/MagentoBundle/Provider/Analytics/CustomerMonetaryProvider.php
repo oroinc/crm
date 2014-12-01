@@ -6,14 +6,14 @@ use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
-class CustomerRecencyProvider extends AbstractCustomerRFMProvider
+class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
 {
     /**
      * {@inheritdoc}
      */
     public function getType()
     {
-        return RFMMetricCategory::TYPE_RECENCY;
+        return RFMMetricCategory::TYPE_MONETARY;
     }
 
     /**
@@ -27,26 +27,27 @@ class CustomerRecencyProvider extends AbstractCustomerRFMProvider
             ->getEntityRepository($this->className)
             ->createQueryBuilder('c');
 
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $qb
-            ->select('MAX(o.createdAt)')
+            ->select('SUM(o.subtotalAmount)')
             ->join('c.orders', 'o')
             ->where(
                 $qb->expr()->andX(
                     $qb->expr()->neq($qb->expr()->lower('o.status'), ':status'),
-                    $qb->expr()->eq('c.id', ':id')
+                    $qb->expr()->eq('c.id', ':id'),
+                    $qb->expr()->gte('o.createdAt', ':date')
                 )
             )
             ->setParameter('status', Order::STATUS_CANCELED)
-            ->setParameter('id', $this->doctrineHelper->getSingleEntityIdentifier($entity));
+            ->setParameter('id', $this->doctrineHelper->getSingleEntityIdentifier($entity))
+            ->setParameter('date', $date->sub(new \DateInterval('P365D')));
 
-        $date = $qb->getQuery()->getSingleScalarResult();
+        $sum = $qb->getQuery()->getSingleScalarResult();
 
-        if (!$date) {
+        if (!$sum) {
             return null;
         }
 
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
-
-        return $now->diff(new \DateTime($date))->days;
+        return $sum;
     }
 }

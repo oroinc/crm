@@ -1,5 +1,8 @@
 orocrm:
     analytics:
+        title:
+            add_row: Add row
+            delete_row: Delete roworocrm:
         rfm:
             recency.label: R
             frequency.label: F
