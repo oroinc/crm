@@ -16,3 +16,16 @@
 .rfm_settings_row .actions {
     display: inline-block;
 }
+
+.rfm-analytics-label {
+    padding: 4px 10px;
+    cursor: default;
+}
+
+.rfm-analytics-label-margin {
+    margin: 5px;
+}
+
+.rfm-analytics-label span {
+    padding-left: 7px;
+}
