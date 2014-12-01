@@ -109,17 +109,23 @@ class ContactImportHelper
             $contact->addEmail($email);
         }
 
-        // process addresses
         $addresses           = $contact->getAddresses();
         $isLocalTypesChanged = $this->isLocalAddressesTypesChanged($addresses, $localData);
+        // loop through contact addresses form DB
         foreach ($addresses as $address) {
-            // find in update local data if
+            // lookup for correspondent record in existing magento customer address list
             $localAddress = $this->getCustomerAddressByContactAddress($localData, $address);
 
             if (!$localAddress && $this->isRemotePrioritized()) {
-                 $contact->removeAddress($address);
+                // case when magento local data does not have corresponded address and remote data has higher priority
+                // override contact data then and remove this address
+                $contact->removeAddress($address);
             } elseif ($localAddress) {
-                 $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+                $remoteAddress = $this->getCorrespondentRemoteAddress($remoteData, $localAddress);
+                $contactPhone  = $localAddress->getContactPhone();
+                if ($contactPhone) {
+                    $contactPhone = $this->getContactPhoneFromContact($contact, $contactPhone);
+                }
 
                 if ($remoteAddress) {
                     // do update
@@ -142,15 +148,16 @@ class ContactImportHelper
                         $this->addressImportHelper->mergeAddressTypes($address, $remoteAddress);
                     }
 
-                    $contactPhone = null;
-
-                    if ($localAddress->getContactPhone()) {
-                        $contactPhone = $this->getContactPhoneFromContact($contact, $localAddress->getContactPhone());
-                    }
-
                     if ($contactPhone) {
                         $this->mergeScalars(['phone'], $remoteAddress, $localAddress, $contactPhone);
-                    } elseif ($this->isRemotePrioritized() && $remoteAddress->getPhone() !== 'no phone') {
+                        if (!$contactPhone->getPhone()) {
+                            $contact->removePhone($contactPhone);
+                        }
+                    } elseif (
+                        $this->isRemotePrioritized()
+                        && $remoteAddress->getPhone()
+                        && $remoteAddress->getPhone() !== 'no phone'
+                    ) {
                         $contactPhone = new ContactPhone();
                         $contactPhone->setPhone($remoteAddress->getPhone());
                         $contactPhone->setPrimary(!$contact->getPrimaryPhone());
@@ -161,9 +168,15 @@ class ContactImportHelper
                     $this->prepareAddress($address);
                     if (!$address->getCountry()) {
                         $contact->removeAddress($address);
+                        if ($contactPhone) {
+                            $contact->removePhone($contactPhone);
+                        }
                     }
                 } else {
-                     $contact->removeAddress($address);
+                    $contact->removeAddress($address);
+                    if ($contactPhone) {
+                        $contact->removePhone($contactPhone);
+                    }
                 }
             }
         }
