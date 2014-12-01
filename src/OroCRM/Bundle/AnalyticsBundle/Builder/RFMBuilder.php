@@ -75,22 +75,27 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function build(AnalyticsAwareInterface $entity)
     {
-        $update = false;
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->providers as $provider) {
             if ($provider->supports($entity)) {
                 $value = $provider->getValue($entity);
-                $propertyAccessor->setValue(
-                    $entity,
-                    $provider->getType(),
-                    $this->getIndex($entity, $provider->getType(), $value)
-                );
-                $update = true;
+
+                $type = $provider->getType();
+                $entityIndex = $propertyAccessor->getValue($entity, $type);
+                $index = $this->getIndex($entity, $type, $value);
+
+                if ($index === $entityIndex) {
+                    continue;
+                }
+
+                $propertyAccessor->setValue($entity, $type, $index);
+
+                return true;
             }
         }
 
-        return $update;
+        return false;
     }
 
     /**

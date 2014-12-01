@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class RFMBuilderTest extends \PHPUnit_Framework_TestCase
@@ -94,6 +94,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $supports
      * @param bool $expected
+     * @param mixed $entityIndex
      * @param mixed $providerValue
      * @param mixed $expectedValue
      * @param \PHPUnit_Framework_MockObject_MockObject|Channel $channel
@@ -105,6 +106,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     public function testBuild(
         $supports,
         $expected,
+        $entityIndex = null,
         $providerValue = null,
         $expectedValue = null,
         $channel = null,
@@ -136,6 +138,12 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
             $entity->expects($this->exactly(2))
                 ->method('setFrequency')
                 ->with($this->equalTo($expectedValue));
+        }
+
+        if ($entityIndex) {
+            $entity->expects($this->exactly(2))
+                ->method('getFrequency')
+                ->will($this->returnValue($entityIndex));
         }
 
         if ($channel) {
@@ -183,23 +191,25 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
 
         return [
             'no support' => [false, false],
-            'empty value' => [true, true],
-            'channel without id' => [true, true, null, null, $channel],
-            'empty categories' => [true, true, 10, null, $channel, 2, []],
-            'value not matched' => [true, true, 20, null, $channel, 2, [$this->getCategoryMock(1, 20)]],
-            'value matched' => [true, true, 15, 2, $channel, 2, [$this->getCategoryMock(2, 10)]],
+            'empty value' => [true, false],
+            'channel without id' => [true, false, null, 10, null, $channel],
+            'empty categories' => [true, false, null, 10, null, $channel, 2, []],
+            'value not matched' => [true, false, null, 20, null, $channel, 2, [$this->getCategoryMock(1, 20)]],
+            'value matched' => [true, true, null, 15, 2, $channel, 2, [$this->getCategoryMock(2, 10)]],
             'first max match' => [
                 true,
                 true,
+                null,
                 10,
                 null,
                 $channel,
                 2,
                 [$this->getCategoryMock(0, 0, 10), $this->getCategoryMock(2, 10)]
             ],
-            'first min match' => [
+            'first min not match' => [
                 true,
                 true,
+                2,
                 10,
                 null,
                 $channel,
@@ -209,6 +219,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
             'first match' => [
                 true,
                 true,
+                null,
                 11,
                 1,
                 $channel,
@@ -218,6 +229,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
             'last max match' => [
                 true,
                 true,
+                null,
                 30,
                 2,
                 $channel,
@@ -227,6 +239,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
             'more than last min match' => [
                 true,
                 true,
+                null,
                 500,
                 2,
                 $channel,
