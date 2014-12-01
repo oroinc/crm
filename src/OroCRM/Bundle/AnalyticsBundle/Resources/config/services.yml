@@ -8,6 +8,8 @@ parameters:
     orocrm_analytics.form.type.category_settings.class: OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType
 
     orocrm_analytics.model.analytics_aware_interface.interface: OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface
+
+    orocrm_analytics.event_listener.timezone_change.class: OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
 services:
     orocrm_analytics.builder:
         class: %orocrm_analytics.builder.class%
@@ -30,3 +32,10 @@ services:
         class: %orocrm_analytics.form.type.category_settings.class%
         tags:
             - { name: form.type, alias: "orocrm_analytics_rfm_category_settings" }
+
+    orocrm_analytics.event_listener.timezone_change:
+        class: %orocrm_analytics.event_listener.timezone_change.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
