@@ -4,14 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
-class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
+class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInterface
 {
     /**
      * @var array
@@ -140,15 +140,5 @@ class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInt
             $manager->persist($entity);
         }
         $manager->flush();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
-    {
-        return [
-            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMOrderData'
-        ];
     }
 }

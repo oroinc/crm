@@ -18,7 +18,10 @@ class CustomerRFMProviderTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient();
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMCategoryData']);
+        $this->loadFixtures([
+            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMOrderData',
+            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadRFMCategoryData'
+        ]);
     }
 
     /**

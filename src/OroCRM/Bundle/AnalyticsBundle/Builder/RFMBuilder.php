@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
 use Doctrine\Common\Collections\Criteria;
+
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
