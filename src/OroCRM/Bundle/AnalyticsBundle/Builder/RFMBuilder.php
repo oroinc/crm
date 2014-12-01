@@ -75,6 +75,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function build(AnalyticsAwareInterface $entity)
     {
+        $update = false;
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->providers as $provider) {
@@ -90,12 +91,11 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 }
 
                 $propertyAccessor->setValue($entity, $type, $index);
-
-                return true;
+                $update = true;
             }
         }
 
-        return false;
+        return $update;
     }
 
     /**
