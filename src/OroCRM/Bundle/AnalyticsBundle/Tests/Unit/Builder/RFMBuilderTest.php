@@ -96,7 +96,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
      * @param bool $expected
      * @param mixed $entityIndex
      * @param mixed $providerValue
-     * @param mixed $expectedValue
+     * @param mixed $expectedIndex
      * @param \PHPUnit_Framework_MockObject_MockObject|Channel $channel
      * @param int $channelId
      * @param array $categories
@@ -108,7 +108,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
         $expected,
         $entityIndex = null,
         $providerValue = null,
-        $expectedValue = null,
+        $expectedIndex = null,
         $channel = null,
         $channelId = null,
         array $categories = null
@@ -137,7 +137,7 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
         if ($expected) {
             $entity->expects($this->exactly(2))
                 ->method('setFrequency')
-                ->with($this->equalTo($expectedValue));
+                ->with($this->equalTo($expectedIndex));
         }
 
         if ($entityIndex) {
@@ -190,61 +190,135 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         return [
-            'no support' => [false, false],
-            'empty value' => [true, false],
-            'channel without id' => [true, false, null, 10, null, $channel],
-            'empty categories' => [true, false, null, 10, null, $channel, 2, []],
-            'value not matched' => [true, false, null, 20, null, $channel, 2, [$this->getCategoryMock(1, 20)]],
-            'value matched' => [true, true, null, 15, 2, $channel, 2, [$this->getCategoryMock(2, 10)]],
+            'no support' => ['supports' => false, 'expected' => false],
+            'empty value' => ['supports' => true, 'expected' => false],
+            'channel without id' => [
+                'supports' => true,
+                'expected' => false,
+                'entityIndex' => null,
+                'providerValue' => 10,
+                'expectedIndex' => null,
+                'channel' => $channel
+            ],
+            'empty categories' => [
+                'supports' => true,
+                'expected' => false,
+                'entityIndex' => null,
+                'providerValue' => 10,
+                'expectedIndex' => null,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => []
+            ],
+            'value not matched' => [
+                'supports' => true,
+                'expected' => false,
+                'entityIndex' => null,
+                'providerValue' => 20,
+                'expectedIndex' => null,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 20)]
+            ],
+            'value matched' => [
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 15,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(2, 10)]
+            ],
             'first max match' => [
-                true,
-                true,
-                null,
-                10,
-                null,
-                $channel,
-                2,
-                [$this->getCategoryMock(0, 0, 10), $this->getCategoryMock(2, 10)]
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 10,
+                'expectedIndex' => null,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(0, 0, 10), $this->getCategoryMock(2, 10)]
             ],
             'first min not match' => [
-                true,
-                true,
-                2,
-                10,
-                null,
-                $channel,
-                2,
-                [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => 2,
+                'providerValue' => 10,
+                'expectedIndex' => null,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
             ],
             'first match' => [
-                true,
-                true,
-                null,
-                11,
-                1,
-                $channel,
-                2,
-                [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 11,
+                'expectedIndex' => 1,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
             ],
             'last max match' => [
-                true,
-                true,
-                null,
-                30,
-                2,
-                $channel,
-                2,
-                [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20, 30)]
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 30,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20, 30)]
             ],
             'more than last min match' => [
-                true,
-                true,
-                null,
-                500,
-                2,
-                $channel,
-                2,
-                [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 500,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+            ],
+            'null match' => [
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => null,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 10, 20), $this->getCategoryMock(2, 20)]
+            ],
+            'decrease match max' => [
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 35,
+                'expectedIndex' => 1,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 30), $this->getCategoryMock(2, 20, 30)]
+            ],
+            'decrease match' => [
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 30,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 30), $this->getCategoryMock(2, 20, 30)]
+            ],
+            'decrease match min' => [
+                'supports' => true,
+                'expected' => true,
+                'entityIndex' => null,
+                'providerValue' => 15,
+                'expectedIndex' => 2,
+                'channel' => $channel,
+                'channelId' => 2,
+                'categories' => [$this->getCategoryMock(1, 30), $this->getCategoryMock(2, null, 30)]
             ],
         ];
     }

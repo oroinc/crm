@@ -1,9 +1,0 @@
-{% if entity is defined and entity.recency is defined and entity.frequency is defined and entity.monetary is defined %}
-    <div class="pull-right label label-warning rfm-analytics-label{% if margin is defined %} rfm-analytics-label-margin{% endif %}">
-        {{ 'orocrm.analytics.rfm.score.label'|trans}}:
-        <span>{{ 'orocrm.analytics.rfm.recency.label'|trans}} {{ entity.recency|default(0) }}</span>
-        <span>{{ 'orocrm.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default(0) }}</span>
-        <span>{{ 'orocrm.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default(0) }}</span>
-    </div>
-    <div class="clearfix"></div>
-{% endif %}

@@ -45,8 +45,9 @@ class CustomerRecencyProvider extends AbstractCustomerRFMProvider
             return null;
         }
 
-        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $timezone = new \DateTimeZone('UTC');
+        $now = new \DateTime('now', $timezone);
 
-        return $now->diff(new \DateTime($date))->days;
+        return $now->diff(new \DateTime($date, $timezone))->days;
     }
 }

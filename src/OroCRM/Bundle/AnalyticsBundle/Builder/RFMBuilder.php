@@ -122,13 +122,23 @@ class RFMBuilder implements AnalyticsBuilderInterface
             return null;
         }
 
+        // null value must be ranked with worse index
+        if ($value === null) {
+            /** @var RFMMetricCategory $category */
+            $category = end($categories);
+            reset($categories);
+            return $category->getIndex();
+        }
+
+        // Search for RFM category that match current value
         foreach ($categories as $category) {
             $maxValue = $category->getMaxValue();
             if ($maxValue && $value > $maxValue) {
                 continue;
             }
 
-            if ($value <= $category->getMinValue()) {
+            $minValue = $category->getMinValue();
+            if ($minValue !== null && $value <= $category->getMinValue()) {
                 continue;
             }
 
