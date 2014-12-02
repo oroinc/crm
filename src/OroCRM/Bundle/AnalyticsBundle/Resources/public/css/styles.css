@@ -22,10 +22,20 @@
     cursor: default;
 }
 
-.rfm-analytics-label-margin {
+.rfm-analytics-label-vertical {
     margin: 5px;
 }
 
-.rfm-analytics-label span {
+.rfm-analytics-label span:not(:first-child) {
     padding-left: 7px;
+}
+
+.rfm-analytics-label p {
+    margin: 2px 0;
+}
+
+.rfm-analytics-label-wrapper {
+    float: right;
+    height: 0;
+    margin-top: 17px;
 }
