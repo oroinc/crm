@@ -116,7 +116,7 @@ definitions:
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
-                        string: '--channel=%channel_id% --id=%id%'
+                        string: '--channel=%channel_id% --ids=%id%'
                         arguments:
                             id: $customer.id
                             channel_id: $dataChannel.id
@@ -159,7 +159,7 @@ definitions:
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
-                        string: '--channel=%channel_id% -v'
+                        string: '--channel=%channel_id%'
                         arguments:
                             channel_id: $.dataChannel.id
                     - @create_entity:
