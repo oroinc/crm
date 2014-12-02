@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
 
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -18,6 +17,7 @@ use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
@@ -157,6 +157,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                     'label' => sprintf('orocrm.analytics.form.%s.label', $type),
                     'mapped' => false,
                     'required' => false,
+                    'error_bubbling' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
                     'constraints' => [$constraint],
                     'data' => $collection,

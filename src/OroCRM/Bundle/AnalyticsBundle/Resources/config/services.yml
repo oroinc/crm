@@ -13,6 +13,8 @@ parameters:
 
     orocrm_analytics.placeholder.rfm_filter.class: OroCRM\Bundle\AnalyticsBundle\Placeholder\FRMAwareFilter
     orocrm_analytics.event_listener.timezone_change.class: OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
+    orocrm_analytics.validator.categories.class: OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesValidator
+
 services:
     orocrm_analytics.builder:
         class: %orocrm_analytics.builder.class%
@@ -56,3 +58,8 @@ services:
             - @doctrine
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
+
+    orocrm_analytics.validator.categories:
+        class: %orocrm_analytics.validator.categories.class%
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_analytics.categories_validator }

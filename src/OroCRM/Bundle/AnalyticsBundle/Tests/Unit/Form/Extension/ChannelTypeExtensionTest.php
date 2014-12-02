@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
 
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -205,7 +206,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.recency.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => true,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_RECENCY)],
                                 'data' => $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
                             ]
                         )
@@ -219,7 +222,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.frequency.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => false,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_FREQUENCY)],
                                 'data' => $this->getCollection(
                                     [1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]
                                 ),
@@ -235,7 +240,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.monetary.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => false,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_MONETARY)],
                                 'data' => $this->getCollection([]),
                             ]
                         )
@@ -260,6 +267,19 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 ]
             ],
         ];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return CategoriesConstraint
+     */
+    protected function getConstraint($type)
+    {
+        $constraint = new CategoriesConstraint();
+        $constraint->setType($type);
+
+        return $constraint;
     }
 
     /**
