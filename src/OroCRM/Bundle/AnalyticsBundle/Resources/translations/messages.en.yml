@@ -18,3 +18,4 @@ orocrm:
             recency.label: Recency, days
             frequency.label: Frequency
             monetary.label: Monetary
+            rfm_setting.title: RFM Segment Configuration

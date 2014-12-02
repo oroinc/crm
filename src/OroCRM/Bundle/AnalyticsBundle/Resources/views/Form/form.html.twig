@@ -1,4 +1,5 @@
 {% if form is defined %}
+    <h4>{{ 'orocrm.analytics.form.rfm_setting.title'|trans }}</h4>
     {% if form.recency is defined %}
         {{ form_row(form.recency) }}
     {% endif %}

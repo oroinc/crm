@@ -1,0 +1,5 @@
+orocrm:
+    analytics:
+        recency.tooltip: Recency - How recently did the customer purchase?
+        frequency.tooltip: Frequency - How often do they purchase?
+        monetary.tooltop: Monetary Value - How much do they spend?
