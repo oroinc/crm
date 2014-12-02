@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\PersistentCollection;
 
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -15,6 +14,7 @@ use Symfony\Component\Form\FormEvents;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 {
