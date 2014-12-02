@@ -8,6 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 
 /**
  * @outputBuffering enabled
@@ -125,6 +126,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
      * @depends testCustomerChangeShouldUpdateBothCustomersIfValuable
      *
      * @param Opportunity $opportunity
+     *
+     * @return Opportunity
      */
     public function testRemoveSubtractLifetime(Opportunity $opportunity)
     {
@@ -136,6 +139,38 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $em->refresh($b2bCustomer);
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
+
+        return $opportunity;
+    }
+
+    /**
+     * Test that no processing occured for b2bcustomers that were deleted
+     * assert that onFlush event listeners not throwing exceptions
+     */
+    public function testRemovedB2bCustomer()
+    {
+        $em           = $this->getEntityManager();
+        $organization = $em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+
+        $opportunity = new Opportunity();
+        $opportunity->setName('remove_b2bcustomer_test');
+        $opportunity->setDataChannel($this->getReference('default_channel'));
+        $opportunity->setCloseRevenue(50);
+        $opportunity->setBudgetAmount(50.00);
+        $opportunity->setProbability(10);
+        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        $opportunity->setOrganization($organization);
+        $opportunity->setCustomer($this->getReference('default_b2bcustomer'));
+
+        /** @var B2bCustomer $b2bCustomer */
+        $b2bCustomer = $this->getReference('default_b2bcustomer');
+        $b2bCustomer->addOpportunity($opportunity);
+
+        $em->persist($opportunity);
+        $em->flush();
+
+        $em->remove($b2bCustomer);
+        $em->flush();
     }
 
     /**
