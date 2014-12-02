@@ -113,6 +113,9 @@ orocrm:
             lifetime.label:      Lifetime sales value
             currency.label:      Currency
             organization.label:  Organization
+            monetary.label:      Monetary
+            recency.label:       Recency
+            frequency.label:     Frequency
 
         customergroup:
             entity_label:        Customer Group
