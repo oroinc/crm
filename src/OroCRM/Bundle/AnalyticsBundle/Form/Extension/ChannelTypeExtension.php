@@ -91,7 +91,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             /** @var RFMMetricCategory $category */
             foreach ($categories->getInsertDiff() as $category) {
                 $category
-                    ->setType($type)
+                    ->setCategoryType($type)
                     ->setChannel($channel);
                 $em->persist($category);
             }
@@ -118,7 +118,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             ->getEntityRepository($this->rfmCategoryClass)
             ->findBy(
                 ['channel' => $channel],
-                ['index' => Criteria::ASC]
+                ['categoryIndex' => Criteria::ASC]
             );
 
         $this->addRFMTypes($event->getForm(), $categories);
@@ -134,7 +134,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             $typeCategories = array_filter(
                 $categories,
                 function (RFMMetricCategory $category) use ($type) {
-                    return $category->getType() === $type;
+                    return $category->getCategoryType() === $type;
                 }
             );
 

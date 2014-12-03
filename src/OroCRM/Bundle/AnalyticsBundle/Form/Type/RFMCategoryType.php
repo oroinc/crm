@@ -28,7 +28,7 @@ class RFMCategoryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('index', 'hidden')
+            ->add('category_index', 'hidden')
             ->add('min_value', 'hidden')
             ->add('max_value', 'hidden');
     }

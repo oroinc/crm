@@ -292,7 +292,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     protected function getCategory($type)
     {
         $category = new RFMMetricCategory();
-        $category->setType($type);
+        $category->setCategoryType($type);
 
         return $category;
     }
