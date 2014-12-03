@@ -18,10 +18,10 @@ The trait extend entity to add opportunity to save and use analytics values.
 
 
 ## Ranking
-Ranking defined in accordance with set values for each of the 3 RFM pockets. 
-You can define separated bordering values for each of the indexes for each of the pockets.
-For each pocket can be defined any amount of indexes. 
-The analytics function calculates which index have to apply to current value of entity and set it for each metric.
+Ranking defined in accordance with set values for each of the 3 RFM metrics. 
+You can define separated bordering values for each of the indexes (pockets) for each of the metrics.
+For each metric can be defined any amount of pockets. 
+The analytics function calculates which pocket have to apply to current value of entity and set it for each metric.
 
 
 ## Providers
