@@ -53,7 +53,7 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateOrder(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        $orderedByIndex = $value->matching(new Criteria(null, ['index' => Criteria::ASC]));
+        $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
 
         $isIncreasing = is_null($orderedByIndex->first()->getMinValue())
             && is_null($orderedByIndex->last()->getMaxValue());

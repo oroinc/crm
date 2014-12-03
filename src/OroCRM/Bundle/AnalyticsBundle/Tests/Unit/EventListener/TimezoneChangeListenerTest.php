@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
 use JMS\JobQueueBundle\Entity\Job;
 
-use OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand;
+use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
@@ -103,7 +103,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($repo));
         $repo->expects($this->once())
             ->method('findOneBy')
-            ->with(['command' => BuildAnalyticsCommand::COMMAND_NAME, 'state' => Job::STATE_PENDING])
+            ->with(['command' => CalculateAnalyticsCommand::COMMAND_NAME, 'state' => Job::STATE_PENDING])
             ->will($this->returnValue($changed));
     }
 }

@@ -169,8 +169,8 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         $category = new RFMMetricCategory();
 
         $category
-            ->setType($type)
-            ->setIndex($index)
+            ->setCategoryIndex($type)
+            ->setCategoryIndex($index)
             ->setMinValue($minValue)
             ->setMaxValue($maxValue);
 

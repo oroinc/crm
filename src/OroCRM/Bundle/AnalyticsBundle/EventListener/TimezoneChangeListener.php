@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-use OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand;
+use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 
 class TimezoneChangeListener
 {
@@ -31,11 +31,11 @@ class TimezoneChangeListener
             return;
         }
 
-        if (!$this->isAlreadyScheduled(BuildAnalyticsCommand::COMMAND_NAME)) {
+        if (!$this->isAlreadyScheduled(CalculateAnalyticsCommand::COMMAND_NAME)) {
             /** @var EntityManager $em */
             $em = $this->registry->getManager();
 
-            $job = new Job(BuildAnalyticsCommand::COMMAND_NAME);
+            $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME);
             $em->persist($job);
             $em->flush($job);
         }

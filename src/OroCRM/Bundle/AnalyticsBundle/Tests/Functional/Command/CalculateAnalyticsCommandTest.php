@@ -3,11 +3,12 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Command;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 
 /**
  * @dbIsolation
  */
-class BuildAnalyticsCommandTest extends WebTestCase
+class CalculateAnalyticsCommandTest extends WebTestCase
 {
     /**
      * @param array $parameters
@@ -36,7 +37,7 @@ class BuildAnalyticsCommandTest extends WebTestCase
             }
         }
 
-        $output = $this->runCommand('oro:cron:build-analytics', $parameters);
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME, $parameters);
         foreach ($expects as $expect) {
             $this->assertContains($expect, $output);
         }
