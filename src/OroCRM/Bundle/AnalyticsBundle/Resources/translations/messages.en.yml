@@ -5,15 +5,14 @@ orocrm:
             delete_row: Delete row
         rfm:
             recency:
-                label: R
+                label: Recency
                 title: Recency
             frequency:
-                label: F
+                label: Frequency
                 title: Frequency
             monetary:
-                label: M
+                label: Monetary
                 title: Monetary
-            score.label: RFM score
         form:
             recency.label: Recency, days
             frequency.label: Frequency

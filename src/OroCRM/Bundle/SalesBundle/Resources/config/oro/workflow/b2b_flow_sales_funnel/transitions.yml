@@ -18,6 +18,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
+                            form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:
@@ -77,6 +78,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
+                            form_type: oro_user_select
                             options:
                                 required: true
                                 constraints:

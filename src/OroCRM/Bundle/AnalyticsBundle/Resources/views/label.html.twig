@@ -1,15 +1,17 @@
 {% if entity is defined and entity.recency is defined and entity.frequency is defined and entity.monetary is defined %}
-    <div class="pull-right label label-warning rfm-analytics-label{% if margin is defined %} rfm-analytics-label-margin{% endif %}">
-        {{ 'orocrm.analytics.rfm.score.label'|trans}}:
-        <span title="{{ 'orocrm.analytics.rfm.recency.title'|trans}}">
-            {{ 'orocrm.analytics.rfm.recency.label'|trans}} {{ entity.recency|default(0) }}
-        </span>
-        <span title="{{ 'orocrm.analytics.rfm.frequency.title'|trans}}">
-            {{ 'orocrm.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default(0) }}
-        </span>
-        <span title="{{ 'orocrm.analytics.rfm.monetary.title'|trans}}">
-            {{ 'orocrm.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default(0) }}
-        </span>
-    </div>
-    <div class="clearfix"></div>
+    {% if vertical is defined %}<div class="rfm-analytics-label-wrapper">{% endif %}
+        <div class="pull-right label label-warning rfm-analytics-label{% if vertical is defined %} rfm-analytics-label-vertical{% endif %}">
+            {% set el = vertical is defined ? 'p' : 'span' %}
+            <{{ el }} title="{{ 'orocrm.analytics.rfm.recency.title'|trans}}">
+                {{ 'orocrm.analytics.rfm.recency.label'|trans}} {{ entity.recency|default('-') }}
+            </{{ el }}>
+            <{{ el }} title="{{ 'orocrm.analytics.rfm.frequency.title'|trans}}">
+                {{ 'orocrm.analytics.rfm.frequency.label'|trans}} {{ entity.frequency|default('-') }}
+            </{{ el }}>
+            <{{ el }} title="{{ 'orocrm.analytics.rfm.monetary.title'|trans}}">
+                {{ 'orocrm.analytics.rfm.monetary.label'|trans}} {{ entity.monetary|default('-') }}
+            </{{ el }}>
+        </div>
+        <div class="clearfix"></div>
+    {% if vertical is defined %}</div>{% endif %}
 {% endif %}

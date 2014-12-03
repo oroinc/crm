@@ -14,11 +14,11 @@ use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
 
-class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
+class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
     const FLUSH_BATCH_SIZE = 25;
 
-    const COMMAND_NAME = 'oro:cron:build-analytics';
+    const COMMAND_NAME = 'oro:cron:analytic:calculate';
 
     /**
      * @var DoctrineHelper
@@ -45,18 +45,18 @@ class BuildAnalyticsCommand extends ContainerAwareCommand implements CronCommand
     {
         $this
             ->setName(self::COMMAND_NAME)
-            ->setDescription('Build analytics')
+            ->setDescription('Calculate all registered analytic metrics')
             ->addOption(
                 'ids',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-                'Entity ids to update'
+                'Customer identity ids for given channel'
             )
             ->addOption(
                 'channel',
                 null,
                 InputOption::VALUE_OPTIONAL,
-                'Entity ids to update'
+                'Data Channel id to process'
             );
     }
 
