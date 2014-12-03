@@ -1,16 +1,15 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Command\DataFixtures;
+namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class LoadChannelData extends AbstractFixture implements DependentFixtureInterface
+class LoadChannelData extends AbstractFixture
 {
     /**
      * @var array
@@ -30,6 +29,13 @@ class LoadChannelData extends AbstractFixture implements DependentFixtureInterfa
             'status' => Channel::STATUS_ACTIVE,
             'reference' => 'Channel.CustomerChannel'
         ],
+        'second supported' => [
+            'customerIdentity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'name' => 'CustomerChannel2',
+            'channelType' => 'magento',
+            'status' => Channel::STATUS_ACTIVE,
+            'reference' => 'Channel.CustomerChannel2'
+        ],
         'notActive' => [
             'customerIdentity' => 'OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface',
             'name' => 'AnalyticsAwareInterfaceChannel',
@@ -38,14 +44,6 @@ class LoadChannelData extends AbstractFixture implements DependentFixtureInterfa
             'reference' => 'Channel.AnalyticsAwareInterface'
         ],
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
-    {
-        return [__NAMESPACE__ . '\LoadEntitiesData'];
-    }
 
     /**
      * {@inheritdoc}
