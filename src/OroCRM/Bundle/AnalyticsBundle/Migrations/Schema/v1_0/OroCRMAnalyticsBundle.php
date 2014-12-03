@@ -28,8 +28,8 @@ class OroCRMAnalyticsBundle implements Migration
         $table = $schema->createTable('orocrm_analytics_rfm_category');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('type', 'string', ['length' => 16]);
-        $table->addColumn('index', 'integer', ['notnull' => true]);
+        $table->addColumn('category_type', 'string', ['length' => 16]);
+        $table->addColumn('category_index', 'integer', ['notnull' => true]);
         $table->addColumn('min_value', 'integer', ['notnull' => false]);
         $table->addColumn('max_value', 'integer', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => true]);

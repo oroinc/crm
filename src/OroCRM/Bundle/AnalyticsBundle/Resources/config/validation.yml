@@ -1,9 +1,9 @@
 OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory:
     constraints:
         - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity:
-            fields: [ index, channel, type ]
+            fields: [ categoryIndex, channel, categoryType ]
     properties:
-        index:
+        categoryIndex:
             - NotBlank: ~
-        type:
+        categoryType:
             - NotBlank: ~

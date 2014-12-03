@@ -21,7 +21,7 @@ define(function (require) {
         };
 
         var getIndexInput = function($row) {
-            return $row.find('[name$="[index]"]');
+            return $row.find('[name$="[category_index]"]');
         };
 
         var getInvisibleInput = function($row) {

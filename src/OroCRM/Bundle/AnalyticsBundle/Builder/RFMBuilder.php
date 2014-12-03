@@ -127,7 +127,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
             /** @var RFMMetricCategory $category */
             $category = end($categories);
             reset($categories);
-            return $category->getIndex();
+            return $category->getCategoryIndex();
         }
 
         // Search for RFM category that match current value
@@ -142,7 +142,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 continue;
             }
 
-            return $category->getIndex();
+            return $category->getCategoryIndex();
         }
 
         return null;
@@ -165,7 +165,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         $categories = $this->doctrineHelper
             ->getEntityRepository('OroCRMAnalyticsBundle:RFMMetricCategory')
-            ->findBy(['channel' => $channelId, 'type' => $type], ['index' => Criteria::ASC]);
+            ->findBy(['channel' => $channelId, 'categoryType' => $type], ['categoryIndex' => Criteria::ASC]);
 
         $this->categories[$channelId][$type] = $categories;
 

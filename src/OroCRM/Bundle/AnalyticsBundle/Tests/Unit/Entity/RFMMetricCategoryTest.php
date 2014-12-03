@@ -40,8 +40,8 @@ class RFMMetricCategoryTest extends \PHPUnit_Framework_TestCase
         return [
             ['channel', $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel')],
             ['owner', $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization')],
-            ['type', RFMMetricCategory::TYPE_RECENCY],
-            ['index', 1],
+            ['category_type', RFMMetricCategory::TYPE_RECENCY],
+            ['category_index', 1],
             ['minValue', 123],
             ['maxValue', 321],
         ];

@@ -18,78 +18,78 @@ class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInter
      */
     protected $data = [
         [
-            'type' => 'recency',
-            'index' => 0,
+            'category_type' => 'recency',
+            'category_index' => 0,
             'minValue' => 0,
             'maxValue' => 1,
             'reference' => 'rfm_r_category_1'
         ],
         [
-            'type' => 'recency',
-            'index' => 1,
+            'category_type' => 'recency',
+            'category_index' => 1,
             'minValue' => 1,
             'maxValue' => 10,
             'reference' => 'rfm_r_category_2'
         ],
         [
-            'type' => 'recency',
-            'index' => 2,
+            'category_type' => 'recency',
+            'category_index' => 2,
             'minValue' => 10,
             'maxValue' => null,
             'reference' => 'rfm_r_category_3'
         ],
         [
-            'type' => 'frequency',
-            'index' => 0,
+            'category_type' => 'frequency',
+            'category_index' => 0,
             'minValue' => 0,
             'maxValue' => 1,
             'reference' => 'rfm_f_category_1'
         ],
         [
-            'type' => 'frequency',
-            'index' => 1,
+            'category_type' => 'frequency',
+            'category_index' => 1,
             'minValue' => 1,
             'maxValue' => 2,
             'reference' => 'rfm_f_category_2'
         ],
         [
-            'type' => 'frequency',
-            'index' => 2,
+            'category_type' => 'frequency',
+            'category_index' => 2,
             'minValue' => 2,
             'maxValue' => 100,
             'reference' => 'rfm_f_category_3'
         ],
         [
-            'type' => 'frequency',
-            'index' => 3,
+            'category_type' => 'frequency',
+            'category_index' => 3,
             'minValue' => 100,
             'maxValue' => null,
             'reference' => 'rfm_f_category_4'
         ],
         [
-            'type' => 'monetary',
-            'index' => 0,
+            'category_type' => 'monetary',
+            'category_index' => 0,
             'minValue' => 0,
             'maxValue' => 1,
             'reference' => 'rfm_m_category_1'
         ],
         [
-            'type' => 'monetary',
-            'index' => 1,
+            'category_type' => 'monetary',
+            'category_index' => 1,
             'minValue' => 1,
             'maxValue' => 10,
             'reference' => 'rfm_m_category_2'
         ],
         [
-            'type' => 'monetary',
-            'index' => 2,
+            'category_type' => 'monetary',
+            'category_index' => 2,
             'minValue' => 10,
             'maxValue' => 500,
             'reference' => 'rfm_m_category_3'
         ],
         [
-            'type' => 'monetary',
-            'index' => 3,
+            'category_type' => 'monetary',
+            'category_index' => 3,
             'minValue' => 500,
             'maxValue' => null,
             'reference' => 'rfm_m_category_4'
