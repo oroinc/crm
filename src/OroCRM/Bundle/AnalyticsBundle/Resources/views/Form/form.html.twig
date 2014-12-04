@@ -1,12 +1,22 @@
 {% if form is defined %}
-    <h4>{{ 'orocrm.analytics.form.rfm_setting.title'|trans }}</h4>
-    {% if form.recency is defined %}
-        {{ form_row(form.recency) }}
-    {% endif %}
-    {% if form.frequency is defined %}
-        {{ form_row(form.frequency) }}
-    {% endif %}
-    {% if form.monetary is defined %}
-        {{ form_row(form.monetary) }}
+    {% if form.recency is defined or form.frequency is defined or form.monetary is defined %}
+        {% set options = {rfm_enable_id: form.rfm_enabled.vars.id} %}
+        <div class="rfm_settings"
+            data-page-component-module="orocrmanalytics/js/app/components/rfm-settings"
+            data-page-component-options="{{ options|json_encode }}">
+            <h4>{{ 'orocrm.analytics.form.rfm_setting.title'|trans }}</h4>
+            
+            {{ form_row(form.rfm_enabled) }}
+
+            {% if form.recency is defined %}
+                {{ form_row(form.recency) }}
+            {% endif %}
+            {% if form.frequency is defined %}
+                {{ form_row(form.frequency) }}
+            {% endif %}
+            {% if form.monetary is defined %}
+                {{ form_row(form.monetary) }}
+            {% endif %}
+        </div>
     {% endif %}
 {% endif %}

@@ -8,6 +8,7 @@ define(function (require) {
 
     return function (options) {
         var $el = options._sourceElement.find('#' + options.containerId),
+            $container = options._sourceElement.closest('.rfm_settings'),
             isIncreasing = options.isIncreasing,
             rowTemplate = $el.data('prototype'),
             rows = 0;
@@ -136,6 +137,8 @@ define(function (require) {
             }
 
             refresh();
+
+            $container.trigger('rfmSettingsRender');
         };
 
         var refresh = function() {
@@ -144,13 +147,18 @@ define(function (require) {
         };
 
         $el.on('click', '.action-add', function() {
-            decorateRow(addRow($(this).closest('.rfm_settings_row')));
-            refresh();
+            console.log($container);
+            if ($container.hasClass('rfm_enabled')) {
+                decorateRow(addRow($(this).closest('.rfm_settings_row')));
+                refresh();
+            }
         });
 
         $el.on('click', '.action-delete', function() {
-            $(this).closest('.rfm_settings_row').remove();
-            refresh();
+            if ($container.hasClass('rfm_enabled')) {
+                $(this).closest('.rfm_settings_row').remove();
+                refresh();
+            }
         });
 
         render();
