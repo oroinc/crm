@@ -82,6 +82,10 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($childForm));
 
+        $form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue(true));
+
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
 
@@ -107,7 +111,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             $em->expects($this->once())->method('remove')->with($this->equalTo($removeEntity));
         }
 
-        $this->extension->postSubmit($event);
+        $this->extension->manageCategories($event);
     }
 
     /**
@@ -250,7 +254,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 );
         }
 
-        $this->extension->preSetData($event);
+        $this->extension->loadCategories($event);
     }
 
     /**

@@ -74,7 +74,6 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'collection' => $this->getCollection(
                     [
                         $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 20),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 20, null),
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
@@ -169,7 +168,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         $category = new RFMMetricCategory();
 
         $category
-            ->setCategoryIndex($type)
+            ->setCategoryType($type)
             ->setCategoryIndex($index)
             ->setMinValue($minValue)
             ->setMaxValue($maxValue);

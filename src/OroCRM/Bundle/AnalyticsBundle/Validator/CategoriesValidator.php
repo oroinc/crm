@@ -36,7 +36,7 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateCount(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        if ($value->count() > self::MIN_CATEGORIES_COUNT) {
+        if ($value->count() >= self::MIN_CATEGORIES_COUNT) {
             return;
         }
 
@@ -53,6 +53,10 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateOrder(PersistentCollection $value, CategoriesConstraint $constraint)
     {
+        if ($value->isEmpty()) {
+            return;
+        }
+
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
 
         $isIncreasing = is_null($orderedByIndex->first()->getMinValue())

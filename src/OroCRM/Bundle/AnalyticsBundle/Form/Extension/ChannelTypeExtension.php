@@ -56,14 +56,14 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'postSubmit']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories']);
     }
 
     /**
      * @param FormEvent $event
      */
-    public function postSubmit(FormEvent $event)
+    public function manageCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
@@ -80,12 +80,19 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 continue;
             }
 
-            /** @var PersistentCollection $categories */
+            /** @var PersistentCollection|RFMMetricCategory[] $categories */
             $child = $form->get($type);
             $categories = $child->getData();
 
             if (!$categories->isDirty()) {
                 continue;
+            }
+
+            $index = 1;
+            foreach ($categories as $category) {
+                $category->setCategoryIndex($index);
+
+                $index++;
             }
 
             /** @var RFMMetricCategory $category */
@@ -105,7 +112,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     /**
      * @param FormEvent $event
      */
-    public function preSetData(FormEvent $event)
+    public function loadCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
