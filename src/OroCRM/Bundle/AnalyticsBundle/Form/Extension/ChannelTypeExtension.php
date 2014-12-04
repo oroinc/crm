@@ -75,6 +75,11 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
+        $rfmEnabled = $form->get('rfm_enabled');
+        $channelData = (array)$channel->getData();
+        $channelData['rfm_enabled'] = (bool)$rfmEnabled->getData();
+        $channel->setData($channelData);
+
         foreach (RFMMetricCategory::$types as $type) {
             if (!$form->has($type)) {
                 continue;
@@ -121,7 +126,20 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 ['categoryIndex' => Criteria::ASC]
             );
 
-        $this->addRFMTypes($event->getForm(), $categories);
+        $channelData = (array)$channel->getData();
+        $rfmEnabled = !empty($channelData['rfm_enabled']);
+        $form = $event->getForm();
+        $form->add(
+            'rfm_enabled',
+            'checkbox',
+            [
+                'label' => 'orocrm.analytics.form.rfm_enable.label',
+                'mapped' => false,
+                'required' => false,
+                'data' => $rfmEnabled
+            ]
+        );
+        $this->addRFMTypes($form, $categories);
     }
 
     /**
@@ -146,8 +164,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $collection->takeSnapshot();
 
-            $constraint = new CategoriesConstraint();
-            $constraint->setType($type);
+//            $constraint = new CategoriesConstraint();
+//            $constraint->setType($type);
 
             $form->add(
                 $type,
@@ -158,7 +176,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                     'mapped' => false,
                     'required' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
-                    'constraints' => [$constraint],
+//                    'constraints' => [$constraint],
                     'data' => $collection,
                 ]
             );
