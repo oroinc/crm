@@ -3,5 +3,8 @@ orocrm:
         less: Less than
         more: More than
         from: From
-        to: to
+        to: To
         na: N/A
+        best: the best
+        worst: the worst
+        delete_row: Delete bucket

@@ -136,7 +136,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 'label' => 'orocrm.analytics.form.rfm_enable.label',
                 'mapped' => false,
                 'required' => false,
-                'data' => $rfmEnabled
+                'data' => $rfmEnabled,
+                'tooltip' => 'orocrm.analytics.rfm.tooltip'
             ]
         );
         $this->addRFMTypes($form, $categories);
