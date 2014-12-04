@@ -79,7 +79,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
-        if (!$form->get(self::RFM_STATE_KEY)->getData()) {
+        $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
+        if (!$rfmEnabled) {
             return;
         }
 
