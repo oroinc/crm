@@ -22,7 +22,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
         $this->resetClient();
         $this->initClient();
 
-        $this->loadFixtures([__NAMESPACE__ . '\DataFixtures\LoadChannelData'], true);
+        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
 
         $options = ['--ids', '--channel'];
         foreach ($options as $option) {

@@ -2,17 +2,16 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 
-use JMS\JobQueueBundle\Entity\Job;
-
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 
 class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|RFMMetricStateManager
      */
-    protected $registry;
+    protected $manager;
 
     /**
      * @var TimezoneChangeListener
@@ -21,9 +20,11 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->registry = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
+        $this->manager = $this->getMockBuilder('OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager')
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->listener = new TimezoneChangeListener($this->registry);
+
+        $this->listener = new TimezoneChangeListener($this->manager);
     }
 
     protected function tearDown()
@@ -33,12 +34,17 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testWasNotChanged()
     {
-        $this->registry->expects($this->never())
-            ->method('getManager');
+        $this->manager->expects($this->never())
+            ->method('resetMetrics');
 
+        $this->manager->expects($this->never())
+            ->method('scheduleRecalculation');
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ConfigUpdateEvent $event */
         $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
             ->disableOriginalConstructor()
             ->getMock();
+
         $event->expects($this->once())
             ->method('isChanged')
             ->with('oro_locale.timezone')
@@ -47,63 +53,30 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
         $this->listener->onConfigUpdate($event);
     }
 
-    public function testChangedButAlreadyScheduled()
-    {
-        $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $event->expects($this->once())
-            ->method('isChanged')
-            ->with('oro_locale.timezone')
-            ->will($this->returnValue(true));
-
-        $this->registry->expects($this->never())
-            ->method('getManager');
-        $this->assertIsChangedCalled(true);
-
-        $this->listener->onConfigUpdate($event);
-    }
-
     public function testSuccessChange()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ConfigUpdateEvent $event */
         $event = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent')
             ->disableOriginalConstructor()
             ->getMock();
+
         $event->expects($this->once())
             ->method('isChanged')
             ->with('oro_locale.timezone')
             ->will($this->returnValue(true));
 
-        $this->assertIsChangedCalled(false);
+        $this->manager->expects($this->once())
+            ->method('resetMetrics');
 
-        $em = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
-            ->getMock();
+        $this->manager->expects($this->once())
+            ->method('scheduleRecalculation');
 
-        $em->expects($this->once())
-            ->method('persist')
-            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
-        $em->expects($this->once())
-            ->method('flush');
+        $this->manager->expects($this->once())
+            ->method('resetMetrics');
 
-        $this->registry->expects($this->once())
-            ->method('getManager')
-            ->will($this->returnValue($em));
+        $this->manager->expects($this->once())
+            ->method('scheduleRecalculation');
 
         $this->listener->onConfigUpdate($event);
-    }
-
-    protected function assertIsChangedCalled($changed)
-    {
-        $repo = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->registry->expects($this->once())->method('getRepository')
-            ->with('JMSJobQueueBundle:Job')
-            ->will($this->returnValue($repo));
-        $repo->expects($this->once())
-            ->method('findOneBy')
-            ->with(['command' => CalculateAnalyticsCommand::COMMAND_NAME, 'state' => Job::STATE_PENDING])
-            ->will($this->returnValue($changed));
     }
 }
