@@ -144,11 +144,15 @@ class RFMMetricStateManagerTest extends WebTestCase
         $this->assertCount(1, $entities);
     }
 
-    public function testScheduleShouldAddGenericJobIfChannelJobExists()
+    public function testScheduleShouldAddGenericJobAndDropChannelJobExists()
     {
         /** @var Channel $channel */
         $channel = $this->getReference('Channel.CustomerChannel');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+
+        /** @var Channel $channel2 */
+        $channel2 = $this->getReference('Channel.CustomerChannel2');
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -160,7 +164,7 @@ class RFMMetricStateManagerTest extends WebTestCase
             $this->assertNotEmpty($entity->getArgs());
         }
 
-        $this->assertCount(1, $entities);
+        $this->assertCount(2, $entities);
 
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
@@ -170,7 +174,11 @@ class RFMMetricStateManagerTest extends WebTestCase
             ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
             ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
 
-        $this->assertCount(2, $entities);
+        $this->assertCount(1, $entities);
+
+        foreach ($entities as $entity) {
+            $this->assertEmpty($entity->getArgs());
+        }
     }
 
     public function testScheduleDifferentChannels()
@@ -194,5 +202,40 @@ class RFMMetricStateManagerTest extends WebTestCase
         }
 
         $this->assertCount(2, $entities);
+    }
+
+    public function testScheduleSameChannel()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+
+        /** @var Job[] $entities */
+        $entities = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
+            ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
+
+        foreach ($entities as $entity) {
+            $this->assertNotEmpty($entity->getArgs());
+        }
+
+        $this->assertCount(1, $entities);
+    }
+
+    public function testScheduleWithoutFlush()
+    {
+        /** @var Channel $channel */
+        $channel = $this->getReference('Channel.CustomerChannel');
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel, false);
+
+        /** @var Job[] $entities */
+        $entities = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
+            ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
+
+        $this->assertEmpty($entities);
     }
 }

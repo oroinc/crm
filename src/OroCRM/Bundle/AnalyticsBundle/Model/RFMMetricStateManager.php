@@ -103,8 +103,10 @@ class RFMMetricStateManager
 
     /**
      * @param Channel $channel
+     *
+     * @param bool $flush
      */
-    public function scheduleRecalculation(Channel $channel = null)
+    public function scheduleRecalculation(Channel $channel = null, $flush = true)
     {
         if ($job = $this->getJob()) {
             return;
@@ -112,14 +114,32 @@ class RFMMetricStateManager
 
         $args = [];
         if ($channel) {
-            $args = [sprintf('--channel=%s', $channel->getId())];
+            $argument  = sprintf('--channel=%s', $channel->getId());
+            $channelJob = $this->getJob($argument);
+            if ($channelJob) {
+                return;
+            }
+
+            $args = [$argument];
+        }
+
+        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME, $args);
+        $em = $this->doctrineHelper->getEntityManager($job);
+
+        if (!$channel) {
+            $channelJobs = $this->getJob('--channel');
+
+            foreach ($channelJobs as $channelJob) {
+                $em->remove($channelJob);
+            }
         }
 
         $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME, $args);
 
-        $em = $this->doctrineHelper->getEntityManager($job);
         $em->persist($job);
-        $em->flush($job);
+        if ($flush) {
+            $em->flush($job);
+        }
     }
 
     /**
@@ -157,6 +177,6 @@ class RFMMetricStateManager
                 ->setParameter('args', '%--channel%');
         }
 
-        return $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getResult();
     }
 }

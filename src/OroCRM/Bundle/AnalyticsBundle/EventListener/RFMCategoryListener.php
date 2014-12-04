@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
-use Doctrine\ORM\Event\PostFlushEventArgs;
 
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -54,6 +53,17 @@ class RFMCategoryListener
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
             $this->handleEntity($entity);
         }
+
+        if (!$this->channels) {
+            return;
+        }
+
+        foreach ($this->channels as $channel) {
+            $this->metricStateManager->resetMetrics($channel);
+            $this->metricStateManager->scheduleRecalculation($channel, false);
+        }
+
+        $uow->computeChangeSets();
     }
 
     /**
@@ -67,18 +77,5 @@ class RFMCategoryListener
 
             $this->channels[$channel->getId()] = $channel;
         }
-    }
-
-    /**
-     * @param PostFlushEventArgs $args
-     */
-    public function postFlush(PostFlushEventArgs $args)
-    {
-        foreach ($this->channels as $channel) {
-            $this->metricStateManager->resetMetrics($channel);
-            $this->metricStateManager->scheduleRecalculation($channel);
-        }
-
-        $this->channels = [];
     }
 }

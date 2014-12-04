@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\EventListener;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
-use Doctrine\ORM\Event\PostFlushEventArgs;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -78,10 +77,6 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $args = new OnFlushEventArgs($em);
 
         $this->listener->onFlush($args);
-
-        $args = new PostFlushEventArgs($em);
-
-        $this->listener->postFlush($args);
     }
 
     /**

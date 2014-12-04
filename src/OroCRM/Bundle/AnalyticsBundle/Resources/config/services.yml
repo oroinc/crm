@@ -74,4 +74,3 @@ services:
             - %orocrm_analytics.entity.rfm_category.class%
         tags:
             - { name: doctrine.event_listener, event: onFlush }
-            - { name: doctrine.event_listener, event: postFlush }
