@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
 
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
+//use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;

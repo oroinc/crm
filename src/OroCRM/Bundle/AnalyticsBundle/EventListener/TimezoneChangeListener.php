@@ -2,24 +2,20 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManager;
-use JMS\JobQueueBundle\Entity\Job;
-
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
-use OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 
 class TimezoneChangeListener
 {
-    /** @var ManagerRegistry */
-    protected $registry;
+    /** @var RFMMetricStateManager */
+    protected $metricStateManager;
 
     /**
-     * @param ManagerRegistry $registry
+     * @param RFMMetricStateManager $metricStateManager
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RFMMetricStateManager $metricStateManager)
     {
-        $this->registry = $registry;
+        $this->metricStateManager = $metricStateManager;
     }
 
     /**
@@ -31,23 +27,7 @@ class TimezoneChangeListener
             return;
         }
 
-        if (!$this->isAlreadyScheduled(BuildAnalyticsCommand::COMMAND_NAME)) {
-            /** @var EntityManager $em */
-            $em = $this->registry->getManager();
-
-            $job = new Job(BuildAnalyticsCommand::COMMAND_NAME);
-            $em->persist($job);
-            $em->flush($job);
-        }
-    }
-
-    /**
-     * @param string $commandName
-     * @return bool
-     */
-    protected function isAlreadyScheduled($commandName)
-    {
-        return (bool)$this->registry->getRepository('JMSJobQueueBundle:Job')
-            ->findOneBy(['command' => $commandName, 'state' => Job::STATE_PENDING]);
+        $this->metricStateManager->resetMetrics();
+        $this->metricStateManager->scheduleRecalculation();
     }
 }
