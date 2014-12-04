@@ -25,9 +25,3 @@
         {{ form_widget(form) }}
     </div>
 {% endblock %}
-
-{% block _orocrm_channel_form_monetary_label %}
-    <label class="control-label" for="{{ id }}">
-        {{ label|trans }}, {{ oro_currency_symbol() }}
-    </label>
-{% endblock %}

@@ -146,8 +146,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $collection->takeSnapshot();
 
-            $constraint = new CategoriesConstraint();
-            $constraint->setType($type);
+//            $constraint = new CategoriesConstraint();
+//            $constraint->setType($type);
 
             $form->add(
                 $type,
@@ -155,10 +155,11 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
                     'label' => sprintf('orocrm.analytics.form.%s.label', $type),
+                    'tooltip' => sprintf('orocrm.analytics.%s.tooltip', $type),
                     'mapped' => false,
                     'required' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
-                    'constraints' => [$constraint],
+//                    'constraints' => [$constraint],
                     'data' => $collection,
                 ]
             );
