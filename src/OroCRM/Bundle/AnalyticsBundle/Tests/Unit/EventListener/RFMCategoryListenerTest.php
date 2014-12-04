@@ -30,7 +30,8 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->listener = new RFMCategoryListener(
             $this->manager,
-            'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory'
+            'OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory',
+            'OroCRM\Bundle\ChannelBundle\Entity\Channel'
         );
     }
 
@@ -38,7 +39,8 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      * @param array $updateEntities
      * @param array $insertEntities
      * @param array $deleteEntities
-     * @param int $expectedChannelResets
+     * @param int $expectedResetMetrics
+     * @param int $expectedScheduleRecalculation
      *
      * @dataProvider entitiesDataProvider
      */
@@ -46,7 +48,8 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         array $updateEntities,
         array $insertEntities,
         array $deleteEntities,
-        $expectedChannelResets
+        $expectedResetMetrics = 0,
+        $expectedScheduleRecalculation = 0
     ) {
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
@@ -68,10 +71,10 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getScheduledEntityDeletions')
             ->will($this->returnValue($deleteEntities));
 
-        $this->manager->expects($this->exactly($expectedChannelResets))
+        $this->manager->expects($this->exactly($expectedResetMetrics))
             ->method('resetMetrics');
 
-        $this->manager->expects($this->exactly($expectedChannelResets))
+        $this->manager->expects($this->exactly($expectedScheduleRecalculation))
             ->method('scheduleRecalculation');
 
         $args = new OnFlushEventArgs($em);
@@ -85,14 +88,16 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     public function entitiesDataProvider()
     {
         return [
-            'without reset' => [[], [], [], 0],
-            'not supported entities' => [[new \stdClass()], [new \stdClass()], [new \stdClass()], 0],
-            'one channel insertions' => [[$this->getCategory(1)], [], [], 1],
-            'updates' => [[], [$this->getCategory(1)], [], 1],
-            'deletions' => [[], [], [$this->getCategory(1)], 1],
-            'full' => [[$this->getCategory(1)], [$this->getCategory(1)], [$this->getCategory(1)], 1],
-            'two channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(1)], 2],
-            'three channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(3)], 3],
+            'without reset' => [[], [], []],
+            'not supported entities' => [[new \stdClass()], [new \stdClass()], [new \stdClass()]],
+            'one channel insertions' => [[$this->getCategory(1)], [], [], 1, 1],
+            'updates' => [[], [$this->getCategory(1)], [], 1, 1],
+            'deletions' => [[], [], [$this->getCategory(1)], 1, 1],
+            'full' => [[$this->getCategory(1)], [$this->getCategory(1)], [$this->getCategory(1)], 1, 1],
+            'two channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(1)], 2, 2],
+            'three channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(3)], 3, 3],
+            'channel to drop' => [[], [new Channel()], [], 1],
+            'channel with category' => [[$this->getCategory(1)], [new Channel()], [], 2, 1],
         ];
     }
 

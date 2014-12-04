@@ -43,6 +43,7 @@ services:
         class: %orocrm_analytics.form.channel_type_extension.class%
         arguments:
             - @oro_entity.doctrine_helper
+            - @orocrm_analytics.model.rfm_state_manager
             - %orocrm_analytics.model.rfm_aware_interface%
             - %orocrm_analytics.entity.rfm_category.class%
         tags:
@@ -72,5 +73,6 @@ services:
         arguments:
             - @orocrm_analytics.model.rfm_state_manager
             - %orocrm_analytics.entity.rfm_category.class%
+            - %orocrm_channel.entity.class%
         tags:
             - { name: doctrine.event_listener, event: onFlush }

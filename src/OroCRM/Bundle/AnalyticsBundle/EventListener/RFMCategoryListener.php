@@ -21,18 +21,30 @@ class RFMCategoryListener
     protected $categoryClass;
 
     /**
+     * @var string
+     */
+    protected $channelClass;
+
+    /**
      * @var Channel[]
      */
-    protected $channels = [];
+    protected $channelsToRecalculate = [];
+
+    /**
+     * @var Channel[]
+     */
+    protected $channelsToDrop = [];
 
     /**
      * @param RFMMetricStateManager $metricStateManager
      * @param string $categoryClass
+     * @param string $channelClass
      */
-    public function __construct(RFMMetricStateManager $metricStateManager, $categoryClass)
+    public function __construct(RFMMetricStateManager $metricStateManager, $categoryClass, $channelClass)
     {
         $this->metricStateManager = $metricStateManager;
         $this->categoryClass = $categoryClass;
+        $this->channelClass = $channelClass;
     }
 
     /**
@@ -54,16 +66,18 @@ class RFMCategoryListener
             $this->handleEntity($entity);
         }
 
-        if (!$this->channels) {
-            return;
-        }
-
-        foreach ($this->channels as $channel) {
+        foreach ($this->channelsToRecalculate as $channel) {
             $this->metricStateManager->resetMetrics($channel);
             $this->metricStateManager->scheduleRecalculation($channel, false);
         }
 
-        $uow->computeChangeSets();
+        foreach ($this->channelsToDrop as $channel) {
+            $this->metricStateManager->resetMetrics($channel);
+        }
+
+        if ($this->channelsToRecalculate || $this->channelsToDrop) {
+            $uow->computeChangeSets();
+        }
     }
 
     /**
@@ -75,7 +89,11 @@ class RFMCategoryListener
         if ($entity instanceof $this->categoryClass) {
             $channel = $entity->getChannel();
 
-            $this->channels[$channel->getId()] = $channel;
+            $this->channelsToRecalculate[$channel->getId()] = $channel;
+        }
+
+        if ($entity instanceof $this->channelClass) {
+            $this->channelsToDrop[$entity->getId()] = $entity;
         }
     }
 }
