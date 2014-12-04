@@ -96,9 +96,30 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
             'full' => [[$this->getCategory(1)], [$this->getCategory(1)], [$this->getCategory(1)], 1, 1],
             'two channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(1)], 2, 2],
             'three channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(3)], 3, 3],
-            'channel to drop' => [[], [new Channel()], [], 1],
-            'channel with category' => [[$this->getCategory(1)], [new Channel()], [], 2, 1],
+            'channel without key' => [[], [$this->getChannel()], []],
+            'channel to drop' => [[], [$this->getChannel(['rfm_require_drop' => true])], [], 1],
+            'channel with category' => [
+                [$this->getCategory(1)],
+                [$this->getChannel(['rfm_require_drop' => true])],
+                [],
+                2,
+                1
+            ],
         ];
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return Channel
+     */
+    protected function getChannel(array $data = [])
+    {
+        $channel = new Channel();
+
+        $channel->setData($data);
+
+        return $channel;
     }
 
     /**

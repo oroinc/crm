@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
@@ -92,7 +93,16 @@ class RFMCategoryListener
             $this->channelsToRecalculate[$channel->getId()] = $channel;
         }
 
+        /** @var Channel $entity */
         if ($entity instanceof $this->channelClass) {
+            $data = $entity->getData();
+            if (empty($data[ChannelTypeExtension::RFM_REQUIRE_DROP_KEY])) {
+                return;
+            }
+
+            unset($data[ChannelTypeExtension::RFM_REQUIRE_DROP_KEY]);
+            $entity->setData($data);
+
             $this->channelsToDrop[$entity->getId()] = $entity;
         }
     }
