@@ -88,13 +88,6 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 continue;
             }
 
-            $index = 1;
-            foreach ($categories as $category) {
-                $category->setCategoryIndex($index);
-
-                $index++;
-            }
-
             /** @var RFMMetricCategory $category */
             foreach ($categories->getInsertDiff() as $category) {
                 $category
