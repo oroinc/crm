@@ -91,7 +91,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 
         $childForm->expects($this->any())
             ->method('getData')
-            ->will($this->onConsecutiveCalls($collection, $this->getCollection(), $this->getCollection()));
+            ->will($this->onConsecutiveCalls(true, $collection, $this->getCollection(), $this->getCollection()));
 
         $this->doctrineHelper->expects($this->any())
             ->method('getEntityManager')
@@ -124,7 +124,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->getChannelMock('\stdClass')
             ],
             'supported identity' => [
-                $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'), 1, 1
             ],
         ];
     }

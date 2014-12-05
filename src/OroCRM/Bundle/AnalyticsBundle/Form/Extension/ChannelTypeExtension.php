@@ -290,6 +290,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
             throw new \InvalidArgumentException(sprintf('%s form child is missing'));
         }
 
-        return filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
+        $data = $form->get(self::RFM_STATE_KEY)->getData();
+
+        return filter_var($data, FILTER_VALIDATE_BOOLEAN);
     }
 }
