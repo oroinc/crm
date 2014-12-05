@@ -280,7 +280,6 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-<<<<<<< HEAD
      * @param \PHPUnit_Framework_MockObject_MockObject $channel
      * @param bool $hasStateForm
      * @param bool $isEnabled
