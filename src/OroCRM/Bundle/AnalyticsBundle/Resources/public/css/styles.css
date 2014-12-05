@@ -7,9 +7,13 @@
     height: 14px;
 }
 
-.rfm-settings-data span {
+.rfm-settings-data .grid span {
     display: inline-block;
     width: 70px;
+}
+
+.rfm-settings-data .alert span {
+    display: block;
 }
 
 .rfm-settings .rfm-settings-data .grid {

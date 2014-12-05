@@ -24,6 +24,33 @@
                     {% endif %}
                 </div>
 
+                {% if form.recency.vars.errors|length > 0 or form.frequency.vars.errors|length > 0 or form.monetary.vars.errors|length > 0 %}
+                    <div class="alert alert-error">
+                        <ul>
+                            {% if form.recency.vars.errors|length > 0 %}
+                                <li>
+                                    <strong>{{ 'orocrm.analytics.rfm.recency.label'|trans }}</strong>
+                                    {{ form_errors(form.recency) }}
+                                </li>
+                            {% endif %}
+
+                            {% if form.frequency.vars.errors|length > 0 %}
+                                <li>
+                                    <strong>{{ 'orocrm.analytics.rfm.frequency.label'|trans }}</strong>
+                                    {{ form_errors(form.frequency) }}
+                                </li>
+                            {% endif %}
+
+                            {% if form.monetary.vars.errors|length > 0 %}
+                                <li>
+                                    <strong>{{ 'orocrm.analytics.rfm.monetary.label'|trans }}</strong>
+                                    {{ form_errors(form.monetary) }}
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endif %}
+
                 <table class="grid table-hover table table-bordered table-condensed">
                     <thead>
                     <tr>
