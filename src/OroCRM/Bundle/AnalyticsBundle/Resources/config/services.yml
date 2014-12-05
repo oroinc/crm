@@ -80,5 +80,6 @@ services:
         arguments:
             - @orocrm_analytics.model.rfm_state_manager
             - %orocrm_analytics.entity.rfm_category.class%
+            - %orocrm_channel.entity.class%
         tags:
             - { name: doctrine.event_listener, event: onFlush }

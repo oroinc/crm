@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
@@ -32,7 +33,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_3';
     }
 
     /**
@@ -72,6 +73,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('status', 'boolean', []);
         $table->addColumn('channel_type', 'string', ['length' => 255]);
+        $table->addColumn('data', Type::JSON_ARRAY, ['notnull' => false]);
         $table->addColumn('customer_identity', 'string', ['length' => 255]);
         $table->addColumn('createdAt', 'datetime', []);
         $table->addColumn('updatedAt', 'datetime', ['notnull' => false]);
