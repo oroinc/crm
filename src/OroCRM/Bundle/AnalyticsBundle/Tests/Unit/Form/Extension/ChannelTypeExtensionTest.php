@@ -380,7 +380,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getConstraint($type)
     {
-        $constraint = new CategoriesConstraint();
+        $constraint = new CategoriesConstraint(['groups' => 'RFMCategory']);
         $constraint->setType($type);
 
         return $constraint;
@@ -421,9 +421,53 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
         return $category;
     }
 
-
     public function testGetExtendedType()
     {
         $this->assertEquals('orocrm_channel_form', $this->extension->getExtendedType());
+    }
+
+    /**
+     * @param bool $feature
+     * @param array $expected
+     *
+     * @dataProvider validationGroupsDataProvider
+     */
+    public function testSetDefaults($feature, array $expected)
+    {
+        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($form));
+        $form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue($feature));
+        $form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($feature));
+
+        $reflector = new \ReflectionClass(get_class($this->extension));
+        $method = $reflector->getMethod('getValidationGroups');
+        $method->setAccessible(true);
+        /** @var callable $result */
+        $result = $method->invokeArgs($this->extension, []);
+
+        $this->assertEquals($expected, $result($form));
+    }
+
+    /**
+     * @return array
+     */
+    public function validationGroupsDataProvider()
+    {
+        return [
+            'validate' => [
+                true,
+                ['Default', 'RFMCategory']
+            ],
+            'not validate' => [
+                false,
+                ['Default']
+            ],
+        ];
     }
 }

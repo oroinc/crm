@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
@@ -62,6 +63,19 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
         $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'handleState'], 10);
         $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories'], 20);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'data_class' => 'OroCRM\Bundle\ChannelBundle\Entity\Channel',
+                'validation_groups' => $this->getValidationGroups()
+            ]
+        );
     }
 
     /**
@@ -209,7 +223,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $collection->takeSnapshot();
 
-            $constraint = new CategoriesConstraint();
+            $constraint = new CategoriesConstraint(['groups' => 'RFMCategory']);
             $constraint->setType($type);
 
             $form->add(
@@ -246,5 +260,30 @@ class ChannelTypeExtension extends AbstractTypeExtension
         }
 
         return in_array($this->interface, class_implements($customerIdentity));
+    }
+
+    /**
+     * @return callable
+     */
+    protected function getValidationGroups()
+    {
+        return function (FormInterface $form) {
+            if ($this->isRFMEnabled($form)) {
+                return ['Default', 'RFMCategory'];
+            } else {
+                return ['Default'];
+            }
+        };
+    }
+
+    /**
+     * @param FormInterface $form
+     * @return mixed
+     */
+    protected function isRFMEnabled(FormInterface $form)
+    {
+        return
+            $form->has(self::RFM_STATE_KEY)
+            && filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
     }
 }
