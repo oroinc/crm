@@ -108,7 +108,7 @@ class RFMMetricStateManager
      */
     public function scheduleRecalculation(Channel $channel = null, $flush = true)
     {
-        if ($job = $this->getJob()) {
+        if ($this->getJob()) {
             return;
         }
 
@@ -134,8 +134,6 @@ class RFMMetricStateManager
             }
         }
 
-        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME, $args);
-
         $em->persist($job);
         if ($flush) {
             $em->flush($job);
@@ -145,7 +143,7 @@ class RFMMetricStateManager
     /**
      * @param string $args
      *
-     * @return Job|null
+     * @return Job[]
      */
     protected function getJob($args = null)
     {
