@@ -156,8 +156,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     protected function getCategories($channelId, $type)
     {
-        if (
-            array_key_exists($channelId, $this->categories)
+        if (array_key_exists($channelId, $this->categories)
             && array_key_exists($type, $this->categories[$channelId])
         ) {
             return $this->categories[$channelId][$type];
