@@ -3,7 +3,7 @@
 Bundle provides analytics opportunities, tools for recalculation and analytics data visualization.
 Can be apply to Channel entities.
 The analytics data are available for build the segments and reports.
-For available at now RMF metrics you can use this data for definition of columns, conditions and filters of your segments.
+For available at now RFM metrics you can use this data for definition of columns, conditions and filters of your segments.
 
 ## RFM
 Recency, Frequency, Monetary ([RFM](https://en.wikipedia.org/wiki/RFM_\(customer_value\))) Configured on Channel level.
