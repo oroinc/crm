@@ -188,7 +188,7 @@ class Workflow extends AbstractPageEntity
         $this->test->byId('transition-b2b_flow_sales_funnel-reopen')->click();
         sleep(1);
         $this->waitForAjax();
-        $this->test->byXpath("//div[div[contains(., 'Reopen')]]//a[text()='Ok']")->click();
+        $this->test->byXpath("//div[div[contains(., 'Reopen')]]//a[text()='OK']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
 
