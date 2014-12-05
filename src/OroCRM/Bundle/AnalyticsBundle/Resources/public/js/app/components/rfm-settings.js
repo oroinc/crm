@@ -11,9 +11,9 @@ define(function (require) {
         rowTemplate = _.template(
             '<tr>' +
             '<td class="rfm-cell-index"></td>' +
-            '<td class="rfm-cell-recency"><%= recency %></td>' +
-            '<td class="rfm-cell-frequency"><%= frequency %></td>' +
-            '<td class="rfm-cell-monetary"><%= monetary %></td>' +
+            '<td class="rfm-cell-recency"></td>' +
+            '<td class="rfm-cell-frequency"></td>' +
+            '<td class="rfm-cell-monetary"></td>' +
             '<td class="action-cell"><a href="#" class="action-delete" title="<%= _.__("orocrm.analytics.delete_row") %>"><i class="icon-remove hide-text"></i></a></td>' +
             '</tr>'
         );
@@ -90,8 +90,17 @@ define(function (require) {
             });
         };
 
-        var createSettingsRow = function (recency, frequency, monetary) {
-            return $(rowTemplate({recency: recency, frequency: frequency, monetary: monetary}));
+        var createSettingsRow = function (recency, frequency, monetary, append) {
+            var $row = $(rowTemplate());
+            $(recency).appendTo($row.find('.rfm-cell-recency'));
+            $(frequency).appendTo($row.find('.rfm-cell-frequency'));
+            $(monetary).appendTo($row.find('.rfm-cell-monetary'));
+
+            if (append) {
+                $row.appendTo($table);
+            }
+
+            return $row;
         };
 
         var getPreparedTemplate = function (type) {
@@ -190,15 +199,20 @@ define(function (require) {
                 decorateLastRow(addRow());
                 decorateFirstRow(addRow());
             } else {
-                decorateFirstRow(createSettingsRow(existingRRows[0], existingFRows[0], existingMRows[0]));
+                decorateFirstRow(createSettingsRow(existingRRows[0], existingFRows[0], existingMRows[0], true));
                 if (totalRows > 2) {
                     for (var i = 1; i < totalRows - 1; i++) {
-                        decorateRow(createSettingsRow(existingRRows[i], existingFRows[i], existingMRows[i]));
+                        decorateRow(createSettingsRow(existingRRows[i], existingFRows[i], existingMRows[i], true));
                     }
                 }
 
                 decorateLastRow(
-                    createSettingsRow(existingRRows[lastRowIdx], existingFRows[lastRowIdx], existingMRows[lastRowIdx])
+                    createSettingsRow(
+                        existingRRows[lastRowIdx],
+                        existingFRows[lastRowIdx],
+                        existingMRows[lastRowIdx],
+                        true
+                    )
                 );
             }
 
@@ -235,5 +249,6 @@ define(function (require) {
         $enableEl.on('click', enableHandler);
 
         adoptExistingRecords();
+        enableHandler();
     };
 });
