@@ -12,8 +12,11 @@ parameters:
     orocrm_analytics.form.channel_type_extension.class: OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
 
     orocrm_analytics.placeholder.rfm_filter.class: OroCRM\Bundle\AnalyticsBundle\Placeholder\FRMAwareFilter
+
     orocrm_analytics.event_listener.timezone_change.class: OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
     orocrm_analytics.event_listener.rfm_category.class: OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener
+
+    orocrm_analytics.validator.categories.class: OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesValidator
 
     orocrm_analytics.model.rfm_state_manager.class: OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
 services:
@@ -59,6 +62,11 @@ services:
             - @orocrm_analytics.model.rfm_state_manager
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
+
+    orocrm_analytics.validator.categories:
+        class: %orocrm_analytics.validator.categories.class%
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_analytics.categories_validator }
 
     orocrm_analytics.model.rfm_state_manager:
         class: %orocrm_analytics.model.rfm_state_manager.class%
