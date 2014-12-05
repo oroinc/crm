@@ -5,6 +5,6 @@ orocrm:
         from: From
         to: To
         na: N/A
-        best: the best
-        worst: the worst
+        best: best
+        worst: worst
         delete_row: Delete bucket

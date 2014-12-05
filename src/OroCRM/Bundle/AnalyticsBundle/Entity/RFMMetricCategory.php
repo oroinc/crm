@@ -74,16 +74,16 @@ class RFMMetricCategory
     protected $categoryIndex;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="min_value", type="integer", nullable=true)
+     * @ORM\Column(name="min_value", type="float", nullable=true)
      */
     protected $minValue;
 
     /**
-     * @var int
+     * @var float
      *
-     * @ORM\Column(name="max_value", type="integer", nullable=true)
+     * @ORM\Column(name="max_value", type="float", nullable=true)
      */
     protected $maxValue;
 
@@ -154,7 +154,7 @@ class RFMMetricCategory
     /**
      * Set minValue
      *
-     * @param integer $minValue
+     * @param float $minValue
      * @return RFMMetricCategory
      */
     public function setMinValue($minValue)
@@ -167,7 +167,7 @@ class RFMMetricCategory
     /**
      * Get minValue
      *
-     * @return integer
+     * @return float
      */
     public function getMinValue()
     {
@@ -177,7 +177,7 @@ class RFMMetricCategory
     /**
      * Set maxValue
      *
-     * @param integer $maxValue
+     * @param float $maxValue
      * @return RFMMetricCategory
      */
     public function setMaxValue($maxValue)
@@ -190,7 +190,7 @@ class RFMMetricCategory
     /**
      * Get maxValue
      *
-     * @return integer 
+     * @return float
      */
     public function getMaxValue()
     {

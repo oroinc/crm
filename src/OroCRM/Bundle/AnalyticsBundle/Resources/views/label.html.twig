@@ -1,4 +1,4 @@
-{% if entity is defined and entity.recency is defined and entity.frequency is defined and entity.monetary is defined %}
+{% if entity.dataChannel.data.rfm_enabled and entity is defined and entity.recency is defined and entity.frequency is defined and entity.monetary is defined %}
     {% if vertical is defined %}<div class="rfm-analytics-label-wrapper">{% endif %}
         <div class="pull-right label label-warning rfm-analytics-label{% if vertical is defined %} rfm-analytics-label-vertical{% endif %}">
             {% set el = vertical is defined ? 'p' : 'span' %}

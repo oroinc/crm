@@ -21,15 +21,6 @@
     margin-bottom: 10px;
 }
 
-.rfm-settings .rfm-settings-data .table-bordered th,
-.rfm-settings .rfm-settings-data .table-bordered td {
-    border-left: none;
-}
-
-.rfm-settings .rfm-settings-data .table-bordered {
-    border-left: 1px solid #ddd;
-}
-
 .rfm-settings .rfm-settings-data {
     display: none;
 }
