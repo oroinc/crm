@@ -9,7 +9,6 @@ use Doctrine\ORM\PersistentCollection;
 
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
@@ -46,12 +45,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormBuilderInterface $builder */
         $builder = $this->getMock('Symfony\Component\Form\FormBuilderInterface');
 
-        $builder->expects($this->exactly(2))
-            ->method('addEventListener')
-            ->withConsecutive(
-                [$this->equalTo(FormEvents::PRE_SET_DATA), $this->isType('array')],
-                [$this->equalTo(FormEvents::POST_SUBMIT), $this->isType('array')]
-            );
+        $builder->expects($this->atLeastOnce())->method('addEventListener');
 
         $this->extension->buildForm($builder, []);
     }
@@ -198,9 +192,21 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($metadata));
 
         if ($categories) {
-            $form->expects($this->exactly(3))
+            $form->expects($this->exactly(4))
                 ->method('add')
                 ->withConsecutive(
+                    [
+                        $this->equalTo(ChannelTypeExtension::RFM_STATE_KEY),
+                        $this->isType('string'),
+                        $this->equalTo(
+                            [
+                                'label' => 'orocrm.analytics.form.rfm_enable.label',
+                                'mapped' => false,
+                                'required' => false,
+                                'data' => false,
+                            ]
+                        )
+                    ],
                     [
                         $this->equalTo('recency'),
                         $this->equalTo('orocrm_analytics_rfm_category_settings'),
@@ -269,6 +275,100 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     $this->getCategory(RFMMetricCategory::TYPE_RECENCY),
                     $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)
                 ]
+            ],
+        ];
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $channel
+     * @param bool $hasStateForm
+     * @param bool $isEnabled
+     * @param array $actualData
+     * @param array $expectedData
+     *
+     * @dataProvider stateDataProvider
+     */
+    public function testHandleState(
+        $channel,
+        $hasStateForm,
+        $isEnabled = null,
+        $actualData = null,
+        $expectedData = null
+    ) {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
+        $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
+
+        $event->expects($this->once())
+            ->method('getData')
+            ->will($this->returnValue($channel));
+
+        $form = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue($hasStateForm));
+        $event->expects($this->any())
+            ->method('getForm')
+            ->will($this->returnValue($form));
+
+        $stateForm = $this->getMock('Symfony\Component\Form\FormInterface');
+        $form->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($stateForm));
+        $stateForm->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($isEnabled));
+
+        if ($actualData) {
+            $channel->expects($this->any())
+                ->method('getData')
+                ->will($this->returnValue($actualData));
+        }
+
+        if ($expectedData) {
+            $channel->expects($this->any())
+                ->method('setData')
+                ->will($this->returnValue($expectedData));
+        } else {
+            $channel->expects($this->never())->method('setData');
+        }
+
+        $this->extension->handleState($event);
+    }
+
+    /**
+     * @return array
+     */
+    public function stateDataProvider()
+    {
+        return [
+            'empty customer identity' => [$this->getChannelMock(), false],
+            'has not state form' => [$this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'), false],
+            'empty data' => [
+                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'hasStateForm' => true,
+                'isEnabled' => false,
+                'actualData' => [],
+                'expectedData' => ['rfm_enabled' => false],
+            ],
+            'data was not changed' => [
+                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'hasStateForm' => true,
+                'isEnabled' => false,
+                'actualData' => ['rfm_enabled' => false],
+            ],
+            'enable' => [
+                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'hasStateForm' => true,
+                'isEnabled' => true,
+                'actualData' => ['rfm_enabled' => false],
+                'expectedData' => ['rfm_enabled' => true],
+            ],
+            'disable' => [
+                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'hasStateForm' => true,
+                'isEnabled' => false,
+                'actualData' => ['rfm_enabled' => true],
+                'expectedData' => ['rfm_enabled' => true, 'rfm_require_drop' => true],
             ],
         ];
     }

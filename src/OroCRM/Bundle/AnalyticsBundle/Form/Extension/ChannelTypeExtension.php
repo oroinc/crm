@@ -21,6 +21,9 @@ use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
+    const RFM_STATE_KEY = 'rfm_enabled';
+    const RFM_REQUIRE_DROP_KEY = 'rfm_require_drop';
+
     /**
      * @var DoctrineHelper
      */
@@ -57,7 +60,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories']);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'handleState'], 10);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories'], 20);
     }
 
     /**
@@ -75,10 +79,14 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
-        $rfmEnabled = $form->get('rfm_enabled');
-        $channelData = (array)$channel->getData();
-        $channelData['rfm_enabled'] = (bool)$rfmEnabled->getData();
-        $channel->setData($channelData);
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return;
+        }
+
+        $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
+        if (!$rfmEnabled) {
+            return;
+        }
 
         foreach (RFMMetricCategory::$types as $type) {
             if (!$form->has($type)) {
@@ -105,6 +113,43 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 $em->remove($category);
             }
         }
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function handleState(FormEvent $event)
+    {
+        /** @var Channel $channel */
+        $channel = $event->getData();
+        if (!$this->isApplicable($channel)) {
+            return;
+        }
+
+        $form = $event->getForm();
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return;
+        }
+
+        $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
+
+        $data = $channel->getData();
+        if (!$data) {
+            $data = [];
+        }
+
+        if (array_key_exists(self::RFM_STATE_KEY, $data) && $data[self::RFM_STATE_KEY] === $rfmEnabled) {
+            return;
+        }
+
+        if (!$rfmEnabled) {
+            $data[self::RFM_REQUIRE_DROP_KEY] = true;
+        }
+
+        $data[self::RFM_STATE_KEY] = $rfmEnabled;
+
+        $channel->setData($data);
+        $event->setData($channel);
     }
 
     /**
