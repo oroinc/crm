@@ -1,6 +1,5 @@
-.rfm-settings-data {
-    margin-left: 170px;
-    width: 700px;
+.control-group.rfm-settings-data {
+    max-width: 890px;
 }
 
 .rfm-settings-data input {
@@ -13,12 +12,9 @@
     width: 70px;
 }
 
-.rfm-settings .rfm-settings-data {
-    display: none;
-}
-
 .rfm-settings .rfm-settings-data .grid {
-    margin-top: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 
 .rfm-settings .rfm-settings-data .table-bordered th,
@@ -28,6 +24,10 @@
 
 .rfm-settings .rfm-settings-data .table-bordered {
     border-left: 1px solid #ddd;
+}
+
+.rfm-settings .rfm-settings-data {
+    display: none;
 }
 
 .rfm-settings.rfm-enabled .rfm-settings-data {
