@@ -97,27 +97,42 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
             'two channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(1)], 2, 2],
             'three channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(3)], 3, 3],
             'channel without key' => [[], [$this->getChannel()], []],
-            'channel to drop' => [[], [$this->getChannel(['rfm_require_drop' => true])], [], 1],
+            'channel to drop' => [[], [$this->getChannel(1, ['rfm_require_drop' => true])], [], 1],
             'channel with category' => [
-                [$this->getCategory(1)],
-                [$this->getChannel(['rfm_require_drop' => true])],
-                [],
-                2,
-                1
+                'updateEntities' => [$this->getCategory(1)],
+                'insertEntities' => [$this->getChannel(2, ['rfm_require_drop' => true])],
+                'deleteEntities' => [],
+                'expectedResetMetrics' => 2,
+                'expectedScheduleRecalculation' => 1,
+            ],
+            'skip dropped channel recalculation' => [
+                'updateEntities' => [$this->getCategory(1)],
+                'insertEntities' => [$this->getChannel(1, ['rfm_require_drop' => true])],
+                'deleteEntities' => [],
+                'expectedResetMetrics' => 1,
+                'expectedScheduleRecalculation' => 0,
             ],
         ];
     }
 
     /**
+     * @param int $channelId
      * @param array $data
      *
      * @return Channel
      */
-    protected function getChannel(array $data = [])
+    protected function getChannel($channelId = 1, array $data = [])
     {
-        $channel = new Channel();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
-        $channel->setData($data);
+        $channel->expects($this->any())
+            ->method('getId')
+            ->will($this->returnValue($channelId));
+
+        $channel->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue($data));
 
         return $channel;
     }
@@ -129,16 +144,9 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCategory($channelId)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-
-        $channel->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue($channelId));
-
         $category = new RFMMetricCategory();
 
-        $category->setChannel($channel);
+        $category->setChannel($this->getChannel($channelId));
 
         return $category;
     }

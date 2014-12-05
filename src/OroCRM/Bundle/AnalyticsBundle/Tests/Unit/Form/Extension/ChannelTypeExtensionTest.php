@@ -124,7 +124,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->getChannelMock('\stdClass')
             ],
             'supported identity' => [
-                $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'), 1, 1
+                $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                1,
+                1
             ],
         ];
     }
@@ -198,64 +200,46 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                     [
                         $this->equalTo(ChannelTypeExtension::RFM_STATE_KEY),
                         $this->isType('string'),
-                        $this->equalTo(
-                            [
-                                'label' => 'orocrm.analytics.form.rfm_enable.label',
-                                'mapped' => false,
-                                'required' => false,
-                                'data' => false,
-                            ]
-                        )
+                        $this->isType('array')
                     ],
                     [
                         $this->equalTo('recency'),
                         $this->equalTo('orocrm_analytics_rfm_category_settings'),
-                        $this->equalTo(
-                            [
-                                'rfm_type' => 'recency',
-                                'label' => 'orocrm.analytics.form.recency.label',
-                                'mapped' => false,
-                                'required' => false,
-                                'error_bubbling' => false,
-                                'is_increasing' => true,
-                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_RECENCY)],
-                                'data' => $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
-                            ]
-                        )
+                        $this->callback(
+                            function ($options) {
+                                $this->assertEquals(
+                                    $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
+                                    $options['data']
+                                );
+
+                                return true;
+                            }
+                        ),
                     ],
                     [
                         $this->equalTo('frequency'),
                         $this->equalTo('orocrm_analytics_rfm_category_settings'),
-                        $this->equalTo(
-                            [
-                                'rfm_type' => 'frequency',
-                                'label' => 'orocrm.analytics.form.frequency.label',
-                                'mapped' => false,
-                                'required' => false,
-                                'error_bubbling' => false,
-                                'is_increasing' => false,
-                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_FREQUENCY)],
-                                'data' => $this->getCollection(
-                                    [1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]
-                                ),
-                            ]
-                        )
+                        $this->callback(
+                            function ($options) {
+                                $this->assertEquals(
+                                    $this->getCollection([1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]),
+                                    $options['data']
+                                );
+
+                                return true;
+                            }
+                        ),
                     ],
                     [
                         $this->equalTo('monetary'),
                         $this->equalTo('orocrm_analytics_rfm_category_settings'),
-                        $this->equalTo(
-                            [
-                                'rfm_type' => 'monetary',
-                                'label' => 'orocrm.analytics.form.monetary.label',
-                                'mapped' => false,
-                                'required' => false,
-                                'error_bubbling' => false,
-                                'is_increasing' => false,
-                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_MONETARY)],
-                                'data' => $this->getCollection([]),
-                            ]
-                        )
+                        $this->callback(
+                            function ($options) {
+                                $this->assertEquals($this->getCollection([]), $options['data']);
+
+                                return true;
+                            }
+                        ),
                     ]
                 );
         }

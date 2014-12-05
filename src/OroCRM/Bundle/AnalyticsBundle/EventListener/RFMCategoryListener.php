@@ -67,13 +67,17 @@ class RFMCategoryListener
             $this->handleEntity($entity);
         }
 
-        foreach ($this->channelsToRecalculate as $channel) {
-            $this->metricStateManager->resetMetrics($channel);
-            $this->metricStateManager->scheduleRecalculation($channel, false);
-        }
-
         foreach ($this->channelsToDrop as $channel) {
             $this->metricStateManager->resetMetrics($channel);
+        }
+
+        foreach ($this->channelsToRecalculate as $channel) {
+            if (array_key_exists($channel->getId(), $this->channelsToDrop)) {
+                continue;
+            }
+
+            $this->metricStateManager->resetMetrics($channel);
+            $this->metricStateManager->scheduleRecalculation($channel, false);
         }
 
         if ($this->channelsToRecalculate || $this->channelsToDrop) {
