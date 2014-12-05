@@ -1,0 +1,6 @@
+orocrm:
+    analytics:
+        rfm.tooltip: RFM is a popular set of metrics that you can use to evaluate and your customers and quickly identify the best ones.
+        recency.tooltip: Recency value is the number of days since the last purchase. Less days means better score, no orders is the worst score.
+        frequency.tooltip: Frequency value is the number of orders placed by the customer in the last 365 days. More orders means better score.
+        monetary.tooltip: Monetary value is the total amount of orders placed by the customer in the last 365 days. Bigger amount means better score.

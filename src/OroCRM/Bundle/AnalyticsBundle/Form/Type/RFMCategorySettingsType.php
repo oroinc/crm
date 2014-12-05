@@ -34,7 +34,8 @@ class RFMCategorySettingsType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $view->vars['is_increasing'] = (bool)$options['is_increasing'];
+        $view->vars['attr']['data-increasing'] = (int)$options['is_increasing'];
+        $view->vars['attr']['class'] = 'rfm-' . $options[self::TYPE_OPTION];
     }
 
     /**
