@@ -1,34 +1,32 @@
 # OroCRMAnalyticsBundle
 
-This Bundle provides analytics opportunities for OroCRM. 
-It provide instruments are allowing to add and to use recalculation and visualisation the analytics data. 
-Can be apply to data of data channel import. 
-And applicable to chosen entity of the imported data.
-The analytics data are available for build the segments and reports. 
-You can use this data for definition of columns, conditions and filters of your segments.
+Bundle provides analytics opportunities, tools for recalculation and analytics data visualization.
+Can be apply to Channel entities.
+The analytics data are available for build the segments and reports.
+For available at now RMF metrics you can use this data for definition of columns, conditions and filters of your segments.
 
-
-## Metrics
-At the now we have implemented three metrics - Recency, Frequency, Monetary ([RFM](https://en.wikipedia.org/wiki/RFM_\(customer_value\))). 
-It can be set to chosen data channel.
+## RFM
+Recency, Frequency, Monetary ([RFM](https://en.wikipedia.org/wiki/RFM_\(customer_value\))) Configured on Channel level.
 Representing this metrics of entity must implement the interface
-_OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface_, and also must use the trait
-_OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait_. 
+`OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface`, and also must use the trait
+`OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait`. 
 The trait extend entity to add opportunity to save and use analytics values.
 
+## Metrics
+`AnalyticsBuilderInterface` and `AnalyticsAwareInterface`
 
-## Ranking
-Ranking defined in accordance with set values for each of the 3 RFM metrics. 
-You can define separated bordering values for each of the indexes (pockets) for each of the metrics.
-For each metric can be defined any amount of pockets. 
-The analytics function calculates which pocket have to apply to current value of entity and set it for each metric.
+## RFM Ranking
+Ranking defined in accordance with minimum and maximum values for RFM metric segment.
+You can define separated bordering values for each of the indexes (pockets) for each of the metrics. 
+Metric amount is not limited.
+The analytics builder calculates which pocket have to apply to current value of entity and set it for each metric.
 
 
 ## Providers
 Analytics providers provides functional for calculate data of each metric of given entity.
 Provider have to implement for the each metric in your bundle and add to service container.
-The providers connect by DI and must be added to the service container with _orocrm_analytics.builder.rfm_ tag.
-Each provider must implement _OroCRM\Bundle\AnalyticsBundle\BuilderRFMProviderInterface_
+The providers connect by DI and must be added to the service container with `orocrm_analytics.builder.rfm` tag.
+Each provider must implement `OroCRM\Bundle\AnalyticsBundle\BuilderRFMProviderInterface`
 
 
 ## Command
