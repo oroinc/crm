@@ -70,12 +70,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(
-            [
-                'data_class' => 'OroCRM\Bundle\ChannelBundle\Entity\Channel',
-                'validation_groups' => $this->getValidationGroups()
-            ]
-        );
+        $resolver->replaceDefaults(['validation_groups' => $this->getValidationGroups()]);
     }
 
     /**
@@ -93,12 +88,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
-        if (!$form->has(self::RFM_STATE_KEY)) {
-            return;
-        }
-
-        $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
-        if (!$rfmEnabled) {
+        if (!$this->isRFMEnabled($form)) {
             return;
         }
 
@@ -145,8 +135,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             return;
         }
 
-        $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
-
+        $rfmEnabled = $this->getRFMEnabled($form);
         $data = $channel->getData();
         if (!$data) {
             $data = [];
@@ -223,7 +212,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $collection->takeSnapshot();
 
-            $constraint = new CategoriesConstraint(['groups' => 'RFMCategory']);
+            $constraint = new CategoriesConstraint();
             $constraint->setType($type);
 
             $form->add(
@@ -269,21 +258,38 @@ class ChannelTypeExtension extends AbstractTypeExtension
     {
         return function (FormInterface $form) {
             if ($this->isRFMEnabled($form)) {
-                return ['Default', 'RFMCategory'];
-            } else {
-                return ['Default'];
+                return [CategoriesConstraint::DEFAULT_GROUP, CategoriesConstraint::GROUP];
             }
+
+            return [CategoriesConstraint::DEFAULT_GROUP];
         };
     }
 
     /**
      * @param FormInterface $form
-     * @return mixed
+     *
+     * @return bool
      */
     protected function isRFMEnabled(FormInterface $form)
     {
-        return
-            $form->has(self::RFM_STATE_KEY)
-            && filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return false;
+        }
+
+        return $this->getRFMEnabled($form);
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    protected function getRFMEnabled(FormInterface $form)
+    {
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            throw new \InvalidArgumentException(sprintf('%s form child is missing'));
+        }
+
+        return filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
     }
 }

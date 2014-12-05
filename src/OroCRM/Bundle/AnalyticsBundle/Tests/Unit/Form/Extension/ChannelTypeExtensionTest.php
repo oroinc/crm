@@ -380,7 +380,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getConstraint($type)
     {
-        $constraint = new CategoriesConstraint(['groups' => 'RFMCategory']);
+        $constraint = new CategoriesConstraint();
         $constraint->setType($type);
 
         return $constraint;
@@ -462,7 +462,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
         return [
             'validate' => [
                 true,
-                ['Default', 'RFMCategory']
+                ['Default', 'RFMCategories']
             ],
             'not validate' => [
                 false,

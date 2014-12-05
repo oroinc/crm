@@ -6,6 +6,8 @@ use Symfony\Component\Validator\Constraint;
 
 class CategoriesConstraint extends Constraint
 {
+    const GROUP = 'RFMCategories';
+
     /**
      * @var string
      */
@@ -20,6 +22,11 @@ class CategoriesConstraint extends Constraint
      * @var string
      */
     protected $type;
+
+    /**
+     * {@inheritdoc}
+     */
+    public $groups = [self::GROUP];
 
     /**
      * {@inheritdoc}
