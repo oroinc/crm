@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 
 class ChannelHandler
 {
@@ -53,6 +54,7 @@ class ChannelHandler
      */
     public function process(Channel $entity)
     {
+        $this->handleRequestChannelType($entity);
         $this->form->setData($entity);
 
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
@@ -66,6 +68,24 @@ class ChannelHandler
         }
 
         return false;
+    }
+
+    /**
+     * @param Channel $channel
+     */
+    protected function handleRequestChannelType(Channel &$channel)
+    {
+        if ($channel->getChannelType()) {
+            return;
+        }
+
+        $channelType = $this->request->get(sprintf('%s[channelType]', ChannelType::NAME), null, true);
+
+        if (!$channelType) {
+            return;
+        }
+
+        $channel->setChannelType($channelType);
     }
 
     /**
@@ -94,8 +114,12 @@ class ChannelHandler
         // take different form due to JS validation should be shown even in case when it was not validated on backend
         if ($isUpdateOnly) {
             $config = $form->getConfig();
-            $form   = $config->getFormFactory()
-                ->createNamed($form->getName(), $config->getType()->getName(), $form->getData());
+            /** @var FormInterface $form */
+            $form = $config->getFormFactory()->createNamed(
+                $form->getName(),
+                $config->getType()->getName(),
+                $form->getData()
+            );
         }
 
         return $form->createView();

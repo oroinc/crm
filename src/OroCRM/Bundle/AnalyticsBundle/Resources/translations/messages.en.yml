@@ -1,0 +1,26 @@
+orocrm:
+    analytics:
+        title:
+            add_row: Add bucket
+        rfm:
+            recency:
+                label: Recency
+                title: Recency
+            frequency:
+                label: Frequency
+                title: Frequency
+            monetary:
+                label: Monetary value
+                title: Monetary value
+        form:
+            rfm_enable.label: Enable RFM
+            recency.label: Recency
+            frequency.label: Frequency
+            monetary.label: Monetary value
+            rfm_setting.title: RFM Segment Configuration
+            score.title: Score
+            actions.title: Actions
+            hint:
+                recency: Days, less is better
+                frequency: Orders/365, more is better
+                monetary: Order amount/365, more is better
