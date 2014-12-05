@@ -6,7 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
 
-//use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -18,6 +17,7 @@ use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
@@ -59,15 +59,15 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'postSubmit'], 20);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
         $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'handleState'], 10);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories'], 20);
     }
 
     /**
      * @param FormEvent $event
      */
-    public function postSubmit(FormEvent $event)
+    public function manageCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
@@ -79,6 +79,10 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return;
+        }
+
         $rfmEnabled = filter_var($form->get(self::RFM_STATE_KEY)->getData(), FILTER_VALIDATE_BOOLEAN);
         if (!$rfmEnabled) {
             return;
@@ -89,7 +93,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 continue;
             }
 
-            /** @var PersistentCollection $categories */
+            /** @var PersistentCollection|RFMMetricCategory[] $categories */
             $child = $form->get($type);
             $categories = $child->getData();
 
@@ -151,7 +155,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
     /**
      * @param FormEvent $event
      */
-    public function preSetData(FormEvent $event)
+    public function loadCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
@@ -205,8 +209,8 @@ class ChannelTypeExtension extends AbstractTypeExtension
 
             $collection->takeSnapshot();
 
-//            $constraint = new CategoriesConstraint();
-//            $constraint->setType($type);
+            $constraint = new CategoriesConstraint();
+            $constraint->setType($type);
 
             $form->add(
                 $type,
@@ -216,8 +220,9 @@ class ChannelTypeExtension extends AbstractTypeExtension
                     'label' => sprintf('orocrm.analytics.form.%s.label', $type),
                     'mapped' => false,
                     'required' => false,
+                    'error_bubbling' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
-//                    'constraints' => [$constraint],
+                    'constraints' => [$constraint],
                     'data' => $collection,
                 ]
             );

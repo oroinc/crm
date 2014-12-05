@@ -26,7 +26,6 @@ class TimezoneChangeListener
         if (!$event->isChanged('oro_locale.timezone')) {
             return;
         }
-
         $this->metricStateManager->resetMetrics();
         $this->metricStateManager->scheduleRecalculation();
     }

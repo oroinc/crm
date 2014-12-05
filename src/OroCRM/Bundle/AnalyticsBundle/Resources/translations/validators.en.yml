@@ -1,0 +1,6 @@
+orocrm:
+    analytics:
+        validator:
+            categories:
+                order: Values should be in %order% order
+                count: Minimum %count% required

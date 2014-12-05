@@ -13,6 +13,7 @@ use Symfony\Component\Form\FormEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -75,6 +76,10 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($childForm));
 
+        $form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue(true));
+
         /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager $em */
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')->disableOriginalConstructor()->getMock();
 
@@ -100,7 +105,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
             $em->expects($this->once())->method('remove')->with($this->equalTo($removeEntity));
         }
 
-        $this->extension->postSubmit($event);
+        $this->extension->manageCategories($event);
     }
 
     /**
@@ -211,7 +216,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.recency.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => true,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_RECENCY)],
                                 'data' => $this->getCollection([$this->getCategory(RFMMetricCategory::TYPE_RECENCY)]),
                             ]
                         )
@@ -225,7 +232,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.frequency.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => false,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_FREQUENCY)],
                                 'data' => $this->getCollection(
                                     [1 => $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY)]
                                 ),
@@ -241,7 +250,9 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                                 'label' => 'orocrm.analytics.form.monetary.label',
                                 'mapped' => false,
                                 'required' => false,
+                                'error_bubbling' => false,
                                 'is_increasing' => false,
+                                'constraints' => [$this->getConstraint(RFMMetricCategory::TYPE_MONETARY)],
                                 'data' => $this->getCollection([]),
                             ]
                         )
@@ -249,7 +260,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 );
         }
 
-        $this->extension->preSetData($event);
+        $this->extension->loadCategories($event);
     }
 
     /**
@@ -269,6 +280,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+<<<<<<< HEAD
      * @param \PHPUnit_Framework_MockObject_MockObject $channel
      * @param bool $hasStateForm
      * @param bool $isEnabled
@@ -360,6 +372,19 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 'expectedData' => ['rfm_enabled' => true, 'rfm_require_drop' => true],
             ],
         ];
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return CategoriesConstraint
+     */
+    protected function getConstraint($type)
+    {
+        $constraint = new CategoriesConstraint();
+        $constraint->setType($type);
+
+        return $constraint;
     }
 
     /**
