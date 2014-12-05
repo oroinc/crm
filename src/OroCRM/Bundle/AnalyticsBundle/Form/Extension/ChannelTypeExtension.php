@@ -6,21 +6,25 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
 
-use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 use Symfony\Component\Form\AbstractTypeExtension;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\Form\Type\RFMCategorySettingsType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
+use OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint;
 
 class ChannelTypeExtension extends AbstractTypeExtension
 {
+    const RFM_STATE_KEY = 'rfm_enabled';
+    const RFM_REQUIRE_DROP_KEY = 'rfm_require_drop';
+
     /**
      * @var DoctrineHelper
      */
@@ -56,14 +60,23 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData']);
-        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'postSubmit']);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'loadCategories']);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'handleState'], 10);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, [$this, 'manageCategories'], 20);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->replaceDefaults(['validation_groups' => $this->getValidationGroups()]);
     }
 
     /**
      * @param FormEvent $event
      */
-    public function postSubmit(FormEvent $event)
+    public function manageCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
@@ -75,12 +88,16 @@ class ChannelTypeExtension extends AbstractTypeExtension
         $em = $this->doctrineHelper->getEntityManager($this->rfmCategoryClass);
         $form = $event->getForm();
 
+        if (!$this->isRFMEnabled($form)) {
+            return;
+        }
+
         foreach (RFMMetricCategory::$types as $type) {
             if (!$form->has($type)) {
                 continue;
             }
 
-            /** @var PersistentCollection $categories */
+            /** @var PersistentCollection|RFMMetricCategory[] $categories */
             $child = $form->get($type);
             $categories = $child->getData();
 
@@ -105,7 +122,43 @@ class ChannelTypeExtension extends AbstractTypeExtension
     /**
      * @param FormEvent $event
      */
-    public function preSetData(FormEvent $event)
+    public function handleState(FormEvent $event)
+    {
+        /** @var Channel $channel */
+        $channel = $event->getData();
+        if (!$this->isApplicable($channel)) {
+            return;
+        }
+
+        $form = $event->getForm();
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return;
+        }
+
+        $rfmEnabled = $this->getRFMEnabled($form);
+        $data = $channel->getData();
+        if (!$data) {
+            $data = [];
+        }
+
+        if (array_key_exists(self::RFM_STATE_KEY, $data) && $data[self::RFM_STATE_KEY] === $rfmEnabled) {
+            return;
+        }
+
+        if (!$rfmEnabled) {
+            $data[self::RFM_REQUIRE_DROP_KEY] = true;
+        }
+
+        $data[self::RFM_STATE_KEY] = $rfmEnabled;
+
+        $channel->setData($data);
+        $event->setData($channel);
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    public function loadCategories(FormEvent $event)
     {
         /** @var Channel $channel */
         $channel = $event->getData();
@@ -121,7 +174,21 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 ['categoryIndex' => Criteria::ASC]
             );
 
-        $this->addRFMTypes($event->getForm(), $categories);
+        $channelData = (array)$channel->getData();
+        $rfmEnabled = !empty($channelData['rfm_enabled']);
+        $form = $event->getForm();
+        $form->add(
+            'rfm_enabled',
+            'checkbox',
+            [
+                'label' => 'orocrm.analytics.form.rfm_enable.label',
+                'mapped' => false,
+                'required' => false,
+                'data' => $rfmEnabled,
+                'tooltip' => 'orocrm.analytics.rfm.tooltip'
+            ]
+        );
+        $this->addRFMTypes($form, $categories);
     }
 
     /**
@@ -155,8 +222,10 @@ class ChannelTypeExtension extends AbstractTypeExtension
                 [
                     RFMCategorySettingsType::TYPE_OPTION => $type,
                     'label' => sprintf('orocrm.analytics.form.%s.label', $type),
+                    'tooltip' => sprintf('orocrm.analytics.%s.tooltip', $type),
                     'mapped' => false,
                     'required' => false,
+                    'error_bubbling' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
                     'constraints' => [$constraint],
                     'data' => $collection,
@@ -182,5 +251,49 @@ class ChannelTypeExtension extends AbstractTypeExtension
         }
 
         return in_array($this->interface, class_implements($customerIdentity));
+    }
+
+    /**
+     * @return callable
+     */
+    protected function getValidationGroups()
+    {
+        return function (FormInterface $form) {
+            if ($this->isRFMEnabled($form)) {
+                return [CategoriesConstraint::DEFAULT_GROUP, CategoriesConstraint::GROUP];
+            }
+
+            return [CategoriesConstraint::DEFAULT_GROUP];
+        };
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    protected function isRFMEnabled(FormInterface $form)
+    {
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            return false;
+        }
+
+        return $this->getRFMEnabled($form);
+    }
+
+    /**
+     * @param FormInterface $form
+     *
+     * @return bool
+     */
+    protected function getRFMEnabled(FormInterface $form)
+    {
+        if (!$form->has(self::RFM_STATE_KEY)) {
+            throw new \InvalidArgumentException(sprintf('%s form child is missing'));
+        }
+
+        $data = $form->get(self::RFM_STATE_KEY)->getData();
+
+        return filter_var($data, FILTER_VALIDATE_BOOLEAN);
     }
 }

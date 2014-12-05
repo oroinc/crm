@@ -1,33 +1,7 @@
 {% block orocrm_analytics_rfm_category_row %}
-    <div class="rfm_settings_row clearfix">
-        <div class="pull-left">
-            {{ form_widget(form.category_index) }}
-            {{ form_widget(form.min_value) }}
-            {{ form_widget(form.max_value) }}
-        </div>
-
-        <div class="actions pull-right">
-            <a href="#" class="action-delete" title="{{ 'orocrm.analytics.title.delete_row'|trans }}"><i class="icon-trash hide-text"></i></a>&nbsp;
-            <a href="#" class="action-add" title="{{ 'orocrm.analytics.title.add_row'|trans }}"><i class="icon-plus hide-text"></i></a>
-        </div>
+    <div class="rfm-settings-row">
+        {{ form_widget(form.category_index) }}
+        {{ form_widget(form.min_value) }}
+        {{ form_widget(form.max_value) }}
     </div>
-{% endblock %}
-
-{% block orocrm_analytics_rfm_category_settings_widget %}
-    {% set options = {
-        isIncreasing: form.vars.is_increasing,
-        containerId: form.vars.id
-    } %}
-
-    <div id="{{ form.vars.id }}-el" class="rfm_settings"
-         data-page-component-module="orocrmanalytics/js/app/components/rfm-category-settings"
-         data-page-component-options="{{ options|json_encode }}">
-        {{ form_widget(form) }}
-    </div>
-{% endblock %}
-
-{% block _orocrm_channel_form_monetary_label %}
-    <label class="control-label" for="{{ id }}">
-        {{ label|trans }}, {{ oro_currency_symbol() }}
-    </label>
 {% endblock %}

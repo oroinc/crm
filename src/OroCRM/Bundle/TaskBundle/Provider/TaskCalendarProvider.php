@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
-use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarPropertyRepository;
 use Oro\Bundle\CalendarBundle\Provider\CalendarProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -60,15 +58,15 @@ class TaskCalendarProvider implements CalendarProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCalendarDefaultValues($userId, $calendarId, array $calendarIds)
+    public function getCalendarDefaultValues($organizationId, $userId, $calendarId, array $calendarIds)
     {
         $result = [];
 
-        if ($this->myTasksEnabled || in_array(self::MY_TASKS_CALENDAR_ID, $calendarIds)) {
+        if ($this->myTasksEnabled) {
             $result[self::MY_TASKS_CALENDAR_ID] = [
                 'calendarName'    => $this->translator->trans($this->calendarLabels[self::MY_TASKS_CALENDAR_ID]),
                 'removable'       => false,
-                'position'        => -1,
+                'position'        => -100,
                 'backgroundColor' => '#F83A22',
                 'options'         => [
                     'widgetRoute'   => 'orocrm_task_widget_info',
@@ -80,6 +78,8 @@ class TaskCalendarProvider implements CalendarProviderInterface
                     ]
                 ]
             ];
+        } elseif (in_array(self::MY_TASKS_CALENDAR_ID, $calendarIds)) {
+            $result[self::MY_TASKS_CALENDAR_ID] = null;
         }
 
         return $result;
@@ -88,18 +88,11 @@ class TaskCalendarProvider implements CalendarProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCalendarEvents($userId, $calendarId, $start, $end, $subordinate)
+    public function getCalendarEvents($organizationId, $userId, $calendarId, $start, $end, $connections)
     {
         if (!$this->myTasksEnabled) {
             return [];
         }
-
-        /** @var CalendarPropertyRepository $connectionRepo */
-        $connectionRepo = $this->doctrineHelper->getEntityRepository('OroCalendarBundle:CalendarProperty');
-        $connections    = $connectionRepo->getConnectionsByTargetCalendarQueryBuilder($calendarId, self::ALIAS)
-            ->select('connection.calendar, connection.visible')
-            ->getQuery()
-            ->getArrayResult();
 
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
@@ -122,14 +115,8 @@ class TaskCalendarProvider implements CalendarProviderInterface
      */
     protected function isCalendarVisible($connections, $calendarId, $default = true)
     {
-        $connection = null;
-        foreach ($connections as $c) {
-            if ($c['calendar'] === $calendarId) {
-                $connection = $c;
-                break;
-            }
-        }
-
-        return $connection ? $connection['visible'] : $default;
+        return isset($connections[$calendarId])
+            ? $connections[$calendarId]
+            : $default;
     }
 }

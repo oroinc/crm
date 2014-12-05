@@ -99,7 +99,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             );
 
             $em = $this->doctrineHelper->getEntityManager($customerIdentityClass);
-            $entities = $this->getEntities($customerIdentityClass, $ids);
+            $entities = $this->getEntitiesByChannel($channel, $ids);
             $entitiesToSave = [];
 
             foreach ($entities as $entity) {
@@ -187,20 +187,24 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     }
 
     /**
-     * @param string $className
+     * @param Channel $channel
      * @param array $ids
      *
      * @return BufferedQueryResultIterator|CustomerIdentity[]
      */
-    protected function getEntities($className, $ids = [])
+    protected function getEntitiesByChannel(Channel $channel, $ids = [])
     {
         $qb = $this->getDoctrineHelper()
-            ->getEntityRepository($className)
+            ->getEntityRepository($channel->getCustomerIdentity())
             ->createQueryBuilder('e');
+
+        $qb
+            ->where($qb->expr()->eq('e.dataChannel', ':dataChannel'))
+            ->setParameter('dataChannel', $channel->getId());
 
         if ($ids) {
             $qb
-                ->where($qb->expr()->in('e.id', ':ids'))
+                ->andWhere($qb->expr()->in('e.id', ':ids'))
                 ->setParameter('ids', $ids);
         }
 
