@@ -47,7 +47,7 @@ class OroCRMAnalyticsBundle implements Migration
             $schema->getTable('orocrm_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 }

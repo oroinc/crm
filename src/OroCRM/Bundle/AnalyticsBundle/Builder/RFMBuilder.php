@@ -75,7 +75,18 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     public function build(AnalyticsAwareInterface $entity)
     {
-        $update = false;
+        $status = false;
+
+        $channel = $entity->getDataChannel();
+        if (!$channel) {
+            return $status;
+        }
+
+        $data = $channel->getData();
+        if (empty($data[RFMAwareInterface::RFM_STATE_KEY])) {
+            return $status;
+        }
+
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->providers as $provider) {
@@ -91,11 +102,11 @@ class RFMBuilder implements AnalyticsBuilderInterface
                 }
 
                 $propertyAccessor->setValue($entity, $type, $index);
-                $update = true;
+                $status = true;
             }
         }
 
-        return $update;
+        return $status;
     }
 
     /**
