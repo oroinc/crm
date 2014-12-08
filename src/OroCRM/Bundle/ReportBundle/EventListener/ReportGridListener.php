@@ -7,7 +7,6 @@ use Oro\Bundle\DataGridBundle\Extension\Formatter\Property\PropertyInterface;
 use Oro\Bundle\FilterBundle\Filter\FilterUtility;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 use Oro\Bundle\FilterBundle\Grid\Extension\Configuration as FilterConfiguration;
-use Oro\Bundle\DataGridBundle\Extension\Sorter\Configuration as OrmSorterConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Formatter\Configuration as FormatterConfiguration;
 
 class ReportGridListener
@@ -42,15 +41,6 @@ class ReportGridListener
         );
         $config->offsetSetByPath(
             sprintf(
-                '%s[%s][%s]',
-                OrmSorterConfiguration::COLUMNS_PATH,
-                self::PERIOD_COLUMN_NAME,
-                PropertyInterface::DATA_NAME_KEY
-            ),
-            $period
-        );
-        $config->offsetSetByPath(
-            sprintf(
                 '[%s][%s][%s]',
                 FormatterConfiguration::COLUMNS_KEY,
                 self::PERIOD_COLUMN_NAME,
@@ -58,5 +48,7 @@ class ReportGridListener
             ),
             $period
         );
+
+        $config->offsetSetByPath('[source][query][groupBy]', $period);
     }
 }
