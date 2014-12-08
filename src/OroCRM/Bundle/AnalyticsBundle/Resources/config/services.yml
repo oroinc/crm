@@ -84,4 +84,3 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush }
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
-

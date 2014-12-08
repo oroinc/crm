@@ -99,9 +99,9 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         return [
             'without reset' => [[], [], []],
             'not supported entities' => [[new \stdClass()], [new \stdClass()], [new \stdClass()]],
-            'one channel insertions' => [[$this->getCategory($this->getChannel())], [], [], 1, 1],
-            'updates' => [[], [$this->getCategory($this->getChannel())], [], 1, 1],
-            'deletions' => [[], [], [$this->getCategory($this->getChannel())], 1, 1],
+            'one channel insertions' => [[$category], [], [], 1, 1],
+            'updates' => [[], [$category], [], 1, 1],
+            'deletions' => [[], [], [$category], 1, 1],
             'full' => [[$category], [$category], [$category], 1, 1],
             'two channels' => [[$category], [$this->getCategory($this->getChannel(2))], [$category], 2, 2],
             'three channels' => [
@@ -111,10 +111,10 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
                 'expectedResetMetrics' => 3,
                 'expectedScheduleRecalculation' => 3,
             ],
-            'channel without key' => [[], [$this->getChannel()], []],
+            'channel without key' => [[], [$channel], []],
             'channel to drop' => [[], [$this->getChannel(1, ['rfm_require_drop' => true])], [], 1],
             'channel with category' => [
-                'updateEntities' => [$this->getCategory($this->getChannel())],
+                'updateEntities' => [$category],
                 'insertEntities' => [$this->getChannel(2, ['rfm_require_drop' => true])],
                 'deleteEntities' => [],
                 'expectedResetMetrics' => 2,
