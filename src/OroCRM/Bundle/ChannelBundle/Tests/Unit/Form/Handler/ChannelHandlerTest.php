@@ -175,4 +175,46 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         return $rootView;
     }
+
+    /**
+     * @param Channel $entity
+     * @param mixed $requestValue
+     * @param string $expectedType
+     *
+     * @dataProvider handleRequestDataProvider
+     */
+    public function testHandleRequestChannelType(Channel $entity, $requestValue, $expectedType)
+    {
+        $this->request->setMethod('GET');
+
+
+        $expectedEntity = clone $entity;
+        $expectedEntity->setChannelType($expectedType);
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($expectedEntity);
+
+        $this->form->expects($this->never())
+            ->method('submit');
+        $this->dispatcher->expects($this->never())
+            ->method('dispatch');
+        $this->request->request->set('orocrm_channel_form', ['channelType' => $requestValue]);
+
+        $this->handler->process($entity);
+    }
+
+    /**
+     * @return array
+     */
+    public function handleRequestDataProvider()
+    {
+        $channel = new Channel();
+        $channel->setChannelType('existing_type');
+
+        return [
+            'has type' => [$channel, null, 'existing_type'],
+            'has not request value' => [$channel, null, 'existing_type'],
+            'has request value' => [new Channel(), 'some_type', 'some_type'],
+        ];
+    }
 }

@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class UpdateCustomerLifetime extends AbstractFixture
 {
@@ -19,12 +20,19 @@ class UpdateCustomerLifetime extends AbstractFixture
         /** @var EntityManager $manager */
         /** @var EntityRepository $repository */
         $repository = $manager->getRepository('OroCRMMagentoBundle:Customer');
-        $queryBuilder = $repository->createQueryBuilder('customer')
+        $queryBuilder = $repository->createQueryBuilder('customer');
+
+        $queryBuilder
             ->select('customer.id, SUM(customerOrder.subtotalAmount) as lifetime')
-            ->leftJoin('customer.orders', 'customerOrder', 'WITH', 'customerOrder.status != :status')
+            ->leftJoin(
+                'customer.orders',
+                'customerOrder',
+                'WITH',
+                $queryBuilder->expr()->neq($queryBuilder->expr()->lower('customerOrder.status'), ':status')
+            )
             ->groupBy('customer.id')
-            ->orderBy('customer.id');
-        $queryBuilder->setParameter('status', 'canceled');
+            ->orderBy('customer.id')
+            ->setParameter('status', Order::STATUS_CANCELED);
 
         $updateQuery =
             'UPDATE OroCRMMagentoBundle:Customer customer SET customer.lifetime = :lifetime WHERE customer.id = :id';

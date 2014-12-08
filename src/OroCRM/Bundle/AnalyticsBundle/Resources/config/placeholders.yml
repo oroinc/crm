@@ -1,0 +1,9 @@
+placeholders:
+    orocrm_channel_additional_block:
+        items:
+            orocrm_channel_additional_block_rfm: ~
+
+items:
+    orocrm_channel_additional_block_rfm:
+        template: OroCRMAnalyticsBundle:Form:form.html.twig
+        applicable: @orocrm_analytics.placeholder.rfm_filter->isApplicable($entity$)
