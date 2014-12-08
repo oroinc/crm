@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Controller;
 
-use FOS\RestBundle\Util\Codes;
+use FOS\Rest\Util\Codes;
 
 use Doctrine\ORM\EntityManager;
 
