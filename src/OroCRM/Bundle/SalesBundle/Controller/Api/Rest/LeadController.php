@@ -2,23 +2,21 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Api\Rest;
 
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\RestBundle\Util\Codes;
-
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
-
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Response;
+use FOS\RestBundle\Routing\ClassResourceInterface;
+use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 /**
  * @RouteResource("lead")

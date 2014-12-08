@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Functional\Controller\Api\Rest;
 
-use FOS\RestBundle\Util\Codes;
+use FOS\Rest\Util\Codes;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 

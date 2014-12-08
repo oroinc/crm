@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use FOS\RestBundle\Util\Codes;
+use FOS\Rest\Util\Codes;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
