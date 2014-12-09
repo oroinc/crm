@@ -14,8 +14,6 @@ interface MagentoTransportInterface extends TransportInterface
 
     const TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST = 102;
 
-    const ALL_STORES = -1;
-
     /**
      * @param string       $action
      * @param object|array $params

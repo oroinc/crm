@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -153,11 +154,9 @@ class CartExpirationProcessor
      */
     protected function getSores(MagentoTransportInterface $transport, $websiteId)
     {
-        $stores        = [];
-        $magentoStores = iterator_to_array($transport->getStores());
-
-        foreach ($magentoStores as $store) {
-            if ($store['website_id'] == $websiteId || $websiteId === SoapTransport::ALL_STORES) {
+        $stores = [];
+        foreach ($transport->getStores() as $store) {
+            if ($store['website_id'] == $websiteId || $websiteId === StoresSoapIterator::ALL_WEBSITES) {
                 $stores[] = $store['store_id'];
             }
         }
