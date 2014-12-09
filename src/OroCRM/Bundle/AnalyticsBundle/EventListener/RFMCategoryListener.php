@@ -5,9 +5,10 @@ namespace OroCRM\Bundle\AnalyticsBundle\EventListener;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class RFMCategoryListener
 {
@@ -66,23 +67,28 @@ class RFMCategoryListener
         foreach ($uow->getScheduledEntityDeletions() as $entity) {
             $this->handleEntity($entity);
         }
+    }
 
+    /**
+     * @param ChannelSaveEvent $event
+     */
+    public function onChannelSucceedSave(ChannelSaveEvent $event)
+    {
         foreach ($this->channelsToDrop as $channel) {
             $this->metricStateManager->resetMetrics($channel);
         }
 
         foreach ($this->channelsToRecalculate as $channel) {
-            if (array_key_exists($channel->getId(), $this->channelsToDrop)) {
+            if (array_key_exists(spl_object_hash($channel), $this->channelsToDrop)) {
                 continue;
             }
 
             $this->metricStateManager->resetMetrics($channel);
-            $this->metricStateManager->scheduleRecalculation($channel, false);
+            $this->metricStateManager->scheduleRecalculation($channel);
         }
 
-        if ($this->channelsToRecalculate || $this->channelsToDrop) {
-            $uow->computeChangeSets();
-        }
+        $this->channelsToDrop = [];
+        $this->channelsToRecalculate = [];
     }
 
     /**
@@ -94,20 +100,20 @@ class RFMCategoryListener
         if ($entity instanceof $this->categoryClass) {
             $channel = $entity->getChannel();
 
-            $this->channelsToRecalculate[$channel->getId()] = $channel;
+            $this->channelsToRecalculate[spl_object_hash($channel)] = $channel;
         }
 
         /** @var Channel $entity */
         if ($entity instanceof $this->channelClass) {
             $data = $entity->getData();
-            if (empty($data[ChannelTypeExtension::RFM_REQUIRE_DROP_KEY])) {
+            if (empty($data[RFMAwareInterface::RFM_REQUIRE_DROP_KEY])) {
                 return;
             }
 
-            unset($data[ChannelTypeExtension::RFM_REQUIRE_DROP_KEY]);
+            unset($data[RFMAwareInterface::RFM_REQUIRE_DROP_KEY]);
             $entity->setData($data);
 
-            $this->channelsToDrop[$entity->getId()] = $entity;
+            $this->channelsToDrop[spl_object_hash($entity)] = $entity;
         }
     }
 }

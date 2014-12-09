@@ -32,7 +32,7 @@ class OroCRMAnalyticsBundle implements Migration
         $table->addColumn('category_index', 'integer', ['notnull' => true]);
         $table->addColumn('min_value', 'float', ['notnull' => false]);
         $table->addColumn('max_value', 'float', ['notnull' => false]);
-        $table->addColumn('channel_id', 'integer', ['notnull' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['channel_id'], 'idx_channel', []);
         $table->addIndex(['owner_id'], 'idx_user_owner', []);
@@ -47,7 +47,7 @@ class OroCRMAnalyticsBundle implements Migration
             $schema->getTable('orocrm_channel'),
             ['channel_id'],
             ['id'],
-            ['onDelete' => null, 'onUpdate' => null]
+            ['onUpdate' => null, 'onDelete' => 'SET NULL']
         );
     }
 }
