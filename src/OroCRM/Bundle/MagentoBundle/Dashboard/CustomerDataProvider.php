@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-use Symfony\Component\Translation\TranslatorInterface;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -21,11 +20,6 @@ class CustomerDataProvider
     protected $registry;
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * @var AclHelper
      */
     protected $aclHelper;
@@ -37,18 +31,15 @@ class CustomerDataProvider
 
     /**
      * @param ManagerRegistry $registry
-     * @param TranslatorInterface $translator
      * @param AclHelper $aclHelper
      * @param ConfigProvider $configProvider
      */
     public function __construct(
         ManagerRegistry $registry,
-        TranslatorInterface $translator,
         AclHelper $aclHelper,
         ConfigProvider $configProvider
     ) {
         $this->registry   = $registry;
-        $this->translator = $translator;
         $this->aclHelper  = $aclHelper;
         $this->configProvider = $configProvider;
     }

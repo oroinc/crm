@@ -12,11 +12,6 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $translator;
-
-    /**
      * @var CustomerDataProvider
      */
     protected $dataProvider;
@@ -34,7 +29,6 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $this->aclHelper  = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
@@ -42,19 +36,8 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->translator->expects($this->any())
-            ->method('trans')
-            ->will(
-                $this->returnCallback(
-                    function ($id) {
-                        return $id . '.trans';
-                    }
-                )
-            );
-
         $this->dataProvider = new CustomerDataProvider(
             $this->registry,
-            $this->translator,
             $this->aclHelper,
             $this->configProvider
         );
@@ -204,12 +187,12 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month.trans',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
                             'type'       => 'month'
                         ],
                         'value' => [
                             'field_name' => 'cnt',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count.trans',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count',
                         ],
                     ],
                 ],
@@ -217,12 +200,12 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label' => 'orocrm.magento.dashboard.new_magento_customers_chart.month.trans',
-                            'type' => 'month',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'type'       => 'month',
                         ],
                         'value' => [
                             'field_name' => 'cnt',
-                            'label' => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count.trans'
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
                         ]
                     ]
                 ]
