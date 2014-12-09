@@ -100,12 +100,13 @@ class CustomerDataProvider
         $customerCountLabel = $this->translator->trans(
             'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
         );
+        $monthLabel = $this->translator->trans('orocrm.magento.dashboard.new_magento_customers_chart.month');
         $chartOptions = [
             'name'        => 'multiline_chart',
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month_year',
-                    'label'      => null,
+                    'label'      => $monthLabel,
                     'type'       => 'month'
                 ],
                 'value' => [

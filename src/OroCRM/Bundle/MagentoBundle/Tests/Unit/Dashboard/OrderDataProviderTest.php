@@ -72,7 +72,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label' => null,
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month.trans',
                     'type' => 'month',
                 ],
                 'value' => [
