@@ -9,6 +9,7 @@ use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 
 class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -80,6 +81,10 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
         $args = new OnFlushEventArgs($em);
 
         $this->listener->onFlush($args);
+
+        $event = new ChannelSaveEvent(new Channel());
+
+        $this->listener->onChannelSucceedSave($event);
     }
 
     /**
@@ -87,27 +92,37 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function entitiesDataProvider()
     {
+        $channel = $this->getChannel();
+        $droppedChannel = $this->getChannel(1, ['rfm_require_drop' => true]);
+        $category = $this->getCategory($channel);
+
         return [
             'without reset' => [[], [], []],
             'not supported entities' => [[new \stdClass()], [new \stdClass()], [new \stdClass()]],
-            'one channel insertions' => [[$this->getCategory(1)], [], [], 1, 1],
-            'updates' => [[], [$this->getCategory(1)], [], 1, 1],
-            'deletions' => [[], [], [$this->getCategory(1)], 1, 1],
-            'full' => [[$this->getCategory(1)], [$this->getCategory(1)], [$this->getCategory(1)], 1, 1],
-            'two channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(1)], 2, 2],
-            'three channels' => [[$this->getCategory(1)], [$this->getCategory(2)], [$this->getCategory(3)], 3, 3],
-            'channel without key' => [[], [$this->getChannel()], []],
+            'one channel insertions' => [[$category], [], [], 1, 1],
+            'updates' => [[], [$category], [], 1, 1],
+            'deletions' => [[], [], [$category], 1, 1],
+            'full' => [[$category], [$category], [$category], 1, 1],
+            'two channels' => [[$category], [$this->getCategory($this->getChannel(2))], [$category], 2, 2],
+            'three channels' => [
+                'updateEntities' => [$category],
+                'insertEntities' => [$this->getCategory($this->getChannel(2))],
+                'deleteEntities' => [$this->getCategory($this->getChannel(3))],
+                'expectedResetMetrics' => 3,
+                'expectedScheduleRecalculation' => 3,
+            ],
+            'channel without key' => [[], [$channel], []],
             'channel to drop' => [[], [$this->getChannel(1, ['rfm_require_drop' => true])], [], 1],
             'channel with category' => [
-                'updateEntities' => [$this->getCategory(1)],
+                'updateEntities' => [$category],
                 'insertEntities' => [$this->getChannel(2, ['rfm_require_drop' => true])],
                 'deleteEntities' => [],
                 'expectedResetMetrics' => 2,
                 'expectedScheduleRecalculation' => 1,
             ],
             'skip dropped channel recalculation' => [
-                'updateEntities' => [$this->getCategory(1)],
-                'insertEntities' => [$this->getChannel(1, ['rfm_require_drop' => true])],
+                'updateEntities' => [$this->getCategory($droppedChannel)],
+                'insertEntities' => [$droppedChannel],
                 'deleteEntities' => [],
                 'expectedResetMetrics' => 1,
                 'expectedScheduleRecalculation' => 0,
@@ -138,15 +153,15 @@ class RFMCategoryListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int $channelId
+     * @param Channel $channel
      *
      * @return RFMMetricCategory
      */
-    protected function getCategory($channelId)
+    protected function getCategory($channel)
     {
         $category = new RFMMetricCategory();
 
-        $category->setChannel($this->getChannel($channelId));
+        $category->setChannel($channel);
 
         return $category;
     }

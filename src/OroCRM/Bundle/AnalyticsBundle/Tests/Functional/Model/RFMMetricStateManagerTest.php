@@ -223,19 +223,4 @@ class RFMMetricStateManagerTest extends WebTestCase
 
         $this->assertCount(1, $entities);
     }
-
-    public function testScheduleWithoutFlush()
-    {
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
-        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel, false);
-
-        /** @var Job[] $entities */
-        $entities = $this->getContainer()
-            ->get('oro_entity.doctrine_helper')
-            ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
-            ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
-
-        $this->assertEmpty($entities);
-    }
 }
