@@ -71,12 +71,13 @@ class OrderDataProvider
         $orderAmountLabel = $this->translator->trans(
             'orocrm.magento.dashboard.average_order_amount_chart.order_amount'
         );
+        $monthLabel = $this->translator->trans('orocrm.magento.dashboard.average_order_amount_chart.month');
         $chartOptions = [
             'name' => 'multiline_chart',
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label' => null,
+                    'label' => $monthLabel,
                     'type' => 'month'
                 ],
                 'value' => [

@@ -184,7 +184,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => null,
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month.trans',
                             'type'       => 'month'
                         ],
                         'value' => [
