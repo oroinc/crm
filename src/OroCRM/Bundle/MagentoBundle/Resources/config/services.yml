@@ -254,6 +254,7 @@ services:
             - @doctrine
             - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
@@ -261,6 +262,7 @@ services:
             - @doctrine
             - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
