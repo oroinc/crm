@@ -103,10 +103,8 @@ class RFMMetricStateManager
 
     /**
      * @param Channel $channel
-     *
-     * @param bool $flush
      */
-    public function scheduleRecalculation(Channel $channel = null, $flush = true)
+    public function scheduleRecalculation(Channel $channel = null)
     {
         if ($this->getJob()) {
             return;
@@ -137,9 +135,7 @@ class RFMMetricStateManager
         }
 
         $em->persist($job);
-        if ($flush) {
-            $em->flush($job);
-        }
+        $em->flush($job);
     }
 
     /**

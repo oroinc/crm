@@ -188,6 +188,9 @@ class RFMBuilderTest extends \PHPUnit_Framework_TestCase
     public function buildDataProvider()
     {
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue(['rfm_enabled' => true]));
 
         return [
             'no support' => ['supports' => false, 'expected' => false],
