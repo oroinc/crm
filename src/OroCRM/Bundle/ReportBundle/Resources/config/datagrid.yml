@@ -314,7 +314,7 @@ datagrid:
                 join:
                     inner:
                         - { join: o.status, alias: s }
-                groupBy: o.closeDate
+                groupBy: o.closeDate # will be overridden in ReportGridListener with selected period name (monthly or quarterly or yearly)
                 where:
                     and:
                         - s.name = 'won'
@@ -347,7 +347,7 @@ datagrid:
             value:     { label: orocrm.report.datagrid.columns.total_value, frontend_type: currency }
         sorters:
             columns:
-                period:     { data_name: period }
+                period:     { data_name: o.closeDate }
                 cnt:        { data_name: cnt }
                 value:      { data_name: value }
         filters:
