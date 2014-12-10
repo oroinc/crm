@@ -217,6 +217,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
         $result['countryIso2'] = $entity->getCountryIso2();
         $result['countryIso3'] = $entity->getCountryIso2();
         $result['regionCode']  = $entity->getRegionCode();
+        $result['country'] = $entity->getCountryName();
 
         unset($result['owner']);
 
