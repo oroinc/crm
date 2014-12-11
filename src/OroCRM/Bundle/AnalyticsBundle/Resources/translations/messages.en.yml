@@ -22,8 +22,8 @@ orocrm:
             actions.title: Actions
             hint:
                 recency: Days, less is better
-                frequency: Orders/365, more is better
-                monetary: Order amount/365, more is better
+                frequency: Orders per year, more is better
+                monetary: Order amount per year, US$, more is better
         rfmmetriccategory:
             entity_label: RFM Metric Category
             entity_plural_label: RFM Metric Categories

@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Controller\Api\Rest;
 
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
