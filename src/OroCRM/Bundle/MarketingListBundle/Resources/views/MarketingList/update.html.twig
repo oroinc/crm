@@ -52,11 +52,6 @@
 {% endblock pageHeader %}
 
 {% block content_data %}
-    <style type="text/css">
-        {# TODO: Remove hiding of pin block after fixing of https://magecore.atlassian.net/browse/CRM-907 #}
-        #pin-button-div {display: none !important}
-    </style>
-
     {% set id = 'marketing-list-profile' %}
     {% set ownerDataBlock = {
         'dataBlocks': [{
