@@ -94,6 +94,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
         $result['countryIso2'] = $entity->getCountryIso2();
         $result['countryIso3'] = $entity->getCountryIso3();
         $result['regionCode']  = $entity->getRegionCode();
+        $result['country'] = $entity->getCountryName();
 
         unset($result['owner']);
 
