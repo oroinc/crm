@@ -8,7 +8,7 @@
     "require": {
         "php": ">=5.4",
         "symfony/symfony": "2.3.*",
-        "friendsofsymfony/rest-bundle": "0.11.*",
+        "friendsofsymfony/rest-bundle": "1.5.0-RC2",
         "nelmio/api-doc-bundle": "dev-master",
 
         "oro/ui-bundle": "dev-master",
