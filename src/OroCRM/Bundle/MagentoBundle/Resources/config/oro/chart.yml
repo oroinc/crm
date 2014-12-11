@@ -1,0 +1,33 @@
+oro_chart:
+    average_order_amount:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.average_order_amount_chart.month
+                required: true
+                default_type: month
+                field_name: month
+            value:
+                name: value
+                label: orocrm.magento.dashboard.average_order_amount_chart.order_amount
+                required: true
+                default_type: currency
+                field_name: amount
+        template: OroChartsBundle:Chart:multiline.html.twig
+    new_web_customers:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.new_magento_customers_chart.month
+                required: true
+                default_type: month
+                field_name: month_year
+            value:
+                name: value
+                label: orocrm.magento.dashboard.new_magento_customers_chart.customer_count
+                required: true
+                default_type: integer
+                field_name: cnt
+        template: OroChartsBundle:Chart:multiline.html.twig

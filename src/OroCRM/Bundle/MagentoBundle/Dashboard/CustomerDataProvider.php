@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -20,25 +20,28 @@ class CustomerDataProvider
     protected $registry;
 
     /**
-     * @var TranslatorInterface
-     */
-    protected $translator;
-
-    /**
      * @var AclHelper
      */
     protected $aclHelper;
 
     /**
-     * @param ManagerRegistry     $registry
-     * @param TranslatorInterface $translator
-     * @param AclHelper           $aclHelper
+     * @var ConfigProvider
      */
-    public function __construct(ManagerRegistry $registry, TranslatorInterface $translator, AclHelper $aclHelper)
-    {
+    protected $configProvider;
+
+    /**
+     * @param ManagerRegistry $registry
+     * @param AclHelper $aclHelper
+     * @param ConfigProvider $configProvider
+     */
+    public function __construct(
+        ManagerRegistry $registry,
+        AclHelper $aclHelper,
+        ConfigProvider $configProvider
+    ) {
         $this->registry   = $registry;
-        $this->translator = $translator;
         $this->aclHelper  = $aclHelper;
+        $this->configProvider = $configProvider;
     }
 
     /**
@@ -97,24 +100,10 @@ class CustomerDataProvider
             $items[$channelName] = array_values($item);
         }
 
-        $customerCountLabel = $this->translator->trans(
-            'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
+        $chartOptions = array_merge_recursive(
+            ['name' => 'multiline_chart'],
+            $this->configProvider->getChartConfig('new_web_customers')
         );
-        $monthLabel = $this->translator->trans('orocrm.magento.dashboard.new_magento_customers_chart.month');
-        $chartOptions = [
-            'name'        => 'multiline_chart',
-            'data_schema' => [
-                'label' => [
-                    'field_name' => 'month_year',
-                    'label'      => $monthLabel,
-                    'type'       => 'month'
-                ],
-                'value' => [
-                    'field_name' => 'cnt',
-                    'label'      => $customerCountLabel
-                ],
-            ],
-        ];
 
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData($items)
