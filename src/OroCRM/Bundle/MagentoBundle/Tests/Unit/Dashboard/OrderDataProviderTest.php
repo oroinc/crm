@@ -14,12 +14,12 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $translator;
+    protected $aclHelper;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $aclHelper;
+    protected $configProvider;
 
     /**
      * @var OrderDataProvider
@@ -29,22 +29,18 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->translator->expects($this->any())
-            ->method('trans')
-            ->will(
-                $this->returnCallback(
-                    function ($id) {
-                        return $id . '.trans';
-                    }
-                )
-            );
-
-        $this->dataProvider = new OrderDataProvider($this->registry, $this->translator, $this->aclHelper);
+        $this->dataProvider = new OrderDataProvider(
+            $this->registry,
+            $this->aclHelper,
+            $this->configProvider
+        );
     }
 
     public function testGetAverageOrderAmountByCustomerChartView()
@@ -72,15 +68,29 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month.trans',
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month',
                     'type' => 'month',
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount.trans',
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
                     'type' => 'currency',
                 ],
             ],
+        ];
+        $chartConfig = [
+            'data_schema' => [
+                'label' => [
+                    'field_name' => 'month',
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month',
+                    'type' => 'month',
+                ],
+                'value' => [
+                    'field_name' => 'amount',
+                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
+                    'type' => 'currency'
+                ]
+            ]
         ];
 
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
@@ -114,6 +124,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $chartViewBuilder->expects($this->once())
             ->method('getView')
             ->will($this->returnValue($chartView));
+
+        $this->configProvider->expects($this->once())
+            ->method('getChartConfig')
+            ->with('average_order_amount')
+            ->will($this->returnValue($chartConfig));
 
         $this->assertEquals(
             $chartView,

@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -217,6 +217,7 @@ class ContactAddressController extends RestController implements ClassResourceIn
         $result['countryIso2'] = $entity->getCountryIso2();
         $result['countryIso3'] = $entity->getCountryIso2();
         $result['regionCode']  = $entity->getRegionCode();
+        $result['country'] = $entity->getCountryName();
 
         unset($result['owner']);
 
