@@ -11,10 +11,12 @@ orocrm:
                 title: Average order amount
                 description: This widget shows average order amount for each data channel in form of a line chart
                 order_amount: Order amount
+                month: Month
             new_magento_customers_chart:
                 title: New Web Customers
                 description: This widget gives you a quick overview of new web customers
                 customer_count: Customers count
+                month: Month
         datagrid:
             actions:
                 view:
@@ -113,6 +115,9 @@ orocrm:
             lifetime.label:      Lifetime sales value
             currency.label:      Currency
             organization.label:  Organization
+            monetary.label:      Monetary
+            recency.label:       Recency
+            frequency.label:     Frequency
 
         customergroup:
             entity_label:        Customer Group

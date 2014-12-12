@@ -13,7 +13,8 @@
         "oro/business-entities-bundle": "dev-master",
         "orocrm/contact-bundle": "dev-master",
         "orocrm/account-bundle": "dev-master",
-        "orocrm/integration-bundle": "dev-master"
+        "orocrm/integration-bundle": "dev-master",
+        "orocrm/analytics-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": {

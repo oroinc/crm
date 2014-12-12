@@ -1,0 +1,66 @@
+.control-group.rfm-settings-data {
+    max-width: 890px;
+}
+
+.rfm-settings-data input {
+    width: 70px;
+    height: 14px;
+}
+
+.rfm-settings-data .grid span {
+    display: inline-block;
+    width: 70px;
+}
+
+.rfm-settings-data .alert span {
+    display: block;
+}
+
+.rfm-settings .rfm-settings-data .grid {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.rfm-settings .rfm-settings-data {
+    display: none;
+}
+
+.rfm-settings.rfm-enabled .rfm-settings-data {
+    display: block;
+}
+
+.rfm-settings .rfm-settings-data th {
+    font-weight: normal;
+}
+
+.rfm-settings .rfm-settings-data th label {
+    font-weight: bold;
+    margin-bottom: 0;
+}
+
+.rfm-settings .rfm-settings-data th label .oro-popover-content {
+    font-weight: normal;
+}
+
+.rfm-analytics-label {
+    padding: 4px 10px;
+    cursor: default;
+}
+
+.rfm-analytics-label-vertical {
+    margin: 5px;
+}
+
+.rfm-analytics-label span:not(:first-child) {
+    padding-left: 7px;
+}
+
+.rfm-analytics-label p {
+    margin: 2px 0;
+}
+
+.rfm-analytics-label-wrapper {
+    float: right;
+    height: 0;
+    margin-top: 17px;
+}

@@ -197,10 +197,6 @@ services:
         calls:
             - [setExclusionProvider, [@orocrm_channel.provider.channel_entity_exclusion_provider]]
 
-    oro_security.security_facade.link:
-        tags:
-            - { name: oro_service_link,  service: oro_security.security_facade }
-
     orocrm_channel.provider.state_provider:
         class: %orocrm_channel.provider.state_provider.class%
         arguments:

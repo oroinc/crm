@@ -10,6 +10,7 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class OrderRepository extends EntityRepository
 {
@@ -42,10 +43,18 @@ class OrderRepository extends EntityRepository
      */
     public function getCustomerOrdersSubtotalAmount(Customer $customer)
     {
-        $qb = $this->createQueryBuilder('o')
+        $qb = $this->createQueryBuilder('o');
+
+        $qb
             ->select('sum(o.subtotalAmount) as subtotal')
-            ->where('o.customer = :customer')->setParameter('customer', $customer)
-            ->andWhere('o.status != :status')->setParameter('status', 'canceled');
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('o.customer', ':customer'),
+                    $qb->expr()->neq($qb->expr()->lower('o.status'), ':status')
+                )
+            )
+            ->setParameter('customer', $customer)
+            ->setParameter('status', Order::STATUS_CANCELED);
 
         return $qb->getQuery()->getSingleScalarResult();
     }

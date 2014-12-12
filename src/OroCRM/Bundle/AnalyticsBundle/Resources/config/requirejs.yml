@@ -1,0 +1,3 @@
+config:
+    paths:
+        'orocrmanalytics/js/app/components/rfm-settings': 'bundles/orocrmanalytics/js/app/components/rfm-settings.js'

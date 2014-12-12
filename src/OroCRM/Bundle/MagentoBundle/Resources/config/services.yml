@@ -60,6 +60,10 @@ parameters:
     orocrm_magento.provider.phone.order_address.class:                      OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
     orocrm_magento.provider.phone.customer.class:                           OroCRM\Bundle\MagentoBundle\Provider\CustomerPhoneProvider
 
+    orocrm_magento.provider.analytics.customer_recency.class:               OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider
+    orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
+    orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -248,15 +252,15 @@ services:
         class: %orocrm_magento.dashboard.data_provider.order.class%
         arguments:
             - @doctrine
-            - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
         arguments:
             - @doctrine
-            - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
@@ -282,3 +286,28 @@ services:
         class: %orocrm_magento.provider.phone.customer.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_magento.entity.customer.class% }
+
+    orocrm_magento.provider.analytics.customer_recency:
+        class: %orocrm_magento.provider.analytics.customer_recency.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.analytics.customer_frequency:
+        class: %orocrm_magento.provider.analytics.customer_frequency.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.analytics.customer_monetary:
+
+        class: %orocrm_magento.provider.analytics.customer_monetary.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }
