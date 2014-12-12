@@ -136,7 +136,7 @@ class RFMMetricCategory
      */
     public function setCategoryIndex($categoryIndex)
     {
-        $this->categoryIndex = $categoryIndex;
+        $this->categoryIndex = (int)$categoryIndex;
 
         return $this;
     }
@@ -159,6 +159,10 @@ class RFMMetricCategory
      */
     public function setMinValue($minValue)
     {
+        if (!is_null($minValue)) {
+            $minValue = (float)$minValue;
+        }
+
         $this->minValue = $minValue;
 
         return $this;
@@ -182,6 +186,10 @@ class RFMMetricCategory
      */
     public function setMaxValue($maxValue)
     {
+        if (!is_null($maxValue)) {
+            $maxValue = (float)$maxValue;
+        }
+
         $this->maxValue = $maxValue;
 
         return $this;
