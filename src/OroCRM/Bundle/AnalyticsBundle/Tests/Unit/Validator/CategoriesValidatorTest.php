@@ -89,6 +89,8 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsCount' => 1,
+                'expectedViolationsMessage' => $constraint->message,
             ],
             'asc order violation' => [
                 'collection' => $this->getCollection(
