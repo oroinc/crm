@@ -305,7 +305,13 @@ datagrid:
             query:
                 select:
                     - CONCAT(MONTH(o.closeDate), ' / ', YEAR(o.closeDate)) as monthPeriod
+                    #- CONCAT(YEAR(o.closeDate), '', MONTH(o.closeDate)) as monthPeriodSorting
+                    - MAX(o.closeDate) as monthPeriodSorting
+
                     - CONCAT(QUARTER(o.closeDate), ' / ', YEAR(o.closeDate)) as quarterPeriod
+                    #- CONCAT(YEAR(o.closeDate), '', QUARTER(o.closeDate)) as quarterPeriodSorting
+                    - MAX(o.closeDate) as quarterPeriodSorting
+
                     - YEAR(o.closeDate) as yearPeriod
                     - SUM(o.closeRevenue) as value
                     - COUNT(o.id) as cnt
