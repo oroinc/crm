@@ -988,6 +988,7 @@ datagrid:
                     - o.updatedAt
                     - o.subtotalAmount
                     - o.totalAmount
+                    - o.totalPaidAmount
                     - o.status
                     - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
