@@ -10,7 +10,7 @@ services:
     orocrm_case.manager:
         class: %orocrm_case.manager.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @doctrine
             - @oro_security.acl_helper
 
     orocrm_case.manager.api:

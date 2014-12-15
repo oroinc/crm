@@ -28,6 +28,7 @@ class ContactImportHelperTest extends \PHPUnit_Framework_TestCase
     {
         $this->addressImportHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
+            ->setMethods(['updateAddressTypes', 'updateAddressCountryRegion'])
             ->disableOriginalConstructor()->getMock();
     }
 
