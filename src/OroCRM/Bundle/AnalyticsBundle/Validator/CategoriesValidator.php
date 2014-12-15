@@ -57,7 +57,7 @@ class CategoriesValidator extends ConstraintValidator
         );
         $invalidItems = $values->filter(
             function (RFMMetricCategory $category) {
-                if (!(is_numeric($category->getMaxValue()) || is_real($category->getMaxValue()))
+                if (!is_numeric($category->getMaxValue())
                    && !is_null($category->getMaxValue())
                 ) {
                     return true;
