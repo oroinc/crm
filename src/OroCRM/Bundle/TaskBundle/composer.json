@@ -9,7 +9,7 @@
         "symfony/symfony": "2.3.*",
 
         "besimple/soap-bundle": "dev-master",
-        "friendsofsymfony/rest-bundle": "0.11.*",
+        "friendsofsymfony/rest-bundle": "1.5.0-RC2",
         "nelmio/api-doc-bundle": "dev-master",
         "sensio/framework-extra-bundle": "2.3.*",
 

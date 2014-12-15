@@ -31,7 +31,9 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     public function isApplicableTarget(ConfigIdInterface $configId, ConfigManager $configManager)
     {
         $provider = $configManager->getProvider('activity');
-        return $provider->hasConfigById($configId) && $provider->getConfigById($configId)->has('activities');
+        return $provider->hasConfigById($configId)
+            && $provider->getConfigById($configId)->has('activities')
+            && in_array(self::ACTIVITY_CLASS, $provider->getConfigById($configId)->get('activities'));
     }
 
     /**
