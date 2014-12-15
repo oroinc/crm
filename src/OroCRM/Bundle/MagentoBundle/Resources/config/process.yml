@@ -108,11 +108,17 @@ definitions:
         order:   30
         actions_configuration:
             - @assign_constant_value:
+                attribute: $.dataChannelStatusActive
+                value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+            - @assign_constant_value:
                 attribute: $.commandName
-                value: OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand::COMMAND_NAME
+                value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
             - @tree:
                 conditions:
-                    @not_empty: $customer
+                    @and:
+                        - @not_empty: $customer
+                        - @equal: [$dataChannel.status, $.dataChannelStatusActive]
+                        - @not_empty: $dataChannel.data[rfm_enabled]
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
@@ -135,8 +141,11 @@ definitions:
         order:   30
         actions_configuration:
             - @assign_constant_value:
+                attribute: $.dataChannelStatusActive
+                value: OroCRM\Bundle\ChannelBundle\Entity\Channel::STATUS_ACTIVE
+            - @assign_constant_value:
                 attribute: $.commandName
-                value: OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand::COMMAND_NAME
+                value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
             - @assign_constant_value:
                 attribute: $.statusCompleted
                 value: Oro\Bundle\IntegrationBundle\Entity\Status::STATUS_COMPLETED
@@ -155,7 +164,9 @@ definitions:
                         - @equal: [$code, $.statusCompleted]
                         - @equal: [$channel.type, $.channelType]
                         - @equal: [$connector, 'order']
+                        - @equal: [$.dataChannel.status, $.dataChannelStatusActive]
                         - @not_empty: $.dataChannel
+                        - @not_empty: $.dataChannel.data[rfm_enabled]
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
