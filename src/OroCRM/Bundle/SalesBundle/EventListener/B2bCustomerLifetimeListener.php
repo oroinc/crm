@@ -53,7 +53,7 @@ class B2bCustomerLifetimeListener
                 // handle creation, just add to prev lifetime value and recalculate change set
                 $b2bCustomer = $entity->getCustomer();
                 $b2bCustomer->setLifetime($b2bCustomer->getLifetime() + $entity->getCloseRevenue());
-                $this->scheduleUpdate($b2bCustomer, false);
+                $this->scheduleUpdate($b2bCustomer);
                 $this->uow->computeChangeSet(
                     $this->em->getClassMetadata(ClassUtils::getClass($b2bCustomer)),
                     $b2bCustomer
@@ -121,6 +121,10 @@ class B2bCustomerLifetimeListener
      */
     protected function scheduleUpdate(B2bCustomer $b2bCustomer)
     {
+        if ($this->uow->isScheduledForDelete($b2bCustomer)) {
+            return;
+        }
+
         $this->queued[$b2bCustomer->getId()] = $b2bCustomer;
     }
 
