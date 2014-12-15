@@ -29,9 +29,10 @@ class CategoriesValidator extends ConstraintValidator
             return;
         }
 
-        $this->validateCount($value, $constraint);
-        if ($this->validateBlank($value, $constraint)) {
-            $this->validateOrder($value, $constraint);
+        if ($this->validateCount($value, $constraint)) {
+            if ($this->validateBlank($value, $constraint)) {
+                $this->validateOrder($value, $constraint);
+            }
         }
     }
 
@@ -44,12 +45,38 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateBlank(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        if (!$this->filterNotEmptyFields($value)->isEmpty()) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->blankMessage);
-            return false;
+        $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
+        $isIncreasing = $this->isIncreasing($orderedByIndex);
+
+        if ($isIncreasing) {
+            $firstMax = $orderedByIndex->first()->getMaxValue();
+            $lastMin = $orderedByIndex->last()->getMinValue();
+            $hasEmpty = empty($firstMax) || empty($lastMin);
+        } else {
+            $firstMin = $orderedByIndex->first()->getMinValue();
+            $lastMax = $orderedByIndex->last()->getMaxValue();
+            $hasEmpty = empty($firstMin) || empty($lastMax);
         }
 
-        return true;
+        if (!$hasEmpty) {
+            for ($i = 1; $i < $orderedByIndex->count() - 1; $i++) {
+                /** @var RFMMetricCategory $category */
+                $category = $orderedByIndex[$i];
+                $min = $category->getMinValue();
+                $max = $category->getMaxValue();
+
+                if (empty($min) || empty($max)) {
+                    $hasEmpty = true;
+                    break;
+                }
+            }
+        }
+
+        if ($hasEmpty) {
+            $this->context->addViolationAt($constraint->getType(), $constraint->blankMessage);
+        }
+
+        return !$hasEmpty;
     }
 
     /**
@@ -57,11 +84,12 @@ class CategoriesValidator extends ConstraintValidator
      *
      * @param PersistentCollection $value
      * @param CategoriesConstraint $constraint
+     * @return bool
      */
     protected function validateCount(PersistentCollection $value, CategoriesConstraint $constraint)
     {
         if ($value->count() >= self::MIN_CATEGORIES_COUNT) {
-            return;
+            return true;
         }
 
         $this->context->addViolationAt(
@@ -69,6 +97,8 @@ class CategoriesValidator extends ConstraintValidator
             $constraint->countMessage,
             ['%count%' => self::MIN_CATEGORIES_COUNT]
         );
+
+        return false;
     }
 
     /**
@@ -82,14 +112,12 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateOrder(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        if ($value->isEmpty() || count($this->filterNotEmptyFields($value)) > 0) {
+        if ($value->isEmpty()) {
             return;
         }
 
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
-
-        $isIncreasing = is_null($orderedByIndex->first()->getMinValue())
-            && is_null($orderedByIndex->last()->getMaxValue());
+        $isIncreasing = $this->isIncreasing($orderedByIndex);
 
         if ($isIncreasing) {
             $criteria = Criteria::ASC;
@@ -136,15 +164,11 @@ class CategoriesValidator extends ConstraintValidator
     }
 
     /**
-     * @param Collection $values
-     * @return Collection
+     * @param Collection $orderedByIndex
+     * @return bool
      */
-    protected function filterNotEmptyFields($values)
-    {
-        return $values->filter(
-            function (RFMMetricCategory $category) {
-                return $category->getMaxValue() === null && $category->getMinValue() === null;
-            }
-        );
+    protected function isIncreasing(Collection $orderedByIndex) {
+        return is_null($orderedByIndex->first()->getMinValue())
+        && is_null($orderedByIndex->last()->getMaxValue());
     }
 }
