@@ -37,8 +37,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function testResetChannelMetrics()
     {
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
+        $channel = $this->getActiveRFMChannelReference('Channel.CustomerChannel');
 
         /** @var RFMAwareInterface[] $entities */
         $entities = $this->getContainer()
@@ -114,12 +113,44 @@ class RFMMetricStateManagerTest extends WebTestCase
         $this->assertCount(1, $entities);
     }
 
+    public function testScheduleChannelShouldNotAddJobIfInactive()
+    {
+        /** @var Channel $channel */
+        $channel = clone($this->getReference('Channel.CustomerChannel'));
+        $channel->setStatus(Channel::STATUS_INACTIVE);
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+
+        /** @var Job[] $entities */
+        $entities = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
+            ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
+
+        $this->assertCount(0, $entities);
+    }
+
+    public function testScheduleChannelShouldNotAddJobIfRFMDIsabled()
+    {
+        /** @var Channel $channel */
+        $channel = clone($this->getReference('Channel.CustomerChannel'));
+        $channel->setStatus(Channel::STATUS_ACTIVE);
+        $channel->setData(['rfm_enabled' => false]);
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
+
+        /** @var Job[] $entities */
+        $entities = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityRepository('JMS\JobQueueBundle\Entity\Job')
+            ->findBy(['command' => CalculateAnalyticsCommand::COMMAND_NAME]);
+
+        $this->assertCount(0, $entities);
+    }
+
     public function testScheduleChannelShouldNotAddJobIfGenericExists()
     {
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
 
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
+        $channel = $this->getActiveRFMChannelReference('Channel.CustomerChannel');
 
         /** @var Job[] $entities */
         $entities = $this->getContainer()
@@ -146,12 +177,11 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function testScheduleShouldAddGenericJobAndDropChannelJobExists()
     {
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
+        $channel = $this->getActiveRFMChannelReference('Channel.CustomerChannel');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
         /** @var Channel $channel2 */
-        $channel2 = $this->getReference('Channel.CustomerChannel2');
+        $channel2 = $this->getActiveRFMChannelReference('Channel.CustomerChannel2');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
 
         /** @var Job[] $entities */
@@ -183,12 +213,10 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function testScheduleDifferentChannels()
     {
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
+        $channel = $this->getActiveRFMChannelReference('Channel.CustomerChannel');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
-        /** @var Channel $channel2 */
-        $channel2 = $this->getReference('Channel.CustomerChannel2');
+        $channel2 = $this->getActiveRFMChannelReference('Channel.CustomerChannel2');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel2);
 
         /** @var Job[] $entities */
@@ -206,8 +234,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function testScheduleSameChannel()
     {
-        /** @var Channel $channel */
-        $channel = $this->getReference('Channel.CustomerChannel');
+        $channel = $this->getActiveRFMChannelReference('Channel.CustomerChannel');
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
         $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation($channel);
 
@@ -222,5 +249,19 @@ class RFMMetricStateManagerTest extends WebTestCase
         }
 
         $this->assertCount(1, $entities);
+    }
+
+    /**
+     * @param string $reference
+     * @return Channel
+     */
+    protected function getActiveRFMChannelReference($reference)
+    {
+        /** @var Channel $channel */
+        $channel = clone($this->getReference($reference));
+        $channel->setStatus(Channel::STATUS_ACTIVE);
+        $channel->setData(['rfm_enabled' => true]);
+
+        return $channel;
     }
 }
