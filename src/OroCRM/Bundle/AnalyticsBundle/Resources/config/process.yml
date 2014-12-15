@@ -15,7 +15,7 @@ definitions:
                 conditions:
                     @and:
                         - @equal: [$status, $.dataChannelStatusActive]
-                        - @not_empty: $data[rfm_enabled]
+                        - @equal: ["$data[rfm_enabled]", true]
                 actions:
                     - @format_string:
                         attribute: $.channelArguments

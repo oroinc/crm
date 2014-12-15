@@ -118,7 +118,7 @@ definitions:
                     @and:
                         - @not_empty: $customer
                         - @equal: [$dataChannel.status, $.dataChannelStatusActive]
-                        - @not_empty: $dataChannel.data[rfm_enabled]
+                        - @equal: ["$.dataChannel.data[rfm_enabled]", true]
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
@@ -164,9 +164,9 @@ definitions:
                         - @equal: [$code, $.statusCompleted]
                         - @equal: [$channel.type, $.channelType]
                         - @equal: [$connector, 'order']
-                        - @equal: [$.dataChannel.status, $.dataChannelStatusActive]
                         - @not_empty: $.dataChannel
-                        - @not_empty: $.dataChannel.data[rfm_enabled]
+                        - @equal: [$.dataChannel.status, $.dataChannelStatusActive]
+                        - @equal: ["$.dataChannel.data[rfm_enabled]", true]
                 actions:
                     - @format_string:
                         attribute: $.channelArguments
