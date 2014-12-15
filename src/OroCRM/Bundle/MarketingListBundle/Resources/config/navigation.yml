@@ -18,3 +18,9 @@ oro_titles:
     orocrm_marketing_list_update: '%%entityName%% - Edit'
     orocrm_marketing_list_view: '%%entityName%%'
     orocrm_marketing_list_create: oro.ui.create_entity
+
+oro_navigation_elements:
+    pinButton:
+        routes:
+            orocrm_marketing_list_create: false
+            orocrm_marketing_list_update: false
