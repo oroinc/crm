@@ -26,8 +26,47 @@ class CategoriesValidator extends ConstraintValidator
             return;
         }
 
+        $this->validateBlank($value, $constraint);
+        $this->validateNumber($value, $constraint);
         $this->validateCount($value, $constraint);
         $this->validateOrder($value, $constraint);
+    }
+
+    /**
+     * @param PersistentCollection $value
+     * @param CategoriesConstraint $constraint
+     */
+    protected function validateBlank(PersistentCollection $value, CategoriesConstraint $constraint)
+    {
+        $values = $value->matching(
+            new Criteria(null, ['minValue' => Criteria::ASC])
+        );
+        if (!$this->filterNotEmptyFields($values)->isEmpty()) {
+            $this->context->addViolationAt($constraint->getType(), $constraint->blankMessage);
+        }
+    }
+
+    /**
+     * @param PersistentCollection $value
+     * @param CategoriesConstraint $constraint
+     */
+    protected function validateNumber(PersistentCollection $value, CategoriesConstraint $constraint)
+    {
+        $values = $value->matching(
+            new Criteria(null, ['minValue' => Criteria::ASC])
+        );
+        $invalidItems = $values->filter(
+            function (RFMMetricCategory $category) {
+                if (!(is_numeric($category->getMaxValue()) || is_real($category->getMaxValue()))
+                   && !is_null($category->getMaxValue())
+                ) {
+                    return true;
+                }
+            }
+        );
+        if (!$invalidItems->isEmpty()) {
+            $this->context->addViolationAt($constraint->getType(), $constraint->numberMessage);
+        }
     }
 
     /**
@@ -53,7 +92,7 @@ class CategoriesValidator extends ConstraintValidator
      */
     protected function validateOrder(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        if ($value->isEmpty()) {
+        if ($value->isEmpty() || count($this->filterNotEmptyFields($value)) > 0) {
             return;
         }
 
@@ -104,5 +143,22 @@ class CategoriesValidator extends ConstraintValidator
     public function validatedBy()
     {
         return 'orocrm_analytics.validator.categories';
+    }
+
+    /**
+     * @param $values
+     * @return mixed
+     */
+    protected function filterNotEmptyFields($values)
+    {
+        return $values->filter(
+            function (RFMMetricCategory $category) {
+                if ($category->getMaxValue() == $category->getMinValue()
+                    && is_null($category->getMaxValue())
+                ) {
+                    return true;
+                }
+            }
+        );
     }
 }

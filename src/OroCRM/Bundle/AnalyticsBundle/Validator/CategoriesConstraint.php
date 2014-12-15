@@ -21,6 +21,17 @@ class CategoriesConstraint extends Constraint
     /**
      * @var string
      */
+    public $blankMessage = 'orocrm.analytics.validator.categories.blank';
+
+    /**
+     * @var string
+     */
+    public $numberMessage = 'orocrm.analytics.validator.categories.number';
+
+    /**
+     * @var string
+     */
+
     protected $type;
 
     /**
