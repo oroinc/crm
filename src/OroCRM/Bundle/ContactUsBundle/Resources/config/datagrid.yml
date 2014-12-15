@@ -57,6 +57,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 firstName:
                     type:      string
                     data_name: cr.firstName
@@ -108,3 +109,4 @@ datagrid:
                 link:         delete_link
         options:
             entityHint: contact request
+            entity_pagination: true

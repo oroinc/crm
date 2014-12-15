@@ -305,7 +305,11 @@ datagrid:
             query:
                 select:
                     - CONCAT(MONTH(o.closeDate), ' / ', YEAR(o.closeDate)) as monthPeriod
+                    - MAX(o.closeDate) as monthPeriodSorting
+
                     - CONCAT(QUARTER(o.closeDate), ' / ', YEAR(o.closeDate)) as quarterPeriod
+                    - MAX(o.closeDate) as quarterPeriodSorting
+
                     - YEAR(o.closeDate) as yearPeriod
                     - SUM(o.closeRevenue) as value
                     - COUNT(o.id) as cnt
@@ -314,7 +318,7 @@ datagrid:
                 join:
                     inner:
                         - { join: o.status, alias: s }
-                groupBy: o.closeDate
+                groupBy: o.closeDate # will be overridden in ReportGridListener with selected period name (monthly or quarterly or yearly)
                 where:
                     and:
                         - s.name = 'won'
@@ -347,7 +351,7 @@ datagrid:
             value:     { label: orocrm.report.datagrid.columns.total_value, frontend_type: currency }
         sorters:
             columns:
-                period:     { data_name: period }
+                period:     { data_name: o.closeDate }
                 cnt:        { data_name: cnt }
                 value:      { data_name: value }
         filters:

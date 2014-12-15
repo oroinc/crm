@@ -27,6 +27,11 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var StepExecution|\PHPUnit_Framework_MockObject_MockObject */
     protected $stepExecutionMock;
 
+    /** @var array */
+    protected $config = [
+        'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
+    ];
+
     protected function setUp()
     {
         $this->transportMock     = $this
@@ -59,6 +64,10 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $status = new Status();
         $status->setCode($status::STATUS_COMPLETED);
         $status->setConnector($connector->getType());
+
+        $expectedDateInFilter = clone $status->getDate();
+        $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
+        $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
         $channel->addStatus($status);
 
         $this->transportMock->expects($this->once())->method('init');
@@ -66,7 +75,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->once())->method('setMode')
             ->with($this->equalTo(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
-        $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($status->getDate()));
+        $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 

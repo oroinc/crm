@@ -101,9 +101,91 @@ definitions:
                             organization:   $organization
                     - @unset_value: [$.accountName]
 
+    magento_analytics_customer_calculate:
+        label:   'Calculate RFM analytics for Magento Customer'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
+        order:   30
+        actions_configuration:
+            - @assign_constant_value:
+                attribute: $.commandName
+                value: OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand::COMMAND_NAME
+            - @tree:
+                conditions:
+                    @not_empty: $customer
+                actions:
+                    - @format_string:
+                        attribute: $.channelArguments
+                        string: '--channel=%channel_id% --ids=%id%'
+                        arguments:
+                            id: $customer.id
+                            channel_id: $dataChannel.id
+                    - @create_entity:
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        flush: true
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
+    magento_analytics_customer_calculate_imported:
+        label:   'Calculate RFM analytics for Magento Customer on Import'
+        enabled: true
+        entity:  Oro\Bundle\IntegrationBundle\Entity\Status
+        order:   30
+        actions_configuration:
+            - @assign_constant_value:
+                attribute: $.commandName
+                value: OroCRM\Bundle\AnalyticsBundle\Command\BuildAnalyticsCommand::COMMAND_NAME
+            - @assign_constant_value:
+                attribute: $.statusCompleted
+                value: Oro\Bundle\IntegrationBundle\Entity\Status::STATUS_COMPLETED
+            - @assign_constant_value:
+                attribute: $.channelType
+                value: OroCRM\Bundle\MagentoBundle\Provider\ChannelType::TYPE
+            - @find_entity:
+                parameters:
+                    class: OroCRM\Bundle\ChannelBundle\Entity\Channel
+                    attribute: $.dataChannel
+                    where:
+                        dataSource: $channel.id
+            - @tree:
+                conditions:
+                    @and:
+                        - @equal: [$code, $.statusCompleted]
+                        - @equal: [$channel.type, $.channelType]
+                        - @equal: [$connector, 'order']
+                        - @not_empty: $.dataChannel
+                actions:
+                    - @format_string:
+                        attribute: $.channelArguments
+                        string: '--channel=%channel_id%'
+                        arguments:
+                            channel_id: $.dataChannel.id
+                    - @create_entity:
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        flush: true
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
 triggers:
     magento_customer_creation:
         -
             event:    create
             priority: 5
             queued:   true
+
+    magento_analytics_customer_calculate_imported:
+        -
+            event:    create
+            priority: 10
+            queued:   true
+
+    magento_analytics_customer_calculate:
+        -
+            event:    update
+            priority: 10
+            queued:   true
+            field:    subtotalAmmount

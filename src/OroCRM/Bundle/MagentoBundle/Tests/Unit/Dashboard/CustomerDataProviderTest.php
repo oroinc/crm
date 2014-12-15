@@ -12,11 +12,6 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $translator;
-
-    /**
      * @var CustomerDataProvider
      */
     protected $dataProvider;
@@ -26,25 +21,26 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $aclHelper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $configProvider;
+
     protected function setUp()
     {
         $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
         $this->aclHelper  = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->translator->expects($this->any())
-            ->method('trans')
-            ->will(
-                $this->returnCallback(
-                    function ($id) {
-                        return $id . '.trans';
-                    }
-                )
-            );
-
-        $this->dataProvider = new CustomerDataProvider($this->registry, $this->translator, $this->aclHelper);
+        $this->dataProvider = new CustomerDataProvider(
+            $this->registry,
+            $this->aclHelper,
+            $this->configProvider
+        );
     }
 
     /**
@@ -52,13 +48,15 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $sourceData
      * @param array $expectedArrayData
      * @param array $expectedOptions
+     * @param array $chartConfig
      * @dataProvider getNewCustomerChartViewDataProvider
      */
     public function testGetNewCustomerChartView(
         array $channels,
         array $sourceData,
         array $expectedArrayData,
-        array $expectedOptions
+        array $expectedOptions,
+        array $chartConfig
     ) {
         $channelRepository = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
@@ -109,6 +107,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $chartViewBuilder->expects($this->once())
             ->method('getView')
             ->will($this->returnValue($chartView));
+
+        $this->configProvider->expects($this->once())
+            ->method('getChartConfig')
+            ->with('new_web_customers')
+            ->will($this->returnValue($chartConfig));
 
         $this->assertEquals(
             $chartView,
@@ -184,14 +187,27 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => null,
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
                             'type'       => 'month'
                         ],
                         'value' => [
                             'field_name' => 'cnt',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count.trans',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count',
                         ],
                     ],
+                ],
+                'chartConfig' => [
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'month_year',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'type'       => 'month',
+                        ],
+                        'value' => [
+                            'field_name' => 'cnt',
+                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
+                        ]
+                    ]
                 ]
             ]
         ];

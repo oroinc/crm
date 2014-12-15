@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
-use FOS\RestBundle\Request\ParamFetcherInterface;
 use FOS\RestBundle\Routing\ClassResourceInterface;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -18,6 +17,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
@@ -65,23 +66,8 @@ class ContactController extends RestController implements ClassResourceInterface
         $page  = (int)$this->getRequest()->get('page', 1);
         $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        $dateClosure = function ($value) {
-            // datetime value hack due to the fact that some clients pass + encoded as %20 and not %2B,
-            // so it becomes space on symfony side due to parse_str php function in HttpFoundation\Request
-            $value = str_replace(' ', '+', $value);
-
-            // The timezone is ignored when DateTime value specifies a timezone (e.g. 2010-01-28T15:00:00+02:00)
-            return new \DateTime($value, new \DateTimeZone('UTC'));
-        };
-
-        $filterParameters = [
-            'createdAt' => [
-                'closure' => $dateClosure,
-            ],
-            'updatedAt' => [
-                'closure' => $dateClosure,
-            ],
-        ];
+        $dateParamFilter  = new HttpDateTimeParameterFilter();
+        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
 

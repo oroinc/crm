@@ -90,6 +90,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     campaign-tracking-total-report-grid:
         source:
@@ -363,6 +365,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     orocrm-email-campaign-marketing-list-unsent-items-mixin:
         source:
@@ -387,6 +391,12 @@ datagrid:
     orocrm-email-campaign-marketing-list-sent-items-mixin:
         source:
             query:
+                select:
+                    - cs.openCount as openCount
+                    - cs.clickCount as clickCount
+                    - cs.bounceCount as bounceCount
+                    - cs.abuseCount as abuseCount
+                    - cs.unsubscribeCount as unsubscribeCount
                 join:
                     inner:
                         -
@@ -401,3 +411,53 @@ datagrid:
                             condition: 'cs.marketingListItem = mli.id AND cs.emailCampaign = :emailCampaign'
             bind_parameters:
                 - emailCampaign
+        columns:
+            openCount:
+                label: orocrm.campaign.emailcampaign.stats.open.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            clickCount:
+                label: orocrm.campaign.emailcampaign.stats.click.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            bounceCount:
+                label: orocrm.campaign.emailcampaign.stats.bounce.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            abuseCount:
+                label: orocrm.campaign.emailcampaign.stats.abuse.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+            unsubscribeCount:
+                label: orocrm.campaign.emailcampaign.stats.unsubscribe.label
+                type: twig
+                frontend_type: html
+                template: OroCRMCampaignBundle:EmailCampaign:Property/stats.html.twig
+        filters:
+            columns:
+                openCount:
+                    type:        number
+                    data_name:   cs.openCount
+                clickCount:
+                    type:        number
+                    data_name:   cs.clickCount
+                bounceCount:
+                    type:        number
+                    data_name:   cs.bounceCount
+                abuseCount:
+                    type:        number
+                    data_name:   cs.abuseCount
+                unsubscribeCount:
+                    type:        number
+                    data_name:   cs.unsubscribeCount
+        sorters:
+            columns:
+                openCount:        { data_name: cs.openCount }
+                clickCount:       { data_name: cs.clickCount }
+                bounceCount:      { data_name: cs.bounceCount }
+                abuseCount:       { data_name: cs.abuseCount }
+                unsubscribeCount: { data_name: cs.unsubscribeCount }

@@ -8,13 +8,14 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\CalendarBundle\Entity\CalendarConnection;
-use Oro\Bundle\CalendarBundle\Entity\Calendar;
-use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
-use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\CalendarBundle\Entity\Calendar;
+use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
+use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
+use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -62,6 +63,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         foreach ($users as $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $organization->getId());
+            $this->setSecurityContext($calendar->getOwner());
             /** @var CalendarEvent $event */
             $days = $this->getDatePeriod();
             foreach ($days as $day) {
@@ -150,12 +152,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $calendarAdmin = $this->calendar->findDefaultCalendar($admin->getId(), $admin->getOrganization()->getId());
 
         /** @var \Oro\Bundle\UserBundle\Entity\User $sale */
-        $sale = $this->user->findOneBy(array('username' => 'sale'));
+        $sale = $this->user->findOneBy(['username' => 'sale']);
         /** @var Calendar $calendarSale */
         $calendarSale = $this->calendar->findDefaultCalendar($sale->getId(), $sale->getOrganization()->getId());
 
         /** @var \Oro\Bundle\UserBundle\Entity\User $market */
-        $market = $this->user->findOneBy(array('username' => 'marketing'));
+        $market = $this->user->findOneBy(['username' => 'marketing']);
         /** @var Calendar $calendarMarket */
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
@@ -166,7 +168,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $user = $users[$userId];
             unset($users[$userId]);
             $users = array_values($users);
-            if (in_array($user->getId(), array($admin->getId(), $sale->getId(), $market->getId()))) {
+            if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
                 //to prevent self assignment
                 continue;
             }
@@ -174,23 +176,30 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $user->getOrganization()->getId());
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarAdmin->addConnection($connection);
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarAdmin)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarSale->addConnection($connection);
-
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarSale)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
-                /** @var CalendarConnection $connection */
-                $connection = new CalendarConnection($calendar);
-                $calendarMarket->addConnection($connection);
-
+                $calendarProperty = new CalendarProperty();
+                $calendarProperty
+                    ->setTargetCalendar($calendarMarket)
+                    ->setCalendarAlias('user')
+                    ->setCalendar($calendar->getId());
+                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
             }
 
             $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendar);
@@ -222,6 +231,22 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         }
         return false;
     }
+
+    /**
+     * @param User $user
+     */
+    protected function setSecurityContext($user)
+    {
+        $securityContext = $this->container->get('security.context');
+        $token = new UsernamePasswordOrganizationToken(
+            $user,
+            $user->getUsername(),
+            'main',
+            $this->getReference('default_organization')
+        );
+        $securityContext->setToken($token);
+    }
+
     /**
      * Persist object
      *

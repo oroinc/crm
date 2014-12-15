@@ -15,6 +15,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
@@ -58,9 +60,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  */
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
-    CustomerIdentityInterface
+    CustomerIdentityInterface,
+    RFMAwareInterface
 {
-    use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait;
+    use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
@@ -247,7 +250,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var float
      *
-     * @ORM\Column(name="vat", type="float", nullable=true)
+     * @ORM\Column(name="vat", type="string", length=255, nullable=true)
      * @Oro\Versioned
      */
     protected $vat;
@@ -409,7 +412,7 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param float $vat
+     * @param string $vat
      *
      * @return Customer
      */
@@ -421,7 +424,7 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @return float
+     * @return string
      */
     public function getVat()
     {

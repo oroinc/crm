@@ -4,6 +4,7 @@ datagrid:
         options:
             entityHint: opportunities
             export: true
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_opportunity_view
@@ -98,6 +99,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 name:
                     type: string
                     data_name: o.name
@@ -123,6 +125,7 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                            translatable_options: false
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -152,6 +155,7 @@ datagrid:
         options:
             entityHint: leads
             export: true
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_lead_view
@@ -286,14 +290,16 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                  statusLabel:
                     type: entity
                     data_name: status.name
                     enabled: false
                     options:
                         field_options:
-                          class: OroCRMSalesBundle:LeadStatus
-                          property: label
+                            class: OroCRMSalesBundle:LeadStatus
+                            property: label
+                            translatable_options: false
                  firstName:
                     type: string
                     data_name: l.firstName
@@ -312,9 +318,10 @@ datagrid:
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                  regionLabel:
                     type: string
                     data_name: regionLabel
@@ -328,6 +335,7 @@ datagrid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
         options:
             entityHint: sales process
+            entity_pagination: true
         source:
             type: orm
             acl_resource: orocrm_sales_salesfunnel_view
@@ -444,6 +452,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 startDate:
                     type:      date
                     data_name: salesFunnel.startDate
@@ -469,6 +478,7 @@ datagrid:
                         field_type: oro_workflow_step_select
                         field_options:
                             workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
+                            translatable_options: false
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -578,6 +588,7 @@ datagrid:
                              class: OroAddressBundle:Country
                              property: name
                              query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                             translatable_options: false
                  regionLabel:
                      type: string
                      data_name: regionLabel
@@ -701,6 +712,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                  name:
                     type:      string
                     data_name: c.name
@@ -741,6 +753,8 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        options:
+            entity_pagination: true
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -864,9 +878,10 @@ datagrid:
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                  regionLabel:
                     type: string
                     data_name: regionLabel

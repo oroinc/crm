@@ -97,6 +97,11 @@ class B2bCustomerLifetimeListener
 
         $flushRequired = false;
         foreach ($this->queued as $b2bCustomer) {
+            if (!$b2bCustomer->getId()) {
+                // skip update for just removed customers
+                continue;
+            }
+
             $flushRequired |= $repo->calculateLifetime($b2bCustomer);
         }
 

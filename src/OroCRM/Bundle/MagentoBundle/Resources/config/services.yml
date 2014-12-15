@@ -29,6 +29,7 @@ parameters:
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
+    orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -44,10 +45,6 @@ parameters:
 
     orocrm_magento.listener.customer_listener.class:                        OroCRM\Bundle\MagentoBundle\EventListener\ContactListener
 
-    # processors
-    orocrm_magento.importexport.customer.reverse.processor.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
-    orocrm_magento.importexport.customer.reverse.writer.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter
-
     # helpers
     orocrm_magento.importexport.address_import_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
@@ -62,6 +59,10 @@ parameters:
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
     orocrm_magento.provider.phone.order_address.class:                      OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
     orocrm_magento.provider.phone.customer.class:                           OroCRM\Bundle\MagentoBundle\Provider\CustomerPhoneProvider
+
+    orocrm_magento.provider.analytics.customer_recency.class:               OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider
+    orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
+    orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -198,6 +199,11 @@ services:
         arguments:
             - @doctrine
 
+    orocrm_magento.event_listener.after_job_execution:
+        class: %orocrm_magento.event_listener.integration_sync_after.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: process }
+
     # Customer API
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
@@ -227,18 +233,6 @@ services:
         tags:
             - { name: doctrine.event_listener, event: onFlush, connection: default }
 
-    orocrm_magento.importexport.customer.reverse.processor:
-        class: %orocrm_magento.importexport.customer.reverse.processor.class%
-
-    orocrm_magento.importexport.customer.reverse.writer:
-        class: %orocrm_magento.importexport.customer.reverse.writer.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-            - @orocrm_magento.importexport.denormalizer.customer
-            - @orocrm_magento.transport.soap_transport
-            - @orocrm_magento.importexport.address_import_helper
-            - @orocrm_magento.converter.region
-
     orocrm_magento.importexport.address_import_helper:
         class: %orocrm_magento.importexport.address_import_helper.class%
         arguments:
@@ -258,15 +252,15 @@ services:
         class: %orocrm_magento.dashboard.data_provider.order.class%
         arguments:
             - @doctrine
-            - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
         arguments:
             - @doctrine
-            - @translator
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
@@ -292,3 +286,28 @@ services:
         class: %orocrm_magento.provider.phone.customer.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_magento.entity.customer.class% }
+
+    orocrm_magento.provider.analytics.customer_recency:
+        class: %orocrm_magento.provider.analytics.customer_recency.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.analytics.customer_frequency:
+        class: %orocrm_magento.provider.analytics.customer_frequency.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.analytics.customer_monetary:
+
+        class: %orocrm_magento.provider.analytics.customer_monetary.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: orocrm_analytics.builder.rfm }

@@ -5,7 +5,7 @@
 {% set pageTitle = 'orocrm.marketinglist.entity_plural_label'|trans %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_marketing_list_create') %}
+    {% if isDesktopVersion() and resource_granted('orocrm_marketing_list_create') %}
         {{ UI.addButton({
             'path':          path('orocrm_marketing_list_create'),
             'entity_label': 'orocrm.marketinglist.entity_label'|trans

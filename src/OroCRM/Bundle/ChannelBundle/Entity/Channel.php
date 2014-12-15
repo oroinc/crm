@@ -147,6 +147,13 @@ class Channel
     protected $channelType;
 
     /**
+     * @var array $data
+     *
+     * @ORM\Column(name="data", type="json_array", nullable=true)
+     */
+    protected $data;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -371,6 +378,25 @@ class Channel
     public function getChannelType()
     {
         return $this->channelType;
+    }
+
+    /**
+     * @param array $data
+     * @return Channel
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**

@@ -1,0 +1,36 @@
+orocrm:
+    analytics:
+        title:
+            add_row: Add bucket
+        rfm:
+            recency:
+                label: Recency
+                title: Recency
+            frequency:
+                label: Frequency
+                title: Frequency
+            monetary:
+                label: Monetary value
+                title: Monetary value
+        form:
+            rfm_enable.label: Enable RFM
+            recency.label: Recency
+            frequency.label: Frequency
+            monetary.label: Monetary value
+            rfm_setting.title: RFM Segment Configuration
+            score.title: Score
+            actions.title: Actions
+            hint:
+                recency: Days, less is better
+                frequency: Orders per year, more is better
+                monetary: Order amount per year, US$, more is better
+        rfmmetriccategory:
+            entity_label: RFM Metric Category
+            entity_plural_label: RFM Metric Categories
+            category_index.label: Index
+            category_type.label: Type
+            id.label: Id
+            max_value.label: Maximum Value
+            min_value.label: Minimum Value
+            channel.label: Channel
+            owner.label: Owner

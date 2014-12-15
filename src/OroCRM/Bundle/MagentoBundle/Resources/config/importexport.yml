@@ -42,6 +42,13 @@ parameters:
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
 
+    # processors
+    orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
+
+    # writers
+    orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
+    orocrm_magento.importexport.customer.reverse.writer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter
+
 services:
     # Data converter
     orocrm_magento.importexport.data_converter.cart:
@@ -75,8 +82,10 @@ services:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
+          - []
         tags:
           - { name: oro_integration.connector, type: customer, channel_type: magento }
+          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.cart_connector:
         class: %orocrm_magento.mage.cart_connector.class%
@@ -84,8 +93,10 @@ services:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
+          - []
         tags:
           - { name: oro_integration.connector, type: cart, channel_type: magento }
+          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.order_connector:
         class: %orocrm_magento.mage.order_connector.class%
@@ -93,8 +104,10 @@ services:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
+          - []
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
+          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.region_connector:
         class: %orocrm_magento.mage.region_connector.class%
@@ -102,8 +115,10 @@ services:
           - @oro_importexport.context_registry
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
+          - []
         tags:
           - { name: oro_integration.connector, type: region, channel_type: magento }
+          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     # Normalizers / Denormalizers
     orocrm_magento.importexport.denormalizer.customer:
@@ -191,6 +206,8 @@ services:
     orocrm_magento.import.strategy.customer.add_or_update:
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         parent: orocrm_magento.import.strategy.base_strategy
+        calls:
+             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
@@ -246,13 +263,33 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
 
+    orocrm_magento.importexport.normalizer.datetime:
+        class: %orocrm_magento.importexport.normalizer.datetime.class%
+        tags:
+            - { name: oro_importexport.normalizer }
+
     # Reverse processor
     orocrm_magento.importexport.processor.export_customer:
         parent: oro_importexport.processor.export_abstract
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
 
-    orocrm_magento.importexport.normalizer.datetime:
-        class: %orocrm_magento.importexport.normalizer.datetime.class%
-        tags:
-            - { name: oro_importexport.normalizer }
+    orocrm_magento.importexport.customer.reverse.processor:
+        class: %orocrm_magento.importexport.customer.reverse.processor.class%
+
+    # Writers
+    orocrm_magento.writer.proxy_entity_writer:
+        class: %orocrm_magento.writer.proxy_entity_writer.class%
+        arguments:
+            - @oro_integration.writer.persistent_batch_writer
+        calls:
+            - [setLogger, [@oro_integration.logger.strategy]]
+
+    orocrm_magento.importexport.customer.reverse.writer:
+        class: %orocrm_magento.importexport.customer.reverse.writer.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+            - @orocrm_magento.importexport.denormalizer.customer
+            - @orocrm_magento.transport.soap_transport
+            - @orocrm_magento.importexport.address_import_helper
+            - @orocrm_magento.converter.region

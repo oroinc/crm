@@ -50,10 +50,10 @@ datagrid:
                     type:      choice
                     data_name: ml.entity
                     options:
-                        is_translated_choices: true
                         field_options:
                             multiple:          true
                             choices:           @oro_entity.datagrid_helper->getEntityNames
+                            translatable_options: false
                 listType:
                     type:               choice
                     data_name:          ml.type
@@ -101,12 +101,18 @@ datagrid:
                 label:         oro.grid.action.update
                 icon:          edit
                 link:          update_link
+                launcherOptions:
+                    className: 'no-hash mobile-hide'
             delete:
                 type:          delete
                 acl_resource:  orocrm_marketing_list_delete
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+                launcherOptions:
+                    className: 'no-hash mobile-hide'
+        options:
+            entity_pagination: true
 
     # Segment based grids mixins:
     orocrm-marketing-list-items-base-mixin:
@@ -217,6 +223,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.remove_dialog.content
                     success:         orocrm.marketinglist.remove_dialog.success
 
@@ -242,6 +249,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.unremove_dialog.content
                     success:         orocrm.marketinglist.unremove_dialog.success
 
@@ -251,24 +259,10 @@ datagrid:
                 join:
                     left:
                         -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
-                            alias: 'mlu'
-                            conditionType: 'WITH'
-                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
-                            alias: 'mlr'
-                            conditionType: 'WITH'
-                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
-                        -
                             join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                        - mlu.id IS NULL
         options:
             export: false
             skip_count_walker: true
@@ -384,6 +378,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.remove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.remove_dialog.content
                     success:         orocrm.marketinglist.remove_dialog.success
 
@@ -409,6 +404,7 @@ datagrid:
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
+                    confirm_cancel:  orocrm.marketinglist.unremove_dialog.confirm_cancel
                     confirm_content: orocrm.marketinglist.unremove_dialog.content
                     success:         orocrm.marketinglist.unremove_dialog.success
 
@@ -422,21 +418,6 @@ datagrid:
                             alias: 'mli'
                             conditionType: 'WITH'
                             condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
-                    left:
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
-                            alias: 'mlu'
-                            conditionType: 'WITH'
-                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
-                        -
-                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
-                            alias: 'mlr'
-                            conditionType: 'WITH'
-                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
-                where:
-                    and:
-                        - mlr.id IS NULL
-                        - mlu.id IS NULL
         options:
             export: false
             skip_count_walker: true

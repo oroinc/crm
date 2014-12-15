@@ -6,6 +6,10 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
+use JMS\JobQueueBundle\Entity\Job;
+use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -34,7 +38,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const VAT              = 0.0838;
+    const TAX              = 0.0838;
     const INTEGRATION_NAME = 'Demo Web store';
 
     /** @var array */
@@ -109,7 +113,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $builder = $this->factory->createBuilderForIntegration($integration);
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
-        $builder->setStatus($integration->getEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
+        $builder->setStatus($integration->isEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
         $this->dataChannel = $builder->getChannel();
 
         $om->persist($this->dataChannel);
@@ -123,6 +127,58 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
 
         $this->persistDemoOrders($om, $store, $integration);
         $om->flush();
+
+        $this->persistDemoRFM($om);
+        $om->flush();
+    }
+
+    /**
+     * @param ObjectManager $om
+     */
+    protected function persistDemoRFM(ObjectManager $om)
+    {
+        $rfmData = [
+            'recency' => [
+                ['min' => null, 'max' => 7],
+                ['min' => 7, 'max' => 30],
+                ['min' => 30, 'max' => 90],
+                ['min' => 90, 'max' => 365],
+                ['min' => 365, 'max' => null],
+            ],
+            'frequency' => [
+                ['min' => 52, 'max' => null],
+                ['min' => 12, 'max' => 52],
+                ['min' => 4, 'max' => 12],
+                ['min' => 2, 'max' => 4],
+                ['min' => null, 'max' => 2],
+            ],
+            'monetary' => [
+                ['min' => 10000, 'max' => null],
+                ['min' => 1000, 'max' => 10000],
+                ['min' => 100, 'max' => 1000],
+                ['min' => 10, 'max' => 10],
+                ['min' => null, 'max' => 10],
+            ]
+        ];
+
+        foreach ($rfmData as $type => $values) {
+            foreach ($values as $idx => $limits) {
+                $category = new RFMMetricCategory();
+                $category->setCategoryIndex($idx)
+                    ->setChannel($this->dataChannel)
+                    ->setCategoryType($type)
+                    ->setMinValue($limits['min'])
+                    ->setMaxValue($limits['max'])
+                    ->setOwner($this->organization);
+
+                $om->persist($category);
+            }
+        }
+
+        $data = $this->dataChannel->getData();
+        $data['rfm_enabled'] = true;
+        $this->dataChannel->setData($data);
+        $om->persist($this->dataChannel);
     }
 
     /**
@@ -135,7 +191,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         /** @var Customer[] $customers */
         $customers = $om->getRepository('OroCRMMagentoBundle:Customer')->findAll();
         /** @var CartStatus $status */
-        $status = $om->getRepository('OroCRMMagentoBundle:CartStatus')->findOneBy(array('name' => 'open'));
+        $status = $om->getRepository('OroCRMMagentoBundle:CartStatus')->findOneBy(['name' => 'open']);
 
         for ($i = 0; $i < 10; ++$i) {
             $customerRandom = rand(0, count($customers)-1);
@@ -242,7 +298,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     protected function generateOrderItem(ObjectManager $om, Order $order, Cart $cart)
     {
         $cartItems = $cart->getCartItems();
-        $orderItems = array();
+        $orderItems = [];
         foreach ($cartItems as $cartItem) {
             $orderItem = new OrderItem();
             $orderItem->setOriginId($cartItem->getOriginId());
@@ -322,10 +378,10 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     protected function generateShoppingCartItem(ObjectManager $om, Cart $cart)
     {
 
-        $products = array('Computer', 'Gaming Computer', 'Universal Camera Case', 'SLR Camera Tripod',
-            'Two Year Extended Warranty - Parts and Labor', 'Couch', 'Chair', 'Magento Red Furniture Set');
+        $products = ['Computer', 'Gaming Computer', 'Universal Camera Case', 'SLR Camera Tripod',
+            'Two Year Extended Warranty - Parts and Labor', 'Couch', 'Chair', 'Magento Red Furniture Set'];
 
-        $cartItems = array();
+        $cartItems = [];
         $cartItemsCount = rand(0, 2);
         $total = 0.0;
         $totalTaxAmount = 0.0;
@@ -335,7 +391,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $origin = $i+1;
             $price = rand(10, 200);
             $price = $price + rand(0, 99)/100.0;
-            $taxAmount = $price * self::VAT;
+            $taxAmount = $price * self::TAX;
             $totalTaxAmount = $totalTaxAmount + $taxAmount;
             $total = $total + $price + $taxAmount;
             $cartItem = new CartItem();
@@ -351,7 +407,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $cartItem->setQty(1);
             $cartItem->setPrice($price);
             $cartItem->setDiscountAmount(0);
-            $cartItem->setTaxPercent(self::VAT);
+            $cartItem->setTaxPercent(self::TAX);
             $cartItem->setCreatedAt(new \DateTime('now'));
             $cartItem->setUpdatedAt(new \DateTime('now'));
             $cartItem->setOriginId($origin);
@@ -382,10 +438,10 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $address->setFirstName('John');
         $address->setLastName('Doe');
         /** @var Country $country */
-        $country = $om->getRepository('OroAddressBundle:Country')->findOneBy(array('iso2Code' => 'US'));
+        $country = $om->getRepository('OroAddressBundle:Country')->findOneBy(['iso2Code' => 'US']);
         $address->setCountry($country);
         /** @var Region $region */
-        $region = $om->getRepository('OroAddressBundle:Region')->findOneBy(array('combinedCode' => 'US-AK'));
+        $region = $om->getRepository('OroAddressBundle:Region')->findOneBy(['combinedCode' => 'US-AK']);
         $address->setRegion($region);
         $om->persist($address);
 
@@ -424,7 +480,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ->setLastName($contact->getLastName())
                 ->setEmail($contact->getPrimaryEmail())
                 ->setBirthday($birthday)
-                ->setVat(self::VAT)
+                ->setVat(mt_rand(10000000, 99999999))
                 ->setGroup($group)
                 ->setCreatedAt(new \DateTime('now'))
                 ->setUpdatedAt(new \DateTime('now'))

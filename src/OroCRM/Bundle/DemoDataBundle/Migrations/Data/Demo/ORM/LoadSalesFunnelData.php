@@ -73,7 +73,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function load(ObjectManager $manager)
     {
-        $this->organization = $this->getReference('default_organization');
+        $this->organization = $this->container->get('doctrine')->getManager()
+            ->getRepository('OroOrganizationBundle:Organization')->getFirst();
+
         $this->initSupportingEntities($manager);
         $this->loadFlows();
     }

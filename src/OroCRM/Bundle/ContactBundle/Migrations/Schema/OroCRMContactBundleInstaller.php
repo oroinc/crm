@@ -73,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_12';
     }
 
     /**
@@ -172,7 +172,7 @@ class OroCRMContactBundleInstaller implements
         $table->addColumn('street', 'string', ['notnull' => false, 'length' => 500]);
         $table->addColumn('street2', 'string', ['notnull' => false, 'length' => 500]);
         $table->addColumn('city', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 20]);
+        $table->addColumn('postal_code', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('organization', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('region_text', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
@@ -265,6 +265,7 @@ class OroCRMContactBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_9087C36A7E3C61F9', []);
         $table->addIndex(['phone', 'is_primary'], 'primary_phone_idx', []);
+        $table->addIndex(['phone'], 'phone_idx');
     }
 
     /**

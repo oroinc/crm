@@ -97,6 +97,7 @@ datagrid:
                 link:          delete_link
         options:
             entityHint: group
+            entity_pagination: true
 
     # contacts assigned to group, shown on orocrm_contact_group_update route
     contact-group-contacts-grid:
@@ -276,15 +277,17 @@ datagrid:
                         field_options:
                             class: OroCRMContactBundle:Source
                             property: label
+                            translatable_options: false
                 countryName:
                     type: entity
                     data_name: address.country
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionLabel:
                     type: string
                     data_name: regionLabel
@@ -331,6 +334,7 @@ datagrid:
         options:
             entityHint: contact
             export: true
+            entity_pagination: true
 
     # assigned accounts grid
     contact-accounts-grid:
@@ -532,15 +536,17 @@ datagrid:
                         field_options:
                             class: OroCRMContactBundle:Source
                             property: label
+                            translatable_options: false
                 countryName:
                     type: entity
                     data_name: address.country
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionLabel:
                     type: string
                     data_name: regionLabel

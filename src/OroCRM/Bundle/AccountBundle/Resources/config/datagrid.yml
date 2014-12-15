@@ -173,6 +173,7 @@ datagrid:
         options:
             entityHint: account
             export: true
+            entity_pagination: true
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
@@ -289,9 +290,10 @@ datagrid:
                     enabled: false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_contact.contact.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionLabel:
                     type: string
                     data_name: regionLabel

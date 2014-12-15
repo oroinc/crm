@@ -64,6 +64,7 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
 
         if ($order->getStore()) {
             $order->getStore()->setChannel($integration);
+            $order->getStore()->getWebsite()->setChannel($integration);
         }
 
         return $order;

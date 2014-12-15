@@ -84,6 +84,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -91,6 +92,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                            translatable_options: false
                     enabled: false
                 firstName:
                     type: string
@@ -109,6 +111,7 @@ datagrid:
                             class: OroAddressBundle:Country
                             property: name
                             query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type: string
                     data_name: regionName
@@ -134,6 +137,7 @@ datagrid:
         options:
             entityHint: customer
             export: true
+            entity_pagination: true
 
     magento-cart-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
@@ -239,6 +243,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -268,9 +273,10 @@ datagrid:
                     enabled:          false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type:      string
                     data_name: regionName
@@ -282,6 +288,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:CartStatus
                             property: label
+                            translatable_options: false
                 stepLabel:
                     type: entity
                     data_name: c.workflowStep
@@ -309,6 +316,7 @@ datagrid:
         options:
             entityHint: cart
             export: true
+            entity_pagination: true
 
     magento-cartitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
@@ -497,6 +505,7 @@ datagrid:
                             class: OroCRMMagentoBundle:Website
                             multiple: true
                             property: name
+                            translatable_options: false
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -635,6 +644,7 @@ datagrid:
                         field_options:
                             class: OroCRMChannelBundle:Channel
                             property: name
+                            translatable_options: false
                 websiteName:
                     type: entity
                     data_name: cw.id
@@ -642,6 +652,7 @@ datagrid:
                         field_options:
                             class: OroCRMMagentoBundle:Website
                             property: name
+                            translatable_options: false
                     enabled:   false
                 incrementId:
                     type:             string
@@ -676,9 +687,10 @@ datagrid:
                     enabled:   false
                     options:
                         field_options:
-                          class: OroAddressBundle:Country
-                          property: name
-                          query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
                 regionName:
                     type:      string
                     data_name: regionName
@@ -713,6 +725,7 @@ datagrid:
         options:
             entityHint: order
             export: true
+            entity_pagination: true
 
     magento-orderitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem

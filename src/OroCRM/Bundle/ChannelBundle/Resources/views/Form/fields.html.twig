@@ -123,6 +123,8 @@
         function ($, handler) {
             $(function() {
                 var presetChannelId = {{ channel_id|json_encode|raw }};
+                var $formEl = $('#{{ id }}');
+                var $formElContainer = $('#{{ id }}-el');
 
                 {% set urlParts = {
                     grid: {
@@ -145,8 +147,8 @@
                 {% endif %}
 
                 var configurator = handler(
-                    $('#{{ id }}-el'),
-                    $('#{{ id }}'),
+                    $formElContainer,
+                    $formEl,
                     {{ label|trans|json_encode|raw }},
                     {{ urlParts|json_encode(constant('JSON_FORCE_OBJECT'))|raw }},
                     {{ form.vars.existing_entity_grid_id|default('id')|json_encode|raw }},
@@ -154,15 +156,26 @@
                 ),
                 changeHandler = function($el) {
                     var parts = configurator.getUrlParts(),
-                        channelIds = [$el.val()];
+                        channelIds = [],
+                        currentVal = $el.val();
 
+                    if (currentVal) {
+                        channelIds.push(currentVal);
+                    }
                     if (presetChannelId) {
                         channelIds.push(presetChannelId);
                     }
 
+                    if ({{ form.vars.channel_required|json_encode|raw }}) {
+                        var disallowEdit = !channelIds.length;
+                        $formElContainer.find('button').prop('disabled', disallowEdit);
+                        $formEl.select2("readonly", disallowEdit);
+                    }
+
                     parts.grid.parameters.params.channelIds = channelIds.join(',');
-                    if (parts.hasOwnProperty('create')) {
-                        parts.create.parameters.channelId = presetChannelId || $el.val();
+                    var channelId = presetChannelId || $el.val();
+                    if (parts.hasOwnProperty('create') && channelId) {
+                        parts.create.parameters.channelId = channelId;
                     }
                 },
                 $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]');

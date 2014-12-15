@@ -5,9 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
-use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
@@ -95,6 +94,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
         $result['countryIso2'] = $entity->getCountryIso2();
         $result['countryIso3'] = $entity->getCountryIso3();
         $result['regionCode']  = $entity->getRegionCode();
+        $result['country'] = $entity->getCountryName();
 
         unset($result['owner']);
 
