@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Validator;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\PersistentCollection;
 
@@ -15,6 +16,8 @@ class CategoriesValidator extends ConstraintValidator
     const MIN_CATEGORIES_COUNT = 2;
 
     /**
+     * Validate collection.
+     *
      * @param PersistentCollection|RFMMetricCategory[] $value
      * @param CategoriesConstraint $constraint
      *
@@ -26,50 +29,32 @@ class CategoriesValidator extends ConstraintValidator
             return;
         }
 
-        $this->validateBlank($value, $constraint);
-        $this->validateNumber($value, $constraint);
         $this->validateCount($value, $constraint);
-        $this->validateOrder($value, $constraint);
+        if ($this->validateBlank($value, $constraint)) {
+            $this->validateOrder($value, $constraint);
+        }
     }
 
     /**
+     * Check collection for empty values.
+     *
      * @param PersistentCollection $value
      * @param CategoriesConstraint $constraint
+     * @return bool
      */
     protected function validateBlank(PersistentCollection $value, CategoriesConstraint $constraint)
     {
-        $values = $value->matching(
-            new Criteria(null, ['minValue' => Criteria::ASC])
-        );
-        if (!$this->filterNotEmptyFields($values)->isEmpty()) {
+        if (!$this->filterNotEmptyFields($value)->isEmpty()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->blankMessage);
+            return false;
         }
+
+        return true;
     }
 
     /**
-     * @param PersistentCollection $value
-     * @param CategoriesConstraint $constraint
-     */
-    protected function validateNumber(PersistentCollection $value, CategoriesConstraint $constraint)
-    {
-        $values = $value->matching(
-            new Criteria(null, ['minValue' => Criteria::ASC])
-        );
-        $invalidItems = $values->filter(
-            function (RFMMetricCategory $category) {
-                if (!is_numeric($category->getMaxValue())
-                   && !is_null($category->getMaxValue())
-                ) {
-                    return true;
-                }
-            }
-        );
-        if (!$invalidItems->isEmpty()) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->numberMessage);
-        }
-    }
-
-    /**
+     * Check that number of categories not less than minimum defined number.
+     *
      * @param PersistentCollection $value
      * @param CategoriesConstraint $constraint
      */
@@ -87,6 +72,11 @@ class CategoriesValidator extends ConstraintValidator
     }
 
     /**
+     * Check that collection is in right order.
+     *
+     * For increasing collection values must be in ascending order.
+     * For decreasing collection value must be in descending order.
+     *
      * @param PersistentCollection $value
      * @param CategoriesConstraint $constraint
      */
@@ -146,18 +136,14 @@ class CategoriesValidator extends ConstraintValidator
     }
 
     /**
-     * @param $values
-     * @return mixed
+     * @param Collection $values
+     * @return Collection
      */
     protected function filterNotEmptyFields($values)
     {
         return $values->filter(
             function (RFMMetricCategory $category) {
-                if ($category->getMaxValue() == $category->getMinValue()
-                    && is_null($category->getMaxValue())
-                ) {
-                    return true;
-                }
+                return $category->getMaxValue() === null && $category->getMinValue() === null;
             }
         );
     }

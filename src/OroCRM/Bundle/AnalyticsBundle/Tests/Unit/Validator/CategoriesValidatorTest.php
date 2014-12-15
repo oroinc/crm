@@ -171,37 +171,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     [
                         $constraint->blankMessage,
                     ]
-            ],
-            'not number value violation' => [
-                'collection' => $this->getCollection(
-                    [
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, 10, null),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 5, 'string'),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, 5),
-                    ]
-                ),
-                'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsMessages' =>
-                    [
-                        $constraint->numberMessage
-                    ]
-            ],
-            'not blank and not number value violation' => [
-                'collection' => $this->getCollection(
-                    [
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, 10, null),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 10, 'string'),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, null),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 4, null, null),
-                    ]
-                ),
-                'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsMessages' =>
-                    [
-                        $constraint->blankMessage,
-                        $constraint->numberMessage
-                    ]
-            ],
+            ]
         ];
     }
 
