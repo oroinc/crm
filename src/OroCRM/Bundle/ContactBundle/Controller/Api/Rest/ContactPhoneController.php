@@ -8,14 +8,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Routing\ClassResourceInterface;
-use FOS\Rest\Util\Codes;
+use FOS\RestBundle\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 /**
  * @RouteResource("phone")

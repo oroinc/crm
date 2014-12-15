@@ -9,7 +9,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInterface
 {
@@ -134,7 +136,9 @@ class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInter
         foreach ($this->data as $value) {
             $entity = new RFMMetricCategory();
             $entity->setOwner($organization);
-            $value['channel'] = $this->getReference('default_channel');
+            /** @var Channel $channel */
+            $channel = $this->getReference('default_channel');
+            $value['channel'] = $channel->setData([RFMAwareInterface::RFM_STATE_KEY => true]);
             $this->setEntityPropertyValues($entity, $value, ['reference']);
             $this->setReference($value['reference'], $entity);
             $manager->persist($entity);

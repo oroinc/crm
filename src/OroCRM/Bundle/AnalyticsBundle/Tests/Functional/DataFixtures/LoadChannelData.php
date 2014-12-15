@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -27,6 +28,7 @@ class LoadChannelData extends AbstractFixture
             'name' => 'CustomerChannel',
             'channelType' => 'magento',
             'status' => Channel::STATUS_ACTIVE,
+            'data' => [RFMAwareInterface::RFM_STATE_KEY => true],
             'reference' => 'Channel.CustomerChannel'
         ],
         'second supported' => [
@@ -34,7 +36,16 @@ class LoadChannelData extends AbstractFixture
             'name' => 'CustomerChannel2',
             'channelType' => 'magento',
             'status' => Channel::STATUS_ACTIVE,
+            'data' => [RFMAwareInterface::RFM_STATE_KEY => true],
             'reference' => 'Channel.CustomerChannel2'
+        ],
+        'rfm disabled' => [
+            'customerIdentity' => 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'name' => 'CustomerChannel3',
+            'channelType' => 'magento',
+            'status' => Channel::STATUS_ACTIVE,
+            'data' => [RFMAwareInterface::RFM_STATE_KEY => false],
+            'reference' => 'Channel.CustomerChannel3'
         ],
         'notActive' => [
             'customerIdentity' => 'OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface',

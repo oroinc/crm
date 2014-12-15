@@ -55,11 +55,6 @@ workflows:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
-                        - @create_object:
-                            class: OroCRM\Bundle\SalesBundle\Entity\Lead
-                            attribute: $lead
-                            data:
-                                owner: $sales_funnel_owner
                 transition_definition: start_from_lead
             start_from_opportunity:
                 label: 'Start from Opportunity'
@@ -115,11 +110,6 @@ workflows:
                             attribute: $sales_funnel_start_date
                         - @assign_active_user:
                             attribute: $sales_funnel_owner
-                        - @create_object:
-                            class: OroCRM\Bundle\SalesBundle\Entity\Opportunity
-                            attribute: $opportunity
-                            data:
-                                owner: $sales_funnel_owner
                 transition_definition: start_from_opportunity
             disqualify:
                 label: 'Disqualify'

@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\AnalyticsBundle\Model;
 
 interface RFMAwareInterface extends AnalyticsAwareInterface
 {
+    const RFM_STATE_KEY = 'rfm_enabled';
+    const RFM_REQUIRE_DROP_KEY = 'rfm_require_drop';
+
     /**
      * @return int
      */

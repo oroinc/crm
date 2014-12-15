@@ -198,7 +198,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 ->method('add')
                 ->withConsecutive(
                     [
-                        $this->equalTo(ChannelTypeExtension::RFM_STATE_KEY),
+                        $this->equalTo('rfm_enabled'),
                         $this->isType('string'),
                         $this->isType('array')
                     ],
