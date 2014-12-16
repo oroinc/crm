@@ -51,11 +51,11 @@ class CategoriesValidator extends ConstraintValidator
         if ($isIncreasing) {
             $firstMax = $orderedByIndex->first()->getMaxValue();
             $lastMin = $orderedByIndex->last()->getMinValue();
-            $hasEmpty = empty($firstMax) || empty($lastMin);
+            $hasEmpty = $this->isEmpty($firstMax) || $this->isEmpty($lastMin);
         } else {
             $firstMin = $orderedByIndex->first()->getMinValue();
             $lastMax = $orderedByIndex->last()->getMaxValue();
-            $hasEmpty = empty($firstMin) || empty($lastMax);
+            $hasEmpty = $this->isEmpty($firstMin) || $this->isEmpty($lastMax);
         }
 
         if (!$hasEmpty) {
@@ -65,7 +65,7 @@ class CategoriesValidator extends ConstraintValidator
                 $min = $category->getMinValue();
                 $max = $category->getMaxValue();
 
-                if (empty($min) || empty($max)) {
+                if ($this->isEmpty($min) || $this->isEmpty($max)) {
                     $hasEmpty = true;
                     break;
                 }
@@ -77,6 +77,15 @@ class CategoriesValidator extends ConstraintValidator
         }
 
         return !$hasEmpty;
+    }
+
+    /**
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isEmpty($value)
+    {
+        return $value === '' || $value === null;
     }
 
     /**

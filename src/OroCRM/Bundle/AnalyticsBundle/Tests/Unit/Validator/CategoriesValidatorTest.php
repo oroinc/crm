@@ -74,13 +74,16 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
             'count violation' => [
                 'collection' => $this->getCollection(
                     [
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 20),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 100),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, 1000, null),
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsMessage' => [
-                    $constraint->countMessage
-                ],
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
             ],
             'ordered' => [
                 'collection' => $this->getCollection(
@@ -162,7 +165,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'collection' => $this->getCollection(
                     [
                         $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 100),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, ''),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, null),
                         $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, 1000, null),
                     ]
                 ),
@@ -176,7 +179,7 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                 'collection' => $this->getCollection(
                     [
                         $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, 1000, null),
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, '', 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, null, 1000),
                         $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, 100),
                     ]
                 ),
