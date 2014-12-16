@@ -51,7 +51,7 @@ orocrm:
                 title:       Average lifetime sales
                 description: This widget shows average lifetime sales for each data channel in form of a line chart
                 axis_label:  Lifetime sales
-                month:       Month
+                month:       ''
             e_commerce.label: Ecommerce
 
 oro.embeddedform.data_channel.label: Channel
