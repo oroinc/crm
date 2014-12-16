@@ -250,5 +250,12 @@ define(function (require) {
 
         adoptExistingRecords();
         enableHandler();
+
+        var removeValidateInfo = function () {
+            $el.find('.alert-error').hide();
+            $el.find('.rfm-settings-data').find('.validation-error').removeClass('validation-error');
+        };
+
+        $el.closest('form').on('submit', removeValidateInfo);
     };
 });

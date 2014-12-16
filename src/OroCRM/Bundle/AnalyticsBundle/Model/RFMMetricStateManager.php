@@ -106,6 +106,16 @@ class RFMMetricStateManager
      */
     public function scheduleRecalculation(Channel $channel = null)
     {
+        if ($channel) {
+            $isActiveChannel = $channel->getStatus() === Channel::STATUS_ACTIVE;
+            $channelData = $channel->getData();
+            $rfmEnabled = !empty($channelData['rfm_enabled']);
+
+            if (!$isActiveChannel || !$rfmEnabled) {
+                return;
+            }
+        }
+
         if ($this->getJob()) {
             return;
         }
