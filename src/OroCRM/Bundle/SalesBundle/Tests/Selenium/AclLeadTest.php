@@ -5,10 +5,37 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 class AclLeadTest extends Selenium2TestCase
 {
+    /**
+     * @return string
+     */
+    public function testCreateChannel()
+    {
+        $name = 'Channel_' . mt_rand();
+
+        $login = $this->login();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('Custom')
+            ->setName($name)
+            ->setStatus('Active')
+            ->addEntity('Opportunity')
+            ->addEntity('Lead')
+            ->addEntity('Sales Process')
+            ->addEntity('B2B customer')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $name;
+    }
+
     public function testCreateRole()
     {
         $randomPrefix = mt_rand();
@@ -50,6 +77,7 @@ class AclLeadTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Label_' . $role))
+            ->setBusinessUnit()
             ->setOrganization('OroCRM')
             ->uncheckInviteUser()
             ->save()
