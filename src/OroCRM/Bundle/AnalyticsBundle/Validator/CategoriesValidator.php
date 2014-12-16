@@ -176,7 +176,8 @@ class CategoriesValidator extends ConstraintValidator
      * @param Collection $orderedByIndex
      * @return bool
      */
-    protected function isIncreasing(Collection $orderedByIndex) {
+    protected function isIncreasing(Collection $orderedByIndex)
+    {
         return is_null($orderedByIndex->first()->getMinValue())
         && is_null($orderedByIndex->last()->getMaxValue());
     }
