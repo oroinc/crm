@@ -33,12 +33,11 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param PersistentCollection $collection
      * @param string $type
-     * @param int $expectedViolationsCount
-     * @param string $expectedViolationsMessage
+     * @param array $expectedViolationsMessages
      *
      * @dataProvider validateDataProvider
      */
-    public function testValidate($collection, $type, $expectedViolationsCount = 0, $expectedViolationsMessage = null)
+    public function testValidate($collection, $type, $expectedViolationsMessages = [])
     {
         /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContextInterface $context */
         $context = $this->getMockForAbstractClass('Symfony\Component\Validator\ExecutionContextInterface');
@@ -48,9 +47,11 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|CategoriesConstraint $constraint */
         $constraint = $this->getMock('OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesConstraint');
 
-        $context->expects($this->exactly($expectedViolationsCount))
-            ->method('addViolationAt')
-            ->with($this->equalTo($type), $this->equalTo($expectedViolationsMessage), $this->isType('array'));
+        foreach ($expectedViolationsMessages as $key => $expectedViolationsMessage) {
+            $context->expects($this->at($key))
+                ->method('addViolationAt')
+                ->with($this->equalTo($type), $this->equalTo($expectedViolationsMessage), $this->isType('array'));
+        }
 
         $constraint->expects($this->any())
             ->method('getType')
@@ -73,12 +74,16 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
             'count violation' => [
                 'collection' => $this->getCollection(
                     [
-                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 20),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 100),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, 1000, null),
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsCount' => 1,
-                'expectedViolationsMessage' => $constraint->countMessage,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
             ],
             'ordered' => [
                 'collection' => $this->getCollection(
@@ -100,8 +105,9 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsCount' => 1,
-                'expectedViolationsMessage' => $constraint->message,
+                'expectedViolationsMessage' => [
+                    $constraint->message
+                ],
             ],
             'desc order' => [
                 'collection' => $this->getCollection(
@@ -123,8 +129,9 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsCount' => 1,
-                'expectedViolationsMessage' => $constraint->message,
+                'expectedViolationsMessage' => [
+                    $constraint->message
+                ],
             ],
             'desc order same value violation' => [
                 'collection' => $this->getCollection(
@@ -136,8 +143,9 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsCount' => 1,
-                'expectedViolationsMessage' => $constraint->message,
+                'expectedViolationsMessage' => [
+                    $constraint->message
+                ],
             ],
             'asc order same value violation' => [
                 'collection' => $this->getCollection(
@@ -149,9 +157,94 @@ class CategoriesValidatorTest extends \PHPUnit_Framework_TestCase
                     ]
                 ),
                 'type' => RFMMetricCategory::TYPE_FREQUENCY,
-                'expectedViolationsCount' => 1,
-                'expectedViolationsMessage' => $constraint->message,
+                'expectedViolationsMessage' => [
+                    $constraint->message
+                ],
             ],
+            'blank value violation asc mid' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 100),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, 1000, null),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ],
+            'blank value violation desc mid' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, 1000, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, null, 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, 100),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ],
+            'blank value violation asc first empty' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, 1000, null),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ],
+            'blank value violation asc last empty' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, 100),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 100, 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, null),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ],
+            'blank value violation desc first empty' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, null, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 1000, 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, 100),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ],
+            'blank value violation desc last empty' => [
+                'collection' => $this->getCollection(
+                    [
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 1, 1000, null),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 2, 1000, 1000),
+                        $this->getCategory(RFMMetricCategory::TYPE_FREQUENCY, 3, null, null),
+                    ]
+                ),
+                'type' => RFMMetricCategory::TYPE_FREQUENCY,
+                'expectedViolationsMessages' =>
+                    [
+                        $constraint->blankMessage,
+                    ]
+            ]
         ];
     }
 
