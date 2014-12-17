@@ -48,3 +48,8 @@ orocrm:
                 label: ID
             label:
                 label: Label
+
+        block:
+            general:                General
+            additional:             Additional
+            request_information:    Request Information
