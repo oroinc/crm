@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\CallBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Calls;
 
 class AclCallTest extends Selenium2TestCase
@@ -11,6 +13,7 @@ class AclCallTest extends Selenium2TestCase
     {
         $randomPrefix = mt_rand();
         $login = $this->login();
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->add()
             ->setLabel('Label_' . $randomPrefix)
@@ -34,6 +37,7 @@ class AclCallTest extends Selenium2TestCase
         $username = 'User_'.mt_rand();
 
         $login = $this->login();
+        /** @var Users $login */
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->assertTitle('Create User - Users - User Management - System')
@@ -46,6 +50,7 @@ class AclCallTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array('Label_' . $role))
+            ->setBusinessUnit()
             ->setOrganization('OroCRM')
             ->uncheckInviteUser()
             ->save()
@@ -79,7 +84,6 @@ class AclCallTest extends Selenium2TestCase
 
         return $callSubject;
     }
-
 
     /**
      * @depends testCreateUser

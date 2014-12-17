@@ -35,7 +35,7 @@ class OrderPlaceControllerTest extends WebTestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject */
     protected $soapTransport;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
@@ -49,60 +49,10 @@ class OrderPlaceControllerTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        $this->channel  = $this->getChannel();
-        $this->cart     = $this->getCartByChannel($this->channel);
-        $this->order    = $this->getOrderByChannel($this->channel);
-        $this->customer = $this->getCustomerByChannel($this->channel);
-    }
-
-    /**
-     * @return Channel|null
-     */
-    protected function getChannel()
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->findOneByName('Demo Web store');
-    }
-
-    /**
-     * @param Channel $channel
-     *
-     * @return Cart|null
-     */
-    protected function getCartByChannel(Channel $channel)
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Cart')
-            ->findOneByChannel($channel);
-    }
-
-    /**
-     * @param Channel $channel
-     *
-     * @return mixed
-     */
-    protected function getOrderByChannel(Channel $channel)
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Order')
-            ->findOneByChannel($channel);
-    }
-
-    /**
-     * @param Channel $channel
-     *
-     * @return Customer|null
-     */
-    protected function getCustomerByChannel(Channel $channel)
-    {
-        return $this->getContainer()
-            ->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:Customer')
-            ->findOneByChannel($channel);
+        $this->channel  = $this->getReference('integration');
+        $this->cart     = $this->getReference('cart');
+        $this->order    = $this->getReference('order');
+        $this->customer = $this->getReference('customer');
     }
 
     public function testCartAction()
@@ -128,10 +78,12 @@ class OrderPlaceControllerTest extends WebTestCase
 
     public function testSyncAction()
     {
+        $jobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
+        $jobManager->beginTransaction();
         $newCart = $this->getModifiedCartData($this->cart, $this->customer);
 
         $cartIterator  = new StubIterator([$newCart]);
-        $orderIterator = new \ArrayIterator([]);
+        $orderIterator = new StubIterator([]);
 
         $this->soapTransport->expects($this->any())->method('call');
         $this->soapTransport->expects($this->once())->method('getCarts')->will($this->returnValue($cartIterator));
@@ -154,6 +106,7 @@ class OrderPlaceControllerTest extends WebTestCase
             $arrayJson['url'],
             $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
         );
+        $jobManager->rollback();
 
         $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->cart->getId()]));
         $result = $this->client->getResponse();
@@ -229,14 +182,13 @@ class OrderPlaceControllerTest extends WebTestCase
 
     public function testCustomerSyncAction()
     {
+        $jobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
+        $jobManager->beginTransaction();
         $newCustomerOrder = $this->getModifiedCustomerOrder($this->customer);
 
         $orderIterator = new StubIterator([$newCustomerOrder]);
 
         $this->soapTransport->expects($this->any())->method('call');
-        /*$this->soapTransport->expects($this->once())->method('getCustomer')->will(
-            $this->returnValue($customerIterator)
-        );*/
         $this->soapTransport->expects($this->once())->method('getOrders')->will($this->returnValue($orderIterator));
 
         $this->client->request(
@@ -246,6 +198,7 @@ class OrderPlaceControllerTest extends WebTestCase
             [],
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
+        $jobManager->rollback();
 
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
