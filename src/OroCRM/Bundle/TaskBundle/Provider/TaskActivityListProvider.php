@@ -4,13 +4,14 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
-class TaskActivityListProvider implements ActivityListProviderInterface
+class TaskActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
 
