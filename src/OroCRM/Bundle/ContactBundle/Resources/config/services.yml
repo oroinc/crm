@@ -211,3 +211,11 @@ services:
         class: %orocrm_contact.provider.phone.contact.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_contact.entity.class% }
+
+    orocrm_contact.widget_provider.actions.add_contact:
+        parent: oro_ui.widget_provider.action_button.abstract
+        arguments:
+            - orocrm_add_contact_button
+            - orocrm_add_contact_link
+        tags:
+            - { name: oro_ui.view_action_provider, group: activity }
