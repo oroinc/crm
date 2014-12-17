@@ -1,5 +1,6 @@
 datagrid:
     orcrm-contact-requests-grid:
+        extended_entity_name: %orocrm_contact_us.contactrequest.entity.class%
         source:
             acl_resource: orocrm_contactus_request_view
             type: orm
@@ -13,7 +14,7 @@ datagrid:
                     - cr.createdAt
                     - channel.name as channelName
                 from:
-                    - { table: OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest, alias: cr }
+                    - { table: %orocrm_contact_us.contactrequest.entity.class%, alias: cr }
                 join:
                     left:
                         - { join: cr.dataChannel, alias: channel }
