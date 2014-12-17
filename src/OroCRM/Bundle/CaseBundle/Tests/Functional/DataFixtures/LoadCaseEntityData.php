@@ -81,12 +81,12 @@ class LoadCaseEntityData extends AbstractFixture implements ContainerAwareInterf
             }
 
             foreach ($caseData['comments'] as $commentData) {
-                $comment = $caseManager->createComment($case)
-                    ->setMessage($commentData['message'])
-                    ->setPublic($commentData['public'])
-                    ->setCreatedAt(new \DateTime($commentData['createdAt'], new \DateTimeZone('UTC')))
-                    ->setOrganization($organization)
-                    ->setOwner($adminUser);
+                $comment = $caseManager->createComment($case);
+                $comment->setMessage($commentData['message']);
+                $comment->setPublic($commentData['public']);
+                $comment->setCreatedAt(new \DateTime($commentData['createdAt'], new \DateTimeZone('UTC')));
+                $comment->setOrganization($organization);
+                $comment->setOwner($adminUser);
 
                 if (isset($commentData['contact'])) {
                     $comment->setContact($this->getReference($commentData['contact']));
