@@ -1,0 +1,15 @@
+{% if resource_granted('orocrm_case_view') %}
+    {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+    <div class="responsive-cell">
+        <div class="box-type1">
+            <div class="title">
+                <span class="widget-title">{{ "orocrm.case.caseentity.entity_plural_label"|trans }}</span>
+            </div>
+
+            <div class="row-fluid">
+                {{ dataGrid.renderGrid('account-cases-grid', {id: entity.id}) }}
+            </div>
+        </div>
+    </div>
+{% endif %}
