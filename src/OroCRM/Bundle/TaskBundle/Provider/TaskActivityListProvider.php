@@ -117,4 +117,14 @@ class TaskActivityListProvider implements ActivityListProviderInterface
     {
         return $entity->getActivityTargetEntities();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasComments(ConfigManager $configManager, $entity)
+    {
+        $config = $configManager->getProvider('comment')->getConfig($entity);
+
+        return $config->is('enabled');
+    }
 }
