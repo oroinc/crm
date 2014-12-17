@@ -23,7 +23,7 @@
 
     {# Custom(extended) fields #}
     {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
-        <div class="row-group">
+        <div class="row-group" id="{{ child.vars.id ~ '_holder' }}">
             <div class="box">
                 {{ form_row(child) }}
             </div>
