@@ -16,6 +16,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
 
 /**
  * @ORM\Entity
@@ -43,7 +44,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  * )
  */
-class ContactRequest extends AbstractContactRequest implements ChannelAwareInterface
+class ContactRequest extends ExtendContactRequest implements ChannelAwareInterface
 {
     use ChannelEntityTrait;
 

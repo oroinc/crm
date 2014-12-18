@@ -43,11 +43,11 @@
     {% set id = 'contact-request-form' %}
 
     {% set dataBlocks = [{
-        'title': 'General'|trans,
+        'title': 'orocrm.contactus.block.general'|trans,
         'class': 'active',
         'subblocks': [
             {
-                'title': 'Request Information'|trans,
+                'title': 'orocrm.contactus.block.request_information'|trans,
                 'data': [
                     form_row(form.firstName),
                     form_row(form.lastName),
@@ -59,6 +59,17 @@
             }
         ]
     }] %}
+
+    {% set additionalData = [] %}
+    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
+        {% set additionalData = additionalData|merge([form_row(child)]) %}
+    {% endfor %}
+    {% if additionalData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+        'title':     'orocrm.contactus.block.additional'|trans,
+        'subblocks': [{ 'title': '', 'useSpan': false, 'data' : additionalData }]
+        }] ) %}
+    {% endif %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,
