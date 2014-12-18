@@ -36,7 +36,7 @@ class TaskType extends AbstractType
                 'dueDate',
                 'oro_datetime',
                 [
-                    'required' => true,
+                    'required' => false,
                     'label' => 'orocrm.task.due_date.label'
                 ]
             )
