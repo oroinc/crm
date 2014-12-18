@@ -31,9 +31,6 @@ class TaskCalendarNormalizer
 
         $items  = $query->getArrayResult();
         foreach ($items as $item) {
-            if (!$item['dueDate']) {
-                continue;
-            }
             /** @var \DateTime $start */
             $start = $item['dueDate'];
             $end   = clone $start;
