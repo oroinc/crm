@@ -62,6 +62,14 @@ class TaskCalendarNormalizerTest extends \PHPUnit_Framework_TestCase
                         'dueDate'     => $startDate,
                         'createdAt'   => $createdDate,
                         'updatedAt'   => $updatedDate,
+                    ],
+                    [
+                        'id'          => 2,
+                        'subject'     => 'test_subject_without_date',
+                        'description' => 'test_description',
+                        'dueDate'     => null,
+                        'createdAt'   => $createdDate,
+                        'updatedAt'   => $updatedDate,
                     ]
                 ],
                 'expected' => [
