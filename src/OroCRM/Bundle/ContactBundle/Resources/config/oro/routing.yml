@@ -11,6 +11,8 @@ orocrm_contact_bundle_api:
         version:  latest|v1
     defaults:
         version:  latest
+
+# deprecated API routes
 oro_api_post_contact_deprecated:
     path:            /api/rest/{version}/contact.{_format}
     methods:         [POST]
@@ -21,6 +23,7 @@ oro_api_post_contact_deprecated:
     requirements:
         _format:     json|html
         version:     latest|v1
+
 oro_api_post_contactgroup_deprecated:
     path:            /api/rest/{version}/contactgroup.{_format}
     methods:         [POST]
