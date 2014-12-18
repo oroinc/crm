@@ -5,9 +5,31 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseComment;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity()
+ * @Config(
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-comments"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
+ *      }
+ * )
  */
 class CaseComment extends ExtendCaseComment
 {
