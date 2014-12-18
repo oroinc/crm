@@ -15,3 +15,15 @@ orocrm_sales_bundle_api:
         version:  latest|v1
     defaults:
         version:  latest
+
+# deprecated API route
+oro_api_post_salesfunnel_deprecated:
+    path:            /api/rest/{version}/salesfunnel.{_format}
+    methods:         [POST]
+    defaults:
+        _controller: OroCRM\Bundle\SalesBundle\Controller\Api\Rest\SalesFunnelController::postAction
+        _format:     json
+        version:     latest
+    requirements:
+        _format:     json|html
+        version:     latest|v1
