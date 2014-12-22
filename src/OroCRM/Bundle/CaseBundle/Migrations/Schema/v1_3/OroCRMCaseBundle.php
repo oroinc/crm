@@ -27,8 +27,6 @@ class OroCRMCaseBundle implements Migration, CommentExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addComment($schema, $this->comment);
-
         self::addColumnsForCase($schema);
 
         $queries->addPostQuery(
@@ -38,15 +36,6 @@ class OroCRMCaseBundle implements Migration, CommentExtensionAwareInterface
 
              DROP TABLE orocrm_case_comment;"
         );
-    }
-
-    /**
-     * @param Schema           $schema
-     * @param CommentExtension $commentExtension
-     */
-    public static function addComment(Schema $schema, CommentExtension $commentExtension)
-    {
-        $commentExtension->addCommentAssociation($schema, 'orocrm_case');
     }
 
     /**

@@ -50,7 +50,6 @@ class OroCRMCaseBundleInstaller implements Installation, CommentExtensionAwareIn
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
 
-        OroCRMCaseBundle13::addComment($schema, $this->comment);
         OroCRMCaseBundle13::addColumnsForCase($schema);
     }
 }
