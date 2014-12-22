@@ -47,7 +47,7 @@ datagrid:
                     name:
                         label: orocrm.magento.datagrid.columns.grand_total
                     value:
-                        expr: SUM( lifetimeHistory.amount )
+                        expr: SUM( CASE WHEN ch.status = 1 THEN lifetimeHistory.amount ELSE 0 END )
                         formatter: currency
         sorters:
             columns:
