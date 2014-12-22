@@ -2,9 +2,10 @@
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
-        <div class="accordion-heading collapse<% if (!collapsed) { %> in<% } %>">
+        <div class="accordion-heading">
             <div class="title-item">
-                <a href="#accordion-item<%= id %>" class="no-hash accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
+                <a href="#accordion-item<%= id %>" data-toggle="collapse"
+                   class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
                 <span class="icon">
                     <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
                 </span>
@@ -27,7 +28,8 @@
                         ) %>
                     </span>
                     <span class="message-item message">
-                        <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
+                        <a href="#accordion-item<%= id %>" data-toggle="collapse"
+                           class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"><%= subject %></a>
                     </span>
                 </span>
             </div>
@@ -38,12 +40,12 @@
                             <li>
                                 <ul class="nav nav-pills icons-holder launchers-list">
                                     <li class="launcher-item">
-                                        <a href="javascript:void(0);" class="action no-hash item-edit-button" title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
+                                        <a href="javascript:void(0);" class="action item-edit-button" title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
                                             <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
                                         </a>
                                     </li>
                                     <li class="launcher-item">
-                                        <a href="javascript:void(0);" class="action no-hash item-remove-button" title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
+                                        <a href="javascript:void(0);" class="action item-remove-button" title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
                                             <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
                                         </a>
                                     </li>
@@ -56,7 +58,8 @@
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="subject">
-                <a href="#" class="no-hash accordion-toggle"><%= subject %></a>
+                <a href="#accordion-item<%= id %>" data-toggle="collapse"
+                   class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"><%= subject %></a>
             </div>
             <div class="message">
                 <!-- Do NOT remove. Placeholder for activity view -->
