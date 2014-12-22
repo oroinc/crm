@@ -30,13 +30,17 @@ class OroCRMCaseBundle implements Migration, CommentExtensionAwareInterface
     {
         self::addColumnsForCase($schema);
 
-        $queries->addPostQuery(
-            "INSERT INTO oro_comment (cs_case_id, updated_by_user_id, user_owner_id, cs_contact_id, organization_id, message, createdAt, updatedAt, cs_public, comments_type)
-             SELECT case_id, updated_by_id, owner_id, contact_id, organization_id, message, createdAt, updatedAt, public, 'orocrmcasecomment'
-             FROM orocrm_case_comment;
+        $sql = <<<SQL
+  INSERT INTO oro_comment (
+    cs_case_id, updated_by_user_id, user_owner_id, cs_contact_id, organization_id, message, createdAt, updatedAt,
+    cs_public, comments_type
+  )
+  SELECT case_id, updated_by_id, owner_id, contact_id, organization_id, message, createdAt, updatedAt,
+    public, 'orocrmcasecomment'
+  FROM orocrm_case_comment
+SQL;
 
-             DROP TABLE orocrm_case_comment;"
-        );
+        $queries->addPostQuery($sql);
     }
 
     /**
