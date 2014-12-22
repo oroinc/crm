@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_3;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Schema\SchemaException;
 
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
@@ -40,7 +41,8 @@ class OroCRMCaseBundle implements Migration, CommentExtensionAwareInterface
 
     /**
      * @param Schema $schema
-     * @throws \Doctrine\DBAL\Schema\SchemaException
+     *
+     * @throws SchemaException
      */
     public static function addColumnsForCase(Schema $schema)
     {

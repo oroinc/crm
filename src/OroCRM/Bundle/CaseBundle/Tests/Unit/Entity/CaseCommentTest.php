@@ -35,7 +35,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
 
         $value = 'Test';
 
-        $this->comment->setMessage($value);
+        $this->assertEquals($this->comment, $this->comment->setMessage($value));
         $this->assertEquals($value, $this->comment->getMessage());
     }
 
@@ -43,7 +43,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->comment->isPublic());
 
-        $this->comment->setPublic(true);
+        $this->assertEquals($this->comment, $this->comment->setPublic(true));
         $this->assertTrue($this->comment->isPublic());
     }
 
@@ -55,7 +55,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->comment->setContact($value);
+        $this->assertEquals($this->comment, $this->comment->setContact($value));
         $this->assertEquals($value, $this->comment->getContact());
     }
 
@@ -67,7 +67,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->comment->setCase($value);
+        $this->assertEquals($this->comment, $this->comment->setCase($value));
         $this->assertEquals($value, $this->comment->getCase());
     }
 
@@ -79,7 +79,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->comment->setUpdatedBy($value);
+        $this->assertEquals($this->comment, $this->comment->setUpdatedBy($value));
         $this->assertEquals($value, $this->comment->getUpdatedBy());
     }
 
@@ -91,7 +91,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->comment->setOwner($value);
+        $this->assertEquals($this->comment, $this->comment->setOwner($value));
         $this->assertEquals($value, $this->comment->getOwner());
     }
 
@@ -101,7 +101,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
 
         $value = new \DateTime();
 
-        $this->comment->setCreatedAt($value);
+        $this->assertEquals($this->comment, $this->comment->setCreatedAt($value));
         $this->assertEquals($value, $this->comment->getCreatedAt());
     }
 
@@ -111,7 +111,7 @@ class CaseCommentTest extends \PHPUnit_Framework_TestCase
 
         $value = new \DateTime();
 
-        $this->comment->setUpdatedAt($value);
+        $this->assertEquals($this->comment, $this->comment->setUpdatedAt($value));
         $this->assertEquals($value, $this->comment->getUpdatedAt());
     }
 

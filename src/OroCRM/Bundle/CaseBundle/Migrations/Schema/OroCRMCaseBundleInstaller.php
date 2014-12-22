@@ -8,6 +8,7 @@ use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_0\OroCRMCaseBundle;
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_3\OroCRMCaseBundle as OroCRMCaseBundle13;
 

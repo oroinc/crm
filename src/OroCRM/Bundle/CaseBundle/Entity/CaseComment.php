@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use OroCRM\Bundle\CaseBundle\Model\ExtendCaseComment;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
+use OroCRM\Bundle\CaseBundle\Model\ExtendCaseComment;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
@@ -58,10 +60,13 @@ class CaseComment extends ExtendCaseComment
 
     /**
      * @param CaseEntity|null $case
+     * @return self
      */
     public function setCase($case)
     {
         $this->case = $case;
+
+        return $this;
     }
 
     /**
@@ -74,10 +79,13 @@ class CaseComment extends ExtendCaseComment
 
     /**
      * @param Contact|null $contact
+     * @return self
      */
     public function setContact($contact)
     {
         $this->contact = $contact;
+
+        return $this;
     }
 
     /**
@@ -90,10 +98,13 @@ class CaseComment extends ExtendCaseComment
 
     /**
      * @param boolean $public
+     * @return self
      */
     public function setPublic($public)
     {
         $this->public = (bool)$public;
+
+        return $this;
     }
 
     /**
