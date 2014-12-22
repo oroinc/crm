@@ -8,17 +8,16 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - SUM( lifetimeHistory.amount ) as value
+                    - SUM( CASE WHEN ch.status = 1 THEN lifetimeHistory.amount ELSE 0 END ) as value
                 from:
-                    - { table: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory }
+                    - { table: OroCRMAccountBundle:Account, alias: a }
                 join:
-                    inner:
-                        - { join: lifetimeHistory.account, alias: a }
-                        - { join: lifetimeHistory.dataChannel, alias: ch }
+                    left:
+                        - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a" }
+                        - { join: lifetimeHistory.dataChannel, alias: ch  }
                 where:
                     and:
-                        - ch.status = 1
-                        - lifetimeHistory.status = 1
+                        - lifetimeHistory.id IS NULL OR lifetimeHistory.status = 1
                 groupBy:  a.id
         columns:
             name:   { label: orocrm.report.datagrid.columns.account_name }
