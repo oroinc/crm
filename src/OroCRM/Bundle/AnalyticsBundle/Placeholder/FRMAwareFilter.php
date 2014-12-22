@@ -33,4 +33,20 @@ class FRMAwareFilter
 
         return in_array($this->interface, class_implements($customerIdentity));
     }
+
+    /**
+     * @param Channel $entity
+     * @return bool
+     */
+    public function isViewApplicable($entity)
+    {
+        $isApplicable = $this->isApplicable($entity);
+
+        if ($isApplicable) {
+            $data = $entity->getData();
+            $isApplicable = $isApplicable && !empty($data['rfm_enabled']);
+        }
+
+        return $isApplicable;
+    }
 }
