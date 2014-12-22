@@ -13,11 +13,8 @@ datagrid:
                     - { table: OroCRMAccountBundle:Account, alias: a }
                 join:
                     left:
-                        - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a" }
+                        - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = 1" }
                         - { join: lifetimeHistory.dataChannel, alias: ch  }
-                where:
-                    and:
-                        - lifetimeHistory.id IS NULL OR lifetimeHistory.status = 1
                 groupBy:  a.id
         columns:
             name:   { label: orocrm.report.datagrid.columns.account_name }
