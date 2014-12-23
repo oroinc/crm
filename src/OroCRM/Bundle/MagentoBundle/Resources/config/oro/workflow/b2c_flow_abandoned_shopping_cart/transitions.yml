@@ -208,7 +208,7 @@ workflows:
                             options:
                                 required: true
                                 constraints:
-                                    - NotBlank: ~
+                                    - Oro\Bundle\FormBundle\Validator\Constraints\HtmlNotBlank: ~
                         notes:
                             form_type: oro_rich_text
                             options:
@@ -276,7 +276,7 @@ workflows:
                             options:
                                 required: true
                                 constraints:
-                                    - NotBlank: ~
+                                    - Oro\Bundle\FormBundle\Validator\Constraints\HtmlNotBlank: ~
                         notes:
                             form_type: oro_rich_text
                             options:
