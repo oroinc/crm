@@ -55,7 +55,7 @@ workflows:
                                 widget: single_text
                                 with_seconds: true
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
                     init_actions:
@@ -152,19 +152,15 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         email_body:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: true
-                                attr:
-                                    style: 'width: 90%;height: 200px;'
                                 constraints:
                                     - NotBlank: ~
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
-                                attr:
-                                    style: 'width: 90%;height: 60px'
                     init_actions:
                         - @assign_active_user: $.result.user
                         - @assign_value: [$email_from, $.result.user.email]
@@ -217,7 +213,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
             record_feedback:
@@ -236,6 +232,6 @@ workflows:
                             options:
                                 required: false
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false

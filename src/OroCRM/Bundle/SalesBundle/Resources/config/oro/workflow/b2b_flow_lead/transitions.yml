@@ -28,7 +28,7 @@ workflows:
                             options:
                                 required: false
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
                     attribute_default_values:
