@@ -55,8 +55,6 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         /** Add activity association */
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
-
-        #$this->comment->addCommentAssociation($schema, 'orocrm_task');
     }
 
     /**

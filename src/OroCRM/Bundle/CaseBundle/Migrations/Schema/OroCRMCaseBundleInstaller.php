@@ -52,7 +52,5 @@ class OroCRMCaseBundleInstaller implements Installation, CommentExtensionAwareIn
         );
 
         OroCRMCaseBundle13::addColumnsForCase($schema, $this->comment);
-
-        #$this->comment->addCommentAssociation($schema, 'orocrm_case');
     }
 }
