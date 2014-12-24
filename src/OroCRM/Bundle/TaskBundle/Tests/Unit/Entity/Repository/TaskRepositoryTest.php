@@ -18,14 +18,14 @@ class TaskRepositoryTest extends OrmTestCase
     {
         $metadataDriver = new AnnotationDriver(
             new AnnotationReader(),
-            'OroCRM\Bundle\TaskBundle\Entity'
+            'OroCRM\Bundle\TaskBundle\Tests\Unit\Fixtures\Entity'
         );
 
         $this->em = $this->getTestEntityManager();
         $this->em->getConfiguration()->setMetadataDriverImpl($metadataDriver);
         $this->em->getConfiguration()->setEntityNamespaces(
             [
-                'OroCRMTaskBundle' => 'OroCRM\Bundle\TaskBundle\Entity'
+                'OroCRMTaskBundle' => 'OroCRM\Bundle\TaskBundle\Tests\Unit\Fixtures\Entity'
             ]
         );
     }
@@ -43,7 +43,7 @@ class TaskRepositoryTest extends OrmTestCase
 
         $this->assertEquals(
             'SELECT t.id, t.subject, t.description, t.dueDate, t.createdAt, t.updatedAt'
-            . ' FROM OroCRM\Bundle\TaskBundle\Entity\Task t'
+            . ' FROM OroCRM\Bundle\TaskBundle\Tests\Unit\Fixtures\Entity\Task t'
             . ' WHERE t.owner = :assignedTo AND t.dueDate >= :start AND t.dueDate <= :end',
             $qb->getDQL()
         );
