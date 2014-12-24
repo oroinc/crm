@@ -53,7 +53,7 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('subject', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('description', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('due_date', 'datetime');
+        $table->addColumn('due_date', 'datetime', ['notnull' => false]);
         $table->addColumn('task_priority_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
