@@ -28,7 +28,7 @@ class OroCRMCaseBundle implements Migration, CommentExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addColumnsForCase($schema);
+        self::addColumnsForCase($schema, $this->comment);
 
         $sql = <<<SQL
   INSERT INTO oro_comment (
@@ -48,7 +48,7 @@ SQL;
      *
      * @throws SchemaException
      */
-    public static function addColumnsForCase(Schema $schema)
+    public static function addColumnsForCase(Schema $schema, $comment)
     {
         $table = $schema->getTable('oro_comment');
         $table->addColumn('cs_case_id', 'integer', ['notnull' => false]);
@@ -70,5 +70,7 @@ SQL;
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+
+        $comment->addCommentAssociation($schema, 'orocrm_case');
     }
 }

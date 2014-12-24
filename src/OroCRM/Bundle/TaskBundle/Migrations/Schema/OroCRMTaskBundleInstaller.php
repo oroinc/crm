@@ -6,17 +6,30 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface, CommentExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
+    /** @var CommentExtension */
+    protected $comment;
+
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
+    }
+
+    /**
+     * @param CommentExtension $commentExtension
+     */
+    public function setCommentExtension(CommentExtension $commentExtension)
+    {
+        $this->comment = $commentExtension;
     }
 
     /**
@@ -42,6 +55,8 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         /** Add activity association */
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
+
+        #$this->comment->addCommentAssociation($schema, 'orocrm_task');
     }
 
     /**
