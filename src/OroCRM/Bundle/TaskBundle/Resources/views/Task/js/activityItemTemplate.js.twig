@@ -27,6 +27,10 @@
                             { interpolate: /\{\{(.+?)\}\}/g }
                         ) %>
                     </span>
+                    <span class="comment-count"<% if (!commentCount) { %> style="display:none"<% } %>
+                          title="<%= _.__('oro.activitylist.comment.quantity_label') %>">
+                        <i class="icon icon-comment"></i><span class="count"><%= commentCount %></span>
+                    </span>
                     <span class="message-item message">
                         <a href="#accordion-item<%= id %>" data-toggle="collapse"
                            class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"><%= subject %></a>
