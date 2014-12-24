@@ -1,13 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\TaskBundle\Entity;
+namespace OroCRM\Bundle\TaskBundle\Tests\Unit\Fixtures\Entity;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\ReminderBundle\Entity\RemindableInterface;
@@ -29,44 +26,6 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  * )
  * @ORM\HasLifecycleCallbacks()
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository")
- * @Config(
- *      routeName="orocrm_task_index",
- *      routeView="orocrm_task_view",
- *      defaultValues={
- *          "entity"={
- *              "icon"="icon-list-alt"
- *          },
- *          "ownership"={
- *              "owner_type"="USER",
- *              "owner_field_name"="owner",
- *              "owner_column_name"="owner_id",
- *              "organization_field_name"="organization",
- *              "organization_column_name"="organization_id"
- *          },
- *          "security"={
- *              "type"="ACL"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          },
- *          "workflow"={
- *              "active_workflow"="task_flow"
- *          },
- *          "reminder"={
- *              "reminder_template_name"="task_reminder",
- *              "reminder_flash_template_identifier"="task_template"
- *          },
- *          "grouping"={
- *              "groups"={"activity"}
- *          },
- *          "activity"={
- *              "route"="orocrm_task_activity_view",
- *              "acl"="orocrm_task_view",
- *              "action_button_widget"="orocrm_add_task_button",
- *              "action_link_widget"="orocrm_add_task_link"
- *          }
- *      }
- * )
  */
 class Task extends ExtendTask implements RemindableInterface
 {
@@ -83,13 +42,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="subject", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     protected $subject;
 
@@ -97,13 +49,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     protected $description;
 
@@ -111,57 +56,28 @@ class Task extends ExtendTask implements RemindableInterface
      * @var \DateTime
      *
      * @ORM\Column(name="due_date", type="datetime", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     protected $dueDate;
 
     /**
-     * @var TaskPriority
-     *
      * @ORM\ManyToOne(targetEntity="TaskPriority")
      * @ORM\JoinColumn(name="task_priority_name", referencedColumnName="name", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     protected $taskPriority;
 
     /**
-     * @var User
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "dataaudit"={
-     *              "auditable"=true
-     *          }
-     *      }
-     * )
      */
     protected $owner;
 
     /**
-     * @var WorkflowItem
-     *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
      * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $workflowItem;
 
     /**
-     * @var WorkflowStep
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
      * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
      */
@@ -176,13 +92,6 @@ class Task extends ExtendTask implements RemindableInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
      */
     protected $createdAt;
 
@@ -190,19 +99,10 @@ class Task extends ExtendTask implements RemindableInterface
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
      */
     protected $updatedAt;
 
     /**
-     * @var Organization
-     *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
