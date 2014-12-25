@@ -4,25 +4,28 @@ namespace OroCRM\Bundle\CaseBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
+use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_0\OroCRMCaseBundle;
-use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_3\OroCRMCaseBundle as OroCRMCaseBundle13;
+use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_1\OroCRMCaseBundle as OroCRMCaseBundle11;
+use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_2\OroCRMCaseBundle as OroCRMCaseBundle12;
 
-class OroCRMCaseBundleInstaller implements Installation, CommentExtensionAwareInterface
+class OroCRMCaseBundleInstaller implements
+    Installation,
+    AttachmentExtensionAwareInterface
 {
-    /** @var CommentExtension */
-    protected $comment;
+    /** @var AttachmentExtension */
+    protected $attachmentExtension;
 
     /**
-     * @param CommentExtension $commentExtension
+     * {@inheritdoc}
      */
-    public function setCommentExtension(CommentExtension $commentExtension)
+    public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
     {
-        $this->comment = $commentExtension;
+        $this->attachmentExtension = $attachmentExtension;
     }
 
     /**
@@ -41,16 +44,15 @@ class OroCRMCaseBundleInstaller implements Installation, CommentExtensionAwareIn
         $migration = new OroCRMCaseBundle();
         $migration->up($schema, $queries);
 
-        $table = $schema->getTable('orocrm_case');
-        $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['organization_id'], 'IDX_AB3BAC1E32C8A3DE', []);
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_organization'),
-            ['organization_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
+        $migration11 = new OroCRMCaseBundle11();
+        $migration11->up($schema, $queries);
 
-        OroCRMCaseBundle13::addColumnsForCase($schema);
+        OroCRMCaseBundle12::addOrganization($schema);
+
+        $this->attachmentExtension->addImageRelation(
+            $schema,
+            'orocrm_case_comment',
+            'attachment'
+        );
     }
 }

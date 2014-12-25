@@ -6,20 +6,34 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
+use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareInterface, CommentExtensionAwareInterface
 {
+    /** @var CommentExtension */
+    protected $comment;
+
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /**
+     * @param CommentExtension $commentExtension
+     */
+    public function setCommentExtension(CommentExtension $commentExtension)
+    {
+        $this->comment = $commentExtension;
+    }
+
 
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_4';
+        return 'v1_5';
     }
 
     /**
@@ -42,6 +56,8 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
 
         /** Foreign keys generation **/
         $this->addOrocrmCallForeignKeys($schema);
+
+        $this->comment->addCommentAssociation($schema, 'orocrm_call');
     }
 
     /**

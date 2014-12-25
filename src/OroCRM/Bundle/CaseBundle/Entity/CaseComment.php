@@ -11,6 +11,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @ORM\Entity()
+ * @ORM\Table(name="orocrm_case_comment")
+ * @ORM\HasLifecycleCallbacks()
  * @Config(
  *      defaultValues={
  *          "entity"={
@@ -39,7 +41,7 @@ class CaseComment extends ExtendCaseComment
      * @var CaseEntity
      *
      * @ORM\ManyToOne(targetEntity="CaseEntity", inversedBy="comments", cascade={"persist"})
-     * @ORM\JoinColumn(name="cs_case_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $case;
 
@@ -47,14 +49,14 @@ class CaseComment extends ExtendCaseComment
      * @var Contact
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
-     * @ORM\JoinColumn(name="cs_contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $contact;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="cs_public", type="boolean", options={"default"=false})
+     * @ORM\Column(name="public", type="boolean", options={"default"=false})
      */
     protected $public = false;
 

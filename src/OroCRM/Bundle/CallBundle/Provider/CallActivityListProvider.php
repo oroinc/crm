@@ -4,13 +4,14 @@ namespace OroCRM\Bundle\CallBundle\Provider;
 
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
-class CallActivityListProvider implements ActivityListProviderInterface
+class CallActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
 
@@ -116,5 +117,15 @@ class CallActivityListProvider implements ActivityListProviderInterface
     public function getTargetEntities($entity)
     {
         return $entity->getActivityTargetEntities();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function hasComments(ConfigManager $configManager, $entity)
+    {
+        $config = $configManager->getProvider('comment')->getConfig($entity);
+
+        return $config->is('enabled');
     }
 }
