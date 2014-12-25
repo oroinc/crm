@@ -27,7 +27,7 @@ class OroCRMCaseBundle implements Migration, AttachmentExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->attachmentExtension->addImageRelation(
+        $this->attachmentExtension->addFileRelation(
             $schema,
             'orocrm_case_comment',
             'attachment'
