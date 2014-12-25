@@ -6,8 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -17,14 +15,10 @@ use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_2\OroCRMCaseBundle as OroCRMCa
 
 class OroCRMCaseBundleInstaller implements
     Installation,
-    AttachmentExtensionAwareInterface,
-    CommentExtensionAwareInterface
+    AttachmentExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
-
-    /** @var CommentExtension */
-    protected $comment;
 
     /**
      * {@inheritdoc}
@@ -32,14 +26,6 @@ class OroCRMCaseBundleInstaller implements
     public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
     {
         $this->attachmentExtension = $attachmentExtension;
-    }
-
-    /**
-     * @param CommentExtension $commentExtension
-     */
-    public function setCommentExtension(CommentExtension $commentExtension)
-    {
-        $this->comment = $commentExtension;
     }
 
     /**
@@ -63,7 +49,6 @@ class OroCRMCaseBundleInstaller implements
 
         OroCRMCaseBundle12::addOrganization($schema);
 
-        $this->comment->addCommentAssociation($schema, 'orocrm_case_comment');
         $this->attachmentExtension->addImageRelation(
             $schema,
             'orocrm_case_comment',
