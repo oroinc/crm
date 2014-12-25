@@ -62,9 +62,17 @@
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="message">
-                <!-- Do NOT remove. Placeholder for activity view -->
+                {# Do NOT remove. Placeholder for activity view #}
                 <div class="info responsive-cell"></div>
-                <div class="comment responsive-cell"></div>
+                <% if (has_comments) { %>
+                <div class="responsive-cell">
+                    <h5 class="user-fieldset">
+                        <span><%= _.__('oro.comment.entity_plural_label') %></span>
+                    </h5>
+                    {# paceholder for comments block#}
+                    <div class="comment"></div>
+                </div>
+                <% } %>
             </div>
         </div>
     </div>
