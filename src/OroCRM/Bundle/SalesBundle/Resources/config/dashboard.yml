@@ -37,3 +37,24 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.my_sales_flow_b2b_chart.description
             icon:        bundles/orocrmsales/img/my_sales_flow_b2b.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+        campaigns_leads:
+            label:       orocrm.campaign.dashboard.campaigns_leads.title
+            route:       orocrm_campaign_dashboard_campaigns_leads_chart
+            acl:         orocrm_campaign_view
+            description: orocrm.campaign.dashboard.campaigns_leads.description
+            icon:        bundles/orocrmcampaign/img/Lead-generation-of-most-recently-created-campaigns.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
+        campaigns_opportunity:
+            label:       orocrm.campaign.dashboard.campaigns_opportunity.title
+            route:       orocrm_campaign_dashboard_campaigns_opportunity_chart
+            acl:         orocrm_campaign_view
+            description: orocrm.campaign.dashboard.campaigns_opportunity.description
+            icon:        bundles/orocrmcampaign/img/Top-5-opportunity-generating-campaigns.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+        campaigns_by_close_revenue:
+            label:       orocrm.campaign.dashboard.campaigns_by_close_revenue.title
+            route:       orocrm_campaign_dashboard_campaigns_by_close_revenue_chart
+            acl:         orocrm_campaign_view
+            description: orocrm.campaign.dashboard.campaigns_by_close_revenue.description
+            icon:        bundles/orocrmcampaign/img/Top-5-revenue-generating-campaigns.png
+            applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
