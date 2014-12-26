@@ -9,7 +9,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\AnalyticsBundle\Entity\Repository\RFMMetricCategoryRepository")
  * @ORM\Table(name="orocrm_analytics_rfm_category")
  * @Config(
  *  defaultValues={
