@@ -3,6 +3,7 @@
         <h4>{{ 'orocrm.analytics.form.rfm_setting.title'|trans }}</h4>
         <div class="rfm-settings rfm-enabled">
             <div class="rfm-settings-data">
+                {% if rfmCategoriesCount > 1 %}
                 <table class="grid table-hover table table-bordered table-condensed">
                     <thead>
                     <tr>
@@ -40,7 +41,7 @@
                         </tr>
 
                         {% if rfmCategoriesCount > 2 %}
-                            {% for rfmCategory in rfmCategories|slice(1, rfmCategoriesCount - 2) %}
+                            {% for rfmCategory in rfmCategories.recency|slice(1, -1) %}
                                 <tr>
                                     <td class="rfm-cell-index">{{ loop.index + 1 }}</td>
                                     <td class="rfm-cell-recency">
@@ -82,6 +83,7 @@
                         </tr>
                     </tbody>
                 </table>
+                {% endif %}
             </div>
         </div>
     </div>
