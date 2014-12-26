@@ -6,30 +6,20 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
-use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface, CommentExtensionAwareInterface
+class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
-    /** @var CommentExtension */
-    protected $comment;
-
+    /**
+     * @param ActivityExtension $activityExtension
+     */
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
-    }
-
-    /**
-     * @param CommentExtension $commentExtension
-     */
-    public function setCommentExtension(CommentExtension $commentExtension)
-    {
-        $this->comment = $commentExtension;
     }
 
     /**
