@@ -8,21 +8,17 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - SUM( o.closeRevenue ) as value
+                    - SUM( CASE WHEN ch.status = true THEN lifetimeHistory.amount ELSE 0 END ) as value
                 from:
-                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                    - { table: OroCRMAccountBundle:Account, alias: a }
                 join:
-                    inner:
-                        - { join: o.customer, alias: c }
-                        - { join: c.account, alias: a }
-                        - { join: o.status,  alias: s }
-                where:
-                    and:
-                        - s.name = 'won'
+                    left:
+                        - { join: OroCRMChannelBundle:LifetimeValueHistory, alias: lifetimeHistory, conditionType: WITH, condition: "lifetimeHistory.account = a and lifetimeHistory.status = true" }
+                        - { join: lifetimeHistory.dataChannel, alias: ch  }
                 groupBy:  a.id
         columns:
             name:   { label: orocrm.report.datagrid.columns.account_name }
-            value:  { label: orocrm.report.datagrid.columns.total_value,  frontend_type: currency }
+            value:  { label: orocrm.account.lifetime_value.label,  frontend_type: currency }
         properties:
             id: ~
             view_link:
@@ -51,7 +47,7 @@ datagrid:
                     name:
                         label: orocrm.magento.datagrid.columns.grand_total
                     value:
-                        expr: SUM( o.closeRevenue )
+                        expr: SUM( CASE WHEN ch.status = true THEN lifetimeHistory.amount ELSE 0 END )
                         formatter: currency
         sorters:
             columns:
