@@ -2,7 +2,6 @@ oro_entity:
     virtual_relations:
         OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             trackingEvent:
-                label: 'oro.tracking.trackingevent.entity_label'
                 relation_type: oneToMany
                 related_entity_name: Oro\Bundle\TrackingBundle\Entity\TrackingEvent
                 query:
