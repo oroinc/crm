@@ -81,6 +81,14 @@ class ContactImportHelper
     {
         $this->mergeScalars($this->scalarFields, $remoteData, $localData, $contact);
         $this->mergeObjects($remoteData, $localData, $contact);
+
+        // contact entity must be valid
+        if (!$contact->getFirstName()) {
+            $contact->setFirstName('N/A');
+        }
+        if (!$contact->getLastName()) {
+            $contact->setLastName('N/A');
+        }
     }
 
     /**
