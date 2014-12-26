@@ -1,5 +1,7 @@
 <?php
 
+namespace Oro\Bundle\TaskBundle\Migrations\Schema\v1_5;
+
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
