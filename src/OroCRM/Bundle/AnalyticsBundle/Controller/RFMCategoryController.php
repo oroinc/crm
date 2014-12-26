@@ -71,7 +71,7 @@ class RFMCategoryController extends Controller
     {
         if (!$this->rfmMetricCategoryRepository) {
             $this->rfmMetricCategoryRepository = $this->getDoctrine()
-                ->getRepository('OroCRMAnalyticsBundle:RFMMetricCategory');
+                ->getRepository($this->container->getParameter('orocrm_analytics.entity.rfm_category.class'));
         }
 
         return $this->rfmMetricCategoryRepository;

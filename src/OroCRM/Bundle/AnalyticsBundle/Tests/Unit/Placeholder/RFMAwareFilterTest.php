@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Placeholder;
 
-use OroCRM\Bundle\AnalyticsBundle\Placeholder\FRMAwareFilter;
+use OroCRM\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter;
 
-class FRMAwareFilterTest extends \PHPUnit_Framework_TestCase
+class RFMAwareFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -12,13 +12,13 @@ class FRMAwareFilterTest extends \PHPUnit_Framework_TestCase
     protected $interface = 'OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface';
 
     /**
-     * @var FRMAwareFilter
+     * @var RFMAwareFilter
      */
     protected $filter;
 
     protected function setUp()
     {
-        $this->filter = new FRMAwareFilter($this->interface);
+        $this->filter = new RFMAwareFilter($this->interface);
     }
 
     /**
@@ -31,6 +31,9 @@ class FRMAwareFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->filter->isApplicable($entity));
     }
 
+    /**
+     * @return array
+     */
     public function applicableDataProvider()
     {
         $channelInvalid = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
@@ -73,6 +76,9 @@ class FRMAwareFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->filter->isViewApplicable($entity));
     }
 
+    /**
+     * @return array
+     */
     public function applicableForViewDataProvider()
     {
         $channelInvalid = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')

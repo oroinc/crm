@@ -22,7 +22,7 @@ class RFMMetricCategoryRepository extends EntityRepository
             ->orderBy('c.categoryIndex', Criteria::ASC);
 
         if (null !== $type) {
-            $qb->where("c.categoryType = :type");
+            $qb->where('c.categoryType = :type');
             $qb->setParameter('type', $type);
         }
 

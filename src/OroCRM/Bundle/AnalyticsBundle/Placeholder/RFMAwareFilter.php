@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Placeholder;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class FRMAwareFilter
+class RFMAwareFilter
 {
     /**
      * @var string
