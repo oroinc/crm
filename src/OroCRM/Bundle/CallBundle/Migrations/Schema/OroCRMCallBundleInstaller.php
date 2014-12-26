@@ -27,7 +27,6 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $this->comment = $commentExtension;
     }
 
-
     /**
      * {@inheritdoc}
      */

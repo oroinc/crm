@@ -11,7 +11,10 @@ use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareInterface, CommentExtensionAwareInterface
+class OroCRMTaskBundleInstaller implements
+    Installation,
+    ActivityExtensionAwareInterface,
+    CommentExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -19,6 +22,9 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
     /** @var CommentExtension */
     protected $comment;
 
+    /**
+     * @param ActivityExtension $activityExtension
+     */
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
@@ -37,7 +43,7 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_5';
     }
 
     /**
@@ -55,6 +61,9 @@ class OroCRMTaskBundleInstaller implements Installation, ActivityExtensionAwareI
         /** Add activity association */
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
+
+        /** Add comment relation */
+        $this->comment->addCommentAssociation($schema, 'orocrm_task');
     }
 
     /**

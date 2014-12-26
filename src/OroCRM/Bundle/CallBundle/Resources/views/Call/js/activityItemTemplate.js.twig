@@ -64,7 +64,7 @@
             <div class="message">
                 {# Do NOT remove. Placeholder for activity view #}
                 <div class="info responsive-cell"></div>
-                <% if (has_comments) { %>
+                <% if (has_comments && commentable) { %>
                 <div class="responsive-cell">
                     <h5 class="user-fieldset">
                         <span><%= _.__('oro.comment.entity_plural_label') %></span>
