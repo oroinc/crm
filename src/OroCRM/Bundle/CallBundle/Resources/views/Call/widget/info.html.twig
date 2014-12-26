@@ -4,7 +4,7 @@
     <div class="responsive-block">
         {{ ui.renderProperty('orocrm.call.subject.label'|trans, entity.subject) }}
         {#{{ ui.renderProperty('orocrm.call.call_status.label'|trans, entity.callStatus ? entity.callStatus.label : null) }}#}
-        {{ ui.renderHtmlProperty('orocrm.call.notes.label'|trans, entity.notes) }}
+        {{ ui.renderSwitchableHtmlProperty('orocrm.call.notes.label'|trans, entity.notes) }}
         {{ ui.renderProperty('orocrm.call.call_date_time.label'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
