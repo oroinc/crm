@@ -9,15 +9,25 @@ definitions:
                 conditions: # if Contact not exists
                     @empty: $contact
                 actions:
+                    - @assign_value: [$.firstName, $firstName]
+                    - @assign_value: # check and generate N/A first name
+                        conditions:
+                            @empty: $.firstName
+                        parameters: [$.firstName, 'N/A']
+                    - @assign_value: [$.lastName, $lastName]
+                    - @assign_value: # check and generate last name
+                        conditions:
+                            @empty: $.lastName
+                        parameters: [$.lastName, 'N/A']
                     - @create_entity: # create Contact
                         class:     OroCRM\Bundle\ContactBundle\Entity\Contact
                         attribute: $contact
                         data:
                             birthday:     $birthday
                             email:        $email
-                            firstName:    $firstName
+                            firstName:    $.firstName
                             gender:       $gender
-                            lastName:     $lastName
+                            lastName:     $.lastName
                             middleName:   $middleName
                             namePrefix:   $namePrefix
                             nameSuffix:   $nameSuffix
@@ -91,6 +101,12 @@ definitions:
                         arguments:
                             firstName: $firstName
                             lastName:  $lastName
+                    - @assign_value: # check and generate N/A Account name
+                        conditions:
+                            @and:
+                                - @empty: $firstName
+                                - @empty: $lastName
+                        parameters: [$.accountName, 'N/A']
                     - @create_entity: # create Account
                         class:     OroCRM\Bundle\AccountBundle\Entity\Account
                         attribute: $account
