@@ -4,6 +4,7 @@ oro_entity:
             trackingEvent:
                 relation_type: oneToMany
                 related_entity_name: Oro\Bundle\TrackingBundle\Entity\TrackingEvent
+                label: oro.tracking.trackingevent.entity_label
                 query:
                     join:
                         left:
