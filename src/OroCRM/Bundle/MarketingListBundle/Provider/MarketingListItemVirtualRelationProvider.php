@@ -77,8 +77,9 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     protected function getRelationDefinition($className)
     {
         return [
+            'label' => 'orocrm.marketinglist.marketinglistitem.entity_label',
             'relation_type' => 'oneToMany',
-            'related_entity_name' => 'OroCRMMarketingListBundle:MarketingListItem',
+            'related_entity_name' => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem',
             'query' => [
                 'join' => [
                     'left' => [
