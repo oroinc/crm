@@ -37,7 +37,9 @@
                             {{ form_row(form.callStatus) }}
                         </div>
                     </div>
-                    {{ form_rest(form) }}
+                    <div class="span6">
+                        {{ form_rest(form) }}
+                    </div>
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
                         {% if form.vars.value.id %}
