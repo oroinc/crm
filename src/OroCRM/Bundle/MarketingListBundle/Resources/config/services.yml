@@ -175,7 +175,7 @@ services:
     orocrm_marketing_list.provider.virtual_relation.marketing_list_item:
         class: %orocrm_marketing_list.provider.virtual_relation.marketing_list_item.class%
         arguments:
-            - @doctrine
+            - @oro_entity.doctrine_helper
         tags:
             - { name: oro_entity.virtual_relation_provider, priority: 150 }
 

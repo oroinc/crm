@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Provider;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Query\Expr\Join;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 
 class MarketingListItemVirtualRelationProvider implements VirtualRelationProviderInterface
@@ -11,9 +11,9 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     const FIELD_NAME = 'marketingListItem_virtual';
 
     /**
-     * @var ManagerRegistry
+     * @var DoctrineHelper
      */
-    protected $registry;
+    protected $doctrineHelper;
 
     /**
      * @var array
@@ -21,11 +21,11 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     protected $marketingListByEntity = [];
 
     /**
-     * @param ManagerRegistry $registry
+     * @param DoctrineHelper $doctrineHelper
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(DoctrineHelper $doctrineHelper)
     {
-        $this->registry = $registry;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -64,7 +64,7 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     protected function hasMarketingList($className)
     {
         if (!array_key_exists($className, $this->marketingListByEntity)) {
-            $repository = $this->registry->getRepository('OroCRMMarketingListBundle:MarketingList');
+            $repository = $this->doctrineHelper->getEntityRepository('OroCRMMarketingListBundle:MarketingList');
             $this->marketingListByEntity[$className] = (bool)$repository->findOneBy(['entity' => $className]);
         }
 
@@ -77,6 +77,8 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
      */
     protected function getRelationDefinition($className)
     {
+        $idField = $this->doctrineHelper->getSingleEntityIdentifierFieldName($className);
+
         return [
             'label' => 'orocrm.marketinglist.marketinglistitem.entity_label',
             'relation_type' => 'oneToMany',
@@ -95,7 +97,7 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
                             'alias' => self::FIELD_NAME,
                             'conditionType' => Join::WITH,
                             'condition' => self::FIELD_NAME . '.marketingList = marketingList_virtual'
-                                . ' AND IDENTITY(entity) = ' . self::FIELD_NAME . '.entityId'
+                                . ' AND entity.' . $idField . ' = ' . self::FIELD_NAME . '.entityId'
                         ]
                     ]
                 ]
