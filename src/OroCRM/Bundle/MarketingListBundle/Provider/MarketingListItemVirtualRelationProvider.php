@@ -41,8 +41,12 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
      */
     public function getVirtualRelationQuery($className, $fieldName)
     {
-        $relationDefinition = $this->getRelationDefinition($className);
-        return $relationDefinition['query'];
+        $relations = $this->getVirtualRelations($className);
+        if (array_key_exists($fieldName, $relations)) {
+            return $relations[$fieldName]['query'];
+        }
+
+        return [];
     }
 
     /**
