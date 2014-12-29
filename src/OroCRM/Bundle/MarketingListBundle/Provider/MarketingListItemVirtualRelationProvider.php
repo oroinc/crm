@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MarketingListBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 
 class MarketingListItemVirtualRelationProvider implements VirtualRelationProviderInterface
@@ -86,15 +87,15 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingList',
                             'alias' => 'marketingList_virtual',
-                            'conditionType' => 'WITH',
-                            'condition' => 'marketingList_virtual.entity = ' . $className
+                            'conditionType' => Join::WITH,
+                            'condition' => "marketingList_virtual.entity = '{$className}'"
                         ],
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingListItem',
                             'alias' => self::FIELD_NAME,
-                            'conditionType' => 'WITH',
+                            'conditionType' => Join::WITH,
                             'condition' => self::FIELD_NAME . '.marketingList = marketingList_virtual'
-                                . ' AND ' . self::FIELD_NAME . '.entityId = IDENTITY(entity)'
+                                . ' AND IDENTITY(entity) = ' . self::FIELD_NAME . '.entityId'
                         ]
                     ]
                 ]
