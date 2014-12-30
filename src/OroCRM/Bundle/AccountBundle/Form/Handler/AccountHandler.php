@@ -2,14 +2,15 @@
 
 namespace OroCRM\Bundle\AccountBundle\Form\Handler;
 
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Request;
+
 use Oro\Bundle\TagBundle\Entity\TagManager;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class AccountHandler implements TagHandlerInterface
 {
@@ -50,6 +51,7 @@ class AccountHandler implements TagHandlerInterface
      * Process form
      *
      * @param  Account $entity
+     *
      * @return bool True on successful processing, false otherwise
      */
     public function process(Account $entity)
@@ -58,7 +60,6 @@ class AccountHandler implements TagHandlerInterface
 
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($this->request);
-            $this->handleContacts($entity);
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
@@ -71,18 +72,6 @@ class AccountHandler implements TagHandlerInterface
     }
 
     /**
-     * @param Account $entity
-     */
-    protected function handleContacts($entity)
-    {
-        if ($this->form->has('contacts')) {
-            $contacts = $this->form->get('contacts');
-            $this->appendContacts($entity, $contacts->get('added')->getData());
-            $this->removeContacts($entity, $contacts->get('removed')->getData());
-        }
-    }
-
-    /**
      * "Success" form handler
      *
      * @param Account $entity
@@ -92,32 +81,6 @@ class AccountHandler implements TagHandlerInterface
         $this->manager->persist($entity);
         $this->manager->flush();
         $this->tagManager->saveTagging($entity);
-    }
-
-    /**
-     * Append contacts to account
-     *
-     * @param Account $account
-     * @param Contact[] $contacts
-     */
-    protected function appendContacts(Account $account, array $contacts)
-    {
-        foreach ($contacts as $contact) {
-            $account->addContact($contact);
-        }
-    }
-
-    /**
-     * Remove contacts from account
-     *
-     * @param Account $account
-     * @param Contact[] $contacts
-     */
-    protected function removeContacts(Account $account, array $contacts)
-    {
-        foreach ($contacts as $contact) {
-            $account->removeContact($contact);
-        }
     }
 
     /**
