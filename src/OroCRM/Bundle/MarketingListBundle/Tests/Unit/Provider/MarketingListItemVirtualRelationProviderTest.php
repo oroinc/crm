@@ -131,14 +131,48 @@ class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_Te
         }
     }
 
+    /**
+     * @param string $className
+     * @param object $marketingList
+     */
     protected function assertRepositoryCall($className, $marketingList)
     {
-        $repository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
+        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+            ->disableOriginalConstructor()
+            ->setMethods(['getArrayResult'])
+            ->getMockForAbstractClass();
+
+        $results = [];
+        if ($marketingList) {
+            $results[] = ['entity' => $className];
+        }
+
+        $query->expects($this->once())
+            ->method('getArrayResult')
+            ->will($this->returnValue($results));
+
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $queryBuilder->expects($this->once())
+            ->method('select')
+            ->with('ml.entity')
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())
+            ->method('distinct')
+            ->with(true)
+            ->will($this->returnSelf());
+        $queryBuilder->expects($this->once())
+            ->method('getQuery')
+            ->will($this->returnValue($query));
+
+        $repository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
             ->getMock();
         $repository->expects($this->once())
-            ->method('findOneBy')
-            ->with(['entity' => $className])
-            ->will($this->returnValue($marketingList));
+            ->method('createQueryBuilder')
+            ->with('ml')
+            ->will($this->returnValue($queryBuilder));
 
         $this->doctrineHelper->expects($this->once())
             ->method('getEntityRepository')

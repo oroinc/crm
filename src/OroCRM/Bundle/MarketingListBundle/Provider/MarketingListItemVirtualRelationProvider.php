@@ -16,9 +16,9 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     protected $doctrineHelper;
 
     /**
-     * @var array
+     * @var array|null
      */
-    protected $marketingListByEntity = [];
+    protected $marketingListByEntity;
 
     /**
      * @param DoctrineHelper $doctrineHelper
@@ -67,12 +67,21 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
      */
     protected function hasMarketingList($className)
     {
-        if (!array_key_exists($className, $this->marketingListByEntity)) {
+        if (null === $this->marketingListByEntity) {
+            $this->marketingListByEntity = [];
+
             $repository = $this->doctrineHelper->getEntityRepository('OroCRMMarketingListBundle:MarketingList');
-            $this->marketingListByEntity[$className] = (bool)$repository->findOneBy(['entity' => $className]);
+            $qb = $repository->createQueryBuilder('ml')
+                ->select('ml.entity')
+                ->distinct(true);
+            $entities = $qb->getQuery()->getArrayResult();
+
+            foreach ($entities as $entity) {
+                $this->marketingListByEntity[$entity['entity']] = true;
+            }
         }
 
-        return $this->marketingListByEntity[$className];
+        return !empty($this->marketingListByEntity[$className]);
     }
 
     /**
