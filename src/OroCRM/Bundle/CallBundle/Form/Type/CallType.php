@@ -34,7 +34,7 @@ class CallType extends AbstractType
             )
             ->add(
                 'notes',
-                'textarea',
+                'oro_rich_text',
                 [
                     'required' => false,
                     'label'    => 'orocrm.call.notes.label'
