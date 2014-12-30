@@ -156,7 +156,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
                 ['min' => 10000, 'max' => null],
                 ['min' => 1000, 'max' => 10000],
                 ['min' => 100, 'max' => 1000],
-                ['min' => 10, 'max' => 10],
+                ['min' => 10, 'max' => 100],
                 ['min' => null, 'max' => 10],
             ]
         ];
@@ -164,7 +164,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         foreach ($rfmData as $type => $values) {
             foreach ($values as $idx => $limits) {
                 $category = new RFMMetricCategory();
-                $category->setCategoryIndex($idx)
+                $category->setCategoryIndex($idx + 1)
                     ->setChannel($this->dataChannel)
                     ->setCategoryType($type)
                     ->setMinValue($limits['min'])

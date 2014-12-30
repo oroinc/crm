@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
+use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
@@ -220,5 +221,13 @@ class ChannelDoctrineListener
         $this->em           = $args->getEntityManager();
         $this->uow          = $this->em->getUnitOfWork();
         $this->lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
+    }
+
+    /**
+     * @param OnClearEventArgs $event
+     */
+    public function onClear(OnClearEventArgs $event)
+    {
+        $this->queued = [];
     }
 }
