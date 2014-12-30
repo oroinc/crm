@@ -11,7 +11,7 @@ parameters:
     orocrm_analytics.model.rfm_aware_interface: OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface
     orocrm_analytics.form.channel_type_extension.class: OroCRM\Bundle\AnalyticsBundle\Form\Extension\ChannelTypeExtension
 
-    orocrm_analytics.placeholder.rfm_filter.class: OroCRM\Bundle\AnalyticsBundle\Placeholder\FRMAwareFilter
+    orocrm_analytics.placeholder.rfm_filter.class: OroCRM\Bundle\AnalyticsBundle\Placeholder\RFMAwareFilter
 
     orocrm_analytics.event_listener.timezone_change.class: OroCRM\Bundle\AnalyticsBundle\EventListener\TimezoneChangeListener
     orocrm_analytics.event_listener.rfm_category.class: OroCRM\Bundle\AnalyticsBundle\EventListener\RFMCategoryListener

@@ -1,4 +1,8 @@
 oro_dashboard_config:
+    dashboards:
+        e_commerce:
+            twig: OroDashboardBundle:Index:default.html.twig
+
     widgets:
         average_lifetime_sales_chart:
             label:       orocrm.channel.dashboard.average_lifetime_sales_chart.title

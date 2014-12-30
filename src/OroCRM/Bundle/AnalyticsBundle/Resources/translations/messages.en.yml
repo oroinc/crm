@@ -1,5 +1,11 @@
 orocrm:
     analytics:
+        less: Less than
+        more: More than
+        from: From
+        to: To
+        best: best
+        worst: worst
         title:
             add_row: Add bucket
         rfm:
