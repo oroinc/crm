@@ -55,7 +55,7 @@ workflows:
                                 widget: single_text
                                 with_seconds: true
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -135,7 +135,7 @@ workflows:
                                 widget: single_text
                                 with_seconds: true
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -204,19 +204,15 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         email_body:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: true
-                                attr:
-                                    style: 'width: 90%;height: 200px;'
                                 constraints:
-                                    - NotBlank: ~
+                                    - Oro\Bundle\FormBundle\Validator\Constraints\HtmlNotBlank: ~
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
-                                attr:
-                                    style: 'width: 90%;height: 60px'
                     init_actions:
                         - @assign_active_user: $.result.user
                         - @assign_value: [$email_from, $.result.user.email]
@@ -276,19 +272,15 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         email_body:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: true
-                                attr:
-                                    style: 'width: 90%;height: 200px;'
                                 constraints:
-                                    - NotBlank: ~
+                                    - Oro\Bundle\FormBundle\Validator\Constraints\HtmlNotBlank: ~
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
-                                attr:
-                                    style: 'width: 90%;height: 60px'
                     init_actions:
                         - @assign_active_user: $.result.user
                         - @assign_value: [$email_from, $.result.user.email]
@@ -373,7 +365,7 @@ workflows:
                             options:
                                 required: false
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -400,7 +392,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false
             reopen:
@@ -413,6 +405,6 @@ workflows:
                 form_options:
                     attribute_fields:
                         notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                             options:
                                 required: false

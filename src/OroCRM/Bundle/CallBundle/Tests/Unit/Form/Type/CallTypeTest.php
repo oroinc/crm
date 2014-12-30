@@ -39,7 +39,7 @@ class CallTypeTest extends FormIntegrationTestCase
         $expectedFields = [
             'subject' => 'text',
             'phoneNumber' => 'orocrm_call_phone',
-            'notes' => 'textarea',
+            'notes' => 'oro_rich_text',
             'callDateTime' => 'oro_datetime',
             'callStatus' => 'entity',
             'duration' => 'oro_time_interval',
