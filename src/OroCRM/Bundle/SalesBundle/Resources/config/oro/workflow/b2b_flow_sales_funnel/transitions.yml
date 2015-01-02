@@ -155,7 +155,7 @@ workflows:
                                 channel_id: $dataChannel.id
                         new_company_name: ~
                         new_notes:
-                            form_type: textarea
+                            form_type: oro_rich_text
                     attribute_default_values:
                         new_opportunity_name: $lead.name
                         new_b2bcustomer: $lead.customer

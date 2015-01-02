@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
+use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
@@ -114,6 +115,23 @@ class ChannelDoctrineListenerTest extends OrmTestCase
                 $this->assertEquals($changeSet['channel'], self::TEST_CHANNEL_ID);
             }
         }
+
+        return $this->channelDoctrineListener;
+    }
+
+    /**
+     * @param ChannelDoctrineListener $listener
+     * @depends testOnFlush
+     */
+    public function testOnClear(ChannelDoctrineListener $listener)
+    {
+        $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->assertAttributeNotEmpty('queued', $listener);
+        $listener->onClear(new OnClearEventArgs($entityManager));
+        $this->assertAttributeEmpty('queued', $listener);
     }
 
     public function testPostFlush()

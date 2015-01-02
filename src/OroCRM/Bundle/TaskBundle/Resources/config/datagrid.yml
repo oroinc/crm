@@ -1,5 +1,6 @@
 datagrid:
     tasks-grid:
+        extended_entity_name: %orocrm_task.entity.class%
         source:
             type: orm
             acl_resource: orocrm_task_view
