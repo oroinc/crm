@@ -1,6 +1,7 @@
 {% if form is defined and form.recency is defined or form.frequency is defined or form.monetary is defined %}
     {% set options = {rfm_enable_id: form.rfm_enabled.vars.id} %}
-    <div class="rfm-settings {% if form.vars.value.data.rfm_enabled %}rfm-enabled{% endif %}"
+    {% set rfmEnabled = form.vars.value.data.rfm_enabled is defined and form.vars.value.data.rfm_enabled %}
+    <div class="rfm-settings {% if rfmEnabled %}rfm-enabled{% endif %}"
         data-page-component-module="orocrmanalytics/js/app/components/rfm-settings"
         data-page-component-options="{{ options|json_encode }}">
 
