@@ -58,6 +58,7 @@ orocrm:
             owner.label:                    Owner
             id.label:                       Id
             organization.label:             Organization
+            attachment.label:               Attachment
 
             action:
                 add: Add Comment
