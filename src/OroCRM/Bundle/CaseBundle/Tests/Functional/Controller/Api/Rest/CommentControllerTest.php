@@ -133,7 +133,6 @@ class CommentControllerTest extends WebTestCase
                 'case' => self::$caseId,
                 'owner' => self::$adminUserId,
                 'contact' => null,
-                'updatedAt' => null,
             ],
             $comment
         );

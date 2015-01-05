@@ -5,66 +5,38 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
-use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\CaseBundle\Model\ExtendCaseComment;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
- * @ORM\Entity
- * @ORM\Table(
- *      name="orocrm_case_comment"
- * )
+ * @ORM\Entity()
+ * @ORM\Table(name="orocrm_case_comment")
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
- *  defaultValues={
- *      "dataaudit"={"auditable"=true},
- *      "entity"={
- *          "icon"="icon-list-alt"
- *      },
- *      "ownership"={
- *          "owner_type"="USER",
- *          "owner_field_name"="owner",
- *          "owner_column_name"="owner_id",
- *          "organization_field_name"="organization",
- *          "organization_column_name"="organization_id"
- *      },
- *      "security"={
- *          "type"="ACL"
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-comments"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="user_owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          },
+ *          "activity"={
+ *              "immutable"=true
+ *          }
  *      }
- *  }
  * )
  */
-class CaseComment
+class CaseComment extends ExtendCaseComment
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    protected $id;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="message", type="text")
-     * @Oro\Versioned
-     */
-    protected $message;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="public", type="boolean", options={"default"=false})
-     * @Oro\Versioned
-     */
-    protected $public = false;
-
     /**
      * @var CaseEntity
      *
@@ -78,112 +50,19 @@ class CaseComment
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      */
     protected $contact;
 
     /**
-     * @var User
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="updated_by_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\Column(name="public", type="boolean", options={"default"=false})
      */
-    protected $updatedBy;
-
-    /**
-     * @var User
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
-     */
-    protected $owner;
-
-    /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $organization;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", nullable=true)
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param string $message
-     * @return CaseComment
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * @param boolean $public
-     * @return CaseComment
-     */
-    public function setPublic($public)
-    {
-        $this->public = (bool)$public;
-
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function isPublic()
-    {
-        return (bool)$this->public;
-    }
+    protected $public = false;
 
     /**
      * @param CaseEntity|null $case
-     * @return CaseComment
+     * @return self
      */
     public function setCase($case)
     {
@@ -202,7 +81,7 @@ class CaseComment
 
     /**
      * @param Contact|null $contact
-     * @return CaseComment
+     * @return self
      */
     public function setContact($contact)
     {
@@ -220,117 +99,21 @@ class CaseComment
     }
 
     /**
-     * @param User $owner
-     * @return CaseComment
+     * @param boolean $public
+     * @return self
      */
-    public function setOwner($owner)
+    public function setPublic($public)
     {
-        $this->owner = $owner;
+        $this->public = (bool)$public;
 
         return $this;
     }
 
     /**
-     * @return User|null
+     * @return boolean
      */
-    public function getOwner()
+    public function isPublic()
     {
-        return $this->owner;
-    }
-
-    /**
-     * @param User $updatedBy
-     * @return CaseComment
-     */
-    public function setUpdatedBy($updatedBy)
-    {
-        $this->updatedBy = $updatedBy;
-
-        return $this;
-    }
-
-    /**
-     * @return User|null
-     */
-    public function getUpdatedBy()
-    {
-        return $this->updatedBy;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     * @return CaseComment
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     * @return CaseComment
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime|null
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt  = $this->createdAt ? $this->createdAt : new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * Set organization
-     *
-     * @param Organization $organization
-     * @return CaseEntity
-     */
-    public function setOrganization(Organization $organization = null)
-    {
-        $this->organization = $organization;
-
-        return $this;
-    }
-
-    /**
-     * Get organization
-     *
-     * @return Organization
-     */
-    public function getOrganization()
-    {
-        return $this->organization;
+        return (bool)$this->public;
     }
 }
