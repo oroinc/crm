@@ -101,15 +101,15 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
                     'left' => [
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingList',
-                            'alias' => 'marketingList_virtual',
+                            'alias' => 'marketingList',
                             'conditionType' => Join::WITH,
-                            'condition' => "marketingList_virtual.entity = '{$className}'"
+                            'condition' => "marketingList.entity = '{$className}'"
                         ],
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingListItem',
                             'alias' => self::FIELD_NAME,
                             'conditionType' => Join::WITH,
-                            'condition' => self::FIELD_NAME . '.marketingList = marketingList_virtual'
+                            'condition' => self::FIELD_NAME . '.marketingList = marketingList'
                                 . ' AND entity.' . $idField . ' = ' . self::FIELD_NAME . '.entityId'
                         ]
                     ]
