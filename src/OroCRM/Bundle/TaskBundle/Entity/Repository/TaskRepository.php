@@ -38,16 +38,22 @@ class TaskRepository extends EntityRepository
      * @param int       $userId
      * @param \DateTime $startDate
      * @param \DateTime $endDate
+     * @param string[]  $extraFields
      *
      * @return QueryBuilder
      */
-    public function getTaskListByTimeIntervalQueryBuilder($userId, $startDate, $endDate)
+    public function getTaskListByTimeIntervalQueryBuilder($userId, $startDate, $endDate, $extraFields = [])
     {
-        return $this->createQueryBuilder('t')
+        $qb = $this->createQueryBuilder('t')
             ->select('t.id, t.subject, t.description, t.dueDate, t.createdAt, t.updatedAt')
             ->where('t.owner = :assignedTo AND t.dueDate >= :start AND t.dueDate <= :end')
             ->setParameter('assignedTo', $userId)
             ->setParameter('start', $startDate)
             ->setParameter('end', $endDate);
+        if ($extraFields) {
+            $qb->addSelect(implode(', ', $extraFields));
+        }
+
+        return $qb;
     }
 }

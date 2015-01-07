@@ -88,8 +88,15 @@ class TaskCalendarProvider implements CalendarProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getCalendarEvents($organizationId, $userId, $calendarId, $start, $end, $connections)
-    {
+    public function getCalendarEvents(
+        $organizationId,
+        $userId,
+        $calendarId,
+        $start,
+        $end,
+        $connections,
+        $extraFields = []
+    ) {
         if (!$this->myTasksEnabled) {
             return [];
         }
