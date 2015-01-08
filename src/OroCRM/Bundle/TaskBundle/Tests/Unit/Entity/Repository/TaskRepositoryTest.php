@@ -51,4 +51,27 @@ class TaskRepositoryTest extends OrmTestCase
         $this->assertEquals($startDate, $qb->getParameter('start')->getValue());
         $this->assertEquals($endDate, $qb->getParameter('end')->getValue());
     }
+
+    public function testGetTaskListByTimeIntervaWithExtraFieldslQueryBuilder()
+    {
+        $userId    = 123;
+        $startDate = new \DateTime();
+        $endDate   = clone $startDate;
+        $endDate->add(new \DateInterval('P1D'));
+        $extraFields = ['status'];
+
+        /** @var TaskRepository $repo */
+        $repo = $this->em->getRepository('OroCRMTaskBundle:Task');
+        $qb   = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $startDate, $endDate, $extraFields);
+
+        $this->assertEquals(
+            'SELECT t.id, t.subject, t.description, t.dueDate, t.createdAt, t.updatedAt, t.status'
+            . ' FROM OroCRM\Bundle\TaskBundle\Tests\Unit\Fixtures\Entity\Task t'
+            . ' WHERE t.owner = :assignedTo AND t.dueDate >= :start AND t.dueDate <= :end',
+            $qb->getDQL()
+        );
+        $this->assertEquals($userId, $qb->getParameter('assignedTo')->getValue());
+        $this->assertEquals($startDate, $qb->getParameter('start')->getValue());
+        $this->assertEquals($endDate, $qb->getParameter('end')->getValue());
+    }
 }
