@@ -104,7 +104,7 @@ class TaskCalendarProvider implements CalendarProviderInterface
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
             $repo  = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
-            $qb    = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end);
+            $qb    = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end, $extraFields);
             $query = $this->aclHelper->apply($qb);
 
             return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $query);

@@ -51,7 +51,9 @@ class TaskRepository extends EntityRepository
             ->setParameter('start', $startDate)
             ->setParameter('end', $endDate);
         if ($extraFields) {
-            $qb->addSelect(implode(', ', $extraFields));
+            foreach ($extraFields as $field) {
+                $qb->addSelect('t.' . $field);
+            }
         }
 
         return $qb;
