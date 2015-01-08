@@ -478,7 +478,7 @@ class EmailCampaign extends ExtendEmailCampaign
     /**
      * Get Sender Email address.
      *
-     * @return string 
+     * @return string
      */
     public function getSenderEmail()
     {

@@ -28,7 +28,7 @@ class DropFields implements Migration, OrderedMigrationInterface
         $this->modifyOrocrmAccountTable($schema, $queries);
         $queries->addQuery(new UpdateExtendedFieldQuery());
     }
-
+// @codingStandardsIgnoreStart
     /**
      * @param Schema   $schema
      * @param QueryBag $queries
@@ -128,3 +128,4 @@ DQL
         }
     }
 }
+// @codingStandardsIgnoreEnd

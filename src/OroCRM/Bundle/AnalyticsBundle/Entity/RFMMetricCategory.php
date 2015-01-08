@@ -98,7 +98,7 @@ class RFMMetricCategory
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -121,7 +121,7 @@ class RFMMetricCategory
     /**
      * Get category type
      *
-     * @return string 
+     * @return string
      */
     public function getCategoryType()
     {
