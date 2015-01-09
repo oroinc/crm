@@ -127,6 +127,13 @@ class Campaign extends ExtendCampaign
     /**
      * @var \DateTime
      *
+     * @ORM\Column(name="report_refresh_date", type="datetime", nullable=true)
+     */
+    protected $reportRefreshDate;
+
+    /**
+     * @var \DateTime
+     *
      * @ORM\Column(name="created_at", type="datetime")
      * @ConfigField(
      *      defaultValues={
@@ -402,5 +409,24 @@ class Campaign extends ExtendCampaign
     public function __toString()
     {
         return (string)$this->getName();
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getReportRefreshDate()
+    {
+        return $this->reportRefreshDate;
+    }
+
+    /**
+     * @param \DateTime $reportRefreshDate
+     * @return Campaign
+     */
+    public function setReportRefreshDate($reportRefreshDate)
+    {
+        $this->reportRefreshDate = $reportRefreshDate;
+
+        return $this;
     }
 }
