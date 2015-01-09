@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
-
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;

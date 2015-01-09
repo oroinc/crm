@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
-
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

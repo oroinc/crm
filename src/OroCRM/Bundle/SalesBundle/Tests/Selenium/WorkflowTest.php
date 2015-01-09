@@ -17,7 +17,7 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
  */
 class WorkflowTest extends Selenium2TestCase
 {
-     protected $address = array(
+    protected $address = array(
         'label' => 'Address Label',
         'street' => 'Address Street',
         'city' => 'Address City',
@@ -205,13 +205,13 @@ class WorkflowTest extends Selenium2TestCase
             ->checkStep('Lost Opportunity')
             ->getId();
 
-         /** @var Opportunities $login*/
-         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
+        /** @var Opportunities $login*/
+        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
             ->open(array($opportunityName))
             ->checkStatus('Lost');
 
-         return $id;
+        return $id;
     }
 
     /**
