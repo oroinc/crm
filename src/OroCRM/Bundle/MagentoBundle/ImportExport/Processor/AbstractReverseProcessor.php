@@ -54,9 +54,7 @@ abstract class AbstractReverseProcessor implements ProcessorInterface
                 }
 
                 if (!empty($classMapConfig['relation'])) {
-
                     foreach ($classMapConfig['relation'] as $relationName => $relationClassMapConfig) {
-
                         $relations = $this->getValue($entity, $relationClassMapConfig['method']);
 
                         $allRelationsCheckingEntity = $this->getValue($entity, $classMapConfig['checking']);

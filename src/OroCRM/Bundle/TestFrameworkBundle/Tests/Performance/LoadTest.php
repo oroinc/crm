@@ -66,7 +66,8 @@ class LoadTest extends WebTestCase
     }
 
     public function testPager()
-    {   $url = $this->getUrl('oro_datagrid_index', array('gridName' => 'contacts-grid'));
+    {
+        $url = $this->getUrl('oro_datagrid_index', array('gridName' => 'contacts-grid'));
         $averageTime = 0.0;
         for ($i  = 1; $i <= self::MAX_PAGE_TESTS; $i++) {
             $page = rand(1, self::MAX_PAGES);

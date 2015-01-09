@@ -387,7 +387,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function addLead(Lead $lead)
     {
         if (!$this->getLeads()->contains($lead)) {
-
             $this->getLeads()->add($lead);
             $lead->setCustomer($this);
         }
@@ -426,7 +425,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function addOpportunity(Opportunity $opportunity)
     {
         if (!$this->getOpportunities()->contains($opportunity)) {
-
             $this->getOpportunities()->add($opportunity);
             $opportunity->setCustomer($this);
         }
