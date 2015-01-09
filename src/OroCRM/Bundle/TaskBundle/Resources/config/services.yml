@@ -6,6 +6,7 @@ parameters:
     orocrm_task.task.normalizer.class:              OroCRM\Bundle\TaskBundle\Provider\TaskCalendarNormalizer
     orocrm_task.placeholder.filter.class:           OroCRM\Bundle\TaskBundle\Placeholder\PlaceholderFilter
     orocrm_task.activity_list.provider.class:       OroCRM\Bundle\TaskBundle\Provider\TaskActivityListProvider
+    orocrm_task.validator.due_date_required.class:  OroCRM\Bundle\TaskBundle\Validator\DueDateRequiredValidator
 
 services:
     orocrm_task.listener.datagrid.user_tasks:
@@ -59,3 +60,8 @@ services:
            - @oro_entity.doctrine_helper
         tags:
            - {name: oro_activity_list.provider, priority: 20}
+
+    orocrm_task.validator.due_date_required:
+        class: %orocrm_task.validator.due_date_required.class%
+        tags:
+           - { name: validator.constraint_validator, alias: orocrm_task.due_date_required_validator }
