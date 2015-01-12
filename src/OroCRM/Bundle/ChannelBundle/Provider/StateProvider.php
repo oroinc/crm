@@ -106,6 +106,16 @@ class StateProvider
     }
 
     /**
+     * Clear state cache for given organization
+     *
+     * @param $organizationId
+     */
+    public function clearOrganizationCache($organizationId)
+    {
+        $this->cache->delete($this->getCacheId($organizationId));
+    }
+
+    /**
      * Warm up local data cache in order to prevent multiple queries to DB
      */
     protected function ensureLocalCacheWarmed()
@@ -174,12 +184,16 @@ class StateProvider
     }
 
     /**
-     * Get cache ID depending on the current organization
+     * Get cache ID for given organization id. If id was not set, get cache ID depending on the current organization
      *
+     * @param int $organizationId
      * @return string
      */
-    protected function getCacheId()
+    protected function getCacheId($organizationId = null)
     {
-        return self::CACHE_ID . '_' . $this->securityFacadeLink->getService()->getOrganizationId();
+        if (!$organizationId) {
+            $organizationId = $this->securityFacadeLink->getService()->getOrganizationId();
+        }
+        return self::CACHE_ID . '_' . $organizationId;
     }
 }
