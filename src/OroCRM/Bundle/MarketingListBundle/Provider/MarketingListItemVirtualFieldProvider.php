@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Provider;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\VirtualFieldProviderInterface;
 
 class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInterface
@@ -11,22 +10,20 @@ class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInter
     const FIELD_LAST_CONTACTED_AT = 'mlLastContactedAt';
 
     /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
      * @var array|null
      */
     protected $marketingListByEntity;
 
     /**
-     * @param DoctrineHelper $doctrineHelper
+     * @var MarketingListVirtualRelationProvider
+     */
+    protected $relationProvider;
+
+    /**
      * @param MarketingListVirtualRelationProvider $relationProvider
      */
-    public function __construct(DoctrineHelper $doctrineHelper, MarketingListVirtualRelationProvider $relationProvider)
+    public function __construct(MarketingListVirtualRelationProvider $relationProvider)
     {
-        $this->doctrineHelper = $doctrineHelper;
         $this->relationProvider = $relationProvider;
     }
 
@@ -35,7 +32,7 @@ class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInter
      */
     public function isVirtualField($className, $fieldName)
     {
-        return $this->hasMarketingList($className)
+        return $this->relationProvider->hasMarketingList($className)
             && in_array($fieldName, [self::FIELD_CONTACTED_TIMES, self::FIELD_LAST_CONTACTED_AT]);
     }
 
@@ -58,34 +55,11 @@ class MarketingListItemVirtualFieldProvider implements VirtualFieldProviderInter
      */
     public function getVirtualFields($className)
     {
-        if ($this->hasMarketingList($className)) {
+        if ($this->relationProvider->hasMarketingList($className)) {
             return [self::FIELD_CONTACTED_TIMES, self::FIELD_LAST_CONTACTED_AT];
         }
 
         return [];
-    }
-
-    /**
-     * @param string $className
-     * @return bool
-     */
-    protected function hasMarketingList($className)
-    {
-        if (null === $this->marketingListByEntity) {
-            $this->marketingListByEntity = [];
-
-            $repository = $this->doctrineHelper->getEntityRepository('OroCRMMarketingListBundle:MarketingList');
-            $qb = $repository->createQueryBuilder('ml')
-                ->select('ml.entity')
-                ->distinct(true);
-            $entities = $qb->getQuery()->getArrayResult();
-
-            foreach ($entities as $entity) {
-                $this->marketingListByEntity[$entity['entity']] = true;
-            }
-        }
-
-        return !empty($this->marketingListByEntity[$className]);
     }
 
     /**

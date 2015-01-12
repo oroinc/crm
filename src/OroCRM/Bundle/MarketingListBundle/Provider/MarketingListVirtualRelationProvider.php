@@ -66,7 +66,7 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
      * @param string $className
      * @return bool
      */
-    protected function hasMarketingList($className)
+    public function hasMarketingList($className)
     {
         if (null === $this->marketingListByEntity) {
             $this->marketingListByEntity = [];

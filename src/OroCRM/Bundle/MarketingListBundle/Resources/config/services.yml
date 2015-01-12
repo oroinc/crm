@@ -183,7 +183,6 @@ services:
     orocrm_marketing_list.provider.virtual_field.marketing_list_item:
         class: %orocrm_marketing_list.provider.virtual_field.marketing_list_item.class%
         arguments:
-            - @oro_entity.doctrine_helper
             - @orocrm_marketing_list.provider.virtual_relation.marketing_list
         tags:
             - { name: oro_entity.virtual_field_provider, priority: 150 }
