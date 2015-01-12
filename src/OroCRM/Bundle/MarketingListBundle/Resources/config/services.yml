@@ -28,7 +28,8 @@ parameters:
 
     orocrm_marketing_list.datagrid.configuration.provider.class: OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider
 
-    orocrm_marketing_list.provider.virtual_relation.marketing_list_item.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualRelationProvider
+    orocrm_marketing_list.provider.virtual_relation.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider
+    orocrm_marketing_list.provider.virtual_field.marketing_list_item.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualFieldProvider
 
     # Workflow actions and conditions
     orocrm_marketing_list.workflow.condition.has_contact_information.class: OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation
@@ -172,12 +173,20 @@ services:
         tags:
             - { name: oro_datagrid.configuration.provider, priority: -10 }
 
-    orocrm_marketing_list.provider.virtual_relation.marketing_list_item:
-        class: %orocrm_marketing_list.provider.virtual_relation.marketing_list_item.class%
+    orocrm_marketing_list.provider.virtual_relation.marketing_list:
+        class: %orocrm_marketing_list.provider.virtual_relation.marketing_list.class%
         arguments:
             - @oro_entity.doctrine_helper
         tags:
             - { name: oro_entity.virtual_relation_provider, priority: 150 }
+
+    orocrm_marketing_list.provider.virtual_field.marketing_list_item:
+        class: %orocrm_marketing_list.provider.virtual_field.marketing_list_item.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - @orocrm_marketing_list.provider.virtual_relation.marketing_list
+        tags:
+            - { name: oro_entity.virtual_field_provider, priority: 150 }
 
     # Workflow actions and conditions
     orocrm_marketing_list.workflow.condition.has_contact_information:
