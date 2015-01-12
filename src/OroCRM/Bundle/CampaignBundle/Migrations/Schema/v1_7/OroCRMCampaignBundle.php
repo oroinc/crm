@@ -47,10 +47,10 @@ class OroCRMCampaignBundle implements Migration
         $table->addColumn('logged_at', 'date', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['website_id'], 'IDX_8F005FDD18F45C82', []);
-        $table->addIndex(['name'], 's_event_name_idx', []);
-        $table->addIndex(['logged_at'], 's_event_loggedAt_idx', []);
-        $table->addIndex(['code'], 's_code_idx', []);
-        $table->addIndex(['visit_count'], 's_visits_idx', []);
+        $table->addIndex(['name'], 'tes_event_name_idx', []);
+        $table->addIndex(['logged_at'], 'tes_event_loggedAt_idx', []);
+        $table->addIndex(['code'], 'tes_code_idx', []);
+        $table->addIndex(['visit_count'], 'tes_visits_idx', []);
     }
 
     /**

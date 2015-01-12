@@ -92,6 +92,5 @@ class CalculateTrackingEventSummaryCommandTest extends WebTestCase
             ->addOrderBy('q.code, q.name, q.loggedAt')
             ->getQuery()
             ->getArrayResult();
-
     }
 }

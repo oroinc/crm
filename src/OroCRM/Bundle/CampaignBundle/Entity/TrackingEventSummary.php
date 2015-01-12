@@ -7,10 +7,10 @@ use Oro\Bundle\TrackingBundle\Entity\TrackingWebsite;
 
 /**
  * @ORM\Table(name="orocrm_campaign_te_summary", indexes={
- *     @ORM\Index(name="s_event_name_idx", columns={"name"}),
- *     @ORM\Index(name="s_event_loggedAt_idx", columns={"logged_at"}),
- *     @ORM\Index(name="s_code_idx", columns={"code"}),
- *     @ORM\Index(name="s_visits_idx", columns={"visit_count"})
+ *     @ORM\Index(name="tes_event_name_idx", columns={"name"}),
+ *     @ORM\Index(name="tes_event_loggedAt_idx", columns={"logged_at"}),
+ *     @ORM\Index(name="tes_code_idx", columns={"code"}),
+ *     @ORM\Index(name="tes_visits_idx", columns={"visit_count"})
  * })
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\CampaignBundle\Entity\Repository\TrackingEventSummaryRepository")
  */

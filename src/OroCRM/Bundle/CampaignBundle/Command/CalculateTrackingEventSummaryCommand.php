@@ -80,7 +80,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
      */
     protected function calculate($output, array $campaigns)
     {
-        $em = $this->getEntityManager('OroCRMCampaignBundle:Campaign');
+        $em = $this->getEntityManager($this->getCampaignEntityClass());
         foreach ($campaigns as $campaign) {
             $output->writeln(sprintf('<info>Calculating statistic for campaign</info>: %s', $campaign->getName()));
 
@@ -102,7 +102,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         $trackingEventRepository = $this->getTrackingEventSummaryRepository();
         $events = $trackingEventRepository->getSummarizedStatistic($campaign);
 
-        $em = $this->getEntityManager('OroCRMCampaignBundle:TrackingEventSummary');
+        $em = $this->getEntityManager($this->getTrackingEventSummaryEntityClass());
         foreach ($events as $event) {
             $website = $this->getDoctrineHelper()
                 ->getEntityReference('OroTrackingBundle:TrackingWebsite', $event['websiteId']);
@@ -125,7 +125,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
      */
     protected function getCampaignRepository()
     {
-        return $this->getDoctrineHelper()->getEntityRepository('OroCRMCampaignBundle:Campaign');
+        return $this->getDoctrineHelper()->getEntityRepository($this->getCampaignEntityClass());
     }
 
     /**
@@ -136,7 +136,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         if (!$this->trackingEventRepository) {
             $this->trackingEventRepository = $this
                 ->getDoctrineHelper()
-                ->getEntityRepository('OroCRMCampaignBundle:TrackingEventSummary');
+                ->getEntityRepository($this->getTrackingEventSummaryEntityClass());
         }
 
         return $this->trackingEventRepository;
@@ -161,5 +161,21 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         }
 
         return $this->doctrineHelper;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getCampaignEntityClass()
+    {
+        return $this->getContainer()->getParameter('orocrm_campaign.entity.class');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTrackingEventSummaryEntityClass()
+    {
+        return $this->getContainer()->getParameter('orocrm_campaign.tracking_event_summary.class');
     }
 }
