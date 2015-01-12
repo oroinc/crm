@@ -143,7 +143,7 @@ class TaskController extends Controller
     /**
      * @Route("/widget/info/{id}", name="orocrm_task_widget_info", requirements={"id"="\d+"})
      * @Template
-     * @AclAncestor("orocrm_call_view")
+     * @AclAncestor("orocrm_task_view")
      */
     public function infoAction(Task $entity)
     {
@@ -152,7 +152,7 @@ class TaskController extends Controller
 
     /**
      * @Route("/user/{userId}", name="orocrm_task_user_tasks", requirements={"userId"="\d+"})
-     * @AclAncestor("orocrm_call_view")
+     * @AclAncestor("orocrm_task_view")
      * @Template
      */
     public function userTasksAction($userId)
@@ -162,7 +162,7 @@ class TaskController extends Controller
 
     /**
      * @Route("/my", name="orocrm_task_my_tasks")
-     * @AclAncestor("orocrm_call_view")
+     * @AclAncestor("orocrm_task_view")
      * @Template
      */
     public function myTasksAction()
