@@ -34,7 +34,7 @@ class DueDateRequiredValidatorTest extends \PHPUnit_Framework_TestCase
     public function testInvalidArgument($value, $expectedExceptionMessage)
     {
         $this->setExpectedException(
-            'Oro\Bundle\EntityMergeBundle\Exception\InvalidArgumentException',
+            '\InvalidArgumentException',
             $expectedExceptionMessage
         );
         $this->validator->validate($value, $this->constraint);
