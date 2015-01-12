@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
@@ -11,7 +10,7 @@ class TrackingEventSummaryRepository extends EntityRepository
 {
     /**
      * @param Campaign $campaign
-     * @return QueryBuilder
+     * @return array
      */
     public function getSummarizedStatistic(Campaign $campaign)
     {
@@ -28,7 +27,7 @@ class TrackingEventSummaryRepository extends EntityRepository
                 ]
             )
             ->andWhere('trackingEvent.code = :trackingEventCode')
-            ->andWhere('DATE(trackingEvent.loggedAt) != :today')
+            ->andWhere('DATE(trackingEvent.loggedAt) < DATE(:today)')
             ->setParameter('trackingEventCode', $campaign->getCode())
             ->setParameter('today', $today)
             ->groupBy('trackingEvent.name, trackingEvent.website, loggedAtDate');

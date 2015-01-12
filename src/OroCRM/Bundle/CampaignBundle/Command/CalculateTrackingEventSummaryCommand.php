@@ -2,22 +2,26 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Command;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\CampaignBundle\Entity\TrackingEventSummary;
+use Doctrine\ORM\EntityManager;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 use OroCRM\Bundle\CampaignBundle\Entity\Repository\CampaignRepository;
 use OroCRM\Bundle\CampaignBundle\Entity\Repository\TrackingEventSummaryRepository;
+use OroCRM\Bundle\CampaignBundle\Entity\TrackingEventSummary;
 
 /**
  * Calculate Tracking Event Summary
  */
 class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand implements CronCommandInterface
 {
+    const NAME = 'oro:cron:calculate-tracking-event-summary';
+
     /**
      * @var TrackingEventSummaryRepository
      */
@@ -29,7 +33,9 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
     protected $doctrineHelper;
 
     /**
-     * {@inheritdoc}
+     * Run command at 00:01 every day.
+     *
+     * @return string
      */
     public function getDefaultDefinition()
     {
@@ -41,8 +47,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
      */
     protected function configure()
     {
-        $this
-            ->setName('oro:cron:calculate-tracking-event-summary')
+        $this->setName(self::NAME)
             ->setDescription('Calculate Tracking Event Summary');
     }
 
@@ -55,6 +60,7 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
 
         if (!$campaigns) {
             $output->writeln('<info>No campaigns found</info>');
+
             return;
         }
 
@@ -88,6 +94,9 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         $em->flush();
     }
 
+    /**
+     * @param Campaign $campaign
+     */
     protected function calculateForCampaign(Campaign $campaign)
     {
         $trackingEventRepository = $this->getTrackingEventSummaryRepository();
@@ -133,11 +142,18 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         return $this->trackingEventRepository;
     }
 
+    /**
+     * @param string $class
+     * @return EntityManager
+     */
     protected function getEntityManager($class)
     {
         return $this->getDoctrineHelper()->getEntityManager($class);
     }
 
+    /**
+     * @return DoctrineHelper
+     */
     protected function getDoctrineHelper()
     {
         if (!$this->doctrineHelper) {

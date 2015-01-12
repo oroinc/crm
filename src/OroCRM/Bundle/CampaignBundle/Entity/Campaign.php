@@ -127,7 +127,7 @@ class Campaign extends ExtendCampaign
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="report_refresh_date", type="datetime", nullable=true)
+     * @ORM\Column(name="report_refresh_date", type="date", nullable=true)
      */
     protected $reportRefreshDate;
 
