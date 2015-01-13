@@ -33,6 +33,11 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
     protected $doctrineHelper;
 
     /**
+     * @var string
+     */
+    protected $trackingWebsiteEntityClass;
+
+    /**
      * Run command at 00:01 every day.
      *
      * @return string
@@ -105,7 +110,10 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
         $em = $this->getEntityManager($this->getTrackingEventSummaryEntityClass());
         foreach ($events as $event) {
             $website = $this->getDoctrineHelper()
-                ->getEntityReference('OroTrackingBundle:TrackingWebsite', $event['websiteId']);
+                ->getEntityReference(
+                    $this->getTrackingWebsiteEntityClass(),
+                    $event['websiteId']
+                );
 
             $summary = new TrackingEventSummary();
             $summary->setCode($campaign->getCode());
@@ -177,5 +185,18 @@ class CalculateTrackingEventSummaryCommand extends ContainerAwareCommand impleme
     protected function getTrackingEventSummaryEntityClass()
     {
         return $this->getContainer()->getParameter('orocrm_campaign.tracking_event_summary.class');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTrackingWebsiteEntityClass()
+    {
+        if (!$this->trackingWebsiteEntityClass) {
+            $this->trackingWebsiteEntityClass = $this->getContainer()
+                ->getParameter('oro_tracking.tracking_website.class');
+        }
+
+        return $this->trackingWebsiteEntityClass;
     }
 }
