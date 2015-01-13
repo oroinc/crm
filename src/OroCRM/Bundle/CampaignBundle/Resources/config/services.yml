@@ -1,5 +1,6 @@
 parameters:
     orocrm_campaign.entity.class:                  OroCRM\Bundle\CampaignBundle\Entity\Campaign
+    orocrm_campaign.tracking_event_summary.class:  OroCRM\Bundle\CampaignBundle\Entity\TrackingEventSummary
     orocrm_campaign.email_campaign_statistics.class: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics
     orocrm_campaign.email_campaign.entity.class:   OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
     orocrm_campaign.campaign.form.type.class:      OroCRM\Bundle\CampaignBundle\Form\Type\CampaignType

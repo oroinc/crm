@@ -43,7 +43,11 @@
     {% endset %}
 
     {% set trackingEventsReport %}
-        {{ dataGrid.renderGrid('campaign-tracking-total-report-grid', {code: entity.code}) }}
+        {% set trackingTotalGrid = 'campaign-tracking-total-report-grid' %}
+        {% if entity.reportPeriod is not constant('OroCRM\\Bundle\\CampaignBundle\\Entity\\Campaign::PERIOD_HOURLY') %}
+            {% set trackingTotalGrid = trackingTotalGrid ~ '-precalculated' %}
+        {% endif %}
+        {{ dataGrid.renderGrid(trackingTotalGrid, {code: entity.code}) }}
     {% endset %}
 
     {% set trackingPlot %}
@@ -53,7 +57,7 @@
                 'orocrm_campaign_event_plot',
                 {
                     period: entity.reportPeriod,
-                    campaignCode: entity.code
+                    campaign: entity.id
                 }
             ),
             'title': 'orocrm.campaign.block.detailed_report'|trans
