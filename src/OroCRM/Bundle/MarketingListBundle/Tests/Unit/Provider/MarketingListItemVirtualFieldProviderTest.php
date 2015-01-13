@@ -92,7 +92,8 @@ class MarketingListItemVirtualFieldProviderTest extends \PHPUnit_Framework_TestC
                 true,
                 [
                     MarketingListItemVirtualFieldProvider::FIELD_CONTACTED_TIMES,
-                    MarketingListItemVirtualFieldProvider::FIELD_LAST_CONTACTED_AT]
+                    MarketingListItemVirtualFieldProvider::FIELD_LAST_CONTACTED_AT
+                ]
             ],
             [false, []]
         ];
