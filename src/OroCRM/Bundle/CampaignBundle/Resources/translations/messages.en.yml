@@ -12,6 +12,8 @@ orocrm:
         description.label:   Description
         budget.label:        Budget
         owner.label:         Owner
+        
+        report_refresh_date.label: Report Refresh Date
         form:
             choose_campaign: Choose campaign
         report_period:

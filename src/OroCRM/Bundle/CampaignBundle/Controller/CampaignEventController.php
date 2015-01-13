@@ -4,12 +4,10 @@ namespace OroCRM\Bundle\CampaignBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
-
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 /**
@@ -17,16 +15,18 @@ use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
  */
 class CampaignEventController extends Controller
 {
+    const PRECALCULATED_SUFFIX = '-precalculated';
+
     /**
      * @param string $period
-     * @param string $campaignCode
+     * @param Campaign $campaign
      * @return array
      *
-     * @Route("/plot/{period}/{campaignCode}", name="orocrm_campaign_event_plot")
+     * @Route("/plot/{period}/{campaign}", name="orocrm_campaign_event_plot")
      * @AclAncestor("orocrm_campaign_view")
      * @Template
      */
-    public function plotAction($period, $campaignCode)
+    public function plotAction($period, Campaign $campaign)
     {
         $supportedPeriods = [
             Campaign::PERIOD_HOURLY,
@@ -44,9 +44,12 @@ class CampaignEventController extends Controller
         }
 
         $gridName = sprintf('campaign-tracking-detailed-report-%s-grid', $period);
+        if ($period !== Campaign::PERIOD_HOURLY) {
+            $gridName .= self::PRECALCULATED_SUFFIX;
+        }
 
         $gridParameters = [
-            'code'                           => $campaignCode,
+            'code' => $campaign->getCode(),
             PagerInterface::PAGER_ROOT_PARAM => [
                 PagerInterface::DISABLED_PARAM => true
             ]
@@ -66,7 +69,7 @@ class CampaignEventController extends Controller
             ->setOptions(
                 array_merge_recursive(
                     [
-                        'name'             => $chartName,
+                        'name' => $chartName,
                         'default_settings' => [
                             'period' => $period
                         ]
