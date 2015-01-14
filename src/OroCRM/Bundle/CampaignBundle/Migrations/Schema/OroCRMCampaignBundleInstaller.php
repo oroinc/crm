@@ -17,7 +17,7 @@ class OroCRMCampaignBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7';
     }
 
     /**
@@ -29,6 +29,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $this->createOrocrmCampaignTable($schema);
         $this->createOrocrmCampaignEmailTable($schema);
         $this->createOrocrmEmailCampaignStatisticsTable($schema);
+        $this->createOrocrmCampaignTeSummaryTable($schema);
         $this->createOrocrmCmpgnTransportStngsTable($schema);
         $this->updateOrocrmCmpgnTransportStngsTableAddInternalEmailTransport($schema);
 
@@ -36,6 +37,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $this->addOrocrmCampaignForeignKeys($schema);
         $this->addOrocrmCampaignEmailForeignKeys($schema);
         $this->addOrocrmEmailCampaignStatisticsForeignKeys($schema);
+        $this->addOrocrmCampaignTeSummaryForeignKeys($schema);
         $this->addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport($schema);
     }
 
@@ -64,6 +66,7 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('report_period', 'string', ['length' => 25]);
+        $table->addColumn('report_refresh_date', 'date', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'idx_55153cad7e3c61f9', []);
         $table->addIndex(['organization_id'], 'idx_e9a0640332c8a3de', []);
         $table->addUniqueIndex(['code'], 'uniq_e9a0640377153098');
@@ -124,6 +127,28 @@ class OroCRMCampaignBundleInstaller implements Installation
         $table->addIndex(['marketing_list_item_id'], 'idx_31465f07d530662', []);
         $table->setPrimaryKey(['id']);
         $table->addUniqueIndex(['email_campaign_id', 'marketing_list_item_id'], 'orocrm_ec_litem_unq');
+    }
+
+    /**
+     * Create orocrm_campaign_te_summary table
+     *
+     * @param Schema $schema
+     */
+    protected function createOrocrmCampaignTeSummaryTable(Schema $schema)
+    {
+        $table = $schema->createTable('orocrm_campaign_te_summary');
+        $table->addColumn('id', 'integer', ['autoincrement' => true]);
+        $table->addColumn('website_id', 'integer', ['notnull' => false]);
+        $table->addColumn('name', 'string', ['length' => 255]);
+        $table->addColumn('code', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('visit_count', 'integer', []);
+        $table->addColumn('logged_at', 'date', []);
+        $table->setPrimaryKey(['id']);
+        $table->addIndex(['website_id'], 'IDX_8F005FDD18F45C82', []);
+        $table->addIndex(['name'], 'tes_event_name_idx', []);
+        $table->addIndex(['logged_at'], 'tes_event_loggedAt_idx', []);
+        $table->addIndex(['code'], 'tes_code_idx', []);
+        $table->addIndex(['visit_count'], 'tes_visits_idx', []);
     }
 
     /**
@@ -232,6 +257,22 @@ class OroCRMCampaignBundleInstaller implements Installation
             ['marketing_list_item_id'],
             ['id'],
             ['onUpdate' => null, 'onDelete' => 'CASCADE']
+        );
+    }
+
+    /**
+     * Add orocrm_campaign_te_summary foreign keys.
+     *
+     * @param Schema $schema
+     */
+    protected function addOrocrmCampaignTeSummaryForeignKeys(Schema $schema)
+    {
+        $table = $schema->getTable('orocrm_campaign_te_summary');
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_tracking_website'),
+            ['website_id'],
+            ['id'],
+            ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
     }
 

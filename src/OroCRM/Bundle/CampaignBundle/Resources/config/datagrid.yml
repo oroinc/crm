@@ -93,16 +93,11 @@ datagrid:
         options:
             entity_pagination: true
 
-    campaign-tracking-total-report-grid:
+    campaign-tracking-total-report-grid-basic:
         source:
             type: orm
             acl_resource: orocrm_campaign_view
             query:
-                select:
-                    - e.name
-                    - COUNT(e.id) as visitsCount
-                from:
-                    - { table: %oro_tracking.tracking_event.class%, alias: e }
                 where:
                     and:
                         - e.code = :code
@@ -137,6 +132,26 @@ datagrid:
         options:
             export: true
 
+    campaign-tracking-total-report-grid:
+        extends: campaign-tracking-total-report-grid-basic
+        source:
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+
+    campaign-tracking-total-report-grid-precalculated:
+        extends: campaign-tracking-total-report-grid-basic
+        source:
+            query:
+                select:
+                    - e.name
+                    - SUM(e.visitCount) as visitsCount
+                from:
+                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
+
     campaign-tracking-detailed-report-hour-grid:
         source:
             type: orm
@@ -164,17 +179,11 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: datetime
 
-    campaign-tracking-detailed-report-day-grid:
+    campaign-tracking-detailed-report-day-grid-basic:
         source:
             type: orm
             acl_resource: orocrm_campaign_view
             query:
-                select:
-                    - e.name
-                    - COUNT(e.id) as visitsCount
-                    - DATE(e.loggedAt) as logTime
-                from:
-                    - { table: %oro_tracking.tracking_event.class%, alias: e }
                 where:
                     and:
                         - e.code = :code
@@ -191,19 +200,33 @@ datagrid:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: date
 
-    campaign-tracking-detailed-report-month-grid:
+    campaign-tracking-detailed-report-day-grid:
+        extends: campaign-tracking-detailed-report-day-grid-basic
         source:
-            type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 select:
                     - e.name
                     - COUNT(e.id) as visitsCount
-                    - YEAR(e.loggedAt) as yearLoggedAt
-                    - MONTH(e.loggedAt) as monthLoggedAt
-                    - DATE(CONCAT(YEAR(e.loggedAt), '-', MONTH(e.loggedAt), '-01')) as logTime
+                    - DATE(e.loggedAt) as logTime
                 from:
                     - { table: %oro_tracking.tracking_event.class%, alias: e }
+
+    campaign-tracking-detailed-report-day-grid-precalculated:
+        extends: campaign-tracking-detailed-report-day-grid-basic
+        source:
+            query:
+                select:
+                    - e.name
+                    - SUM(e.visitCount) as visitsCount
+                    - DATE(e.loggedAt) as logTime
+                from:
+                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
+
+    campaign-tracking-detailed-report-month-grid-basic:
+        source:
+            type: orm
+            acl_resource: orocrm_campaign_view
+            query:
                 where:
                     and:
                         - e.code = :code
@@ -219,6 +242,32 @@ datagrid:
             logTime:
                 label: orocrm.campaign.trackingevent.report.date.label
                 frontend_type: date
+
+    campaign-tracking-detailed-report-month-grid:
+        extends: campaign-tracking-detailed-report-month-grid-basic
+        source:
+            query:
+                select:
+                    - e.name
+                    - COUNT(e.id) as visitsCount
+                    - YEAR(e.loggedAt) as yearLoggedAt
+                    - MONTH(e.loggedAt) as monthLoggedAt
+                    - DATE(CONCAT(YEAR(e.loggedAt), '-', MONTH(e.loggedAt), '-01')) as logTime
+                from:
+                    - { table: %oro_tracking.tracking_event.class%, alias: e }
+
+    campaign-tracking-detailed-report-month-grid-precalculated:
+        extends: campaign-tracking-detailed-report-month-grid-basic
+        source:
+            query:
+                select:
+                    - e.name
+                    - SUM(e.visitCount) as visitsCount
+                    - YEAR(e.loggedAt) as yearLoggedAt
+                    - MONTH(e.loggedAt) as monthLoggedAt
+                    - DATE(CONCAT(YEAR(e.loggedAt), '-', MONTH(e.loggedAt), '-01')) as logTime
+                from:
+                    - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
 
     orocrm-email-campaign-grid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
