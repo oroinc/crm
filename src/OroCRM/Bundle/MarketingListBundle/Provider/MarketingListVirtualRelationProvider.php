@@ -6,9 +6,10 @@ use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 
-class MarketingListItemVirtualRelationProvider implements VirtualRelationProviderInterface
+class MarketingListVirtualRelationProvider implements VirtualRelationProviderInterface
 {
-    const FIELD_NAME = 'marketingListItem_virtual';
+    const RELATION_NAME = 'marketingList_virtual';
+    const MARKETING_LIST_ITEM_RELATION_NAME = 'marketingListItem';
 
     /**
      * @var DoctrineHelper
@@ -33,7 +34,7 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
      */
     public function isVirtualRelation($className, $fieldName)
     {
-        return $this->hasMarketingList($className) && $fieldName === self::FIELD_NAME;
+        return $this->hasMarketingList($className) && $fieldName === self::RELATION_NAME;
     }
 
     /**
@@ -55,17 +56,29 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
     public function getVirtualRelations($className)
     {
         if ($this->hasMarketingList($className)) {
-            return [self::FIELD_NAME => $this->getRelationDefinition($className)];
+            return [self::RELATION_NAME => $this->getRelationDefinition($className)];
         }
 
         return [];
     }
 
     /**
+     * Gets a target alias
+     *
+     * @param string $className
+     * @param string $fieldName
+     * @return string
+     */
+    public function getTargetJoinAlias($className, $fieldName)
+    {
+        return self::RELATION_NAME;
+    }
+
+    /**
      * @param string $className
      * @return bool
      */
-    protected function hasMarketingList($className)
+    public function hasMarketingList($className)
     {
         if (null === $this->marketingListByEntity) {
             $this->marketingListByEntity = [];
@@ -88,29 +101,31 @@ class MarketingListItemVirtualRelationProvider implements VirtualRelationProvide
      * @param string $className
      * @return array
      */
-    protected function getRelationDefinition($className)
+    public function getRelationDefinition($className)
     {
         $idField = $this->doctrineHelper->getSingleEntityIdentifierFieldName($className);
 
         return [
-            'label' => 'orocrm.marketinglist.marketinglistitem.entity_label',
+            'label' => 'orocrm.marketinglist.entity_label',
             'relation_type' => 'oneToMany',
-            'related_entity_name' => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem',
+            'related_entity_name' => 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingList',
             'query' => [
                 'join' => [
                     'left' => [
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingList',
-                            'alias' => 'marketingList',
+                            'alias' => self::RELATION_NAME,
                             'conditionType' => Join::WITH,
-                            'condition' => "marketingList.entity = '{$className}'"
+                            'condition' => self::RELATION_NAME . ".entity = '{$className}'"
                         ],
                         [
                             'join' => 'OroCRMMarketingListBundle:MarketingListItem',
-                            'alias' => self::FIELD_NAME,
+                            'alias' => self::MARKETING_LIST_ITEM_RELATION_NAME,
                             'conditionType' => Join::WITH,
-                            'condition' => self::FIELD_NAME . '.marketingList = marketingList'
-                                . ' AND entity.' . $idField . ' = ' . self::FIELD_NAME . '.entityId'
+                            'condition' => self::MARKETING_LIST_ITEM_RELATION_NAME
+                                . '.marketingList = ' . self::RELATION_NAME
+                                . ' AND entity.' . $idField
+                                    . ' = ' . self::MARKETING_LIST_ITEM_RELATION_NAME . '.entityId'
                         ]
                     ]
                 ]

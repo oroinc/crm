@@ -3,9 +3,9 @@
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualRelationProvider;
+use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider;
 
-class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
+class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -13,7 +13,7 @@ class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_Te
     protected $doctrineHelper;
 
     /**
-     * @var MarketingListItemVirtualRelationProvider
+     * @var MarketingListVirtualRelationProvider
      */
     protected $provider;
 
@@ -23,7 +23,7 @@ class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_Te
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->provider = new MarketingListItemVirtualRelationProvider($this->doctrineHelper);
+        $this->provider = new MarketingListVirtualRelationProvider($this->doctrineHelper);
     }
 
     /**
@@ -52,12 +52,12 @@ class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_Te
             'incorrect class incorrect field' => ['stdClass', 'test', null, false],
             'incorrect class correct field' => [
                 'stdClass',
-                MarketingListItemVirtualRelationProvider::FIELD_NAME,
+                MarketingListVirtualRelationProvider::RELATION_NAME,
                 null,
                 false
             ],
             'incorrect field' => ['stdClass', 'test', $marketingList, false],
-            'correct' => ['stdClass', MarketingListItemVirtualRelationProvider::FIELD_NAME, $marketingList, true],
+            'correct' => ['stdClass', MarketingListVirtualRelationProvider::RELATION_NAME, $marketingList, true],
         ];
     }
 
@@ -87,7 +87,7 @@ class MarketingListItemVirtualRelationProviderTest extends \PHPUnit_Framework_Te
             ->will($this->returnValue('id'));
 
         $result = $this->provider->getVirtualRelations($className);
-        $this->assertArrayHasKey(MarketingListItemVirtualRelationProvider::FIELD_NAME, $result);
+        $this->assertArrayHasKey(MarketingListVirtualRelationProvider::RELATION_NAME, $result);
     }
 
     /**
