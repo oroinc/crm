@@ -32,7 +32,7 @@ class CampaignStatisticGroupingListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupByHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\CampaignBundle\Model\GroupByHelper')
+            ->getMockBuilder('Oro\Bundle\QueryDesignerBundle\Model\GroupByHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
