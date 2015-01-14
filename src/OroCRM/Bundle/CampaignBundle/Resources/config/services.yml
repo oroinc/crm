@@ -22,7 +22,6 @@ parameters:
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
     orocrm_campaign.form.handler.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler
-    orocrm_campaign.group_by_helper.class: OroCRM\Bundle\CampaignBundle\Model\GroupByHelper
 
     orocrm_campaign.email_campaign.statistics_connector.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector
 services:
@@ -177,4 +176,4 @@ services:
             - @doctrine
 
     orocrm_campaign.group_by_helper:
-        class: %orocrm_campaign.group_by_helper.class%
+        alias: oro_query_designer.group_by_helper

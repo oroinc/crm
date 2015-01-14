@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\CampaignBundle\EventListener;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\CampaignBundle\Model\GroupByHelper;
+use Oro\Bundle\QueryDesignerBundle\Model\GroupByHelper;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticGroupingListener
