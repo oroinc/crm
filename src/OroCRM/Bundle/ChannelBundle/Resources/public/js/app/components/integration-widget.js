@@ -78,8 +78,14 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
         openDialog: function (e) {
             e.preventDefault();
 
+            var url = this._getUrl();
+            var route_additional_params = $(e.target).data('route_additional_params');
+            if (route_additional_params) {
+                url = url + (url.indexOf('?') == -1 ? '?' : '&') + $.param(route_additional_params);
+            }
+
             var formDialog = new DialogWidget({
-                url: this._getUrl(),
+                url: url,
                 title: this._getTitle(),
                 stateEnabled: false,
                 incrementalPosition: false,
