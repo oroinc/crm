@@ -67,7 +67,8 @@ class CommentController extends Controller
         $comment = $this->get('orocrm_case.manager')->createComment($case);
         $comment->setOwner($this->getUser());
 
-        $formAction = $this->get('router')->generate('orocrm_case_comment_create', ['caseId' => $case->getId()]);
+        $formAction = $this->get('oro_entity.routing_helper')
+            ->generateUrlByRequest('orocrm_case_comment_create', $this->getRequest(), ['caseId' => $case->getId()]);
 
         return $this->update($comment, $formAction);
     }
