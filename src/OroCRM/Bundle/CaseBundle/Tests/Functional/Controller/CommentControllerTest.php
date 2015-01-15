@@ -58,7 +58,7 @@ class CommentControllerTest extends WebTestCase
         /** TODO Change after BAP-1813 */
         $form->getFormNode()->setAttribute(
             'action',
-            $form->getFormNode()->getAttribute('action') . '?_widgetContainer=dialog'
+            $form->getFormNode()->getAttribute('action')
         );
 
         $crawler = $this->client->submit($form);
