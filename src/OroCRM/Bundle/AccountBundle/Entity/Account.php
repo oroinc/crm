@@ -525,7 +525,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      *
      * @return Account
      */
-    public function setReferredBy(Account $referredBy)
+    public function setReferredBy(Account $referredBy = null)
     {
         $this->referredBy = $referredBy;
 
