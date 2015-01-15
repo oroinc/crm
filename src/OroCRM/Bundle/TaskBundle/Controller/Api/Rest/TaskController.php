@@ -18,6 +18,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
 
 /**
  * @RouteResource("task")
@@ -52,6 +53,12 @@ class TaskController extends RestController implements ClassResourceInterface
      *     nullable=true,
      *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
+     * @QueryParam(
+     *     name="owner",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="User ID of assignee"
+     * )
      * @ApiDoc(
      *      description="Get all task items",
      *      resource=true
@@ -65,7 +72,11 @@ class TaskController extends RestController implements ClassResourceInterface
         $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
         $dateParamFilter  = new HttpDateTimeParameterFilter();
-        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
+        $filterParameters = [
+            'createdAt' => $dateParamFilter,
+            'updatedAt' => $dateParamFilter,
+            'owner'     => new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User'),
+        ];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
 

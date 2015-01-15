@@ -11,32 +11,29 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class TaskControllerTest extends WebTestCase
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $task = [
-        'subject' => 'New task',
-        'description' => 'New description',
-        'dueDate' => '2014-03-04T20:00:00+0000',
+        'subject'      => 'New task',
+        'description'  => 'New description',
+        'dueDate'      => '2014-03-04T20:00:00+0000',
         'taskPriority' => 'high',
-        'owner' => 1,
     ];
 
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
+
+        if (!isset($this->task['owner'])) {
+            $this->task['owner'] = $this->getContainer()
+                ->get('doctrine')
+                ->getRepository('OroUserBundle:User')
+                ->findOneBy(['username' => self::USER_NAME])->getId();
+        }
     }
 
     public function testCreate()
     {
-        $request = $this->task;
-
-        $this->client->request(
-            'POST',
-            $this->getUrl('orocrm_api_post_task'),
-            $request
-        );
-
+        $this->client->request('POST', $this->getUrl('orocrm_api_post_task'), $this->task);
         $task = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
         return $task['id'];
@@ -47,14 +44,7 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $this->client->request(
-            'GET',
-            $this->getUrl('orocrm_api_get_tasks'),
-            [],
-            [],
-            $this->generateWsseAuthHeader()
-        );
-
+        $this->client->request('GET', $this->getUrl('orocrm_api_get_tasks'), [], [], $this->generateWsseAuthHeader());
         $tasks = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertCount(1, $tasks);
@@ -65,32 +55,28 @@ class TaskControllerTest extends WebTestCase
      */
     public function testCgetFiltering()
     {
-        $this->client->request(
-            'GET',
-            $this->getUrl('orocrm_api_get_tasks') . '?createdAt>2014-03-04T20:00:00+0000',
-            [],
-            [],
-            $this->generateWsseAuthHeader()
-        );
+        $baseUrl = $this->getUrl('orocrm_api_get_tasks');
 
-        $tasks = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $date     = '2014-03-04T20:00:00+0000';
+        $ownerId  = $this->task['owner'];
+        $randomId = rand($ownerId + 1, $ownerId + 100);
 
-        $this->assertCount(1, $tasks);
+        $this->client->request('GET', $baseUrl . '?createdAt>' . $date, [], [], $this->generateWsseAuthHeader());
+        $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $this->client->request(
-            'GET',
-            $this->getUrl('orocrm_api_get_tasks') . '?createdAt>2050-03-04T20:00:00+0000',
-            [],
-            [],
-            $this->generateWsseAuthHeader()
-        );
+        $this->client->request('GET', $baseUrl . '?createdAt<' . $date, [], [], $this->generateWsseAuthHeader());
+        $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
 
-        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEmpty($entities);
+        $this->client->request('GET', $baseUrl . '?owner=' . $ownerId, [], [], $this->generateWsseAuthHeader());
+        $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
+
+        $this->client->request('GET', $baseUrl . '?owner=' . $randomId, [], [], $this->generateWsseAuthHeader());
+        $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
     }
 
     /**
      * @depends testCreate
+     *
      * @param integer $id
      */
     public function testGet($id)
@@ -102,7 +88,6 @@ class TaskControllerTest extends WebTestCase
             [],
             $this->generateWsseAuthHeader()
         );
-
         $task = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($this->task['subject'], $task['subject']);
@@ -110,11 +95,12 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * @depends testCreate
+     *
      * @param integer $id
      */
     public function testPut($id)
     {
-        $updatedTask =  array_merge($this->task, ['subject' => 'Updated subject']);
+        $updatedTask = array_merge($this->task, ['subject' => 'Updated subject']);
         $this->client->request(
             'PUT',
             $this->getUrl('orocrm_api_put_task', ['id' => $id]),
@@ -142,6 +128,7 @@ class TaskControllerTest extends WebTestCase
 
     /**
      * @depends testCreate
+     *
      * @param integer $id
      */
     public function testDelete($id)
