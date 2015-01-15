@@ -13,6 +13,7 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -62,7 +63,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_7';
+        return 'v1_8';
     }
 
     /**
@@ -98,6 +99,10 @@ class OroCRMAccountBundleInstaller implements
             ],
             2
         );
+
+        // update to 1.8
+        $addReferredBy = new AddReferredBy();
+        $addReferredBy->up($schema, $queries);
     }
 
     /**

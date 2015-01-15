@@ -42,6 +42,7 @@ orocrm:
         phone.label:                Phone
         email.label:                Email
         assigned.label:             Assigned
+        referred_by.label:          Referred By
 
         extend_description.label:   Description
 
