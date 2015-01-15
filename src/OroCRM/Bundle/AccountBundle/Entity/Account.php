@@ -216,6 +216,13 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      */
     protected $organization;
 
+    /**
+     * @var Account
+     * @ORM\ManyToOne(targetEntity="Account")
+     * @ORM\JoinColumn(name="referred_by_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $referredBy;
+
     public function __construct()
     {
         parent::__construct();
@@ -485,6 +492,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
      * Set organization
      *
      * @param Organization $organization
+     *
      * @return Account
      */
     public function setOrganization(Organization $organization = null)
@@ -502,5 +510,25 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return Account
+     */
+    public function getReferredBy()
+    {
+        return $this->referredBy;
+    }
+
+    /**
+     * @param Account $referredBy
+     *
+     * @return Account
+     */
+    public function setReferredBy(Account $referredBy)
+    {
+        $this->referredBy = $referredBy;
+
+        return $this;
     }
 }
