@@ -89,7 +89,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'assignedTo',
-                'oro_user_select',
+                'oro_user_organization_acl_select',
                 [
                     'required'      => false,
                     'label'         => 'orocrm.case.caseentity.assigned_to.label',

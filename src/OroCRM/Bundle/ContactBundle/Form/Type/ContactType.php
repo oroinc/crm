@@ -94,7 +94,7 @@ class ContactType extends AbstractType
         // assigned to (user)
         $builder->add(
             'assignedTo',
-            'oro_user_select',
+            'oro_user_organization_acl_select',
             array('required' => false, 'label' => 'orocrm.contact.assigned_to.label')
         );
 

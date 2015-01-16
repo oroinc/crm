@@ -54,7 +54,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'picture' => 'oro_image',
 
             'source' => 'translatable_entity',
-            'assignedTo' => 'oro_user_select',
+            'assignedTo' => 'oro_user_organization_acl_select',
             'reportsTo' => 'orocrm_contact_select',
             'method' => 'translatable_entity',
             'tags' => 'oro_tag_select',
