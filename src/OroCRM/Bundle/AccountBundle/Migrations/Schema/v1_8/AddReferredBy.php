@@ -17,7 +17,7 @@ class AddReferredBy implements Migration
         $table = $schema->getTable('orocrm_account');
 
         $table->addColumn('referred_by_id', 'integer', ['notnull' => false]);
-        $table->addIndex(['referred_by_id'], 'FK_7166D371758C8114', []);
+        $table->addIndex(['referred_by_id'], 'IDX_7166D371758C8114', []);
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_account'),
             ['referred_by_id'],
