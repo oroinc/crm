@@ -18,6 +18,7 @@ use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
@@ -52,6 +53,30 @@ class ContactController extends RestController implements ClassResourceInterface
      *     nullable=true,
      *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
+     * @QueryParam(
+     *     name="ownerId",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="Id of owner user"
+     * )
+     * @QueryParam(
+     *     name="ownerUsername",
+     *     requirements=".+",
+     *     nullable=true,
+     *     description="Username of owner user"
+     * )
+     * @QueryParam(
+     *     name="assigneeId",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="Id of assignee"
+     * )
+     * @QueryParam(
+     *     name="assigneeUsername",
+     *     requirements=".+",
+     *     nullable=true,
+     *     description="Username of assignee"
+     * )
      * @ApiDoc(
      *      description="Get all contacts items",
      *      resource=true
@@ -67,9 +92,24 @@ class ContactController extends RestController implements ClassResourceInterface
         $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
         $dateParamFilter  = new HttpDateTimeParameterFilter();
-        $filterParameters = ['createdAt' => $dateParamFilter, 'updatedAt' => $dateParamFilter];
+        $userIdFilter     = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User');
+        $userNameFilter   = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User', 'username');
+        $filterParameters = [
+            'createdAt'        => $dateParamFilter,
+            'updatedAt'        => $dateParamFilter,
+            'ownerId'          => $userIdFilter,
+            'ownerUsername'    => $userNameFilter,
+            'assigneeId'       => $userIdFilter,
+            'assigneeUsername' => $userNameFilter,
+        ];
+        $map              = [
+            'ownerId'          => 'owner',
+            'ownerUsername'    => 'owner',
+            'assigneeId'       => 'assignedTo',
+            'assigneeUsername' => 'assignedTo'
+        ];
 
-        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
 
         return $this->handleGetListRequest($page, $limit, $criteria);
     }
