@@ -54,10 +54,16 @@ class TaskController extends RestController implements ClassResourceInterface
      *     description="Date in RFC 3339 format. For example: 2009-11-05T13:15:30Z, 2008-07-01T22:35:17+08:00"
      * )
      * @QueryParam(
-     *     name="owner",
+     *     name="ownerId",
      *     requirements="\d+",
      *     nullable=true,
-     *     description="User ID of assignee"
+     *     description="Id of owner assignee"
+     * )
+     * @QueryParam(
+     *     name="ownerUsername",
+     *     requirements=".+",
+     *     nullable=true,
+     *     description="Username of owner assignee"
      * )
      * @ApiDoc(
      *      description="Get all task items",
@@ -73,12 +79,14 @@ class TaskController extends RestController implements ClassResourceInterface
 
         $dateParamFilter  = new HttpDateTimeParameterFilter();
         $filterParameters = [
-            'createdAt' => $dateParamFilter,
-            'updatedAt' => $dateParamFilter,
-            'owner'     => new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User'),
+            'createdAt'     => $dateParamFilter,
+            'updatedAt'     => $dateParamFilter,
+            'ownerId'       => new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User'),
+            'ownerUsername' => new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User', 'username'),
         ];
+        $map              = array_fill_keys(['ownerId', 'ownerUsername'], 'owner');
 
-        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
 
         return $this->handleGetListRequest($page, $limit, $criteria);
     }
