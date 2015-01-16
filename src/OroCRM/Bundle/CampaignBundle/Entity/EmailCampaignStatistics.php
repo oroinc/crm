@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\CampaignBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\CampaignBundle\Model\ExtendEmailCampaignStatistics;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 
@@ -14,6 +17,24 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  * @ORM\Table(name="orocrm_campaign_email_stats", uniqueConstraints={
  *      @ORM\UniqueConstraint(columns={"email_campaign_id", "marketing_list_item_id"}, name="orocrm_ec_litem_unq")
  * })
+ * @Config(
+ *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-bar-chart"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="USER",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id",
+ *              "organization_field_name"="organization",
+ *              "organization_column_name"="organization_id"
+ *          },
+ *          "security"={
+ *              "type"="ACL",
+ *              "group_name"=""
+ *          }
+ *      }
+ * )
  * @ORM\HasLifecycleCallbacks
  */
 class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
@@ -84,6 +105,22 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
 
     /**
      * @return int
@@ -303,5 +340,52 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
     public function prePersist()
     {
         $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * Set owner
+     *
+     * @param User $owner
+     *
+     * @return EmailCampaignStatistics
+     */
+    public function setOwner(User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * Set organization
+     *
+     * @param Organization $organization
+     * @return EmailCampaign
+     */
+    public function setOrganization(Organization $organization = null)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
     }
 }
