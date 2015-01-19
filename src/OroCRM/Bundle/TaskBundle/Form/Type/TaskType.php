@@ -53,14 +53,6 @@ class TaskType extends AbstractType
                 ]
             )
             ->add(
-                'owner',
-                'oro_user_select',
-                [
-                    'required' => true,
-                    'label' => 'orocrm.task.owner.label'
-                ]
-            )
-            ->add(
                 'reminders',
                 'oro_reminder_collection',
                 [

@@ -15,7 +15,8 @@ use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 
-use Oro\Bundle\UserBundle\Form\Type\UserSelectType;
+use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
+use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Form\Type\ChannelType;
@@ -82,7 +83,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
         $searchHandler->expects($this->any())->method('getEntityName')
             ->will($this->returnValue('OroUser:User'));
         $searchRegistry = new SearchRegistry();
-        $searchRegistry->addSearchHandler('users', $searchHandler);
+        $searchRegistry->addSearchHandler('acl_users', $searchHandler);
 
         $config = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $config->expects($this->any())->method('has')->with($this->equalTo('grid_name'))
@@ -109,7 +110,8 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                 [
                     'oro_integration_channel_form'       => $this->getChannelType($registry),
                     'oro_integration_type_select'        => new IntegrationTypeSelectType($registry, $assetsHelper),
-                    'oro_user_select'                    => new UserSelectType(),
+                    'oro_user_organization_acl_select'   => new OrganizationUserAclSelectType(),
+                    'oro_user_acl_select'                => new UserAclSelectType(),
                     'oro_entity_create_or_select_inline' => new OroEntitySelectOrCreateInlineType($security, $cm),
                     'oro_jqueryselect2_hidden'           => new OroJquerySelect2HiddenType($em, $searchRegistry, $cp),
                     'genemu_jqueryselect2_choice'        => new Select2Type('choice'),
