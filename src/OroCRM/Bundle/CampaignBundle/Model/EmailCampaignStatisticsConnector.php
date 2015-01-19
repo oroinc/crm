@@ -66,7 +66,9 @@ class EmailCampaignStatisticsConnector
             $statisticsRecord = new EmailCampaignStatistics();
             $statisticsRecord
                 ->setEmailCampaign($emailCampaign)
-                ->setMarketingListItem($marketingListItem);
+                ->setMarketingListItem($marketingListItem)
+                ->setOwner($emailCampaign->getOwner())
+                ->setOrganization($emailCampaign->getOrganization());
 
             $manager->persist($statisticsRecord);
         }
