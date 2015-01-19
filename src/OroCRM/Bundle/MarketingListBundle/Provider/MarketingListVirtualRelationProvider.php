@@ -67,7 +67,7 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
      */
     public function getTargetJoinAlias($className, $fieldName, $selectFieldName = null)
     {
-        if (false !== strpos(self::MARKETING_LIST_ITEM_RELATION_NAME, $selectFieldName)) {
+        if (sprintf('%ss', $selectFieldName) === self::MARKETING_LIST_ITEM_RELATION_NAME) {
             return self::MARKETING_LIST_ITEM_RELATION_NAME;
         }
 
