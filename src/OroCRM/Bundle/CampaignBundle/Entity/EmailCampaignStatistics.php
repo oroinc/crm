@@ -370,7 +370,7 @@ class EmailCampaignStatistics extends ExtendEmailCampaignStatistics
      * Set organization
      *
      * @param Organization $organization
-     * @return EmailCampaign
+     * @return EmailCampaignStatistics
      */
     public function setOrganization(Organization $organization = null)
     {
