@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Form\Type;
 
 use Genemu\Bundle\FormBundle\Form\JQuery\Type\Select2Type;
 
-use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Symfony\Component\Validator\Validator;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\Form\PreloadedExtension;
@@ -16,6 +15,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadataFactory;
 use Symfony\Component\Form\Extension\Csrf\Type\FormTypeCsrfExtension;
 use Symfony\Component\Form\Extension\Validator\Type\FormTypeValidatorExtension;
 
+use Oro\Bundle\UserBundle\Form\Type\UserAclSelectType;
 use Oro\Bundle\UserBundle\Form\Type\OrganizationUserAclSelectType;
 use Oro\Bundle\FormBundle\Autocomplete\SearchRegistry;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
