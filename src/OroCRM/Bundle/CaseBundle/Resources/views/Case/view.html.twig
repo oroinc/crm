@@ -11,14 +11,15 @@
             'id': 'add-case-comment-button',
             'aCss': 'no-hash',
             'iCss': 'icon-comment-alt hide-text',
-            'label' : 'orocrm.case.casecomment.action.add'|trans
+            'label' : 'orocrm.case.casecomment.action.add'|trans,
+            'dataAttributes': { 'purpose': 'open-dialog-widget'}
         }) }}
         <script type="text/javascript">
             require(['jquery', 'oroui/js/mediator'],
             function($, mediator){
                 $('#add-case-comment-button').on('click', function(e) {
                     e.preventDefault();
-                    mediator.trigger('comment:add');
+                    mediator.trigger('comment:add', this);
                 });
             });
         </script>
