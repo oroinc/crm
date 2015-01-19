@@ -7,6 +7,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
+use Oro\Bundle\SoapBundle\Event\FindAfter;
 use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
 
 class ContactApiEntityManager extends ApiEntityManager implements EntitySerializerManagerInterface
@@ -31,6 +32,31 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
     public function serialize(QueryBuilder $qb)
     {
         return $this->entitySerializer->serialize($qb, $this->getSerializationConfig());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function serializeOne($id)
+    {
+        $qb = $this->getRepository()->createQueryBuilder('e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id);
+
+        $config = $this->getSerializationConfig();
+        $this->entitySerializer->prepareQuery($qb, $config);
+        $entity = $qb->getQuery()->getResult();
+        if (!$entity) {
+            return null;
+        }
+
+        // dispatch oro_api.request.find.after event
+        $event = new FindAfter($entity);
+        $this->eventDispatcher->dispatch(FindAfter::NAME, $event);
+
+        $serialized = $this->entitySerializer->serializeEntities((array)$entity, $this->class, $config);
+
+        return $serialized[0];
     }
 
     /**
