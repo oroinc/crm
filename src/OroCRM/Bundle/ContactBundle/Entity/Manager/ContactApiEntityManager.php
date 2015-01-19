@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity\Manager;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
 use Oro\Bundle\SoapBundle\Event\FindAfter;
@@ -100,7 +100,7 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
                     'fields'          => [
                         'country' => ['fields' => 'name'],
                         'region'  => ['fields' => 'name'],
-                        'types'   => ['fields' => 'name'],
+                        'types'   => ['fields' => 'name', 'orderBy' => ['name' => 'ASC']],
                     ],
                     'post_serialize'  => function (array &$result) {
                         $this->postSerializeAddress($result);
