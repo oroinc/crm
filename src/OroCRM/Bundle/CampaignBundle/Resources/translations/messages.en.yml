@@ -136,6 +136,8 @@ orocrm:
             click_count.label: Click Count
             open_count.label: Open Count
             unsubscribe_count.label: Unsubscribe Count
+            organization.label: Organization
+            owner.label: Owner
 
         internaltransportsettings:
             entity_label: Email Campaign Internal Transport Settings
