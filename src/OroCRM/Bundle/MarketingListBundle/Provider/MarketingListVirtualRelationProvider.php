@@ -9,7 +9,7 @@ use Oro\Bundle\EntityBundle\Provider\VirtualRelationProviderInterface;
 class MarketingListVirtualRelationProvider implements VirtualRelationProviderInterface
 {
     const RELATION_NAME = 'marketingList_virtual';
-    const MARKETING_LIST_ITEM_RELATION_NAME = 'marketingListItem';
+    const MARKETING_LIST_ITEM_RELATION_NAME = 'marketingListItems';
 
     /**
      * @var DoctrineHelper
