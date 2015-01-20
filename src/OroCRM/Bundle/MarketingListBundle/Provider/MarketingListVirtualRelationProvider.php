@@ -63,14 +63,21 @@ class MarketingListVirtualRelationProvider implements VirtualRelationProviderInt
     }
 
     /**
-     * Gets a target alias
-     *
-     * @param string $className
-     * @param string $fieldName
-     * @return string
+     * {@inheritdoc}
      */
-    public function getTargetJoinAlias($className, $fieldName)
+    public function getTargetJoinAlias($className, $fieldName, $selectFieldName = null)
     {
+        $isItemField = in_array(
+            $selectFieldName,
+            [
+                rtrim(self::MARKETING_LIST_ITEM_RELATION_NAME, 's'),
+                self::MARKETING_LIST_ITEM_RELATION_NAME,
+            ]
+        );
+        if ($isItemField) {
+            return self::MARKETING_LIST_ITEM_RELATION_NAME;
+        }
+
         return self::RELATION_NAME;
     }
 
