@@ -312,7 +312,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @param Address $shippingAddress
      */
-    public function setShippingAddress(Address $shippingAddress)
+    public function setShippingAddress(Address $shippingAddress = null)
     {
         $this->shippingAddress = $shippingAddress;
     }
@@ -328,7 +328,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @param Address $billingAddress
      */
-    public function setBillingAddress(Address $billingAddress)
+    public function setBillingAddress(Address $billingAddress = null)
     {
         $this->billingAddress = $billingAddress;
     }
@@ -344,7 +344,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @param Account $account
      */
-    public function setAccount(Account $account)
+    public function setAccount(Account $account = null)
     {
         $this->account = $account;
     }
@@ -360,7 +360,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @param Contact $contact
      */
-    public function setContact(Contact $contact)
+    public function setContact(Contact $contact = null)
     {
         $this->contact = $contact;
     }
