@@ -179,4 +179,33 @@ class MarketingListVirtualRelationProviderTest extends \PHPUnit_Framework_TestCa
             ->with('OroCRMMarketingListBundle:MarketingList')
             ->will($this->returnValue($repository));
     }
+
+    /**
+     * @param string $selectFieldName
+     * @param string $expected
+     *
+     * @dataProvider targetJoinAliasDataProvider
+     */
+    public function testGetTargetJoinAlias($selectFieldName, $expected)
+    {
+        $this->assertEquals(
+            $expected,
+            $this->provider->getTargetJoinAlias(null, null, $selectFieldName)
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function targetJoinAliasDataProvider()
+    {
+        return [
+            [null, 'marketingList_virtual'],
+            ['', 'marketingList_virtual'],
+            ['field', 'marketingList_virtual'],
+            ['marketingList', 'marketingList_virtual'],
+            ['marketingListItem', 'marketingListItems'],
+            ['marketingListItems', 'marketingListItems'],
+        ];
+    }
 }
