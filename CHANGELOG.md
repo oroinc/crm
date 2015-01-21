@@ -1,3 +1,15 @@
+CHANGELOG for 1.5.1
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.5.1 versions.
+* 1.5.1 (2015-01-21)
+ * List of improvements and fixed bugs
+ - Fixed task creation with reminder and without due date
+ - Magento integration resync already synced entities
+ - Fixed break of differed process potentially affects other processes
+ - Fixed magento integration doesn't create Account and Contact when required fields are empty
+ - Fixed error in Postgres in custom report of Account's lifetimeValue
+ - Updated Account Life Time Value report to calculate orders
+
 CHANGELOG for 1.5.0
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.5.0 versions.
