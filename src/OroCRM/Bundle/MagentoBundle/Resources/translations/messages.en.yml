@@ -106,7 +106,7 @@ orocrm:
             group.label:         Customer Group
             contact.label:       Contact
             account.label:       Account
-            addresses.label:     Adresses
+            addresses.label:     Addresses
             carts.label:         Carts
             channel.label:       Integration
             data_channel.label:  Channel
