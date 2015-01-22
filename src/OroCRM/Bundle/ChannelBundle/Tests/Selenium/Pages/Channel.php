@@ -62,10 +62,7 @@ class Channel extends AbstractPageEntity
         $this->test->byXpath(
             "//div[@class = 'query-designer-form entities-form-container']//a[starts-with(@class, 'select2-choice')]"
         )->click();
-        $xpath = "//li/div[@class='select2-result-label' and contains(text(), '{$entity}')]/i";
-        if (!$this->isElementPresent("//li/div[@class='select2-result-label' and contains(text(), '{$entity}')]/i")) {
-            $xpath = "//li/div[@class='select2-result-label' and contains(text(), '{$entity}')]";
-        }
+        $xpath = "//li/div[@class='select2-result-label' and contains(text(), '{$entity}')]";
         $element = $this->test->byXpath($xpath);
         $this->test->moveto($element);
         $element->click();
