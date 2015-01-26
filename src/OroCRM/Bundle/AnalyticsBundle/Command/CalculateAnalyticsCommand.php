@@ -2,33 +2,29 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
+use Doctrine\ORM\EntityManager;
 
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Symfony\Component\Console\Helper\FormatterHelper;
+use Symfony\Component\Console\Helper\ProgressHelper;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 
 class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
     const FLUSH_BATCH_SIZE = 25;
 
     const COMMAND_NAME = 'oro:cron:analytic:calculate';
-
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
-     * @var AnalyticsBuilder
-     */
-    protected $analyticsBuilder;
 
     /**
      * {@inheritdoc}
@@ -46,17 +42,12 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription('Calculate all registered analytic metrics')
+            ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process')
             ->addOption(
                 'ids',
                 null,
                 InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
                 'Customer identity ids for given channel'
-            )
-            ->addOption(
-                'channel',
-                null,
-                InputOption::VALUE_OPTIONAL,
-                'Data Channel id to process'
             );
     }
 
@@ -65,8 +56,13 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var FormatterHelper $formatter */
+        $formatter = $this->getHelper('formatter');
+        /** @var ProgressHelper $progress */
+        $progress = $this->getHelper('progress');
+
         $channel = $input->getOption('channel');
-        $ids = $input->getOption('ids');
+        $ids     = $input->getOption('ids');
 
         if (!$channel && $ids) {
             $output->writeln('<error>Option "ids" does not work without "channel"</error>');
@@ -74,89 +70,37 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             return;
         }
 
-        $channels = $this->getChannels($channel);
+        foreach ($this->getChannels($channel) as $channel) {
+            $count        = 0;
+            $identityFQCN = $channel->getCustomerIdentity();
 
-        foreach ($channels as $channel) {
-            $customerIdentityClass = $channel->getCustomerIdentity();
-            $analyticsInterface = $this->getAnalyticsAwareInterface();
-            if (!in_array($analyticsInterface, class_implements($customerIdentityClass))) {
-                $output->writeln(
-                    [
-                        sprintf(
-                            '<error>Channel #%s: %s skipped.</error>',
-                            $channel->getId(),
-                            $channel->getName()
-                        ),
-                        sprintf('    %s does not implements %s.', $customerIdentityClass, $analyticsInterface)
-                    ]
-                );
-
-                continue;
-            }
-
-            $output->writeln(
-                sprintf('<info>Channel #%s: %s processing.</info>', $channel->getId(), $channel->getName())
-            );
-
-            $em = $this->doctrineHelper->getEntityManager($customerIdentityClass);
+            $em       = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
             $entities = $this->getEntitiesByChannel($channel, $ids);
-            $entitiesToSave = [];
 
+            if ($input->isInteractive()) {
+                $progress->start($output, $entities->count());
+            }
+            $output->writeln($formatter->formatSection('Process', sprintf('Channel: %s', $channel->getName())));
             foreach ($entities as $entity) {
-                if ($this->getAnalyticsBuilder()->build($entity)) {
-                    $entitiesToSave[] = $entity;
-
-                    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-                        $output->writeln(
-                            sprintf(
-                                '    %s #%s.',
-                                $customerIdentityClass,
-                                $this->getDoctrineHelper()->getSingleEntityIdentifier($entity)
-                            )
-                        );
-                    }
+                if ($input->isInteractive()) {
+                    $progress->advance();
                 }
 
-                if (count($entitiesToSave) % self::FLUSH_BATCH_SIZE === 0) {
-                    $em->flush($entitiesToSave);
-                    $entitiesToSave = [];
+                if ($this->getAnalyticsBuilder()->build($entity)) {
+                    $count++;
+                    $this->write($em, $entity);
+                } else {
+                    $em->detach($entity);
                 }
             }
 
-            $em->flush($entitiesToSave);
+            $this->write($em, null);
 
-            $output->writeln(
-                sprintf(
-                    '    <info>Done. %s/%s updated.</info>',
-                    count($entitiesToSave),
-                    $entities->count()
-                )
-            );
+            if ($input->isInteractive()) {
+                $progress->finish();
+            }
+            $output->writeln($formatter->formatSection('Done', sprintf('%s/%s updated.', $count, $entities->count())));
         }
-    }
-
-    /**
-     * @return DoctrineHelper
-     */
-    protected function getDoctrineHelper()
-    {
-        if (!$this->doctrineHelper) {
-            $this->doctrineHelper = $this->getContainer()->get('oro_entity.doctrine_helper');
-        }
-
-        return $this->doctrineHelper;
-    }
-
-    /**
-     * @return AnalyticsBuilder
-     */
-    protected function getAnalyticsBuilder()
-    {
-        if (!$this->analyticsBuilder) {
-            $this->analyticsBuilder = $this->getContainer()->get('orocrm_analytics.builder');
-        }
-
-        return $this->analyticsBuilder;
     }
 
     /**
@@ -167,55 +111,90 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function getChannels($channelId = null)
     {
         $className = $this->getContainer()->getParameter('orocrm_channel.entity.class');
-        $qb = $this->getDoctrineHelper()
-            ->getEntityRepository($className)
+        $qb        = $this->getDoctrineHelper()->getEntityRepository($className)
             ->createQueryBuilder('c');
 
-        $where = $qb->expr()->andX(
-            $qb->expr()->eq('c.status', ':status')
-        );
+        $qb->andWhere('c.status = :status');
         $qb->setParameter('status', Channel::STATUS_ACTIVE);
 
         if ($channelId) {
-            $where->add($qb->expr()->eq('c.id', ':id'));
+            $qb->andWhere('c.id = :id');
             $qb->setParameter('id', $channelId);
         }
 
-        $qb->andWhere($where);
+        $analyticsInterface = $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface');
 
-        return new BufferedQueryResultIterator($qb);
+        return new \CallbackFilterIterator(
+            new BufferedQueryResultIterator($qb),
+            function (Channel $channel) use ($analyticsInterface) {
+                $identityFQCN = $channel->getCustomerIdentity();
+                $data         = $channel->getData();
+
+                return is_a($identityFQCN, $analyticsInterface, true)
+                    && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
+            }
+        );
     }
 
     /**
      * @param Channel $channel
-     * @param array $ids
+     * @param array   $ids
      *
      * @return BufferedQueryResultIterator|CustomerIdentity[]
      */
     protected function getEntitiesByChannel(Channel $channel, $ids = [])
     {
-        $qb = $this->getDoctrineHelper()
-            ->getEntityRepository($channel->getCustomerIdentity())
+        $qb = $this->getDoctrineHelper()->getEntityRepository($channel->getCustomerIdentity())
             ->createQueryBuilder('e');
 
-        $qb
-            ->where($qb->expr()->eq('e.dataChannel', ':dataChannel'))
-            ->setParameter('dataChannel', $channel->getId());
+        $qb->andWhere('e.dataChannel = :dataChannel');
+        $qb->setParameter('dataChannel', $channel);
 
         if ($ids) {
-            $qb
-                ->andWhere($qb->expr()->in('e.id', ':ids'))
-                ->setParameter('ids', $ids);
+            $qb->andWhere($qb->expr()->in('e.id', ':ids'));
+            $qb->setParameter('ids', $ids);
         }
 
         return new BufferedQueryResultIterator($qb);
     }
 
     /**
-     * @return string
+     * @return DoctrineHelper
      */
-    protected function getAnalyticsAwareInterface()
+    protected function getDoctrineHelper()
     {
-        return $this->getContainer()->getParameter('orocrm_analytics.model.analytics_aware_interface');
+        return $this->getContainer()->get('oro_entity.doctrine_helper');
+    }
+
+    /**
+     * @return AnalyticsBuilder
+     */
+    protected function getAnalyticsBuilder()
+    {
+        return $this->getContainer()->get('orocrm_analytics.builder');
+    }
+
+    /**
+     * Collect data into batches and executes EM#flush when batch is ready
+     *
+     * @param EntityManager $em
+     * @param object|null   $entity Pass null for force flush
+     */
+    protected function write(EntityManager $em, $entity = null)
+    {
+        static $entitiesToSave = [];
+
+        $force = false;
+        if (null !== $entity) {
+            $entitiesToSave[] = $entity;
+        } else {
+            $force = true;
+        }
+
+        if ($force || (count($entitiesToSave) % self::FLUSH_BATCH_SIZE === 0)) {
+            $em->flush($entitiesToSave);
+            array_walk($entitiesToSave, [$em, 'detach']);
+            $entitiesToSave = [];
+        }
     }
 }
