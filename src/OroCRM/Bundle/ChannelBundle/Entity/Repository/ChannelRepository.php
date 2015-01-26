@@ -23,7 +23,7 @@ class ChannelRepository extends EntityRepository
         $qb->from('OroCRMChannelBundle:Channel', 'c', 'c.id');
 
         if (null !== $type) {
-            $qb->where("c.channelType = :type");
+            $qb->where('c.channelType = :type');
             $qb->setParameter('type', $type);
         }
 
