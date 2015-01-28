@@ -1,6 +1,6 @@
 /*jslint nomen: true, vars: true*/
 /*global define*/
-define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oroui/js/loading-mask'],
+define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oroui/js/app/views/loading-mask-view'],
     function ($, _, Backbone, routing, mediator, LoadingMask) {
         /**
          * @export  orotask/widget/assigned-task
@@ -39,14 +39,14 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oro
                     var routeParams = { perPage: settings.perPage, r: Math.random() };
                     var url = routing.generate('orocrm_task_widget_sidebar_tasks', routeParams);
 
-                    var loadingMask = new LoadingMask();
-                    view.$el.html('<div class="widget-mask-wrapper"></div>');
-                    view.$el.find('.widget-mask-wrapper').append(loadingMask.render().$el);
+                    var loadingMask = new LoadingMask({
+                        container: view.$el
+                    });
                     loadingMask.show();
 
                     $.get(url, function (content) {
                         view.$el.html(view.template({'content': content}));
-                        loadingMask.hide();
+                        loadingMask.dispose();
                     });
                 }
             }),
