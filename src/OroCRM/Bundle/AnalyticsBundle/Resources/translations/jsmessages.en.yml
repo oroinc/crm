@@ -7,4 +7,4 @@ orocrm:
         na: N/A
         best: best
         worst: worst
-        delete_row: Delete bucket
+        delete_row: Delete segment

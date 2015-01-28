@@ -7,7 +7,7 @@ orocrm:
         best: best
         worst: worst
         title:
-            add_row: Add bucket
+            add_row: Add segment
         rfm:
             recency:
                 label: Recency
