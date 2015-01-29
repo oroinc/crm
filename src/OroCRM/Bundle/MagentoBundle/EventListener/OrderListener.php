@@ -31,7 +31,7 @@ class OrderListener
 
         // if new order has valuable subtotal
         if ($this->isOrderValid($entity) && $entity->getSubtotalAmount()) {
-            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity);
+            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity, true);
         }
     }
 
@@ -120,10 +120,10 @@ class OrderListener
     /**
      * @param EntityManager $entityManager
      * @param Order $order
-     *
-     * @return bool         Returns 'true' when real changes were provided
+     * @param bool $appendSubtotal
+     * @return bool Returns 'true' when real changes were provided
      */
-    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order)
+    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order, $appendSubtotal = false)
     {
         $customer = $order->getCustomer();
         $oldLifetime = (float)$customer->getLifetime();
@@ -131,6 +131,9 @@ class OrderListener
         /** @var OrderRepository $orderRepository */
         $orderRepository = $entityManager->getRepository('OroCRMMagentoBundle:Order');
         $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
+        if ($appendSubtotal) {
+            $newLifetime += $order->getSubtotalAmount();
+        }
 
         if ($newLifetime !== $oldLifetime) {
             $customer->setLifetime($newLifetime);
