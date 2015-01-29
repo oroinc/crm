@@ -44,6 +44,9 @@ class CustomerCurrencyListener implements ContainerAwareInterface
         }
     }
 
+    /**
+     * @return LocaleSettings
+     */
     protected function getLocaleSettings()
     {
         if (!$this->localeSettings) {
