@@ -17,9 +17,9 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      * @param Order|object $order
      * @param float|null   $newLifetime
      *
-     * @dataProvider postPersistDataProvider
+     * @dataProvider prePersistDataProvider
      */
-    public function testPostPersist($order, $newLifetime = null)
+    public function testPrePersist($order, $newLifetime = null)
     {
         if ($newLifetime) {
             $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
@@ -28,13 +28,13 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         }
 
         $listener = new OrderListener();
-        $listener->postPersist(new LifecycleEventArgs($order, $entityManager));
+        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
     }
 
     /**
      * @return array
      */
-    public function postPersistDataProvider()
+    public function prePersistDataProvider()
     {
         return array(
             'not an order'       => [new \DateTime()],

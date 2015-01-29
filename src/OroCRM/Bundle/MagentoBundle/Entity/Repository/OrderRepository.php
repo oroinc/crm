@@ -39,7 +39,7 @@ class OrderRepository extends EntityRepository
      * Get customer orders subtotal amount
      *
      * @param Customer $customer
-     * @return string
+     * @return float
      */
     public function getCustomerOrdersSubtotalAmount(Customer $customer)
     {
@@ -56,7 +56,7 @@ class OrderRepository extends EntityRepository
             ->setParameter('customer', $customer)
             ->setParameter('status', Order::STATUS_CANCELED);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        return (float)$qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -118,14 +118,14 @@ class OrderRepository extends EntityRepository
         $currentYear  = (int)date('Y');
         $currentMonth = (int)date('m');
 
-        $sliceYear  = $currentMonth == 12 ? $currentYear : $currentYear - 1;
-        $sliceMonth = $currentMonth == 12 ? 1 : $currentMonth + 1;
+        $sliceYear  = $currentMonth === 12 ? $currentYear : $currentYear - 1;
+        $sliceMonth = $currentMonth === 12 ? 1 : $currentMonth + 1;
         $sliceDate  = new \DateTime(sprintf('%s-%s-01', $sliceYear, $sliceMonth), new \DateTimeZone('UTC'));
 
         // calculate match for month and default channel template
         $monthMatch = [];
         $channelTemplate = [];
-        if ($sliceYear != $currentYear) {
+        if ($sliceYear !== $currentYear) {
             for ($i = $sliceMonth; $i <= 12; $i++) {
                 $monthMatch[$i] = ['year' => $sliceYear, 'month' => $i];
                 $channelTemplate[$sliceYear][$i] = 0;
