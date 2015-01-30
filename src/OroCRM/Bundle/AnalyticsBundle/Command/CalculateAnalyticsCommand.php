@@ -131,7 +131,8 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
                 $identityFQCN = $channel->getCustomerIdentity();
                 $data         = $channel->getData();
 
-                return is_a($identityFQCN, $analyticsInterface, true)
+                return
+                    is_a($identityFQCN, $analyticsInterface, true)
                     && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
             }
         );
