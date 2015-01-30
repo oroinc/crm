@@ -149,7 +149,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         $qb = $this->getDoctrineHelper()->getEntityRepository($entityFQCN)
             ->createQueryBuilder('e');
 
-        $qb->orderBy(sprintf('e.%s', $this->getDoctrineHelper()->getSingleEntityIdentifierFieldName($entityFQCN)), 'DESC');
+        $qb->orderBy(sprintf('e.%s', $this->getDoctrineHelper()->getSingleEntityIdentifierFieldName($entityFQCN)));
         $qb->andWhere('e.dataChannel = :dataChannel');
         $qb->setParameter('dataChannel', $channel);
 
