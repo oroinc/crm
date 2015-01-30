@@ -37,7 +37,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
             }
         }
 
-        $output = $this->runCommand('oro:cron:analytic:calculate', $parameters);
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME, $parameters);
         foreach ($expects as $expect) {
             $this->assertContains($expect, $output);
         }
