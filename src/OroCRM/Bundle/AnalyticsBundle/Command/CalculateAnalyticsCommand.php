@@ -20,7 +20,8 @@ use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 
 class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
-    const BATCH_SIZE = 200;
+    const BATCH_SIZE   = 200;
+    const COMMAND_NAME = 'oro:cron:analytic:calculate';
 
     /**
      * {@inheritdoc}
@@ -36,7 +37,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function configure()
     {
         $this
-            ->setName('oro:cron:analytic:calculate')
+            ->setName(self::COMMAND_NAME)
             ->setDescription('Calculate all registered analytic metrics')
             ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process')
             ->addOption(
@@ -67,8 +68,8 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         }
 
         foreach ($this->getChannels($channel) as $channel) {
-            $count          = 0;
-            $identityFQCN   = $channel->getCustomerIdentity();
+            $count        = 0;
+            $identityFQCN = $channel->getCustomerIdentity();
 
             $em       = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
             $entities = $this->getEntitiesByChannel($channel, $ids);
@@ -131,7 +132,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
                 $data         = $channel->getData();
 
                 return is_a($identityFQCN, $analyticsInterface, true)
-                    && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
+                && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
             }
         );
     }
