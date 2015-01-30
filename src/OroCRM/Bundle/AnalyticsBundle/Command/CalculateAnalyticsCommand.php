@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Command;
 
-use Doctrine\ORM\EntityManager;
-
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\ProgressHelper;
 use Symfony\Component\Console\Input\InputOption;
@@ -22,9 +20,7 @@ use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 
 class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
-    const FLUSH_BATCH_SIZE = 25;
-
-    const COMMAND_NAME = 'oro:cron:analytic:calculate';
+    const BATCH_SIZE = 200;
 
     /**
      * {@inheritdoc}
@@ -40,7 +36,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function configure()
     {
         $this
-            ->setName(self::COMMAND_NAME)
+            ->setName('oro:cron:analytic:calculate')
             ->setDescription('Calculate all registered analytic metrics')
             ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process')
             ->addOption(
@@ -71,8 +67,8 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         }
 
         foreach ($this->getChannels($channel) as $channel) {
-            $count        = 0;
-            $identityFQCN = $channel->getCustomerIdentity();
+            $count          = 0;
+            $identityFQCN   = $channel->getCustomerIdentity();
 
             $em       = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
             $entities = $this->getEntitiesByChannel($channel, $ids);
@@ -81,20 +77,23 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
                 $progress->start($output, $entities->count());
             }
             $output->writeln($formatter->formatSection('Process', sprintf('Channel: %s', $channel->getName())));
-            foreach ($entities as $entity) {
+            foreach ($entities as $k => $entity) {
                 if ($input->isInteractive()) {
                     $progress->advance();
                 }
 
-                if ($this->getAnalyticsBuilder()->build($entity)) {
+                if ($this->getAnalyticBuilder()->build($entity)) {
                     $count++;
-                    $this->write($em, $entity);
-                } else {
-                    $em->detach($entity);
+                }
+
+                if (($k + 1) % self::BATCH_SIZE === 0) {
+                    $em->flush();
+                    $em->clear();
                 }
             }
 
-            $this->write($em, null);
+            $em->flush();
+            $em->clear();
 
             if ($input->isInteractive()) {
                 $progress->finish();
@@ -114,6 +113,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         $qb        = $this->getDoctrineHelper()->getEntityRepository($className)
             ->createQueryBuilder('c');
 
+        $qb->orderBy('c.id');
         $qb->andWhere('c.status = :status');
         $qb->setParameter('status', Channel::STATUS_ACTIVE);
 
@@ -144,9 +144,12 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     protected function getEntitiesByChannel(Channel $channel, $ids = [])
     {
-        $qb = $this->getDoctrineHelper()->getEntityRepository($channel->getCustomerIdentity())
+        $entityFQCN = $channel->getCustomerIdentity();
+
+        $qb = $this->getDoctrineHelper()->getEntityRepository($entityFQCN)
             ->createQueryBuilder('e');
 
+        $qb->orderBy(sprintf('e.%s', $this->getDoctrineHelper()->getSingleEntityIdentifierFieldName($entityFQCN)), 'DESC');
         $qb->andWhere('e.dataChannel = :dataChannel');
         $qb->setParameter('dataChannel', $channel);
 
@@ -155,7 +158,19 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             $qb->setParameter('ids', $ids);
         }
 
-        return new BufferedQueryResultIterator($qb);
+        $iterator = new BufferedQueryResultIterator($qb);
+        // !!! should be the same as flush batch, will not work otherwise because of detached entities after EM#clear()
+        $iterator->setBufferSize(self::BATCH_SIZE);
+
+        return $iterator;
+    }
+
+    /**
+     * @return AnalyticsBuilder
+     */
+    protected function getAnalyticBuilder()
+    {
+        return $this->getContainer()->get('orocrm_analytics.builder');
     }
 
     /**
@@ -164,37 +179,5 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function getDoctrineHelper()
     {
         return $this->getContainer()->get('oro_entity.doctrine_helper');
-    }
-
-    /**
-     * @return AnalyticsBuilder
-     */
-    protected function getAnalyticsBuilder()
-    {
-        return $this->getContainer()->get('orocrm_analytics.builder');
-    }
-
-    /**
-     * Collect data into batches and executes EM#flush when batch is ready
-     *
-     * @param EntityManager $em
-     * @param object|null   $entity Pass null for force flush
-     */
-    protected function write(EntityManager $em, $entity = null)
-    {
-        static $entitiesToSave = [];
-
-        $force = false;
-        if (null !== $entity) {
-            $entitiesToSave[] = $entity;
-        } else {
-            $force = true;
-        }
-
-        if ($force || (count($entitiesToSave) % self::FLUSH_BATCH_SIZE === 0)) {
-            $em->flush($entitiesToSave);
-            array_walk($entitiesToSave, [$em, 'detach']);
-            $entitiesToSave = [];
-        }
     }
 }
