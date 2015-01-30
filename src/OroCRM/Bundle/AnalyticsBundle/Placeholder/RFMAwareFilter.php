@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\AnalyticsBundle\Placeholder;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 
 class RFMAwareFilter
 {
@@ -21,6 +22,7 @@ class RFMAwareFilter
 
     /**
      * @param Channel $entity
+     *
      * @return bool
      */
     public function isApplicable($entity)
@@ -36,6 +38,7 @@ class RFMAwareFilter
 
     /**
      * @param Channel $entity
+     *
      * @return bool
      */
     public function isViewApplicable($entity)
@@ -43,8 +46,8 @@ class RFMAwareFilter
         $isApplicable = $this->isApplicable($entity);
 
         if ($isApplicable) {
-            $data = $entity->getData();
-            $isApplicable = $isApplicable && !empty($data['rfm_enabled']);
+            $data         = $entity->getData();
+            $isApplicable = $isApplicable && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
         }
 
         return $isApplicable;
