@@ -62,12 +62,12 @@ class EmailCampaignSender
     protected $emailCampaign;
 
     /**
-     * @param MarketingListProvider $marketingListProvider
-     * @param ConfigManager $configManager
+     * @param MarketingListProvider            $marketingListProvider
+     * @param ConfigManager                    $configManager
      * @param EmailCampaignStatisticsConnector $statisticsConnector
      * @param ContactInformationFieldsProvider $contactInformationFieldsProvider
-     * @param ManagerRegistry $registry
-     * @param EmailTransportProvider $emailTransportProvider
+     * @param ManagerRegistry                  $registry
+     * @param EmailTransportProvider           $emailTransportProvider
      */
     public function __construct(
         MarketingListProvider $marketingListProvider,
@@ -77,12 +77,12 @@ class EmailCampaignSender
         ManagerRegistry $registry,
         EmailTransportProvider $emailTransportProvider
     ) {
-        $this->marketingListProvider = $marketingListProvider;
-        $this->configManager = $configManager;
-        $this->statisticsConnector = $statisticsConnector;
+        $this->marketingListProvider            = $marketingListProvider;
+        $this->configManager                    = $configManager;
+        $this->statisticsConnector              = $statisticsConnector;
         $this->contactInformationFieldsProvider = $contactInformationFieldsProvider;
-        $this->registry = $registry;
-        $this->emailTransportProvider = $emailTransportProvider;
+        $this->registry                         = $registry;
+        $this->emailTransportProvider           = $emailTransportProvider;
     }
 
     /**
@@ -118,7 +118,7 @@ class EmailCampaignSender
         }
 
         /** @var EntityManager $manager */
-        $manager = $this->registry->getManager();
+        $manager     = $this->registry->getManager();
         $emailFields = $this->contactInformationFieldsProvider
             ->getMarketingListTypedFields(
                 $marketingList,
