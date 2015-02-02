@@ -72,7 +72,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         parent::initializeFromContext($context);
 
         // set start date and mode depending on status
-        $status      = $this->channel->getStatusesForConnector($this->getType(), Status::STATUS_COMPLETED)->first();
+        $status      = $this->channel->getLastStatusForConnector($this->getType(), Status::STATUS_COMPLETED);
         $iterator    = $this->getSourceIterator();
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
