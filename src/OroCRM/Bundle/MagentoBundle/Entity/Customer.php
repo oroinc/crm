@@ -267,7 +267,7 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
-    protected $currency = 'USD';
+    protected $currency;
 
     /**
      * @var User
