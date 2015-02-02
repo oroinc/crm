@@ -114,7 +114,7 @@ services:
         class: %orocrm_campaign.email_campaign.sender.class%
         arguments:
             - @orocrm_marketing_list.provider.marketing_list
-            - @oro_config.global
+            - @oro_config.user
             - @orocrm_campaign.email_campaign.statistics_connector
             - @orocrm_marketing_list.provider.contact_information_fields
             - @doctrine
