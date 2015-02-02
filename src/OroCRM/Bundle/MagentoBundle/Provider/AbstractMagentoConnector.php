@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
-use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\IntegrationBundle\Exception\RuntimeException;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractConnector;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
@@ -21,6 +25,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     /** @var array */
     protected $bundleConfiguration;
 
+    /** @var ManagerRegistry */
+    protected $managerRegistry;
+
     /**
      * @param ContextRegistry          $contextRegistry
      * @param LoggerStrategy           $logger
@@ -35,6 +42,15 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     ) {
         parent::__construct($contextRegistry, $logger, $contextMediator);
         $this->bundleConfiguration = $bundleConfiguration;
+
+    }
+
+    /**
+     * @param ManagerRegistry $managerRegistry
+     */
+    public function setManagerRegistry(ManagerRegistry $managerRegistry)
+    {
+        $this->managerRegistry = $managerRegistry;
     }
 
     /**
@@ -72,7 +88,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         parent::initializeFromContext($context);
 
         // set start date and mode depending on status
-        $status      = $this->channel->getLastStatusForConnector($this->getType(), Status::STATUS_COMPLETED);
+        $status      = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
         $iterator    = $this->getSourceIterator();
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
@@ -107,6 +123,23 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 throw new \LogicException('Iterator does not support predefined filters');
             }
         }
+    }
+
+    /**
+     * Get last completed status for connector of integration instance.
+     *
+     * @param Integration $integration
+     * @param string $connector
+     * @return Status|null
+     */
+    protected function getLastCompletedIntegrationStatus(Integration $integration, $connector)
+    {
+        if (!$this->managerRegistry) {
+            throw new RuntimeException('Doctrine manager registry is not initialized. Use setManagerRegistry method.');
+        }
+
+        return $this->managerRegistry->getRepository('OroIntegrationBundle:Channel')
+            ->getLastStatusForConnector($integration, $connector, Status::STATUS_COMPLETED);
     }
 
     /**
