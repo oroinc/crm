@@ -83,6 +83,8 @@ services:
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
           - []
+        calls:
+             - [setManagerRegistry, [@doctrine]]
         tags:
           - { name: oro_integration.connector, type: customer, channel_type: magento }
           - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
@@ -94,6 +96,8 @@ services:
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
           - []
+        calls:
+             - [setManagerRegistry, [@doctrine]]
         tags:
           - { name: oro_integration.connector, type: cart, channel_type: magento }
           - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
@@ -105,6 +109,8 @@ services:
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
           - []
+        calls:
+             - [setManagerRegistry, [@doctrine]]
         tags:
           - { name: oro_integration.connector, type: order, channel_type: magento }
           - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
@@ -116,6 +122,8 @@ services:
           - @oro_integration.logger.strategy
           - @oro_integration.provider.connector_context_mediator
           - []
+        calls:
+             - [setManagerRegistry, [@doctrine]]
         tags:
           - { name: oro_integration.connector, type: region, channel_type: magento }
           - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
