@@ -161,11 +161,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $contact->setAssignedTo($user);
                     $contact->setReportsTo($contact);
                     $contact->setOwner($user);
+                    $contact->setOrganization($this->organization);
 
                     $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
                     $contact->setSource($source);
 
                     $account->setOwner($user);
+                    $account->setOrganization($this->organization);
 
                     $this->persist($this->accountManager, $account);
                     $this->contactManager->persist($contact);
