@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -32,6 +33,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     protected $role;
     protected $businessUnit;
     protected $businessUnitManager;
+    protected $organization;
 
     /**
      * {@inheritDoc}
@@ -45,6 +47,9 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $this->businessUnitManager = $container->get('oro_organization.business_unit_manager');
         $this->businessUnit        = $this->businessUnitManager->getBusinessUnitRepo()->findAll();
         $this->businessUnit        = $this->businessUnit[0];
+        $organizationManager = $container->get('doctrine')->getManager();
+        $organizationRepository = $organizationManager->getRepository('OroOrganizationBundle:Organization');
+        $this->organization = $organizationRepository->getFirst();
     }
 
     /**
@@ -76,7 +81,8 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
                 $firstName,
                 $lastName,
                 $middleName,
-                $birthday
+                $birthday,
+                $this->organization
             );
 
             $user->setPlainPassword($username);
@@ -96,6 +102,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
      * @param string $lastName
      * @param string $middleName
      * @param \DateTime $birthday
+     * @param Organization $organization
      * @return User
      */
     private function createUser(
@@ -104,7 +111,8 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $firstName,
         $lastName,
         $middleName,
-        $birthday
+        $birthday,
+        $organization
     ) {
         /** @var $user User */
         $user = $this->userManager->createUser();
@@ -117,7 +125,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $user->setBirthday($birthday);
         $user->addRole($this->role[0]);
         $user->setOwner($this->businessUnit);
-
+        $user->setOrganization($organization);
         return $user;
     }
 
