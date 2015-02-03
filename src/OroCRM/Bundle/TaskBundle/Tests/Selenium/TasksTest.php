@@ -29,7 +29,8 @@ class TasksTest extends Selenium2TestCase
             ->setDescription($subject)
             ->setDueDate('Apr 9, 2014 12:51 PM')
             ->save()
-            ->assertMessage('Task saved')
+            // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
+            ->assertTitle($subject . ' - Tasks - Activities')
             ->toGrid()
             ->assertTitle('Tasks - Activities');
 
@@ -55,7 +56,8 @@ class TasksTest extends Selenium2TestCase
             ->assertTitle("{$subject} - Edit - Tasks - Activities")
             ->setSubject($newSubject)
             ->save()
-            ->assertMessage('Task saved')
+            // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
+            ->assertTitle($subject . ' - Tasks - Activities')
             ->toGrid()
             ->assertTitle('Tasks - Activities')
             ->close();

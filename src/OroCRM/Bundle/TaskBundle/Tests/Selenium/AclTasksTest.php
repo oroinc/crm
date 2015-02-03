@@ -70,6 +70,7 @@ class AclTasksTest extends Selenium2TestCase
         $subject = 'Tasks_' . mt_rand();
 
         $login = $this->login();
+
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->add()
@@ -77,7 +78,9 @@ class AclTasksTest extends Selenium2TestCase
             ->setDescription($subject)
             ->setDueDate('Apr 9, 2014 12:51 PM')
             ->save()
-            ->assertMessage('Task saved')
+            ->waitPageToLoad()
+            // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
+            ->assertTitle($subject . ' - Tasks - Activities')
             ->toGrid()
             ->assertTitle('Tasks - Activities');
 
