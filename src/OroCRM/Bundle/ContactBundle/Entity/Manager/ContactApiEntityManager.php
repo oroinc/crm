@@ -51,7 +51,7 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
         }
 
         // dispatch oro_api.request.find.after event
-        $event = new FindAfter($entity);
+        $event = new FindAfter($entity[0]);
         $this->eventDispatcher->dispatch(FindAfter::NAME, $event);
 
         $serialized = $this->entitySerializer->serializeEntities((array)$entity, $this->class, $config);
