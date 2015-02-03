@@ -78,9 +78,8 @@ class AclTasksTest extends Selenium2TestCase
             ->setDescription($subject)
             ->setDueDate('Apr 9, 2014 12:51 PM')
             ->save()
-            ->waitPageToLoad()
             // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
-            ->assertTitle($subject . ' - Tasks - Activities')
+            ->assertTitle("{$subject} - Tasks - Activities")
             ->toGrid()
             ->assertTitle('Tasks - Activities');
 
