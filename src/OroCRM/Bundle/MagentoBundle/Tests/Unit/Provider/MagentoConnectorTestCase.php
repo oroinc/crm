@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
@@ -9,6 +11,7 @@ use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
@@ -27,6 +30,12 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var StepExecution|\PHPUnit_Framework_MockObject_MockObject */
     protected $stepExecutionMock;
 
+    /** @var ManagerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $managerRegistryMock;
+
+    /** @var ChannelRepository|\PHPUnit_Framework_MockObject_MockObject */
+    protected $integrationRepositoryMock;
+
     /** @var array */
     protected $config = [
         'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
@@ -36,9 +45,25 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->transportMock     = $this
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
+
         $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
             ->setMethods(['getExecutionContext'])
             ->disableOriginalConstructor()->getMock();
+
+        $this->managerRegistryMock = $this->getMockBuilder('Doctrine\\Common\\Persistence\\ManagerRegistry')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->integrationRepositoryMock = $this->getMockBuilder(
+            'Oro\\Bundle\\IntegrationBundle\\Entity\\Repository\\ChannelRepository'
+        )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->managerRegistryMock->expects($this->any())
+            ->method('getRepository')
+            ->with('OroIntegrationBundle:Channel')
+            ->will($this->returnValue($this->integrationRepositoryMock));
     }
 
     public function tearDown()
@@ -65,10 +90,11 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $status->setCode($status::STATUS_COMPLETED);
         $status->setConnector($connector->getType());
 
+        $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
+
         $expectedDateInFilter = clone $status->getDate();
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
-        $channel->addStatus($status);
 
         $this->transportMock->expects($this->once())->method('init');
 
@@ -91,7 +117,8 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $status = new Status();
         $status->setCode($status::STATUS_COMPLETED);
         $status->setConnector($connector->getType());
-        $channel->addStatus($status);
+
+        $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
 
         $this->transportMock->expects($this->once())->method('init');
 
@@ -306,7 +333,23 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $logger = new LoggerStrategy(new NullLogger());
 
-        return $this->getConnectorInstance($contextRegistryMock, $logger, $contextMediatorMock);
+        $connector = $this->getConnectorInstance($contextRegistryMock, $logger, $contextMediatorMock);
+        $connector->setManagerRegistry($this->managerRegistryMock);
+
+        return $connector;
+    }
+
+    /**
+     * @param Status $expectedStatus
+     * @param Channel $channel
+     * @param string $connector
+     */
+    protected function expectLastCompletedStatusForConnector($expectedStatus, $channel, $connector)
+    {
+        $this->integrationRepositoryMock->expects($this->once())
+            ->method('getLastStatusForConnector')
+            ->with($channel, $connector, Status::STATUS_COMPLETED)
+            ->will($this->returnValue($expectedStatus));
     }
 
     /**
