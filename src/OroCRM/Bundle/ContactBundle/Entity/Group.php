@@ -11,6 +11,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
 
 /**
  * @ORM\Entity
@@ -41,7 +42,7 @@ use Oro\Bundle\UserBundle\Entity\User;
  *      }
  * )
  */
-class Group
+class Group extends ExtendGroup
 {
     /**
      * @ORM\Id
