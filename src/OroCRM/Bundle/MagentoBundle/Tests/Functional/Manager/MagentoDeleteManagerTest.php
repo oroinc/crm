@@ -31,8 +31,7 @@ class MagentoDeleteManagerTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        $channel = $this->em->getRepository('OroIntegrationBundle:Channel')->findAll();
-        $channel = reset($channel);
+        $channel = $this->getReference('default_channel');
         if (!$channel) {
             $this->markTestIncomplete('Invalid fixtures, unable to perform test case');
         }
