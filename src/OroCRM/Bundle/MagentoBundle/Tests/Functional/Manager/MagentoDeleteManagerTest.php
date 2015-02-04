@@ -31,8 +31,7 @@ class MagentoDeleteManagerTest extends WebTestCase
 
     protected function postFixtureLoad()
     {
-        $channel = $this->em->getRepository('OroIntegrationBundle:Channel')->findAll();
-        $channel = reset($channel);
+        $channel = $this->getReference('default_channel');
         if (!$channel) {
             $this->markTestIncomplete('Invalid fixtures, unable to perform test case');
         }
@@ -42,17 +41,21 @@ class MagentoDeleteManagerTest extends WebTestCase
 
     public function testDeleteChannel()
     {
-        $channel   = $this->em->find('OroIntegrationBundle:Channel', self::$channelId);
-        $channelId = $channel->getId();
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $channel));
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $channel));
-        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $channel));
+        $channel   = $this->em->find('OroCRMChannelBundle:Channel', self::$channelId);
+
+        $integration = $channel->getDataSource();
+
+        $integrationId = $integration->getId();
+
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $integration));
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $integration));
+        $this->assertGreaterThan(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $integration));
         $this->client->getKernel()->getContainer()->get('oro_integration.delete_manager')->delete(
-            $channel
+            $integration
         );
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $channelId));
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $channelId));
-        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $channelId));
+        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Cart', $integrationId));
+        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Order', $integrationId));
+        $this->assertEquals(0, $this->getRecordsCount('OroCRMMagentoBundle:Website', $integrationId));
     }
 
     /**
