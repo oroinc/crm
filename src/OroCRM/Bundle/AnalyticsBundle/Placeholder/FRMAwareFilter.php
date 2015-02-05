@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Placeholder;
 
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class FRMAwareFilter
@@ -31,6 +32,27 @@ class FRMAwareFilter
 
         $customerIdentity = $entity->getCustomerIdentity();
 
-        return in_array($this->interface, class_implements($customerIdentity));
+        return in_array($this->interface, class_implements($customerIdentity), true);
+    }
+
+    /**
+     * @param Channel $entity
+     *
+     * @return bool
+     */
+    public function isViewApplicable($entity)
+    {
+        $isApplicable = $this->isApplicable($entity);
+
+        if ($isApplicable) {
+            $data = $entity->getData();
+            if (empty($data[RFMAwareInterface::RFM_STATE_KEY])) {
+                return false;
+            }
+
+            return filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN);
+        }
+
+        return $isApplicable;
     }
 }
