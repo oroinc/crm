@@ -2,21 +2,20 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Command;
 
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\FormatterHelper;
 use Symfony\Component\Console\Helper\ProgressHelper;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
+use OroCRM\Bundle\AnalyticsBundle\Model\StateManager;
 
 class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCommandInterface
 {
@@ -59,7 +58,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         $progress = $this->getHelper('progress');
 
         $channel = $input->getOption('channel');
-        $ids     = $input->getOption('ids');
+        $ids = $input->getOption('ids');
 
         if (!$channel && $ids) {
             $output->writeln('<error>Option "ids" does not work without "channel"</error>');
@@ -67,40 +66,72 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             return;
         }
 
-        foreach ($this->getChannels($channel) as $channel) {
-            $count        = 0;
-            $identityFQCN = $channel->getCustomerIdentity();
+        if ($this->getStateManager()->getJob()) {
+            $output->writeln('<error>Job already running. Terminating....</error>');
 
-            $em       = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
+            return;
+        }
+
+        if ($channel && $this->getStateManager()->getJob(sprintf('--channel=%s', $channel))) {
+            $output->writeln('<error>Job already running. Terminating....</error>');
+
+            return;
+        }
+
+        $channels = $this->getChannels($channel);
+        foreach ($channels as $channel) {
+            $output->writeln($formatter->formatSection('Process', sprintf('Channel: %s', $channel->getName())));
+
             $entities = $this->getEntitiesByChannel($channel, $ids);
 
             if ($input->isInteractive()) {
                 $progress->start($output, $entities->count());
             }
-            $output->writeln($formatter->formatSection('Process', sprintf('Channel: %s', $channel->getName())));
-            foreach ($entities as $k => $entity) {
-                if ($input->isInteractive()) {
-                    $progress->advance();
-                }
 
-                if ($this->getAnalyticBuilder()->build($entity)) {
-                    $count++;
-                }
-
-                if (($k + 1) % self::BATCH_SIZE === 0) {
-                    $em->flush();
-                    $em->clear();
-                }
-            }
-
-            $em->flush();
-            $em->clear();
+            $count = $this->processChannel($channel, $entities, $input, $progress);
 
             if ($input->isInteractive()) {
                 $progress->finish();
             }
             $output->writeln($formatter->formatSection('Done', sprintf('%s/%s updated.', $count, $entities->count())));
         }
+    }
+
+    /**
+     * @param Channel                     $channel
+     * @param BufferedQueryResultIterator $entities
+     * @param InputInterface              $input
+     * @param ProgressHelper              $progress
+     *
+     * @return int
+     */
+    protected function processChannel($channel, BufferedQueryResultIterator $entities, InputInterface $input, ProgressHelper $progress)
+    {
+        $count = 0;
+        $identityFQCN = $channel->getCustomerIdentity();
+
+        $em = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
+
+
+        foreach ($entities as $k => $entity) {
+            if ($input->isInteractive()) {
+                $progress->advance();
+            }
+
+            if ($this->getAnalyticBuilder()->build($entity)) {
+                $count++;
+            }
+
+            if (($k + 1) % self::BATCH_SIZE === 0) {
+                $em->flush();
+                $em->clear();
+            }
+        }
+
+        $em->flush();
+        $em->clear();
+
+        return $count;
     }
 
     /**
@@ -129,11 +160,8 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             new BufferedQueryResultIterator($qb),
             function (Channel $channel) use ($analyticsInterface) {
                 $identityFQCN = $channel->getCustomerIdentity();
-                $data         = $channel->getData();
 
-                return
-                    is_a($identityFQCN, $analyticsInterface, true)
-                    && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
+                return is_a($identityFQCN, $analyticsInterface, true);
             }
         );
     }
@@ -144,7 +172,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      *
      * @return BufferedQueryResultIterator|CustomerIdentity[]
      */
-    protected function getEntitiesByChannel(Channel $channel, $ids = [])
+    protected function getEntitiesByChannel(Channel $channel, array $ids = [])
     {
         $entityFQCN = $channel->getCustomerIdentity();
 
@@ -181,5 +209,13 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function getDoctrineHelper()
     {
         return $this->getContainer()->get('oro_entity.doctrine_helper');
+    }
+
+    /**
+     * @return StateManager
+     */
+    protected function getStateManager()
+    {
+        return $this->getContainer()->get('orocrm_analytics.model.state_manager');
     }
 }
