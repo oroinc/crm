@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 use Oro\Bundle\TestFrameworkBundle\Pages\Workflow;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 /**
  * Class Task
@@ -41,8 +42,6 @@ class Task extends AbstractPageEntity
     {
         $this->subject = $this->test->byId('orocrm_task_subject');
         $this->description = $this->test->byId('orocrm_task_description');
-        $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
-        $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
 
         return $this;
     }
@@ -73,6 +72,8 @@ class Task extends AbstractPageEntity
 
     public function setDueDate($dueDate)
     {
+        $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
+        $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
         $this->dueDate->clear();
         $this->dueTime->clear();
         if (preg_match('/^(.+)\s(\d{2}\:\d{2}\s\w{2})$/', $dueDate, $dueDate)) {
@@ -90,12 +91,16 @@ class Task extends AbstractPageEntity
                     'args' => array()
                 )
             );
+        } else {
+            throw new Exception('Value "' + $dueDate + '" is not a valid date');
         }
         return $this;
     }
 
     public function getDueDate()
     {
+        $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
+        $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
         return $this->dueDate->value() . ' ' . $this->dueTime->value();
     }
 

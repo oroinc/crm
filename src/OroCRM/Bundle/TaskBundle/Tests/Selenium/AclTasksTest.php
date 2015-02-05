@@ -63,6 +63,8 @@ class AclTasksTest extends Selenium2TestCase
     }
 
     /**
+     * @depends testCreateUser
+     * @depends testCreateRole
      * @return string
      */
     public function testCreateTask()
