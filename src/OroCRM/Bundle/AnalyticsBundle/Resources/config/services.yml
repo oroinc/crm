@@ -18,6 +18,7 @@ parameters:
 
     orocrm_analytics.validator.categories.class: OroCRM\Bundle\AnalyticsBundle\Validator\CategoriesValidator
 
+    orocrm_analytics.model.state_manager.class: OroCRM\Bundle\AnalyticsBundle\Model\StateManager
     orocrm_analytics.model.rfm_state_manager.class: OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager
 services:
     orocrm_analytics.builder:
@@ -67,6 +68,11 @@ services:
         class: %orocrm_analytics.validator.categories.class%
         tags:
             - { name: validator.constraint_validator, alias: orocrm_analytics.categories_validator }
+
+    orocrm_analytics.model.state_manager:
+        class: %orocrm_analytics.model.state_manager.class%
+        arguments:
+            - @oro_entity.doctrine_helper
 
     orocrm_analytics.model.rfm_state_manager:
         class: %orocrm_analytics.model.rfm_state_manager.class%

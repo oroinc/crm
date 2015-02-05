@@ -9,13 +9,8 @@ use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class RFMMetricStateManager
+class RFMMetricStateManager extends StateManager
 {
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
     /**
      * @var string
      */
@@ -33,7 +28,8 @@ class RFMMetricStateManager
      */
     public function __construct(DoctrineHelper $doctrineHelper, $interface, $channelClass)
     {
-        $this->doctrineHelper = $doctrineHelper;
+        parent::__construct($doctrineHelper);
+
         $this->interface = $interface;
         $this->channelClass = $channelClass;
     }
@@ -60,7 +56,7 @@ class RFMMetricStateManager
                 continue;
             }
 
-            if (!in_array($this->interface, class_implements($customerIdentity))) {
+            if (!in_array($this->interface, class_implements($customerIdentity), true)) {
                 continue;
             }
 
@@ -109,7 +105,7 @@ class RFMMetricStateManager
         if ($channel) {
             $isActiveChannel = $channel->getStatus() === Channel::STATUS_ACTIVE;
             $channelData = $channel->getData();
-            $rfmEnabled = !empty($channelData['rfm_enabled']);
+            $rfmEnabled = !empty($channelData[RFMAwareInterface::RFM_STATE_KEY]);
 
             if (!$isActiveChannel || !$rfmEnabled) {
                 return;
@@ -122,7 +118,7 @@ class RFMMetricStateManager
 
         $args = [];
         if ($channel) {
-            $argument  = sprintf('--channel=%s', $channel->getId());
+            $argument = sprintf('--channel=%s', $channel->getId());
             $channelJob = $this->getJob($argument);
             if ($channelJob) {
                 return;
@@ -146,43 +142,5 @@ class RFMMetricStateManager
 
         $em->persist($job);
         $em->flush($job);
-    }
-
-    /**
-     * @param string $args
-     *
-     * @return Job[]
-     */
-    protected function getJob($args = null)
-    {
-        $qb = $this->doctrineHelper
-            ->getEntityRepository('JMSJobQueueBundle:Job')
-            ->createQueryBuilder('j');
-
-        $qb
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('j.command', ':command'),
-                    $qb->expr()->eq('j.state', ':state')
-                )
-            )
-            ->setParameters(
-                [
-                    'command' => CalculateAnalyticsCommand::COMMAND_NAME,
-                    'state' => Job::STATE_PENDING
-                ]
-            );
-
-        if ($args) {
-            $qb
-                ->andWhere($qb->expr()->like('j.args', ':args'))
-                ->setParameter('args', '%' . $args . '%');
-        } else {
-            $qb
-                ->andWhere($qb->expr()->notLike('j.args', ':args'))
-                ->setParameter('args', '%--channel%');
-        }
-
-        return $qb->getQuery()->getResult();
     }
 }
