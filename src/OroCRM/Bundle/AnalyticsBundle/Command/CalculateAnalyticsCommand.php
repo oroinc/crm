@@ -72,7 +72,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             return;
         }
 
-        if ($channel && $this->getStateManager()->getJob(sprintf('--channel=%s', $channel))) {
+        if ($channel && !$ids && $this->getStateManager()->getJob(sprintf('--channel=%s', $channel))) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
             return;
@@ -105,13 +105,16 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      *
      * @return int
      */
-    protected function processChannel($channel, BufferedQueryResultIterator $entities, InputInterface $input, ProgressHelper $progress)
-    {
+    protected function processChannel(
+        $channel,
+        BufferedQueryResultIterator $entities,
+        InputInterface $input,
+        ProgressHelper $progress
+    ) {
         $count = 0;
         $identityFQCN = $channel->getCustomerIdentity();
 
         $em = $this->getDoctrineHelper()->getEntityManager($identityFQCN);
-
 
         foreach ($entities as $k => $entity) {
             if ($input->isInteractive()) {
