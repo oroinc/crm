@@ -43,7 +43,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
     {
         $type = $provider->getType();
 
-        if (!in_array($type, RFMMetricCategory::$types)) {
+        if (!in_array($type, RFMMetricCategory::$types, true)) {
             throw new \InvalidArgumentException(
                 sprintf('Expected one of "%s" type, "%s" given', implode(',', RFMMetricCategory::$types), $type)
             );
@@ -84,6 +84,10 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         $data = $channel->getData();
         if (empty($data[RFMAwareInterface::RFM_STATE_KEY])) {
+            return $status;
+        }
+
+        if (!filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN)) {
             return $status;
         }
 
