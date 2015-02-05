@@ -77,7 +77,19 @@ class Task extends AbstractPageEntity
         $this->dueTime->clear();
         if (preg_match('/^(.+)\s(\d{2}\:\d{2}\s\w{2})$/', $dueDate, $dueDate)) {
             $this->dueDate->value($dueDate[1]);
+            $this->test->execute(
+                array(
+                    'script' => "$('#date_selector_orocrm_task_dueDate').trigger('change')",
+                    'args' => array()
+                )
+            );
             $this->dueTime->value($dueDate[2]);
+            $this->test->execute(
+                array(
+                    'script' => "$('#time_selector_orocrm_task_dueDate').trigger('change')",
+                    'args' => array()
+                )
+            );
         }
         return $this;
     }
