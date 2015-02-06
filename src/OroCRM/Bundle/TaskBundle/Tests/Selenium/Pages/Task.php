@@ -79,18 +79,20 @@ class Task extends AbstractPageEntity
         if (preg_match('/^(.+)\s(\d{2}\:\d{2}\s\w{2})$/', $dueDate, $dueDate)) {
             $this->test->execute(
                 array(
-                    'script' => "$('#date_selector_orocrm_task_dueDate').val('$dueDate[1]');$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
+                    'script' => "$('#date_selector_orocrm_task_dueDate').val('$dueDate[1]');" .
+                        "$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
                     'args' => array()
                 )
             );
             $this->test->execute(
                 array(
-                    'script' => "$('#time_selector_orocrm_task_dueDate').val('$dueDate[2]');$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
+                    'script' => "$('#time_selector_orocrm_task_dueDate').val('$dueDate[2]');" .
+                        "$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
                     'args' => array()
                 )
             );
         } else {
-            throw new Exception('Value "' + $dueDate + '" is not a valid date');
+            throw new Exception("Value {$dueDate} is not a valid date");
         }
 
         return $this;
