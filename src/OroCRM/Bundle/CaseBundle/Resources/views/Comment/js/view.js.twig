@@ -27,6 +27,9 @@
         </div>
         <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
             <div class="message">
+                <% if (!public) { %>
+                    <i class="private-mark"><%= _.__("orocrm.case.private") %>:</i>
+                <% } %>
                 <%= message %>
                 <% if (updatedBy) { %>
                     <div class="details">
