@@ -33,7 +33,7 @@ class RFMAwareFilter
 
         $customerIdentity = $entity->getCustomerIdentity();
 
-        return in_array($this->interface, class_implements($customerIdentity));
+        return in_array($this->interface, class_implements($customerIdentity), true);
     }
 
     /**
@@ -46,8 +46,12 @@ class RFMAwareFilter
         $isApplicable = $this->isApplicable($entity);
 
         if ($isApplicable) {
-            $data         = $entity->getData();
-            $isApplicable = $isApplicable && !empty($data[RFMAwareInterface::RFM_STATE_KEY]);
+            $data = $entity->getData();
+            if (empty($data[RFMAwareInterface::RFM_STATE_KEY])) {
+                return false;
+            }
+
+            return filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN);
         }
 
         return $isApplicable;
