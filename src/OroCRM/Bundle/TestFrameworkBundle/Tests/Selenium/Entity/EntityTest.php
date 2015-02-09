@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Entity;
 
+use Oro\Bundle\EntityConfigBundle\Tests\Selenium\Pages\ConfigEntities;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 
 /**
@@ -16,12 +17,14 @@ class EntityTest extends Selenium2TestCase
         $entityName = 'Account';
         $fieldName = 'test_field' . mt_rand();
         $login = $this->login();
+        /** @var  ConfigEntities $login*/
         $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
             ->assertTitle('Entity Management - Entities - System')
             ->open(array($entityName))
             ->assertTitle("{$entityName} - Entity Management - Entities - System")
             ->createField()
             ->setFieldName($fieldName)
+            ->setStorageType('Table column')
             ->setType('String')
             ->proceed()
             ->save()
