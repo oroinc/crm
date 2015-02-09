@@ -9,7 +9,7 @@ define([
 
     CommentView = NoteView.extend({
         /**
-         * Defines class name for root element
+         * Returns class name for root element
          * @returns {string}
          */
         className: function () {
