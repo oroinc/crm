@@ -6,9 +6,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Component\Layout\LayoutManipulatorInterface;
-use Oro\Component\Layout\LayoutUpdateInterface;
 
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
+use Oro\Bundle\EmbeddedFormBundle\Manager\LayoutUpdateInterface;
 
 class ContactRequestType extends AbstractType implements EmbeddedFormInterface, LayoutUpdateInterface
 {
