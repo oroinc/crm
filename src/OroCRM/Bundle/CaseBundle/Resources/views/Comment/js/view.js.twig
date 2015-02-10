@@ -33,14 +33,13 @@
                         <div>
                             <%= _.template(
                                 {{ 'orocrm.case.casecomment.message.updated_by'|trans|json_encode|raw }},
-                                {
-                                    user: updatedBy.url
-                                        ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
-                                        : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
-                                    date: '<i class="date">' + updatedAt + '</i>'
-                                },
                                 { interpolate: /\{\{(.+?)\}\}/g }
-                            ) %>
+                            )({
+                                user: updatedBy.url
+                                    ? '<a class="user" href="' + updatedBy.url + '">' + _.escape(updatedBy.fullName) + '</a>'
+                                    : (updatedBy ? '<i class="user">' + _.escape(updatedBy) + '</i>' : ''),
+                                date: '<i class="date">' + updatedAt + '</i>'
+                            }) %>
                         </div>
                     </div>
                 <% } %>
