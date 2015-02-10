@@ -45,8 +45,8 @@ define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oro
                     loadingMask.show();
 
                     $.get(url, function (content) {
-                        view.$el.html(view.template({'content': content}));
                         loadingMask.dispose();
+                        view.$el.html(view.template({'content': content}));
                     });
                 }
             }),
