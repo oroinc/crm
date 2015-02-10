@@ -96,6 +96,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     {
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
         $contactCount = count($contacts);
+        $heads = [];
 
         for ($i = 0; $i < 100; ++$i) {
             $contactRandom = rand(0, $contactCount - 1);
@@ -126,6 +127,14 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             );
             $email->setEmailBody($emailBody);
             $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
+            $thread = $this->templates[$randomTemplate]['Thread-ID'];
+            if ($thread) {
+                $email->setThreadId($thread);
+                if (!in_array($thread, $heads)) {
+                    $email->setIsHead(1);
+                    $heads[] = $thread;
+                }
+            }
 
             $this->emailEntityBuilder->getBatch()->persist($om);
         }

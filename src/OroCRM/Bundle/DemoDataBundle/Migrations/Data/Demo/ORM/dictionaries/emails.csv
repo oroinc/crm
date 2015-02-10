@@ -1,4 +1,4 @@
-Subject,Text, X-Thread-ID
+Subject,Text,Thread-ID
 My Web Store Introduction, "Thank you for signing up to My Web Store!  Feel free to take our product tour on our homepage.  We look forward to working with you.",
 Account Confirmation, "This email is to confirm your new account with us at My Web Store.  Click on this link www.confirmationwebstore.com to activate your account.",
 BBQ Grill - Order Follow Up, "I'm just following up to see how you have enjoyed your new gas BBQ grill.  We hope the product is to your satisfaction.  Please let me know if you have any issues or questions.",
@@ -13,9 +13,9 @@ Order Follow Up - New iPad, "I'm just following up to see how you have enjoyed y
 Other Items Related to Your Purchase, "After your purchase of the new Alienware D243 laptop, here are a few other items that you might find interesting: Dell Handset, Sony 1TB hard drive, and a HP 24" monitor.  I am pleased to offer each of these items at a 10% discount if you order within the next 3 days.",
 Questions about your product?, "It looks like you received your order of office chairs last Thursday.  Did you have any questions or issues with the product since? Let me know if the chairs meet your expectations!",
 Order Delivery Confirmation, "Thank you for your purchase!  You will receive your product in the mail within the next 3-5 business days.  Don't hesitate to follow up with me if you have any questions.",
-Marketing Discussion, "Let's get on a call this Wednesday to discuss how we can improve our joint marketing efforts.  What time works best for you?", 001a11c3c516277b5d050db49c71
-"Re: Marketing Discussion", "How about Thursday?", 001a11c3c516277b5d050db49c71
-10% Discount on Cart Items, "We noticed that you had left a few items in your shopping cart last week.  If you order in the next two weeks, we will give you a 15% discount on your total purchase of these items.  Your coupon code is: SEU388",
-Products related to your recent purchase - Zildjian Drumset, "I hope you are enjoying your new drumset from Zildjian!  Here are a few other products you might enjoy as well: Vic Firth collector's sticks, Zildjian Crash Cymbal, bass pedal.",
-New Leads, "I have added a list of about 45 new leads.  Can you reach out to them today to follow up?  Please let me know if you have any questions!",
+Marketing Discussion, "Let's get on a call this Wednesday to discuss how we can improve our joint marketing efforts.  What time works best for you?", 5a105e8b9d40e1329780d62ea2265d8a
+"Re: Marketing Discussion", "How about Thursday?", 5a105e8b9d40e1329780d62ea2265d8a
+10% Discount on Cart Items, "We noticed that you had left a few items in your shopping cart last week.  If you order in the next two weeks, we will give you a 15% discount on your total purchase of these items.  Your coupon code is: SEU388", ad0234829205b9033196ba818f7a872b
+Products related to your recent purchase - Zildjian Drumset, "I hope you are enjoying your new drumset from Zildjian!  Here are a few other products you might enjoy as well: Vic Firth collector's sticks, Zildjian Crash Cymbal, bass pedal.", 8ad8757baa8564dc136c1e07507f4a98
+New Leads, "I have added a list of about 45 new leads.  Can you reach out to them today to follow up?  Please let me know if you have any questions!", 86985e105f79b95d6bc918fb45ec7727
 How did you like your new sparring gear?, "I hope you have enjoyed your new sparring gear!  Has it met your expectations?  Let us know how you like it and we will enter you into a",
