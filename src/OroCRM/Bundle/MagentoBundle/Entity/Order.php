@@ -12,6 +12,8 @@ use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
@@ -59,7 +61,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends ExtendOrder implements ChannelAwareInterface
+class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInterface, LastNameInterface
 {
     const STATUS_CANCELED = 'canceled';
 
