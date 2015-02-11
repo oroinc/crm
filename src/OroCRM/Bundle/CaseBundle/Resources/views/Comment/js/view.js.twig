@@ -16,6 +16,9 @@
                 <span class="details">
                     <i class="date"><%= createdAt %></i>
                 </span>
+                <% if (!public) { %>
+                    <span class="label"><%= _.__("orocrm.case.private") %></span>
+                <% } %>
             </div>
             <div class="message-item">
                 <div class="message"><%= briefMessage %></div>
