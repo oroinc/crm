@@ -23,7 +23,7 @@ class RFMMetricStateManagerTest extends WebTestCase
 
     public function tearDown()
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em       = $this->getContainer()->get('doctrine')->getManager();
         $entities = $em
             ->getRepository('JMS\JobQueueBundle\Entity\Job')
             ->findAll();
@@ -32,7 +32,7 @@ class RFMMetricStateManagerTest extends WebTestCase
             $em->remove($entity);
         }
 
-        $em->flush();
+        $em->flush($entities);
     }
 
     public function testResetChannelMetrics()
@@ -252,5 +252,52 @@ class RFMMetricStateManagerTest extends WebTestCase
         }
 
         $this->assertCount(1, $entities);
+    }
+
+    public function testTerminateIfScheduled()
+    {
+        $this->assertFalse($this->getContainer()->get('orocrm_analytics.model.state_manager')->isJobRunning());
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+
+        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME);
+        $em  = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityManager($job);
+        $em->persist($job);
+        $em->flush($job);
+
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('Job already running. Terminating', $output);
+    }
+
+    public function testTerminateIfRunning()
+    {
+        $this->assertFalse($this->getContainer()->get('orocrm_analytics.model.state_manager')->isJobRunning());
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+
+        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME);
+        $em  = $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityManager($job);
+        $em->persist($job);
+
+        $jobs = $this->getContainer()->get('orocrm_analytics.model.state_manager')->getJob();
+        /** @var Job $job */
+        foreach ($jobs as $job) {
+            $job->setState(Job::STATE_RUNNING);
+            $em->persist($job);
+        }
+        $jobs[] = $job;
+        $em->flush($jobs);
+
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('Job already running. Terminating', $output);
+    }
+
+    public function testRunSuccess()
+    {
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('[Process] Channel: Magento channel', $output);
+        $this->assertContains('[Done]', $output);
     }
 }
