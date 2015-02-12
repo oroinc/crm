@@ -131,7 +131,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             if ($thread) {
                 $email->setThreadId($thread);
                 if (!in_array($thread, $heads)) {
-                    $email->setIsHead(1);
+                    $email->setHead(1);
                     $heads[] = $thread;
                 }
             }
