@@ -22,6 +22,9 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     const BATCH_SIZE   = 200;
     const COMMAND_NAME = 'oro:cron:analytic:calculate';
 
+    const STATE_FAILED = -1;
+    const STATE_SUCCESS = 1;
+
     /**
      * {@inheritdoc}
      */
@@ -63,19 +66,19 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         if (!$channel && $ids) {
             $output->writeln('<error>Option "ids" does not work without "channel"</error>');
 
-            return;
+            return self::STATE_FAILED;
         }
 
-        if ($this->getStateManager()->getJob()) {
+        if ($this->getStateManager()->isJobRunning()) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
-            return;
+            return self::STATE_FAILED;
         }
 
-        if ($channel && !$ids && $this->getStateManager()->getJob(sprintf('--channel=%s', $channel))) {
+        if ($channel && !$ids && $this->getStateManager()->isJobRunning(sprintf('--channel=%s', $channel))) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
-            return;
+            return self::STATE_FAILED;
         }
 
         $channels = $this->getChannels($channel);
@@ -95,6 +98,8 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             }
             $output->writeln($formatter->formatSection('Done', sprintf('%s/%s updated.', $count, $entities->count())));
         }
+
+        return self::STATE_SUCCESS;
     }
 
     /**
