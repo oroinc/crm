@@ -71,7 +71,7 @@ datagrid:
         filters:
             columns:
                 caseNumber:
-                    type: string
+                    type: number
                     data_name: caseEntity.id
                 subject:
                     type: string
