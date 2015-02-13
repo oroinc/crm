@@ -24,10 +24,11 @@ class StateManager
 
     /**
      * @param string $args
+     * @param array $states
      *
      * @return Job[]
      */
-    public function getJob($args = null)
+    public function getJob($args = null, array $states = [])
     {
         $qb = $this->doctrineHelper
             ->getEntityRepository('JMSJobQueueBundle:Job')
@@ -43,7 +44,7 @@ class StateManager
             ->setParameters(
                 [
                     'command' => CalculateAnalyticsCommand::COMMAND_NAME,
-                    'states' => [Job::STATE_PENDING, Job::STATE_RUNNING]
+                    'states' => $states ?: [Job::STATE_PENDING]
                 ]
             );
 
@@ -58,5 +59,15 @@ class StateManager
         }
 
         return $qb->getQuery()->getResult();
+    }
+
+    /**
+     * @param string $args
+     *
+     * @return bool
+     */
+    public function isJobRunning($args = null)
+    {
+        return count($this->getJob($args, [Job::STATE_PENDING, Job::STATE_RUNNING])) > 1;
     }
 }
