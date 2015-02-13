@@ -297,7 +297,7 @@ class RFMMetricStateManagerTest extends WebTestCase
     public function testRunSuccess()
     {
         $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
-        $this->assertContains('[Process] Channel: Magento channel', $output);
+        $this->assertContains('[Process] Channel:', $output);
         $this->assertContains('[Done]', $output);
     }
 }
