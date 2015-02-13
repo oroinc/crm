@@ -66,13 +66,13 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
             return;
         }
 
-        if ($this->getStateManager()->getJob()) {
+        if ($this->getStateManager()->isJobRunning()) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
             return;
         }
 
-        if ($channel && !$ids && $this->getStateManager()->getJob(sprintf('--channel=%s', $channel))) {
+        if ($channel && !$ids && $this->getStateManager()->isJobRunning(sprintf('--channel=%s', $channel))) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
             return;
