@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\Form\Test\TypeTestCase;
 
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
@@ -43,9 +42,6 @@ class ContactRequestTypeTest extends TypeTestCase
 
         $this->assertNotEmpty($this->formType->getDefaultSuccessMessage());
         $this->assertInternalType('string', $this->formType->getDefaultSuccessMessage());
-
-        $this->assertNotEmpty($this->formType->getFormLayout());
-        $this->assertInternalType('string', $this->formType->getFormLayout());
     }
 
     public function testBuildForm()
