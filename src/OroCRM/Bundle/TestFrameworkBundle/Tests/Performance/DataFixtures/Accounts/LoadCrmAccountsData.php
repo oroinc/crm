@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -34,65 +35,47 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
 
     protected $maxRecords;
 
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var Account Manager
-     */
+    /** @var Account Manager */
     protected $accountManager;
 
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $accountRepository;
 
-    /**
-     * @var EntityManager
-     */
+    /** @var EntityManager */
     protected $contactManager;
 
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $contactRepository;
 
-    /**
-     * @var UserManager
-     */
+    /** @var UserManager */
     protected $userManager;
 
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $userRepository;
 
-    /**
-     * @var EntityRepository
-     */
+    /** @var EntityRepository */
     protected $countryRepository;
 
-    /**
-     * @var Group[]
-     */
+    /** @var Group[] */
     protected $contactGroups;
 
-    /**
-     * @var Source[]
-     */
+    /** @var Source[] */
     protected $contactSources;
 
-    /**
-     * @var User[]
-     */
+    /** @var User[] */
     protected $users;
 
-    /**
-     * @var Country[]
-     */
+    /** @var Country[] */
     protected $countries;
+
+    /** @var EntityManager */
+    protected $organizationManager;
+
+    /** @var  Organization */
+    protected $organization;
 
     /**
      * {@inheritDoc}
@@ -108,13 +91,12 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         }
 
         $this->accountManager = $container->get('doctrine.orm.entity_manager');
-        $this->accountRepository = $this->accountManager->getRepository('OroCRMAccountBundle:Account');
 
         $this->contactManager = $container->get('doctrine.orm.entity_manager');
-        $this->contactRepository = $this->contactManager->getRepository('OroCRMContactBundle:Contact');
 
         $this->userManager = $container->get('oro_user.manager');
-        $this->userRepository = $this->userManager->getRepository();
+
+        $this->organizationManager = $container->get('doctrine')->getManager();
 
         $this->initSupportingEntities();
     }
@@ -130,6 +112,11 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
         $userStorageManager = $this->userManager->getStorageManager();
         $this->users = $userStorageManager->getRepository('OroUserBundle:User')->findAll();
         $this->countries = $userStorageManager->getRepository('OroAddressBundle:Country')->findAll();
+
+        $this->organization = $this->organizationManager
+            ->getRepository('OroOrganizationBundle:Organization')
+            ->getFirst();
+
     }
 
     /**
@@ -174,11 +161,13 @@ class LoadCrmAccountsData extends AbstractFixture implements ContainerAwareInter
                     $contact->setAssignedTo($user);
                     $contact->setReportsTo($contact);
                     $contact->setOwner($user);
+                    $contact->setOrganization($this->organization);
 
                     $source = $this->contactSources[rand(0, count($this->contactSources)-1)];
                     $contact->setSource($source);
 
                     $account->setOwner($user);
+                    $account->setOrganization($this->organization);
 
                     $this->persist($this->accountManager, $account);
                     $this->contactManager->persist($contact);

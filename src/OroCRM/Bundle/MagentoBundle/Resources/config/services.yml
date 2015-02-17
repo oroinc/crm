@@ -26,6 +26,7 @@ parameters:
 
     # event listeners
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
+    orocrm_magento.event_listener.customer_currency.class:                  OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
@@ -160,10 +161,17 @@ services:
         lazy: true
 
     # event listeners
+    orocrm_magento.event_listener.customer_currency:
+        class: %orocrm_magento.event_listener.customer_currency.class%
+        calls:
+            - [setContainer, ["@service_container"]]
+        tags:
+            - { name: doctrine.event_listener, event: prePersist }
+
     orocrm_magento.event_listener.order:
         class: %orocrm_magento.event_listener.order.class%
         tags:
-            - { name: doctrine.event_listener, event: postPersist }
+            - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postFlush }
 

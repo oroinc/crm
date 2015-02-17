@@ -16,16 +16,12 @@
                             ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
                             : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
                         %>
-                        <%= _.template(
-                            template,
-                            {
-                                user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
-                                date: '<i class="date">' + createdAt + '</i>',
-                                editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
-                                editor_date: '<i class="date">' + updatedAt + '</i>'
-                            },
-                            { interpolate: /\{\{(.+?)\}\}/g }
-                        ) %>
+                        <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
+                            user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
+                            date: '<i class="date">' + createdAt + '</i>',
+                            editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
+                            editor_date: '<i class="date">' + updatedAt + '</i>'
+                        }) %>
                     </span>
                     <span class="comment-count"<% if (!commentCount) { %> style="display:none"<% } %>
                           title="<%= _.__('oro.activitylist.comment.quantity_label') %>">

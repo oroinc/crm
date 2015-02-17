@@ -42,9 +42,9 @@ class RFMCategoryController extends Controller
     public function channelViewAction(Channel $channel)
     {
         $rfmCategories = [
-            RFMMetricCategory::TYPE_RECENCY => $this->getCategoriesByType(RFMMetricCategory::TYPE_RECENCY),
-            RFMMetricCategory::TYPE_FREQUENCY => $this->getCategoriesByType(RFMMetricCategory::TYPE_FREQUENCY),
-            RFMMetricCategory::TYPE_MONETARY => $this->getCategoriesByType(RFMMetricCategory::TYPE_MONETARY),
+            RFMMetricCategory::TYPE_RECENCY => $this->getCategories($channel, RFMMetricCategory::TYPE_RECENCY),
+            RFMMetricCategory::TYPE_FREQUENCY => $this->getCategories($channel, RFMMetricCategory::TYPE_FREQUENCY),
+            RFMMetricCategory::TYPE_MONETARY => $this->getCategories($channel, RFMMetricCategory::TYPE_MONETARY)
         ];
 
         return [
@@ -55,13 +55,14 @@ class RFMCategoryController extends Controller
     }
 
     /**
+     * @param Channel $channel
      * @param string $type
      * @return array
      */
-    protected function getCategoriesByType($type)
+    protected function getCategories(Channel $channel, $type)
     {
         return $this->getRFMMetricCategoryRepository()
-            ->getCategories($this->get('oro_security.acl_helper'), $type);
+            ->getCategoriesByChannel($this->get('oro_security.acl_helper'), $channel, $type);
     }
 
     /**

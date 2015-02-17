@@ -17,7 +17,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
      *
      * @dataProvider dataProvider
      */
-    public function testCommand(array $parameters, array $expects, array $notContains = [])
+    public function testCommand(array $parameters, array $expects = [], array $notContains = [])
     {
         $this->resetClient();
         $this->initClient();
@@ -58,13 +58,10 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                 [
                     '--channel' => 'Channel.CustomerIdentity',
                 ],
+                [],
                 [
-                    'CustomerIdentityChannel skipped',
-                    'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity does not implements',
-                ],
-                [
-                    'processing',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
+                    '[Process]',
+                    '[Done]',
                 ]
             ],
             'supported channel' => [
@@ -72,26 +69,8 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                     '--channel' => 'Channel.CustomerChannel',
                 ],
                 [
-                    'CustomerChannel processing',
-                    'Done. 2/2 updated',
-                ],
-                [
-                    'skipped',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
-                ]
-            ],
-            'verbose supported' => [
-                [
-                    '--channel' => 'Channel.CustomerChannel',
-                    '-v' => true,
-                ],
-                [
-                    'CustomerChannel processing',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
-                    'Done. 2/2 updated',
-                ],
-                [
-                    'skipped',
+                    '[Process] Channel: CustomerChannel',
+                    '[Done] 2/2 updated.',
                 ]
             ],
             'non existing id' => [
@@ -100,12 +79,8 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                     '--ids' => 42,
                 ],
                 [
-                    'CustomerChannel processing',
-                    'Done. 0/0 updated',
-                ],
-                [
-                    'skipped',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
+                    '[Process] Channel: CustomerChannel',
+                    '[Done] 0/0 updated.',
                 ]
             ],
             'existing entity' => [
@@ -114,12 +89,8 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                     '--ids' => 'Channel.CustomerChannel.Customer',
                 ],
                 [
-                    'CustomerChannel processing',
-                    'Done. 1/1 updated',
-                ],
-                [
-                    'skipped',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
+                    '[Process] Channel: CustomerChannel',
+                    '[Done] 1/1 updated.',
                 ]
             ],
             'ids with wrong channel' => [
@@ -127,13 +98,10 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                     '--channel' => 'Channel.CustomerIdentity',
                     '--ids' => 'Channel.CustomerChannel.Customer',
                 ],
+                [],
                 [
-                    'CustomerIdentityChannel skipped',
-                    'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity does not implements',
-                ],
-                [
-                    'processing',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
+                    '[Process]',
+                    '[Done]',
                 ]
             ],
             'all channels with ids' => [
@@ -144,32 +112,17 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                     'Option "ids" does not work without "channel"',
                 ],
                 [
-                    'processing',
-                    'skipped',
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
+                    '[Process]',
+                    '[Done]',
                 ]
             ],
             'all channels' => [
                 [],
                 [
-                    'CustomerIdentityChannel skipped',
-                    'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity does not implements',
-                    'CustomerChannel processing',
-                    'Done. 2/2 updated',
-                ],
-                [
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer #',
-                ]
-            ],
-            'all channels with verbose' => [
-                [
-                    '-v' => true,
-                ],
-                [
-                    'CustomerIdentityChannel skipped',
-                    'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity does not implements',
-                    'CustomerChannel processing',
-                    'Done. 2/2 updated',
+                    '[Process] Channel: CustomerChannel',
+                    '[Done] 2/2 updated.',
+                    '[Process] Channel: CustomerChannel2',
+                    '[Done] 1/1 updated.',
                 ]
             ]
         ];

@@ -175,10 +175,10 @@ class ChannelTypeExtension extends AbstractTypeExtension
             );
 
         $channelData = (array)$channel->getData();
-        $rfmEnabled = !empty($channelData['rfm_enabled']);
+        $rfmEnabled = !empty($channelData[RFMAwareInterface::RFM_STATE_KEY]);
         $form = $event->getForm();
         $form->add(
-            'rfm_enabled',
+            RFMAwareInterface::RFM_STATE_KEY,
             'checkbox',
             [
                 'label' => 'orocrm.analytics.form.rfm_enable.label',
@@ -228,7 +228,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
                     'error_bubbling' => false,
                     'is_increasing' => $type === RFMMetricCategory::TYPE_RECENCY,
                     'constraints' => [$constraint],
-                    'data' => $collection,
+                    'data' => $collection
                 ]
             );
         }
@@ -250,7 +250,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
             return false;
         }
 
-        return in_array($this->interface, class_implements($customerIdentity));
+        return in_array($this->interface, class_implements($customerIdentity), true);
     }
 
     /**
