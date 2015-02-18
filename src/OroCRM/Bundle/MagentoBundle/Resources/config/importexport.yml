@@ -21,6 +21,10 @@ parameters:
     orocrm_magento.mage.cart_connector.class:                                   OroCRM\Bundle\MagentoBundle\Provider\CartConnector
     orocrm_magento.mage.order_connector.class:                                  OroCRM\Bundle\MagentoBundle\Provider\OrderConnector
 
+    orocrm_magento.mage.order_connector_initial.class:                          OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
+    orocrm_magento.mage.cart_connector_initial.class:                           OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialCartConnector
+    orocrm_magento.mage.customer_connector_initial.class:                       OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector
+
     # normalizers
     orocrm_magento.importexport.denormalizer.customer.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer
     orocrm_magento.importexport.denormalizer.region.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer
@@ -127,6 +131,33 @@ services:
         tags:
           - { name: oro_integration.connector, type: region, channel_type: magento }
           - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.order_connector_initial:
+        class: %orocrm_magento.mage.order_connector_initial.class%
+        parent: orocrm_magento.mage.order_connector
+        calls:
+            - [setClassName, [%orocrm_magento.order.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: order_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.cart_connector_initial:
+        class: %orocrm_magento.mage.cart_connector_initial.class%
+        parent: orocrm_magento.mage.cart_connector
+        calls:
+            - [setClassName, [%orocrm_magento.cart.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: cart_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.customer_connector_initial:
+        class: %orocrm_magento.mage.customer_connector_initial.class%
+        parent: orocrm_magento.mage.customer_connector
+        calls:
+            - [setClassName, [%orocrm_magento.customer.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: customer_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     # Normalizers / Denormalizers
     orocrm_magento.importexport.denormalizer.customer:
