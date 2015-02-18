@@ -7,23 +7,34 @@ use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {
+    const INITIAL_SYNC_START_DATE = 'initialSyncStartDate';
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
 
     /**
      * @param Integration $integration
      * @return \DateTime
      */
-    protected function getInitialSyncedTo(Integration $integration)
+    protected function getInitialSyncStartDate(Integration $integration)
     {
-        $syncedTo = null;
+        $syncStartDate = null;
         $synchronizationSettings = $integration->getSynchronizationSettings();
-        if ($synchronizationSettings->offsetExists(self::INITIAL_SYNCED_TO)) {
-            $syncedTo = $synchronizationSettings->offsetGet(self::INITIAL_SYNCED_TO);
+        if ($synchronizationSettings->offsetExists(self::INITIAL_SYNC_START_DATE)) {
+            $syncStartDate = $synchronizationSettings->offsetGet(self::INITIAL_SYNC_START_DATE);
         }
-        if (!$syncedTo) {
-            $syncedTo = 'now';
+        if (!$syncStartDate) {
+            $syncStartDate = 'now';
         }
 
-        return new \DateTime($syncedTo, new \DateTimeZone('UTC'));
+        return new \DateTime($syncStartDate, new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @param object $entity
+     */
+    protected function saveEntity($entity)
+    {
+        $em = $this->doctrineRegistry->getManager();
+        $em->persist($entity);
+        $em->flush($entity);
     }
 }

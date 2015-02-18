@@ -17,16 +17,24 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     {
         /** @var \DateTime $startSyncDate */
         $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
-        $initialSyncedTo = $this->getInitialSyncedTo($integration);
+        $syncSettings = $integration->getSynchronizationSettings();
+        $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
 
         // Set lastSyncDate to now if initial sync is executed at first time
         if (!$this->isInitialSyncStarted($integration)) {
-            $syncSettings = $integration->getSynchronizationSettings();
             $syncSettings->offsetSet(self::INITIAL_SYNC_STARTED, true);
-            $syncSettings->offsetSet(self::INITIAL_SYNCED_TO, $initialSyncedTo->format(\DateTime::ISO8601));
+            $syncSettings->offsetSet(self::INITIAL_SYNC_START_DATE, $initialSyncStartDate->format(\DateTime::ISO8601));
             $this->saveEntity($integration);
 
-            $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncedTo;
+            $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncStartDate;
+        }
+
+        $initialSyncedTo = null;
+        if ($syncSettings->offsetExists(self::INITIAL_SYNCED_TO)) {
+            $initialSyncedTo = $syncSettings->offsetGet(self::INITIAL_SYNCED_TO);
+        }
+        if (!$initialSyncedTo) {
+            $initialSyncedTo = $initialSyncStartDate;
         }
 
         // In case when initial sync does not started yet, it failed or start sync date was changed - run initial sync
@@ -71,15 +79,5 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     {
         $job = new Job(InitialSyncCommand::COMMAND_NAME, [sprintf('--integration-id=%s', $integration->getId())]);
         $this->saveEntity($job);
-    }
-
-    /**
-     * @param object $entity
-     */
-    protected function saveEntity($entity)
-    {
-        $em = $this->doctrineRegistry->getManager();
-        $em->persist($entity);
-        $em->flush($entity);
     }
 }
