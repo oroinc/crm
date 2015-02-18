@@ -48,6 +48,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
         // Run incremental sync
         $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncStartDate;
+
         return parent::process($integration, $connector, $parameters);
     }
 
