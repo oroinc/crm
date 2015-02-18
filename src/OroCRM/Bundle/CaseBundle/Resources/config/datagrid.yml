@@ -71,7 +71,7 @@ datagrid:
         filters:
             columns:
                 caseNumber:
-                    type: string
+                    type: number
                     data_name: caseEntity.id
                 subject:
                     type: string
@@ -88,7 +88,7 @@ datagrid:
                 statusLabel:
                     label: orocrm.case.datagrid.status.label
                     type: entity
-                    data_name: status.label
+                    data_name: status.name
                     options:
                         field_options:
                             class: OroCRMCaseBundle:CaseStatus
@@ -96,7 +96,7 @@ datagrid:
                 priorityLabel:
                     label: orocrm.case.datagrid.priority.label
                     type: entity
-                    data_name: priority.label
+                    data_name: priority.name
                     options:
                         field_options:
                             class: OroCRMCaseBundle:CasePriority
@@ -105,7 +105,7 @@ datagrid:
                     label: orocrm.case.datagrid.source.label
                     type: entity
                     enabled: false
-                    data_name: source.label
+                    data_name: source.name
                     options:
                         field_options:
                             class: OroCRMCaseBundle:CaseSource

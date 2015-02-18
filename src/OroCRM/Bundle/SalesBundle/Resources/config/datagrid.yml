@@ -433,9 +433,8 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: string
-                    data_name: salesFunnel.id
                     type: number
+                    data_name: salesFunnel.id
                 channelName:
                     type:      entity
                     data_name: channel.id
@@ -551,10 +550,9 @@ datagrid:
         filters:
             columns:
                  id:
-                     type: string
+                     type: number
                      data_name: lead.id
                      enabled: false
-                     frontend_type: integer
                  name:
                      type: string
                      data_name: lead.name
@@ -641,10 +639,9 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: string
+                    type: number
                     data_name: opportunity.id
                     enabled: false
-                    frontend_type: integer
                 name:
                     type: string
                     data_name: opportunity.name

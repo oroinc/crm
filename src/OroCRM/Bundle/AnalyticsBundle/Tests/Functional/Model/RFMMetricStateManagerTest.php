@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Tests\Functional\Model;
 
+use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
@@ -18,7 +19,12 @@ class RFMMetricStateManagerTest extends WebTestCase
     {
         $this->initClient();
 
-        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData']);
+        $this->loadFixtures(
+            [
+                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData',
+                'OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadJobData'
+            ]
+        );
     }
 
     public function tearDown()
@@ -32,7 +38,7 @@ class RFMMetricStateManagerTest extends WebTestCase
             $em->remove($entity);
         }
 
-        $em->flush();
+        $em->flush($entities);
     }
 
     public function testResetChannelMetrics()
@@ -252,5 +258,65 @@ class RFMMetricStateManagerTest extends WebTestCase
         }
 
         $this->assertCount(1, $entities);
+    }
+
+    public function testTerminateIfScheduled()
+    {
+        $this->loadJob();
+
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('Job already running. Terminating', $output);
+    }
+
+    public function testTerminateIfRunning()
+    {
+        $job = $this->loadJob();
+        $em = $this->getManager($job);
+        $jobs = $this->getContainer()->get('orocrm_analytics.model.state_manager')->getJob();
+        /** @var Job $job */
+        foreach ($jobs as $job) {
+            $job->setState(Job::STATE_RUNNING);
+            $em->persist($job);
+        }
+        $jobs[] = $job;
+        $em->flush($jobs);
+
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('Job already running. Terminating', $output);
+    }
+
+    public function testRunSuccess()
+    {
+        $output = $this->runCommand(CalculateAnalyticsCommand::COMMAND_NAME);
+        $this->assertContains('[Process] Channel:', $output);
+        $this->assertContains('[Done]', $output);
+    }
+
+    /**
+     * @return Job
+     */
+    protected function loadJob()
+    {
+        $this->assertFalse($this->getContainer()->get('orocrm_analytics.model.state_manager')->isJobRunning());
+        $this->getContainer()->get('orocrm_analytics.model.rfm_state_manager')->scheduleRecalculation();
+
+        $job = new Job(CalculateAnalyticsCommand::COMMAND_NAME);
+        $em = $this->getManager($job);
+        $em->persist($job);
+        $em->flush($job);
+
+        return $job;
+    }
+
+    /**
+     * @param object $entity
+     *
+     * @return EntityManager
+     */
+    protected function getManager($entity)
+    {
+        return $this->getContainer()
+            ->get('oro_entity.doctrine_helper')
+            ->getEntityManager($entity);
     }
 }
