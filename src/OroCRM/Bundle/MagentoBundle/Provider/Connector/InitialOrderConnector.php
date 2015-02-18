@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 
+use OroCRM\Bundle\MagentoBundle\Provider\OrderConnector;
+
 class InitialOrderConnector extends AbstractInitialConnector
 {
     const TYPE = 'order_initial';
-    const IMPORT_JOB_NAME = 'mage_order_initial_import';
 
     /**
      * {@inheritdoc}
@@ -20,7 +21,7 @@ class InitialOrderConnector extends AbstractInitialConnector
      */
     public function getImportJobName()
     {
-        return self::IMPORT_JOB_NAME;
+        return OrderConnector::IMPORT_JOB_NAME;
     }
 
     /**

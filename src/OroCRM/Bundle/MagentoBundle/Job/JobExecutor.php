@@ -2,11 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Job;
 
-use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
-use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
-
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class JobExecutor extends Executor
 {
@@ -24,20 +23,29 @@ class JobExecutor extends Executor
     /**
      * {@inheritdoc}
      */
-    protected function doJob(JobInstance $jobInstance, JobExecution $jobExecution)
+    public function executeJob($jobType, $jobName, array $configuration = [])
     {
+        if (empty($configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO])) {
+            return parent::executeJob($jobType, $jobName, $configuration);
+        }
+
+        if (empty($configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::START_SYNC_DATE])) {
+            return parent::executeJob($jobType, $jobName, $configuration);
+        }
+
+        /** @var \DateTime $startSyncDate */
+        $startSyncDate = $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::START_SYNC_DATE];
+
+        /** @var \DateTime $initialSyncedTo */
+        $initialSyncedTo = $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO];
+
         $jobResults = [];
 
-        $context = $jobExecution->getExecutionContext();
-        $startDate = $context->get('startDate');
-        $syncStartDate = $context->get('syncStartDate');
+        while ($startSyncDate < $initialSyncedTo) {
+            $jobResults[] = parent::executeJob($jobType, $jobName, $configuration);
 
-        while ($startDate >= $syncStartDate) {
-            $jobResults[] = parent::doJob($jobInstance, $jobExecution);
-
-            /** @todo: config and to date */
-            $startDate->modify('-1 day');
-            $context->put('syncStartDate', $startDate);
+            $initialSyncedTo->modify('-1 day');
+            $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO] = $initialSyncedTo;
         }
 
         return reset($jobResults);
@@ -52,6 +60,8 @@ class JobExecutor extends Executor
         foreach ($this->connectors as $connector) {
             $jobs[$connector->getType()][$connector->getImportJobName()] = true;
         }
+
+//        return in_array($jobName, ['mage_order_import'], true);
 
         return !empty($jobs[$jobType][$jobName]);
     }

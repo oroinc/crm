@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
@@ -13,7 +14,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
         $callback = function ($connector) {
-            return true; //$connector instanceof InitialConnectorInterface;
+            return !$connector instanceof InitialConnectorInterface;
         };
 
         return parent::processConnectors($integration, $parameters, $callback);
@@ -27,6 +28,8 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         // Set start date for initial connectors
         $initialConnectorSyncedTo = $this->getInitialConnectorSyncedTo($integration, $connector);
         $configuration[ProcessorRegistry::TYPE_IMPORT][self::INITIAL_SYNCED_TO] = $initialConnectorSyncedTo;
+        $configuration[ProcessorRegistry::TYPE_IMPORT][self::START_SYNC_DATE] =
+            $integration->getTransport()->getSettingsBag()->get('start_sync_date');
 
         $isSuccess = parent::processImport($connector, $jobName, $configuration, $integration);
 
