@@ -324,10 +324,10 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $contextRegistryMock->expects($this->any())->method('getByStepExecution')
             ->will($this->returnValue($contextMock));
-        $contextMediatorMock->expects($this->once())
+        $contextMediatorMock->expects($this->any())
             ->method('getTransport')->with($this->equalTo($contextMock))
             ->will($this->returnValue($transport));
-        $contextMediatorMock->expects($this->once())
+        $contextMediatorMock->expects($this->any())
             ->method('getChannel')->with($this->equalTo($contextMock))
             ->will($this->returnValue($channel));
 
