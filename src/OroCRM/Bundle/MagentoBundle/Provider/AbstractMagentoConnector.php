@@ -19,6 +19,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractMagentoConnector extends AbstractConnector implements MagentoConnectorInterface
 {
+    const LAST_SYNC_KEY = 'lastSyncItemDate';
+
     /** @var MagentoTransportInterface */
     protected $transport;
 
@@ -62,8 +64,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
 
         if (null !== $item) {
             $this->addStatusData(
-                'lastSyncItemDate',
-                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData('lastSyncItemDate'))
+                self::LAST_SYNC_KEY,
+                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
             );
         }
         $iterator = $this->getSourceIterator();
@@ -72,8 +74,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             // then just take point from what it was started
             $dateFromReadStarted = $iterator->getStartDate() ? $iterator->getStartDate()->format('Y-m-d H:i:s') : null;
             $this->addStatusData(
-                'lastSyncItemDate',
-                $this->getMaxUpdatedDate($this->getStatusData('lastSyncItemDate'), $dateFromReadStarted)
+                self::LAST_SYNC_KEY,
+                $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted)
             );
         }
 
@@ -97,8 +99,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
             $data = $status->getData();
 
-            if (!empty($data['lastSyncItemDate'])) {
-                $startDate = new \DateTime($data['lastSyncItemDate'], new \DateTimeZone('UTC'));
+            if (!empty($data[self::LAST_SYNC_KEY])) {
+                $startDate = new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
             } else {
                 $startDate = clone $status->getDate();
             }

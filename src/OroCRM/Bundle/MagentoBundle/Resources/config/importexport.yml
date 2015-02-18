@@ -48,6 +48,8 @@ parameters:
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
+    orocrm_magento.provider.initial_sync_processor.class:                       OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor
+    orocrm_magento.provider.initial_schedule_processor.class:                   OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor
 
     # writers
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
@@ -306,6 +308,16 @@ services:
         class: %orocrm_magento.importexport.normalizer.datetime.class%
         tags:
             - { name: oro_importexport.normalizer }
+
+    orocrm_magento.provider.initial_sync_processor:
+        class: %orocrm_magento.provider.initial_sync_processor.class%
+        parent: oro_integration.sync.processor
+
+    orocrm_magento.provider.initial_schedule_processor:
+        class: %orocrm_magento.provider.initial_schedule_processor.class%
+        parent: oro_integration.sync.processor
+        tags:
+            - { name: oro_integration.sync_processor, integration: magento }
 
     # Reverse processor
     orocrm_magento.importexport.processor.export_customer:
