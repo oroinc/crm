@@ -130,6 +130,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function isExtensionInstalled()
     {
+        return false;
+
         if (null === $this->isExtensionInstalled) {
             $this->pingMagento();
         }

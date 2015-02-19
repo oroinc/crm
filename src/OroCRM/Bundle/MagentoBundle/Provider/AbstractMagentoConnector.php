@@ -96,14 +96,18 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
         if ($iterator instanceof UpdatedLoaderInterface && !$isForceSync) {
-            $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-
             $startDate = $this->getStartDate($status);
-            // use assumption interval in order to prevent mistiming issues
-            $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
-            $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
-            $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
-            $startDate->sub(\DateInterval::createFromDateString($intervalString));
+
+            if ($status) {
+                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
+
+                // use assumption interval in order to prevent mistiming issues
+                $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
+                $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
+                $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
+                $startDate->sub(\DateInterval::createFromDateString($intervalString));
+            }
+
             $iterator->setStartDate($startDate);
         }
 

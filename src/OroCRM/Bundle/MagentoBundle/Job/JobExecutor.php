@@ -33,10 +33,10 @@ class JobExecutor extends Executor
         $jobResults = [];
 
         while ($startSyncDate < $initialSyncedTo) {
+            $jobResults[] = parent::executeJob($jobType, $jobName, $configuration);
+
             $initialSyncedTo->modify('-1 day');
             $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO] = $initialSyncedTo;
-
-            $jobResults[] = parent::executeJob($jobType, $jobName, $configuration);
         }
 
         return reset($jobResults);
