@@ -326,3 +326,4 @@ services:
         parent: oro_integration.job_executor
         tags:
             - { name: oro_importexport.job_executor, priority: 10 }
+            - { name: orocrm_magento.bundle_config.aware }

@@ -309,13 +309,24 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
+    orocrm_magento.provider.initial_absract:
+        class: %orocrm_magento.provider.initial_sync_processor.class%
+        arguments:
+            - @doctrine
+            - @oro_importexport.processor.registry
+            - @orocrm_magento.job_executor
+            - @oro_integration.manager.types_registry
+            - @event_dispatcher
+            - @oro_integration.logger.strategy
+        abstract: true
+
     orocrm_magento.provider.initial_sync_processor:
         class: %orocrm_magento.provider.initial_sync_processor.class%
-        parent: oro_integration.sync.processor
+        parent: orocrm_magento.provider.initial_absract
 
     orocrm_magento.provider.initial_schedule_processor:
         class: %orocrm_magento.provider.initial_schedule_processor.class%
-        parent: oro_integration.sync.processor
+        parent: orocrm_magento.provider.initial_absract
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 

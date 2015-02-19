@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use JMS\JobQueueBundle\Entity\Job;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 
 /**
@@ -72,8 +73,12 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      */
     protected function isInitialJobRunning(Integration $integration)
     {
-        $initialJobsRunning = $this->doctrineRegistry->getRepository('OroIntegrationBundle:Channel')
-            ->getRunningSyncJobsCount(InitialSyncCommand::COMMAND_NAME, $integration->getId());
+        /** @var ChannelRepository $repository */
+        $repository = $this->doctrineRegistry->getRepository('OroIntegrationBundle:Channel');
+        $initialJobsRunning = $repository->getRunningSyncJobsCount(
+            InitialSyncCommand::COMMAND_NAME,
+            $integration->getId()
+        );
 
         return $initialJobsRunning > 1;
     }

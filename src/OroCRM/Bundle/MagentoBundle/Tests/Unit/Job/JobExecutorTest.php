@@ -61,7 +61,12 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
             $this->batchJobRegistry,
             $this->batchJobRepository,
             $this->contextRegistry,
-            $this->managerRegistry
+            $this->managerRegistry,
+            [
+                'sync_settings' => [
+                    'initial_import_step_interval' => '1 day'
+                ]
+            ]
         );
     }
 
