@@ -31,14 +31,14 @@ class InitialSyncCommand extends ContainerAwareCommand
     public function configure()
     {
         $this
-            ->setName(static::COMMAND_NAME)
+            ->setName(self::COMMAND_NAME)
             ->addOption(
                 'integration-id',
                 'i',
                 InputOption::VALUE_REQUIRED,
                 'Sync will be performed for given integration id'
             )
-            ->setDescription('Runs synchronization for magento channels to process expiration of merged carts');
+            ->setDescription('Run initial synchronization for magento channel.');
     }
 
     /**

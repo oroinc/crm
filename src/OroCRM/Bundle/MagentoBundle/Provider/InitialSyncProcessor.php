@@ -24,11 +24,15 @@ class InitialSyncProcessor extends AbstractInitialProcessor
      */
     protected function processImport($connector, $jobName, $configuration, Integration $integration)
     {
+        // Set start date for initial connectors
         $initialConnectorSyncedTo = $this->getInitialConnectorSyncedTo($integration, $connector);
+        $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
         $configuration[ProcessorRegistry::TYPE_IMPORT][self::INITIAL_SYNCED_TO] = $initialConnectorSyncedTo;
+        $configuration[ProcessorRegistry::TYPE_IMPORT]['start_sync_date'] = $startSyncDate;
 
         $isSuccess = parent::processImport($connector, $jobName, $configuration, $integration);
 
+        // Save synced to date for further checks in InitialScheduleProcessor
         $syncedTo = $this->getSyncedTo($integration, $connector);
         if ($syncedTo) {
             $integration->getSynchronizationSettings()

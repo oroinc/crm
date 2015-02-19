@@ -6,6 +6,11 @@ use JMS\JobQueueBundle\Entity\Job;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 
+/**
+ * Schedule initial synchronization if it is required.
+ * Limit incremental sync to initial sync start date.
+ * Execute incremental sync.
+ */
 class InitialScheduleProcessor extends AbstractInitialProcessor
 {
     const INITIAL_SYNC_STARTED = 'initialSyncedStarted';
@@ -20,15 +25,14 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $syncSettings = $integration->getSynchronizationSettings();
         $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
 
-        // Set lastSyncDate to now if initial sync is executed at first time
+        // Save initial sync start date and flag initial sync as started
         if (!$this->isInitialSyncStarted($integration)) {
             $syncSettings->offsetSet(self::INITIAL_SYNC_STARTED, true);
             $syncSettings->offsetSet(self::INITIAL_SYNC_START_DATE, $initialSyncStartDate->format(\DateTime::ISO8601));
             $this->saveEntity($integration);
-
-            $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncStartDate;
         }
 
+        // Get latest initial synced to date
         $initialSyncedTo = null;
         if ($syncSettings->offsetExists(self::INITIAL_SYNCED_TO)) {
             $initialSyncedTo = $syncSettings->offsetGet(self::INITIAL_SYNCED_TO);
@@ -43,6 +47,8 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         }
 
         // Run incremental sync
+        $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncStartDate;
+
         return parent::process($integration, $connector, $parameters);
     }
 
