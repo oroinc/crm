@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
+use Oro\Bundle\ImportExportBundle\Job\JobExecutorInterface;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
@@ -38,7 +38,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     protected $processorRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Executor
+     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecutorInterface
      */
     protected $jobExecutor;
 
@@ -73,9 +73,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processorRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Job\JobExecutorInterface')->getMock();
         $this->typesRegistry = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry')
             ->disableOriginalConstructor()
             ->getMock();
