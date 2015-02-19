@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Job;
 
 use Akeneo\Bundle\BatchBundle\Connector\ConnectorRegistry;
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository;
 
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use Doctrine\ORM\EntityManager;
+
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
@@ -28,15 +30,24 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry */
     protected $managerRegistry;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
+    protected $batchJobManager;
+
     protected function setUp()
     {
         $this->batchJobRegistry = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Connector\ConnectorRegistry')
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->batchJobManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->batchJobRepository = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Job\DoctrineJobRepository')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->batchJobRepository->expects($this->any())
+            ->method('getJobManager')
+            ->will($this->returnValue($this->batchJobManager));
 
         $this->contextRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextRegistry')
             ->disableOriginalConstructor()
@@ -58,16 +69,11 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
      * @param string $jobType
      * @param string $jobName
      * @param bool $expected
-     * @param array $connectors
      *
      * @dataProvider applicableDataConverter
      */
-    public function testIsApplicable($jobType, $jobName, $expected, array $connectors = [])
+    public function testIsApplicable($jobType, $jobName, $expected)
     {
-        foreach ($connectors as $connector) {
-            $this->executor->addConnector($connector);
-        }
-
         $this->assertEquals(
             $expected,
             $this->executor->isApplicable($jobType, $jobName)
@@ -81,34 +87,65 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty' => ['jobType1', 'jobName1', false],
-            'not matched name' => ['jobType1', 'jobName1', false, [$this->getConnector('jobType1', 'jobName2')]],
-            'not matched type' => ['jobType1', 'jobName1', false, [$this->getConnector('jobType2', 'jobName1')]],
-            'matched' => ['jobType1', 'jobName1', true, [$this->getConnector('jobType1', 'jobName1')]],
-            'second matched' => [
-                'jobType1',
-                'jobName1',
-                true,
-                [$this->getConnector('jobType1', 'jobName2'), $this->getConnector('jobType1', 'jobName1')]
-            ]
+            'not matched name' => ['import', 'jobName1', false],
+            'not matched type' => ['jobType1', 'mage_customer_import', false],
+            'matched' => ['import', 'mage_customer_import', true]
         ];
     }
 
     /**
-     * @param string $jobType
-     * @param string $jobName
-     * @return \PHPUnit_Framework_MockObject_MockObject|ConnectorInterface
+     * @param array $configuration
+     * @param mixed $expectedExecutions
+     *
+     * @dataProvider configurationDataProvider
      */
-    protected function getConnector($jobType, $jobName)
+    public function testExecuteJob(array $configuration = [], $expectedExecutions)
     {
-        $connector = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface');
-        $connector->expects($this->once())->method('getImportJobName')->will($this->returnValue($jobName));
-        $connector->expects($this->once())->method('getType')->will($this->returnValue($jobType));
+        $this->batchJobRepository->expects($this->exactly($expectedExecutions))
+            ->method('createJobExecution')
+            ->willReturnCallback(
+                function ($instance) {
+                    $execution = new JobExecution();
+                    $execution->setJobInstance($instance);
 
-        return $connector;
+                    return $execution;
+                }
+            );
+
+        $this->executor->executeJob('jobType', 'jobName', $configuration);
     }
 
-    public function testDoJob()
+    /**
+     * @return array
+     */
+    public function configurationDataProvider()
     {
-        $this->markTestIncomplete();
+        $date2 = new \DateTime();
+        $date2->modify('-5 days');
+        $date3 = new \DateTime();
+        $date3->modify('-90 days');
+
+        return [
+            'empty' => [[], 1],
+            'initial synced to defined' => [['import' => ['initialSyncedTo' => new \DateTime()]], 1],
+            'start sync date defined' => [
+                [
+                    'import' => [
+                        'initialSyncedTo' => new \DateTime(),
+                        'start_sync_date' => $date2
+                    ]
+                ],
+                5
+            ],
+            'start sync date another option' => [
+                [
+                    'import' => [
+                        'initialSyncedTo' => new \DateTime(),
+                        'start_sync_date' => $date3
+                    ]
+                ],
+                90
+            ]
+        ];
     }
 }

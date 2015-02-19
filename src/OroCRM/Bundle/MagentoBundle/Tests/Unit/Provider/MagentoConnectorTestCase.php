@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Symfony\Component\HttpKernel\Log\NullLogger;
-
-use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
@@ -36,6 +37,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var ChannelRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $integrationRepositoryMock;
 
+    /** @var JobExecution|\PHPUnit_Framework_MockObject_MockObject */
+    protected $jobExecutionMock;
+
     /** @var array */
     protected $config = [
         'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
@@ -47,8 +51,17 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
 
         $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
-            ->setMethods(['getExecutionContext'])
+            ->setMethods(['getExecutionContext', 'getJobExecution'])
             ->disableOriginalConstructor()->getMock();
+
+        $this->jobExecutionMock = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
+        $this->jobExecutionMock->expects($this->any())
+            ->method('getExecutionContext')
+            ->will($this->returnValue(new ExecutionContext()));
+
+        $this->stepExecutionMock->expects($this->any())
+            ->method('getJobExecution')
+            ->will($this->returnValue($this->jobExecutionMock));
 
         $this->managerRegistryMock = $this->getMockBuilder('Doctrine\\Common\\Persistence\\ManagerRegistry')
             ->disableOriginalConstructor()

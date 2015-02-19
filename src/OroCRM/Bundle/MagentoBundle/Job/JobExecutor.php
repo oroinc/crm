@@ -4,22 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Job;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use OroCRM\Bundle\MagentoBundle\Provider\OrderConnector;
 
 class JobExecutor extends Executor
 {
-    /** @var ConnectorInterface[] */
-    protected $connectors = [];
-
-    /**
-     * @param ConnectorInterface $connector
-     */
-    public function addConnector(ConnectorInterface $connector)
-    {
-        $this->connectors[] = $connector;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -42,10 +33,10 @@ class JobExecutor extends Executor
         $jobResults = [];
 
         while ($startSyncDate < $initialSyncedTo) {
-            $jobResults[] = parent::executeJob($jobType, $jobName, $configuration);
-
             $initialSyncedTo->modify('-1 day');
             $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO] = $initialSyncedTo;
+
+            $jobResults[] = parent::executeJob($jobType, $jobName, $configuration);
         }
 
         return reset($jobResults);
@@ -56,13 +47,18 @@ class JobExecutor extends Executor
      */
     public function isApplicable($jobType, $jobName)
     {
-        $jobs = [];
-        foreach ($this->connectors as $connector) {
-            $jobs[$connector->getType()][$connector->getImportJobName()] = true;
+        $supportedJobs = [
+            ProcessorRegistry::TYPE_IMPORT => [
+                OrderConnector::IMPORT_JOB_NAME,
+                CartConnector::IMPORT_JOB_NAME,
+                CustomerConnector::IMPORT_JOB_NAME
+            ]
+        ];
+
+        if (empty($supportedJobs[$jobType])) {
+            return false;
         }
 
-//        return in_array($jobName, ['mage_order_import'], true);
-
-        return !empty($jobs[$jobType][$jobName]);
+        return in_array($jobName, $supportedJobs[$jobType], true);
     }
 }
