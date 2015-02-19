@@ -7,6 +7,9 @@ use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 {
+    /** @var InitialSyncProcessor */
+    protected $processor;
+
     protected function setUp()
     {
         parent::setUp();
@@ -23,7 +26,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcess()
     {
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
@@ -53,9 +56,9 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob(
             [
                 'processorAlias' => false,
-                'entityName'     => 'testEntity',
-                'channel'        => 'testChannel',
-                'channelType'    => 'testChannelType',
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
                 AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo,
                 'start_sync_date' => $syncStartDate
             ]
@@ -66,7 +69,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessFirst()
     {
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
@@ -82,9 +85,9 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob(
             [
                 'processorAlias' => false,
-                'entityName'     => 'testEntity',
-                'channel'        => 'testChannel',
-                'channelType'    => 'testChannelType',
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
                 AbstractInitialProcessor::INITIAL_SYNCED_TO => $initialStartDate,
                 'start_sync_date' => $syncStartDate
             ]

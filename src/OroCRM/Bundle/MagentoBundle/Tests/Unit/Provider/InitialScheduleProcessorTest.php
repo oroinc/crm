@@ -9,6 +9,9 @@ use OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
 
 class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 {
+    /** @var InitialScheduleProcessor */
+    protected $processor;
+
     protected function setUp()
     {
         parent::setUp();
@@ -25,7 +28,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessFirstInitial()
     {
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors);
 
@@ -58,7 +61,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
 
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
 
@@ -86,9 +89,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob(
             [
                 'processorAlias' => false,
-                'entityName'     => 'testEntity',
-                'channel'        => 'testChannel',
-                'channelType'    => 'testChannelType',
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
                 AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
             ]
         );
@@ -110,7 +113,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
 
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
 
@@ -137,9 +140,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob(
             [
                 'processorAlias' => false,
-                'entityName'     => 'testEntity',
-                'channel'        => 'testChannel',
-                'channelType'    => 'testChannelType',
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
                 AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
             ]
         );
@@ -161,7 +164,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $syncedTo = $syncStartDate->sub(new \DateInterval('P1D'));
 
-        $connector  = 'testConnector';
+        $connector = 'testConnector';
         $connectors = [$connector];
         $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
 
@@ -187,9 +190,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->assertExecuteJob(
             [
                 'processorAlias' => false,
-                'entityName'     => 'testEntity',
-                'channel'        => 'testChannel',
-                'channelType'    => 'testChannelType',
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
                 AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
             ]
         );

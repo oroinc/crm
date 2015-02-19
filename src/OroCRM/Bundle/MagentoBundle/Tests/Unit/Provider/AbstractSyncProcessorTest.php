@@ -2,15 +2,23 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
-use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\DataGridBundle\Common\Object;
-use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,42 +28,42 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry
      */
     protected $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ProcessorRegistry
      */
     protected $processorRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Executor
      */
     protected $jobExecutor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry
      */
     protected $typesRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|LoggerStrategy
      */
     protected $logger;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
      */
     protected $em;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelRepository
      */
     protected $repository;
 
@@ -110,7 +118,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param \PHPUnit_Framework_MockObject_MockObject $integration
      * @param array $settings
-     * @return \Oro\Bundle\DataGridBundle\Common\Object
+     * @return Object
      */
     public function assertIntegrationSettingsCall($integration, array $settings = [])
     {
@@ -165,7 +173,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $connectors
      * @param array $settings
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|Channel
      */
     protected function getIntegration(array $connectors = [], array $settings = [])
     {
