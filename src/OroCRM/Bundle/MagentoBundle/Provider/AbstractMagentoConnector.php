@@ -90,26 +90,24 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         parent::initializeFromContext($context);
 
         // set start date and mode depending on status
-        $status      = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
-        $iterator    = $this->getSourceIterator();
+        /** @var Status $status */
+        $status = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
+        $iterator = $this->getSourceIterator();
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
-        if ($iterator instanceof UpdatedLoaderInterface && !empty($status) && !$isForceSync) {
-            /** @var Status $status */
-            $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-            $data = $status->getData();
+        if ($iterator instanceof UpdatedLoaderInterface && !$isForceSync) {
+            $startDate = $this->getStartDate($status);
 
-            if (!empty($data[self::LAST_SYNC_KEY])) {
-                $startDate = new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
-            } else {
-                $startDate = clone $status->getDate();
+            if ($status) {
+                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
+
+                // use assumption interval in order to prevent mistiming issues
+                $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
+                $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
+                $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
+                $startDate->sub(\DateInterval::createFromDateString($intervalString));
             }
 
-            // use assumption interval in order to prevent mistiming issues
-            $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
-            $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
-            $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
-            $startDate->sub(\DateInterval::createFromDateString($intervalString));
             $iterator->setStartDate($startDate);
         }
 
@@ -125,6 +123,36 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 throw new \LogicException('Iterator does not support predefined filters');
             }
         }
+    }
+
+    /**
+     * @param Status $status
+     *
+     * @return \DateTime
+     */
+    protected function getStartDate(Status $status = null)
+    {
+        $jobContext = $this->stepExecution->getJobExecution()->getExecutionContext();
+        $initialSyncedTo = $jobContext->get(InitialSyncProcessor::INITIAL_SYNCED_TO);
+        if ($initialSyncedTo) {
+            return $initialSyncedTo;
+        }
+
+        $lastSyncDate = $this->stepExecution->getExecutionContext()->get(self::LAST_SYNC_KEY);
+        if ($lastSyncDate) {
+            return $lastSyncDate;
+        }
+
+        if ($status) {
+            $data = $status->getData();
+            if (!empty($data[self::LAST_SYNC_KEY])) {
+                return new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
+            }
+
+            return clone $status->getDate();
+        }
+
+        return new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

@@ -1,25 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 
-class OrderConnector extends AbstractMagentoConnector
+use OroCRM\Bundle\MagentoBundle\Provider\OrderConnector;
+
+class InitialOrderConnector extends AbstractInitialConnector
 {
-    const IMPORT_JOB_NAME = 'mage_order_import';
+    const TYPE = 'order_initial';
 
     /**
      * {@inheritdoc}
      */
     public function getLabel()
     {
-        return 'orocrm.magento.connector.order.label';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return self::ORDER_TYPE;
+        return 'orocrm.magento.connector.order.initial.label';
     }
 
     /**
@@ -27,7 +21,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     public function getImportJobName()
     {
-        return self::IMPORT_JOB_NAME;
+        return OrderConnector::IMPORT_JOB_NAME;
     }
 
     /**
@@ -35,7 +29,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     public function getType()
     {
-        return 'order';
+        return self::TYPE;
     }
 
     /**

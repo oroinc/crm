@@ -47,7 +47,25 @@ connector:
             title: "Order import from Magento"
             type:  import
             steps:
-                import:
+                import_with_existing_customers:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.order_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                import_customers:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.customer_connector
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                import_with_new_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:

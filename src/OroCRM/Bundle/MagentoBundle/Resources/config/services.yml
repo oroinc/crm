@@ -65,6 +65,7 @@ parameters:
     orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
+    orocrm_magento.job_executor.class:                                      OroCRM\Bundle\MagentoBundle\Job\JobExecutor
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -319,3 +320,10 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.job_executor:
+        class: %orocrm_magento.job_executor.class%
+        parent: oro_integration.job_executor
+        tags:
+            - { name: oro_importexport.job_executor, priority: 10 }
+            - { name: orocrm_magento.bundle_config.aware }

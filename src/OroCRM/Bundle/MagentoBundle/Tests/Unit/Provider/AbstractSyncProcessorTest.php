@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
@@ -19,6 +18,7 @@ use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
 use Oro\Bundle\DataGridBundle\Common\Object;
+use OroCRM\Bundle\MagentoBundle\Job\JobExecutor;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     protected $processorRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Executor
+     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecutor
      */
     protected $jobExecutor;
 
@@ -73,7 +73,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processorRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor')
+        $this->jobExecutor = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Job\JobExecutor')
             ->disableOriginalConstructor()
             ->getMock();
         $this->typesRegistry = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry')

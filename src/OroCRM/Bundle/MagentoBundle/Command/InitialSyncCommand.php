@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
-use OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
+use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncCommand extends ContainerAwareCommand
 {
@@ -116,7 +116,7 @@ class InitialSyncCommand extends ContainerAwareCommand
 
     /**
      * @param LoggerInterface $logger
-     * @return InitialScheduleProcessor
+     * @return InitialSyncProcessor
      */
     protected function getSyncProcessor($logger)
     {
