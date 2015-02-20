@@ -452,7 +452,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @param User $owner
      */
-    public function setOwner(User $owner)
+    public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
     }

@@ -45,6 +45,7 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
         $leadRepo    = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Lead');
         $accountRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\AccountBundle\Entity\Account');
         $channelRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $opportunityRepo = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
 
         switch ($key) {
             case 'Jerry Coleman':
@@ -58,6 +59,7 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setDataChannel($channelRepo->getEntity('B2B channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
+                $entity->addOpportunity($opportunityRepo->getEntity('Jerry Coleman'));
 
                 return;
         }
