@@ -74,11 +74,14 @@ class JobExecutor extends Executor
         $syncInterval = $this->bundleConfiguration['sync_settings']['initial_import_step_interval'];
         $interval = \DateInterval::createFromDateString($syncInterval);
 
+        $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INTERVAL] = $interval;
+        $initialSyncedTo->add($interval);
+
         while ($startSyncDate < $initialSyncedTo) {
+            $jobResult = parent::executeJob($jobType, $jobName, $configuration);
+
             $initialSyncedTo->sub($interval);
             $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO] = $initialSyncedTo;
-
-            $jobResult = parent::executeJob($jobType, $jobName, $configuration);
         }
 
         return $jobResult;

@@ -10,6 +10,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     const INITIAL_SYNC_START_DATE = 'initialSyncStartDate';
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
     const START_SYNC_DATE = 'start_sync_date';
+    const INTERVAL = 'initialSyncInterval';
 
     /**
      * @param Integration $integration

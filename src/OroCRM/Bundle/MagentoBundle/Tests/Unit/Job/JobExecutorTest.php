@@ -104,7 +104,7 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider configurationDataProvider
      */
-    public function testExecuteJob(array $configuration = [], $expectedExecutions)
+    public function testExecuteJob(array $configuration, $expectedExecutions)
     {
         $this->batchJobRepository->expects($this->exactly($expectedExecutions))
             ->method('createJobExecution')
@@ -140,7 +140,7 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
                         'start_sync_date' => $date2
                     ]
                 ],
-                5
+                6
             ],
             'start sync date another option' => [
                 [
@@ -149,7 +149,7 @@ class JobExecutorTest extends \PHPUnit_Framework_TestCase
                         'start_sync_date' => $date3
                     ]
                 ],
-                90
+                91
             ]
         ];
     }

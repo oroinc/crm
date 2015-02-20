@@ -111,6 +111,11 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $iterator->setStartDate($startDate);
         }
 
+        $interval = $this->stepExecution->getJobExecution()->getExecutionContext()->get(InitialSyncProcessor::INTERVAL);
+        if ($interval) {
+            $iterator->setSyncRange($interval);
+        }
+
         // pass filters from connector
         if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
             if ($iterator instanceof PredefinedFiltersAwareInterface) {
