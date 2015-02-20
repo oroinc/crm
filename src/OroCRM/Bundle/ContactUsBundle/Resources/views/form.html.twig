@@ -5,9 +5,11 @@
 {% endblock %}
 
 {% block form_field_widget %}
+<div class="row-group" {% if form.vars.extra_field is defined and form.vars.extra_field %} id="{{ form.vars.id ~ '_holder' }}" {% endif %} >
     <div class="box">
         {{ form_row(form) }}
     </div>
+</div>
 {% endblock %}
 
 {% block _embedded_form_widget %}
@@ -17,6 +19,18 @@
         {{ block_widget(block) }}
     </div>
     {{ form_end(form) }}
+{% endblock %}
+
+{% block _embedded_form_firstName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_lastName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
 {% endblock %}
 
 {% block _embedded_form_comment_widget %}

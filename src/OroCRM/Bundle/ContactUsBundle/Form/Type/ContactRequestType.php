@@ -195,32 +195,19 @@ CSS;
     public function updateLayout(LayoutManipulatorInterface $layoutManipulator)
     {
         $layoutManipulator->setBlockTheme('OroCRMContactUsBundle::form.html.twig');
-        $layoutManipulator->remove('form');
-        $layoutManipulator->add(
-            'embedded_form',
-            'content',
-            'form',
-            [
-                'form_name' => 'embedded_form',
-                'groups'    => [
-                    'name'       => [
-                        'title'   => 'General Info',
-                        'fields'  => ['firstName', 'lastName']
-                    ],
-                    'email'      => [
-                        'title'   => 'Email Address',
-                        'fields'  => ['emailAddress']
-                    ],
-                    'phone'      => [
-                        'title'   => 'Phone',
-                        'fields'  => ['phone']
-                    ],
-                    'additional' => [
-                        'title'   => 'Additional Info',
-                        'default' => true
-                    ]
+        $layoutManipulator
+            ->remove('form')
+            ->add(
+                'embedded_form',
+                'content',
+                'form',
+                [
+                    'form_name'        => 'embedded_form',
+                    'preferred_fields' => ['emailAddress', 'phone'],
                 ]
-            ]
-        );
+            )
+            ->add('name_group', 'embedded_form', 'fieldset')
+            ->move('embedded_form_firstName', 'name_group')
+            ->move('embedded_form_lastName', 'name_group');
     }
 }
