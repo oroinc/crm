@@ -126,8 +126,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
-     * @todo: to date once connectors support customer load
-     *
      * @param Status $status
      *
      * @return \DateTime
@@ -138,6 +136,11 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $initialSyncedTo = $jobContext->get(InitialSyncProcessor::INITIAL_SYNCED_TO);
         if ($initialSyncedTo) {
             return $initialSyncedTo;
+        }
+
+        $lastSyncDate = $this->stepExecution->getExecutionContext()->get(self::LAST_SYNC_KEY);
+        if ($lastSyncDate) {
+            return $lastSyncDate;
         }
 
         if ($status) {
