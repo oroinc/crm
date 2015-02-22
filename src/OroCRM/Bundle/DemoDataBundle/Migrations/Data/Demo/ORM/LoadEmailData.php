@@ -108,18 +108,16 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $randomTemplate = array_rand($this->templates);
 
             $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
-            if ($i % 7 == 0) {
-                $thread = new EmailThread();
-                $thread->setSubject($email->getSubject());
-                $thread->setSentAt($email->getSentAt());
-                $email->setThread($thread);
-                for ($j = 0; $j < rand(1, 7); ++$j) {
-                    $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
-                    $email->setSubject('Re: ' . $email->getSubject());
-                    $email->setThread($thread);
-                    $email->setHead(false);
-                }
-            }
+//            if ($i % 7 == 0) {
+//                $thread = new EmailThread();
+//                $email->setThread($thread);
+//                for ($j = 0; $j < rand(1, 7); ++$j) {
+//                    $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
+//                    $email->setSubject('Re: ' . $email->getSubject());
+//                    $email->setThread($thread);
+//                    $email->setHead(false);
+//                }
+//            }
 
             $this->emailEntityBuilder->getBatch()->persist($om);
         }
