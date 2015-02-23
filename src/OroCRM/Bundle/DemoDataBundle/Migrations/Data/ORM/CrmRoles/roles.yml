@@ -48,6 +48,8 @@ ROLE_SALES_MANAGER:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: [EXECUTE]
+        action|oro_tag_unassign_global: [EXECUTE]
         action|oro_workflow: [EXECUTE]
 ROLE_SALES_REP:
     bap_role: ROLE_USER
@@ -99,6 +101,8 @@ ROLE_SALES_REP:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: []
+        action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
 ROLE_ONLINE_SALES_REP:
     label: Online Sales Rep
@@ -149,6 +153,8 @@ ROLE_ONLINE_SALES_REP:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: []
+        action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
 ROLE_MARKETING_MANAGER:
     label: Marketing Manager
@@ -199,6 +205,8 @@ ROLE_MARKETING_MANAGER:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: []
+        action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
 ROLE_LEADS_DEVELOPMENT_REP:
     label: Leads Development Rep
@@ -249,4 +257,6 @@ ROLE_LEADS_DEVELOPMENT_REP:
         action|oro_search: [EXECUTE]
         action|oro_config_system: []
         action|oro_platform_system_info: []
+        action|oro_tag_assign_unassign: []
+        action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
