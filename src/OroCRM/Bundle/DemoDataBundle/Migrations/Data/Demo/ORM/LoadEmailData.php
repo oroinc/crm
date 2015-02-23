@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -13,6 +12,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\EmailBundle\Model\FolderType;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
+use Oro\Bundle\EmailBundle\Entity\EmailThread;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -108,12 +109,13 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
             $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
             if ($i % 7 == 0) {
-                $thread = uniqid();
-                $email->setThreadId($thread);
+                $thread = new EmailThread();
+                $om->persist($thread);
+                $email->setThread($thread);
                 for ($j = 0; $j < rand(1, 7); ++$j) {
                     $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
                     $email->setSubject('Re: ' . $email->getSubject());
-                    $email->setThreadId($thread);
+                    $email->setThread($thread);
                     $email->setHead(false);
                 }
             }
