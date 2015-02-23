@@ -203,7 +203,7 @@ CSS;
                 'form',
                 [
                     'form_name'        => 'embedded_form',
-                    'preferred_fields' => ['emailAddress', 'phone'],
+                    'preferred_fields' => ['firstName', 'lastName', 'emailAddress', 'phone'],
                 ]
             )
             ->add('name_group', 'embedded_form', 'fieldset')
