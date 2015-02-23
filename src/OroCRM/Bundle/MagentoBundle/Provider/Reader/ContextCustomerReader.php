@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCustomerReader extends CustomerConnector
 {
@@ -17,6 +18,10 @@ class ContextCustomerReader extends CustomerConnector
     protected function getConnectorSource()
     {
         $iterator = parent::getConnectorSource();
+
+        if (!$iterator instanceof UpdatedLoaderInterface) {
+            return $iterator;
+        }
 
         $customerIds = $this->getCustomerIds();
         if ($customerIds) {
@@ -36,11 +41,21 @@ class ContextCustomerReader extends CustomerConnector
 
         $entitiesIdsBuffer = array_map(
             function (Order $order) {
-                return $order->getCustomer()->getOriginId();
+                if (!$order->getCustomer()) {
+                    return false;
+                }
+
+                $customer = $order->getCustomer();
+
+                if (!$customer->getOriginId()) {
+                    return false;
+                }
+
+                return $customer->getOriginId();
             },
             $orders
         );
 
-        return $entitiesIdsBuffer;
+        return array_unique(array_filter($entitiesIdsBuffer));
     }
 }

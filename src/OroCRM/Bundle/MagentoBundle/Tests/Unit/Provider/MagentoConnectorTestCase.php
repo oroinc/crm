@@ -40,6 +40,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var JobExecution|\PHPUnit_Framework_MockObject_MockObject */
     protected $jobExecutionMock;
 
+    /** @var ExecutionContext|\PHPUnit_Framework_MockObject_MockObject */
+    protected $executionContextMock;
+
     /** @var array */
     protected $config = [
         'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
@@ -54,10 +57,12 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             ->setMethods(['getExecutionContext', 'getJobExecution'])
             ->disableOriginalConstructor()->getMock();
 
+        $this->executionContextMock = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+
         $this->jobExecutionMock = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
         $this->jobExecutionMock->expects($this->any())
             ->method('getExecutionContext')
-            ->will($this->returnValue(new ExecutionContext()));
+            ->will($this->returnValue($this->executionContextMock));
 
         $this->stepExecutionMock->expects($this->any())
             ->method('getJobExecution')
