@@ -45,6 +45,7 @@ parameters:
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
+    orocrm_magento.import.strategy.order_with_customer.add_or_update.class:     OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
@@ -271,6 +272,10 @@ services:
         calls:
              - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
+    orocrm_magento.import.strategy.order_with_customer.add_or_update:
+        parent: orocrm_magento.import.strategy.order.add_or_update
+        class: %orocrm_magento.import.strategy.order_with_customer.add_or_update.class%
+
     # Processors
     orocrm_magento.importexport.processor.import_customer:
         parent: oro_importexport.processor.import_abstract
@@ -303,6 +308,13 @@ services:
              - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
+
+    orocrm_magento.importexport.processor.import_order_with_customer:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
+             - [setStrategy, [@orocrm_magento.import.strategy.order_with_customer.add_or_update]]
+             - [setEntityName, [%orocrm_magento.entity.order.class%]]
 
     orocrm_magento.importexport.normalizer.datetime:
         class: %orocrm_magento.importexport.normalizer.datetime.class%

@@ -52,7 +52,7 @@ connector:
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.mage.order_connector
-                        processor: oro_importexport.processor.import_delegate
+                        processor: orocrm_magento.importexport.processor.import_order_with_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
