@@ -58,9 +58,12 @@ parameters:
 
     # Readers
     orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
+    orocrm_magento.reader.context_order.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader
 
     # Processor
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
+    orocrm_magento.importexport.processor.context_order.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextOrderProcessor
+
 services:
     # Data converter
     orocrm_magento.importexport.data_converter.cart:
@@ -282,14 +285,18 @@ services:
         class: %orocrm_magento.import.strategy.order_with_customer.add_or_update.class%
 
     # Processors
-    orocrm_magento.importexport.processor.import_customer:
+    orocrm_magento.importexport.processor.abstract:
         class: %orocrm_magento.importexport.processor.absract.class%
         parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setContextRegistry, [@oro_importexport.context_registry]]
+
+    orocrm_magento.importexport.processor.import_customer:
+        parent: orocrm_magento.importexport.processor.abstract
         calls:
              - [setDataConverter, [@oro_importexport.data_converter.default]]
              - [setStrategy, [@orocrm_magento.import.strategy.customer.add_or_update]]
              - [setEntityName, [%orocrm_magento.entity.customer.class%]]
-             - [setContextRegistry, [@oro_importexport.context_registry]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
 
@@ -352,6 +359,12 @@ services:
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 
+    orocrm_magento.importexport.processor.context_order:
+        class: %orocrm_magento.importexport.processor.context_order.class%
+        parent: orocrm_magento.importexport.processor.abstract
+        calls:
+             - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
+
     # Reverse processor
     orocrm_magento.importexport.processor.export_customer:
         parent: oro_importexport.processor.export_abstract
@@ -383,4 +396,9 @@ services:
         class: %orocrm_magento.reader.context_customer.class%
         parent: orocrm_magento.mage.customer_connector
         tags:
-          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.reader.context_order:
+        class: %orocrm_magento.reader.context_order.class%
+        arguments:
+            - @oro_importexport.context_registry

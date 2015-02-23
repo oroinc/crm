@@ -69,8 +69,8 @@ connector:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    orocrm_magento.mage.order_connector
-                        processor: oro_importexport.processor.import_delegate
+                        reader:    orocrm_magento.reader.context_order
+                        processor: orocrm_magento.importexport.processor.context_order
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

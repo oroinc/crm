@@ -51,6 +51,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var array */
     protected $entitiesIdsBuffer = [];
 
+    /**
+     * In case entities ids were predefined we should not load next iteration
+     *
+     * @var bool
+     */
+    protected $entitiesIdsBufferImmutable = false;
+
     /** @var null|\stdClass */
     protected $current;
 
@@ -96,10 +103,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function next()
     {
         do {
+            $result = true;
+
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
-                $result   = $this->getEntity($entityId);
-            } else {
+                $result = $this->getEntity($entityId);
+            } elseif ($this->entitiesIdsBufferImmutable && empty($this->entitiesIdsBuffer)) {
+                $result = null;
+            } elseif (!$this->entitiesIdsBufferImmutable) {
                 $result = $this->findEntitiesToProcess();
             }
 
@@ -144,7 +155,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $this->loaded       = true;
         }
 
-        $this->entitiesIdsBuffer = [];
+        if (!$this->entitiesIdsBufferImmutable) {
+            $this->entitiesIdsBuffer = [];
+        }
         $this->current           = null;
         $this->lastSyncDate      = clone $this->lastSyncDateInitialValue;
         $this->filter->reset();
@@ -190,6 +203,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function setEntitiesIdsBuffer(array $entitiesIdsBuffer)
     {
         $this->entitiesIdsBuffer = $entitiesIdsBuffer;
+        $this->entitiesIdsBufferImmutable = true;
     }
 
     /**
