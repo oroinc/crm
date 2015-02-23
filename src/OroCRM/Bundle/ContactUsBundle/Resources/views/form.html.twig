@@ -1,43 +1,46 @@
-{% block _form_widget %}
-{% form_theme form with ['OroCRMContactUsBundle::fields.html.twig'] %}
-
-{{ form_start(form, {'attr': {'id': form.vars.name, 'novalidate': 'novalidate' }}) }}
-<div class="wrapper">
+{% block fieldset_widget %}
     <div class="row-group">
-        <div class="box">
-            {{ form_row(form.firstName) }}
-        </div>
-        <div class="box">
-            {{ form_row(form.lastName) }}
-        </div>
+        {{ block_widget(block) }}
     </div>
-    <div class="row-group">
-        <div class="box">
-            {{ form_row(form.emailAddress) }}
-        </div>
-    </div>
-    <div class="row-group">
-        <div class="box">
-            {{ form_row(form.phone) }}
-        </div>
-    </div>
+{% endblock %}
 
-    {# Custom(extended) fields #}
-    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
-        <div class="row-group" id="{{ child.vars.id ~ '_holder' }}">
-            <div class="box">
-                {{ form_row(child) }}
-            </div>
-        </div>
-    {% endfor %}
-
-    <div class="row-group">
-        {{ form_row(form.comment) }}
-    </div>
-
-    <div class="row-group">
-        {{ form_widget(form.submit) }}
+{% block form_field_widget %}
+<div class="row-group"{% if form.vars.extra_field is defined and form.vars.extra_field %} id="{{ form.vars.id ~ '_holder' }}" {% endif %} >
+    <div class="box">
+        {{ form_row(form) }}
     </div>
 </div>
-{{ form_end(form) }}
+{% endblock %}
+
+{% block form_widget %}
+    {% form_theme form with ['OroCRMContactUsBundle::fields.html.twig'] %}
+    {{ form_start(form, {'attr': {'id': form.vars.name, 'novalidate': 'novalidate' }}) }}
+    <div class="wrapper">
+        {{ block_widget(block) }}
+    </div>
+    {{ form_end(form) }}
+{% endblock %}
+
+{% block _embedded_form_firstName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_lastName_widget %}
+    <div class="box">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_comment_widget %}
+    <div class="row-group">
+        {{ form_row(form) }}
+    </div>
+{% endblock %}
+
+{% block _embedded_form_submit_widget %}
+    <div class="row-group">
+        {{ form_widget(form) }}
+    </div>
 {% endblock %}
