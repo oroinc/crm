@@ -15,9 +15,6 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
     /** @var int */
     protected $currentPage = 1;
 
-    /** @var \stdClass[] Entities buffer got from pageable remote */
-    protected $entityBuffer = null;
-
     /** @var bool */
     protected $lastPageAssumed = false;
 

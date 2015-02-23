@@ -64,6 +64,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var bool */
     protected $loaded = false;
 
+    /** @var \stdClass[] Entities buffer got from pageable remote */
+    protected $entityBuffer;
+
     /**
      * @param SoapTransport $transport
      * @param array $settings
