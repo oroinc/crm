@@ -66,15 +66,10 @@ class JobExecutor extends Executor
         $initialSyncedTo = $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INITIAL_SYNCED_TO];
 
         $jobResult = null;
-
-        if (empty($this->bundleConfiguration['sync_settings']['initial_import_step_interval'])) {
-            throw new \InvalidArgumentException('Option "initial_import_step_interval" is missing');
-        }
-
-        $syncInterval = $this->bundleConfiguration['sync_settings']['initial_import_step_interval'];
-        $interval = \DateInterval::createFromDateString($syncInterval);
+        $interval = $this->getSyncInterval();
 
         $configuration[ProcessorRegistry::TYPE_IMPORT][InitialSyncProcessor::INTERVAL] = $interval;
+        // Workaround for magento 1.6 support
         $initialSyncedTo->add($interval);
 
         while ($startSyncDate < $initialSyncedTo) {
@@ -97,5 +92,20 @@ class JobExecutor extends Executor
         }
 
         return in_array($jobName, $this->supportedJobs[$jobType], true);
+    }
+
+    /**
+     * @return \DateInterval
+     */
+    protected function getSyncInterval()
+    {
+        if (empty($this->bundleConfiguration['sync_settings']['initial_import_step_interval'])) {
+            throw new \InvalidArgumentException('Option "initial_import_step_interval" is missing');
+        }
+
+        $syncInterval = $this->bundleConfiguration['sync_settings']['initial_import_step_interval'];
+        $interval = \DateInterval::createFromDateString($syncInterval);
+
+        return $interval;
     }
 }
