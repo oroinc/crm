@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Processor;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Serializer\SerializerInterface;
 
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextOrderProcessor;
 

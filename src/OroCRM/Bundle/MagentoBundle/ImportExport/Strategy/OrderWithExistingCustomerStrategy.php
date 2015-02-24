@@ -37,7 +37,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy implements StepExe
     {
         $this->customer = null;
         if (!$this->isProcessingAllowed($importingOrder)) {
-            $postProcessOrders = $this->getExecutionContext()->get(self::CONTEXT_ORDER_POST_PROCESS) ?: [];
+            $postProcessOrders = (array)$this->getExecutionContext()->get(self::CONTEXT_ORDER_POST_PROCESS);
             $postProcessOrders[] = $this->context->getValue('itemData');
             $this->getExecutionContext()->put(self::CONTEXT_ORDER_POST_PROCESS, $postProcessOrders);
 
