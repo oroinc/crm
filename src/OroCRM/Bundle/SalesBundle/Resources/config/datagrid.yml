@@ -754,6 +754,7 @@ datagrid:
                 link:          delete_link
         options:
             entity_pagination: true
+            export: true
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%

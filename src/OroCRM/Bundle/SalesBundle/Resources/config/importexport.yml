@@ -26,10 +26,16 @@ services:
     orocrm_sales.importexport.data_converter.opportunity:
         parent: oro_importexport.data_converter.configurable
 
+    orocrm_sales.importexport.data_converter.b2bcustomer:
+        parent: oro_importexport.data_converter.configurable
+
     orocrm_sales.importexport.template_fixture.data_converter.lead:
         parent: oro_importexport.data_converter.template_fixture.configurable
 
     orocrm_sales.importexport.template_fixture.data_converter.opportunity:
+        parent: oro_importexport.data_converter.template_fixture.configurable
+
+    orocrm_sales.importexport.template_fixture.data_converter.b2bcustomer:
         parent: oro_importexport.data_converter.template_fixture.configurable
 
     # Export processor
@@ -47,6 +53,13 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity }
 
+    orocrm_sales.importexport.processor.export.b2bcustomer:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+             - [setDataConverter, [@orocrm_sales.importexport.data_converter.b2bcustomer]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_sales.b2bcustomer.entity.class%, alias: orocrm_sales_b2bcustomer }
+
     orocrm_sales.importexport.processor.export_template.lead:
         parent: oro_importexport.processor.export_abstract
         calls:
@@ -61,11 +74,21 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export_template, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity }
 
+    orocrm_sales.importexport.processor.export_template.b2bcustomer:
+        parent: oro_importexport.processor.export_abstract
+        calls:
+            - [setDataConverter, [@orocrm_sales.importexport.template_fixture.data_converter.b2bcustomer]]
+        tags:
+            - { name: oro_importexport.processor, type: export_template, entity: %orocrm_sales.b2bcustomer.entity.class%, alias: orocrm_sales_b2bcustomer }
+
     # Strategy
     orocrm_sales.importexport.strategy.lead.add_or_replace:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_sales.importexport.strategy.opportunity.add_or_replace:
+        parent: oro_importexport.strategy.configurable_add_or_replace
+
+    orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     # Import processor
@@ -86,3 +109,12 @@ services:
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity.add_or_replace }
             - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_sales.opportunity.class%, alias: orocrm_sales_opportunity.add_or_replace }
+
+    orocrm_sales.importexport.processor.import.b2bcustomer:
+        parent: oro_importexport.processor.import_abstract
+        calls:
+             - [setDataConverter, [@orocrm_sales.importexport.data_converter.b2bcustomer]]
+             - [setStrategy, [@orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_sales.b2bcustomer.entity.class%, alias: orocrm_sales_b2bcustomer }
+            - { name: oro_importexport.processor, type: import_validation, entity: %orocrm_sales.b2bcustomer.entity.class%, alias: orocrm_sales_b2bcustomer }
