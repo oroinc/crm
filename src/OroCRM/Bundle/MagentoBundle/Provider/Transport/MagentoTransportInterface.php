@@ -86,6 +86,14 @@ interface MagentoTransportInterface extends TransportInterface
     public function getRegions();
 
     /**
+     * Retrieve customer information from magento.
+     *
+     * @param Customer $customer
+     * @return mixed
+     */
+    public function getCustomerInfo(Customer $customer);
+
+    /**
      * Retrieve customer address list
      *
      * @param Customer $customer

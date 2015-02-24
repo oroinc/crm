@@ -266,6 +266,16 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
+    public function getCustomerInfo(Customer $customer)
+    {
+        $customerId = $customer->getOriginId();
+
+        return $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $customerId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getErrorCode(\Exception $e)
     {
         if ($e instanceof \SoapFault) {
