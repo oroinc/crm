@@ -30,7 +30,7 @@ class ContextOrderReader extends AbstractReader
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        $this->orders = $this->stepExecution->getJobExecution()
-            ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS) ?: [];
+        $this->orders = (array)$this->stepExecution->getJobExecution()
+            ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
     }
 }
