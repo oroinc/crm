@@ -36,8 +36,8 @@ class ContextCustomerReader extends CustomerConnector
      */
     public function getCustomerIds()
     {
-        $orders = $this->stepExecution->getJobExecution()
-            ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS) ?: [];
+        $orders = (array)$this->stepExecution->getJobExecution()
+            ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
 
         $entitiesIdsBuffer = array_map(
             function (Order $order) {

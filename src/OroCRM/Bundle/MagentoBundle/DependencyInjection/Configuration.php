@@ -30,7 +30,7 @@ class Configuration implements ConfigurationInterface
                     ->example('10 minutes')
                 ->end()
                 ->scalarNode('initial_import_step_interval')
-                    ->defaultValue('90 days')
+                    ->defaultValue('1 day')
                     ->cannotBeEmpty()
                     ->info(
                         'This interval will be used in initial sync, connector will walk starting from now or' .
