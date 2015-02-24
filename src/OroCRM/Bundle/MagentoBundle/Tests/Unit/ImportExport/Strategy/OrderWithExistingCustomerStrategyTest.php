@@ -2,7 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
 
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\EntityManager;
+
+use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
@@ -10,29 +18,34 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerS
 class OrderWithExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ImportStrategyHelper
      */
     protected $strategyHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry
      */
     protected $managerRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|DefaultOwnerHelper
      */
     protected $ownerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
      */
     protected $em;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecution
      */
-    protected $context;
+    protected $stepExecution;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecution
+     */
+    protected $jobExecution;
 
     /**
      * @var OrderWithExistingCustomerStrategy
@@ -56,14 +69,23 @@ class OrderWithExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+
+        $this->stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->jobExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\JobExecution')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->stepExecution->expects($this->any())->method('getJobExecution')
+            ->will($this->returnValue($this->jobExecution));
 
         $this->strategy = new OrderWithExistingCustomerStrategy(
             $this->strategyHelper,
             $this->managerRegistry,
             $this->ownerHelper
         );
-        $this->strategy->setImportExportContext($this->context);
     }
 
     protected function tearDown()
@@ -73,12 +95,15 @@ class OrderWithExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
             $this->strategyHelper,
             $this->managerRegistry,
             $this->ownerHelper,
-            $this->context,
             $this->strategy
         );
     }
 
-    public function testProcess()
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Execution context is not configured
+     */
+    public function testProcessFailed()
     {
         $customer = new Customer();
         $customer->setOriginId(1);
@@ -97,11 +122,38 @@ class OrderWithExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($repository));
 
-        $this->context->expects($this->once())
-            ->method('getValue')
+        $this->assertNull($this->strategy->process($order));
+    }
+
+    public function testProcess()
+    {
+        $customer = new Customer();
+        $customer->setOriginId(1);
+        $channel = new Channel();
+        $order = new Order();
+        $order->setCustomer($customer);
+        $order->setChannel($channel);
+
+        $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+        $this->jobExecution->expects($this->any())->method('getExecutionContext')
+            ->will($this->returnValue($execution));
+        $this->strategy->setStepExecution($this->stepExecution);
+
+        $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $repository->expects($this->once())
+            ->method('findOneBy')
+            ->with(['originId' => $customer->getOriginId(), 'channel' => $channel]);
+        $this->em->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($repository));
+
+        $execution->expects($this->once())
+            ->method('get')
             ->with(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
-        $this->context->expects($this->once())
-            ->method('setValue')
+        $execution->expects($this->once())
+            ->method('put')
             ->with(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS, [$order]);
 
         $this->assertNull($this->strategy->process($order));

@@ -2,11 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class OrderWithExistingCustomerStrategy extends OrderStrategy
+class OrderWithExistingCustomerStrategy extends OrderStrategy implements StepExecutionAwareInterface
 {
     const CONTEXT_ORDER_POST_PROCESS = 'postProcessOrders';
 
@@ -15,6 +19,17 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected $customer;
 
+    /** @var StepExecution */
+    protected $stepExecution;
+
+    /**
+     * @param StepExecution $stepExecution
+     */
+    public function setStepExecution(StepExecution $stepExecution)
+    {
+        $this->stepExecution = $stepExecution;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -22,9 +37,9 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     {
         $this->customer = null;
         if (!$this->isProcessingAllowed($importingOrder)) {
-            $postProcessOrders = $this->context->getValue(self::CONTEXT_ORDER_POST_PROCESS);
+            $postProcessOrders = $this->getExecutionContext()->get(self::CONTEXT_ORDER_POST_PROCESS);
             $postProcessOrders[] = $importingOrder;
-            $this->context->setValue(self::CONTEXT_ORDER_POST_PROCESS, $postProcessOrders);
+            $this->getExecutionContext()->put(self::CONTEXT_ORDER_POST_PROCESS, $postProcessOrders);
 
             return null;
         }
@@ -66,5 +81,17 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         } else {
             parent::processCustomer($entity);
         }
+    }
+
+    /**
+     * @return ExecutionContext
+     */
+    protected function getExecutionContext()
+    {
+        if (!$this->stepExecution) {
+            throw new \InvalidArgumentException('Execution context is not configured');
+        }
+
+        return $this->stepExecution->getJobExecution()->getExecutionContext();
     }
 }

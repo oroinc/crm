@@ -57,6 +57,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var bool */
     protected $loaded = false;
 
+    /**
+     * @param SoapTransport $transport
+     * @param array $settings
+     */
     public function __construct(SoapTransport $transport, array $settings)
     {
         $this->transport = $transport;
@@ -173,6 +177,22 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
+     * @param \DateInterval $syncRange
+     */
+    public function setSyncRange(\DateInterval $syncRange)
+    {
+        $this->syncRange = $syncRange;
+    }
+
+    /**
+     * @param array $entitiesIdsBuffer
+     */
+    public function setEntitiesIdsBuffer(array $entitiesIdsBuffer)
+    {
+        $this->entitiesIdsBuffer = $entitiesIdsBuffer;
+    }
+
+    /**
      * @param \DateTime $date
      * @param array     $websiteIds
      * @param array     $storeIds
@@ -196,15 +216,15 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             }
         }
 
+        $toDate = clone $date;
+        $toDate->sub($this->syncRange);
+        $dateField = 'updated_at';
         $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
         if ($initMode) {
-            $toDate = clone $date;
-            $toDate->modify('-1 day');
-            $this->filter->addDateFilter('created_at', 'to', $date, $format);
-            $this->filter->addDateFilter('created_at', 'from', $toDate, $format);
-        } else {
-            $this->filter->addDateFilter('updated_at', 'from', $date, $format);
+            $dateField = 'created_at';
         }
+        $this->filter->addDateFilter($dateField, 'to', $date, $format);
+        $this->filter->addDateFilter($dateField, 'from', $toDate, $format);
 
         $lastId = $this->getLastId();
         if (!is_null($lastId) && $initMode) {
@@ -245,8 +265,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
         // if init mode and it's first iteration we have to skip retrieved entities
         if ($wasNull && $initMode) {
-            $this->entitiesIdsBuffer = [];
-            $this->logger->info('Pagination start point detected');
+//            @todo: restore after requirements clarifying
+//            $this->entitiesIdsBuffer = [];
+//            $this->logger->info('Pagination start point detected');
         } else {
             $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
         }
