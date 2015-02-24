@@ -5,12 +5,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use Oro\Component\Layout\LayoutManipulatorInterface;
-
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
-use Oro\Bundle\EmbeddedFormBundle\Manager\LayoutUpdateInterface;
 
-class ContactRequestType extends AbstractType implements EmbeddedFormInterface, LayoutUpdateInterface
+class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {
     /**
      * {@inheritdoc}
@@ -187,27 +184,5 @@ CSS;
     public function getDefaultSuccessMessage()
     {
         return '<p>Form has been submitted successfully</p>{back_link}';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateLayout(LayoutManipulatorInterface $layoutManipulator)
-    {
-        $layoutManipulator->setBlockTheme('OroCRMContactUsBundle::form.html.twig');
-        $layoutManipulator
-            ->remove('form')
-            ->add(
-                'embedded_form',
-                'content',
-                'form',
-                [
-                    'form_name'        => 'embedded_form',
-                    'preferred_fields' => ['firstName', 'lastName', 'emailAddress', 'phone'],
-                ]
-            )
-            ->add('name_group', 'embedded_form', 'fieldset')
-            ->move('embedded_form_firstName', 'name_group')
-            ->move('embedded_form_lastName', 'name_group');
     }
 }
