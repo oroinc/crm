@@ -8,6 +8,7 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
@@ -149,12 +150,20 @@ class OrderWithExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
             ->method('getRepository')
             ->will($this->returnValue($repository));
 
+        $orderItemDate = ['customerId' => uniqid()];
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $context->expects($this->once())
+            ->method('getValue')
+            ->will($this->returnValue($orderItemDate));
+        $this->strategy->setImportExportContext($context);
+
         $execution->expects($this->once())
             ->method('get')
             ->with(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
         $execution->expects($this->once())
             ->method('put')
-            ->with(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS, [$order]);
+            ->with(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS, [$orderItemDate]);
 
         $this->assertNull($this->strategy->process($order));
     }

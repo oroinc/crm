@@ -5,8 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
 
@@ -66,7 +64,7 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
 
         $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
 
-        $iterator->expects($expectedIds ? $this->once() : $this->never())
+        $iterator->expects($this->once())
             ->method('setEntitiesIdsBuffer')
             ->with($expectedIds);
 
@@ -101,21 +99,21 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
         return [
             'empty orders' => [],
             'order without customer' => [[$this->getOrder()]],
-            'order with customer without originId' => [[$this->getOrder(new Customer())]],
-            'nullable originId' => [[$this->getOrder(new Customer(), false)]],
-            'invalid originId' => [[$this->getOrder(new Customer(), 0)]],
-            'valid order' => [[$this->getOrder(new Customer(), $originId)], [$originId]],
+            'order with customer without originId' => [[$this->getOrder([])]],
+            'nullable originId' => [[$this->getOrder([], false)]],
+            'invalid originId' => [[$this->getOrder([], 0)]],
+            'valid order' => [[$this->getOrder([], $originId)], [$originId]],
             'multiple orders' => [
                 [
-                    $this->getOrder(new Customer(), $originId),
-                    $this->getOrder(new Customer(), $originId2)
+                    $this->getOrder([], $originId),
+                    $this->getOrder([], $originId2)
                 ],
                 [$originId, $originId2]
             ],
             'duplicate customer ids' => [
                 [
-                    $this->getOrder(new Customer(), $originId),
-                    $this->getOrder(new Customer(), $originId)
+                    $this->getOrder([], $originId),
+                    $this->getOrder([], $originId)
                 ],
                 [$originId]
             ],
@@ -123,20 +121,20 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     }
 
     /**
-     * @param Customer|null $customer
+     * @param mixed $customerData
      * @param mixed $originId
-     * @return Order
+     * @return array
      */
-    protected function getOrder($customer = null, $originId = null)
+    protected function getOrder($customerData = null, $originId = null)
     {
-        $order = new Order();
+        $order = [];
 
-        if ($customer) {
+        if (null !== $customerData) {
             if ($originId) {
-                $customer->setOriginId($originId);
+                $customerData['originId'] = $originId;
             }
 
-            $order->setCustomer($customer);
+            $order['customer'] = $customerData;
         }
 
         return $order;
