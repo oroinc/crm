@@ -1,0 +1,28 @@
+oro_layout:
+    actions:
+        - @remove:
+            id: form
+        - @add:
+           id:        embedded_form
+           parent:    content
+           blockType: form
+           options:
+                form_name:        embedded_form
+                preferred_fields: [firstName, lastName, emailAddress, phone]
+        - @add:
+            id:        name_group
+            parent:    embedded_form
+            blockType: fieldset
+        - @move:
+            id:     embedded_form_firstName
+            parent: name_group
+        - @move:
+            id:     embedded_form_lastName
+            parent: name_group
+        - @setBlockTheme:
+            themeName: 'OroCRMContactUsBundle::form.html.twig'
+
+    condition:
+        @eq:
+            - $context.embedded_form_type
+            - 'orocrm_contact_us.embedded_form'
