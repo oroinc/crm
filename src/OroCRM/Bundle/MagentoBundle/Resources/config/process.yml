@@ -237,7 +237,7 @@ definitions:
                         attribute: $.isSyncRequested
                         object: $.stateManager
                         method: 'isInState'
-                        method_parameters: [$.infoSyncState]
+                        method_parameters: [$syncState, $.infoSyncState]
                     - @tree:
                         coditions:
                             @equal: [$.isSyncRequested, true]
