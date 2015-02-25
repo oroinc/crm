@@ -37,5 +37,14 @@ class StateManagerTest extends \PHPUnit_Framework_TestCase
         $stateManager->addState($object, 'stateField', self::STATE_REQUIRE_ADDRESS | self::STATE_REQUIRE_INFO);
         $this->assertTrue($stateManager->isInState($object->stateField, self::STATE_REQUIRE_ADDRESS));
         $this->assertTrue($stateManager->isInState($object->stateField, self::STATE_REQUIRE_INFO));
+
+        $stateManager->addState($object, 'stateField', self::STATE_REQUIRE_ADDRESS);
+        $this->assertTrue($stateManager->isInState($object->stateField, self::STATE_REQUIRE_ADDRESS));
+        $this->assertTrue($stateManager->isInState($object->stateField, self::STATE_REQUIRE_INFO));
+
+        $stateManager->removeState($object, 'stateField', self::STATE_REQUIRE_ADDRESS);
+        $stateManager->removeState($object, 'stateField', self::STATE_REQUIRE_ADDRESS);
+        $this->assertFalse($stateManager->isInState($object->stateField, self::STATE_REQUIRE_ADDRESS));
+        $this->assertTrue($stateManager->isInState($object->stateField, self::STATE_REQUIRE_INFO));
     }
 }

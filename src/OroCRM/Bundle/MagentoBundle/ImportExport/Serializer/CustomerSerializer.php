@@ -359,8 +359,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         if (!empty($mappedData['birthday'])) {
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
-        } else {
-            $this->stateManager->addState($resultObject, SyncStateAwareInterface::PROPERTY, Customer::SYNC_INFO);
         }
 
         if (isset($mappedData['gender']) && !empty($mappedData['gender'])) {
@@ -378,6 +376,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData, $format, $context);
+        $this->updateStates($resultObject, $data);
 
         return $resultObject;
     }
@@ -555,8 +554,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 }
                 $object->resetAddresses($addresses);
             }
-        } else {
-            $this->stateManager->addState($object, SyncStateAwareInterface::PROPERTY, Customer::SYNC_ADDRESS);
         }
     }
 
@@ -674,5 +671,16 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         return $bapAddress;
+    }
+
+    /**
+     * @param Customer $resultObject
+     * @param array $data
+     */
+    protected function updateStates(Customer $resultObject, array $data)
+    {
+        if (!array_key_exists('dob', $data)) {
+            $this->stateManager->addState($resultObject, 'syncState', Customer::SYNC_INFO);
+        }
     }
 }
