@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
+use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
 class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 {
@@ -26,13 +27,14 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcess()
     {
-        $connector = 'testConnector';
+        $connector = 'testConnector_initial';
         $connectors = [$connector];
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
 
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+        $realConnector = new InitialConnector();
+        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate], $realConnector);
 
         $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
             ->disableOriginalConstructor()
@@ -69,7 +71,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessFirst()
     {
-        $connector = 'testConnector';
+        $connector = 'testConnector_initial';
         $connectors = [$connector];
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));

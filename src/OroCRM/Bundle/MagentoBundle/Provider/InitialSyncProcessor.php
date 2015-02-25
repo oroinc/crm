@@ -4,17 +4,18 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
+    const INITIAL_CONNECTOR_SUFFIX = '_initial';
+
     /**
      * {@inheritdoc}
      */
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
         $callback = function ($connector) {
-            return !$connector instanceof InitialConnectorInterface;
+            return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
         };
 
         return parent::processConnectors($integration, $parameters, $callback);
