@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
@@ -24,6 +23,8 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\SyncStateAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -67,6 +68,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'telephone'           => '[phone]'
     ];
 
+    /** @var array */
     protected $contactAddressEntityToMageMapping = [
         'name_prefix'          => 'prefix',
         'first_name'           => 'firstname',
@@ -358,7 +360,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         if (!empty($mappedData['birthday'])) {
             $mappedData['birthday'] = substr($mappedData['birthday'], 0, 10);
         } else {
-            $this->stateManager->addState($resultObject, 'syncState', Customer::SYNC_INFO);
+            $this->stateManager->addState($resultObject, SyncStateAwareInterface::PROPERTY, Customer::SYNC_INFO);
         }
 
         if (isset($mappedData['gender']) && !empty($mappedData['gender'])) {
@@ -554,7 +556,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
                 $object->resetAddresses($addresses);
             }
         } else {
-            $this->stateManager->addState($object, 'syncState', Customer::SYNC_ADDRESS);
+            $this->stateManager->addState($object, SyncStateAwareInterface::PROPERTY, Customer::SYNC_ADDRESS);
         }
     }
 

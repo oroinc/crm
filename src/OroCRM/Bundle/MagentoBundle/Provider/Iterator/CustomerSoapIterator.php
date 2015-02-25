@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
@@ -16,6 +17,40 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     {
         $filters = $this->getBatchFilter($this->lastSyncDate, [$this->websiteId]);
 
+        $this->loadByFilters($filters);
+
+        return array_keys($this->entityBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        $this->loadByFilters($filters->getAppliedFilters());
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
@@ -27,8 +62,6 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
         );
 
         $this->entityBuffer = array_combine($ids, $result);
-
-        return $ids;
     }
 
     /**

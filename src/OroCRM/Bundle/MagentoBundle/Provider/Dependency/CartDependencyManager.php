@@ -15,6 +15,10 @@ class CartDependencyManager extends AbstractDependencyManager
      */
     public static function addDependencyData($result, array $dependencies)
     {
+        if (!$result) {
+            return;
+        }
+
         parent::addDependencyData($result, $dependencies);
 
         if (empty($result->customer_group_id)) {

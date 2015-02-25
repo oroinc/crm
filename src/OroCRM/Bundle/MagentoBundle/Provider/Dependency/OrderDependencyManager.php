@@ -12,6 +12,10 @@ class OrderDependencyManager extends AbstractDependencyManager
      */
     public static function addDependencyData($result, array $dependencies)
     {
+        if (!$result) {
+            return;
+        }
+
         parent::addDependencyData($result, $dependencies);
 
         $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;

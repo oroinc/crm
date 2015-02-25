@@ -14,6 +14,10 @@ abstract class AbstractDependencyManager
      */
     public static function addDependencyData($result, array $dependencies)
     {
+        if (!$result) {
+            return;
+        }
+
         // fill related entities data, needed to create full representation of magento store state in this time
         // flat array structure will be converted by data converter
         $store   = $dependencies[SoapTransport::ALIAS_STORES][$result->store_id];

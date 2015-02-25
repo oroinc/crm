@@ -61,7 +61,11 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInterface, LastNameInterface
+class Order extends ExtendOrder implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    LastNameInterface,
+    SyncStateAwareInterface
 {
     const SYNC_INFO = 1;
     const STATUS_CANCELED = 'canceled';
@@ -771,7 +775,7 @@ class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInter
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getSyncState()
     {
@@ -779,7 +783,8 @@ class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInter
     }
 
     /**
-     * @param int $syncState
+     * {@inheritdoc}
+     *
      * @return Order
      */
     public function setSyncState($syncState)

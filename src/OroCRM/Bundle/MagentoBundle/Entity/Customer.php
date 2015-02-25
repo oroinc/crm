@@ -61,7 +61,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
-    RFMAwareInterface
+    RFMAwareInterface,
+    SyncStateAwareInterface
 {
     const SYNC_INFO = 1;
     const SYNC_ADDRESS = 2;
@@ -596,7 +597,7 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getSyncState()
     {
@@ -604,7 +605,8 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param int $syncState
+     * {@inheritdoc}
+     *
      * @return Customer
      */
     public function setSyncState($syncState)

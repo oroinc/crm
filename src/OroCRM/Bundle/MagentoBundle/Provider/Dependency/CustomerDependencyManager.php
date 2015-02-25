@@ -14,6 +14,10 @@ class CustomerDependencyManager extends AbstractDependencyManager
      */
     public static function addDependencyData($result, array $dependencies)
     {
+        if (!$result) {
+            return;
+        }
+
         // TODO: implement convertion using customer data converter
         //return parent::addDependencyData($result, $dependencies);
 

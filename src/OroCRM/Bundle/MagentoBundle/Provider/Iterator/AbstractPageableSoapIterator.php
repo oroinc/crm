@@ -205,6 +205,15 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         $this->entitiesIdsBuffer = $entitiesIdsBuffer;
         $this->entitiesIdsBufferImmutable = true;
+
+        $this->loadEntities($entitiesIdsBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
     }
 
     /**
