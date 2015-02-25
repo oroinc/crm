@@ -13,7 +13,7 @@ class StateManager
      */
     public function isInState($currentState, $requiredState)
     {
-        return ($currentState & $requiredState) == $requiredState;
+        return ($currentState & $requiredState) === $requiredState;
     }
 
     /**
@@ -25,8 +25,10 @@ class StateManager
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $currentState = $propertyAccessor->getValue($object, $field);
-        $currentState |= $state;
-        $propertyAccessor->setValue($object, $field, $currentState);
+        if (!$this->isInState($currentState, $state)) {
+            $currentState |= $state;
+            $propertyAccessor->setValue($object, $field, $currentState);
+        }
     }
 
     /**
@@ -38,7 +40,9 @@ class StateManager
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
         $currentState = $propertyAccessor->getValue($object, $field);
-        $currentState &= ~$state;
-        $propertyAccessor->setValue($object, $field, $currentState);
+        if ($this->isInState($currentState, $state)) {
+            $currentState &= ~$state;
+            $propertyAccessor->setValue($object, $field, $currentState);
+        }
     }
 }
