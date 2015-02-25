@@ -19,14 +19,16 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
         $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
-        $result = array_map(
+        $ids = array_map(
             function ($item) {
                 return is_object($item) ? $item->customer_id : $item['customer_id'];
             },
             $result
         );
 
-        return $result;
+        $this->entityBuffer = array_combine($ids, $result);
+
+        return $ids;
     }
 
     /**
@@ -34,13 +36,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $id]);
-
-        $result->addresses = $this->getCustomerAddressData($id);
-        foreach ($result->addresses as $key => $val) {
-            $result->addresses[$key] = (array)$val;
-        }
-
+        $result = $this->entityBuffer[$id];
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);

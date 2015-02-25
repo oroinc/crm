@@ -9,6 +9,10 @@ class ContextOrderProcessor extends ImportProcessor
      */
     public function process($item)
     {
+        if (!$this->serializer || !$this->strategy) {
+            throw new \InvalidArgumentException('Processor was not configured properly');
+        }
+
         $object = $this->serializer->deserialize(
             $item,
             $this->getEntityName(),
