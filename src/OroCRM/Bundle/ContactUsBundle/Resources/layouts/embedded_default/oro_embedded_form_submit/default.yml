@@ -3,24 +3,24 @@ oro_layout:
         - @remove:
             id: form
         - @add:
-           id:        embedded_form
-           parent:    content
-           blockType: form
+           id:          embedded_form
+           parentId:    content
+           blockType:   form
            options:
                 form_name:        embedded_form
                 preferred_fields: [firstName, lastName, emailAddress, phone]
         - @add:
-            id:        name_group
-            parent:    embedded_form
-            blockType: fieldset
+            id:          name_group
+            parentId:    embedded_form
+            blockType:   fieldset
         - @move:
-            id:     embedded_form_firstName
-            parent: name_group
+            id:       embedded_form_firstName
+            parentId: name_group
         - @move:
-            id:     embedded_form_lastName
-            parent: name_group
+            id:       embedded_form_lastName
+            parentId: name_group
         - @setBlockTheme:
-            themeName: 'OroCRMContactUsBundle::form.html.twig'
+            themes: 'OroCRMContactUsBundle::form.html.twig'
 
     condition:
         @eq:
