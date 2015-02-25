@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CustomerSoapIterator extends AbstractPageableSoapIterator
@@ -40,17 +41,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
             $result->addresses[$key] = (array)$val;
         }
 
-        /**
-         * @TODO move to converter
-         */
-        // fill related entities data, needed to create full representation of magento store state in this time
-        // flat array structure will be converted by data converter
-        $result->group               = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
-        $result->group['originId']   = $result->group['customer_group_id'];
-        $result->store               = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $result->store['originId']   = $result->store_id;
-        $result->website             = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
-        $result->website['originId'] = $result->website['id'];
+        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
     }
@@ -58,13 +49,9 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     /**
      * {@inheritdoc}
      */
-    protected function getDependencies()
+    protected function addDependencyData($result)
     {
-        return [
-            self::ALIAS_STORES   => iterator_to_array($this->transport->getStores()),
-            self::ALIAS_WEBSITES => iterator_to_array($this->transport->getWebsites()),
-            self::ALIAS_GROUPS   => iterator_to_array($this->transport->getCustomerGroups())
-        ];
+        CustomerDependencyManager::addDependencyData($result, $this->transport->getDependencies());
     }
 
     /**

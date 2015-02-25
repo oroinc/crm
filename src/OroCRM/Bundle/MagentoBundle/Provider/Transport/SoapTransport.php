@@ -30,6 +30,11 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
+    const ALIAS_GROUPS   = 'groups';
+    const ALIAS_STORES   = 'stores';
+    const ALIAS_WEBSITES = 'websites';
+    const ALIAS_REGIONS  = 'regions';
+
     const ACTION_CUSTOMER_LIST           = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
     const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
@@ -73,6 +78,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var  string */
     protected $serverTime;
 
+    /** @var array */
+    protected $dependencies = [];
+
+    /**
+     * @param Mcrypt $encoder
+     */
     public function __construct(Mcrypt $encoder)
     {
         $this->encoder = $encoder;
@@ -112,6 +123,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         if (null !== $this->sessionId) {
             $params = array_merge(['sessionId' => $this->sessionId], (array)$params);
         }
+
+        $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
 
         if ($this->isWsiMode) {
             $result = parent::call($action, [(object)$params]);
@@ -191,6 +204,32 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         } else {
             return new OrderSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrderInfo($incrementId)
+    {
+        return $this->call(self::ACTION_ORDER_INFO, ['orderIncrementId' => $incrementId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies($force = false)
+    {
+        if (!$force && $this->dependencies) {
+            return $this->dependencies;
+        }
+
+        $this->dependencies = [
+            self::ALIAS_STORES => iterator_to_array($this->getStores()),
+            self::ALIAS_WEBSITES => iterator_to_array($this->getWebsites()),
+            self::ALIAS_GROUPS   => iterator_to_array($this->getCustomerGroups())
+        ];
+
+        return $this->dependencies;
     }
 
     /**

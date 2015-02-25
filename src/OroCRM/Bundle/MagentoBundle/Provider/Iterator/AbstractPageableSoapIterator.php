@@ -8,6 +8,7 @@ use Psr\Log\LoggerAwareInterface;
 
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\AbstractDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
@@ -44,9 +45,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
     /** @var int */
     protected $websiteId;
-
-    /** @var array dependencies data: customer groups, stores, websites */
-    protected $dependencies = [];
 
     /** @var array */
     protected $entitiesIdsBuffer = [];
@@ -154,8 +152,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function rewind()
     {
         if (false === $this->loaded) {
-            $this->dependencies = $this->getDependencies();
-            $this->loaded       = true;
+            $this->transport->getDependencies(true);
+            $this->loaded = true;
         }
 
         if (!$this->entitiesIdsBufferImmutable) {
@@ -330,7 +328,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         $stores = [];
 
-        foreach ((array)$this->dependencies[self::ALIAS_STORES] as $store) {
+        $dependencies = $this->transport->getDependencies();
+        foreach ($dependencies[self::ALIAS_STORES] as $store) {
             if ($store['website_id'] == $websiteId) {
                 $stores[] = $store['store_id'];
             }
@@ -350,16 +349,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function addDependencyData($result)
     {
-        // fill related entities data, needed to create full representation of magento store state in this time
-        // flat array structure will be converted by data converter
-        $store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $website = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
-
-        $result->store_code         = $store['code'];
-        $result->store_storename    = $store['name'];
-        $result->store_website_id   = $website['id'];
-        $result->store_website_code = $website['code'];
-        $result->store_website_name = $website['name'];
+        AbstractDependencyManager::addDependencyData($result, $this->transport->getDependencies());
     }
 
     /**
@@ -393,16 +383,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
             $this->logger->debug(sprintf($template, $field, urldecode($value)));
         }
-    }
-
-    /**
-     * Get dependencies data
-     *
-     * @return array
-     */
-    protected function getDependencies()
-    {
-        return [];
     }
 
     /**

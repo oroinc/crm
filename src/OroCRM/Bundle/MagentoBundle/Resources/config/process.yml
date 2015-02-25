@@ -197,6 +197,25 @@ definitions:
                             - $.commandName
                             - [$.channelArguments]
 
+    magento_load_order_info:
+        label:   'Load Order info info "salesOrderInfo" action'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
+        order:   40
+        actions_configuration:
+            - @execute_job:
+                conditions:
+                    @not_empty: $incrementId
+                parameters:
+                    jobType: import
+                    jobName: mage_load_order_info
+                    configuration:
+                        data: $.data
+                        channel: $channel
+                        writer_skip_clear: true
+                        processorAlias: 'orocrm_magento.add_or_update_order'
+                    attribute: $.jobResult
+
 triggers:
     magento_customer_creation:
         -
@@ -216,3 +235,9 @@ triggers:
             priority: 10
             queued:   true
             field:    subtotalAmmount
+
+    magento_load_order_info:
+        -
+            event:    create
+            priority: 20
+            queued:   true

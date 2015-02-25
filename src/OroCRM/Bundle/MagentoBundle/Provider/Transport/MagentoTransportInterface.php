@@ -102,4 +102,16 @@ interface MagentoTransportInterface extends TransportInterface
      * @return int
      */
     public function getErrorCode(\Exception $e);
+
+    /**
+     * @param string $incrementId
+     */
+    public function getOrderInfo($incrementId);
+
+    /**
+     * @param bool false
+     *
+     * @return array
+     */
+    public function getDependencies($force = false);
 }

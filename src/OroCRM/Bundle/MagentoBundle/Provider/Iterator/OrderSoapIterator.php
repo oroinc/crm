@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\OrderDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderSoapIterator extends AbstractPageableSoapIterator
@@ -63,19 +64,7 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
      */
     protected function addDependencyData($result)
     {
-        parent::addDependencyData($result);
-        $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getDependencies()
-    {
-        return [
-            self::ALIAS_STORES => iterator_to_array($this->transport->getStores()),
-            self::ALIAS_WEBSITES => iterator_to_array($this->transport->getWebsites())
-        ];
+        OrderDependencyManager::addDependencyData($result, $this->transport->getDependencies());
     }
 
     /**
