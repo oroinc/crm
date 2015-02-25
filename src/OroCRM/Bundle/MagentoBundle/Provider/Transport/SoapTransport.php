@@ -124,7 +124,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             $params = array_merge(['sessionId' => $this->sessionId], (array)$params);
         }
 
-        $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
+        if ($this->logger) {
+            $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
+        }
 
         if ($this->isWsiMode) {
             $result = parent::call($action, [(object)$params]);

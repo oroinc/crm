@@ -47,15 +47,16 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function applyFilter()
     {
-        if ($this->mode == self::IMPORT_MODE_INITIAL) {
+        $toDate = clone $this->lastSyncDate;
+        $toDate->sub($this->syncRange);
+        $dateField = 'updated_at';
+        $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
+        if ($initMode) {
             $dateField = 'created_at';
-            $operator  = 'from';
-        } else {
-            $dateField = 'updated_at';
-            $operator  = 'gt';
         }
+        $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
+        $this->filter->addDateFilter($dateField, 'from', $toDate);
 
-        $this->filter->addDateFilter($dateField, $operator, $this->lastSyncDate);
         if ($this->transport instanceof ServerTimeAwareInterface) {
             // fix time frame if it's possible to retrieve server time
             $time = $this->transport->getServerTime();
