@@ -30,7 +30,7 @@ class OrderInfoReader extends OrderConnector
     {
         $incrementId = $this->getOrder()->getIncrementId();
 
-        if (!empty($this->loaded[$incrementId])) {
+        if (!$incrementId || !empty($this->loaded[$incrementId])) {
             return null;
         }
 
