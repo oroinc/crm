@@ -89,9 +89,6 @@ class CustomerStrategy extends BaseStrategy
         $addresses = $remoteEntity->getAddresses();
         if ($addresses) {
             $this->updateAddresses($localEntity, $addresses);
-        } else {
-            // TODO: CRM-2559 add flags on Customer
-            // $localEntity->setFlag(Customer::SYNC_REQUIRED_FOR_ADDRESSES);
         }
 
         // validate and update context - increment counter or add validation error

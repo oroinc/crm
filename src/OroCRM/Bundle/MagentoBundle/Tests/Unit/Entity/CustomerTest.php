@@ -51,6 +51,7 @@ class CustomerTest extends AbstractEntityTestCase
             'recency'      => ['recency', 1, 1],
             'frequency'    => ['frequency', 2, 2],
             'monetary'     => ['monetary', 3, 3],
+            'syncState'    => ['syncState', 1, 1]
         ];
     }
 

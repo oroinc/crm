@@ -36,17 +36,6 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     protected function getEntity($id)
     {
         $result = $this->entityBuffer[$id];
-
-        // TODO Move getting this data to process CRM-2559
-        /*
-        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $id]);
-
-        $result->addresses = $this->getCustomerAddressData($id);
-        foreach ($result->addresses as $key => $val) {
-            $result->addresses[$key] = (array)$val;
-        }
-        */
-
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);

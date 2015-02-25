@@ -63,6 +63,9 @@ class Customer extends ExtendCustomer implements
     CustomerIdentityInterface,
     RFMAwareInterface
 {
+    const SYNC_INFO = 1;
+    const SYNC_ADDRESS = 2;
+
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
     /*
@@ -268,6 +271,13 @@ class Customer extends ExtendCustomer implements
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
     protected $currency;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     */
+    protected $syncState;
 
     /**
      * @var User
@@ -583,5 +593,24 @@ class Customer extends ExtendCustomer implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSyncState()
+    {
+        return $this->syncState;
+    }
+
+    /**
+     * @param int $syncState
+     * @return Customer
+     */
+    public function setSyncState($syncState)
+    {
+        $this->syncState = $syncState;
+
+        return $this;
     }
 }
