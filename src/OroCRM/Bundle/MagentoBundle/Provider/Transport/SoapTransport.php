@@ -219,7 +219,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getDependencies(array $dependenciesToLoad = null, $force = false)
     {
-        if ($force && null == $dependenciesToLoad) {
+        if ($force && null === $dependenciesToLoad) {
             $dependenciesToLoad = array_keys($this->dependencies);
         }
 
