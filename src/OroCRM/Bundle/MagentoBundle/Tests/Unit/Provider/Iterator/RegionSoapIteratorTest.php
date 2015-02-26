@@ -32,10 +32,10 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
             ]
         ];
 
-        $this->transport->expects($this->at(0))->method('call')
+        $this->transport->expects($this->at(1))->method('call')
             ->with($this->equalTo('directoryCountryList'))->will($this->returnValue($countries));
 
-        $i = 1;
+        $i = 2;
         foreach ($regions as $countryCode => $regionsForCountry) {
             $this->transport->expects($this->at($i))->method('call')
                 ->with($this->equalTo('directoryRegionList'), $this->equalTo(['country' => $countryCode]))

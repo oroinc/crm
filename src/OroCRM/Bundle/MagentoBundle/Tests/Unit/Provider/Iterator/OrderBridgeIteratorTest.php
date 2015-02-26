@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class OrderBridgeIteratorTest extends BaseIteratorTestCase
 {
@@ -24,17 +25,16 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIteration($orderArray, $storeData, $stores, $websites)
     {
-        $this->transport->expects($this->at(0))->method('getStores')
-            ->will(
-                $this->returnValue(new \ArrayIterator($stores))
-            );
+        $dependencies = [
+            MagentoTransportInterface::ALIAS_STORES => $stores,
+            MagentoTransportInterface::ALIAS_WEBSITES => $websites
+        ];
+        $this->transport->expects($this->atLeastOnce())
+            ->method('getDependencies')
+            ->will($this->returnValue($dependencies));
 
-        $this->transport->expects($this->at(1))->method('getWebsites')
-            ->will(
-                $this->returnValue(new \ArrayIterator($websites))
-            );
-
-        $this->transport->expects($this->at(3))->method('call')
+        $this->transport->expects($this->atLeastOnce())
+            ->method('call')
             ->with($this->equalTo('oroOrderList'))
             ->will($this->returnValue($orderArray));
 
