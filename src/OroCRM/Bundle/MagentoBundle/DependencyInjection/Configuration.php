@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
                         'last initial import date and will import data from now till previous date by step interval.' .
                         'Should be \DateInterval::createFromDateString argument value'
                     )
-                    ->example('10 days')
+                    ->example('1 day')
                 ->end();
 
         return $treeBuilder;
