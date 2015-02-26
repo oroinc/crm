@@ -87,6 +87,8 @@ class JobExecutor extends Executor
      */
     public function isApplicable($jobType, $jobName)
     {
+        return false;
+
         if (empty($this->supportedJobs[$jobType])) {
             return false;
         }
