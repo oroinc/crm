@@ -35,6 +35,9 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
                     function (Customer $customer) {
                         $object = new \stdClass();
                         $object->origin_id = $customer->getOriginId();
+                        $object->group_id = 0;
+                        $object->store_id = 0;
+                        $object->website_id = 0;
 
                         return $object;
                     }
@@ -49,7 +52,15 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
 
         $this->transport->expects($this->once())
             ->method('getDependencies')
-            ->will($this->returnValue([]));
+            ->will(
+                $this->returnValue(
+                    [
+                        'groups' => [['customer_group_id' => $originId]],
+                        'websites' => [['id' => $originId]],
+                        'stores' => [['website_id' => $originId]],
+                    ]
+                )
+            );
 
         $reader = $this->getReader();
         $reader->setStepExecution($this->stepExecutionMock);
@@ -57,12 +68,15 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
         $this->assertEquals(
             [
                 'origin_id' => $originId,
+                'group_id' => 0,
+                'store_id' => 0,
+                'website_id' => 0,
                 'addresses' => [
                     ['zip' => $address->zip]
                 ],
-                'group' => ['originId' => null],
-                'store' => ['originId' => null],
-                'website' => ['originId' => null]
+                'group' => ['customer_group_id' => $originId, 'originId' => $originId],
+                'store' => ['website_id' => $originId, 'originId' => 0],
+                'website' => ['id' => $originId, 'originId' => $originId]
             ],
             $reader->read()
         );

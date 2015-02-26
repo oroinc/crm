@@ -35,6 +35,7 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
                     function ($incrementId) {
                         $object = new \stdClass();
                         $object->origin_id = $incrementId;
+                        $object->store_id = 0;
 
                         return $object;
                     }
@@ -43,7 +44,15 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
 
         $this->transport->expects($this->once())
             ->method('getDependencies')
-            ->will($this->returnValue([]));
+            ->will(
+                $this->returnValue(
+                    [
+                        'groups' => [['customer_group_id' => $originId]],
+                        'websites' => [$originId => ['id' => $originId, 'code' => 'code', 'name' => 'name']],
+                        'stores' => [['website_id' => $originId, 'code' => 'code', 'name' => 'name']],
+                    ]
+                )
+            );
 
         $reader = $this->getReader();
         $reader->setStepExecution($this->stepExecutionMock);
@@ -51,11 +60,12 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
         $this->assertEquals(
             [
                 'origin_id' => $originId,
-                'store_code' => null,
-                'store_storename' => null,
-                'store_website_id' => null,
-                'store_website_code' => null,
-                'store_website_name' => null,
+                'store_id' => 0,
+                'store_code' => 'code',
+                'store_storename' => 'name',
+                'store_website_id' => $originId,
+                'store_website_code' => 'code',
+                'store_website_name' => 'name',
                 'payment_method' => null
             ],
             $reader->read()
