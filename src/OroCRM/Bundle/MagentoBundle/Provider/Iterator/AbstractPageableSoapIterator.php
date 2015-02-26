@@ -10,15 +10,14 @@ use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Dependency\AbstractDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
-
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
 
     const DEFAULT_SYNC_RANGE = '1 month';
 
@@ -133,9 +132,11 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function key()
     {
-        return is_object($this->current)
-            ? $this->current->{$this->getIdFieldName()}
-            : $this->current[$this->getIdFieldName()];
+        if (is_object($this->current)) {
+            return $this->current->{$this->getIdFieldName()};
+        } else {
+            return $this->current[$this->getIdFieldName()];
+        }
     }
 
     /**
@@ -152,7 +153,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function rewind()
     {
         if (false === $this->loaded) {
-            $this->transport->getDependencies(true);
+            // Reload loaded dependencies
+            $this->transport->getDependencies(null, true);
             $this->loaded = true;
         }
 
@@ -337,8 +339,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         $stores = [];
 
-        $dependencies = $this->transport->getDependencies();
-        foreach ($dependencies[self::ALIAS_STORES] as $store) {
+        $dependencies = $this->transport->getDependencies([MagentoTransportInterface::ALIAS_STORES]);
+        foreach ($dependencies[MagentoTransportInterface::ALIAS_STORES] as $store) {
             if ($store['website_id'] == $websiteId) {
                 $stores[] = $store['store_id'];
             }
@@ -358,7 +360,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function addDependencyData($result)
     {
-        AbstractDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        AbstractDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

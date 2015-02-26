@@ -43,7 +43,7 @@ class CustomerInfoReader extends CustomerConnector
 
         $this->loaded[$originId] = true;
 
-        CustomerDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        CustomerDependencyManager::addDependencyData($result, $this->transport);
 
         return ConverterUtils::objectToArray($result);
     }

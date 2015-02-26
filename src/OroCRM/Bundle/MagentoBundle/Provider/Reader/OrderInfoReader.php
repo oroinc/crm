@@ -38,7 +38,7 @@ class OrderInfoReader extends OrderConnector
 
         $this->loaded[$incrementId] = true;
 
-        OrderDependencyManager::addDependencyData($order, $this->transport->getDependencies());
+        OrderDependencyManager::addDependencyData($order, $this->transport);
 
         return ConverterUtils::objectToArray($order);
     }
