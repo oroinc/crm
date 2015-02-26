@@ -46,5 +46,6 @@ class CartDependencyManager extends AbstractDependencyManager
 
         $customer_group              = $dependencies[SoapTransport::ALIAS_GROUPS][$groupId];
         $result->customer_group_code = $customer_group['customer_group_code'];
-        $result->customer_group_name = $customer_group['name'];    }
+        $result->customer_group_name = $customer_group['name'];
+    }
 }

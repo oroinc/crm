@@ -187,7 +187,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function setMode($mode)
     {
-        $this->mode = self::IMPORT_MODE_INITIAL;
+        $this->mode = $mode;
     }
 
     /**
