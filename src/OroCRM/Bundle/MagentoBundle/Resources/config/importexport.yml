@@ -357,6 +357,8 @@ services:
     orocrm_magento.provider.initial_sync_processor:
         class: %orocrm_magento.provider.initial_sync_processor.class%
         parent: oro_integration.sync.processor
+        tags:
+            - { name: orocrm_magento.bundle_config.aware }
 
     orocrm_magento.provider.initial_schedule_processor:
         class: %orocrm_magento.provider.initial_schedule_processor.class%

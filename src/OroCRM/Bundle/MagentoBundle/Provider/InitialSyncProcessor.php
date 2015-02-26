@@ -2,19 +2,51 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
+use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
     const INITIAL_CONNECTOR_SUFFIX = '_initial';
 
-    // TODO: Read from bundle configuration
-    /** @var array */
-    protected $bundleConfiguration = [
-        'sync_settings' => [
-            'initial_import_step_interval' => '1 day'
-        ]
-    ];
+    /** @var array|null */
+    protected $bundleConfiguration;
+
+    /**
+     * @param ManagerRegistry $doctrineRegistry
+     * @param ProcessorRegistry $processorRegistry
+     * @param Executor $jobExecutor
+     * @param TypesRegistry $registry
+     * @param EventDispatcherInterface $eventDispatcher
+     * @param LoggerStrategy $logger
+     * @param array $bundleConfiguration
+     */
+    public function __construct(
+        ManagerRegistry $doctrineRegistry,
+        ProcessorRegistry $processorRegistry,
+        Executor $jobExecutor,
+        TypesRegistry $registry,
+        EventDispatcherInterface $eventDispatcher,
+        LoggerStrategy $logger = null,
+        array $bundleConfiguration = null
+    ) {
+        parent::__construct(
+            $doctrineRegistry,
+            $processorRegistry,
+            $jobExecutor,
+            $registry,
+            $eventDispatcher,
+            $logger
+        );
+
+        $this->bundleConfiguration = $bundleConfiguration;
+    }
 
     /**
      * {@inheritdoc}
@@ -59,11 +91,17 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                         $connectorsSyncedTo[$connector]->sub($interval);
 
                         $isSuccess = $isSuccess && $result;
+
+                        if ($isSuccess) {
+                            $this->updateSyncedTo($integration, $connector, $connectorsSyncedTo[$connector]);
+                        } else {
+                            break 2;
+                        }
                     } catch (\Exception $e) {
                         $isSuccess = false;
 
                         $this->logger->critical($e->getMessage());
-                        break;
+                        break 2;
                     }
                 }
             }
@@ -73,21 +111,24 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     }
 
     /**
-     * {@inheritdoc}
+     * @param Integration $integration
+     * @param string $connector
+     * @param \DateTime $syncedTo
      */
-    protected function processImport($connector, $jobName, $configuration, Integration $integration)
+    protected function updateSyncedTo(Integration $integration, $connector, \DateTime $syncedTo)
     {
-        $isSuccess = parent::processImport($connector, $jobName, $configuration, $integration);
+        $formattedSyncedTo = $syncedTo->format(\DateTime::ISO8601);
 
-        // Save synced to date for further checks in InitialScheduleProcessor
-        $syncedTo = $this->getSyncedTo($integration, $connector);
-        if ($syncedTo) {
-            $integration->getSynchronizationSettings()
-                ->offsetSet(self::INITIAL_SYNCED_TO, $syncedTo->format(\DateTime::ISO8601));
-            $this->saveEntity($integration);
-        }
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
+        $statusData = $lastStatus->getData();
+        $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
+        $lastStatus->setData($statusData);
 
-        return $isSuccess;
+        $integration->getSynchronizationSettings()->offsetSet(self::INITIAL_SYNCED_TO, $formattedSyncedTo);
+
+        $this->doctrineRegistry
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->addStatus($integration, $lastStatus);
     }
 
     /**
@@ -112,8 +153,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
      */
     protected function getSyncedTo(Integration $integration, $connector)
     {
-        $lastStatus = $this->doctrineRegistry->getRepository('OroIntegrationBundle:Channel')
-            ->getLastStatusForConnector($integration, $connector);
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
         if ($lastStatus) {
             $statusData = $lastStatus->getData();
             if (!empty($statusData[self::INITIAL_SYNCED_TO])) {
@@ -126,6 +166,18 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         }
 
         return false;
+    }
+
+    /**
+     * @param Integration $integration
+     * @param $connector
+     * @return null|\Oro\Bundle\IntegrationBundle\Entity\Status
+     */
+    protected function getLastStatusForConnector(Integration $integration, $connector)
+    {
+        return $this->doctrineRegistry
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->getLastStatusForConnector($integration, $connector);
     }
 
     /**
