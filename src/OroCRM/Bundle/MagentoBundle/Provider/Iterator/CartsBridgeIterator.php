@@ -53,7 +53,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
      */
     protected function addDependencyData($result)
     {
-        CartDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        CartDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

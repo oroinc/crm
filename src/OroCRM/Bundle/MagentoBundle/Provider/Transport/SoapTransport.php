@@ -2,24 +2,22 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
-use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
-
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
-
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 /**
  * Magento SOAP transport
@@ -27,14 +25,10 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
  * with sessionId param using SOAP requests
  *
  * @package OroCRM\Bundle\MagentoBundle
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
-
     const ACTION_CUSTOMER_LIST           = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
     const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
@@ -161,9 +155,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         if (null === $this->isExtensionInstalled && null === $this->adminUrl) {
             try {
-                $result                     = $this->call(self::ACTION_PING);
+                $result = $this->call(self::ACTION_PING);
                 $this->isExtensionInstalled = !empty($result->version);
-                $this->adminUrl             = !empty($result->admin_url) ? $result->admin_url : false;
+                if (!empty($result->admin_url)) {
+                    $this->adminUrl = $result->admin_url;
+                } else {
+                    $this->adminUrl = false;
+                }
             } catch (\Exception $e) {
                 $this->isExtensionInstalled
                     = $this->adminUrl
@@ -219,19 +217,68 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function getDependencies($force = false)
+    public function getDependencies(array $dependenciesToLoad = null, $force = false)
     {
-        if (!$force && $this->dependencies) {
-            return $this->dependencies;
+        if ($force && null == $dependenciesToLoad) {
+            $dependenciesToLoad = array_keys($this->dependencies);
         }
 
-        $this->dependencies = [
-            self::ALIAS_STORES => iterator_to_array($this->getStores()),
-            self::ALIAS_WEBSITES => iterator_to_array($this->getWebsites()),
-            self::ALIAS_GROUPS   => iterator_to_array($this->getCustomerGroups())
-        ];
+        $dependencies = [];
+        foreach ($dependenciesToLoad as $dependencyToLoad) {
+            switch ($dependencyToLoad) {
+                case MagentoTransportInterface::ALIAS_STORES:
+                    $dependencies[$dependencyToLoad] = $this->getStoreDependency($force);
+                    break;
+                case MagentoTransportInterface::ALIAS_WEBSITES:
+                    $dependencies[$dependencyToLoad] = $this->getWebsiteDependency($force);
+                    break;
+                case MagentoTransportInterface::ALIAS_GROUPS:
+                    $dependencies[$dependencyToLoad] = $this->getCustomerGroupsDependency($force);
+                    break;
+            }
+        }
 
-        return $this->dependencies;
+        return $dependencies;
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getStoreDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_STORES, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_STORES] = iterator_to_array($this->getStores());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_STORES];
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getWebsiteDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_WEBSITES, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES] = iterator_to_array($this->getWebsites());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES];
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getCustomerGroupsDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_GROUPS, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS]
+                = iterator_to_array($this->getCustomerGroups());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS];
     }
 
     /**
@@ -359,8 +406,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         if (null === $this->serverTime) {
             $parsedResponse = $this->getLastResponseHeaders();
 
-            $this->serverTime = isset($parsedResponse['headers'], $parsedResponse['headers']['Date'])
-                ? $parsedResponse['headers']['Date'] : false;
+            if (isset($parsedResponse['headers']['Date'])) {
+                $this->serverTime = $parsedResponse['headers']['Date'];
+            } else {
+                $this->serverTime = false;
+            }
         }
     }
 }

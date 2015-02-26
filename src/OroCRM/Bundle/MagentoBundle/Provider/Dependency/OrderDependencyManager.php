@@ -2,21 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Dependency;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+
 class OrderDependencyManager extends AbstractDependencyManager
 {
     /**
-     * Adds dependencies to result entity
-     *
-     * @param \stdClass $result
-     * @param array $dependencies
+     * {@inheritdoc}
      */
-    public static function addDependencyData($result, array $dependencies)
+    public static function addDependencyData($result, MagentoTransportInterface $transport)
     {
         if (!$result) {
             return;
         }
 
-        parent::addDependencyData($result, $dependencies);
+        parent::addDependencyData($result, $transport);
 
         $result->payment_method = isset($result->payment, $result->payment->method) ? $result->payment->method : null;
     }
