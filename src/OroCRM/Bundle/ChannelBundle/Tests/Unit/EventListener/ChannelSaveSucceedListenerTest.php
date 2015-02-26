@@ -61,7 +61,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->event->expects($this->once())
+        $this->event->expects($this->atLeastOnce())
             ->method('getChannel')
             ->will($this->returnValue($this->entity));
 

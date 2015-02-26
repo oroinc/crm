@@ -2,15 +2,22 @@
 
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener as BaseChannelSaveSucceedListener;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
 {
+    public function onChannelSucceedSave(ChannelSaveEvent $event)
+    {
+        if ($event->getChannel()->getChannelType() === ChannelType::TYPE) {
+            parent::onChannelSucceedSave($event);
+        }
+    }
+
     /**
-     * @param array $entities
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getConnectors(array $entities)
     {
