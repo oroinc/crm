@@ -22,7 +22,7 @@ oro_layout:
         - @setBlockTheme:
             themes: 'OroCRMContactUsBundle::form.html.twig'
 
-    condition:
+    conditions:
         @eq:
             - $context.embedded_form_type
             - 'orocrm_contact_us.embedded_form'
