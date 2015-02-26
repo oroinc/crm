@@ -59,6 +59,8 @@ parameters:
     # Readers
     orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
     orocrm_magento.reader.context_order.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader
+    orocrm_magento.reader.order_info.class:                                     OroCRM\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
+    orocrm_magento.reader.customer_info.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
 
     # Processor
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
@@ -402,3 +404,19 @@ services:
         class: %orocrm_magento.reader.context_order.class%
         arguments:
             - @oro_importexport.context_registry
+
+    orocrm_magento.reader.order_info:
+        class: %orocrm_magento.reader.order_info.class%
+        parent: orocrm_magento.mage.order_connector
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+        calls:
+            - [setOrderClassName, [%orocrm_magento.entity.order.class%]]
+
+    orocrm_magento.reader.customer_info:
+        class: %orocrm_magento.reader.customer_info.class%
+        parent: orocrm_magento.mage.customer_connector
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+        calls:
+            - [setCustomerClassName, [%orocrm_magento.entity.customer.class%]]

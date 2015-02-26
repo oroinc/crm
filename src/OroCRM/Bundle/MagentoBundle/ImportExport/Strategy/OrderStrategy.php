@@ -224,11 +224,11 @@ class OrderStrategy extends BaseStrategy
         // delete order items that not exists in remote order
         $deleted = $entityToUpdate->getItems()->filter(
             function (OrderItem $item) use ($importedOriginIds) {
-                return !in_array($item->getOriginId(), $importedOriginIds);
+                return !in_array($item->getOriginId(), $importedOriginIds, true);
             }
         );
         foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->remove($item);
+            $entityToUpdate->getItems()->removeElement($item);
         }
     }
 }

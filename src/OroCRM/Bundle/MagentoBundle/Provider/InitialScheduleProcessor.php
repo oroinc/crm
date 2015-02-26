@@ -54,6 +54,20 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
+    {
+        if (null === $callback) {
+            $callback = function ($connector) {
+                return strpos($connector, InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX) === false;
+            };
+        }
+
+        return parent::processConnectors($integration, $parameters, $callback);
+    }
+
+    /**
      * @param Integration $integration
      * @return bool
      */

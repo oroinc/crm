@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CustomerSoapIterator extends AbstractPageableSoapIterator
@@ -15,17 +17,51 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     {
         $filters = $this->getBatchFilter($this->lastSyncDate, [$this->websiteId]);
 
+        $this->loadByFilters($filters);
+
+        return array_keys($this->entityBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        $this->loadByFilters($filters->getAppliedFilters());
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
-        $result = array_map(
+        $ids = array_map(
             function ($item) {
                 return is_object($item) ? $item->customer_id : $item['customer_id'];
             },
             $result
         );
 
-        return $result;
+        $this->entityBuffer = array_combine($ids, $result);
     }
 
     /**
@@ -33,24 +69,8 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $result = $this->transport->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $id]);
-
-        $result->addresses = $this->getCustomerAddressData($id);
-        foreach ($result->addresses as $key => $val) {
-            $result->addresses[$key] = (array)$val;
-        }
-
-        /**
-         * @TODO move to converter
-         */
-        // fill related entities data, needed to create full representation of magento store state in this time
-        // flat array structure will be converted by data converter
-        $result->group               = $this->dependencies[self::ALIAS_GROUPS][$result->group_id];
-        $result->group['originId']   = $result->group['customer_group_id'];
-        $result->store               = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $result->store['originId']   = $result->store_id;
-        $result->website             = $this->dependencies[self::ALIAS_WEBSITES][$result->website_id];
-        $result->website['originId'] = $result->website['id'];
+        $result = $this->entityBuffer[$id];
+        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
     }
@@ -58,13 +78,9 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
     /**
      * {@inheritdoc}
      */
-    protected function getDependencies()
+    protected function addDependencyData($result)
     {
-        return [
-            self::ALIAS_STORES   => iterator_to_array($this->transport->getStores()),
-            self::ALIAS_WEBSITES => iterator_to_array($this->transport->getWebsites()),
-            self::ALIAS_GROUPS   => iterator_to_array($this->transport->getCustomerGroups())
-        ];
+        CustomerDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

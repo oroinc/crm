@@ -30,14 +30,14 @@ class Configuration implements ConfigurationInterface
                     ->example('10 minutes')
                 ->end()
                 ->scalarNode('initial_import_step_interval')
-                    ->defaultValue('1 day')
+                    ->defaultValue('90 days')
                     ->cannotBeEmpty()
                     ->info(
                         'This interval will be used in initial sync, connector will walk starting from now or' .
                         'last initial import date and will import data from now till previous date by step interval.' .
                         'Should be \DateInterval::createFromDateString argument value'
                     )
-                    ->example('10 days')
+                    ->example('1 day')
                 ->end();
 
         return $treeBuilder;

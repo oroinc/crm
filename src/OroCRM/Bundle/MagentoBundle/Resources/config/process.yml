@@ -197,6 +197,93 @@ definitions:
                             - $.commandName
                             - [$.channelArguments]
 
+    magento_load_order_info:
+        label:   'Load Order info info "salesOrderInfo" action'
+        exclude_definitions: [magento_load_order_info]
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Order
+        order:   40
+        actions_configuration:
+            - @tree:
+                conditions:
+                    @not_empty: $incrementId
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.infoSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Order::SYNC_INFO
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.infoSyncState]
+                    - @tree:
+                        conditions:
+                            @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                  jobType: import
+                                  jobName: mage_load_order_info
+                                  configuration:
+                                      data: $.data
+                                      channel: $channel
+                                      writer_skip_clear: true
+                                      processorAlias: 'orocrm_magento.add_or_update_order'
+                                  attribute: $.jobResult
+                            - @call_method:
+                                conditions:
+                                    @equal: [$.jobResult.successful, true]
+                                parameters:
+                                    object: $.stateManager
+                                    method: 'removeState'
+                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
+
+    magento_load_customer_info:
+        label:   'Load Customer Information'
+        exclude_definitions: [magento_load_customer_info]
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   40
+        actions_configuration:
+            - @tree:
+                conditions:
+                    @not_empty: $originId
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.infoSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.infoSyncState]
+                    - @tree:
+                        conditions:
+                            @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                parameters:
+                                    jobType: import
+                                    jobName: mage_load_customer_info
+                                    configuration:
+                                        data: $.data
+                                        channel: $channel
+                                        writer_skip_clear: true
+                                        processorAlias: 'orocrm_magento.add_or_update_customer'
+                                    attribute: $.jobResult
+                            - @call_method:
+                                conditions:
+                                    @equal: [$.jobResult.successful, true]
+                                parameters:
+                                    object: $.stateManager
+                                    method: 'removeState'
+                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
+
 triggers:
     magento_customer_creation:
         -
@@ -216,3 +303,25 @@ triggers:
             priority: 10
             queued:   true
             field:    subtotalAmmount
+
+    magento_load_order_info:
+        -
+            event:    create
+            priority: 20
+            queued:   true
+        -
+            event:    update
+            field:    syncState
+            priority: 20
+            queued:   true
+
+    magento_load_customer_info:
+        -
+            event:    create
+            priority: 20
+            queued:   true
+        -
+            event:    update
+            field:    syncState
+            priority: 20
+            queued:   true
