@@ -9,6 +9,9 @@ use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
 {
+    /**
+     * {@inheritdoc}
+     */
     public function onChannelSucceedSave(ChannelSaveEvent $event)
     {
         if ($event->getChannel()->getChannelType() === ChannelType::TYPE) {
