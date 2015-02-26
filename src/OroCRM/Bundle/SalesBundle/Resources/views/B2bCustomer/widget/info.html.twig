@@ -33,7 +33,7 @@
                 {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
             {% endif %}
 
-            {% if resource_granted('oro_tag_view_tag_cloud') %}
+            {% if resource_granted('oro_tag_view') %}
                 {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
             {% endif %}
         </div>
