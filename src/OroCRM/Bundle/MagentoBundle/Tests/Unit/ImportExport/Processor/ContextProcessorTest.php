@@ -7,16 +7,16 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextOrderProcessor;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor;
 
-class ContextOrderProcessorTest extends \PHPUnit_Framework_TestCase
+class ContextProcessorTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var ContextOrderProcessor */
+    /** @var ContextProcessor */
     protected $processor;
 
     protected function setUp()
     {
-        $this->processor = new ContextOrderProcessor();
+        $this->processor = new ContextProcessor();
     }
 
     public function testProcess()

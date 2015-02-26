@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
-class ContextOrderProcessor extends ImportProcessor
+class ContextProcessor extends ImportProcessor
 {
     /**
      * {@inheritdoc}
