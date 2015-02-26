@@ -9,6 +9,11 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
 {
+    const ALIAS_GROUPS = 'groups';
+    const ALIAS_STORES = 'stores';
+    const ALIAS_WEBSITES = 'websites';
+    const ALIAS_REGIONS = 'regions';
+
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 
@@ -117,9 +122,10 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrderInfo($incrementId);
 
     /**
+     * @param array|null $dependenciesToLoad
      * @param bool false
      *
      * @return array
      */
-    public function getDependencies($force = false);
+    public function getDependencies(array $dependenciesToLoad = null, $force = false);
 }

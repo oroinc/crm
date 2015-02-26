@@ -25,7 +25,7 @@ class OrderInfoReader extends AbstractInfoReader
 
         $this->loaded[$incrementId] = true;
 
-        OrderDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        OrderDependencyManager::addDependencyData($result, $this->transport);
 
         return ConverterUtils::objectToArray($result);
     }

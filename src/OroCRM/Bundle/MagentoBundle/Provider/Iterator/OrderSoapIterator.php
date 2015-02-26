@@ -64,7 +64,7 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
      */
     protected function addDependencyData($result)
     {
-        OrderDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        OrderDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

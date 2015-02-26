@@ -80,7 +80,7 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function addDependencyData($result)
     {
-        CustomerDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        CustomerDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

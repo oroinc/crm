@@ -14,7 +14,7 @@ interface SyncStateAwareInterface
     /**
      * @param int $syncState
      *
-     * @return self
+     * @return SyncStateAwareInterface
      */
     public function setSyncState($syncState);
 }

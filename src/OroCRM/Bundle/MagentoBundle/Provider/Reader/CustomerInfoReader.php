@@ -29,7 +29,7 @@ class CustomerInfoReader extends AbstractInfoReader
 
         $this->loaded[$originId] = true;
 
-        CustomerDependencyManager::addDependencyData($result, $this->transport->getDependencies());
+        CustomerDependencyManager::addDependencyData($result, $this->transport);
 
         return ConverterUtils::objectToArray($result);
     }
