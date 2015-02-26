@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class CustomerBridgeIteratorTest extends BaseIteratorTestCase
 {
@@ -18,22 +19,17 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIteration($customerArray, $storeData, $stores, $websites, $groups)
     {
-        $this->transport->expects($this->at(0))->method('getStores')
-            ->will(
-                $this->returnValue(new \ArrayIterator($stores))
-            );
+        $dependencies = [
+            MagentoTransportInterface::ALIAS_STORES => $stores,
+            MagentoTransportInterface::ALIAS_WEBSITES => $websites,
+            MagentoTransportInterface::ALIAS_GROUPS => $groups
+        ];
+        $this->transport->expects($this->atLeastOnce())
+            ->method('getDependencies')
+            ->will($this->returnValue($dependencies));
 
-        $this->transport->expects($this->at(1))->method('getWebsites')
-            ->will(
-                $this->returnValue(new \ArrayIterator($websites))
-            );
-
-        $this->transport->expects($this->at(2))->method('getCustomerGroups')
-            ->will(
-                $this->returnValue(new \ArrayIterator($groups))
-            );
-
-        $this->transport->expects($this->at(4))->method('call')
+        $this->transport->expects($this->atLeastOnce())
+            ->method('call')
             ->with($this->equalTo('oroCustomerList'))
             ->will($this->returnValue($customerArray));
 
@@ -144,7 +140,7 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
         $this->assertAttributeEquals(CustomerBridgeIterator::DEFAULT_PAGE_SIZE, 'pageSize', $iterator);
 
         $batchSize = 2000;
-        $settings = array_merge($this->settings, array('page_size' => $batchSize));
+        $settings = array_merge($this->settings, ['page_size' => $batchSize]);
         $iterator = new CustomerBridgeIterator($this->transport, $settings);
         $this->assertAttributeEquals($batchSize, 'pageSize', $iterator);
     }
