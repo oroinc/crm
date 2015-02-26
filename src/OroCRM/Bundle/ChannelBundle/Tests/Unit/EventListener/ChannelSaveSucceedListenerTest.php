@@ -61,7 +61,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->event->expects($this->once())
+        $this->event->expects($this->atLeastOnce())
             ->method('getChannel')
             ->will($this->returnValue($this->entity));
 
@@ -81,9 +81,25 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('persist')->with($this->integration);
         $this->em->expects($this->once())->method('flush');
 
-        $channelSaveSucceedListener = new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
+        $channelSaveSucceedListener = $this->getListener();
         $channelSaveSucceedListener->onChannelSucceedSave($this->event);
 
-        $this->assertEquals($this->integration->getConnectors(), ['TestConnector1', 'TestConnector2']);
+        $this->assertConnectors();
+    }
+
+    /**
+     * @return ChannelSaveSucceedListener
+     */
+    protected function getListener()
+    {
+        return new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
+    }
+
+    public function assertConnectors()
+    {
+        $this->assertEquals(
+            $this->integration->getConnectors(),
+            ['TestConnector1', 'TestConnector2']
+        );
     }
 }

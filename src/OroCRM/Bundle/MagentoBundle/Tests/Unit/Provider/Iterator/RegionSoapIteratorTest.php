@@ -24,7 +24,7 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
             'UA' => [],
             'US' => [
                 (object)['code' => 'AZ', 'region_id' => 1, 'name' => 'Arizona'],
-                (object)['code' => 'DE', 'region_id' => 2, 'name' => 'Delaware']
+                (object)['code' => 'DE', 'region_id' => 2, 'name' => 'Delaware'],
             ],
             'RU' => [
                 (object)['code' => 'MO', 'region_id' => 3, 'name' => 'Moscow'],

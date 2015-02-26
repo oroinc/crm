@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 class CustomerBridgeIteratorTest extends BaseIteratorTestCase
 {
@@ -24,20 +25,18 @@ class CustomerBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIteration(array $customerArray, array $storeData, array $stores, array $websites, array $groups)
     {
+        $dependencies = [
+            MagentoTransportInterface::ALIAS_STORES => $stores,
+            MagentoTransportInterface::ALIAS_WEBSITES => $websites,
+            MagentoTransportInterface::ALIAS_GROUPS => $groups
+        ];
+        $this->transport->expects($this->atLeastOnce())
+            ->method('getDependencies')
+            ->will($this->returnValue($dependencies));
+
         $this->transport->expects($this->once())->method('call')
             ->with($this->equalTo('oroCustomerList'))
             ->will($this->returnValue($customerArray));
-
-        $this->transport->expects($this->atLeastOnce())->method('getDependencies')
-            ->will(
-                $this->returnValue(
-                    [
-                        'stores' => new \ArrayIterator($stores),
-                        'websites' => new \ArrayIterator($websites),
-                        'groups' => new \ArrayIterator($groups)
-                    ]
-                )
-            );
 
         $this->assertEquals(
             [
