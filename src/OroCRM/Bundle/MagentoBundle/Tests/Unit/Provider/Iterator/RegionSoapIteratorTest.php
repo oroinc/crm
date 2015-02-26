@@ -32,8 +32,7 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
             ]
         ];
 
-        $this->transport->expects($this->once())->method('getDependencies')
-            ->with($this->equalTo(true))->will($this->returnValue([]));
+        $this->transport->expects($this->once())->method('getDependencies')->will($this->returnValue([]));
 
         $this->transport->expects($this->at(1))->method('call')
             ->with($this->equalTo('directoryCountryList'))->will($this->returnValue($countries));
