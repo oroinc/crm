@@ -173,9 +173,10 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $connectors
      * @param array $settings
-     * @return \PHPUnit_Framework_MockObject_MockObject|Channel
+     * @param object|null $realConnector
+     * @return Channel|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getIntegration(array $connectors = [], array $settings = [])
+    protected function getIntegration(array $connectors = [], array $settings = [], $realConnector = null)
     {
         $integration = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
@@ -213,7 +214,9 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->will($this->returnValue(true));
 
-        $realConnector = new TestConnector();
+        if (!$realConnector) {
+            $realConnector = new TestConnector();
+        }
         $this->typesRegistry
             ->expects($this->any())
             ->method('getConnectorType')

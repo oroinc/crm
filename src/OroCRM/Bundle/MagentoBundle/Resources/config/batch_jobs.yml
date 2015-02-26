@@ -88,3 +88,31 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+
+        mage_load_order_info:
+            title: 'Load order info using "salesOrderInfo" action'
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.order_info
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_load_customer_info:
+            title: 'Load customer info'
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.customer_info
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25

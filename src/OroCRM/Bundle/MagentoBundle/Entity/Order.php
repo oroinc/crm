@@ -61,8 +61,13 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInterface, LastNameInterface
+class Order extends ExtendOrder implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    LastNameInterface,
+    SyncStateAwareInterface
 {
+    const SYNC_INFO = 1;
     const STATUS_CANCELED = 'canceled';
 
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
@@ -232,6 +237,13 @@ class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInter
      * @ORM\Column(name="customer_email", type="string", length=255, nullable=true)
      */
     protected $customerEmail;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     */
+    protected $syncState;
 
     /**
      * @var User
@@ -760,5 +772,25 @@ class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInter
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSyncState()
+    {
+        return $this->syncState;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Order
+     */
+    public function setSyncState($syncState)
+    {
+        $this->syncState = $syncState;
+
+        return $this;
     }
 }

@@ -9,6 +9,11 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
 {
+    const ALIAS_GROUPS = 'groups';
+    const ALIAS_STORES = 'stores';
+    const ALIAS_WEBSITES = 'websites';
+    const ALIAS_REGIONS = 'regions';
+
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 
@@ -86,6 +91,14 @@ interface MagentoTransportInterface extends TransportInterface
     public function getRegions();
 
     /**
+     * Retrieve customer information from magento.
+     *
+     * @param Customer $customer
+     * @return mixed
+     */
+    public function getCustomerInfo(Customer $customer);
+
+    /**
      * Retrieve customer address list
      *
      * @param Customer $customer
@@ -102,4 +115,17 @@ interface MagentoTransportInterface extends TransportInterface
      * @return int
      */
     public function getErrorCode(\Exception $e);
+
+    /**
+     * @param string $incrementId
+     */
+    public function getOrderInfo($incrementId);
+
+    /**
+     * @param array|null $dependenciesToLoad
+     * @param bool false
+     *
+     * @return array
+     */
+    public function getDependencies(array $dependenciesToLoad = null, $force = false);
 }
