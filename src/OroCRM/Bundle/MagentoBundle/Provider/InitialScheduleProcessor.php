@@ -6,6 +6,7 @@ use JMS\JobQueueBundle\Entity\Job;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 /**
  * Schedule initial synchronization if it is required.
@@ -21,36 +22,60 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      */
     public function process(Integration $integration, $connector = null, array $parameters = [])
     {
-        /** @var \DateTime $startSyncDate */
-        $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
-        $syncSettings = $integration->getSynchronizationSettings();
-        $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
+        $this->scheduleInitialSyncIfRequired($integration);
 
-        // Save initial sync start date and flag initial sync as started
-        if (!$this->isInitialSyncStarted($integration)) {
-            $syncSettings->offsetSet(self::INITIAL_SYNC_STARTED, true);
-            $syncSettings->offsetSet(self::INITIAL_SYNC_START_DATE, $initialSyncStartDate->format(\DateTime::ISO8601));
-            $this->saveEntity($integration);
-        }
-
-        // Get latest initial synced to date
-        $initialSyncedTo = null;
-        if ($syncSettings->offsetExists(self::INITIAL_SYNCED_TO)) {
-            $initialSyncedTo = $syncSettings->offsetGet(self::INITIAL_SYNCED_TO);
-        }
-        if (!$initialSyncedTo) {
-            $initialSyncedTo = $initialSyncStartDate;
-        }
-
-        // In case when initial sync does not started yet, it failed or start sync date was changed - run initial sync
-        if (!$this->isInitialJobRunning($integration) && $initialSyncedTo > $startSyncDate) {
-            $this->scheduleInitialSync($integration);
-        }
-
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
         // Run incremental sync
-        $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $initialSyncStartDate;
+        $parameters[AbstractMagentoConnector::LAST_SYNC_KEY] = $transport->getInitialSyncStartDate();
 
         return parent::process($integration, $connector, $parameters);
+    }
+
+    /**
+     * @param Integration $integration
+     * @param \DateTime $initialSyncStartDate
+     * @param \DateTime $startSyncDate
+     * @return bool
+     */
+    protected function isInitialSyncRequired(
+        Integration $integration,
+        \DateTime $initialSyncStartDate,
+        \DateTime $startSyncDate
+    ) {
+        $connectors = $this->getInitialConnectors($integration);
+        $syncDates = [];
+        foreach ($connectors as $connector) {
+            $lastSyncedTo = $this->getLastStatusForConnector($integration, $connector);
+            if (!$lastSyncedTo) {
+                $lastSyncedTo = $initialSyncStartDate;
+            }
+
+            $syncDates[] = $lastSyncedTo;
+        }
+
+        if ($syncDates) {
+            $minSyncedTo = min($syncDates);
+            return $minSyncedTo > $startSyncDate;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param Integration $integration
+     * @return array
+     */
+    protected function getInitialConnectors(Integration $integration)
+    {
+        $connectors = $integration->getConnectors();
+
+        return array_filter(
+            $connectors,
+            function ($connector) {
+                return strpos($connector, InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX) !== false;
+            }
+        );
     }
 
     /**
@@ -71,20 +96,6 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      * @param Integration $integration
      * @return bool
      */
-    protected function isInitialSyncStarted(Integration $integration)
-    {
-        $synchronizationSettings = $integration->getSynchronizationSettings();
-        if ($synchronizationSettings->offsetExists(self::INITIAL_SYNC_STARTED)) {
-            return (bool)$synchronizationSettings->offsetGet(self::INITIAL_SYNC_STARTED);
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Integration $integration
-     * @return bool
-     */
     protected function isInitialJobRunning(Integration $integration)
     {
         /** @var ChannelRepository $repository */
@@ -98,11 +109,40 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     }
 
     /**
+     * In case when initial sync does not started yet, it failed or start sync date was changed - run initial sync.
+     *
      * @param Integration $integration
      */
-    protected function scheduleInitialSync(Integration $integration)
+    protected function scheduleInitialSyncIfRequired(Integration $integration)
     {
-        $job = new Job(InitialSyncCommand::COMMAND_NAME, [sprintf('--integration-id=%s', $integration->getId())]);
-        $this->saveEntity($job);
+        $this->checkInitialSyncStartDate($integration);
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        if (!$this->isInitialJobRunning($integration)
+            && $this->isInitialSyncRequired(
+                $integration,
+                $transport->getInitialSyncStartDate(),
+                $transport->getSyncStartDate()
+            )
+        ) {
+            $job = new Job(InitialSyncCommand::COMMAND_NAME, [sprintf('--integration-id=%s', $integration->getId())]);
+            $this->saveEntity($job);
+        }
+    }
+
+    /**
+     * Save initial sync start date and flag initial sync as started.
+     *
+     * @param Integration $integration
+     */
+    protected function checkInitialSyncStartDate(Integration $integration)
+    {
+        if (!$this->isInitialSyncStarted($integration)) {
+            /** @var MagentoSoapTransport $transport */
+            $transport = $integration->getTransport();
+            $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
+            $transport->setInitialSyncStartDate($initialSyncStartDate);
+            $this->saveEntity($transport);
+        }
     }
 }

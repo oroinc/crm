@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {
@@ -19,16 +20,26 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function getInitialSyncStartDate(Integration $integration)
     {
-        $syncStartDate = null;
-        $synchronizationSettings = $integration->getSynchronizationSettings();
-        if ($synchronizationSettings->offsetExists(self::INITIAL_SYNC_START_DATE)) {
-            $syncStartDate = $synchronizationSettings->offsetGet(self::INITIAL_SYNC_START_DATE);
-        }
-        if (!$syncStartDate) {
-            $syncStartDate = 'now';
-        }
+        if ($this->isInitialSyncStarted($integration)) {
+            /** @var MagentoSoapTransport $transport */
+            $transport = $integration->getTransport();
 
-        return new \DateTime($syncStartDate, new \DateTimeZone('UTC'));
+            return $transport->getInitialSyncStartDate();
+        } else {
+            return new \DateTime('now', new \DateTimeZone('UTC'));
+        }
+    }
+
+    /**
+     * @param Integration $integration
+     * @return bool
+     */
+    protected function isInitialSyncStarted(Integration $integration)
+    {
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+
+        return (bool)$transport->getInitialSyncStartDate();
     }
 
     /**
@@ -39,5 +50,39 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         $em = $this->doctrineRegistry->getManager();
         $em->persist($entity);
         $em->flush($entity);
+    }
+
+    /**
+     * @param Integration $integration
+     * @param $connector
+     * @return null|\Oro\Bundle\IntegrationBundle\Entity\Status
+     */
+    protected function getLastStatusForConnector(Integration $integration, $connector)
+    {
+        return $this->doctrineRegistry
+            ->getRepository('OroIntegrationBundle:Channel')
+            ->getLastStatusForConnector($integration, $connector);
+    }
+
+    /**
+     * @param Integration $integration
+     * @param string $connector
+     * @return bool|\DateTime
+     */
+    protected function getSyncedTo(Integration $integration, $connector)
+    {
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
+        if ($lastStatus) {
+            $statusData = $lastStatus->getData();
+            if (!empty($statusData[self::INITIAL_SYNCED_TO])) {
+                return \DateTime::createFromFormat(
+                    \DateTime::ISO8601,
+                    $statusData[self::INITIAL_SYNCED_TO],
+                    new \DateTimeZone('UTC')
+                );
+            }
+        }
+
+        return false;
     }
 }

@@ -139,9 +139,6 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
 
-        // Synced to for integration is used by InitialScheduleProcessor to detect initial processor scheduling
-        $integration->getSynchronizationSettings()->offsetSet(self::INITIAL_SYNCED_TO, $formattedSyncedTo);
-
         $this->doctrineRegistry
             ->getRepository('OroIntegrationBundle:Channel')
             ->addStatus($integration, $lastStatus);
@@ -160,40 +157,6 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         }
 
         return $latestSyncedTo;
-    }
-
-    /**
-     * @param Integration $integration
-     * @param string $connector
-     * @return bool|\DateTime
-     */
-    protected function getSyncedTo(Integration $integration, $connector)
-    {
-        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
-        if ($lastStatus) {
-            $statusData = $lastStatus->getData();
-            if (!empty($statusData[self::INITIAL_SYNCED_TO])) {
-                return \DateTime::createFromFormat(
-                    \DateTime::ISO8601,
-                    $statusData[self::INITIAL_SYNCED_TO],
-                    new \DateTimeZone('UTC')
-                );
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param Integration $integration
-     * @param $connector
-     * @return null|\Oro\Bundle\IntegrationBundle\Entity\Status
-     */
-    protected function getLastStatusForConnector(Integration $integration, $connector)
-    {
-        return $this->doctrineRegistry
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->getLastStatusForConnector($integration, $connector);
     }
 
     /**
