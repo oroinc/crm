@@ -102,7 +102,6 @@ class TaskController extends SoapController
         parent::fixFormData($data, $entity);
 
         unset($data['id']);
-        unset($data['createdAt']);
         unset($data['updatedAt']);
 
         return true;

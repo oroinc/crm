@@ -218,7 +218,6 @@ class TaskController extends RestController implements ClassResourceInterface
         parent::fixFormData($data, $entity);
 
         unset($data['id']);
-        unset($data['createdAt']);
         unset($data['updatedAt']);
 
         return true;
