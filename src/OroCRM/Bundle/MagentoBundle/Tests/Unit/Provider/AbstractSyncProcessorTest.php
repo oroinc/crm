@@ -73,7 +73,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         $this->processorRegistry = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->jobExecutor = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Job\JobExecutor')
+        $this->jobExecutor = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor')
             ->disableOriginalConstructor()
             ->getMock();
         $this->typesRegistry = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Manager\TypesRegistry')

@@ -111,6 +111,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
                 $result = $this->getEntity($entityId);
+                if ($result === false) {
+                    continue;
+                }
             } elseif ($this->entitiesIdsBufferImmutable && empty($this->entitiesIdsBuffer)) {
                 $result = null;
             } elseif (!$this->entitiesIdsBufferImmutable) {
@@ -156,8 +159,10 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function rewind()
     {
         if (false === $this->loaded) {
-            // Reload loaded dependencies
-            $this->transport->getDependencies(null, true);
+            // Reload loaded dependencies for deltas
+            if (!$this->isInitialSync()) {
+                $this->transport->getDependencies(null, true);
+            }
             $this->loaded = true;
         }
 
@@ -255,7 +260,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
         $toDate = $this->getToDate($date);
         $dateField = 'updated_at';
-        $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
+        $initMode = $this->isInitialSync();
         if ($initMode) {
             $dateField = 'created_at';
         }
@@ -280,7 +285,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     protected function findEntitiesToProcess()
     {
         $now      = new \DateTime($this->transport->getServerTime(), new \DateTimeZone('UTC'));
-        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        $initMode = $this->isInitialSync();
 
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
@@ -443,5 +448,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         }
 
         return $toDate;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isInitialSync()
+    {
+        return $this->mode === self::IMPORT_MODE_INITIAL;
     }
 }

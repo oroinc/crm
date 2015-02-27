@@ -109,8 +109,11 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function getEntity($id)
     {
-        $result = $this->entityBuffer[$id];
+        if (!array_key_exists($id, $this->entityBuffer)) {
+            return false;
+        }
 
+        $result = $this->entityBuffer[$id];
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);

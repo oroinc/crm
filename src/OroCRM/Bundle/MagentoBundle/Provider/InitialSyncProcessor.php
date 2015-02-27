@@ -61,9 +61,11 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
         $parameters[self::START_SYNC_DATE] = $startSyncDate;
 
+        // Pass interval to connectors for further filters creation
         $interval = $this->getSyncInterval();
         $parameters[self::INTERVAL] = $interval;
 
+        // Collect initial connectors
         $connectors = $this->getConnectorsToSync($integration, $callback);
         /** @var \DateTime[] $connectorsSyncedTo */
         $connectorsSyncedTo = [];
@@ -71,6 +73,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
             $connectorsSyncedTo[$connector] = $this->getInitialConnectorSyncedTo($integration, $connector);
         }
 
+        // Process all initial connectors by date interval while there are connectors to process
         $isSuccess = true;
         do {
             $syncedConnectors = 0;
@@ -79,6 +82,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                     $syncedConnectors++;
 
                     try {
+                        // Pass synced to for further filters creation
                         $parameters = array_merge(
                             $parameters,
                             [self::INITIAL_SYNCED_TO => $connectorsSyncedTo[$connector]]
@@ -88,11 +92,13 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                             $connector,
                             $parameters
                         );
+                        // Move sync date into past by interval value
                         $connectorsSyncedTo[$connector]->sub($interval);
 
                         $isSuccess = $isSuccess && $result;
 
                         if ($isSuccess) {
+                            // Save synced to date for connector
                             $this->updateSyncedTo($integration, $connector, $connectorsSyncedTo[$connector]);
                         } else {
                             break 2;
@@ -124,6 +130,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
 
+        // Synced to for integration is used by InitialScheduleProcessor to detect initial processor scheduling
         $integration->getSynchronizationSettings()->offsetSet(self::INITIAL_SYNCED_TO, $formattedSyncedTo);
 
         $this->doctrineRegistry
