@@ -99,8 +99,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $startDate = $this->getStartDate($status);
 
             if ($status) {
-                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-
                 // use assumption interval in order to prevent mistiming issues
                 $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
                 $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
@@ -108,17 +106,19 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 $startDate->sub(\DateInterval::createFromDateString($intervalString));
             }
 
-            $iterator->setStartDate($startDate);
-        }
+            $executionContext = $this->stepExecution->getJobExecution()->getExecutionContext();
+            $interval = $executionContext->get(InitialSyncProcessor::INTERVAL);
+            if ($interval) {
+                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_INITIAL);
+                $iterator->setSyncRange($interval);
+            }
 
-        $executionContext = $this->stepExecution->getJobExecution()->getExecutionContext();
-        $interval = $executionContext->get(InitialSyncProcessor::INTERVAL);
-        $minimalSyncDate = $executionContext->get(InitialSyncProcessor::START_SYNC_DATE);
-        if ($interval) {
-            $iterator->setSyncRange($interval);
-        }
-        if ($minimalSyncDate) {
-            $iterator->setMinSyncDate($minimalSyncDate);
+            $minimalSyncDate = $executionContext->get(InitialSyncProcessor::START_SYNC_DATE);
+            if ($minimalSyncDate) {
+                $iterator->setMinSyncDate($minimalSyncDate);
+            }
+
+            $iterator->setStartDate($startDate);
         }
 
         // pass filters from connector

@@ -30,11 +30,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \DateTime */
     protected $minSyncDate;
 
-    /** @var int|\stdClass Last id used for initial mode, paging by created_at assuming that ids always incremented */
-    protected $lastId = null;
-
     /** @var string initial or update mode */
-    protected $mode = self::IMPORT_MODE_INITIAL;
+    protected $mode = self::IMPORT_MODE_UPDATE;
 
     /** @var \DateInterval */
     protected $syncRange;
@@ -257,19 +254,12 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
                 $this->filter->addStoreFilter($storeIds);
             }
         }
-
-        $toDate = $this->getToDate($date);
-        $dateField = 'updated_at';
-        $initMode = $this->isInitialSync();
-        if ($initMode) {
-            $dateField = 'created_at';
-        }
-        $this->filter->addDateFilter($dateField, 'to', $date, $format);
-        $this->filter->addDateFilter($dateField, 'from', $toDate, $format);
-
-        $lastId = $this->getLastId();
-        if (!is_null($lastId) && $initMode) {
-            $this->filter->addLastIdFilter($lastId, $this->getIdFieldName());
+        
+        if ($this->isInitialSync()) {
+            $this->filter->addDateFilter('created_at', 'from', $this->getToDate($date), $format);
+            $this->filter->addDateFilter('created_at', 'to', $date, $format);
+        } else {
+            $this->filter->addDateFilter('updated_at', 'from', $date, $format);
         }
 
         $this->logAppliedFilters($this->filter);
@@ -290,56 +280,25 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
 
-        // first run, ignore all data in less then start sync date
-        $lastId  = $this->getLastId();
-        $wasNull = is_null($lastId);
-        $lastId  = end($this->entitiesIdsBuffer);
+        $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
 
-        if (!empty($lastId)) {
-            $this->lastId = $lastId;
-        } elseif ($wasNull) {
-            $this->lastId = 0;
+        if (empty($this->entitiesIdsBuffer) && !$initMode) {
+            if (!$initMode) {
+                $lastSyncDate = clone $this->lastSyncDate;
+                $lastSyncDate->add($this->syncRange);
+
+                if ($lastSyncDate >= $now) {
+                    return null;
+                }
+
+                //increment date for further filtering
+                $this->lastSyncDate->add($this->syncRange);
+
+                return true;
+            }
         }
 
-        // restore cursor
-        reset($this->entitiesIdsBuffer);
-
-        // if init mode and it's first iteration we have to skip retrieved entities
-        if ($wasNull && $initMode) {
-//            @todo: restore after requirements clarifying
-//            $this->entitiesIdsBuffer = [];
-//            $this->logger->info('Pagination start point detected');
-        } else {
-            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
-        }
-
-        if ($initMode) {
-            $lastSyncDate = $this->lastSyncDate;
-        } else {
-            $lastSyncDate = clone $this->lastSyncDate;
-            $lastSyncDate->add($this->syncRange);
-        }
-
-        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
-            $result = null;
-        } else {
-            $result = true;
-        }
-
-        //increment date for further filtering
-        $this->lastSyncDate->add($this->syncRange);
-
-        return $result;
-    }
-
-    /**
-     * Retrieve last id in queue
-     *
-     * @return int|null
-     */
-    protected function getLastId()
-    {
-        return is_object($this->lastId) ? $this->lastId->{$this->getIdFieldName()} : $this->lastId;
+        return null;
     }
 
     /**
