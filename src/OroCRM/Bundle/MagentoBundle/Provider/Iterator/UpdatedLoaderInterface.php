@@ -34,6 +34,12 @@ interface UpdatedLoaderInterface extends \Iterator
     public function setSyncRange(\DateInterval $syncRange);
 
     /**
+     * @param \DateTime $date
+     * @return mixed
+     */
+    public function setMinSyncDate(\DateTime $date);
+
+    /**
      * @param array $entitiesIdsBuffer
      */
     public function setEntitiesIdsBuffer(array $entitiesIdsBuffer);

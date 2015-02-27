@@ -188,7 +188,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * @param \DateTime $date
+     * {@inheritdoc}
      */
     public function setMinSyncDate(\DateTime $date)
     {
