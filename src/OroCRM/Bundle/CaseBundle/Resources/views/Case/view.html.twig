@@ -119,7 +119,7 @@
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('orocrm.case.caseentity.related_account.label'|trans, relatedAccount) }}
 
-                {% if resource_granted('oro_tag_view_tag_cloud') %}
+                {% if resource_granted('oro_tag_view') %}
                     {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
                 {% endif %}
             </div>
