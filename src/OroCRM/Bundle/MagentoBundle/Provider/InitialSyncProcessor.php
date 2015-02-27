@@ -81,6 +81,15 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                 if ($connectorsSyncedTo[$connector] > $startSyncDate) {
                     $syncedConnectors++;
 
+                    $this->logger->info(
+                        sprintf(
+                            'Syncing connector %s starting %s interval %s',
+                            $connector,
+                            $connectorsSyncedTo[$connector]->format('Y-m-d H:i:s'),
+                            $interval->format('%d days')
+                        )
+                    );
+
                     try {
                         // Pass synced to for further filters creation
                         $parameters = array_merge(
