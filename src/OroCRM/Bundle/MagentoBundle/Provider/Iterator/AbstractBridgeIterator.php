@@ -47,8 +47,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function applyFilter()
     {
-        $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
-        if ($initMode) {
+        if ($this->isInitialSync()) {
             $dateField = 'created_at';
             $this->filter->addDateFilter($dateField, 'from', $this->getToDate($this->lastSyncDate));
             $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
@@ -57,14 +56,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
             $this->filter->addDateFilter($dateField, 'gt', $this->lastSyncDate);
         }
 
-        if (!$initMode && $this->transport instanceof ServerTimeAwareInterface) {
-            // fix time frame if it's possible to retrieve server time
-            $time = $this->transport->getServerTime();
-            if (false !== $time) {
-                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
-                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
-            }
-        }
+        $this->fixServerTime($dateField);
 
         if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
@@ -118,5 +110,21 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
+    }
+
+    /**
+     * Fix time frame if it's possible to retrieve server time.
+     *
+     * @param string $dateField
+     */
+    protected function fixServerTime($dateField)
+    {
+        if (!$this->isInitialSync() && $this->transport instanceof ServerTimeAwareInterface) {
+            $time = $this->transport->getServerTime();
+            if (false !== $time) {
+                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
+            }
+        }
     }
 }
