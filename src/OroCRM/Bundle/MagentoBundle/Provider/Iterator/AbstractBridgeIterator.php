@@ -47,8 +47,7 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function applyFilter()
     {
-        $toDate = clone $this->lastSyncDate;
-        $toDate->sub($this->syncRange);
+        $toDate = $this->getToDate($this->lastSyncDate);
         $dateField = 'updated_at';
         $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
         if ($initMode) {

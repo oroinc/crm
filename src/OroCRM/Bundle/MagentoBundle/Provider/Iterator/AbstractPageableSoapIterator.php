@@ -27,6 +27,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \DateTime */
     protected $lastSyncDate;
 
+    /** @var \DateTime */
+    protected $minSyncDate;
+
     /** @var int|\stdClass Last id used for initial mode, paging by created_at assuming that ids always incremented */
     protected $lastId = null;
 
@@ -185,6 +188,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
+     * @param \DateTime $date
+     */
+    public function setMinSyncDate(\DateTime $date)
+    {
+        $this->minSyncDate = $date;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function setMode($mode)
@@ -242,8 +253,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             }
         }
 
-        $toDate = clone $date;
-        $toDate->sub($this->syncRange);
+        $toDate = $this->getToDate($date);
         $dateField = 'updated_at';
         $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
         if ($initMode) {
@@ -419,4 +429,19 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      * @return string
      */
     abstract protected function getIdFieldName();
+
+    /**
+     * @param \DateTime $date
+     * @return \DateTime
+     */
+    protected function getToDate(\DateTime $date)
+    {
+        $toDate = clone $date;
+        $toDate->sub($this->syncRange);
+        if ($this->minSyncDate && $toDate < $this->minSyncDate) {
+            $toDate = $this->minSyncDate;
+        }
+
+        return $toDate;
+    }
 }
