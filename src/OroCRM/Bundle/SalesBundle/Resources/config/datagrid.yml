@@ -20,6 +20,7 @@ datagrid:
                     - status.label as statusLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
@@ -28,6 +29,7 @@ datagrid:
                         - { join: o.status, alias: status }
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
+                        - { join: o.owner, alias: owner }
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -51,6 +53,8 @@ datagrid:
                 label:         orocrm.sales.opportunity.status.label
             primaryEmail:
                 label:         orocrm.contact.email.label
+            ownerName:
+                label:         orocrm.sales.opportunity.owner.label
         properties:
             id: ~
             view_link:
@@ -85,6 +89,8 @@ datagrid:
                     data_name: status.label
                 primaryEmail:
                     data_name: email.email
+                ownerName:
+                    data_name: ownerName
             default:
                 createdAt: DESC
         filters:
@@ -126,6 +132,9 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
+                ownerName:
+                    type:      string
+                    data_name: ownerName
         actions:
             view:
                 type:          navigate
@@ -176,6 +185,7 @@ datagrid:
                             END, ''
                         ) as regionLabel
                     - channel.name as channelName
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
@@ -185,6 +195,7 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
+                        - { join: l.owner, alias: owner }
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
@@ -212,6 +223,8 @@ datagrid:
                 label:         orocrm.sales.lead.datagrid.region
             addressPostalCode:
                 label:         orocrm.sales.lead.datagrid.postal_code
+            ownerName:
+                label:         orocrm.sales.lead.owner.label
         properties:
             id: ~
             view_link:
@@ -250,6 +263,8 @@ datagrid:
                     data_name: regionLabel
                 addressPostalCode:
                     data_name: addressPostalCode
+                ownerName:
+                    data_name: ownerName
             default:
                 createdAt:  DESC
         actions:
@@ -324,6 +339,9 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
+                 ownerName:
+                    type:      string
+                    data_name: ownerName
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -344,6 +362,7 @@ datagrid:
                     - opportunity.probability as opportunityProbability
                     - step.label as stepLabel
                     - channel.name as channelName
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
                 from:
                     - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
@@ -352,6 +371,7 @@ datagrid:
                         - { join: salesFunnel.lead, alias: lead }
                         - { join: salesFunnel.opportunity, alias: opportunity }
                         - { join: salesFunnel.dataChannel, alias: channel }
+                        - { join: salesFunnel.owner, alias: owner }
         columns:
             id:
                 label: orocrm.sales.salesfunnel.id.label
@@ -375,6 +395,8 @@ datagrid:
                 frontend_type: percent
             stepLabel:
                 label: orocrm.sales.salesfunnel.workflow_step.label
+            ownerName:
+                label: orocrm.sales.salesfunnel.owner.label
         properties:
             view_link:
                 type:       url
@@ -408,6 +430,8 @@ datagrid:
                     data_name: opportunity.probability
                 stepLabel:
                     data_name: step.label
+                ownerName:
+                    data_name: ownerName
             default:
                 startDate: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_DESC
         actions:
@@ -469,6 +493,9 @@ datagrid:
                         field_options:
                             workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
                             translatable_options: false
+                ownerName:
+                    type:      string
+                    data_name: ownerName
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
