@@ -70,6 +70,11 @@ class Task extends AbstractPageEntity
         return $this->description->value();
     }
 
+    /**
+     * @param $dueDate string Due date
+     * @return $this
+     * @throws \Exception
+     */
     public function setDueDate($dueDate)
     {
         $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
