@@ -1,14 +1,9 @@
 oro_layout:
     actions:
-        - @remove:
-            id: form
-        - @add:
-           id:          embedded_form
-           parentId:    content
-           blockType:   form
-           options:
-                form_name:        embedded_form
-                preferred_fields: [firstName, lastName, emailAddress, phone]
+        - @setOption:
+            id:          embedded_form
+            optionName:  preferred_fields
+            optionValue: [firstName, lastName, emailAddress, phone]
         - @add:
             id:          name_group
             parentId:    embedded_form
