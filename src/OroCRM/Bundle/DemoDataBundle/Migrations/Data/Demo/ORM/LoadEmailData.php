@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -13,6 +12,8 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Oro\Bundle\EmailBundle\Model\FolderType;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
+use Oro\Bundle\EmailBundle\Entity\EmailThread;
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -104,28 +105,20 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $contact = $contacts[$contactRandom];
             $owner = $contact->getOwner();
             $origin = $this->mailerProcessor->getEmailOrigin($owner->getEmail());
-
             $randomTemplate = array_rand($this->templates);
 
-            $email = $this->emailEntityBuilder->email(
-                $this->templates[$randomTemplate]['Subject'],
-                $owner->getEmail(),
-                $contact->getPrimaryEmail()->getEmail(),
-                new \DateTime('now'),
-                new \DateTime('now'),
-                new \DateTime('now')
-            );
-
-            $this->setSecurityContext($owner);
-            $email->addFolder($origin->getFolder(FolderType::SENT));
-
-            $emailBody = $this->emailEntityBuilder->body(
-                "Hi,\n" . $this->templates[$randomTemplate]['Text'],
-                false,
-                true
-            );
-            $email->setEmailBody($emailBody);
-            $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
+            $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
+            if ($i % 7 == 0) {
+                $thread = new EmailThread();
+                $om->persist($thread);
+                $email->setThread($thread);
+                for ($j = 0; $j < rand(1, 7); ++$j) {
+                    $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
+                    $email->setSubject('Re: ' . $email->getSubject());
+                    $email->setThread($thread);
+                    $email->setHead(false);
+                }
+            }
 
             $this->emailEntityBuilder->getBatch()->persist($om);
         }
@@ -144,5 +137,38 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $this->getReference('default_organization')
         );
         $securityContext->setToken($token);
+    }
+
+    /**
+     * @param $randomTemplate
+     * @param $owner
+     * @param $contact
+     * @param $origin
+     *
+     * @return \Oro\Bundle\EmailBundle\Entity\Email
+     */
+    protected function addEmail($randomTemplate, $owner, $contact, $origin)
+    {
+        $email = $this->emailEntityBuilder->email(
+            $this->templates[$randomTemplate]['Subject'],
+            $owner->getEmail(),
+            $contact->getPrimaryEmail()->getEmail(),
+            new \DateTime('now'),
+            new \DateTime('now'),
+            new \DateTime('now')
+        );
+
+        $this->setSecurityContext($owner);
+        $email->addFolder($origin->getFolder(FolderType::SENT));
+
+        $emailBody = $this->emailEntityBuilder->body(
+            "Hi,\n" . $this->templates[$randomTemplate]['Text'],
+            false,
+            true
+        );
+        $email->setEmailBody($emailBody);
+        $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
+
+        return $email;
     }
 }

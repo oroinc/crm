@@ -237,6 +237,7 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
+            import: Import
         widgets:
             b2bcustomer_information: B2B Customer Information
             leads:                   Leads
