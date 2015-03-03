@@ -46,15 +46,16 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
 
     public function testSettingsBag()
     {
-        $data = array(
-            'api_user'        => 'test_user',
-            'api_key'         => 'test_key',
-            'wsdl_url'        => 'http://test.url/',
-            'sync_range'      => new \DateInterval('P1D'),
-            'wsi_mode'        => true,
-            'website_id'      => 1,
+        $data = [
+            'api_user' => 'test_user',
+            'api_key' => 'test_key',
+            'wsdl_url' => 'http://test.url/',
+            'sync_range' => new \DateInterval('P1D'),
+            'wsi_mode' => true,
+            'website_id' => 1,
             'start_sync_date' => new \DateTime('now'),
-        );
+            'initial_sync_start_date' => new \DateTime('now'),
+        ];
 
         $this->entity
             ->setApiUser($data['api_user'])
@@ -63,7 +64,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             ->setSyncRange($data['sync_range'])
             ->setIsWsiMode($data['wsi_mode'])
             ->setWebsiteId($data['website_id'])
-            ->setSyncStartDate($data['start_sync_date']);
+            ->setSyncStartDate($data['start_sync_date'])
+            ->setInitialSyncStartDate($data['initial_sync_start_date']);
 
         $settingsBag = $this->entity->getSettingsBag();
 

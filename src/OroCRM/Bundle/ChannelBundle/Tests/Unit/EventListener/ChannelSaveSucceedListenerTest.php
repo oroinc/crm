@@ -32,7 +32,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
     protected $em;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registry        = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $this->settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')

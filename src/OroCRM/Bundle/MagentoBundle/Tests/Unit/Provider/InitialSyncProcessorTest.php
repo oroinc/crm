@@ -24,15 +24,20 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             $this->logger,
             ['sync_settings' => ['initial_import_step_interval' => '2 days']]
         );
+
+        $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
     }
 
     public function testProcess()
     {
         $connector = 'testConnector_initial';
         $connectors = [$connector];
-        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
-        $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
-        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
+        $interval = new \DateInterval('P2D');
+        $initialStartDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $syncedTo = clone $initialStartDate;
+        $syncedTo->sub($interval);
+        $syncStartDate = clone $syncedTo;
+        $syncStartDate->sub($interval);
 
         $realConnector = new InitialConnector();
         $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate], $realConnector);
@@ -62,24 +67,57 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'entityName' => 'testEntity',
                 'channel' => 'testChannel',
                 'channelType' => 'testChannelType',
+                'start_sync_date' => $syncStartDate,
+                AbstractInitialProcessor::INTERVAL => $interval,
                 AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo,
-                'start_sync_date' => $syncStartDate
             ]
         );
 
         $this->processor->process($integration);
     }
 
-    public function testProcessFirst()
+    public function testProcessOverDate()
     {
         $connector = 'testConnector_initial';
         $connectors = [$connector];
-        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
-        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
+        $interval = new \DateInterval('P2D');
+        $subInterval = new \DateInterval('P1D');
+        $initialStartDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        $syncedTo = clone $initialStartDate;
+        $syncedTo->sub($subInterval);
+        $syncStartDate = clone $syncedTo;
+        $syncStartDate->sub($subInterval);
 
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+        $realConnector = new InitialConnector();
+        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate], $realConnector);
 
-        $this->assertConnectorStatusCall($integration, $connector);
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        InitialSyncProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                    ]
+                )
+            );
+        $status->expects($this->any())
+            ->method('setData')
+            ->with(
+                $this->callback(
+                    function ($data) use ($syncStartDate) {
+                        $this->assertArrayHasKey('initialSyncedTo', $data);
+
+                        $this->assertEquals(['initialSyncedTo' => $syncStartDate->format(\DateTime::ISO8601)], $data);
+
+                        return true;
+                    }
+                )
+            );
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
         $settings = [
             AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601)
         ];
@@ -91,8 +129,69 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'entityName' => 'testEntity',
                 'channel' => 'testChannel',
                 'channelType' => 'testChannelType',
-                AbstractInitialProcessor::INITIAL_SYNCED_TO => $initialStartDate,
-                'start_sync_date' => $syncStartDate
+                'start_sync_date' => $syncStartDate,
+                AbstractInitialProcessor::INTERVAL => $interval,
+                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo,
+            ]
+        );
+
+        $this->processor->process($integration);
+    }
+
+    public function testProcessFirst()
+    {
+        $connector = 'testConnector_initial';
+        $connectors = [$connector];
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        $interval = new \DateInterval('P2D');
+        $initialStartDate = clone $now;
+        $syncedTo = clone $initialStartDate;
+        $syncedTo->sub($interval);
+        $syncStartDate = clone $syncedTo;
+        $syncStartDate->sub($interval);
+
+        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will($this->returnValue([]));
+        $status->expects($this->any())
+            ->method('setData')
+            ->with(
+                $this->callback(
+                    function ($data) use ($now, $interval) {
+                        $this->assertArrayHasKey('initialSyncedTo', $data);
+
+                        $date = \DateTime::createFromFormat(
+                            \DateTime::ISO8601,
+                            $data['initialSyncedTo'],
+                            new \DateTimeZone('UTC')
+                        );
+
+                        $this->assertEquals($date, $now->sub($interval));
+
+                        return true;
+                    }
+                )
+            );
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
+        $settings = [
+            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601)
+        ];
+        $this->assertIntegrationSettingsCall($integration, $settings);
+        $this->assertProcessCalls();
+        $this->assertExecuteJob(
+            [
+                'processorAlias' => false,
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
+                'start_sync_date' => $syncStartDate,
+                AbstractInitialProcessor::INTERVAL => $interval,
             ]
         );
 

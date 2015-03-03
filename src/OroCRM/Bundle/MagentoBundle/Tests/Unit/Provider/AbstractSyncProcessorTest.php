@@ -17,8 +17,8 @@ use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
+use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
 use Oro\Bundle\DataGridBundle\Common\Object;
-use OroCRM\Bundle\MagentoBundle\Job\JobExecutor;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -38,7 +38,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
     protected $processorRegistry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecutor
+     * @var \PHPUnit_Framework_MockObject_MockObject|Executor
      */
     protected $jobExecutor;
 
@@ -135,7 +135,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->never())
             ->method('critical');
 
-        $this->processorRegistry->expects($this->once())
+        $this->processorRegistry->expects($this->any())
             ->method('getProcessorAliasesByEntity')
             ->will($this->returnValue([]));
     }
@@ -150,16 +150,41 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         $jobResult->setSuccessful(true);
 
         if ($expectedConfig) {
-            $this->jobExecutor->expects($this->once())
+            $this->jobExecutor->expects($this->any())
                 ->method('executeJob')
                 ->with(
                     ProcessorRegistry::TYPE_IMPORT,
                     'test job',
-                    [ProcessorRegistry::TYPE_IMPORT => $expectedConfig]
+                    $this->callback(
+                        function (array $config) use ($expectedConfig) {
+                            $this->assertArrayHasKey(ProcessorRegistry::TYPE_IMPORT, $config);
+
+                            $diff = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $expectedConfig);
+                            if (!$diff) {
+                                $this->assertEquals($expectedConfig, $config[ProcessorRegistry::TYPE_IMPORT]);
+
+                                return true;
+                            }
+
+                            $intersect = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $diff);
+                            $this->assertEquals($expectedConfig, $intersect);
+
+                            if ($diff) {
+                                $this->assertArrayHasKey('initialSyncedTo', $diff);
+
+                                /** @var \DateTime $date */
+                                $date = $diff['initialSyncedTo'];
+                                $interval = $date->diff(new \DateTime('now', new \DateTimeZone('UTC')));
+                                $this->assertEmpty($interval->m);
+                            }
+
+                            return true;
+                        }
+                    )
                 )
                 ->will($this->returnValue($jobResult));
         } else {
-            $this->jobExecutor->expects($this->once())
+            $this->jobExecutor->expects($this->any())
                 ->method('executeJob')
                 ->with(
                     ProcessorRegistry::TYPE_IMPORT,
@@ -183,7 +208,7 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $integration
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getConnectors')
             ->will($this->returnValue($connectors));
 
@@ -193,17 +218,30 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('testChannel'));
 
         $integration
-            ->expects($this->atLeastOnce())
+            ->expects($this->any())
             ->method('getType')
             ->will($this->returnValue('testChannelType'));
 
         $settingsBag = new ParameterBag($settings);
-        $transport = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Transport')
+        $transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
+            ->getMock();
         $transport->expects($this->any())
             ->method('getSettingsBag')
             ->will($this->returnValue($settingsBag));
+
+        if (!empty($settings['initial_sync_start_date'])) {
+            $transport->expects($this->any())
+                ->method('getInitialSyncStartDate')
+                ->will($this->returnValue($settings['initial_sync_start_date']));
+        }
+
+        if (!empty($settings['start_sync_date'])) {
+            $transport->expects($this->any())
+                ->method('getSyncStartDate')
+                ->will($this->returnValue($settings['start_sync_date']));
+        }
+
         $integration
             ->expects($this->any())
             ->method('getTransport')

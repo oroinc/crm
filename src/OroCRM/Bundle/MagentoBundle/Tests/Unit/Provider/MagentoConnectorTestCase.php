@@ -21,7 +21,6 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -117,8 +116,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-        $iterator->expects($this->once())->method('setMode')
-            ->with($this->equalTo(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
         $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
@@ -141,7 +138,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-        $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setMode');
         $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setStartDate');
         $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));

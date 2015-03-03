@@ -45,6 +45,7 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
             && $channel->getDataSource()->getTransport() instanceof MagentoSoapTransport
         ) {
             $this->transportEntity = $channel->getDataSource()->getTransport();
+
             parent::onChannelSucceedSave($event);
         }
     }
@@ -56,12 +57,16 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
     {
         $connectors = [];
         $initialConnectors = [];
+        $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
             if ($connectorName) {
                 $connector = $this->typeRegistry->getConnectorType(ChannelType::TYPE, $connectorName);
-                $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
+                if (!$connector) {
+                    continue;
+                }
+
                 if ($isExtensionInstalled
                     || (!$isExtensionInstalled && !$connector instanceof ExtensionAwareInterface)
                 ) {
