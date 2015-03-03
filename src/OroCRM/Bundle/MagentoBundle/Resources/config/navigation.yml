@@ -41,6 +41,8 @@ oro_menu_config:
 oro_titles:
     orocrm_magento_customer_index: ~
     orocrm_magento_customer_view:  %%customer.name%%
+    orocrm_magento_customer_update: %%customer.name%% - oro.ui.edit
+    orocrm_magento_customer_create: oro.ui.create_entity
     orocrm_magento_cart_index:     ~
     orocrm_magento_cart_view:      Cart %%cart.id%%
     orocrm_magento_order_index:    ~

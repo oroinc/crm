@@ -60,6 +60,10 @@ datagrid:
                 type: url
                 route: orocrm_magento_customer_view
                 params: [ id ]
+            update_link:
+                type: url
+                route: orocrm_magento_customer_update
+                params: [ id ]
         sorters:
             columns:
                 firstName:   { data_name: c.firstName }
@@ -134,6 +138,12 @@ datagrid:
                 icon:         eye-open
                 acl_recource: orocrm_magento_customer_view
                 rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: orocrm_magento_customer_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
         options:
             entityHint: customer
             export: true

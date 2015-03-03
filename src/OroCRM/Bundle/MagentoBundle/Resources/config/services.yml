@@ -23,7 +23,7 @@ parameters:
     orocrm_magento.form.type.customer_select.class:                         OroCRM\Bundle\MagentoBundle\Form\Type\CustomerSelectType
     orocrm_magento.form.type.cart_select.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType
     orocrm_magento.form.type.website_select.class:                          OroCRM\Bundle\MagentoBundle\Form\Type\WebsiteSelectType
-
+    orocrm_magento.form.type.customer.class:                                OroCRM\Bundle\MagentoBundle\Form\Type\CustomerType
     # event listeners
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.customer_currency.class:                  OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
@@ -131,6 +131,13 @@ services:
         class: %orocrm_magento.form.type.order_place.class%
         tags:
             - { name: form.type, alias: orocrm_magento_order_place_form_type }
+
+    orocrm_magento.form.type.customer:
+        class: %orocrm_magento.form.type.customer.class%
+        arguments:
+            - %orocrm_magento.entity.customer.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_customer }
 
     # Search handler
     orocrm_magento.form.autocomplete.order.search_handler:

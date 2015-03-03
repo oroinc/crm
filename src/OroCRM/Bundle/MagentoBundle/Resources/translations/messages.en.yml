@@ -118,6 +118,7 @@ orocrm:
             monetary.label:      Monetary
             recency.label:       Recency
             frequency.label:     Frequency
+            saved.message:       Customer saved
 
         customergroup:
             entity_label:        Customer Group

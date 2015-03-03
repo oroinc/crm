@@ -33,6 +33,9 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Customer $customer
+     * @return array
+     *
      * @Route("/view/{id}", name="orocrm_magento_customer_view", requirements={"id"="\d+"}))
      * @Acl(
      *      id="orocrm_magento_customer_view",
@@ -48,6 +51,67 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Customer $customer
+     * @return array
+     *
+     * @Route("/update/{id}", name="orocrm_magento_customer_update", requirements={"id"="\d+"}))
+     * @Acl(
+     *      id="orocrm_magento_customer_update",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMMagentoBundle:Customer"
+     * )
+     * @Template("OroCRMMagentoBundle:Customer:update.html.twig")
+     */
+    public function updateAction(Customer $customer)
+    {
+        return $this->update($customer);
+    }
+
+    /**
+     * @Route("/create", name="orocrm_magento_customer_create"))
+     * @Acl(
+     *      id="orocrm_magento_customer_create",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMMagentoBundle:Customer"
+     * )
+     * @Template("OroCRMMagentoBundle:Customer:update.html.twig")
+     */
+    public function createAction()
+    {
+        return $this->update(new Customer());
+    }
+
+    /**
+     * @param Customer $customer
+     * @return array
+     */
+    protected function update(Customer $customer)
+    {
+        return $this->get('oro_form.model.update_handler')->handleUpdate(
+            $customer,
+            $this->createForm('orocrm_magento_customer', $customer),
+            function (Customer $customer) {
+                return [
+                    'route' => 'orocrm_magento_customer_update',
+                    'parameters' => ['id' => $customer->getId()]
+                ];
+            },
+            function (Customer $customer) {
+                return [
+                    'route' => 'orocrm_magento_customer_view',
+                    'parameters' => ['id' => $customer->getId()]
+                ];
+            },
+            $this->get('translator')->trans('orocrm.magento.customer.saved.message')
+        );
+    }
+
+    /**
+     * @param Customer $customer
+     * @return array
+     *
      * @Route("/info/{id}", name="orocrm_magento_customer_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
@@ -58,6 +122,10 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Account $account
+     * @param Channel $channel
+     * @return array
+     *
      * @Route(
      *         "/widget/customers-info/{accountId}/{channelId}",
      *          name="orocrm_magento_widget_account_customers_info",
@@ -72,12 +140,16 @@ class CustomerController extends Controller
     {
         $customers = $this->getDoctrine()
             ->getRepository('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer')
-            ->findBy(array('account' => $account, 'dataChannel' => $channel));
+            ->findBy(['account' => $account, 'dataChannel' => $channel]);
 
-        return array('customers' => $customers, 'channel' => $channel, 'account' => $account);
+        return ['customers' => $customers, 'channel' => $channel, 'account' => $account];
     }
 
     /**
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
+     *
      * @Route(
      *        "/widget/customer-info/{id}/{channelId}",
      *        name="orocrm_magento_widget_customer_info",
@@ -98,6 +170,9 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Customer $customer
+     * @return array
+     *
      * @Route("/order/{id}", name="orocrm_magento_customer_orderplace", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
@@ -108,6 +183,9 @@ class CustomerController extends Controller
     }
 
     /**
+     * @param Customer $customer
+     * @return array
+     *
      * @Route("/addressBook/{id}", name="orocrm_magento_customer_address_book", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_customer_view")
      * @Template
