@@ -64,6 +64,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \stdClass[] Entities buffer got from pageable remote */
     protected $entityBuffer;
 
+    /** @var bool */
+    protected $isInitialDataLoaded = false;
+
     /**
      * @param SoapTransport $transport
      * @param array $settings
@@ -266,6 +269,12 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function findEntitiesToProcess()
     {
+        if ($this->isInitialSync() && $this->isInitialDataLoaded) {
+            $this->isInitialDataLoaded = false;
+
+            return null;
+        }
+
         $now = new \DateTime($this->transport->getServerTime(), new \DateTimeZone('UTC'));
 
         $this->logger->info('Looking for batch');
@@ -273,7 +282,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
 
         $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
 
-        if (!$this->isInitialSync() && empty($this->entitiesIdsBuffer)) {
+        if ($this->isInitialSync()) {
+            $this->isInitialDataLoaded = true;
+        } elseif (empty($this->entitiesIdsBuffer)) {
             $lastSyncDate = clone $this->lastSyncDate;
             $lastSyncDate->add($this->syncRange);
 
@@ -287,7 +298,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             return true;
         }
 
-        return null;
+        return empty($this->entitiesIdsBuffer) ? null : true;
     }
 
     /**
