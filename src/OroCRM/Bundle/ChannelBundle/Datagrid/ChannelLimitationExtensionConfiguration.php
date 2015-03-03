@@ -21,7 +21,8 @@ class ChannelLimitationExtensionConfiguration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(
                             function ($value) {
-                                return (substr_count((string)$value, '.') !== 1);
+                                $hasDot = strpos((string)$value, '.') !== false;
+                                return $hasDot && substr_count((string)$value, '.') !== 1;
                             }
                         )
                         ->thenInvalid('Must contains relative path with single nesting')

@@ -6,6 +6,8 @@ parameters:
     orocrm_magento.entity.cart_address.class:                               OroCRM\Bundle\MagentoBundle\Entity\CartAddress
     orocrm_magento.entity.order_address.class:                              OroCRM\Bundle\MagentoBundle\Entity\OrderAddress
     orocrm_magento.entity.customer.class:                                   OroCRM\Bundle\MagentoBundle\Entity\Customer
+    orocrm_magento.entity.customer_group.class:                             OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup
+    orocrm_magento.entity.store.class:                                      OroCRM\Bundle\MagentoBundle\Entity\Store
 
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
@@ -24,6 +26,8 @@ parameters:
     orocrm_magento.form.type.cart_select.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\CartSelectType
     orocrm_magento.form.type.website_select.class:                          OroCRM\Bundle\MagentoBundle\Form\Type\WebsiteSelectType
     orocrm_magento.form.type.customer.class:                                OroCRM\Bundle\MagentoBundle\Form\Type\CustomerType
+    orocrm_magento.form.type.customer_group_selector.class:                 OroCRM\Bundle\MagentoBundle\Form\Type\CustomerGroupSelectType
+    orocrm_magento.form.type.store_selector.class:                          OroCRM\Bundle\MagentoBundle\Form\Type\StoreSelectType
     # event listeners
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.customer_currency.class:                  OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
@@ -64,6 +68,10 @@ parameters:
     orocrm_magento.provider.analytics.customer_recency.class:               OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider
     orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
+
+    # Search handlers
+    orocrm_magento.form.autocomplete.customer_group.search_handler.class:   OroCRM\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
+    orocrm_magento.form.autocomplete.store.search_handler.class:            OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
 
 services:
     orocrm_magento.transport.soap_transport:
@@ -138,6 +146,16 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: form.type, alias: orocrm_magento_customer }
+
+    orocrm_magento.form.type.customer_group_selector:
+        class: %orocrm_magento.form.type.customer_group_selector.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_customer_group_select }
+
+    orocrm_magento.form.type.store_selector:
+        class: %orocrm_magento.form.type.store_selector.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_store_select }
 
     # Search handler
     orocrm_magento.form.autocomplete.order.search_handler:
@@ -326,3 +344,29 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
+
+    # Search handlers
+    orocrm_magento.form.autocomplete.customer_group.search_handler:
+        class: %orocrm_magento.form.autocomplete.customer_group.search_handler.class%
+        arguments:
+            - %orocrm_magento.entity.customer_group.class%
+            - ["name"]
+        calls:
+            - [initDoctrinePropertiesByManagerRegistry, [@doctrine]]
+            - [setAclHelper,["@oro_security.acl_helper"]]
+            - [setDataChannelClass, [%orocrm_channel.entity.class%]]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: "magento_customer_group", acl_resource: "orocrm_magento_customer_view" }
+
+    orocrm_magento.form.autocomplete.store.search_handler:
+        class: %orocrm_magento.form.autocomplete.store.search_handler.class%
+        arguments:
+            - %orocrm_magento.entity.store.class%
+            - ["name"]
+        calls:
+            - [initDoctrinePropertiesByManagerRegistry, [@doctrine]]
+            - [setAclHelper,["@oro_security.acl_helper"]]
+            - [setDataChannelClass, [%orocrm_channel.entity.class%]]
+        tags:
+            - { name: oro_form.autocomplete.search_handler, alias: "magento_store", acl_resource: "orocrm_magento_customer_view" }
+

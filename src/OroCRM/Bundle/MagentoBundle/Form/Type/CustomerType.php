@@ -48,10 +48,24 @@ class CustomerType extends AbstractType
                     'allowed_types' => [ChannelType::TYPE],
                     'label' => 'orocrm.magento.customer.channel.label',
                 ]
+            ) // TODO: Remove
+            ->add('website', 'choice', ['label' => 'orocrm.magento.customer.website.label']) //TODO: Remove
+            ->add(
+                'store',
+                'orocrm_magento_store_select',
+                [
+                    'label' => 'orocrm.magento.customer.store.label',
+                    'channel_field' => 'dataChannel'
+                ]
             )
-            ->add('website', 'choice', ['label' => 'orocrm.magento.customer.website.label'])
-            ->add('store', 'choice', ['label' => 'orocrm.magento.customer.store.label'])
-            ->add('group', 'choice', ['label' => 'orocrm.magento.customer.group.label'])
+            ->add(
+                'group',
+                'orocrm_magento_customer_group_select',
+                [
+                    'label' => 'orocrm.magento.customer.group.label',
+                    'channel_field' => 'dataChannel'
+                ]
+            )
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
             ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
     }

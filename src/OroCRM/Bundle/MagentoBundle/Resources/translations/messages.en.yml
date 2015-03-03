@@ -127,6 +127,7 @@ orocrm:
             id.label:            Id
             origin_id.label:     Origin Id
             channel.label:       Integration
+            placeholder:         Please, select group
 
         cart:
             entity_label:         Shopping Cart
@@ -412,6 +413,7 @@ orocrm:
             name.label:          Name
             channel.label:       Integration
             website.label:       Website
+            placeholder:         Please, select store
 
         website:
             entity_label:        Website
