@@ -102,9 +102,21 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
                 )
             );
 
-        parent::testOnChannelSucceedSave();
+        $this->prepareEvent();
+        $this->getListener()->onChannelSucceedSave($this->event);
 
         $this->assertEquals($expectedConnectors, $this->integration->getConnectors());
+    }
+
+    public function testOnChannelSucceedSave()
+    {
+        $this->entity->setChannelType(ChannelType::TYPE);
+        $transport = new MagentoSoapTransport();
+        $transport->setIsExtensionInstalled(false);
+        $this->integration->setTransport($transport);
+
+        $this->prepareEvent();
+        $this->getListener()->onChannelSucceedSave($this->event);
     }
 
     /**

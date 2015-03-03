@@ -54,6 +54,16 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnChannelSucceedSave()
     {
+        $this->prepareEvent();
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelSucceedSave($this->event);
+
+        $this->assertConnectors();
+    }
+
+    protected function prepareEvent()
+    {
         $this->entity->setEntities(
             [
                 'OroCRM\Bundle\AcmeBundle\Entity\TestEntity1',
@@ -80,11 +90,6 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->integration);
         $this->em->expects($this->once())->method('flush');
-
-        $channelSaveSucceedListener = $this->getListener();
-        $channelSaveSucceedListener->onChannelSucceedSave($this->event);
-
-        $this->assertConnectors();
     }
 
     /**
