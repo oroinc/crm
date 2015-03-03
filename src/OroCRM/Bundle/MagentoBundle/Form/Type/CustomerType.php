@@ -6,8 +6,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-
 class CustomerType extends AbstractType
 {
     const NAME = 'orocrm_magento_customer';
@@ -39,23 +37,16 @@ class CustomerType extends AbstractType
                 [
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
+                    'required' => true
                 ]
             )
-            ->add(
-                'channel',
-                'oro_integration_select',
-                [
-                    'allowed_types' => [ChannelType::TYPE],
-                    'label' => 'orocrm.magento.customer.channel.label',
-                ]
-            ) // TODO: Remove
-            ->add('website', 'choice', ['label' => 'orocrm.magento.customer.website.label']) //TODO: Remove
             ->add(
                 'store',
                 'orocrm_magento_store_select',
                 [
                     'label' => 'orocrm.magento.customer.store.label',
-                    'channel_field' => 'dataChannel'
+                    'channel_field' => 'dataChannel',
+                    'required' => true
                 ]
             )
             ->add(
@@ -63,9 +54,11 @@ class CustomerType extends AbstractType
                 'orocrm_magento_customer_group_select',
                 [
                     'label' => 'orocrm.magento.customer.group.label',
-                    'channel_field' => 'dataChannel'
+                    'channel_field' => 'dataChannel',
+                    'required' => true
                 ]
             )
+            // TODO: Add tooltip that contact and account will be auto created if not set
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
             ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
     }
