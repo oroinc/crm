@@ -19,5 +19,8 @@ class AddSyncState implements Migration
 
         $orderTable = $schema->getTable('orocrm_magento_order');
         $orderTable->addColumn('sync_state', 'integer', ['notnull' => false]);
+
+        $transportTable = $schema->getTable('oro_integration_transport');
+        $transportTable->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
     }
 }

@@ -16,14 +16,14 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
     }
 
     /**
-     * @dataProvider dataProvider
+     * @param array $orderArray
+     * @param array $storeData
+     * @param array $stores
+     * @param array $websites
      *
-     * @param string $orderArray
-     * @param string $storeData
-     * @param string $stores
-     * @param string $websites
+     * @dataProvider dataProvider
      */
-    public function testIteration($orderArray, $storeData, $stores, $websites)
+    public function testIteration(array $orderArray, array $storeData, array $stores, array $websites)
     {
         $dependencies = [
             MagentoTransportInterface::ALIAS_STORES => $stores,
@@ -33,22 +33,15 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
             ->method('getDependencies')
             ->will($this->returnValue($dependencies));
 
-        $this->transport->expects($this->atLeastOnce())
-            ->method('call')
+        $this->transport->expects($this->once())->method('call')
             ->with($this->equalTo('oroOrderList'))
             ->will($this->returnValue($orderArray));
 
-        $orders = [
-            array_merge((array)$orderArray[0], $storeData, ['items' => []]),
-            array_merge((array)$orderArray[1], $storeData, ['items' => []]),
-            array_merge((array)$orderArray[2], $storeData, ['items' => []]),
-        ];
-
         $this->assertEquals(
             [
-                1 => $orders[0],
-                2 => $orders[1],
-                3 => $orders[2],
+                1 => array_merge((array)$orderArray[0], $storeData, ['items' => []]),
+                2 => array_merge((array)$orderArray[1], $storeData, ['items' => []]),
+                3 => array_merge((array)$orderArray[2], $storeData, ['items' => []])
             ],
             iterator_to_array($this->iterator)
         );
@@ -68,53 +61,59 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
         $this->testIteration($orderArray, $storeData, $stores, $websites);
     }
 
+    /**
+     * @return array
+     */
     public function dataProvider()
     {
         return [
             'one test case' => [
                 [
-                    (object)['order_id'   => 1,
-                             'total'      => 12.5,
-                             'store_id'   => 0,
-                             'store_name' => 'admin',
-                             'items'      => (object)[]
+                    (object)[
+                        'order_id' => 1,
+                        'total' => 12.5,
+                        'store_id' => 0,
+                        'store_name' => 'admin',
+                        'items' => (object)[]
                     ],
-                    (object)['order_id'   => 2,
-                             'total'      => 132,
-                             'store_id'   => 0,
-                             'store_name' => 'admin',
-                             'items'      => (object)[]
+                    (object)[
+                        'order_id' => 2,
+                        'total' => 132,
+                        'store_id' => 0,
+                        'store_name' => 'admin',
+                        'items' => (object)[]
                     ],
-                    (object)['order_id'   => 3,
-                             'total'      => 86,
-                             'store_id'   => 0,
-                             'store_name' => 'admin',
-                             'items'      => (object)[]
+                    (object)[
+                        'order_id' => 3,
+                        'total' => 86,
+                        'store_id' => 0,
+                        'store_name' => 'admin',
+                        'items' => (object)[]
                     ]
                 ],
                 [
-                    'store_code'         => 'admin',
-                    'store_storename'    => 'Admin',
-                    'store_website_id'   => 0,
+                    'store_code' => 'admin',
+                    'store_storename' => 'Admin',
+                    'store_website_id' => 0,
                     'store_website_code' => 'admin',
-                    'store_website_name' => 'Admin',
+                    'store_website_name' => 'Admin'
                 ],
                 [
                     [
                         'website_id' => 0,
-                        'code'       => 'admin',
-                        'name'       => 'Admin',
-                        'store_id'   => 0
+                        'code' => 'admin',
+                        'name' => 'Admin',
+                        'store_id' => 0
                     ]
                 ],
                 [
                     [
-                        'id'   => 0,
+                        'id' => 0,
                         'code' => 'admin',
-                        'name' => 'Admin',
+                        'name' => 'Admin'
                     ]
                 ]
-            ],
+            ]
         ];
     }
 }

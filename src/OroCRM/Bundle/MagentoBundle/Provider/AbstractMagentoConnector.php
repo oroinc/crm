@@ -44,7 +44,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     ) {
         parent::__construct($contextRegistry, $logger, $contextMediator);
         $this->bundleConfiguration = $bundleConfiguration;
-
     }
 
     /**
@@ -99,8 +98,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             $startDate = $this->getStartDate($status);
 
             if ($status) {
-                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-
                 // use assumption interval in order to prevent mistiming issues
                 $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
                 $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
@@ -108,26 +105,23 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 $startDate->sub(\DateInterval::createFromDateString($intervalString));
             }
 
+            $executionContext = $this->stepExecution->getJobExecution()->getExecutionContext();
+            $interval = $executionContext->get(InitialSyncProcessor::INTERVAL);
+            if ($interval) {
+                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_INITIAL);
+                $iterator->setSyncRange($interval);
+            }
+
+            $minimalSyncDate = $executionContext->get(InitialSyncProcessor::START_SYNC_DATE);
+            if ($minimalSyncDate) {
+                $iterator->setMinSyncDate($minimalSyncDate);
+            }
+
             $iterator->setStartDate($startDate);
         }
 
-        $interval = $this->stepExecution->getJobExecution()->getExecutionContext()->get(InitialSyncProcessor::INTERVAL);
-        if ($interval) {
-            $iterator->setSyncRange($interval);
-        }
-
         // pass filters from connector
-        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
-            if ($iterator instanceof PredefinedFiltersAwareInterface) {
-                $filters           = $context->getOption('filters') ?: [];
-                $complexFilters    = $context->getOption('complex_filters') ?: [];
-                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
-
-                $iterator->setPredefinedFiltersBag($predefinedFilters);
-            } else {
-                throw new \LogicException('Iterator does not support predefined filters');
-            }
-        }
+        $this->setPredefinedFilters($context, $iterator);
     }
 
     /**
@@ -222,6 +216,30 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 break;
             default:
                 return null;
+        }
+    }
+
+    /**
+     * @param ContextInterface $context
+     * @param \Iterator $iterator
+     */
+    protected function setPredefinedFilters(ContextInterface $context, \Iterator $iterator)
+    {
+        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
+            if ($iterator instanceof PredefinedFiltersAwareInterface) {
+                if (!$filters = $context->getOption('filters')) {
+                    $filters = [];
+                }
+                if (!$complexFilters = $context->getOption('complex_filters')) {
+                    $complexFilters = [];
+                }
+
+                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
+
+                $iterator->setPredefinedFiltersBag($predefinedFilters);
+            } else {
+                throw new \LogicException('Iterator does not support predefined filters');
+            }
         }
     }
 }

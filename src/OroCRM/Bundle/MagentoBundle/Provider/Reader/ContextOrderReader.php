@@ -2,35 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 
-class ContextOrderReader extends AbstractReader
+class ContextOrderReader extends AbstractContextReader
 {
     /**
-     * @var array[]
+     * @return Order[]
      */
-    protected $orders;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function read()
+    protected function getEntities()
     {
-        if (!$this->orders) {
-            return null;
-        }
-
-        return array_shift($this->orders);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function initializeFromContext(ContextInterface $context)
-    {
-        $this->orders = (array)$this->stepExecution->getJobExecution()
+        return (array)$this->stepExecution->getJobExecution()
             ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
     }
 }

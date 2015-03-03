@@ -18,7 +18,11 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        return new ContextCustomerReader($contextRegistry, $logger, $contextMediator, $this->config);
+        $reader = new ContextCustomerReader($contextRegistry, $logger, $contextMediator, $this->config);
+
+        $reader->setContextKey('postProcessOrders');
+
+        return $reader;
     }
 
     /**
@@ -35,6 +39,26 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     protected function supportsForceMode()
     {
         return true;
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Context key is missing
+     */
+    public function testFailedWithoutExecutionContext()
+    {
+        /** @var ContextCustomerReader $connector */
+        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
+        $connector->setContextKey(null);
+        $this->transportMock->expects($this->once())->method('init');
+
+        $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
+        $iterator->expects($this->never())->method('setEntitiesIdsBuffer');
+
+        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+            ->will($this->returnValue($iterator));
+
+        $connector->setStepExecution($this->stepExecutionMock);
     }
 
     public function testInitializationWithNotMatchedIterator()
@@ -116,7 +140,7 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
                     $this->getOrder([], $originId)
                 ],
                 [$originId]
-            ],
+            ]
         ];
     }
 

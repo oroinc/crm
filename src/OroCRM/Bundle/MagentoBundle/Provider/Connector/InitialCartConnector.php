@@ -2,10 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 
-class InitialCartConnector extends AbstractInitialConnector
+use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+
+class InitialCartConnector extends AbstractInitialConnector implements ExtensionAwareInterface
 {
     const TYPE = 'cart_initial';
-    const IMPORT_JOB_NAME = 'mage_cart_initial_import';
 
     /**
      * {@inheritdoc}
@@ -20,7 +22,7 @@ class InitialCartConnector extends AbstractInitialConnector
      */
     public function getImportJobName()
     {
-        return self::IMPORT_JOB_NAME;
+        return CartConnector::IMPORT_JOB_NAME;
     }
 
     /**

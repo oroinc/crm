@@ -47,24 +47,16 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function applyFilter()
     {
-        $toDate = clone $this->lastSyncDate;
-        $toDate->sub($this->syncRange);
-        $dateField = 'updated_at';
-        $initMode = $this->mode === self::IMPORT_MODE_INITIAL;
-        if ($initMode) {
+        if ($this->isInitialSync()) {
             $dateField = 'created_at';
+            $this->filter->addDateFilter($dateField, 'from', $this->getToDate($this->lastSyncDate));
+            $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
+        } else {
+            $dateField = 'updated_at';
+            $this->filter->addDateFilter($dateField, 'gt', $this->lastSyncDate);
         }
-        $this->filter->addDateFilter($dateField, 'to', $this->lastSyncDate);
-        $this->filter->addDateFilter($dateField, 'from', $toDate);
 
-        if ($this->transport instanceof ServerTimeAwareInterface) {
-            // fix time frame if it's possible to retrieve server time
-            $time = $this->transport->getServerTime();
-            if (false !== $time) {
-                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
-                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
-            }
-        }
+        $this->fixServerTime($dateField);
 
         if (null !== $this->predefinedFilters) {
             $this->filter->merge($this->predefinedFilters);
@@ -110,10 +102,29 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
      */
     protected function getEntity($id)
     {
-        $result = $this->entityBuffer[$id];
+        if (!array_key_exists($id, $this->entityBuffer)) {
+            return false;
+        }
 
+        $result = $this->entityBuffer[$id];
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
+    }
+
+    /**
+     * Fix time frame if it's possible to retrieve server time.
+     *
+     * @param string $dateField
+     */
+    protected function fixServerTime($dateField)
+    {
+        if (!$this->isInitialSync() && $this->transport instanceof ServerTimeAwareInterface) {
+            $time = $this->transport->getServerTime();
+            if (false !== $time) {
+                $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
+                $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
+            }
+        }
     }
 }

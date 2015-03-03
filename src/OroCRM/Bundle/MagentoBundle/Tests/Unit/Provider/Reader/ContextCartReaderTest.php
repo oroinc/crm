@@ -2,16 +2,16 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
 
-class ContextOrderReaderTest extends AbstractContextReaderTest
+class ContextCartReaderTest extends AbstractContextReaderTest
 {
     /**
-     * @return ContextOrderReader
+     * @return ContextCartReader
      */
     protected function getReader()
     {
-        return new ContextOrderReader($this->contextRegistry);
+        return new ContextCartReader($this->contextRegistry);
     }
 
     /**

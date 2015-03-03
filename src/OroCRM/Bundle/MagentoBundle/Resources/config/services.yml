@@ -329,10 +329,3 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
-
-    orocrm_magento.job_executor:
-        class: %orocrm_magento.job_executor.class%
-        parent: oro_integration.job_executor
-        tags:
-            - { name: oro_importexport.job_executor, priority: 10 }
-            - { name: orocrm_magento.bundle_config.aware }

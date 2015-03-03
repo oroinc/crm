@@ -2,12 +2,22 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCustomerReader extends CustomerConnector
 {
+    /** @var string */
+    protected $contextKey;
+
+    /**
+     * @param string $contextKey
+     */
+    public function setContextKey($contextKey)
+    {
+        $this->contextKey = $contextKey;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -29,18 +39,21 @@ class ContextCustomerReader extends CustomerConnector
      */
     public function getCustomerIds()
     {
-        $orders = (array)$this->stepExecution->getJobExecution()
-            ->getExecutionContext()->get(OrderWithExistingCustomerStrategy::CONTEXT_ORDER_POST_PROCESS);
+        if (!$this->contextKey) {
+            throw new \InvalidArgumentException('Context key is missing');
+        }
+
+        $entities = (array)$this->stepExecution->getJobExecution()->getExecutionContext()->get($this->contextKey);
 
         $entitiesIdsBuffer = array_map(
-            function (array $order) {
-                if (empty($order['customer']['originId'])) {
+            function (array $entity) {
+                if (empty($entity['customer']['originId'])) {
                     return false;
                 }
 
-                return $order['customer']['originId'];
+                return $entity['customer']['originId'];
             },
-            $orders
+            $entities
         );
 
         return array_unique(array_filter($entitiesIdsBuffer));

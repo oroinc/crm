@@ -21,7 +21,8 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             $this->jobExecutor,
             $this->typesRegistry,
             $this->eventDispatcher,
-            $this->logger
+            $this->logger,
+            ['sync_settings' => ['initial_import_step_interval' => '2 days']]
         );
     }
 
