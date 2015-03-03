@@ -100,6 +100,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         IntegrationUpdate::updateOroIntegrationTransportTable($schema);
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
     }
 
     /**

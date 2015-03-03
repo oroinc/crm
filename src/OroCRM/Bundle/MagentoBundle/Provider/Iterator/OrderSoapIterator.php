@@ -26,7 +26,11 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
         $this->entityBuffer = array_combine(
             array_map(
                 function ($item) {
-                    return is_object($item) ? $item->order_id : $item['order_id'];
+                    if (is_object($item)) {
+                        return $item->order_id;
+                    } else {
+                        return $item['order_id'];
+                    }
                 },
                 $result
             ),

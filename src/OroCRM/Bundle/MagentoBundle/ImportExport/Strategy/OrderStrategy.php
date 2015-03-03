@@ -105,7 +105,7 @@ class OrderStrategy extends BaseStrategy
      * @param Order $order
      * @param Customer $customer
      */
-    protected function updateCustomer(Order $order, Customer $customer)
+    protected function updateCustomer(Order $order, Customer $customer = null)
     {
         if ($customer instanceof Customer) {
             // now customer orders subtotal calculation support only one currency.
