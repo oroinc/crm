@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use JMS\JobQueueBundle\Entity\Job;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
@@ -98,9 +97,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      */
     protected function isInitialJobRunning(Integration $integration)
     {
-        /** @var ChannelRepository $repository */
-        $repository = $this->doctrineRegistry->getRepository('OroIntegrationBundle:Channel');
-        $initialJobsRunning = $repository->getRunningSyncJobsCount(
+        $initialJobsRunning = $this->getChannelRepository()->getRunningSyncJobsCount(
             InitialSyncCommand::COMMAND_NAME,
             $integration->getId()
         );
@@ -115,7 +112,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      */
     protected function scheduleInitialSyncIfRequired(Integration $integration)
     {
-        $this->checkInitialSyncStartDate($integration);
+        $this->saveInitialSyncStartDate($integration);
         /** @var MagentoSoapTransport $transport */
         $transport = $integration->getTransport();
         if (!$this->isInitialJobRunning($integration)
@@ -135,7 +132,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      *
      * @param Integration $integration
      */
-    protected function checkInitialSyncStartDate(Integration $integration)
+    protected function saveInitialSyncStartDate(Integration $integration)
     {
         if (!$this->isInitialSyncStarted($integration)) {
             /** @var MagentoSoapTransport $transport */

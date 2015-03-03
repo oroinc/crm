@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
@@ -13,6 +15,17 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     const CONNECTORS_INITIAL_SYNCED_TO = 'connectorsInitialSyncedTo';
     const START_SYNC_DATE = 'start_sync_date';
     const INTERVAL = 'initialSyncInterval';
+
+    /** @var string */
+    protected $channelClassName;
+
+    /**
+     * @param string $channelClassName
+     */
+    public function setChannelClassName($channelClassName)
+    {
+        $this->channelClassName = $channelClassName;
+    }
 
     /**
      * @param Integration $integration
@@ -54,14 +67,12 @@ abstract class AbstractInitialProcessor extends SyncProcessor
 
     /**
      * @param Integration $integration
-     * @param $connector
-     * @return null|\Oro\Bundle\IntegrationBundle\Entity\Status
+     * @param string $connector
+     * @return null|Status
      */
     protected function getLastStatusForConnector(Integration $integration, $connector)
     {
-        return $this->doctrineRegistry
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->getLastStatusForConnector($integration, $connector);
+        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector);
     }
 
     /**
@@ -84,5 +95,17 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         }
 
         return false;
+    }
+
+    /**
+     * @return ChannelRepository
+     */
+    protected function getChannelRepository()
+    {
+        if (!$this->channelClassName) {
+            throw new \InvalidArgumentException('Channel class option is missing');
+        }
+
+        return $this->doctrineRegistry->getRepository($this->channelClassName);
     }
 }

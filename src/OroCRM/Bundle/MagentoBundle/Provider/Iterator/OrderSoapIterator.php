@@ -29,7 +29,7 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
                     if (is_object($item)) {
                         return $item->order_id;
                     } else {
-                        return  $item['order_id'];
+                        return $item['order_id'];
                     }
                 },
                 $result

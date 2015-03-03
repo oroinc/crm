@@ -50,6 +50,7 @@ parameters:
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
+    orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
     orocrm_magento.provider.initial_sync_processor.class:                       OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor
     orocrm_magento.provider.initial_schedule_processor.class:                   OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor
 
@@ -354,15 +355,22 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
+    orocrm_magento.provider.initial_processor:
+        class: %orocrm_magento.provider.initial_processor.class%
+        parent: oro_integration.sync.processor
+        abstract: true
+        calls:
+             - [setChannelClassName, [%oro_integration.entity.class%]]
+
     orocrm_magento.provider.initial_sync_processor:
         class: %orocrm_magento.provider.initial_sync_processor.class%
-        parent: oro_integration.sync.processor
+        parent: orocrm_magento.provider.initial_processor
         tags:
             - { name: orocrm_magento.bundle_config.aware }
 
     orocrm_magento.provider.initial_schedule_processor:
         class: %orocrm_magento.provider.initial_schedule_processor.class%
-        parent: oro_integration.sync.processor
+        parent: orocrm_magento.provider.initial_processor
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 

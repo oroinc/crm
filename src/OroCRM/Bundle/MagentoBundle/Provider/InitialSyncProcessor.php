@@ -139,9 +139,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
 
-        $this->doctrineRegistry
-            ->getRepository('OroIntegrationBundle:Channel')
-            ->addStatus($integration, $lastStatus);
+        $this->getChannelRepository()->addStatus($integration, $lastStatus);
     }
 
     /**
