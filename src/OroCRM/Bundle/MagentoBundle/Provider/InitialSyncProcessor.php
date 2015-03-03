@@ -94,7 +94,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                         // Pass synced to for further filters creation
                         $parameters = array_merge(
                             $parameters,
-                            [self::INITIAL_SYNCED_TO => $connectorsSyncedTo[$connector]]
+                            [self::INITIAL_SYNCED_TO => clone $connectorsSyncedTo[$connector]]
                         );
                         $result = $this->processIntegrationConnector(
                             $integration,
@@ -108,7 +108,11 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
                         if ($isSuccess) {
                             // Save synced to date for connector
-                            $this->updateSyncedTo($integration, $connector, $connectorsSyncedTo[$connector]);
+                            $syncedTo = $connectorsSyncedTo[$connector];
+                            if ($syncedTo < $startSyncDate) {
+                                $syncedTo = $startSyncDate;
+                            }
+                            $this->updateSyncedTo($integration, $connector, $syncedTo);
                         } else {
                             break 2;
                         }
@@ -151,10 +155,10 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     {
         $latestSyncedTo = $this->getSyncedTo($integration, $connector);
         if ($latestSyncedTo === false) {
-            return $this->getInitialSyncStartDate($integration);
+            return clone $this->getInitialSyncStartDate($integration);
         }
 
-        return $latestSyncedTo;
+        return clone $latestSyncedTo;
     }
 
     /**

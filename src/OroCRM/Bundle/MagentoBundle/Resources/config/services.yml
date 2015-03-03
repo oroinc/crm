@@ -199,6 +199,8 @@ services:
         arguments:
             - @orocrm_channel.provider.settings_provider
             - @doctrine
+        calls:
+            - [setConnectorsTypeRegistry, [@oro_integration.manager.types_registry]]
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave, priority: -10 }
 

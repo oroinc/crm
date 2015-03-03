@@ -140,7 +140,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function isExtensionInstalled()
     {
         if (null === $this->isExtensionInstalled) {
-            $this->pingMagento();
+            //$this->pingMagento();
         }
 
         return $this->isExtensionInstalled;
@@ -155,7 +155,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         if (null === $this->isExtensionInstalled && null === $this->adminUrl) {
             try {
-                $result = $this->call(self::ACTION_PING);
+                //$result = $this->call(self::ACTION_PING);
+                $result = (object)['version' => null, 'admin_url' => null];
                 $this->isExtensionInstalled = !empty($result->version);
                 if (!empty($result->admin_url)) {
                     $this->adminUrl = $result->admin_url;
@@ -178,7 +179,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getAdminUrl()
     {
         if (null === $this->adminUrl) {
-            $this->pingMagento();
+            //$this->pingMagento();
         }
 
         return $this->adminUrl;

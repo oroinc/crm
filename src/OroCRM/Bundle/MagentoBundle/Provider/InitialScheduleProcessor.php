@@ -45,7 +45,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $connectors = $this->getInitialConnectors($integration);
         $syncDates = [];
         foreach ($connectors as $connector) {
-            $lastSyncedTo = $this->getLastStatusForConnector($integration, $connector);
+            $lastSyncedTo = $this->getSyncedTo($integration, $connector);
             if (!$lastSyncedTo) {
                 $lastSyncedTo = $initialSyncStartDate;
             }
