@@ -280,20 +280,19 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
 
+        if (!$this->isInitialSync()) {
+            //increment date for further filtering
+            $this->lastSyncDate->add($this->syncRange);
+        }
+
         $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
 
         if ($this->isInitialSync()) {
             $this->isInitialDataLoaded = true;
         } elseif (empty($this->entitiesIdsBuffer)) {
-            $lastSyncDate = clone $this->lastSyncDate;
-            $lastSyncDate->add($this->syncRange);
-
-            if ($lastSyncDate >= $now) {
+            if ($this->lastSyncDate >= $now) {
                 return null;
             }
-
-            //increment date for further filtering
-            $this->lastSyncDate->add($this->syncRange);
 
             return true;
         }
