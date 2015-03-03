@@ -32,6 +32,7 @@ class CustomerType extends AbstractType
             ->add('birthday', 'oro_date', ['required' => false, 'label' => 'orocrm.magento.customer.birthday.label'])
             ->add('email', 'email', ['label' => 'orocrm.magento.customer.email.label'])
             ->add('isActive', 'checkbox', ['label' => 'orocrm.magento.customer.is_active.label'])
+            ->add('vat', 'text', ['label' => 'orocrm.magento.customer.vat.label'])
             ->add(
                 'dataChannel',
                 'orocrm_channel_select_type',
