@@ -15,12 +15,11 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
 
         $queryBuilder = $this->entityRepository->createQueryBuilder('e');
         $queryBuilder
+            ->leftJoin('e.website', 'w')
             ->where($queryBuilder->expr()->like('LOWER(e.name)', ':searchTerm'))
             ->setParameter('searchTerm', '%' . strtolower($searchTerm) . '%')
-            ->addOrderBy('e.website', 'ASC')
-            ->addOrderBy('e.name', 'ASC')
-            ->setFirstResult($firstResult)
-            ->setMaxResults($maxResults);
+            ->addOrderBy('w.name', 'ASC')
+            ->addOrderBy('e.name', 'ASC');
 
         $dataChannel = $this->getDataChannelById($channelId);
         if ($dataChannel) {
