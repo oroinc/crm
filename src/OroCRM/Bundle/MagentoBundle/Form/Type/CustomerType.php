@@ -37,7 +37,6 @@ class CustomerType extends AbstractType
                 'dataChannel',
                 'orocrm_channel_select_type',
                 [
-                    'required' => true,
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
                 ]
@@ -46,7 +45,6 @@ class CustomerType extends AbstractType
                 'channel',
                 'oro_integration_select',
                 [
-                    'required' => true,
                     'allowed_types' => [ChannelType::TYPE],
                     'label' => 'orocrm.magento.customer.channel.label',
                 ]

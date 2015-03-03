@@ -28,6 +28,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
@@ -583,5 +584,25 @@ class Customer extends ExtendCustomer implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
+
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

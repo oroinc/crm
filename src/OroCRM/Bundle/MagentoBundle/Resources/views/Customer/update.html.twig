@@ -1,9 +1,18 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
 {% set formAction = entity.id ? path('orocrm_magento_customer_update', {id: entity.id}) : path('orocrm_magento_customer_create') %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {'%customer.name%': fullname, '%entityName%': 'orocrm.magento.customer.entity_label'|trans} }) %}
+
+{% block navButtons %}
+    {{ UI.cancelButton(path('orocrm_magento_customer_index')) }}
+    {% set html = UI.saveAndCloseButton() %}
+    {% if form.vars.value.id or resource_granted('orocrm_magento_customer_update') %}
+        {% set html = html ~ UI.saveAndStayButton() %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
 
 {% block pageHeader %}
     {% if form.vars.value.id %}
