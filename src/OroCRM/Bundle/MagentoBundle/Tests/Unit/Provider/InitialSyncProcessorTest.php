@@ -40,7 +40,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate->sub($interval);
 
         $realConnector = new InitialConnector();
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate], $realConnector);
+        $integration = $this->getIntegration($connectors, $syncStartDate, $realConnector);
 
         $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
             ->disableOriginalConstructor()
@@ -56,10 +56,6 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             );
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601)
-        ];
-        $this->assertIntegrationSettingsCall($integration, $settings);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -89,7 +85,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate->sub($subInterval);
 
         $realConnector = new InitialConnector();
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate], $realConnector);
+        $integration = $this->getIntegration($connectors, $syncStartDate, $realConnector);
 
         $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
             ->disableOriginalConstructor()
@@ -118,10 +114,6 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             );
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601)
-        ];
-        $this->assertIntegrationSettingsCall($integration, $settings);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -150,7 +142,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate = clone $syncedTo;
         $syncStartDate->sub($interval);
 
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+        $integration = $this->getIntegration($connectors, $syncStartDate);
 
         $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
             ->disableOriginalConstructor()
@@ -179,10 +171,6 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             );
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601)
-        ];
-        $this->assertIntegrationSettingsCall($integration, $settings);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -196,18 +184,5 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $integration
-     * @param string $connector
-     * @param null|object $status
-     */
-    protected function assertConnectorStatusCall($integration, $connector, $status = null)
-    {
-        $this->repository->expects($this->atLeastOnce())
-            ->method('getLastStatusForConnector')
-            ->with($integration, $connector)
-            ->will($this->returnValue($status));
     }
 }

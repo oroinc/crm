@@ -6,19 +6,18 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
-use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
+use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\AbstractSyncProcessor;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestConnector;
 use Oro\Bundle\IntegrationBundle\Tests\Unit\Fixture\TestContext;
-use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
-use Oro\Bundle\DataGridBundle\Common\Object;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 {
@@ -115,21 +114,6 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $integration
-     * @param array $settings
-     * @return Object
-     */
-    public function assertIntegrationSettingsCall($integration, array $settings = [])
-    {
-        $syncSettings = Object::create($settings);
-        $integration->expects($this->any())
-            ->method('getSynchronizationSettings')
-            ->will($this->returnValue($syncSettings));
-
-        return $syncSettings;
-    }
-
     public function assertProcessCalls()
     {
         $this->logger->expects($this->never())
@@ -197,11 +181,11 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $connectors
-     * @param array $settings
+     * @param \DateTime $syncStartDate
      * @param object|null $realConnector
      * @return Channel|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getIntegration(array $connectors = [], array $settings = [], $realConnector = null)
+    protected function getIntegration(array $connectors = [], \DateTime $syncStartDate = null, $realConnector = null)
     {
         $integration = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
@@ -222,24 +206,9 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->method('getType')
             ->will($this->returnValue('testChannelType'));
 
-        $settingsBag = new ParameterBag($settings);
-        $transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $transport->expects($this->any())
-            ->method('getSettingsBag')
-            ->will($this->returnValue($settingsBag));
-
-        if (!empty($settings['initial_sync_start_date'])) {
-            $transport->expects($this->any())
-                ->method('getInitialSyncStartDate')
-                ->will($this->returnValue($settings['initial_sync_start_date']));
-        }
-
-        if (!empty($settings['start_sync_date'])) {
-            $transport->expects($this->any())
-                ->method('getSyncStartDate')
-                ->will($this->returnValue($settings['start_sync_date']));
+        $transport = new MagentoSoapTransport();
+        if ($syncStartDate) {
+            $transport->setSyncStartDate($syncStartDate);
         }
 
         $integration
@@ -261,5 +230,18 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($realConnector));
 
         return $integration;
+    }
+
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $integration
+     * @param string $connector
+     * @param null|object $status
+     */
+    protected function assertConnectorStatusCall($integration, $connector, $status = null)
+    {
+        $this->repository->expects($this->atLeastOnce())
+            ->method('getLastStatusForConnector')
+            ->with($integration, $connector)
+            ->will($this->returnValue($status));
     }
 }

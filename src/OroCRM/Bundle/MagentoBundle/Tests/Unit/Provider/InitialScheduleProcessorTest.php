@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor;
@@ -14,8 +15,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
     protected function setUp()
     {
-        $this->markTestIncomplete();
-
         parent::setUp();
 
         $this->processor = new InitialScheduleProcessor(
@@ -32,15 +31,11 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessFirstInitial()
     {
-        $connector = 'testConnector';
+        $connector = 'testConnector_initial';
         $connectors = [$connector];
 
-        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
-        $integration = $this->getIntegration(
-            $connectors,
-            ['start_sync_date' => $syncStartDate, 'initial_sync_start_date' => $initialStartDate]
-        );
+        $integration = $this->getIntegration($connectors, $syncStartDate);
 
         $this->em->expects($this->exactly(2))
             ->method('persist');
@@ -50,19 +45,10 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
-        $syncSettings = $this->assertIntegrationSettingsCall($integration);
-
-        $this->assertFalse($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertFalse($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-
         $this->assertProcessCalls();
         $this->assertExecuteJob();
 
         $this->processor->process($integration);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-        $this->assertTrue($syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
     }
 
     public function testProcessExisting()
@@ -71,12 +57,27 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
 
-        $connector = 'testConnector';
+        $connector = 'testConnector_initial';
         $connectors = [$connector];
-        $integration = $this->getIntegration(
-            $connectors,
-            ['start_sync_date' => $syncStartDate, 'initial_sync_start_date' => $initialStartDate]
-        );
+        $integration = $this->getIntegration($connectors, $syncStartDate);
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate($initialStartDate);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                    ]
+                )
+            );
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
 
         $this->em->expects($this->once())
             ->method('persist')
@@ -88,16 +89,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601),
-            InitialScheduleProcessor::INITIAL_SYNC_STARTED => true,
-            AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
-        ];
-        $syncSettings = $this->assertIntegrationSettingsCall($integration, $settings);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -110,14 +101,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-        $this->assertTrue($syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertEquals(
-            $initialStartDate->format(\DateTime::ISO8601),
-            $syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_START_DATE)
-        );
     }
 
     public function testProcessJobRunning()
@@ -128,7 +111,14 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $connector = 'testConnector';
         $connectors = [$connector];
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+        $integration = $this->getIntegration($connectors, $syncStartDate);
+
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate($initialStartDate);
+
+        $this->repository->expects($this->never())
+            ->method('getLastStatusForConnector');
 
         $this->em->expects($this->never())
             ->method('persist');
@@ -139,16 +129,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
             ->will($this->returnValue(2));
 
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601),
-            InitialScheduleProcessor::INITIAL_SYNC_STARTED => true,
-            AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
-        ];
-        $syncSettings = $this->assertIntegrationSettingsCall($integration, $settings);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -161,14 +141,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-        $this->assertTrue($syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertEquals(
-            $initialStartDate->format(\DateTime::ISO8601),
-            $syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_START_DATE)
-        );
     }
 
     public function testProcessInitialSynced()
@@ -177,9 +149,28 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
         $syncedTo = $syncStartDate->sub(new \DateInterval('P1D'));
 
-        $connector = 'testConnector';
+        $connector = 'testConnector_initial';
         $connectors = [$connector];
-        $integration = $this->getIntegration($connectors, ['start_sync_date' => $syncStartDate]);
+        $integration = $this->getIntegration($connectors, $syncStartDate);
+
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate($initialStartDate);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                    ]
+                )
+            );
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
 
         $this->em->expects($this->never())
             ->method('persist');
@@ -189,15 +180,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
-        $settings = [
-            AbstractInitialProcessor::INITIAL_SYNC_START_DATE => $initialStartDate->format(\DateTime::ISO8601),
-            InitialScheduleProcessor::INITIAL_SYNC_STARTED => true,
-            AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
-        ];
-        $syncSettings = $this->assertIntegrationSettingsCall($integration, $settings);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
 
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -211,13 +193,5 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
-
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertTrue($syncSettings->offsetExists(InitialScheduleProcessor::INITIAL_SYNC_START_DATE));
-        $this->assertTrue($syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_STARTED));
-        $this->assertEquals(
-            $initialStartDate->format(\DateTime::ISO8601),
-            $syncSettings->offsetGet(InitialScheduleProcessor::INITIAL_SYNC_START_DATE)
-        );
     }
 }
