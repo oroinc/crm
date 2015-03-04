@@ -122,7 +122,10 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
                 $transport->getSyncStartDate()
             )
         ) {
-            $job = new Job(InitialSyncCommand::COMMAND_NAME, [sprintf('--integration-id=%s', $integration->getId())]);
+            $job = new Job(
+                InitialSyncCommand::COMMAND_NAME,
+                [sprintf('--integration-id=%s', $integration->getId()), '-v']
+            );
             $this->saveEntity($job);
         }
     }

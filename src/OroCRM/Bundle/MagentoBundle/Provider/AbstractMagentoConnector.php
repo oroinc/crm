@@ -61,7 +61,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     {
         $item = parent::read();
 
-        if (null !== $item) {
+        if (is_array($item)) {
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
                 $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
