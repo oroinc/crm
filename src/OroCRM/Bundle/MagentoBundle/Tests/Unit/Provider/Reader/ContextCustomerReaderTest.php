@@ -50,12 +50,11 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
         /** @var ContextCustomerReader $connector */
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
         $connector->setContextKey(null);
-        $this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
         $iterator->expects($this->never())->method('setEntitiesIdsBuffer');
 
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -64,12 +63,11 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     public function testInitializationWithNotMatchedIterator()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        $this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('\Iterator');
         $iterator->expects($this->never())->method('setEntitiesIdsBuffer');
 
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -84,7 +82,6 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     public function testInitializationWithCustomerIds(array $orders = [], array $expectedIds = [])
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        $this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
 
@@ -92,7 +89,7 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
             ->method('setEntitiesIdsBuffer')
             ->with($expectedIds);
 
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $this->executionContextMock->expects($this->any())

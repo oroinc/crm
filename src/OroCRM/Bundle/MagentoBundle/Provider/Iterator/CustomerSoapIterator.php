@@ -69,6 +69,12 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
+        if (!array_key_exists($id, $this->entityBuffer)) {
+            $this->logger->warning(sprintf('Entity with id "%s" was not found', $id));
+
+            return false;
+        }
+
         $result = $this->entityBuffer[$id];
         $this->addDependencyData($result);
 

@@ -59,10 +59,8 @@ abstract class AbstractInfoReader extends AbstractReader
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        $this->transport = $this->contextMediator->getTransport($context, true);
         $this->channel   = $this->contextMediator->getChannel($context);
-
-        $this->transport->init($this->channel->getTransport());
+        $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
     }
 
     /**

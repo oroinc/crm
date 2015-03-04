@@ -56,6 +56,8 @@ class ContextCustomerReader extends CustomerConnector
             $entities
         );
 
+        sort($entitiesIdsBuffer);
+
         return array_unique(array_filter($entitiesIdsBuffer));
     }
 }

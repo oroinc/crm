@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Psr\Log\LoggerAwareInterface;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -61,7 +63,7 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     {
         $item = parent::read();
 
-        if (is_array($item)) {
+        if (null !== $item) {
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
                 $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
@@ -82,11 +84,27 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
+     * @param ContextInterface $context
+     */
+    protected function initializeTransport(ContextInterface $context)
+    {
+        $this->channel   = $this->contextMediator->getChannel($context);
+        $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
+
+        $this->validateConfiguration();
+        $this->setSourceIterator($this->getConnectorSource());
+
+        if ($this->getSourceIterator() instanceof LoggerAwareInterface) {
+            $this->getSourceIterator()->setLogger($this->logger);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        parent::initializeFromContext($context);
+        $this->initializeTransport($context);
 
         // set start date and mode depending on status
         /** @var Status $status */

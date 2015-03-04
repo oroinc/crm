@@ -91,9 +91,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     public function testInitialization()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        $this->transportMock->expects($this->once())->method('init');
-
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($this->getMock('\Iterator')));
         $connector->setStepExecution($this->stepExecutionMock);
     }
@@ -113,11 +111,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
 
-        $this->transportMock->expects($this->once())->method('init');
-
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -135,11 +131,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
 
-        $this->transportMock->expects($this->once())->method('init');
-
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setStartDate');
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -161,9 +155,8 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $context = new Context(['filters' => []]);
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, null, $context);
-        $this->transportMock->expects($this->once())->method('init');
 
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -227,8 +220,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $this->transportMock->expects($this->once())->method('init');
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iteratorMock));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -339,7 +331,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $contextRegistryMock->expects($this->any())->method('getByStepExecution')
             ->will($this->returnValue($contextMock));
         $contextMediatorMock->expects($this->any())
-            ->method('getTransport')->with($this->equalTo($contextMock))
+            ->method('getInitializedTransport')->with($this->equalTo($channel))
             ->will($this->returnValue($transport));
         $contextMediatorMock->expects($this->any())
             ->method('getChannel')->with($this->equalTo($contextMock))

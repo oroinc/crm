@@ -225,6 +225,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         $this->entitiesIdsBufferImmutable = true;
 
         $this->loadEntities($entitiesIdsBuffer);
+
+        // drop missing customer ids
+        $this->entitiesIdsBuffer = array_intersect(array_keys((array)$this->entityBuffer), $entitiesIdsBuffer);
     }
 
     /**

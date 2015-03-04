@@ -56,8 +56,15 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
      */
     protected function getEntity($id)
     {
-        $result = $this->entityBuffer[$id->{$this->getIdFieldName()}];
+        $id = $id->{$this->getIdFieldName()};
 
+        if (!array_key_exists($id, $this->entityBuffer)) {
+            $this->logger->warning(sprintf('Entity with id "%s" was not found', $id));
+
+            return false;
+        }
+
+        $result = $this->entityBuffer[$id];
         $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);

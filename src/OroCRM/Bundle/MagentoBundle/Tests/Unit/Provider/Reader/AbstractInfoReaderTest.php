@@ -64,7 +64,7 @@ abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
 
         $this->transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
         $this->contextMediator->expects($this->any())
-            ->method('getTransport')
+            ->method('getInitializedTransport')
             ->will($this->returnValue($this->transport));
 
         $this->contextMediator->expects($this->any())
