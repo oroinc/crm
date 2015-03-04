@@ -76,8 +76,10 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
         website:
             - Valid: ~
         store:
+            - NotBlank: ~
             - Valid: ~
         group:
+            - NotBlank: ~
             - Valid: ~
         contact:
             - Valid: ~

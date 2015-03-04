@@ -28,6 +28,9 @@ parameters:
     orocrm_magento.form.type.customer.class:                                OroCRM\Bundle\MagentoBundle\Form\Type\CustomerType
     orocrm_magento.form.type.customer_group_selector.class:                 OroCRM\Bundle\MagentoBundle\Form\Type\CustomerGroupSelectType
     orocrm_magento.form.type.store_selector.class:                          OroCRM\Bundle\MagentoBundle\Form\Type\StoreSelectType
+    orocrm_magento.form.handler.customer.class:                             OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerHandler
+    orocrm_magento.form.type.customer_address.class:                        OroCRM\Bundle\MagentoBundle\Form\Type\CustomerAddressType
+
     # event listeners
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.customer_currency.class:                  OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
@@ -144,8 +147,14 @@ services:
         class: %orocrm_magento.form.type.customer.class%
         arguments:
             - %orocrm_magento.entity.customer.class%
+            - %orocrm_magento.entity.address.class%
         tags:
             - { name: form.type, alias: orocrm_magento_customer }
+
+    orocrm_magento.form.type.customer_address:
+        class: %orocrm_magento.form.type.customer_address.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_customer_addresses }
 
     orocrm_magento.form.type.customer_group_selector:
         class: %orocrm_magento.form.type.customer_group_selector.class%
@@ -156,6 +165,11 @@ services:
         class: %orocrm_magento.form.type.store_selector.class%
         tags:
             - { name: form.type, alias: orocrm_magento_store_select }
+
+    orocrm_magento.form.handler.customer:
+        class: %orocrm_magento.form.handler.customer.class%
+        parent: oro_form.model.update_handler
+        scope: request
 
     # Search handler
     orocrm_magento.form.autocomplete.order.search_handler:

@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroCRMMagentoBundle:Include:fields.html.twig'] %}
 {% set formAction = entity.id ? path('orocrm_magento_customer_update', {id: entity.id}) : path('orocrm_magento_customer_create') %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
@@ -52,11 +52,15 @@
                     form_row(form.gender),
                     form_row(form.birthday),
                     form_row(form.vat),
-                    form_row(form.contact),
-                    form_row(form.account),
                     form_row(form.owner),
                 ]
-            }
+            },
+            {
+                'title': 'orocrm.magento.customer.addresses.label'|trans,
+                'data': [
+                    form_widget(form.addresses),
+                ]
+            },
         ]
     }] %}
 

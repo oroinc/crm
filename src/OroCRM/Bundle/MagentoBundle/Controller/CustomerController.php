@@ -89,7 +89,7 @@ class CustomerController extends Controller
      */
     protected function update(Customer $customer)
     {
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
+        return $this->get('orocrm_magento.form.handler.customer')->handleUpdate(
             $customer,
             $this->createForm('orocrm_magento_customer', $customer),
             function (Customer $customer) {
