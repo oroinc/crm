@@ -1,5 +1,7 @@
 oro_layout:
     actions:
+        - @setBlockTheme:
+            themes: 'OroCRMContactUsBundle:layouts:embedded_default/oro_embedded_form_submit/form.html.twig'
         - @setOption:
             id:          embedded_form
             optionName:  preferred_fields
@@ -14,8 +16,6 @@ oro_layout:
         - @move:
             id:       embedded_form_lastName
             parentId: name_group
-        - @setBlockTheme:
-            themes: 'OroCRMContactUsBundle::form.html.twig'
 
     conditions:
         @eq:
