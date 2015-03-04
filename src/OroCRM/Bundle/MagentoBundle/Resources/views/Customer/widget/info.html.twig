@@ -6,6 +6,16 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
+            {% if entity.syncState == constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer::SYNC_INFO') %}
+                <div class="control-group">
+                    <label class="control-label">{{ 'orocrm.magento.customer.sync_state.label'|trans }}</label>
+                    <div class="controls">
+                        <div class="control-label sync-state-label">
+                            <div class="label label-info">{{ 'orocrm.magento.customer.sync_state.info'|trans }}</div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
             {% if entity.group %}
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}

@@ -121,6 +121,9 @@ orocrm:
             monetary.label:      Monetary
             recency.label:       Recency
             frequency.label:     Frequency
+            sync_state:
+                label: Sync State
+                info: Requesting info
 
         customergroup:
             entity_label:        Customer Group
