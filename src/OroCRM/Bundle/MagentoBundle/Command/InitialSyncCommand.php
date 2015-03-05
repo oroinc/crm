@@ -82,7 +82,7 @@ class InitialSyncCommand extends ContainerAwareCommand
             $exitCode = self::STATUS_FAILED;
         }
 
-        $this->scheduleLifetimeRecalculation($integration, $logger);
+        $this->scheduleAnalyticRecalculation($integration, $logger);
 
         $logger->notice('Completed');
 
@@ -166,18 +166,21 @@ class InitialSyncCommand extends ContainerAwareCommand
      * @param Integration $integration
      * @param LoggerInterface $logger
      */
-    protected function scheduleLifetimeRecalculation(Integration $integration, LoggerInterface $logger)
+    protected function scheduleAnalyticRecalculation(Integration $integration, LoggerInterface $logger)
     {
         $dataChannel = $this->getDataChannelByChannel($integration);
         if ($dataChannel && $dataChannel->getStatus() === Channel::STATUS_ACTIVE) {
-            $logger->notice('Scheduling Lifetime value recalculation');
-            $recalculateJob = new Job(
-                CalculateAnalyticsCommand::COMMAND_NAME,
-                ['--channel=' . $dataChannel->getId(), '-v']
-            );
-            $em = $this->getEntityManager();
-            $em->persist($recalculateJob);
-            $em->flush($recalculateJob);
+            $dataChannelData = $dataChannel->getData();
+            if (!empty($dataChannelData['rfm_enabled'])) {
+                $logger->notice('Scheduling RFM recalculation');
+                $recalculateJob = new Job(
+                    CalculateAnalyticsCommand::COMMAND_NAME,
+                    ['--channel=' . $dataChannel->getId(), '-v']
+                );
+                $em = $this->getEntityManager();
+                $em->persist($recalculateJob);
+                $em->flush($recalculateJob);
+            }
         }
     }
 
