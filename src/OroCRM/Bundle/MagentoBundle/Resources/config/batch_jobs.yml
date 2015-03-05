@@ -31,15 +31,15 @@ connector:
 
         magento_customer_export:
             title: 'Export Magento Customer to Magento'
-            type:   export
+            type: export
             steps:
                 export:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    oro_integration.reader.entity.by_id
-                        processor: ~
-                        writer:    ~
+                        processor: orocrm_magento.importexport.processor.customer_export
+                        writer:    orocrm_magento.importexport.writer.customer
                     parameters:
                         batch_size: 1
 
