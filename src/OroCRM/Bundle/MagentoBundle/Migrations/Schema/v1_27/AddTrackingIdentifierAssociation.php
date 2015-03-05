@@ -25,7 +25,6 @@ class AddTrackingIdentifierAssociation implements Migration, IdentifierEventExte
         $this->extension = $extension;
     }
 
-
     /**
      * {@inheritdoc}
      */
