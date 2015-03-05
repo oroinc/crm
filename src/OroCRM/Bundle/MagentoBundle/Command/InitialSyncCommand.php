@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
-use JMS\JobQueueBundle\Entity\Job;
-
 use Psr\Log\LoggerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -16,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
@@ -82,7 +80,7 @@ class InitialSyncCommand extends ContainerAwareCommand
             $exitCode = self::STATUS_FAILED;
         }
 
-        $this->scheduleAnalyticRecalculation($integration, $logger);
+        $this->scheduleAnalyticRecalculation($integration);
 
         $logger->notice('Completed');
 
@@ -164,24 +162,13 @@ class InitialSyncCommand extends ContainerAwareCommand
 
     /**
      * @param Integration $integration
-     * @param LoggerInterface $logger
      */
-    protected function scheduleAnalyticRecalculation(Integration $integration, LoggerInterface $logger)
+    protected function scheduleAnalyticRecalculation(Integration $integration)
     {
         $dataChannel = $this->getDataChannelByChannel($integration);
-        if ($dataChannel && $dataChannel->getStatus() === Channel::STATUS_ACTIVE) {
-            $dataChannelData = $dataChannel->getData();
-            if (!empty($dataChannelData['rfm_enabled'])) {
-                $logger->notice('Scheduling RFM recalculation');
-                $recalculateJob = new Job(
-                    CalculateAnalyticsCommand::COMMAND_NAME,
-                    ['--channel=' . $dataChannel->getId(), '-v']
-                );
-                $em = $this->getEntityManager();
-                $em->persist($recalculateJob);
-                $em->flush($recalculateJob);
-            }
-        }
+        /** @var RFMMetricStateManager $rfmStateManager */
+        $rfmStateManager = $this->getService('orocrm_analytics.model.rfm_state_manager');
+        $rfmStateManager->scheduleRecalculation($dataChannel);
     }
 
     /**
