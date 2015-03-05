@@ -7,7 +7,7 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {% if entity.syncState == constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\Order::SYNC_INFO') %}
-                {{ ui.renderHtmlProperty('orocrm.magento.order.sync_state.label'|trans, '<div class="label label-info">' ~ 'orocrm.magento.order.sync_state.info'|trans ~ '</div>') }}
+                {{ ui.renderHtmlProperty('orocrm.magento.order.sync_state.label'|trans, '<div class="label label-info sync-state-label">' ~ 'orocrm.magento.order.sync_state.info'|trans ~ '</div>') }}
             {% endif %}
 
             {{ channel.renderChannelProperty(entity, 'orocrm.magento.order.data_channel.label') }}
