@@ -11,9 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
+use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncCommand extends ContainerAwareCommand
@@ -61,6 +63,10 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical(sprintf('Integration with given ID "%d" not found', $integrationId));
 
             return self::STATUS_FAILED;
+        } elseif (!$integration->isEnabled()) {
+            $logger->warning('Integration is disabled. Terminating....');
+
+            return self::STATUS_SUCCESS;
         }
 
         $processor = $this->getSyncProcessor($logger);
@@ -73,6 +79,8 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
         }
+
+        $this->scheduleAnalyticRecalculation($integration);
 
         $logger->notice('Completed');
 
@@ -109,9 +117,15 @@ class InitialSyncCommand extends ContainerAwareCommand
 
     protected function initEntityManager()
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->getService('doctrine')->getManager();
-        $entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $this->getEntityManager()->getConnection()->getConfiguration()->setSQLLogger(null);
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getEntityManager()
+    {
+        return $this->getService('doctrine')->getManager();
     }
 
     /**
@@ -144,5 +158,27 @@ class InitialSyncCommand extends ContainerAwareCommand
     protected function getService($id)
     {
         return $this->getContainer()->get($id);
+    }
+
+    /**
+     * @param Integration $integration
+     */
+    protected function scheduleAnalyticRecalculation(Integration $integration)
+    {
+        $dataChannel = $this->getDataChannelByChannel($integration);
+        /** @var RFMMetricStateManager $rfmStateManager */
+        $rfmStateManager = $this->getService('orocrm_analytics.model.rfm_state_manager');
+        $rfmStateManager->scheduleRecalculation($dataChannel);
+    }
+
+    /**
+     * @param Integration $integration
+     * @return Channel
+     */
+    protected function getDataChannelByChannel(Integration $integration)
+    {
+        return $this->getContainer()->get('doctrine')
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->findOneBy(['dataSource' => $integration]);
     }
 }
