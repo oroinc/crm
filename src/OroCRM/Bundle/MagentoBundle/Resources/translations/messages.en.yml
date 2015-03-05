@@ -118,6 +118,8 @@ orocrm:
             monetary.label:      Monetary
             recency.label:       Recency
             frequency.label:     Frequency
+            saved.message:       Customer saved
+            address_book.title:  Address Book
 
         customergroup:
             entity_label:        Customer Group
@@ -126,6 +128,7 @@ orocrm:
             id.label:            Id
             origin_id.label:     Origin Id
             channel.label:       Integration
+            placeholder:         Please, select group
 
         cart:
             entity_label:         Shopping Cart
@@ -411,6 +414,7 @@ orocrm:
             name.label:          Name
             channel.label:       Integration
             website.label:       Website
+            placeholder:         Please, select store
 
         website:
             entity_label:        Website

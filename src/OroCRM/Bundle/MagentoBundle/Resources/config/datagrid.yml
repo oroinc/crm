@@ -60,6 +60,10 @@ datagrid:
                 type: url
                 route: orocrm_magento_customer_view
                 params: [ id ]
+            update_link:
+                type: url
+                route: orocrm_magento_customer_update
+                params: [ id ]
         sorters:
             columns:
                 firstName:   { data_name: c.firstName }
@@ -134,6 +138,12 @@ datagrid:
                 icon:         eye-open
                 acl_recource: orocrm_magento_customer_view
                 rowAction:    true
+            update:
+                type:         navigate
+                acl_resource: orocrm_magento_customer_update
+                label:        oro.grid.action.update
+                icon:         edit
+                link:         update_link
         options:
             entityHint: customer
             export: true
@@ -1204,3 +1214,85 @@ datagrid:
                 icon:         eye-open
                 acl_recource: orocrm_magento_cart_view
                 rowAction:    true
+
+    magento-customers-group-by-channel-grid:
+        extended_entity_name: %orocrm_magento.entity.customer_group.class%
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            type: orm
+            acl_resource: orocrm_magento_customer_view
+            query:
+                select:
+                    - g.id
+                    - g.name
+                from:
+                    - { table: %orocrm_magento.entity.customer_group.class%, alias: g }
+                join:
+                    left:
+                        - { join: g.channel, alias: integrationChannel }
+                        - { join: %orocrm_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+        columns:
+            name:
+                label: orocrm.magento.customergroup.name.label
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name: { data_name: g.name }
+            default:
+                name:  ASC
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: g.name
+
+    magento-store-by-channel-grid:
+        extended_entity_name: %orocrm_magento.entity.store.class%
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            type: orm
+            acl_resource: orocrm_magento_customer_view
+            query:
+                select:
+                    - s.id
+                    - s.name
+                    - s.code
+                    - w.name as websiteName
+                from:
+                    - { table: %orocrm_magento.entity.store.class%, alias: s }
+                join:
+                    left:
+                        - { join: s.website, alias: w }
+                        - { join: s.channel, alias: integrationChannel }
+                        - { join: %orocrm_channel.entity.class%, alias: dataChannel, conditionType: WITH, condition: "dataChannel.dataSource = integrationChannel" }
+        columns:
+            name:
+                label: orocrm.magento.store.name.label
+            code:
+                label: orocrm.magento.store.code.label
+            websiteName:
+                label: orocrm.magento.store.website.label
+        properties:
+            id: ~
+        sorters:
+            columns:
+                name: { data_name: s.name }
+                code: { data_name: s.code }
+                websiteName: { data_name: w.name }
+            default:
+                websiteName: ASC
+                name:  ASC
+        filters:
+            columns:
+                name:
+                    type: string
+                    data_name: s.name
+                code:
+                    type: string
+                    data_name: s.code
+                websiteName:
+                    type: string
+                    data_name: w.name

@@ -188,7 +188,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $integration = new Integration();
         $integration->setName('Demo Web store');
         $integration->setType('magento');
-        $integration->setConnectors(["customer", "order", "cart", "region"]);
+        $integration->setConnectors(['customer', 'order', 'cart', 'region']);
         $integration->setTransport($this->transport);
         $integration->setOrganization($this->organization);
 
@@ -389,6 +389,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customerGroup->setOriginId(1);
 
         $this->em->persist($customerGroup);
+        $this->setReference('customer_group', $customerGroup);
         $this->customerGroup = $customerGroup;
 
         return $this;
@@ -482,6 +483,10 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         return $order;
     }
 
+    /**
+     * @param Order $order
+     * @return OrderItem
+     */
     protected function createBaseOrderItem(Order $order)
     {
         $orderItem = new OrderItem();
