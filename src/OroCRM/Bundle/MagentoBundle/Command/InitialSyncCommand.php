@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
+use JMS\JobQueueBundle\Entity\Job;
+
 use Psr\Log\LoggerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -11,9 +13,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
+use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 class InitialSyncCommand extends ContainerAwareCommand
@@ -61,6 +65,10 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical(sprintf('Integration with given ID "%d" not found', $integrationId));
 
             return self::STATUS_FAILED;
+        } elseif (!$integration->isEnabled()) {
+            $logger->warning('Integration is disabled. Terminating....');
+
+            return self::STATUS_SUCCESS;
         }
 
         $processor = $this->getSyncProcessor($logger);
@@ -73,6 +81,8 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
         }
+
+        $this->scheduleLifetimeRecalculation($integration, $logger);
 
         $logger->notice('Completed');
 
@@ -109,9 +119,15 @@ class InitialSyncCommand extends ContainerAwareCommand
 
     protected function initEntityManager()
     {
-        /** @var EntityManager $entityManager */
-        $entityManager = $this->getService('doctrine')->getManager();
-        $entityManager->getConnection()->getConfiguration()->setSQLLogger(null);
+        $this->getEntityManager()->getConnection()->getConfiguration()->setSQLLogger(null);
+    }
+
+    /**
+     * @return EntityManager
+     */
+    protected function getEntityManager()
+    {
+        return $this->getService('doctrine')->getManager();
     }
 
     /**
@@ -144,5 +160,35 @@ class InitialSyncCommand extends ContainerAwareCommand
     protected function getService($id)
     {
         return $this->getContainer()->get($id);
+    }
+
+    /**
+     * @param Integration $integration
+     * @param LoggerInterface $logger
+     */
+    protected function scheduleLifetimeRecalculation(Integration $integration, LoggerInterface $logger)
+    {
+        $dataChannel = $this->getDataChannelByChannel($integration);
+        if ($dataChannel && $dataChannel->getStatus() === Channel::STATUS_ACTIVE) {
+            $logger->notice('Scheduling Lifetime value recalculation');
+            $recalculateJob = new Job(
+                CalculateAnalyticsCommand::COMMAND_NAME,
+                ['--channel=' . $dataChannel->getId(), '-v']
+            );
+            $em = $this->getEntityManager();
+            $em->persist($recalculateJob);
+            $em->flush($recalculateJob);
+        }
+    }
+
+    /**
+     * @param Integration $integration
+     * @return Channel
+     */
+    protected function getDataChannelByChannel(Integration $integration)
+    {
+        return $this->getContainer()->get('doctrine')
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->findOneBy(['dataSource' => $integration]);
     }
 }
