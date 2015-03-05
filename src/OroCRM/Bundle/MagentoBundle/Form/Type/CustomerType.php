@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraint;
 
 class CustomerType extends AbstractType
 {
@@ -82,10 +83,9 @@ class CustomerType extends AbstractType
                     'required' => true,
                     'options' => ['data_class' => $this->customerAddressClassName]
                 ]
-            );
-        // TODO: Add tooltip that contact and account will be auto created if not set
-//            ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
-//            ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
+            )
+            ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
+            ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
     }
 
     /**
@@ -97,7 +97,8 @@ class CustomerType extends AbstractType
             [
                 'data_class' => $this->customerClassName,
                 'intention' => 'magento_customer',
-                'cascade_validation' => true
+                'cascade_validation' => true,
+                'validation_groups' => [Constraint::DEFAULT_GROUP, 'form']
             ]
         );
     }

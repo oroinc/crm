@@ -51,10 +51,10 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
         namePrefix:
             - Length: { max: 255 }
         firstName:
-            - NotBlank: ~
+            - NotBlank: { groups: ['form'] }
             - Length: { max: 255 }
         lastName:
-            - NotBlank: ~
+            - NotBlank: { groups: ['form'] }
             - Length: { max: 255 }
         middleName:
             - Length: { max: 255 }
@@ -63,7 +63,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
         vat:
             - Length: { max: 255 }
         email:
-            - NotBlank: ~
+            - NotBlank: { groups: ['form'] }
+            - Email: { groups: ['form'] }
             - Length: { max: 255 }
         gender:
             - Length: { max: 8 }
@@ -76,10 +77,10 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
         website:
             - Valid: ~
         store:
-            - NotBlank: ~
+            - NotBlank: { groups: ['form'] }
             - Valid: ~
         group:
-            - NotBlank: ~
+            - NotBlank: { groups: ['form'] }
             - Valid: ~
         contact:
             - Valid: ~

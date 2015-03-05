@@ -119,6 +119,7 @@ orocrm:
             recency.label:       Recency
             frequency.label:     Frequency
             saved.message:       Customer saved
+            address_book.title:  Address Book
 
         customergroup:
             entity_label:        Customer Group
