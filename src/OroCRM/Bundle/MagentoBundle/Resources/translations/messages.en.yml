@@ -123,7 +123,7 @@ orocrm:
             frequency.label:     Frequency
             sync_state:
                 label: Sync State
-                info: Requesting info
+                info: Partially synced
 
         customergroup:
             entity_label:        Customer Group
@@ -303,6 +303,9 @@ orocrm:
             workflow_step.label:    Workflow step
             website.label:          Website
             organization.label:     Organization
+            sync_state:
+                label: Sync State
+                info: Partially synced
 
         product:
             entity_label:         Product
