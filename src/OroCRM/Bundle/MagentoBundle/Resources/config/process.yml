@@ -117,6 +117,44 @@ definitions:
                             organization:   $organization
                     - @unset_value: [$.accountName]
 
+            # TODO: Remove this and enable create trigger on magento_load_customer_info after BAP-7778
+            - @tree:
+                conditions:
+                    @not_empty: $originId
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.infoSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.infoSyncState]
+                    - @tree:
+                        conditions:
+                            @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                parameters:
+                                    jobType: import
+                                    jobName: mage_load_customer_info
+                                    configuration:
+                                        data: $.data
+                                        channel: $channel
+                                        writer_skip_clear: true
+                                        processorAlias: 'orocrm_magento.add_or_update_customer'
+                                    attribute: $.jobResult
+                            - @call_method:
+                                conditions:
+                                    @equal: [$.jobResult.successful, true]
+                                parameters:
+                                    object: $.stateManager
+                                    method: 'removeState'
+                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
+
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
         enabled: true
@@ -316,10 +354,11 @@ triggers:
             queued:   true
 
     magento_load_customer_info:
-        -
-            event:    create
-            priority: 20
-            queued:   true
+# TODO: Reenable after BAP-7778
+#        -
+#            event:    create
+#            priority: 20
+#            queued:   true
         -
             event:    update
             field:    syncState
