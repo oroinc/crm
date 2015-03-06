@@ -18,7 +18,6 @@ use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
@@ -64,6 +63,22 @@ class Customer extends ExtendCustomer implements
     RFMAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $id;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
@@ -174,13 +189,6 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=false
-     *          }
-     *      }
-     * )
      */
     protected $website;
 
@@ -189,13 +197,6 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=false
-     *          }
-     *      }
-     * )
      */
     protected $store;
 
@@ -204,13 +205,6 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup", cascade="PERSIST")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "full"=false
-     *          }
-     *      }
-     * )
      */
     protected $group;
 
@@ -237,6 +231,13 @@ class Customer extends ExtendCustomer implements
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 

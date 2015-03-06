@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-use Oro\Bundle\ImportExportBundle\Converter\ConfigurableTableDataConverter;
+use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
 
-class CustomerDataConverter extends ConfigurableTableDataConverter
+class CustomerDataConverter extends AbstractTableDataConverter
 {
     /**
      * {@inheritdoc}
@@ -26,7 +26,6 @@ class CustomerDataConverter extends ConfigurableTableDataConverter
             'taxvat' => 'vat',
             'gender' => 'gender',
             'middlename' => 'middleName',
-
 //             list
             'customer_id' => 'originId',
             'created_at' => 'createdAt',
@@ -36,5 +35,15 @@ class CustomerDataConverter extends ConfigurableTableDataConverter
 //            'confirmation' => 'confirmation',
 //            'password_hash' => 'passwordHash',
         ];
+    }
+
+    /**
+     * Get maximum backend header for current entity
+     *
+     * @return array
+     */
+    protected function getBackendHeader()
+    {
+        return array_values($this->getHeaderConversionRules());
     }
 }

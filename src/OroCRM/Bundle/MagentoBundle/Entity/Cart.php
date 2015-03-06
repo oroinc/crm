@@ -19,7 +19,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**

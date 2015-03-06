@@ -294,7 +294,7 @@ services:
         calls:
              - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
         tags:
-            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento.customer_export }
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.customer.class%, alias: orocrm_magento.customer_export }
 
     orocrm_magento.importexport.customer.reverse.processor:
         class: %orocrm_magento.importexport.customer.reverse.processor.class%
