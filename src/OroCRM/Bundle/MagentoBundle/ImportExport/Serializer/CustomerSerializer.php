@@ -66,6 +66,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         'telephone'           => '[phone]'
     ];
 
+    /**
+     * @var array
+     */
     protected $contactAddressEntityToMageMapping = [
         'name_prefix'          => 'prefix',
         'first_name'           => 'firstname',
@@ -319,6 +322,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     public function supportsNormalization($data, $format = null, array $context = array())
     {
+        if (array_key_exists('useConfigurableNormalizer', $context)) {
+            return false;
+        }
+
         return $data instanceof Customer;
     }
 
@@ -327,6 +334,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      */
     public function supportsDenormalization($data, $type, $format = null, array $context = array())
     {
+        if (array_key_exists('useConfigurableNormalizer', $context)) {
+            return false;
+        }
+
         return $type == MagentoConnectorInterface::CUSTOMER_TYPE;
     }
 

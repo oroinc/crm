@@ -123,16 +123,14 @@ definitions:
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   20
         actions_configuration:
-            - @tree:
-                conditions:
-                    @empty: $originId
-                actions:
-                    - @execute_job:
-                        jobType: export
-                        jobName: magento_customer_export
-                        configuration:
-                            id: $id
-                        attribute: $.jobResult
+            - @execute_job:
+                jobType: export
+                jobName: magento_customer_export
+                configuration:
+                    id: $id
+                    entityName: OroCRM\Bundle\MagentoBundle\Entity\Customer
+                    useConfigurableNormalizer: true
+                attribute: $.jobResult
 
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
@@ -221,10 +219,10 @@ triggers:
             priority: 5
             queued:   true
 
-    magento_customer_export:
-        -
-            event:    create
-            priority: 10
+#    magento_customer_export:
+#        -
+#            event:    create
+#            priority: 10
 #            queued:   true
 
     magento_analytics_customer_calculate_imported:

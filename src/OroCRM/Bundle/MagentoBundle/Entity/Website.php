@@ -5,9 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
 
@@ -56,13 +54,6 @@ class Website extends ExtendWebsite
      *
      * @ORM\Column(name="website_code", type="string", length=32, nullable=false)
      * @Oro\Versioned
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     protected $code;
 
