@@ -4,6 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
+        exclude_definitions: [magento_customer_export]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -122,14 +123,15 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   20
+        exclude_definitions: [magento_customer_creation]
         actions_configuration:
             - @execute_job:
                 jobType: export
                 jobName: magento_customer_export
                 configuration:
-                    id: $id
-                    entityName: OroCRM\Bundle\MagentoBundle\Entity\Customer
+                    channel: $channel
                     useConfigurableNormalizer: true
+                    entity: $.data
                 attribute: $.jobResult
 
     magento_analytics_customer_calculate:
@@ -219,11 +221,15 @@ triggers:
             priority: 5
             queued:   true
 
-#    magento_customer_export:
-#        -
-#            event:    create
-#            priority: 10
-#            queued:   true
+    magento_customer_export:
+        -
+            event:    create
+            priority: 10
+            queued:   true
+        -
+            event:    update
+            priority: 10
+            queued:   true
 
     magento_analytics_customer_calculate_imported:
         -

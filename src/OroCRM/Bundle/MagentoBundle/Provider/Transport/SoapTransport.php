@@ -264,13 +264,28 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         return $addresses;
     }
 
+    /** {@inheritdoc} */
+    public function createCustomer(array $customerData)
+    {
+        return $this->call(SoapTransport::ACTION_CUSTOMER_CREATE, ['customerData' => $customerData]);
+    }
+
+    /** {@inheritdoc} */
+    public function updateCustomer($customerId, array $customerData)
+    {
+        return $this->call(
+            SoapTransport::ACTION_CUSTOMER_UPDATE,
+            ['customerId' => $customerId, 'customerData' => $customerData]
+        );
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getErrorCode(\Exception $e)
     {
         if ($e instanceof \SoapFault) {
-            switch($e->faultcode) {
+            switch($e->getCode()) {
                 case self::SOAP_FAULT_ADDRESS_DOES_NOT_EXIST:
                     return self::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
             }

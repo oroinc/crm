@@ -52,6 +52,9 @@ parameters:
     orocrm_magento.importexport.writer.abstract_export.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
     orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
 
+    # readers
+    orocrm_magento.importexport.reader.entity.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Reader\ContextEntityReader
+
 services:
     # Data converter
     orocrm_magento.importexport.data_converter.cart:
@@ -327,3 +330,11 @@ services:
     orocrm_magento.importexport.writer.customer:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
+        calls:
+            - [setEntityClassName, [%orocrm_magento.entity.customer.class%]]
+
+    # readers
+    orocrm_magento.importexport.reader.entity:
+        class: %orocrm_magento.importexport.reader.entity.class%
+        arguments:
+            - @oro_importexport.context_registry
