@@ -24,6 +24,7 @@ class CallPhoneType extends AbstractType
         $resolver->setDefaults(
             [
                 'suggestions' => [],
+                'random_id'   => true,
                 'configs'     => $defaultConfigs,
             ]
         );

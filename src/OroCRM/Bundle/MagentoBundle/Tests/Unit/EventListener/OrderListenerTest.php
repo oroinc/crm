@@ -15,11 +15,11 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @param Order|object $order
-     * @param float|null   $newLifetime
-     *
+     * @param float|null $newLifetime
+     * @param float $expectedLifetime
      * @dataProvider prePersistDataProvider
      */
-    public function testPrePersist($order, $newLifetime = null)
+    public function testPrePersist($order, $newLifetime = null, $expectedLifetime = null)
     {
         if ($newLifetime) {
             $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
@@ -29,6 +29,9 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
         $listener = new OrderListener();
         $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
+        if ($order instanceof Order && $order->getCustomer() instanceof Customer) {
+            $this->assertEquals($expectedLifetime, $order->getCustomer()->getLifetime());
+        }
     }
 
     /**
@@ -36,14 +39,15 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function prePersistDataProvider()
     {
-        return array(
+        return [
             'not an order'       => [new \DateTime()],
             'zero subtotal'      => [$this->createOrder(null, 0)],
             'no customer'        => [$this->createOrder(null)],
             'incorrect customer' => [$this->createOrder(new \DateTime())],
-            'equal lifetime'     => [$this->createOrder($this->createCustomer(20)), 20],
-            'updated lifetime'   => [$this->createOrder($this->createCustomer(20)), 30],
-        );
+            'equal lifetime'     => [$this->createOrder($this->createCustomer(20), 10), 20, 30],
+            'updated lifetime'   => [$this->createOrder($this->createCustomer(20), 15), 30, 45],
+            'canceled order'     => [$this->createOrder($this->createCustomer(20), 3, Order::STATUS_CANCELED), 30, 30],
+        ];
     }
 
     /**
@@ -81,7 +85,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function preUpdateDataProvider()
     {
-        return array(
+        return [
             'not an order'         => [new \DateTime()],
             'no customer'          => [$this->createOrder(null)],
             'incorrect customer'   => [$this->createOrder(new \DateTime())],
@@ -94,7 +98,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
                 $this->createOrder($this->createCustomer(20)),
                 ['subtotalAmount' => [0, 10]],
             ],
-        );
+        ];
     }
 
     /**
@@ -133,7 +137,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     public function postFlushProvider()
     {
-        return array(
+        return [
             'not an order'         => [new \DateTime()],
             'no customer'          => [$this->createOrder(null)],
             'incorrect customer'   => [$this->createOrder(new \DateTime())],
@@ -148,7 +152,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
                 true,
                 30,
             ],
-        );
+        ];
     }
 
     /**
@@ -233,11 +237,11 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param Customer|object|null $customer
-     * @param float                $subtotal
-     *
+     * @param float $subtotal
+     * @param string $status
      * @return Order
      */
-    protected function createOrder($customer = null, $subtotal = 10.1)
+    protected function createOrder($customer = null, $subtotal = 10.1, $status = 'complete')
     {
         $order = new Order();
         $order->setId(1);
@@ -245,6 +249,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             $order->setCustomer($customer);
         }
         $order->setSubtotalAmount($subtotal);
+        $order->setStatus($status);
 
         return $order;
     }
