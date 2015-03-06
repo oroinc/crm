@@ -15,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
  */
 class UpdateCustomerLifetimeForCanceledOrders extends AbstractFixture
 {
-    const BUFFER_SIZE = 50;
+    const BUFFER_SIZE = 25;
 
     /**
      * {@inheritDoc}
@@ -40,29 +40,24 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractFixture
         $iterator = new BufferedQueryResultIterator($queryBuilder);
         $iterator->setBufferSize(self::BUFFER_SIZE);
 
-        $requireFlush = false;
         $processed = 0;
         foreach ($iterator as $customer) {
-            $processed++;
             $oldLifetime = (float)$customer->getLifetime();
             $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
             if ($newLifetime !== $oldLifetime) {
                 $customer->setLifetime($newLifetime);
                 $manager->persist($customer);
-                $requireFlush = true;
+                $processed++;
             }
 
             if ($processed === self::BUFFER_SIZE) {
+                $manager->flush();
+                $manager->clear();
                 $processed = 0;
-                $requireFlush = false;
-                if ($requireFlush) {
-                    $manager->flush();
-                    $manager->clear();
-                }
             }
         }
 
-        if ($requireFlush) {
+        if ($processed > 0) {
             $manager->flush();
             $manager->clear();
         }
