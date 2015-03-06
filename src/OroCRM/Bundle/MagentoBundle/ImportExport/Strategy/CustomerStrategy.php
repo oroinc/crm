@@ -9,7 +9,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\ContactImportHelper;
 
 class CustomerStrategy extends BaseStrategy
 {
@@ -75,10 +74,7 @@ class CustomerStrategy extends BaseStrategy
 
         // account and contact for new customer should be created automatically
         // by the appropriate queued process to improve initial import performance
-        if ($localEntity->getId() && $localEntity->getContact() && $localEntity->getContact()->getId()) {
-            $helper = new ContactImportHelper($localEntity->getChannel(), $this->addressHelper);
-            $helper->merge($remoteEntity, $localEntity, $localEntity->getContact());
-        } else {
+        if (!$localEntity->getId()) {
             $localEntity->setContact(null);
             $localEntity->setAccount(null);
         }
@@ -127,8 +123,6 @@ class CustomerStrategy extends BaseStrategy
     }
 
     /**
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
      * @param Customer             $entity
      * @param Collection|Address[] $addresses
      *
@@ -183,21 +177,6 @@ class CustomerStrategy extends BaseStrategy
                 $address->setOwner($entity);
                 $entity->addAddress($address);
                 $processedRemote[] = $address;
-            }
-
-            $contact = $entity->getContact();
-            if ($contact) {
-                $contactAddress = $address->getContactAddress();
-                $contactPhone   = $address->getContactPhone();
-                if ($contactAddress) {
-                    $contactAddress->setOwner($contact);
-                }
-                if ($contactPhone) {
-                    $contactPhone->setOwner($contact);
-                }
-            } else {
-                $address->setContactAddress(null);
-                $address->setContactPhone(null);
             }
         }
 

@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\IntegrationAwareDataConverter;
 
-class AddressDataConverter extends AbstractTableDataConverter
+class AddressDataConverter extends IntegrationAwareDataConverter
 {
     /**
      * {@inheritdoc}
@@ -24,6 +24,22 @@ class AddressDataConverter extends AbstractTableDataConverter
             'updated_at' => 'updated',
             'postcode'   => 'postalCode',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        if (!empty($importedRecord['street']) && strpos($importedRecord['street'], "\n") !== false) {
+            list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
+        }
+        if (empty($importedRecord['region']['code'])) {
+            $importedRecord['region'] = null;
+        }
+
+        return $importedRecord;
     }
 
     /**

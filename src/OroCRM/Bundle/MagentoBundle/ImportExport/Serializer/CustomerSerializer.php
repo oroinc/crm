@@ -11,9 +11,7 @@ use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\NormalizerInterface;
 use Oro\Bundle\UserBundle\Model\Gender;
 use Oro\Bundle\ImportExportBundle\Serializer\Serializer;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
-use OroCRM\Bundle\ContactBundle\ImportExport\Serializer\Normalizer\ContactNormalizer;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
@@ -25,7 +23,6 @@ use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 
 /**
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * TODO Should be fixed during CRM-1185
  */
 class CustomerSerializer extends AbstractNormalizer implements DenormalizerInterface, NormalizerInterface
@@ -299,7 +296,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function normalize($object, $format = null, array $context = array())
+    public function normalize($object, $format = null, array $context = [])
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $result   = [];
@@ -320,8 +317,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null, array $context = array())
+    public function supportsNormalization($data, $format = null, array $context = [])
     {
+        return false;
+
         if (array_key_exists('useConfigurableNormalizer', $context)) {
             return false;
         }
@@ -332,8 +331,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
+        return false;
+
         if (array_key_exists('useConfigurableNormalizer', $context)) {
             return false;
         }
@@ -344,7 +345,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         /** @var Customer $resultObject */
         $resultObject = new $class;
@@ -407,7 +408,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      * @param mixed    $format
      * @param array    $context
      */
-    protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = array())
+    protected function setObjectFieldsValues(Customer $object, array $data, $format = null, array $context = [])
     {
         if (!empty($data['birthday'])) {
             /** @var \DateTime $birthday */
@@ -446,13 +447,19 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             $object->setUpdatedAt($updatedAt);
         }
 
-        $this->setContact($object, $data, $format, $context);
+        $this->setAddresses($object, $data, $format, $context);
         $this->setWebsite($object, $data, $format, $context);
         $this->setStore($object, $data, $format, $context);
         $this->setGroup($object, $data, $format, $context);
     }
 
-    protected function setGroup(Customer $object, array $data, $format = null, array $context = array())
+    /**
+     * @param Customer $object
+     * @param array $data
+     * @param null $format
+     * @param array $context
+     */
+    protected function setGroup(Customer $object, array $data, $format = null, array $context = [])
     {
         /** @var CustomerGroup $group */
         $group = $this->denormalizeObject(
@@ -468,7 +475,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
     }
 
-    protected function setStore(Customer $object, array $data, $format = null, array $context = array())
+    /**
+     * @param Customer $object
+     * @param array $data
+     * @param null $format
+     * @param array $context
+     */
+    protected function setStore(Customer $object, array $data, $format = null, array $context = [])
     {
         /** @var Store $store */
         $store = $this->denormalizeObject(
@@ -485,7 +498,13 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
     }
 
-    protected function setWebsite(Customer $object, array $data, $format = null, array $context = array())
+    /**
+     * @param Customer $object
+     * @param array $data
+     * @param null $format
+     * @param array $context
+     */
+    protected function setWebsite(Customer $object, array $data, $format = null, array $context = [])
     {
         /** @var Website $website */
         $website = $this->denormalizeObject(
@@ -501,30 +520,16 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
     }
 
-    protected function setContact(Customer $object, array $data, $format = null, array $context = array())
+    /**
+     * @param Customer $object
+     * @param array $data
+     * @param null $format
+     * @param array $context
+     */
+    protected function setAddresses(Customer $object, array $data, $format = null, array $context = [])
     {
-        $data['contact'] = $this->formatContactData($data);
-
-        /** @var Contact $contact */
-        $contact = $this->denormalizeObject(
-            $data,
-            'contact',
-            ContactNormalizer::CONTACT_TYPE,
-            $format,
-            $context
-        );
-        if ($contact) {
-            $contact->setBirthday($object->getBirthday());
-            $object->setContact($contact);
-        }
-
-        $this->setAddresses($object, $data, $format, $context);
-    }
-
-    protected function setAddresses(Customer $object, array $data, $format = null, array $context = array())
-    {
-        if (!empty($data['contact']['addresses'])) {
-            $data['addresses'] = $data['contact']['addresses'];
+        $data = $this->formatAddressesData($data);
+        if (!empty($data['addresses'])) {
             /** @var \Doctrine\Common\Collections\Collection $addresses */
             $addresses = $this->denormalizeObject(
                 $data,
@@ -535,7 +540,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             );
 
             // TODO Should be fixed during CRM-1185
-            $originIds = array();
+            $originIds = [];
             foreach ($data['addresses'] as $key => $address) {
                 if (!empty($address['customerAddressId'])) {
                     $originIds[$key] = $address['customerAddressId'];
@@ -543,14 +548,10 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
             }
 
             if (!empty($addresses)) {
-                $contact = $object->getContact();
                 /** @var Address $address */
                 foreach ($addresses as $key => $address) {
                     if (!empty($originIds[$key])) {
                         $address->setOriginId($originIds[$key]);
-                    }
-                    if ($contactPhone = $address->getContactPhone()) {
-                        $contactPhone->setOwner($contact);
                     }
                 }
                 $object->resetAddresses($addresses);
@@ -559,62 +560,34 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     }
 
     /**
-     * @todo Move to converter CRM-789
-     *
-     * @param $data
-     *
+     * @param array $data
      * @return array
      */
-    protected function formatContactData($data)
+    protected function formatAddressesData(array $data)
     {
-        $contact           = $this->convertToCamelCase($data);
-        $contactFieldNames = array(
-            'firstName'  => null,
-            'lastName'   => null,
-            'middleName' => null,
-            'namePrefix' => null,
-            'nameSuffix' => null,
-            'gender'     => null,
-            'addresses'  => [],
-            'phones'     => [],
-            'emails'     => []
-        );
-        // fill default values
-        $contact = array_merge($contactFieldNames, $contact);
+        if (!empty($data['addresses'])) {
+            foreach ($data['addresses'] as $key => $address) {
+                $bapAddress = $this->getBapAddressData(
+                    $address,
+                    [
+                        'firstname' => $data['firstName'],
+                        'lastname' => $data['lastName']
+                    ]
+                );
 
-        foreach ($contact['addresses'] as $key => $address) {
-            $bapAddress = $this->getBapAddressData(
-                $address,
-                array(
-                     'firstname' => $contact['firstName'],
-                     'lastname'  => $contact['lastName']
-                )
-            );
-
-            // prepare address types
-            if (!empty($address['is_default_shipping'])) {
-                $bapAddress['types'][] = array('name' => AddressType::TYPE_SHIPPING);
-            }
-            if (!empty($address['is_default_billing'])) {
-                $bapAddress['types'][] = array('name' => AddressType::TYPE_BILLING);
-            }
-
-            if (!empty($address['telephone'])) {
-                $phone = $address['telephone'];
-                $bapAddress['contactPhone'] = array('phone' => $phone);
-                if (!$this->arrayHasValueForKey($contact['phones'], 'phone', $phone)) {
-                    $contact['phones'][] = array('phone' => $phone);
+                // prepare address types
+                if (!empty($address['is_default_shipping'])) {
+                    $bapAddress['types'][] = ['name' => AddressType::TYPE_SHIPPING];
                 }
+                if (!empty($address['is_default_billing'])) {
+                    $bapAddress['types'][] = ['name' => AddressType::TYPE_BILLING];
+                }
+
+                $contact['addresses'][$key] = $bapAddress;
             }
-            $contact['addresses'][$key] = $bapAddress;
         }
 
-        if (!empty($contact['email'])) {
-            $contact['emails'][] = array('email' => $contact['email']);
-            unset($contact['email']);
-        }
-
-        return $contact;
+        return $data;
     }
 
     /**
@@ -645,9 +618,9 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
      *
      * @return array
      */
-    protected function getBapAddressData(array $address, array $defaultValues = array())
+    protected function getBapAddressData(array $address, array $defaultValues = [])
     {
-        $bapAddress = array();
+        $bapAddress = [];
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($this->addressMageToBapMapping as $mageKey => $bapKey) {

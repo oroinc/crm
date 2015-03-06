@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConverter;
+use Oro\Bundle\UserBundle\Model\Gender;
 
-class CustomerDataConverter extends AbstractTableDataConverter
+class CustomerDataConverter extends AbstractTreeDataConverter
 {
     /**
      * {@inheritdoc}
@@ -35,6 +36,29 @@ class CustomerDataConverter extends AbstractTableDataConverter
 //            'confirmation' => 'confirmation',
 //            'password_hash' => 'passwordHash',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+
+        if (!empty($importedRecord['birthday'])) {
+            $importedRecord['birthday'] = substr($importedRecord['birthday'], 0, 10);
+        }
+
+        if (isset($importedRecord['gender']) && !empty($importedRecord['gender'])) {
+            $gender = strtolower($importedRecord['gender']);
+            if (in_array($gender, [Gender::FEMALE, Gender::MALE])) {
+                $importedRecord['gender'] = $gender;
+            } else {
+                $importedRecord['gender'] = null;
+            }
+        }
+
+        return $importedRecord;
     }
 
     /**

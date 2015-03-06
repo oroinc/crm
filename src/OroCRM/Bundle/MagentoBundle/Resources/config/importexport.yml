@@ -15,6 +15,9 @@ parameters:
     orocrm_magento.importexport.data_converter.cart_address.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
     orocrm_magento.importexport.data_converter.magento_address.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Converter\MagentoAddressDataConverter
     orocrm_magento.importexport.data_converter.customer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter
+    orocrm_magento.importexport.data_converter.website.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter
+    orocrm_magento.importexport.data_converter.store.class:                     OroCRM\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
+    orocrm_magento.importexport.data_converter.customer_group.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerGroupDataConverter
 
     # connectors
     orocrm_magento.mage.region_connector.class:                                 OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
@@ -36,12 +39,14 @@ parameters:
     orocrm_magento.importexport.normalizer.datetime.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer
 
     # strategies
+    orocrm_magento.import.strategy.abstract.class:                              OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy
     orocrm_magento.import_strategy.customer.base_strategy.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
     orocrm_magento.import_strategy.customer.add_or_update.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy
     orocrm_magento.import_strategy.region.add_or_update.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
+    orocrm_magento.import.strategy.new_customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewCustomerStrategy
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
@@ -78,9 +83,23 @@ services:
     orocrm_magento.importexport.data_converter.magento_address:
         class: %orocrm_magento.importexport.data_converter.magento_address.class%
 
+    orocrm_magento.importexport.data_converter.website:
+        class: %orocrm_magento.importexport.data_converter.website.class%
+
+    orocrm_magento.importexport.data_converter.store:
+        class: %orocrm_magento.importexport.data_converter.store.class%
+
+    orocrm_magento.importexport.data_converter.customer_group:
+        class: %orocrm_magento.importexport.data_converter.customer_group.class%
+
     orocrm_magento.importexport.data_converter.customer:
         class: %orocrm_magento.importexport.data_converter.customer.class%
         parent: oro_importexport.data_converter.configurable
+        calls:
+            - [addNodeDataConverter, ['addresses', @orocrm_magento.importexport.data_converter.magento_address, true]]
+            - [addNodeDataConverter, ['website', @orocrm_magento.importexport.data_converter.website]]
+            - [addNodeDataConverter, ['store', @orocrm_magento.importexport.data_converter.store]]
+            - [addNodeDataConverter, ['group', @orocrm_magento.importexport.data_converter.customer_group]]
 
     # Connectors
     orocrm_magento.mage.customer_connector:
@@ -210,6 +229,14 @@ services:
             - { name: oro_importexport.normalizer }
 
     # Strategies
+    orocrm_magento.import.strategy.abstract:
+        class: %orocrm_magento.import.strategy.abstract.class%
+        parent: oro_importexport.strategy.configurable_add_or_replace
+        absract: true
+        calls:
+            - [setLogger, [@oro_integration.logger.strategy]]
+            - [setOwnerHelper, [@oro_integration.helper.default_owner_helper]]
+
     orocrm_magento.import.strategy.base_strategy:
         class: %orocrm_magento.import_strategy.customer.base_strategy.class%
         abstract: true
@@ -219,10 +246,10 @@ services:
             - @oro_integration.helper.default_owner_helper
 
     orocrm_magento.import.strategy.customer.add_or_update:
-        class: %orocrm_magento.import_strategy.customer.add_or_update.class%
-        parent: orocrm_magento.import.strategy.base_strategy
+        parent: orocrm_magento.import.strategy.abstract
+        class: %orocrm_magento.import.strategy.new_customer.class%
         calls:
-             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+         - [setChannelHelper, [@orocrm_channel.importexport.helper.channel]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
@@ -249,7 +276,7 @@ services:
     orocrm_magento.importexport.processor.import_customer:
         parent: oro_importexport.processor.import_abstract
         calls:
-             - [setDataConverter, [@oro_importexport.data_converter.default]]
+             - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
              - [setStrategy, [@orocrm_magento.import.strategy.customer.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }

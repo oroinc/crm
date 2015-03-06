@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_26';
+        return 'v1_27';
     }
 
     /**
@@ -423,6 +423,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('created', 'datetime', ['precision' => 0]);
         $table->addColumn('updated', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_1E239D647E3C61F9', []);
         $table->addUniqueIndex(['related_contact_address_id'], 'UNIQ_1E239D648137CB7B');
         $table->addUniqueIndex(['related_contact_phone_id'], 'UNIQ_1E239D64E3694F65');
@@ -998,6 +999,12 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             ['region_code'],
             ['combined_code'],
             []
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
         );
     }
 

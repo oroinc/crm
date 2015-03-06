@@ -213,6 +213,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         $settings = $this->settings->all();
 
+        $data = file_get_contents('/tmp/customer.json');
+        $customer = json_decode($data, true);
+        $customers = [$customer];
+        return new \ArrayIterator($customers);
+
         if ($this->isExtensionInstalled()) {
             return new CustomerBridgeIterator($this, $settings);
         } else {

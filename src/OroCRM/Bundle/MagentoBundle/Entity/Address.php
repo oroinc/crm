@@ -36,7 +36,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  */
 class Address extends ExtendAddress
 {
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer address fields
