@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-
 class CustomerExportWriter extends AbstractExportWriter
 {
     /**
@@ -33,11 +31,10 @@ class CustomerExportWriter extends AbstractExportWriter
                 sprintf('Customer with id %s successfully created with data %s', $customerId, json_encode($item))
             );
 
-            /** @var Customer $customer */
-            $customer = $this->getEntity();
-            $customer->setOriginId($customerId);
+            $entity = $this->getEntity();
+            $entity->setOriginId($customerId);
 
-            parent::write([$customer]);
+            parent::write([$entity]);
         } else {
             $customerId = $item['customer_id'];
 

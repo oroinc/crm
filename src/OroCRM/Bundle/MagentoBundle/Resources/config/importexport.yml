@@ -330,8 +330,6 @@ services:
     orocrm_magento.importexport.writer.customer:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
-        calls:
-            - [setEntityClassName, [%orocrm_magento.entity.customer.class%]]
 
     # readers
     orocrm_magento.importexport.reader.entity:

@@ -60,7 +60,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
-    RFMAwareInterface
+    RFMAwareInterface,
+    OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 

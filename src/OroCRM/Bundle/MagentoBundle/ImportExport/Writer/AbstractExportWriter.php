@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
+use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractExportWriter extends PersistentBatchWriter
@@ -14,9 +15,6 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
 
     /** @var string */
     protected $channelClassName;
-
-    /** @var string */
-    protected $entityClassName;
 
     /**
      * @param MagentoTransportInterface $transport
@@ -35,24 +33,15 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     }
 
     /**
-     * @param string $entityClassName
-     */
-    public function setEntityClassName($entityClassName)
-    {
-        $this->entityClassName = $entityClassName;
-    }
-
-    /**
      * @return Channel
      */
     protected function getChannel()
     {
-        $channelId = $this->getContext()->getOption('channel');
-
-        if (!$channelId) {
+        if (!$this->getContext()->hasOption('channel')) {
             throw new \InvalidArgumentException('Channel id is missing');
         }
 
+        $channelId = $this->getContext()->getOption('channel');
         $channel = $this->registry->getRepository($this->channelClassName)->find($channelId);
 
         if (!$channel) {
@@ -83,7 +72,7 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     }
 
     /**
-     * @return object
+     * @return OriginAwareInterface
      */
     protected function getEntity()
     {
@@ -91,24 +80,14 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
             throw new \InvalidArgumentException('Option "entity" was not configured');
         }
 
-        if (!$this->getContext()->hasOption('entityName')) {
-            throw new \InvalidArgumentException('Option "entityName" was not configured');
-        }
-
-        if (!$this->entityClassName) {
-            throw new \InvalidArgumentException('Class name was not configured');
-        }
-
         $entity = $this->getContext()->getOption('entity');
 
-        if (!$entity || !is_a($entity, $this->entityClassName, true)) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Instance of "%s" expected, "%s" given',
-                    $this->entityClassName,
-                    is_object($entity) ? get_class($entity) : gettype($entity)
-                )
-            );
+        if (!$entity) {
+            throw new \InvalidArgumentException('Missing entity in context');
+        }
+
+        if (!$entity instanceof OriginAwareInterface) {
+            throw new \InvalidArgumentException('Entity does not implements OriginAwareInterface');
         }
 
         return $entity;

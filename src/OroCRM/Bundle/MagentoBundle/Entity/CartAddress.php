@@ -30,7 +30,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class CartAddress extends ExtendCartAddress
+class CartAddress extends ExtendCartAddress implements OriginAwareInterface
 {
     use OriginTrait;
 

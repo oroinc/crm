@@ -34,7 +34,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class Address extends ExtendAddress
+class Address extends ExtendAddress implements OriginAwareInterface
 {
     use OriginTrait;
 

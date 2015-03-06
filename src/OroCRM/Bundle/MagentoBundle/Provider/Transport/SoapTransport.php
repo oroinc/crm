@@ -285,7 +285,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getErrorCode(\Exception $e)
     {
         if ($e instanceof \SoapFault) {
-            switch($e->getCode()) {
+            switch($e->faultcode) {
                 case self::SOAP_FAULT_ADDRESS_DOES_NOT_EXIST:
                     return self::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
             }
