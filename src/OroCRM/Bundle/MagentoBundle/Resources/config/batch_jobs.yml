@@ -37,7 +37,7 @@ connector:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    oro_integration.reader.entity.by_id
+                        reader:    orocrm_magento.importexport.reader.entity
                         processor: orocrm_magento.importexport.processor.customer_export
                         writer:    orocrm_magento.importexport.writer.customer
                     parameters:

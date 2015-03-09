@@ -38,7 +38,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  *
  * TODO: Create migration to remove country and region from identity fields list CRM-2411
  */
-class Address extends ExtendAddress
+class Address extends ExtendAddress implements OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait;
 

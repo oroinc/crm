@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
+use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractExportWriter extends PersistentBatchWriter
@@ -31,21 +32,23 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
         $this->channelClassName = $channelClassName;
     }
 
-    protected function initTransport()
+    /**
+     * @return Channel
+     */
+    protected function getChannel()
     {
-        $channelId = $this->getContext()->getOption('channel');
-
-        if (!$channelId) {
-            throw new \InvalidArgumentException('Channel is missing');
+        if (!$this->getContext()->hasOption('channel')) {
+            throw new \InvalidArgumentException('Channel id is missing');
         }
 
-        /** @var Channel $channel */
+        $channelId = $this->getContext()->getOption('channel');
         $channel = $this->registry->getRepository($this->channelClassName)->find($channelId);
+
         if (!$channel) {
             throw new \InvalidArgumentException('Channel is missing');
         }
 
-        $this->transport->init($channel->getTransport());
+        return $channel;
     }
 
     /**
@@ -66,5 +69,27 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
         }
 
         parent::write($items);
+    }
+
+    /**
+     * @return OriginAwareInterface
+     */
+    protected function getEntity()
+    {
+        if (!$this->getContext()->hasOption('entity')) {
+            throw new \InvalidArgumentException('Option "entity" was not configured');
+        }
+
+        $entity = $this->getContext()->getOption('entity');
+
+        if (!$entity) {
+            throw new \InvalidArgumentException('Missing entity in context');
+        }
+
+        if (!$entity instanceof OriginAwareInterface) {
+            throw new \InvalidArgumentException('Entity does not implements OriginAwareInterface');
+        }
+
+        return $entity;
     }
 }

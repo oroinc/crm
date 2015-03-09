@@ -102,4 +102,19 @@ interface MagentoTransportInterface extends TransportInterface
      * @return int
      */
     public function getErrorCode(\Exception $e);
+
+    /**
+     * @param array $customerData
+     *
+     * @return int ID of the created customer
+     */
+    public function createCustomer(array $customerData);
+
+    /**
+     * @param int $customerId
+     * @param array $customerData
+     *
+     * @return bool True if the customer is updated
+     */
+    public function updateCustomer($customerId, array $customerData);
 }

@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
 
@@ -34,7 +33,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  * )
  * @Oro\Loggable
  */
-class CustomerGroup extends ExtendCustomerGroup
+class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait;
 

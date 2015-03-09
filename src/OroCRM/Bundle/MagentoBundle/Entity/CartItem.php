@@ -37,7 +37,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class CartItem extends ExtendCartItem
+class CartItem extends ExtendCartItem implements OriginAwareInterface
 {
     use OriginTrait;
 

@@ -64,7 +64,11 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  * )
  */
-class Cart extends ExtendCart implements ChannelAwareInterface, FirstNameInterface, LastNameInterface
+class Cart extends ExtendCart implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    LastNameInterface,
+    OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait, ChannelEntityTrait;
 
