@@ -34,6 +34,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
     const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
     const ACTION_CUSTOMER_DELETE         = 'customerCustomerDelete';
+    const ACTION_CUSTOMER_CREATE         = 'customerCustomerCreate';
     const ACTION_CUSTOMER_ADDRESS_LIST   = 'customerAddressList';
     const ACTION_CUSTOMER_ADDRESS_INFO   = 'customerAddressInfo';
     const ACTION_CUSTOMER_ADDRESS_UPDATE = 'customerAddressUpdate';
@@ -261,6 +262,25 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $addresses  = WSIUtils::processCollectionResponse($addresses);
 
         return $addresses;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createCustomer(array $customerData)
+    {
+        return $this->call(SoapTransport::ACTION_CUSTOMER_CREATE, ['customerData' => $customerData]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateCustomer($customerId, array $customerData)
+    {
+        return $this->call(
+            SoapTransport::ACTION_CUSTOMER_UPDATE,
+            ['customerId' => $customerId, 'customerData' => $customerData]
+        );
     }
 
     /**

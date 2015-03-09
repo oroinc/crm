@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
 use Doctrine\ORM\EntityManager;
 

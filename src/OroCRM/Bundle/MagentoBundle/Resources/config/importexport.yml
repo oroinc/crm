@@ -14,6 +14,7 @@ parameters:
     orocrm_magento.importexport.data_converter.order_item.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter
     orocrm_magento.importexport.data_converter.cart_address.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
     orocrm_magento.importexport.data_converter.magento_address.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Converter\MagentoAddressDataConverter
+    orocrm_magento.importexport.data_converter.customer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter
 
     # connectors
     orocrm_magento.mage.region_connector.class:                                 OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
@@ -48,6 +49,11 @@ parameters:
     # writers
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
     orocrm_magento.importexport.customer.reverse.writer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter
+    orocrm_magento.importexport.writer.abstract_export.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
+    orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
+
+    # readers
+    orocrm_magento.importexport.reader.entity.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Reader\ContextEntityReader
 
 services:
     # Data converter
@@ -74,6 +80,10 @@ services:
 
     orocrm_magento.importexport.data_converter.magento_address:
         class: %orocrm_magento.importexport.data_converter.magento_address.class%
+
+    orocrm_magento.importexport.data_converter.customer:
+        class: %orocrm_magento.importexport.data_converter.customer.class%
+        parent: oro_importexport.data_converter.configurable
 
     # Connectors
     orocrm_magento.mage.customer_connector:
@@ -282,6 +292,13 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
 
+    orocrm_magento.importexport.processor.customer_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+             - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.customer.class%, alias: orocrm_magento.customer_export }
+
     orocrm_magento.importexport.customer.reverse.processor:
         class: %orocrm_magento.importexport.customer.reverse.processor.class%
 
@@ -301,3 +318,21 @@ services:
             - @orocrm_magento.transport.soap_transport
             - @orocrm_magento.importexport.address_import_helper
             - @orocrm_magento.converter.region
+
+    orocrm_magento.importexport.writer.abstract_export:
+        class: %orocrm_magento.importexport.writer.abstract_export.class%
+        parent: oro_integration.writer.persistent_batch_writer
+        abstract: true
+        calls:
+            - [setTransport, [@orocrm_magento.transport.soap_transport]]
+            - [setChannelClassName, [%oro_integration.entity.class%]]
+
+    orocrm_magento.importexport.writer.customer:
+        class: %orocrm_magento.importexport.writer.customer.class%
+        parent: orocrm_magento.importexport.writer.abstract_export
+
+    # readers
+    orocrm_magento.importexport.reader.entity:
+        class: %orocrm_magento.importexport.reader.entity.class%
+        arguments:
+            - @oro_importexport.context_registry

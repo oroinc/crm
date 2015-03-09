@@ -10,7 +10,6 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -19,7 +18,6 @@ use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
@@ -62,9 +60,26 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
-    RFMAwareInterface
+    RFMAwareInterface,
+    OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $id;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
@@ -132,9 +147,6 @@ class Customer extends ExtendCustomer implements
      * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          },
      *          "entity"={
      *              "contact_information"="email"
      *          }
@@ -220,6 +232,13 @@ class Customer extends ExtendCustomer implements
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 
@@ -245,6 +264,13 @@ class Customer extends ExtendCustomer implements
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $isActive = false;
 
@@ -257,9 +283,16 @@ class Customer extends ExtendCustomer implements
     protected $vat;
 
     /**
-     * @var double
+     * @var float
      *
      * @ORM\Column(name="lifetime", type="money", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $lifetime = 0;
 
@@ -267,6 +300,13 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $currency;
 
@@ -274,6 +314,13 @@ class Customer extends ExtendCustomer implements
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $owner;
 
@@ -282,6 +329,13 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $organization;
 
@@ -484,8 +538,8 @@ class Customer extends ExtendCustomer implements
     public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originId) {
-                return $item->getOriginId() == $originId;
+            function (Address $item) use ($originId) {
+                return $item->getOriginId() === $originId;
             }
         )->first();
     }
