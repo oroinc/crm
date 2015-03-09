@@ -18,8 +18,8 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'firstname' => 'firstName',
             'lastname' => 'lastName',
 //            'password' => 'password',
-            'website_id' => 'website:originId',
-            'store_id' => 'store:originId',
+//            'website_id' => 'website:originId', // Store is set from Iterator
+//            'store_id' => 'store:originId', // Website is set from Iterator
             'group_id' => 'group:originId',
             'prefix' => 'namePrefix',
             'suffix' => 'nameSuffix',
@@ -49,22 +49,22 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['birthday'] = substr($importedRecord['birthday'], 0, 10);
         }
 
-        if (isset($importedRecord['gender']) && !empty($importedRecord['gender'])) {
-            $gender = strtolower($importedRecord['gender']);
-            if (in_array($gender, [Gender::FEMALE, Gender::MALE])) {
-                $importedRecord['gender'] = $gender;
-            } else {
+        if (!empty($importedRecord['gender'])) {
+            $importedRecord['gender'] = strtolower($importedRecord['gender']);
+            if (!in_array($importedRecord['gender'], [Gender::FEMALE, Gender::MALE], true)) {
                 $importedRecord['gender'] = null;
             }
+        }
+
+        if (!empty($importedRecord['store']) && !empty($importedRecord['website'])) {
+            $importedRecord['store']['website'] = $importedRecord['website'];
         }
 
         return $importedRecord;
     }
 
     /**
-     * Get maximum backend header for current entity
-     *
-     * @return array
+     * {@inheritdoc}
      */
     protected function getBackendHeader()
     {

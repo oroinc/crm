@@ -8,12 +8,11 @@ parameters:
     # converter
     orocrm_magento.importexport.data_converter.cart.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartDataConverter
     orocrm_magento.importexport.data_converter.cartitem.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartItemDataConverter
-    orocrm_magento.importexport.data_converter.address.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AddressDataConverter
     orocrm_magento.importexport.data_converter.order.class:                     OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderDataConverter
     orocrm_magento.importexport.data_converter.order_address.class:             OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderAddressDataConverter
     orocrm_magento.importexport.data_converter.order_item.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Converter\OrderItemDataConverter
     orocrm_magento.importexport.data_converter.cart_address.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
-    orocrm_magento.importexport.data_converter.magento_address.class:           OroCRM\Bundle\MagentoBundle\ImportExport\Converter\MagentoAddressDataConverter
+    orocrm_magento.importexport.data_converter.customer_address.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerAddressDataConverter
     orocrm_magento.importexport.data_converter.customer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter
     orocrm_magento.importexport.data_converter.website.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter
     orocrm_magento.importexport.data_converter.store.class:                     OroCRM\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
@@ -28,25 +27,20 @@ parameters:
     # normalizers
     orocrm_magento.importexport.denormalizer.customer.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CustomerSerializer
     orocrm_magento.importexport.denormalizer.region.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer
-    orocrm_magento.importexport.typed_address_normalizer.class:                 OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\MagentoAddressNormalizer
     orocrm_magento.importexport.normalizer.cart.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartNormalizer
-    orocrm_magento.importexport.normalizer.cart_address.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartAddressNormalizer
-    orocrm_magento.importexport.denormalizer.cart_item.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartItemCompositeDenormalizer
     orocrm_magento.importexport.denormalizer.order.class:                       OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderDenormalizer
-    orocrm_magento.importexport.denormalizer.order_address.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderAddressCompositeDenormalizer
-    orocrm_magento.importexport.denormalizer.order_item.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderItemCompositeDenormalizer
+    orocrm_magento.importexport.denormalizer.order_item.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\OrderItemDenormalizer
 
     orocrm_magento.importexport.normalizer.datetime.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\Normalizer\DateTimeNormalizer
 
     # strategies
     orocrm_magento.import.strategy.abstract.class:                              OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy
-    orocrm_magento.import_strategy.customer.base_strategy.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
+    orocrm_magento.import_strategy.base_strategy.class:                         OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy
     orocrm_magento.import_strategy.customer.add_or_update.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy
     orocrm_magento.import_strategy.region.add_or_update.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
-    orocrm_magento.import.strategy.new_customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewCustomerStrategy
 
     # processors
     orocrm_magento.importexport.customer.reverse.processor.class:               OroCRM\Bundle\MagentoBundle\ImportExport\Processor\CustomerReverseProcessor
@@ -59,17 +53,18 @@ parameters:
 
 services:
     # Data converter
-    orocrm_magento.importexport.data_converter.cart:
-        class: %orocrm_magento.importexport.data_converter.cart.class%
-
     orocrm_magento.importexport.data_converter.cartitem:
         class: %orocrm_magento.importexport.data_converter.cartitem.class%
 
-    orocrm_magento.importexport.data_converter.address:
-        class: %orocrm_magento.importexport.data_converter.address.class%
+    orocrm_magento.importexport.data_converter.cart_address:
+        class: %orocrm_magento.importexport.data_converter.cart_address.class%
 
-    orocrm_magento.importexport.data_converter.order:
-        class: %orocrm_magento.importexport.data_converter.order.class%
+    orocrm_magento.importexport.data_converter.cart:
+        class: %orocrm_magento.importexport.data_converter.cart.class%
+        calls:
+            - [addNodeDataConverter, ['shipping_address', @orocrm_magento.importexport.data_converter.cart_address]]
+            - [addNodeDataConverter, ['billing_address', @orocrm_magento.importexport.data_converter.cart_address]]
+            - [addNodeDataConverter, ['items', @orocrm_magento.importexport.data_converter.cartitem, true]]
 
     orocrm_magento.importexport.data_converter.order_address:
         class: %orocrm_magento.importexport.data_converter.order_address.class%
@@ -77,11 +72,15 @@ services:
     orocrm_magento.importexport.data_converter.order_item:
         class: %orocrm_magento.importexport.data_converter.order_item.class%
 
-    orocrm_magento.importexport.data_converter.cart_address:
-        class: %orocrm_magento.importexport.data_converter.cart_address.class%
+    orocrm_magento.importexport.data_converter.order:
+        class: %orocrm_magento.importexport.data_converter.order.class%
+        calls:
+            - [addNodeDataConverter, ['shipping_address', @orocrm_magento.importexport.data_converter.order_address]]
+            - [addNodeDataConverter, ['billing_address', @orocrm_magento.importexport.data_converter.order_address]]
+            - [addNodeDataConverter, ['items', @orocrm_magento.importexport.data_converter.order_item, true]]
 
-    orocrm_magento.importexport.data_converter.magento_address:
-        class: %orocrm_magento.importexport.data_converter.magento_address.class%
+    orocrm_magento.importexport.data_converter.customer_address:
+        class: %orocrm_magento.importexport.data_converter.customer_address.class%
 
     orocrm_magento.importexport.data_converter.website:
         class: %orocrm_magento.importexport.data_converter.website.class%
@@ -96,7 +95,7 @@ services:
         class: %orocrm_magento.importexport.data_converter.customer.class%
         parent: oro_importexport.data_converter.configurable
         calls:
-            - [addNodeDataConverter, ['addresses', @orocrm_magento.importexport.data_converter.magento_address, true]]
+            - [addNodeDataConverter, ['addresses', @orocrm_magento.importexport.data_converter.customer_address, true]]
             - [addNodeDataConverter, ['website', @orocrm_magento.importexport.data_converter.website]]
             - [addNodeDataConverter, ['store', @orocrm_magento.importexport.data_converter.store]]
             - [addNodeDataConverter, ['group', @orocrm_magento.importexport.data_converter.customer_group]]
@@ -179,14 +178,6 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_magento.importexport.magento_address_normalizer:
-        class: %orocrm_magento.importexport.typed_address_normalizer.class%
-        arguments:
-            - @oro_importexport.field.field_helper
-            - @orocrm_magento.importexport.data_converter.magento_address
-#        tags:
-#            - { name: oro_importexport.normalizer, priority: -1 }
-
     orocrm_magento.importexport.normalizer.cart:
         class: %orocrm_magento.importexport.normalizer.cart.class%
         arguments:
@@ -196,35 +187,10 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
-    orocrm_magento.importexport.denormalizer.cartitem:
-        class: %orocrm_magento.importexport.denormalizer.cart_item.class%
-        arguments:
-            - @orocrm_magento.service.import_helper
-            - @orocrm_magento.importexport.data_converter.cartitem
-        tags:
-            - { name: oro_importexport.normalizer }
-
-    orocrm_magento.importexport.denormalizer.order_address:
-        class: %orocrm_magento.importexport.denormalizer.order_address.class%
-        arguments:
-            - @oro_importexport.field.field_helper
-            - @orocrm_magento.importexport.data_converter.order_address
-        tags:
-            - { name: oro_importexport.normalizer, priority: 200 }
-
-    orocrm_magento.importexport.normalizer.cart_address:
-        class: %orocrm_magento.importexport.normalizer.cart_address.class%
-        arguments:
-            - @oro_importexport.field.field_helper
-            - @orocrm_magento.importexport.data_converter.cart_address
-        tags:
-            - { name: oro_importexport.normalizer, priority: 200 }
-
     orocrm_magento.importexport.denormalizer.order_item:
         class: %orocrm_magento.importexport.denormalizer.order_item.class%
         arguments:
             - @orocrm_magento.service.import_helper
-            - @orocrm_magento.importexport.data_converter.order_item
         tags:
             - { name: oro_importexport.normalizer }
 
@@ -238,7 +204,7 @@ services:
             - [setOwnerHelper, [@oro_integration.helper.default_owner_helper]]
 
     orocrm_magento.import.strategy.base_strategy:
-        class: %orocrm_magento.import_strategy.customer.base_strategy.class%
+        class: %orocrm_magento.import_strategy.base_strategy.class%
         abstract: true
         arguments:
             - @oro_importexport.strategy.import.helper
@@ -247,9 +213,11 @@ services:
 
     orocrm_magento.import.strategy.customer.add_or_update:
         parent: orocrm_magento.import.strategy.abstract
-        class: %orocrm_magento.import.strategy.new_customer.class%
+        class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         calls:
          - [setChannelHelper, [@orocrm_channel.importexport.helper.channel]]
+         - [setAddressHelper, [@orocrm_magento.importexport.address_import_helper]]
+         - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%

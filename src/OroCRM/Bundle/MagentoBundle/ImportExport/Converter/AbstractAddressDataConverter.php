@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\IntegrationAwareDataConverter;
 
-class AddressDataConverter extends IntegrationAwareDataConverter
+abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverter
 {
     /**
      * {@inheritdoc}

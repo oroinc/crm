@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 
-class MagentoAddressDataConverter extends AddressDataConverter
+class CustomerAddressDataConverter extends AbstractAddressDataConverter
 {
     /**
      * {@inheritdoc}
@@ -36,14 +36,5 @@ class MagentoAddressDataConverter extends AddressDataConverter
         }
 
         return $importedRecord;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function getBackendHeader()
-    {
-        // will be implemented for bidirectional sync
-        throw new \Exception('Normalization is not implemented!');
     }
 }

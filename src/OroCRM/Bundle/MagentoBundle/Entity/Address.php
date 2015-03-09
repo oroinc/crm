@@ -8,9 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
@@ -33,6 +35,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * )
  * @ORM\Entity
  * @Oro\Loggable
+ *
+ * TODO: Create migration to remove country and region from identity fields list CRM-2411
  */
 class Address extends ExtendAddress
 {
@@ -85,6 +89,38 @@ class Address extends ExtendAddress
      * @Oro\Versioned
      */
     protected $postalCode;
+
+    /**
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
+     * @Soap\ComplexType("string", nillable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=140
+     *          }
+     *      }
+     * )
+     */
+    protected $country;
+
+    /**
+     * @var Region
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
+     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
+     * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=130
+     *          }
+     *      }
+     * )
+     */
+    protected $region;
 
     /**
      * @var string

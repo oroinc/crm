@@ -2,42 +2,48 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Collection;
-
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 
-class CustomerStrategy extends BaseStrategy
+class CustomerStrategy extends AbstractImportStrategy
 {
-    /** @var array */
-    protected $groupEntityCache = [];
+    /**
+     * @var ChannelHelper
+     */
+    protected $channelHelper;
 
-    /** @var array */
-    protected $processedEntities = [];
+    /**
+     * @var AddressImportHelper
+     */
+    protected $addressHelper;
 
-    /** @var array */
-    protected static $fieldsForManualUpdate = [
-        'id',
-        'contact',
-        'account',
-        'website',
-        'store',
-        'group',
-        'carts',
-        'orders',
-        'addresses',
-        'lifetime',
-        'owner',
-        'organization',
-        'channel',
-        'dataChannel'
-    ];
-
-    /** @var StoreStrategy */
+    /**
+     * @var StoreStrategy
+     */
     protected $storeStrategy;
+
+    /**
+     * @var Address[]
+     */
+    protected $importingAddresses;
+
+    /**
+     * @param ChannelHelper $channelHelper
+     */
+    public function setChannelHelper(ChannelHelper $channelHelper)
+    {
+        $this->channelHelper = $channelHelper;
+    }
+
+    /**
+     * @param AddressImportHelper $addressHelper
+     */
+    public function setAddressHelper(AddressImportHelper $addressHelper)
+    {
+        $this->addressHelper = $addressHelper;
+    }
 
     /**
      * @param StoreStrategy $storeStrategy
@@ -48,146 +54,85 @@ class CustomerStrategy extends BaseStrategy
     }
 
     /**
-     * Update/Create customer and related entities based on remote data
-     *
-     * @param Customer $remoteEntity Denormalized remote data
-     *
-     * @return Customer|null
+     * @param Customer $entity
+     * @return Customer
      */
-    public function process($remoteEntity)
+    protected function beforeProcessEntity($entity)
     {
-        /** @var Customer $localEntity */
-        $localEntity = $this->getEntityByCriteria(
-            ['originId' => $remoteEntity->getOriginId(), 'channel' => $remoteEntity->getChannel()],
-            $remoteEntity
-        );
-
-        if (!$localEntity) {
-            $localEntity = $remoteEntity;
-
-            // populate owner only for newly created entities
-            $this->defaultOwnerHelper->populateChannelOwner($localEntity, $localEntity->getChannel());
+        $importingAddresses = $entity->getAddresses();
+        if ($importingAddresses) {
+            foreach ($importingAddresses as $address) {
+                $this->importingAddresses[$address->getOriginId()] = $address;
+            }
         }
 
-        // update store/website/customerGroup related entities
-        $this->updateStoresAndGroup($localEntity, $remoteEntity->getStore(), $remoteEntity->getGroup());
-
-        // account and contact for new customer should be created automatically
-        // by the appropriate queued process to improve initial import performance
-        if (!$localEntity->getId()) {
-            $localEntity->setContact(null);
-            $localEntity->setAccount(null);
-        }
-
-        // modify local entity after all relations done
-        $this->strategyHelper->importEntity($localEntity, $remoteEntity, self::$fieldsForManualUpdate);
-
-        $this->updateAddresses($localEntity, $remoteEntity->getAddresses());
-
-        // validate and update context - increment counter or add validation error
-        return $this->validateAndUpdateContext($localEntity);
+        return parent::beforeProcessEntity($entity);
     }
 
     /**
-     * Update $entity with new data from imported $store, $website, $group
-     *
-     * @param Customer      $entity
-     * @param Store         $store
-     * @param CustomerGroup $group
-     *
-     * @return $this
+     * @param Customer $entity
+     * @return Customer
      */
-    protected function updateStoresAndGroup(Customer $entity, Store $store, CustomerGroup $group)
+    protected function afterProcessEntity($entity)
     {
-        if (!isset($this->groupEntityCache[$group->getName()])) {
-            $this->groupEntityCache[$group->getName()] = $this->findAndReplaceEntity(
-                $group,
-                MagentoConnectorInterface::CUSTOMER_GROUPS_TYPE,
-                [
-                    'name'     => $group->getName(),
-                    'channel'  => $group->getChannel(),
-                    'originId' => $group->getOriginId()
-                ],
-                ['id', 'channel']
-            );
-        }
-        $this->groupEntityCache[$group->getName()] = $this->merge($this->groupEntityCache[$group->getName()]);
-        $this->groupEntityCache[$group->getName()]->setChannel($this->merge($group->getChannel()));
+        $this->processStore($entity);
+        $this->processDataChannel($entity);
+        $this->processGroup($entity);
+        $this->processAddresses($entity);
 
-        $store = $this->storeStrategy->process($store);
-
-        $entity
-            ->setStore($store)
-            ->setWebsite($store->getWebsite())
-            ->setGroup($this->groupEntityCache[$group->getName()]);
+        return parent::afterProcessEntity($entity);
     }
 
     /**
-     * @param Customer             $entity
-     * @param Collection|Address[] $addresses
-     *
-     * @return $this
+     * @param Customer $entity
      */
-    protected function updateAddresses(Customer $entity, Collection $addresses)
+    protected function processStore(Customer $entity)
     {
-        // force option enforce re-import of all addresses
-        if ($this->context->getOption('force') && $entity->getId()) {
-            $entity->getAddresses()->clear();
+        $store = $entity->getStore();
+        if ($entity->getStore()) {
+            $store = $this->storeStrategy->process($store);
+
+            $entity->setStore($store);
+            $entity->setWebsite($store->getWebsite());
         }
+    }
 
-        $processedRemote = [];
+    /**
+     * @param Customer $entity
+     */
+    protected function processDataChannel(Customer $entity)
+    {
+        if ($entity->getChannel()) {
+            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
+            if ($dataChannel) {
+                $entity->setDataChannel($dataChannel);
+            }
+        }
+    }
 
-        /** @var $address - imported address */
-        foreach ($addresses as $address) {
-            // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
+    /**
+     * @param Customer $entity
+     */
+    protected function processGroup(Customer $entity)
+    {
+        if ($entity->getGroup()) {
+            $this->updateRelations($entity->getGroup());
+        }
+    }
 
-            $originAddressId = $address->getOriginId();
-            if ($originAddressId && !$this->context->getOption('force')) {
-                $existingAddress = $entity->getAddressByOriginId($originAddressId);
-                if ($existingAddress) {
-                    $this->strategyHelper->importEntity(
-                        $existingAddress,
-                        $address,
-                        [
-                            'id',
-                            'region',
-                            'country',
-                            'owner',
-                            'contactAddress',
-                            'created',
-                            'updated',
-                            'contactPhone',
-                            'types'
-                        ]
-                    );
-                    // set remote data for further processing
-                    $existingAddress->setRegion($address->getRegion());
-                    $existingAddress->setCountry($address->getCountry());
-                    $this->addressHelper->mergeAddressTypes($existingAddress, $address);
-
-                    $address = $existingAddress;
+    /**
+     * @param Customer $entity
+     */
+    protected function processAddresses(Customer $entity)
+    {
+        if (!$entity->getAddresses()->isEmpty()) {
+            foreach ($entity->getAddresses() as $address) {
+                $originId = $address->getOriginId();
+                if (array_key_exists($originId, $this->importingAddresses)) {
+                    $remoteAddress = $this->importingAddresses[$originId];
+                    $this->addressHelper->mergeAddressTypes($address, $remoteAddress);
                 }
             }
-
-            $this->updateAddressCountryRegion($address, $mageRegionId);
-            if ($address->getCountry()) {
-                $this->updateAddressTypes($address);
-
-                $address->setOwner($entity);
-                $entity->addAddress($address);
-                $processedRemote[] = $address;
-            }
-        }
-
-        // remove not processed addresses
-        $toRemove = $entity->getAddresses()->filter(
-            function (Address $address) use ($processedRemote) {
-                return !in_array($address, $processedRemote, true);
-            }
-        );
-        foreach ($toRemove as $address) {
-            $entity->removeAddress($address);
         }
     }
 }
