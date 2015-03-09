@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Writer;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
 use Oro\Bundle\IntegrationBundle\Tests\Unit\ImportExport\Writer\PersistentBatchWriterTest;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter;

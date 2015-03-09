@@ -264,13 +264,17 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         return $addresses;
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function createCustomer(array $customerData)
     {
         return $this->call(SoapTransport::ACTION_CUSTOMER_CREATE, ['customerData' => $customerData]);
     }
 
-    /** {@inheritdoc} */
+    /**
+     * {@inheritdoc}
+     */
     public function updateCustomer($customerId, array $customerData)
     {
         return $this->call(
