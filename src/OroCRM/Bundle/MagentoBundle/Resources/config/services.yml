@@ -65,7 +65,7 @@ parameters:
     orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
-    orocrm_magento.provider.tracking_customer_identificator.class:          Oro\Bundle\TrackingBundle\Provider\TrackingCustomerIdentification
+    orocrm_magento.provider.tracking_customer_identificator.class:          OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification
 
 services:
     orocrm_magento.transport.soap_transport:

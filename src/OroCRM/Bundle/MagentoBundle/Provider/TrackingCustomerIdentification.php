@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\TrackingBundle\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -9,8 +9,8 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 
+use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 {
