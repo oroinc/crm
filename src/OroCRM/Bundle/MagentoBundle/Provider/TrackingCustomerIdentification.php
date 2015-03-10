@@ -69,7 +69,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
      */
     public function identify(TrackingVisit $trackingVisit)
     {
-        $userIdentifier = $this->parse($trackingVisit->getUserIdentifier());
+        $userIdentifier = $trackingVisit->getParsedUID() > 0 ? : $this->parse($trackingVisit->getUserIdentifier());
         if ($userIdentifier) {
             $result = [
                 'parsedUID'    => $userIdentifier,
