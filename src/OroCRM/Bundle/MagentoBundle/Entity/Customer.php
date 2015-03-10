@@ -65,6 +65,7 @@ class Customer extends ExtendCustomer implements
     SyncStateAwareInterface
 {
     const SYNC_INFO = 1;
+    const SCHEDULE_INFO = 2;
 
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 

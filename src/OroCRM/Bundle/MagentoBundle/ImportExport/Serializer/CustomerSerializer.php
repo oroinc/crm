@@ -680,7 +680,7 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
     protected function updateStates(Customer $resultObject, array $data)
     {
         if (!array_key_exists('addresses', $data)) {
-            $this->stateManager->addState($resultObject, SyncStateAwareInterface::PROPERTY, Customer::SYNC_INFO);
+            $this->stateManager->addState($resultObject, SyncStateAwareInterface::PROPERTY, Customer::SCHEDULE_INFO);
         }
     }
 }

@@ -4,7 +4,6 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
-        exclude_definitions: [magento_customer_creation, magento_load_customer_info]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -118,7 +117,6 @@ definitions:
                             organization:   $organization
                     - @unset_value: [$.accountName]
 
-            # TODO: Remove this and enable create trigger on magento_load_customer_info after BAP-7778
             - @tree:
                 conditions:
                     @not_empty: $originId
@@ -126,6 +124,9 @@ definitions:
                     - @assign_constant_value:
                         attribute: $.infoSyncState
                         value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
+                    - @assign_constant_value:
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SCHEDULE_INFO
                     - @create_object:
                         attribute: $.stateManager
                         class: OroCRM\Bundle\MagentoBundle\Service\StateManager
@@ -133,28 +134,19 @@ definitions:
                         attribute: $.isSyncRequested
                         object: $.stateManager
                         method: 'isInState'
-                        method_parameters: [$syncState, $.infoSyncState]
+                        method_parameters: [$syncState, $.scheduleSyncState]
                     - @tree:
                         conditions:
                             @equal: [$.isSyncRequested, true]
                         actions:
-                            - @execute_job:
-                                parameters:
-                                    jobType: import
-                                    jobName: mage_load_customer_info
-                                    configuration:
-                                        data: $.data
-                                        channel: $channel
-                                        writer_skip_clear: true
-                                        processorAlias: 'orocrm_magento.add_or_update_customer'
-                                    attribute: $.jobResult
                             - @call_method:
-                                conditions:
-                                    @equal: [$.jobResult.successful, true]
-                                parameters:
-                                    object: $.stateManager
-                                    method: 'removeState'
-                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
+                            - @call_method:
+                                object: $.stateManager
+                                method: 'addState'
+                                method_parameters: [$.data, 'syncState', $.infoSyncState]
 
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
@@ -281,7 +273,7 @@ definitions:
 
     magento_load_customer_info:
         label:   'Load Customer Information'
-        exclude_definitions: [magento_load_customer_info, magento_customer_creation]
+        exclude_definitions: [magento_load_customer_info]
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   40
@@ -355,11 +347,6 @@ triggers:
             queued:   true
 
     magento_load_customer_info:
-# TODO: Reenable after BAP-7778
-#        -
-#            event:    create
-#            priority: 20
-#            queued:   true
         -
             event:    update
             field:    syncState
