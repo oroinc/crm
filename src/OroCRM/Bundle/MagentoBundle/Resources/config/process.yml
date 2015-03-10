@@ -4,6 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
+        exclude_definitions: [magento_customer_creation, magento_load_customer_info]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -280,7 +281,7 @@ definitions:
 
     magento_load_customer_info:
         label:   'Load Customer Information'
-        exclude_definitions: [magento_load_customer_info]
+        exclude_definitions: [magento_load_customer_info, magento_customer_creation]
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   40
