@@ -68,7 +68,8 @@ class Cart extends ExtendCart implements
     ChannelAwareInterface,
     FirstNameInterface,
     LastNameInterface,
-    OriginAwareInterface
+    OriginAwareInterface,
+    IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait, ChannelEntityTrait;
 

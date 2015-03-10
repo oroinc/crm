@@ -61,7 +61,8 @@ class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
     RFMAwareInterface,
-    OriginAwareInterface
+    OriginAwareInterface,
+    IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
@@ -212,7 +213,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -227,7 +228,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -260,7 +261,7 @@ class Customer extends ExtendCustomer implements
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
-     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
      * )
      * @ConfigField(
      *      defaultValues={
@@ -276,7 +277,7 @@ class Customer extends ExtendCustomer implements
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
-     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
      * )
      * @ConfigField(
      *      defaultValues={

@@ -40,6 +40,7 @@ parameters:
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
+    orocrm_magento.import_strategy.customer_group.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerGroupStrategy
 
     # writers
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
@@ -208,6 +209,7 @@ services:
          - [setChannelHelper, [@orocrm_channel.importexport.helper.channel]]
          - [setAddressHelper, [@orocrm_magento.importexport.address_import_helper]]
          - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+         - [setCustomerGroupHelper, [@orocrm_magento.importexport.customer_group_helper]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%

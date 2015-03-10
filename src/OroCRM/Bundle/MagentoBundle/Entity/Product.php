@@ -38,7 +38,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  * )
  * @Oro\Loggable
  */
-class Product extends ExtendProduct
+class Product extends ExtendProduct implements IntegrationAwareInterface
 {
     use IntegrationEntityTrait;
 

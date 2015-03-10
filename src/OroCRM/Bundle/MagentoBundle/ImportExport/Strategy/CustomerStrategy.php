@@ -6,6 +6,7 @@ use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
@@ -25,9 +26,19 @@ class CustomerStrategy extends AbstractImportStrategy
     protected $storeStrategy;
 
     /**
+     * @var CustomerGroupHelper
+     */
+    protected $customerGroupHelper;
+
+    /**
      * @var Address[]
      */
-    protected $importingAddresses;
+    protected $importingAddresses = [];
+
+    /**
+     * @var array
+     */
+    protected $addressRegions = [];
 
     /**
      * @param ChannelHelper $channelHelper
@@ -54,15 +65,35 @@ class CustomerStrategy extends AbstractImportStrategy
     }
 
     /**
+     * @param CustomerGroupHelper $customerGroupHelper
+     * @return CustomerStrategy
+     */
+    public function setCustomerGroupHelper($customerGroupHelper)
+    {
+        $this->customerGroupHelper = $customerGroupHelper;
+
+        return $this;
+    }
+
+    /**
      * @param Customer $entity
      * @return Customer
      */
     protected function beforeProcessEntity($entity)
     {
+        $this->importingAddresses = [];
+        $this->addressRegions = [];
         $importingAddresses = $entity->getAddresses();
         if ($importingAddresses) {
             foreach ($importingAddresses as $address) {
-                $this->importingAddresses[$address->getOriginId()] = $address;
+                $originId = $address->getOriginId();
+                $this->importingAddresses[$originId] = $address;
+
+                if ($address->getRegion()) {
+                    $this->addressRegions[$originId] = $address->getRegion()->getCode();
+                } else {
+                    $this->addressRegions[$originId] = null;
+                }
             }
         }
 
@@ -115,8 +146,11 @@ class CustomerStrategy extends AbstractImportStrategy
      */
     protected function processGroup(Customer $entity)
     {
-        if ($entity->getGroup()) {
-            $this->updateRelations($entity->getGroup());
+        $group = $entity->getGroup();
+        if ($group) {
+            $group = $this->customerGroupHelper->getUniqueGroup($group);
+            $group->setChannel($entity->getChannel());
+            $entity->setGroup($group);
         }
     }
 
@@ -131,6 +165,14 @@ class CustomerStrategy extends AbstractImportStrategy
                 if (array_key_exists($originId, $this->importingAddresses)) {
                     $remoteAddress = $this->importingAddresses[$originId];
                     $this->addressHelper->mergeAddressTypes($address, $remoteAddress);
+
+                    if (!empty($this->addressRegions[$originId]) && $address->getCountry()) {
+                        $this->addressHelper->updateRegionByMagentoRegionId(
+                            $address,
+                            $this->addressRegions[$originId],
+                            $address->getCountry()->getIso2Code()
+                        );
+                    }
                 }
             }
         }

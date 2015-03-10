@@ -13,8 +13,6 @@ class OrderAddressDataConverter extends AbstractAddressDataConverter
             parent::getHeaderConversionRules(),
             [
                 'fax'          => 'fax',
-                'telephone'    => 'phone',
-                'company'      => 'organization',
                 'customer_id'  => 'customerId',
                 'address_type' => 'types:0:name'
             ]

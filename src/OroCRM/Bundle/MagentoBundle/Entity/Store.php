@@ -38,7 +38,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
  *      }
  * )
  */
-class Store extends ExtendStore implements OriginAwareInterface
+class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait;
 

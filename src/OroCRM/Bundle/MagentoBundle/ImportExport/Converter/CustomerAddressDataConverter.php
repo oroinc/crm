@@ -14,7 +14,7 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
         return array_merge(
             parent::getHeaderConversionRules(),
             [
-                'customer_address_id' => 'originId'
+                'customer_address_id' => 'originId',
             ]
         );
     }
