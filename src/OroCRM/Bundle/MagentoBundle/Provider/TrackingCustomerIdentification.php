@@ -6,10 +6,11 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 
+use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
@@ -88,9 +89,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     }
 
     /**
-     * Returns FQCN for which visit should be assigned to.
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getTarget()
     {
