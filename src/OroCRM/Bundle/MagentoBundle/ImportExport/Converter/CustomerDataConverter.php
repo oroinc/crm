@@ -50,10 +50,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
         }
 
         if (!empty($importedRecord['gender'])) {
-            $importedRecord['gender'] = strtolower($importedRecord['gender']);
-            if (!in_array($importedRecord['gender'], [Gender::FEMALE, Gender::MALE], true)) {
-                $importedRecord['gender'] = null;
-            }
+            $importedRecord['gender'] = $this->getGender($importedRecord['gender']);
         }
 
         if (!empty($importedRecord['store']) && !empty($importedRecord['website'])) {
@@ -61,6 +58,29 @@ class CustomerDataConverter extends AbstractTreeDataConverter
         }
 
         return $importedRecord;
+    }
+
+    /**
+     * @param string|int $gender
+     * @return null|string
+     */
+    protected function getGender($gender)
+    {
+        if (is_integer($gender)) {
+            if ($gender == 1) {
+                $gender = Gender::MALE;
+            }
+            if ($gender == 2) {
+                $gender = Gender::FEMALE;
+            }
+        } else {
+            $gender = strtolower($gender);
+            if (!in_array($gender, [Gender::FEMALE, Gender::MALE], true)) {
+                $gender = null;
+            }
+        }
+
+        return $gender;
     }
 
     /**
