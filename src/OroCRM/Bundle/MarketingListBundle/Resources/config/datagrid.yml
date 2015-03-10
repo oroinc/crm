@@ -115,6 +115,21 @@ datagrid:
             entity_pagination: true
 
     # Segment based grids mixins:
+    orocrm-marketing-full-mixin:
+        source:
+            query:
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem'
+                            alias: 'mli'
+                            conditionType: 'WITH'
+                            condition: 'mli.entityId = __root_entity__.id AND mli.marketingList = :marketingListEntity'
+        options:
+            export: false
+            skip_count_walker: true
+            mixin: true
+
     orocrm-marketing-list-items-base-mixin:
         source:
             query:
@@ -253,7 +268,28 @@ datagrid:
                     confirm_content: orocrm.marketinglist.unremove_dialog.content
                     success:         orocrm.marketinglist.unremove_dialog.success
 
+    orocrm-marketing-list-entities-base-unsubscribe-mixin:
+        source:
+            query:
+                join:
+                    left:
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListUnsubscribedItem'
+                            alias: 'mlu'
+                            conditionType: 'WITH'
+                            condition: 'mlu.entityId = __root_entity__.id AND mlu.marketingList = :marketingListEntity'
+                        -
+                            join: 'OroCRM\Bundle\MarketingListBundle\Entity\MarketingListRemovedItem'
+                            alias: 'mlr'
+                            conditionType: 'WITH'
+                            condition: 'mlr.entityId = __root_entity__.id AND mlr.marketingList = :marketingListEntity'
+                where:
+                    and:
+                        - mlr.id IS NULL
+                        - mlu.id IS NULL
+
     orocrm-marketing-list-entities-mixin:
+        extends: orocrm-marketing-list-entities-base-unsubscribe-mixin
         source:
             query:
                 join:
@@ -409,6 +445,7 @@ datagrid:
                     success:         orocrm.marketinglist.unremove_dialog.success
 
     orocrm-marketing-list-manual-entities-mixin:
+        extends: orocrm-marketing-list-entities-base-unsubscribe-mixin
         source:
             query:
                 join:
