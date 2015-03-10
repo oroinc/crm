@@ -134,6 +134,13 @@ class CartItem extends ExtendCartItem
     protected $productType;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="product_image_url", type="text", nullable=true)
+     */
+    protected $productImageUrl;
+
+    /**
      * @param float $customPrice
      *
      * @return CartItem
@@ -359,5 +366,24 @@ class CartItem extends ExtendCartItem
     public function getTaxClassId()
     {
         return $this->taxClassId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductImageUrl()
+    {
+        return $this->productImageUrl;
+    }
+
+    /**
+     * @param string $productImageUrl
+     * @return CartItem
+     */
+    public function setProductImageUrl($productImageUrl)
+    {
+        $this->productImageUrl = $productImageUrl;
+
+        return $this;
     }
 }
