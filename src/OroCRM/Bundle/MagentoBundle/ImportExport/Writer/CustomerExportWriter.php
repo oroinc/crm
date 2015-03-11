@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
+use Oro\Bundle\IntegrationBundle\Exception\TransportException;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+
 class CustomerExportWriter extends AbstractExportWriter
 {
     const CUSTOMER_ID_KEY = 'customer_id';
+    const FAULT_CODE_NOT_EXISTS = 102;
 
     /**
      * {@inheritdoc}
@@ -34,6 +38,14 @@ class CustomerExportWriter extends AbstractExportWriter
     {
         try {
             $customerId = $this->transport->createCustomer($item);
+        } catch (TransportException $e) {
+            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
+                $this->markCustomerRemoved($this->getEntity());
+            }
+
+            $this->logger->error($e->getMessage());
+
+            return;
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
@@ -72,5 +84,13 @@ class CustomerExportWriter extends AbstractExportWriter
         } else {
             $this->logger->error(sprintf('Customer with id %s was not updated', $customerId));
         }
+    }
+
+    /**
+     * @param Customer $getEntity
+     */
+    protected function markCustomerRemoved(Customer $getEntity)
+    {
+        // TODO: Use state manager and set STATE_MAGENTO_REMOVED to $address
     }
 }

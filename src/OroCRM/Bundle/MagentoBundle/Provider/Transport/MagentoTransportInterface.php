@@ -117,4 +117,18 @@ interface MagentoTransportInterface extends TransportInterface
      * @return bool True if the customer is updated
      */
     public function updateCustomer($customerId, array $customerData);
+
+    /**
+     * @param int $customerId
+     * @param array $item
+     * @return int
+     */
+    public function createCustomerAddress($customerId, $item);
+
+    /**
+     * @param int $customerAddressId
+     * @param array $item
+     * @return bool
+     */
+    public function updateCustomerAddress($customerAddressId, $item);
 }

@@ -13,13 +13,10 @@ class CustomerDataConverter extends AbstractTreeDataConverter
     protected function getHeaderConversionRules()
     {
         return [
-//             create
             'email' => 'email',
             'firstname' => 'firstName',
             'lastname' => 'lastName',
-//            'password' => 'password',
-//            'website_id' => 'website:originId', // Store is set from Iterator
-//            'store_id' => 'store:originId', // Website is set from Iterator
+//            'password' => 'password', // TODO: Add ability to set and change? customer password
             'group_id' => 'group:originId',
             'prefix' => 'namePrefix',
             'suffix' => 'nameSuffix',
@@ -27,14 +24,9 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'taxvat' => 'vat',
             'gender' => 'gender',
             'middlename' => 'middleName',
-//             list
             'customer_id' => 'originId',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
-//            'increment_id' => 'incrementId',
-//            'created_in' => 'createdIn',
-//            'confirmation' => 'confirmation',
-//            'password_hash' => 'passwordHash',
         ];
     }
 
@@ -50,7 +42,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
         }
 
         if (!empty($importedRecord['gender'])) {
-            $importedRecord['gender'] = $this->getGender($importedRecord['gender']);
+            $importedRecord['gender'] = $this->getOroGender($importedRecord['gender']);
         }
 
         if (!empty($importedRecord['store']) && !empty($importedRecord['website'])) {
@@ -64,7 +56,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
      * @param string|int $gender
      * @return null|string
      */
-    protected function getGender($gender)
+    protected function getOroGender($gender)
     {
         if (is_integer($gender)) {
             if ($gender == 1) {
@@ -84,10 +76,65 @@ class CustomerDataConverter extends AbstractTreeDataConverter
     }
 
     /**
+     * @param string $gender
+     * @return int|null
+     */
+    protected function getMagentoGender($gender)
+    {
+        if ($gender) {
+            if ($gender === Gender::MALE) {
+                return 1;
+            }
+            if ($gender === Gender::FEMALE) {
+                return 2;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getBackendHeader()
     {
         return array_values($this->getHeaderConversionRules());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToExportFormat(array $exportedRecord, $skipNullValues = true)
+    {
+        $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
+
+        if (isset($exportedRecord['store']['store_id'])) {
+            $exportedRecord['store_id'] =  $exportedRecord['store']['store_id'];
+            unset($exportedRecord['store']);
+        }
+
+        if (isset($exportedRecord['website']['id'])) {
+            $exportedRecord['website_id'] =  $exportedRecord['website']['id'];
+            unset($exportedRecord['website']);
+        }
+
+        if (isset($exportedRecord['group']['customer_group_id'])) {
+            $exportedRecord['group_id'] =  $exportedRecord['group']['customer_group_id'];
+            unset($exportedRecord['group']);
+        }
+
+        if (isset($exportedRecord['created_at'])) {
+            unset($exportedRecord['created_at']);
+        }
+
+        if (isset($exportedRecord['updated_at'])) {
+            unset($exportedRecord['updated_at']);
+        }
+
+        if (!empty($exportedRecord['gender'])) {
+            $exportedRecord['gender'] = $this->getMagentoGender($exportedRecord['gender']);
+        }
+
+        return $exportedRecord;
     }
 }

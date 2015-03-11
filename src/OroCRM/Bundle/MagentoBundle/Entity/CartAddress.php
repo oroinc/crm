@@ -32,6 +32,10 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCartAddress;
  */
 class CartAddress extends ExtendCartAddress implements OriginAwareInterface
 {
+    const SYNC_TO_MAGENTO = 4;
+    const SCHEDULE_SYNC_TO_MAGENTO = 8;
+    const MAGENTO_REMOVED = 16;
+
     use OriginTrait;
 
     /**

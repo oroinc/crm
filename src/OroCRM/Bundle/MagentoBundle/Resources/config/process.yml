@@ -123,15 +123,31 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   20
-        exclude_definitions: [magento_customer_creation]
+        exclude_definitions: [magento_customer_export, magento_customer_creation]
         actions_configuration:
             - @execute_job:
                 jobType: export
                 jobName: magento_customer_export
                 configuration:
                     channel: $channel
-                    useConfigurableNormalizer: true
                     entity: $.data
+                    writer_skip_clear: true
+                attribute: $.jobResult
+
+    magento_customer_address_export:
+        label:   'Export Magento Customer Address to Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
+        order:   20
+        exclude_definitions: [magento_customer_address_export]
+        actions_configuration:
+            - @execute_job:
+                jobType: export
+                jobName: magento_customer_address_export
+                configuration:
+                    channel: $channel
+                    entity: $.data
+                    writer_skip_clear: true
                 attribute: $.jobResult
 
     magento_analytics_customer_calculate:
@@ -222,6 +238,16 @@ triggers:
             queued:   true
 
     magento_customer_export:
+        -
+            event:    create
+            priority: 10
+            queued:   true
+        -
+            event:    update
+            priority: 10
+            queued:   true
+
+    magento_customer_address_export:
         -
             event:    create
             priority: 10

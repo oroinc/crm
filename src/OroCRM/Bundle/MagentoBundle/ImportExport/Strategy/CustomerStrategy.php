@@ -90,7 +90,7 @@ class CustomerStrategy extends AbstractImportStrategy
                 $this->importingAddresses[$originId] = $address;
 
                 if ($address->getRegion()) {
-                    $this->addressRegions[$originId] = $address->getRegion()->getCode();
+                    $this->addressRegions[$originId] = $address->getRegion()->getCombinedCode();
                 } else {
                     $this->addressRegions[$originId] = null;
                 }

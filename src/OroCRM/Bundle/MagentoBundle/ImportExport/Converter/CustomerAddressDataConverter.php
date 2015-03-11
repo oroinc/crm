@@ -15,6 +15,8 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
             parent::getHeaderConversionRules(),
             [
                 'customer_address_id' => 'originId',
+                'customer_id'         => 'owner:originId',
+                'region_id'           => 'region:combinedCode', // Note, this is integer identifier of magento region
             ]
         );
     }
@@ -36,5 +38,80 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
         }
 
         return $importedRecord;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getBackendHeader()
+    {
+        return array_merge(parent::getBackendHeader(), ['types:0:name', 'types:1:name']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToExportFormat(array $exportedRecord, $skipNullValues = true)
+    {
+        $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
+        $exportedRecord = $this->convertTypesToExportFormat($exportedRecord);
+
+        if (isset($exportedRecord['created_at'])) {
+            unset($exportedRecord['created_at']);
+        }
+
+        if (isset($exportedRecord['updated_at'])) {
+            unset($exportedRecord['updated_at']);
+        }
+
+        return $exportedRecord;
+    }
+
+    /**
+     * @param array $exportedRecord
+     * @return array
+     */
+    protected function convertTypesToExportFormat(array $exportedRecord)
+    {
+        $exportedRecord = array_merge(
+            $exportedRecord,
+            [
+                'is_default_billing' => false,
+                'is_default_shipping' => false
+            ]
+        );
+
+        if (isset($exportedRecord['types:0:name'])) {
+            $exportedRecord = array_merge(
+                $exportedRecord,
+                $this->getMagentoTypeData($exportedRecord['types:0:name'])
+            );
+            unset($exportedRecord['types:0:name']);
+        }
+        if (isset($exportedRecord['types:1:name'])) {
+            $exportedRecord = array_merge(
+                $exportedRecord,
+                $this->getMagentoTypeData($exportedRecord['types:1:name'])
+            );
+            unset($exportedRecord['types:1:name']);
+        }
+
+        return $exportedRecord;
+    }
+
+    /**
+     * @param string $type
+     * @return array
+     */
+    protected function getMagentoTypeData($type)
+    {
+        if ($type === AddressType::TYPE_BILLING) {
+            return ['is_default_billing' => true];
+        }
+        if ($type === AddressType::TYPE_SHIPPING) {
+            return ['is_default_shipping' => true];
+        }
+
+        return [];
     }
 }

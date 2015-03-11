@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
 use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerHandler extends UpdateHandler
@@ -32,6 +33,15 @@ class CustomerHandler extends UpdateHandler
                 $store = $entity->getStore();
                 if ($store) {
                     $entity->setWebsite($store->getWebsite());
+                }
+
+                if (!$entity->getAddresses()->isEmpty()) {
+                    /** @var Address $address */
+                    foreach ($entity->getAddresses() as $address) {
+                        if (!$address->getChannel()) {
+                            $address->setChannel($entity->getChannel());
+                        }
+                    }
                 }
 
                 $manager = $this->doctrineHelper->getEntityManager($entity);
