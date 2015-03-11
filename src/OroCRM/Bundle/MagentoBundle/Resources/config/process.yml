@@ -117,36 +117,33 @@ definitions:
                             organization:   $organization
                     - @unset_value: [$.accountName]
 
+            # TODO: Remove this and enable create trigger on magento_load_customer_info after BAP-7778
+            - @assign_constant_value:
+                attribute: $.infoSyncState
+                value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
+            - @assign_constant_value:
+                attribute: $.scheduleSyncState
+                value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SCHEDULE_INFO
+            - @create_object:
+                attribute: $.stateManager
+                class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+            - @call_method:
+                attribute: $.isSyncRequested
+                object: $.stateManager
+                method: 'isInState'
+                method_parameters: [$syncState, $.scheduleSyncState]
             - @tree:
                 conditions:
-                    @not_empty: $originId
+                    @equal: [$.isSyncRequested, true]
                 actions:
-                    - @assign_constant_value:
-                        attribute: $.infoSyncState
-                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
-                    - @assign_constant_value:
-                        attribute: $.scheduleSyncState
-                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SCHEDULE_INFO
-                    - @create_object:
-                        attribute: $.stateManager
-                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
                     - @call_method:
-                        attribute: $.isSyncRequested
                         object: $.stateManager
-                        method: 'isInState'
-                        method_parameters: [$syncState, $.scheduleSyncState]
-                    - @tree:
-                        conditions:
-                            @equal: [$.isSyncRequested, true]
-                        actions:
-                            - @call_method:
-                                object: $.stateManager
-                                method: 'removeState'
-                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
-                            - @call_method:
-                                object: $.stateManager
-                                method: 'addState'
-                                method_parameters: [$.data, 'syncState', $.infoSyncState]
+                        method: 'removeState'
+                        method_parameters: [$.data, 'syncState', $.scheduleSyncState]
+                    - @call_method:
+                        object: $.stateManager
+                        method: 'addState'
+                        method_parameters: [$.data, 'syncState', $.infoSyncState]
 
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
@@ -319,7 +316,7 @@ triggers:
     magento_customer_creation:
         -
             event:    create
-            priority: 30
+            priority: 40
             queued:   true
 
     magento_analytics_customer_calculate_imported:
@@ -350,5 +347,5 @@ triggers:
         -
             event:    update
             field:    syncState
-            priority: 40
+            priority: 30
             queued:   true
