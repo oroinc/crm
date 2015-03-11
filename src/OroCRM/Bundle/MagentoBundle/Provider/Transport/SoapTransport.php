@@ -146,6 +146,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     protected function pingMagento()
     {
         if (null === $this->isExtensionInstalled && null === $this->adminUrl) {
+            $multipleAttemptsEnabled = $this->multipleAttemptsEnabled;
+            $this->setMultipleAttemptsEnabled(false);
             try {
                 $result                     = $this->call(self::ACTION_PING);
                 $this->isExtensionInstalled = !empty($result->version);
@@ -155,6 +157,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
                     = $this->adminUrl
                     = false;
             }
+            $this->setMultipleAttemptsEnabled($multipleAttemptsEnabled);
         }
 
         return $this;

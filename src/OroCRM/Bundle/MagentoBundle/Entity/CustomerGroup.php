@@ -33,7 +33,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  * )
  * @Oro\Loggable
  */
-class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface
+class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface, IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait;
 

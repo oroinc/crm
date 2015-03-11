@@ -4,6 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+
+use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 class CustomerAddressType extends AbstractType
 {
@@ -14,7 +18,17 @@ class CustomerAddressType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-       $builder->add('phone', 'text', ['required' => false, 'label' => 'orocrm.magento.address.phone.label']);
+        $builder->add('phone', 'text', ['required' => false, 'label' => 'orocrm.magento.address.phone.label']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function finishView(FormView $view, FormInterface $form, array $options)
+    {
+        if (array_key_exists('label', $view->children)) {
+            FormUtils::appendClass($view->children['label'], 'hide');
+        }
     }
 
     /**

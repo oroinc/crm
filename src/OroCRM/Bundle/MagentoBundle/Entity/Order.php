@@ -59,7 +59,11 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Order extends ExtendOrder implements ChannelAwareInterface, FirstNameInterface, LastNameInterface
+class Order extends ExtendOrder implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    LastNameInterface,
+    IntegrationAwareInterface
 {
     const STATUS_CANCELED = 'canceled';
 

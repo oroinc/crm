@@ -2,19 +2,19 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-class MagentoAddressDataConverter extends AddressDataConverter
+use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\IntegrationAwareDataConverter;
+
+class CustomerGroupDataConverter extends IntegrationAwareDataConverter
 {
     /**
      * {@inheritdoc}
      */
     protected function getHeaderConversionRules()
     {
-        return array_merge(
-            parent::getHeaderConversionRules(),
-            array(
-                'customerAddressId' => 'originId'
-            )
-        );
+        return [
+            'customer_group_id' => 'originId',
+            'name' => 'name'
+        ];
     }
 
     /**

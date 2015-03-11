@@ -15,20 +15,6 @@ connector:
                     parameters:
                         batch_size: 25
 
-        mage_customer_reverse_sync:
-            title: "Customer's updates push to Magento"
-            type:   export
-            steps:
-                export:
-                    title: export
-                    class: Oro\Bundle\BatchBundle\Step\ItemStep
-                    services:
-                        reader:    oro_integration.reader.entity.by_id
-                        processor: orocrm_magento.importexport.customer.reverse.processor
-                        writer:    orocrm_magento.importexport.customer.reverse.writer
-                    parameters:
-                        batch_size: 100
-
         magento_customer_export:
             title: 'Export Magento Customer to Magento'
             type: export
