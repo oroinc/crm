@@ -35,7 +35,7 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
      */
     public function getExportJobName()
     {
-        return 'mage_customer_reverse_sync';
+        return 'magento_customer_export';
     }
 
     /**
