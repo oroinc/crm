@@ -316,7 +316,7 @@ triggers:
     magento_customer_creation:
         -
             event:    create
-            priority: 40
+            priority: 5
             queued:   true
 
     magento_analytics_customer_calculate_imported:
@@ -347,5 +347,5 @@ triggers:
         -
             event:    update
             field:    syncState
-            priority: 30
+            priority: 20
             queued:   true
