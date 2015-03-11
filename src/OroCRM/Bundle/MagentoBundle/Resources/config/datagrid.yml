@@ -533,7 +533,7 @@ datagrid:
                 acl_recource: orocrm_magento_product_view
                 rowAction:    true
         options:
-            entityHint: product
+            entityHint: magento product
 
     magento-order-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order

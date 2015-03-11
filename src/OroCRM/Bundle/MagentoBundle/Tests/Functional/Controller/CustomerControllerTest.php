@@ -24,6 +24,17 @@ class CustomerControllerTest extends AbstractController
         return self::$customer->getid();
     }
 
+    /**
+     * Moved here to fix order of executed tests, because create and update tests work with data same to fixture.
+     *
+     * @dataProvider gridProvider
+     * @param array $requestData
+     */
+    public function testGrid($requestData)
+    {
+        parent::testGrid($requestData);
+    }
+
     public function testView()
     {
         $this->client->request(
@@ -45,6 +56,9 @@ class CustomerControllerTest extends AbstractController
         $this->assertContains('web site', $result->getContent());
     }
 
+    /**
+     * @depends testGrid
+     */
     public function testCreate()
     {
         $crawler = $this->client->request('GET', $this->getUrl('orocrm_magento_customer_create'));
