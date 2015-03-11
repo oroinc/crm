@@ -169,8 +169,8 @@ class CustomerStrategy extends AbstractImportStrategy
                     if (!empty($this->addressRegions[$originId]) && $address->getCountry()) {
                         $this->addressHelper->updateRegionByMagentoRegionId(
                             $address,
-                            $this->addressRegions[$originId],
-                            $address->getCountry()->getIso2Code()
+                            $address->getCountry()->getIso2Code(),
+                            $this->addressRegions[$originId]
                         );
                     }
                 }
