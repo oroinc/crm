@@ -18,9 +18,18 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
         return $reader;
     }
 
-    public function testRead()
+    /**
+     * @param array $data
+     *
+     * @dataProvider dataProvider
+     */
+    public function testRead(array $data)
     {
-        $originId = uniqid();
+        $this->executionContext->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($data));
+
+        $originId = 123;
         $expectedData = new Customer();
         $expectedData->setOriginId($originId);
 
@@ -32,9 +41,9 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
             ->method('getCustomerInfo')
             ->will(
                 $this->returnCallback(
-                    function (Customer $customer) {
+                    function ($customerId) {
                         $object = new \stdClass();
-                        $object->origin_id = $customer->getOriginId();
+                        $object->origin_id = $customerId;
                         $object->group_id = 0;
                         $object->store_id = 0;
                         $object->website_id = 0;
@@ -50,14 +59,14 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
             ->method('getCustomerAddresses')
             ->will($this->returnValue([$address]));
 
-        $this->transport->expects($this->once())
+        $this->transport->expects($this->atLeastOnce())
             ->method('getDependencies')
             ->will(
                 $this->returnValue(
                     [
                         'groups' => [['customer_group_id' => $originId]],
                         'websites' => [['id' => $originId]],
-                        'stores' => [['website_id' => $originId]],
+                        'stores' => [['website_id' => $originId]]
                     ]
                 )
             );
@@ -81,5 +90,20 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
             $reader->read()
         );
         $this->assertNull($reader->read());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataProvider()
+    {
+        return [
+            [
+                [
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer' => [123],
+                    'OroCRM\Bundle\MagentoBundle\Entity\Order' => [321]
+                ]
+            ]
+        ];
     }
 }

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Item\ItemReaderInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
@@ -30,6 +31,12 @@ abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface */
     protected $transport;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext */
+    protected $jobExecution;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ExecutionContext */
+    protected $executionContext;
 
     /** @var LoggerStrategy */
     protected $logger;
@@ -70,38 +77,20 @@ abstract class AbstractInfoReaderTest extends \PHPUnit_Framework_TestCase
         $this->contextMediator->expects($this->any())
             ->method('getChannel')
             ->will($this->returnValue($channel));
+
+        $this->executionContext = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+        $this->jobExecution = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
+        $this->jobExecution->expects($this->any())
+            ->method('getExecutionContext')
+            ->will($this->returnValue($this->executionContext));
+
+        $this->stepExecutionMock->expects($this->once())
+            ->method('getJobExecution')
+            ->will($this->returnValue($this->jobExecution));
     }
 
     /**
      * @return ItemReaderInterface|StepExecutionAwareInterface
      */
     abstract protected function getReader();
-
-    /**
-     * @expectedException \Oro\Bundle\ImportExportBundle\Exception\LogicException
-     * @expectedExceptionMessage Step execution must be set
-     */
-    public function testReadWithoutStepExecution()
-    {
-        $this->getReader()->read();
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Data is missing
-     */
-    public function testReadWithoutData()
-    {
-        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
-
-        $this->contextRegistry->expects($this->any())
-            ->method('getByStepExecution')
-            ->will($this->returnValue($context));
-
-        $reader = $this->getReader();
-
-        $reader->setStepExecution($this->stepExecutionMock);
-
-        $reader->read();
-    }
 }

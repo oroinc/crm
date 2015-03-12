@@ -5,12 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Reader;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
-use Akeneo\Bundle\BatchBundle\Item\ItemReaderInterface;
-use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextReader;
 
-abstract class AbstractContextReaderTest extends \PHPUnit_Framework_TestCase
+class ContextReaderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry */
     protected $contextRegistry;
@@ -75,12 +74,52 @@ abstract class AbstractContextReaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ItemReaderInterface|StepExecutionAwareInterface
+     * @param string $contextKey
+     *
+     * @return ContextReader
      */
-    abstract protected function getReader();
+    protected function getReader($contextKey = 'ids')
+    {
+        $reader = new ContextReader($this->contextRegistry);
+        $reader->setContextKey($contextKey);
+
+        return $reader;
+    }
 
     /**
      * @return array
      */
-    abstract protected function getData();
+    protected function getData()
+    {
+        $obj = new \stdClass();
+        $obj->prop = 1;
+
+        $obj2 = new \stdClass();
+        $obj2->prop = 2;
+
+        return [$obj, $obj2];
+    }
+
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Context key is missing
+     */
+    public function testReadFailed()
+    {
+        $reader = $this->getReader(null);
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|StepExecution $stepExecution */
+        $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+
+        $this->contextRegistry->expects($this->once())
+            ->method('getByStepExecution')
+            ->with($stepExecution)
+            ->will($this->returnValue($context));
+
+        $reader->setStepExecution($stepExecution);
+    }
 }

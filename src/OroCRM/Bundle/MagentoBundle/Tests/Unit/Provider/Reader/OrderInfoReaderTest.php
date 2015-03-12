@@ -18,9 +18,18 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
         return $reader;
     }
 
-    public function testRead()
+    /**
+     * @param array $data
+     *
+     * @dataProvider dataProvider
+     */
+    public function testRead(array $data)
     {
-        $originId = uniqid();
+        $this->executionContext->expects($this->once())
+            ->method('get')
+            ->will($this->returnValue($data));
+
+        $originId = 321;
         $expectedData = new Order();
         $expectedData->setIncrementId($originId);
 
@@ -49,7 +58,7 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
                     [
                         'groups' => [['customer_group_id' => $originId]],
                         'websites' => [$originId => ['id' => $originId, 'code' => 'code', 'name' => 'name']],
-                        'stores' => [['website_id' => $originId, 'code' => 'code', 'name' => 'name']],
+                        'stores' => [['website_id' => $originId, 'code' => 'code', 'name' => 'name']]
                     ]
                 )
             );
@@ -71,5 +80,21 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
             $reader->read()
         );
         $this->assertNull($reader->read());
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function dataProvider()
+    {
+        return [
+            [
+                [
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer' => [123],
+                    'OroCRM\Bundle\MagentoBundle\Entity\Order' => [321]
+                ]
+            ]
+        ];
     }
 }
