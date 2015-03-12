@@ -55,7 +55,7 @@ class CustomerRepository extends EntityRepository
      * @param Customer $customer
      * @param string $value
      */
-    public function updateCustomerLifetimeValueByOrderId(Customer $customer, $value)
+    public function updateCustomerLifetimeValue(Customer $customer, $value)
     {
         $qb = $this
             ->createQueryBuilder('c')

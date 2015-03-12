@@ -32,7 +32,7 @@ class OrderListener
 
         // if new order has valuable subtotal
         if ($this->isOrderValid($entity) && $entity->getSubtotalAmount()) {
-            $this->ordersForUpdate[$entity->getId()] = true;
+            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity);
         }
     }
 
@@ -122,7 +122,7 @@ class OrderListener
 
         $subtotalAmount = $order->getSubtotalAmount();
         if ($subtotalAmount) {
-            $customerRepository->updateCustomerLifetimeValueByOrderId($order->getCustomer(), $subtotalAmount);
+            $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
         }
     }
 }
