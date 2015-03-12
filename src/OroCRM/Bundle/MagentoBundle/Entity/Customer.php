@@ -62,11 +62,9 @@ class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
     RFMAwareInterface,
-    SyncStateAwareInterface
+    SyncStateAwareInterface,
+    OriginAwareInterface
 {
-    const SYNC_INFO = 1;
-    const SCHEDULE_INFO = 2;
-
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
     /*
@@ -494,8 +492,8 @@ class Customer extends ExtendCustomer implements
     public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originId) {
-                return $item->getOriginId() == $originId;
+            function (Address $item) use ($originId) {
+                return $item->getOriginId() === $originId;
             }
         )->first();
     }

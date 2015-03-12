@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -70,6 +71,18 @@ class OrderStrategy extends BaseStrategy
 
         // check errors, update context increments
         return $this->validateAndUpdateContext($order);
+    }
+
+    /**
+     * @param Order $entity
+     */
+    protected function saveOriginIdContext($entity)
+    {
+        if ($entity instanceof Order) {
+            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
+            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getIncrementId();
+            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
+        }
     }
 
     /**

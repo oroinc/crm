@@ -67,7 +67,6 @@ class Order extends ExtendOrder implements
     LastNameInterface,
     SyncStateAwareInterface
 {
-    const SYNC_INFO = 1;
     const STATUS_CANCELED = 'canceled';
 
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;

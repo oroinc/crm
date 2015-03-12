@@ -14,6 +14,15 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+                load_customer_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.customer_info
+                        processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
 
         mage_customer_reverse_sync:
             title: "Customer's updates push to Magento"
@@ -74,6 +83,24 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+                load_customer_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.customer_info
+                        processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                load_order_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.order_info
+                        processor: orocrm_magento.importexport.processor.import_order
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
 
         mage_cart_import:
             title: "Cart(quote) import from Magento"
@@ -106,31 +133,12 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
-
-        mage_load_order_info:
-            title: 'Load order info using "salesOrderInfo" action'
-            type:  import
-            steps:
-                import:
-                    title: import
-                    class: Oro\Bundle\BatchBundle\Step\ItemStep
-                    services:
-                        reader:    orocrm_magento.reader.order_info
-                        processor: oro_importexport.processor.import_delegate
-                        writer:    orocrm_magento.writer.proxy_entity_writer
-                    parameters:
-                        batch_size: 25
-
-        mage_load_customer_info:
-            title: 'Load customer info'
-            type:  import
-            steps:
-                import:
-                    title: import
-                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                load_customer_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.reader.customer_info
-                        processor: oro_importexport.processor.import_delegate
+                        processor: orocrm_magento.importexport.processor.import_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

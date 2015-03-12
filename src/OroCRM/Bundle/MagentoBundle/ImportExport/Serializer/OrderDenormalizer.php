@@ -6,7 +6,6 @@ use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\SyncStateAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
@@ -66,10 +65,6 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
 
         /** @var Order $order */
         $order = parent::denormalize($data, $class, $format, $context);
-
-        if (!array_key_exists('addresses', $data)) {
-            $this->stateManager->addState($order, SyncStateAwareInterface::PROPERTY, Order::SYNC_INFO);
-        }
 
         $integration = $this->importHelper->getIntegrationFromContext($context);
         $order->setChannel($integration);

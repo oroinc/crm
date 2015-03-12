@@ -60,11 +60,11 @@ parameters:
 
     # Readers
     orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
-    orocrm_magento.reader.context_order.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextOrderReader
+    orocrm_magento.reader.context.class:                                        OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextReader
     orocrm_magento.reader.order_info.class:                                     OroCRM\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
     orocrm_magento.reader.customer_info.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
-    orocrm_magento.reader.context_cart.class:                                   OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader
-    # Processor
+
+   # Processor
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
     orocrm_magento.importexport.processor.context.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
 
@@ -325,10 +325,11 @@ services:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
 
     orocrm_magento.importexport.processor.import_order:
-        parent: oro_importexport.processor.import_abstract
+        parent: orocrm_magento.importexport.processor.abstract
         calls:
              - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
              - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
+             - [setEntityName, [%orocrm_magento.entity.order.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
 
@@ -431,15 +432,21 @@ services:
         calls:
             - [setContextKey, ['postProcessCarts']]
 
-    orocrm_magento.reader.context_order:
-        class: %orocrm_magento.reader.context_order.class%
+    orocrm_magento.reader.context:
+        class: %orocrm_magento.reader.context.class%
+        abstract: true
         arguments:
             - @oro_importexport.context_registry
 
+    orocrm_magento.reader.context_order:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessOrders']]
+
     orocrm_magento.reader.context_cart:
-        class: %orocrm_magento.reader.context_cart.class%
-        arguments:
-            - @oro_importexport.context_registry
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCarts']]
 
     orocrm_magento.reader.order_info:
         class: %orocrm_magento.reader.order_info.class%

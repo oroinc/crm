@@ -2,33 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
-use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class CartWithExistingCustomerStrategy extends CartStrategy implements StepExecutionAwareInterface
+class CartWithExistingCustomerStrategy extends CartStrategy
 {
     const CONTEXT_CART_POST_PROCESS = 'postProcessCarts';
-
-    /** @var StepExecution */
-    protected $stepExecution;
 
     /** @var Customer */
     protected $customer;
 
-    /**
-     * @param StepExecution $stepExecution
-     */
-    public function setStepExecution(StepExecution $stepExecution)
-    {
-        $this->stepExecution = $stepExecution;
-    }
-
-    /**
+   /**
      * {@inheritdoc}
      */
     public function process($importingCart)
@@ -77,17 +62,5 @@ class CartWithExistingCustomerStrategy extends CartStrategy implements StepExecu
         $customerToProcess = $this->customer ?: $customer;
 
         return parent::updateCustomer($newCart, $customerToProcess);
-    }
-
-    /**
-     * @return ExecutionContext
-     */
-    protected function getExecutionContext()
-    {
-        if (!$this->stepExecution) {
-            throw new \InvalidArgumentException('Execution context is not configured');
-        }
-
-        return $this->stepExecution->getJobExecution()->getExecutionContext();
     }
 }

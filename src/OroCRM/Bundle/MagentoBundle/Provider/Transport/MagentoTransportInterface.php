@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
@@ -93,19 +92,19 @@ interface MagentoTransportInterface extends TransportInterface
     /**
      * Retrieve customer information from magento.
      *
-     * @param Customer $customer
-     * @return mixed
+     * @param string $originId
+     * @return object
      */
-    public function getCustomerInfo(Customer $customer);
+    public function getCustomerInfo($originId);
 
     /**
      * Retrieve customer address list
      *
-     * @param Customer $customer
+     * @param string $originId
      *
      * @return array
      */
-    public function getCustomerAddresses(Customer $customer);
+    public function getCustomerAddresses($originId);
 
     /**
      * Parse exception from remote side and returns generic code

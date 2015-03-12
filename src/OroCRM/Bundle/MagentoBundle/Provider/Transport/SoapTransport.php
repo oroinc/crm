@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
@@ -342,10 +341,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function getCustomerAddresses(Customer $customer)
+    public function getCustomerAddresses($originId)
     {
-        $customerId = $customer->getOriginId();
-        $addresses  = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $customerId]);
+        $addresses  = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
         $addresses  = WSIUtils::processCollectionResponse($addresses);
 
         return $addresses;
@@ -354,11 +352,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function getCustomerInfo(Customer $customer)
+    public function getCustomerInfo($originId)
     {
-        $customerId = $customer->getOriginId();
-
-        return $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $customerId]);
+        return $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
     }
 
     /**

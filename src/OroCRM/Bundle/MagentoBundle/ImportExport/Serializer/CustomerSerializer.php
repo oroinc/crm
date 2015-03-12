@@ -23,7 +23,6 @@ use OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ReverseWriter;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
-use OroCRM\Bundle\MagentoBundle\Entity\SyncStateAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
 /**
@@ -376,7 +375,6 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
 
         $this->setScalarFieldsValues($resultObject, $mappedData);
         $this->setObjectFieldsValues($resultObject, $mappedData, $format, $context);
-        $this->updateStates($resultObject, $data);
 
         return $resultObject;
     }
@@ -671,16 +669,5 @@ class CustomerSerializer extends AbstractNormalizer implements DenormalizerInter
         }
 
         return $bapAddress;
-    }
-
-    /**
-     * @param Customer $resultObject
-     * @param array $data
-     */
-    protected function updateStates(Customer $resultObject, array $data)
-    {
-        if (!array_key_exists('addresses', $data)) {
-            $this->stateManager->addState($resultObject, SyncStateAwareInterface::PROPERTY, Customer::SCHEDULE_INFO);
-        }
     }
 }
