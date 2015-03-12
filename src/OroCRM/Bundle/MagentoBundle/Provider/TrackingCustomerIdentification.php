@@ -99,7 +99,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     }
 
     /**
-     * Parse user identifier string and returns PK value by which identity object can be retrived.
+     * Parse user identifier string and returns value for column by which identity object can be retrieved.
      * Returns null in case identifier is not found.
      *
      * @param string $identifier
