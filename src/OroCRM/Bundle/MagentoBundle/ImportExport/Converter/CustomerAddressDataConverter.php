@@ -43,6 +43,20 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
     /**
      * {@inheritdoc}
      */
+    protected function convertImportedRegion(array $importedRecord)
+    {
+        if (empty($importedRecord['region']['combinedCode'])) {
+            $importedRecord['region'] = null;
+        } else {
+            $importedRecord['region']['combinedCode'] = (string)$importedRecord['region']['combinedCode'];
+        }
+
+        return $importedRecord;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getBackendHeader()
     {
         return array_merge(parent::getBackendHeader(), ['types:0:name', 'types:1:name']);

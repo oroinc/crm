@@ -10,7 +10,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
 {
     const CUSTOMER_ADDRESS_ID_KEY = 'customer_address_id';
     const CUSTOMER_ID_KEY = 'customer_id';
-    const FAULT_CODE_NOT_EXISTS = 102;
+    const FAULT_CODE_NOT_EXISTS = '102';
 
     /**
      * @var string

@@ -40,6 +40,17 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
         if (!empty($importedRecord['street']) && strpos($importedRecord['street'], "\n") !== false) {
             list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
         }
+        $importedRecord = $this->convertImportedRegion($importedRecord);
+
+        return $importedRecord;
+    }
+
+    /**
+     * @param array $importedRecord
+     * @return array
+     */
+    protected function convertImportedRegion(array $importedRecord)
+    {
         if (empty($importedRecord['region']['code'])) {
             $importedRecord['region'] = null;
         }

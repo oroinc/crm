@@ -29,6 +29,11 @@ class ContextEntityReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $context;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $doctrineHelper;
+
     protected function setUp()
     {
         $this->contextRegistry = $this->getMockbuilder('Oro\Bundle\ImportExportBundle\Context\ContextRegistry')
@@ -45,8 +50,13 @@ class ContextEntityReaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->reader = new ContextEntityReader($this->contextRegistry);
         $this->reader->setStepExecution($this->stepExecution);
+        $this->reader->setDoctrineHelper($this->doctrineHelper);
     }
 
     /**
@@ -58,16 +68,40 @@ class ContextEntityReaderTest extends \PHPUnit_Framework_TestCase
         $this->reader->read();
     }
 
-    public function testRead()
+    public function testReadSame()
     {
         $expected = new \stdClass();
 
-        $this->context->expects($this->once())
+        $this->doctrineHelper->expects($this->exactly(2))
+            ->method('getSingleEntityIdentifier')
+            ->will($this->returnValue(1));
+
+        $this->context->expects($this->exactly(2))
             ->method('getOption')
             ->with($this->equalTo('entity'))
             ->will($this->returnValue($expected));
 
         $this->assertEquals($expected, $this->reader->read());
         $this->assertNull($this->reader->read());
+    }
+
+    public function testReadDifferent()
+    {
+        $expected = new \stdClass();
+
+        $this->doctrineHelper->expects($this->at(0))
+            ->method('getSingleEntityIdentifier')
+            ->will($this->returnValue(1));
+        $this->doctrineHelper->expects($this->at(1))
+            ->method('getSingleEntityIdentifier')
+            ->will($this->returnValue(2));
+
+        $this->context->expects($this->exactly(2))
+            ->method('getOption')
+            ->with($this->equalTo('entity'))
+            ->will($this->returnValue($expected));
+
+        $this->assertEquals($expected, $this->reader->read());
+        $this->assertEquals($expected, $this->reader->read());
     }
 }

@@ -9,7 +9,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 class CustomerExportWriter extends AbstractExportWriter
 {
     const CUSTOMER_ID_KEY = 'customer_id';
-    const FAULT_CODE_NOT_EXISTS = 102;
+    const FAULT_CODE_NOT_EXISTS = '102';
 
     /**
      * {@inheritdoc}
@@ -55,12 +55,6 @@ class CustomerExportWriter extends AbstractExportWriter
             $this->logger->info(
                 sprintf('Customer with id %s successfully created with data %s', $customerId, json_encode($item))
             );
-        } catch (TransportException $e) {
-            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
-                $this->markRemoved($entity);
-            }
-
-            $this->logger->error($e->getMessage());
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
         }
@@ -88,6 +82,12 @@ class CustomerExportWriter extends AbstractExportWriter
             } else {
                 $this->logger->error(sprintf('Customer with id %s was not updated', $customerId));
             }
+        } catch (TransportException $e) {
+            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
+                $this->markRemoved($entity);
+            }
+
+            $this->logger->error($e->getMessage());
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
@@ -109,8 +109,12 @@ class CustomerExportWriter extends AbstractExportWriter
      */
     protected function markSynced(Customer $customer)
     {
-        $this->getStateManager()->removeState($customer, 'syncState', Customer::SYNC_TO_MAGENTO);
-        $this->markAddressesForSync($customer);
+        $stateManager = $this->getStateManager();
+
+        if (!$stateManager->isInState($customer->getSyncState(), Customer::MAGENTO_REMOVED)) {
+            $stateManager->removeState($customer, 'syncState', Customer::SYNC_TO_MAGENTO);
+            $this->markAddressesForSync($customer);
+        }
     }
 
     /**
@@ -119,9 +123,13 @@ class CustomerExportWriter extends AbstractExportWriter
     protected function markAddressesForSync(Customer $customer)
     {
         $stateManager = $this->getStateManager();
+
         if (!$customer->getAddresses()->isEmpty()) {
+            /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
-                $stateManager->addState($address, 'syncState', Address::SYNC_TO_MAGENTO);
+                if (!$stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED)) {
+                    $stateManager->addState($address, 'syncState', Address::SYNC_TO_MAGENTO);
+                }
             }
         }
     }
@@ -131,10 +139,10 @@ class CustomerExportWriter extends AbstractExportWriter
      */
     protected function markAddressesRemoved(Customer $customer)
     {
-        $stateManager = $this->getStateManager();
         if (!$customer->getAddresses()->isEmpty()) {
+            /** @var Address $address */
             foreach ($customer->getAddresses() as $address) {
-                $stateManager->addState($address, 'syncState', Address::MAGENTO_REMOVED);
+                $address->setSyncState(Address::MAGENTO_REMOVED);
             }
         }
     }

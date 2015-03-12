@@ -321,3 +321,5 @@ services:
         class: %orocrm_magento.importexport.reader.entity.class%
         arguments:
             - @oro_importexport.context_registry
+        calls:
+            - [setDoctrineHelper, [@oro_entity.doctrine_helper]]
