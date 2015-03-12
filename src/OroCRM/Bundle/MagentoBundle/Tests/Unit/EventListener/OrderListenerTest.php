@@ -14,24 +14,28 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 class OrderListenerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $customerRepository;
+
+    /**
      * @param Order|object $order
-     * @param float|null $newLifetime
      * @param float $expectedLifetime
      * @dataProvider prePersistDataProvider
      */
-    public function testPrePersist($order, $newLifetime = null, $expectedLifetime = null)
+    public function testPrePersist($order, $expectedLifetime = null)
     {
-        if ($newLifetime) {
-            $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
+        $entityManager = $this->createEntityManagerMock();
+        if ($expectedLifetime) {
+            $this->customerRepository->expects($this->once())
+                ->method('updateCustomerLifetimeValue')
+                ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
         } else {
-            $entityManager = $this->createEntityManagerMock();
+            $this->customerRepository->expects($this->never())->method('updateCustomerLifetimeValue');
         }
 
         $listener = new OrderListener();
         $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
-        if ($order instanceof Order && $order->getCustomer() instanceof Customer) {
-            $this->assertEquals($expectedLifetime, $order->getCustomer()->getLifetime());
-        }
     }
 
     /**
@@ -44,9 +48,9 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'zero subtotal'      => [$this->createOrder(null, 0)],
             'no customer'        => [$this->createOrder(null)],
             'incorrect customer' => [$this->createOrder(new \DateTime())],
-            'equal lifetime'     => [$this->createOrder($this->createCustomer(20), 10), 20, 30],
-            'updated lifetime'   => [$this->createOrder($this->createCustomer(20), 15), 30, 45],
-            'canceled order'     => [$this->createOrder($this->createCustomer(20), 3, Order::STATUS_CANCELED), 30, 30],
+            'equal lifetime'     => [$this->createOrder($this->createCustomer(), 10), 10],
+            'updated lifetime'   => [$this->createOrder($this->createCustomer(), 15), 15],
+            'canceled order'     => [$this->createOrder($this->createCustomer(), 3, Order::STATUS_CANCELED)],
         ];
     }
 
@@ -103,16 +107,13 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider postFlushProvider
+     * @param Order $order
+     * @param null|int $newLifetime
      */
-    public function testPostFlush($order, $shouldBeFlushed = false, $newLifetime = null)
+    public function testPostFlush($order, $newLifetime = null)
     {
         if ($newLifetime) {
             $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
-            if ($shouldBeFlushed) {
-                $entityManager
-                    ->expects($this->once())
-                    ->method('flush');
-            }
         } else {
             $entityManager = $this->createEntityManagerMock();
         }
@@ -125,11 +126,15 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             $reflectionProperty->setValue($listener, [1 => true]);
         }
 
-        $listener->postFlush(new PostFlushEventArgs($entityManager));
-
         if ($newLifetime) {
-            $this->assertEquals($order->getCustomer()->getLifetime(), $newLifetime);
+            $this->customerRepository->expects($this->once())
+                ->method('updateCustomerLifetimeValue')
+                ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $newLifetime);
+        } else {
+            $this->customerRepository->expects($this->never())->method('updateCustomerLifetimeValue');
         }
+
+        $listener->postFlush(new PostFlushEventArgs($entityManager));
     }
 
     /**
@@ -142,44 +147,21 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'no customer'          => [$this->createOrder(null)],
             'incorrect customer'   => [$this->createOrder(new \DateTime())],
             'subtotal not changed' => [$this->createOrder($this->createCustomer())],
-            'equal lifetime'       => [
-                $this->createOrder($this->createCustomer(20)),
-                false,
-                20,
-            ],
-            'updated lifetime'     => [
-                $this->createOrder($this->createCustomer(20)),
-                true,
-                30,
-            ],
+            'updated lifetime'     => [$this->createOrder($this->createCustomer(20)), 10.1,],
         ];
     }
 
     /**
      * @param Customer|null $customer
-     * @param float|null    $newLifetime
      *
      * @return EntityManager
      * @throws \PHPUnit_Framework_Exception
      */
-    protected function createEntityManagerMock($customer = null, $newLifetime = null)
+    protected function createEntityManagerMock($customer = null)
     {
-        $orderRepository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+        $this->customerRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerOrdersSubtotalAmount'])
             ->getMock();
-
-        if ($customer && $newLifetime) {
-            $orderRepository
-                ->expects($this->once())
-                ->method('getCustomerOrdersSubtotalAmount')
-                ->with($customer)
-                ->will($this->returnValue($newLifetime));
-        } else {
-            $orderRepository
-                ->expects($this->never())
-                ->method('getCustomerOrdersSubtotalAmount');
-        }
 
         $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
             ->disableOriginalConstructor()
@@ -225,8 +207,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
-            ->will($this->returnValue($orderRepository));
+            ->with('OroCRMMagentoBundle:Customer')
+            ->will($this->returnValue($this->customerRepository));
         $entityManager
             ->expects($this->any())
             ->method('getUnitOfWork')

@@ -121,7 +121,7 @@ class OrderListener
         $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
 
         $subtotalAmount = $order->getSubtotalAmount();
-        if ($subtotalAmount) {
+        if ($subtotalAmount && $order->getStatus() !== Order::STATUS_CANCELED) {
             $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
         }
     }
