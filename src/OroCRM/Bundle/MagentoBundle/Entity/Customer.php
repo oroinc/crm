@@ -64,11 +64,8 @@ class Customer extends ExtendCustomer implements
     OriginAwareInterface,
     IntegrationAwareInterface
 {
-    const SYNC_INFO = 1;
-    const SCHEDULE_INFO = 2;
-    const SYNC_TO_MAGENTO = 4;
-    const SCHEDULE_SYNC_TO_MAGENTO = 8;
-    const MAGENTO_REMOVED = 16;
+    const SYNC_TO_MAGENTO = 1;
+    const MAGENTO_REMOVED = 2;
 
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 

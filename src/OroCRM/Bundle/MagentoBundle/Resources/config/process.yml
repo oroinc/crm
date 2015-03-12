@@ -125,14 +125,54 @@ definitions:
         order:   20
         exclude_definitions: [magento_customer_export, magento_customer_creation]
         actions_configuration:
-            - @execute_job:
-                jobType: export
-                jobName: magento_customer_export
-                configuration:
-                    channel: $channel
-                    entity: $.data
-                    writer_skip_clear: true
-                attribute: $.jobResult
+            - @call_method:
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - @tree:
+                conditions:
+                    @and:
+                        - @equal: [$channel.enabled, true]
+                        - @equal: [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_TO_MAGENTO
+                    - @assign_constant_value:
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::MAGENTO_REMOVED
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - @call_method:
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @equal: [$.isRemoteRemoved, false]
+                                - @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                jobType: export
+                                jobName: magento_customer_export
+                                configuration:
+                                    channel: $channel
+                                    entity: $.data
+                                    writer_skip_clear: true
+                                attribute: $.jobResult
+                            - @call_method:
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
 
     magento_customer_address_export:
         label:   'Export Magento Customer Address to Magento'
@@ -141,14 +181,54 @@ definitions:
         order:   20
         exclude_definitions: [magento_customer_address_export]
         actions_configuration:
-            - @execute_job:
-                jobType: export
-                jobName: magento_customer_address_export
-                configuration:
-                    channel: $channel
-                    entity: $.data
-                    writer_skip_clear: true
-                attribute: $.jobResult
+            - @call_method:
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - @tree:
+                conditions:
+                    @and:
+                        - @equal: [$channel.enabled, true]
+                        - @equal: [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::SYNC_TO_MAGENTO
+                    - @assign_constant_value:
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::MAGENTO_REMOVED
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - @call_method:
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @equal: [$.isRemoteRemoved, false]
+                                - @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                jobType: export
+                                jobName: magento_customer_address_export
+                                configuration:
+                                    channel: $channel
+                                    entity: $.data
+                                    writer_skip_clear: true
+                                attribute: $.jobResult
+                            - @call_method:
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
 
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
@@ -244,16 +324,14 @@ triggers:
             queued:   true
         -
             event:    update
+            field:    syncState
             priority: 10
             queued:   true
 
     magento_customer_address_export:
         -
-            event:    create
-            priority: 10
-            queued:   true
-        -
             event:    update
+            field:    syncState
             priority: 10
             queued:   true
 

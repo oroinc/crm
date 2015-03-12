@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormInterface;
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
 class CustomerHandler extends UpdateHandler
 {
@@ -42,6 +43,11 @@ class CustomerHandler extends UpdateHandler
                             $address->setChannel($entity->getChannel());
                         }
                     }
+                }
+
+                $stateManager = new StateManager();
+                if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
+                    $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
                 }
 
                 $manager = $this->doctrineHelper->getEntityManager($entity);

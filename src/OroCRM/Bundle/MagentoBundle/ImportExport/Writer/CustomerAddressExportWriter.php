@@ -22,6 +22,12 @@ class CustomerAddressExportWriter extends AbstractExportWriter
      */
     public function write(array $items)
     {
+        /** @var Address $entity */
+        $entity = $this->getEntity();
+        if ($this->getStateManager()->isInState($entity->getSyncState(), Address::MAGENTO_REMOVED)) {
+            return;
+        }
+
         $item = reset($items);
         if (!empty($item['region_id'])) {
             $item['region_id'] = $this->getMagentoRegionIdByCombinedCode($item['region_id']);
@@ -39,6 +45,8 @@ class CustomerAddressExportWriter extends AbstractExportWriter
         } else {
             $this->writeExistingItem($item);
         }
+
+        parent::write([$this->getEntity()]);
     }
 
     /**
@@ -46,28 +54,28 @@ class CustomerAddressExportWriter extends AbstractExportWriter
      */
     protected function writeNewItem(array $item)
     {
+        /** @var Address $entity */
+        $entity = $this->getEntity();
+
         try {
             $customerId = $item[self::CUSTOMER_ID_KEY];
             $customerAddressId = $this->transport->createCustomerAddress($customerId, $item);
+            $entity->setOriginId($customerAddressId);
+            $this->markSynced($entity);
+
+            $this->logger->info(
+                sprintf(
+                    'Customer address with id %s for customer %s successfully created with data %s',
+                    $customerAddressId,
+                    $customerId,
+                    json_encode($item)
+                )
+            );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
             return;
         }
-
-        $this->logger->info(
-            sprintf(
-                'Customer address with id %s for customer %s successfully created with data %s',
-                $customerAddressId,
-                $customerId,
-                json_encode($item)
-            )
-        );
-
-        $entity = $this->getEntity();
-        $entity->setOriginId($customerId);
-
-        parent::write([$entity]);
     }
 
     /**
@@ -77,32 +85,35 @@ class CustomerAddressExportWriter extends AbstractExportWriter
     {
         $customerAddressId = $item[self::CUSTOMER_ADDRESS_ID_KEY];
 
+        /** @var Address $entity */
+        $entity = $this->getEntity();
+
         try {
             $result = $this->transport->updateCustomerAddress($customerAddressId, $item);
+
+            if ($result) {
+                $this->markSynced($entity);
+
+                $this->logger->info(
+                    sprintf(
+                        'Customer address with id %s successfully updated with data %s',
+                        $customerAddressId,
+                        json_encode($item)
+                    )
+                );
+            } else {
+                $this->logger->error(sprintf('Customer address with id %s was not updated', $customerAddressId));
+            }
         } catch (TransportException $e) {
             if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
-                $this->markAddressRemoved($this->getEntity());
+                $this->markRemoved($entity);
             }
 
             $this->logger->error($e->getMessage());
-
-            return;
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
 
             return;
-        }
-
-        if ($result) {
-            $this->logger->info(
-                sprintf(
-                    'Customer address with id %s successfully updated with data %s',
-                    $customerAddressId,
-                    json_encode($item)
-                )
-            );
-        } else {
-            $this->logger->error(sprintf('Customer address with id %s was not updated', $customerAddressId));
         }
     }
 
@@ -132,8 +143,16 @@ class CustomerAddressExportWriter extends AbstractExportWriter
     /**
      * @param Address $address
      */
-    protected function markAddressRemoved(Address $address)
+    protected function markRemoved(Address $address)
     {
-        // TODO: Use state manager and set STATE_MAGENTO_REMOVED to $address
+        $this->getStateManager()->addState($address, 'syncState', Address::MAGENTO_REMOVED);
+    }
+
+    /**
+     * @param Address $address
+     */
+    protected function markSynced(Address $address)
+    {
+        $this->getStateManager()->removeState($address, 'syncState', Address::SYNC_TO_MAGENTO);
     }
 }
