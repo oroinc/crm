@@ -12,7 +12,6 @@ use Doctrine\ORM\UnitOfWork;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 
 class OrderListener
 {
@@ -31,7 +30,11 @@ class OrderListener
         $entity = $event->getEntity();
 
         // if new order has valuable subtotal
-        if ($this->isOrderValid($entity) && $entity->getSubtotalAmount()) {
+        if (
+            $this->isOrderValid($entity)
+            && $entity->getSubtotalAmount()
+            && $entity->getStatus() !== Order::STATUS_CANCELED
+        ) {
             $this->recalculateCustomerLifetime($event->getEntityManager(), $entity);
         }
     }
@@ -121,7 +124,11 @@ class OrderListener
         $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
 
         $subtotalAmount = $order->getSubtotalAmount();
-        if ($subtotalAmount && $order->getStatus() !== Order::STATUS_CANCELED) {
+        if ($subtotalAmount) {
+            if ($order->getStatus() === Order::STATUS_CANCELED) {
+                $subtotalAmount *= -1;
+            }
+
             $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
         }
     }

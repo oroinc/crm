@@ -50,7 +50,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'incorrect customer' => [$this->createOrder(new \DateTime())],
             'equal lifetime'     => [$this->createOrder($this->createCustomer(), 10), 10],
             'updated lifetime'   => [$this->createOrder($this->createCustomer(), 15), 15],
-            'canceled order'     => [$this->createOrder($this->createCustomer(), 3, Order::STATUS_CANCELED)],
+            'canceled order'     => [$this->createOrder($this->createCustomer(), 3, Order::STATUS_CANCELED)]
         ];
     }
 
@@ -65,7 +65,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $isUpdateRequired = array_intersect(['subtotalAmount', 'status'], array_keys($changeSet));
 
         if ($isUpdateRequired) {
-            $entityManager = $this->createEntityManagerMock($order->getCustomer());
+            $entityManager = $this->createEntityManagerMock($order);
         } else {
             $entityManager = $this->createEntityManagerMock();
         }
@@ -96,12 +96,12 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'subtotal not changed' => [$this->createOrder($this->createCustomer())],
             'equal lifetime'       => [
                 $this->createOrder($this->createCustomer(20)),
-                ['status' => ['pending', 'canceled']],
+                ['status' => ['pending', 'canceled']]
             ],
             'updated lifetime'     => [
                 $this->createOrder($this->createCustomer(20)),
-                ['subtotalAmount' => [0, 10]],
-            ],
+                ['subtotalAmount' => [0, 10]]
+            ]
         ];
     }
 
@@ -113,7 +113,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function testPostFlush($order, $newLifetime = null)
     {
         if ($newLifetime) {
-            $entityManager = $this->createEntityManagerMock($order->getCustomer(), $newLifetime);
+            $entityManager = $this->createEntityManagerMock($order, $newLifetime);
         } else {
             $entityManager = $this->createEntityManagerMock();
         }
@@ -147,17 +147,21 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             'no customer'          => [$this->createOrder(null)],
             'incorrect customer'   => [$this->createOrder(new \DateTime())],
             'subtotal not changed' => [$this->createOrder($this->createCustomer())],
-            'updated lifetime'     => [$this->createOrder($this->createCustomer(20)), 10.1,],
+            'updated lifetime'     => [$this->createOrder($this->createCustomer(20)), 10.1],
+            'decrease lifetime'    => [
+                $this->createOrder($this->createCustomer(20), 20, Order::STATUS_CANCELED),
+                -20
+            ]
         ];
     }
 
     /**
-     * @param Customer|null $customer
+     * @param Order|null $order
      *
      * @return EntityManager
      * @throws \PHPUnit_Framework_Exception
      */
-    protected function createEntityManagerMock($customer = null)
+    protected function createEntityManagerMock($order = null)
     {
         $this->customerRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
             ->disableOriginalConstructor()
@@ -171,7 +175,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
                     'getScheduledEntityDeletions',
                     'getScheduledEntityUpdates',
                     'getScheduledCollectionDeletions',
-                    'getScheduledCollectionUpdates',
+                    'getScheduledCollectionUpdates'
                 ]
             )
             ->getMock();
@@ -179,7 +183,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $unitOfWork
             ->expects($this->any())
             ->method('getScheduledEntityInsertions')
-            ->will($this->returnValue(['OroCRM\Bundle\MagentoBundle\Entity\Order' => $this->createOrder($customer)]));
+            ->will($this->returnValue(['OroCRM\Bundle\MagentoBundle\Entity\Order' => $order]));
         $unitOfWork
             ->expects($this->any())
             ->method('getScheduledEntityDeletions')
