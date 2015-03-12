@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-
 use Doctrine\ORM\EntityRepository;
+
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerRepository extends EntityRepository
 {
@@ -48,5 +49,22 @@ class CustomerRepository extends EntityRepository
         }
 
         return $aclHelper->apply($qb)->getArrayResult();
+    }
+
+    /**
+     * @param Customer $customer
+     * @param string $value
+     */
+    public function updateCustomerLifetimeValueByOrderId(Customer $customer, $value)
+    {
+        $qb = $this
+            ->createQueryBuilder('c')
+            ->update('OroCRMMagentoBundle:Customer', 'c')
+            ->set('c.lifetime', 'c.lifetime + :value')
+            ->setParameter('value', $value)
+            ->where('c.id = :id')
+            ->setParameter('id', $customer->getId());
+
+        $qb->getQuery()->execute();
     }
 }

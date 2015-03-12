@@ -11,6 +11,7 @@ use Doctrine\ORM\UnitOfWork;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 
 class OrderListener
@@ -31,7 +32,7 @@ class OrderListener
 
         // if new order has valuable subtotal
         if ($this->isOrderValid($entity) && $entity->getSubtotalAmount()) {
-            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity, true);
+            $this->ordersForUpdate[$entity->getId()] = true;
         }
     }
 
@@ -59,20 +60,13 @@ class OrderListener
             return;
         }
 
-        $needFlush = false;
         $orders = $this->getChangedOrders($event->getEntityManager()->getUnitOfWork());
         foreach ($orders as $order) {
             // if order was scheduled for update
             if (!empty($this->ordersForUpdate[$order->getId()])) {
-                $needFlush |= $this->recalculateCustomerLifetime($event->getEntityManager(), $order);
+                $this->recalculateCustomerLifetime($event->getEntityManager(), $order);
                 unset($this->ordersForUpdate[$order->getId()]);
             }
-        }
-
-        if ($needFlush) {
-            $this->isInProgress = true;
-            $event->getEntityManager()->flush();
-            $this->isInProgress = false;
         }
     }
 
@@ -120,27 +114,15 @@ class OrderListener
     /**
      * @param EntityManager $entityManager
      * @param Order $order
-     * @param bool $appendSubtotal
-     * @return bool Returns 'true' when real changes were provided
      */
-    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order, $appendSubtotal = false)
+    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order)
     {
-        $customer = $order->getCustomer();
-        $oldLifetime = (float)$customer->getLifetime();
+        /** @var CustomerRepository $customerRepository */
+        $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
 
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $entityManager->getRepository('OroCRMMagentoBundle:Order');
-        $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
-        if ($appendSubtotal && $order->getStatus() && $order->getStatus() !== Order::STATUS_CANCELED) {
-            $newLifetime += $order->getSubtotalAmount();
+        $subtotalAmount = $order->getSubtotalAmount();
+        if ($subtotalAmount) {
+            $customerRepository->updateCustomerLifetimeValueByOrderId($order->getCustomer(), $subtotalAmount);
         }
-
-        if ($newLifetime !== $oldLifetime) {
-            $customer->setLifetime($newLifetime);
-
-            return true;
-        }
-
-        return false;
     }
 }
