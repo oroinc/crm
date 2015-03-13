@@ -30,6 +30,6 @@ class AddTrackingIdentifierAssociation implements Migration, IdentifierEventExte
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extension->addIdentifierAssociation($schema,'orocrm_magento_customer');
+        $this->extension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
     }
 }
