@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_26';
+        return 'v1_27';
     }
 
     /**
@@ -376,6 +376,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('row_total', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax_amount', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('product_image_url', 'text');
         $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
