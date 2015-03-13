@@ -83,7 +83,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
             $target = $this->em->getRepository($this->getTarget())->findOneBy(
                 [
                     'originId'  => $userIdentifier,
-                    'channelId' => $channel
+                    'dataChannel' => $channel
                 ]
             );
             if ($target) {
