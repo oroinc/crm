@@ -163,7 +163,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function createEntityManagerMock($order = null)
     {
-        $this->customerRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
+        $this->customerRepository = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -13,7 +13,7 @@ class CartWithExistingCustomerStrategy extends CartStrategy
     /** @var Customer */
     protected $customer;
 
-   /**
+    /**
      * {@inheritdoc}
      */
     public function process($importingCart)
