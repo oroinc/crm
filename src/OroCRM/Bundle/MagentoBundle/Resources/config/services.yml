@@ -66,7 +66,7 @@ parameters:
     orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
-    orocrm_magento.job_executor.class:                                      OroCRM\Bundle\MagentoBundle\Job\JobExecutor
+    orocrm_magento.provider.tracking_customer_identificator.class:          OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -331,3 +331,12 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.tracking_customer_identificator:
+        class: %orocrm_magento.provider.tracking_customer_identificator.class%
+        arguments:
+           - @doctrine
+           - @oro_entity_config.provider.extend
+           - @orocrm_channel.provider.settings_provider
+        tags:
+           - {name: oro_tracking.provider.identification, priority: 10}
