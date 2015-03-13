@@ -100,6 +100,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         IntegrationUpdate::updateOroIntegrationTransportTable($schema);
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
     }
 
     /**
@@ -235,6 +236,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -331,6 +333,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('rfm_recency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
