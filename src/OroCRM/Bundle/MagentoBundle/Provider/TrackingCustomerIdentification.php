@@ -114,8 +114,10 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
             array_walk(
                 $identifierArray,
                 function ($string) use (&$identifierData) {
-                    $data                     = explode('=', $string);
-                    $identifierData[$data[0]] = $data[1];
+                    $data = explode('=', $string);
+                    if (count($data) === 2) {
+                        $identifierData[$data[0]] = $data[1];
+                    }
                 }
             );
 
