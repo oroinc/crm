@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 class OrderConnector extends AbstractMagentoConnector
 {
+    const IMPORT_JOB_NAME = 'mage_order_import';
+
     /**
      * {@inheritdoc}
      */
@@ -25,7 +27,7 @@ class OrderConnector extends AbstractMagentoConnector
      */
     public function getImportJobName()
     {
-        return 'mage_order_import';
+        return self::IMPORT_JOB_NAME;
     }
 
     /**

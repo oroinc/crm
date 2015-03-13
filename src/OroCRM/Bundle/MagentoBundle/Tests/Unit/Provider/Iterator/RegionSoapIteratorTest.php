@@ -17,7 +17,7 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
         $countries = [
             'UA' => (object)['iso2_code' => 'UA', 'name' => 'Ukraine'],
             'US' => (object)['iso2_code' => 'US', 'name' => 'USA'],
-            'RU' => (object)['iso2_code' => 'RU', 'name' => 'Russia'],
+            'RU' => (object)['iso2_code' => 'RU', 'name' => 'Russia']
         ];
 
         $regions = [
@@ -27,15 +27,17 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
                 (object)['code' => 'DE', 'region_id' => 2, 'name' => 'Delaware'],
             ],
             'RU' => [
-                (object)['code' => 'MO', 'region_id' => 3, 'name' => 'Moskow'],
-                (object)['code' => 'TU', 'region_id' => 4, 'name' => 'Tula'],
+                (object)['code' => 'MO', 'region_id' => 3, 'name' => 'Moscow'],
+                (object)['code' => 'TU', 'region_id' => 4, 'name' => 'Tula']
             ]
         ];
 
-        $this->transport->expects($this->at(0))->method('call')
+        $this->transport->expects($this->once())->method('getDependencies')->will($this->returnValue([]));
+
+        $this->transport->expects($this->at(1))->method('call')
             ->with($this->equalTo('directoryCountryList'))->will($this->returnValue($countries));
 
-        $i = 1;
+        $i = 2;
         foreach ($regions as $countryCode => $regionsForCountry) {
             $this->transport->expects($this->at($i))->method('call')
                 ->with($this->equalTo('directoryRegionList'), $this->equalTo(['country' => $countryCode]))
@@ -47,29 +49,29 @@ class RegionSoapIteratorTest extends BaseIteratorTestCase
         $this->assertEquals(
             [
                 'AZ' => [
-                    'code'        => 'AZ',
-                    'region_id'   => 1,
-                    'name'        => 'Arizona',
-                    'countryCode' => 'US',
+                    'code' => 'AZ',
+                    'region_id' => 1,
+                    'name' => 'Arizona',
+                    'countryCode' => 'US'
                 ],
                 'DE' => [
-                    'code'        => 'DE',
-                    'region_id'   => 2,
-                    'name'        => 'Delaware',
-                    'countryCode' => 'US',
+                    'code' => 'DE',
+                    'region_id' => 2,
+                    'name' => 'Delaware',
+                    'countryCode' => 'US'
                 ],
                 'MO' => [
-                    'code'        => 'MO',
-                    'region_id'   => 3,
-                    'name'        => 'Moskow',
-                    'countryCode' => 'RU',
+                    'code' => 'MO',
+                    'region_id' => 3,
+                    'name' => 'Moscow',
+                    'countryCode' => 'RU'
                 ],
                 'TU' => [
-                    'code'        => 'TU',
-                    'region_id'   => 4,
-                    'name'        => 'Tula',
-                    'countryCode' => 'RU',
-                ],
+                    'code' => 'TU',
+                    'region_id' => 4,
+                    'name' => 'Tula',
+                    'countryCode' => 'RU'
+                ]
             ],
             iterator_to_array($this->iterator)
         );
