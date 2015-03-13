@@ -8,6 +8,8 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraint;
 
 class CustomerAddressType extends AbstractType
 {
@@ -18,7 +20,19 @@ class CustomerAddressType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('phone', 'text', ['required' => false, 'label' => 'orocrm.magento.address.phone.label']);
+        $builder->add('phone', 'text', ['required' => true, 'label' => 'orocrm.magento.address.phone.label']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(
+            [
+                'validation_groups' => [Constraint::DEFAULT_GROUP, 'form']
+            ]
+        );
     }
 
     /**

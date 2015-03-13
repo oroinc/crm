@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityRepository;
 
 class RegionRepository extends EntityRepository
@@ -17,6 +18,12 @@ class RegionRepository extends EntityRepository
             ->where('r.combinedCode = :combinedCode')
             ->setParameter('combinedCode', $combinedCode);
 
-        return $qb->getQuery()->getSingleScalarResult();
+        $results = $qb->getQuery()->getResult();
+        $firstResult = reset($results);
+        if ($firstResult) {
+            return $firstResult['regionId'];
+        }
+
+        return null;
     }
 }

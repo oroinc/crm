@@ -31,6 +31,9 @@ class CustomerAddressExportWriter extends AbstractExportWriter
         $item = reset($items);
         if (!empty($item['region_id'])) {
             $item['region_id'] = $this->getMagentoRegionIdByCombinedCode($item['region_id']);
+            if (empty($item['region_id'])) {
+                $item['region'] = $entity->getRegionName();
+            }
         }
 
         if (!$item) {

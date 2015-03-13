@@ -36,6 +36,8 @@ class CustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $isExisting = $builder->getData() && $builder->getData()->getId();
+
         $builder
             ->add('namePrefix', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.name_prefix.label'])
             ->add('firstName', 'text', ['label' => 'orocrm.magento.customer.first_name.label'])
@@ -52,7 +54,8 @@ class CustomerType extends AbstractType
                 [
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
-                    'required' => true
+                    'required' => true,
+                    'disabled' => $isExisting
                 ]
             )
             ->add(
@@ -61,7 +64,8 @@ class CustomerType extends AbstractType
                 [
                     'label' => 'orocrm.magento.customer.store.label',
                     'channel_field' => 'dataChannel',
-                    'required' => true
+                    'required' => true,
+                    'disabled' => $isExisting
                 ]
             )
             ->add(

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Reader;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 
 class ContextEntityReader extends AbstractReader
@@ -20,11 +21,25 @@ class ContextEntityReader extends AbstractReader
     protected $doctrineHelper;
 
     /**
+     * @param ContextRegistry $contextRegistry
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function __construct(ContextRegistry $contextRegistry, DoctrineHelper $doctrineHelper)
+    {
+        parent::__construct($contextRegistry);
+        $this->doctrineHelper = $doctrineHelper;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function read()
     {
         $entity = $this->getContext()->getOption('entity');
+        if (!$entity) {
+            return null;
+        }
+
         $entityIdentifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
 
         if (!empty($this->processed[$entityIdentifier])) {
@@ -40,16 +55,5 @@ class ContextEntityReader extends AbstractReader
         $this->processed[$entityIdentifier] = true;
 
         return $entity;
-    }
-
-    /**
-     * @param DoctrineHelper $doctrineHelper
-     * @return ContextEntityReader
-     */
-    public function setDoctrineHelper($doctrineHelper)
-    {
-        $this->doctrineHelper = $doctrineHelper;
-
-        return $this;
     }
 }

@@ -105,8 +105,21 @@ OroCRM\Bundle\MagentoBundle\Entity\Address:
             - Valid: ~
         country:
             - Valid: ~
+            - NotBlank: { groups: ['form'] }
         region:
             - Valid: ~
+        street:
+            - NotBlank: { groups: ['form'] }
+        city:
+            - NotBlank: { groups: ['form'] }
+        postalCode:
+            - NotBlank: { groups: ['form'] }
+        firstName:
+            - NotBlank: { groups: ['form'] }
+        lastName:
+            - NotBlank: { groups: ['form'] }
+        phone:
+            - NotBlank: { groups: ['form'] }
 
 OroCRM\Bundle\MagentoBundle\Entity\Cart:
     properties:

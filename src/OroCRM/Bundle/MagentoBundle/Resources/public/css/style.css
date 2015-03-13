@@ -78,3 +78,7 @@
     /* hide empty button pane */
     display: none;
 }
+
+.collection-remove-disabled + .removeRow {
+    display: none;
+}
