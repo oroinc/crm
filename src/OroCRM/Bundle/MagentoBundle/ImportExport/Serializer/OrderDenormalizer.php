@@ -63,11 +63,16 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
         }
 
-        if (array_key_exists('items', $data)) {
+        // normalize order items if single is passed
+        if (!empty($data['items'])) {
+            /** @var array $items */
             $items = $data['items'];
-            $item = reset($items);
-            if (!is_array($item)) {
-                $data['items'] = [$items];
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    $data['items'] = [$items];
+
+                    break;
+                }
             }
         }
 
