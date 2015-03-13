@@ -47,6 +47,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Region:
             - Length: { max: 255 }
 
 OroCRM\Bundle\MagentoBundle\Entity\Customer:
+    constraints:
+        - OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstraint: { groups: ['form'] }
     properties:
         namePrefix:
             - Length: { max: 255 }
