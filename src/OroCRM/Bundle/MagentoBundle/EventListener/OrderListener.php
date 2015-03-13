@@ -18,9 +18,6 @@ class OrderListener
     /** @var array */
     protected $ordersForUpdate = [];
 
-    /** @var bool */
-    protected $isInProgress = false;
-
     /**
      * @param LifecycleEventArgs $event
      */
@@ -29,13 +26,13 @@ class OrderListener
         /** @var Order $entity */
         $entity = $event->getEntity();
 
-        // if new order has valuable subtotal
+        // if new order has valuable subtotal and status
         if (
             $this->isOrderValid($entity)
             && $entity->getSubtotalAmount()
             && $entity->getStatus() !== Order::STATUS_CANCELED
         ) {
-            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity);
+            $this->updateCustomerLifetime($event->getEntityManager(), $entity);
         }
     }
 
@@ -59,7 +56,7 @@ class OrderListener
      */
     public function postFlush(PostFlushEventArgs $event)
     {
-        if ($this->isInProgress || count($this->ordersForUpdate) === 0) {
+        if (count($this->ordersForUpdate) === 0) {
             return;
         }
 
@@ -67,7 +64,7 @@ class OrderListener
         foreach ($orders as $order) {
             // if order was scheduled for update
             if (!empty($this->ordersForUpdate[$order->getId()])) {
-                $this->recalculateCustomerLifetime($event->getEntityManager(), $order);
+                $this->updateCustomerLifetime($event->getEntityManager(), $order);
                 unset($this->ordersForUpdate[$order->getId()]);
             }
         }
@@ -118,13 +115,14 @@ class OrderListener
      * @param EntityManager $entityManager
      * @param Order $order
      */
-    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order)
+    protected function updateCustomerLifetime(EntityManager $entityManager, Order $order)
     {
         /** @var CustomerRepository $customerRepository */
         $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
 
         $subtotalAmount = $order->getSubtotalAmount();
         if ($subtotalAmount) {
+            // if order status changed to canceled we should remove subtotalAmount from customer lifetime
             if ($order->getStatus() === Order::STATUS_CANCELED) {
                 $subtotalAmount *= -1;
             }
