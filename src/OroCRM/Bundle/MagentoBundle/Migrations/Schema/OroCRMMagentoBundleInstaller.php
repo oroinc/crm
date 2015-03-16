@@ -8,6 +8,9 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
 
@@ -15,10 +18,16 @@ use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as In
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class OroCRMMagentoBundleInstaller implements
+    Installation,
+    ActivityExtensionAwareInterface,
+    IdentifierEventExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var IdentifierEventExtension */
+    protected $identifierEventExtension;
 
     /**
      * {@inheritdoc}
@@ -31,9 +40,17 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
     /**
      * {@inheritdoc}
      */
+    public function setIdentifierEventExtension(IdentifierEventExtension $identifierEventExtension)
+    {
+        $this->identifierEventExtension = $identifierEventExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMigrationVersion()
     {
-        return 'v1_27';
+        return 'v1_28';
     }
 
     /**
@@ -87,6 +104,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $this->addOrocrmMagentoOrderItemsForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
+        $this->addIdentifierEventAssociations($schema);
     }
 
     /**
@@ -1312,5 +1330,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
         MagentoActivities::disableActivityAssociations($schema);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addIdentifierEventAssociations(Schema $schema)
+    {
+        $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
     }
 }
