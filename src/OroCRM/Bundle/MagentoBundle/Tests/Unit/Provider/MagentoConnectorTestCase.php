@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Symfony\Component\HttpKernel\Log\NullLogger;
-
-use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
-use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
@@ -20,7 +21,6 @@ use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 {
@@ -36,6 +36,12 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     /** @var ChannelRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $integrationRepositoryMock;
 
+    /** @var JobExecution|\PHPUnit_Framework_MockObject_MockObject */
+    protected $jobExecutionMock;
+
+    /** @var ExecutionContext|\PHPUnit_Framework_MockObject_MockObject */
+    protected $executionContextMock;
+
     /** @var array */
     protected $config = [
         'sync_settings' => ['mistiming_assumption_interval' => '2 minutes']
@@ -47,8 +53,19 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
             ->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\MagentoTransportInterface');
 
         $this->stepExecutionMock = $this->getMockBuilder('Akeneo\\Bundle\\BatchBundle\\Entity\\StepExecution')
-            ->setMethods(['getExecutionContext'])
+            ->setMethods(['getExecutionContext', 'getJobExecution'])
             ->disableOriginalConstructor()->getMock();
+
+        $this->executionContextMock = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+
+        $this->jobExecutionMock = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobExecution');
+        $this->jobExecutionMock->expects($this->any())
+            ->method('getExecutionContext')
+            ->will($this->returnValue($this->executionContextMock));
+
+        $this->stepExecutionMock->expects($this->any())
+            ->method('getJobExecution')
+            ->will($this->returnValue($this->jobExecutionMock));
 
         $this->managerRegistryMock = $this->getMockBuilder('Doctrine\\Common\\Persistence\\ManagerRegistry')
             ->disableOriginalConstructor()
@@ -74,9 +91,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     public function testInitialization()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        $this->transportMock->expects($this->once())->method('init');
-
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($this->getMock('\Iterator')));
         $connector->setStepExecution($this->stepExecutionMock);
     }
@@ -96,13 +111,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
 
-        $this->transportMock->expects($this->once())->method('init');
-
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-        $iterator->expects($this->once())->method('setMode')
-            ->with($this->equalTo(UpdatedLoaderInterface::IMPORT_MODE_UPDATE));
         $iterator->expects($this->once())->method('setStartDate')->with($this->equalTo($expectedDateInFilter));
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -120,12 +131,9 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
 
-        $this->transportMock->expects($this->once())->method('init');
-
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-        $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setMode');
         $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setStartDate');
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -147,9 +155,8 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $context = new Context(['filters' => []]);
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, null, $context);
-        $this->transportMock->expects($this->once())->method('init');
 
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -213,8 +220,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $this->transportMock->expects($this->once())->method('init');
-        $this->transportMock->expects($this->at(1))->method($this->getIteratorGetterMethodName())
+        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iteratorMock));
 
         $connector->setStepExecution($this->stepExecutionMock);
@@ -324,10 +330,10 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $contextRegistryMock->expects($this->any())->method('getByStepExecution')
             ->will($this->returnValue($contextMock));
-        $contextMediatorMock->expects($this->once())
-            ->method('getTransport')->with($this->equalTo($contextMock))
+        $contextMediatorMock->expects($this->any())
+            ->method('getInitializedTransport')->with($this->equalTo($channel))
             ->will($this->returnValue($transport));
-        $contextMediatorMock->expects($this->once())
+        $contextMediatorMock->expects($this->any())
             ->method('getChannel')->with($this->equalTo($contextMock))
             ->will($this->returnValue($channel));
 

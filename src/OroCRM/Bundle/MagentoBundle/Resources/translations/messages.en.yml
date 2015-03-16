@@ -73,14 +73,17 @@ orocrm:
         connector:
             customer:
                 label: Customer connector
+                initial.label: Initial Customer connector
             region:
                 label: States connector
             cart:
                 label: Cart connector
+                initial.label: Initial Cart connector
             product:
                 label: Product connector
             order:
                 label: Order connector
+                initial.label: Initial Order connector
 
         customer:
             entity_label:        Web Customer
@@ -118,6 +121,9 @@ orocrm:
             monetary.label:      Monetary
             recency.label:       Recency
             frequency.label:     Frequency
+            sync_state:
+                label: Sync State
+                info: Partially synced
 
         customergroup:
             entity_label:        Customer Group
@@ -297,6 +303,9 @@ orocrm:
             workflow_step.label:    Workflow step
             website.label:          Website
             organization.label:     Organization
+            sync_state:
+                label: Sync State
+                info: Partially synced
 
         product:
             entity_label:         Product

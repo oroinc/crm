@@ -47,17 +47,6 @@ class OrderBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function getDependencies()
-    {
-        return [
-            self::ALIAS_STORES   => iterator_to_array($this->transport->getStores()),
-            self::ALIAS_WEBSITES => iterator_to_array($this->transport->getWebsites())
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getIdFieldName()
     {
         return 'order_id';

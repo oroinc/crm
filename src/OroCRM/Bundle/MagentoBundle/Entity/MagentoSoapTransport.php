@@ -64,6 +64,13 @@ class MagentoSoapTransport extends Transport
     protected $syncStartDate;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="initial_sync_start_date", type="datetime", nullable=true)
+     */
+    protected $initialSyncStartDate;
+
+    /**
      * @var \DateInterval
      *
      * @ORM\Column(name="sync_range", type="string", length=50)
@@ -312,6 +319,7 @@ class MagentoSoapTransport extends Transport
                     'wsi_mode'        => $this->getIsWsiMode(),
                     'website_id'      => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
+                    'initial_sync_start_date' => $this->getInitialSyncStartDate()
                 ]
             );
         }
@@ -337,5 +345,24 @@ class MagentoSoapTransport extends Transport
     public function getAdminUrl()
     {
         return $this->adminUrl;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getInitialSyncStartDate()
+    {
+        return $this->initialSyncStartDate;
+    }
+
+    /**
+     * @param \DateTime $initialSyncStartDate
+     * @return MagentoSoapTransport
+     */
+    public function setInitialSyncStartDate($initialSyncStartDate)
+    {
+        $this->initialSyncStartDate = $initialSyncStartDate;
+
+        return $this;
     }
 }

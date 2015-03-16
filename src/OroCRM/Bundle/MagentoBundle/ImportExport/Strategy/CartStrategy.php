@@ -9,6 +9,7 @@ use Psr\Log\LoggerAwareInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
@@ -38,7 +39,7 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
         'owner',
         'organization',
         'channel',
-        'dataChannel',
+        'dataChannel'
     ];
 
     /**
@@ -74,12 +75,12 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
                 $this->context->incrementErrorEntriesCount();
                 $this->logger->debug(sprintf('Cart ID: %d was skipped because it does not have items', $oid));
 
-                return false;
+                return null;
             } elseif (!$hasContactInfo) {
                 $this->context->incrementErrorEntriesCount();
                 $this->logger->debug(sprintf('Cart ID: %d was skipped because lack of contact info', $oid));
 
-                return false;
+                return null;
             }
             $existingEntity = $newEntity;
 
@@ -134,7 +135,7 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
     protected function updateCartItems(Cart $cart, ArrayCollection $cartItems)
     {
         $importedOriginIds = $cartItems->map(
-            function ($item) {
+            function (CartItem $item) {
                 return $item->getOriginId();
             }
         )->toArray();
@@ -145,8 +146,8 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
             $originId = $item->getOriginId();
 
             $existingItem = $cart->getCartItems()->filter(
-                function ($item) use ($originId) {
-                    return $item->getOriginId() == $originId;
+                function (CartItem $item) use ($originId) {
+                    return $item->getOriginId() === $originId;
                 }
             )->first();
 
@@ -166,8 +167,8 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
 
         // delete cart items that not exists in remote cart
         $deletedCartItems = $cart->getCartItems()->filter(
-            function ($item) use ($importedOriginIds) {
-                return !in_array($item->getOriginId(), $importedOriginIds);
+            function (CartItem $item) use ($importedOriginIds) {
+                return !in_array($item->getOriginId(), $importedOriginIds, true);
             }
         );
         foreach ($deletedCartItems as $item) {
@@ -201,8 +202,9 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
             $mageRegionId    = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $originAddressId = $address->getOriginId();
 
+            /** @var CartAddress $existingAddress */
             $existingAddress = $newCart->$addressGetter();
-            if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
+            if ($existingAddress && $existingAddress->getOriginId() === $originAddressId) {
                 $this->strategyHelper->importEntity(
                     $existingAddress,
                     $address,

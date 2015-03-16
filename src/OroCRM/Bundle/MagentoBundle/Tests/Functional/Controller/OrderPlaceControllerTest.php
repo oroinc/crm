@@ -84,10 +84,13 @@ class OrderPlaceControllerTest extends WebTestCase
 
         $cartIterator  = new StubIterator([$newCart]);
         $orderIterator = new StubIterator([]);
+        $customerIterator = new StubIterator([]);
 
         $this->soapTransport->expects($this->any())->method('call');
         $this->soapTransport->expects($this->once())->method('getCarts')->will($this->returnValue($cartIterator));
         $this->soapTransport->expects($this->once())->method('getOrders')->will($this->returnValue($orderIterator));
+        $this->soapTransport->expects($this->any())->method('getCustomers')
+            ->will($this->returnValue($customerIterator));
 
         $this->client->request(
             'GET',
@@ -187,9 +190,12 @@ class OrderPlaceControllerTest extends WebTestCase
         $newCustomerOrder = $this->getModifiedCustomerOrder($this->customer);
 
         $orderIterator = new StubIterator([$newCustomerOrder]);
+        $customerIterator = new StubIterator([]);
 
         $this->soapTransport->expects($this->any())->method('call');
         $this->soapTransport->expects($this->once())->method('getOrders')->will($this->returnValue($orderIterator));
+        $this->soapTransport->expects($this->any())->method('getCustomers')
+            ->will($this->returnValue($customerIterator));
 
         $this->client->request(
             'GET',
