@@ -4,8 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraint;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerType extends AbstractType
 {
@@ -89,6 +94,32 @@ class CustomerType extends AbstractType
             )
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
             ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
+
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) {
+                /** @var Customer $entity */
+                $entity = $event->getData();
+                $dataChannel = $entity->getDataChannel();
+                if ($dataChannel) {
+                    $entity->setChannel($dataChannel->getDataSource());
+                }
+
+                $store = $entity->getStore();
+                if ($store) {
+                    $entity->setWebsite($store->getWebsite());
+                }
+
+                if (!$entity->getAddresses()->isEmpty()) {
+                    /** @var Address $address */
+                    foreach ($entity->getAddresses() as $address) {
+                        if (!$address->getChannel()) {
+                            $address->setChannel($entity->getChannel());
+                        }
+                    }
+                }
+            }
+        );
     }
 
     /**

@@ -5,11 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 use Symfony\Component\Form\Form;
 
 use Oro\Bundle\FormBundle\Tests\Unit\Model\UpdateHandlerTest;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerHandler;
 
 class CustomerHandlerTest extends UpdateHandlerTest
@@ -29,15 +25,6 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->getMock();
 
         $entity = new Customer();
-        $dataChannel = new Channel();
-        $integration = new Integration();
-        $dataChannel->setDataSource($integration);
-        $entity->setDataChannel($dataChannel);
-
-        $store = new Store();
-        $website = new Website();
-        $store->setWebsite($website);
-        $entity->setStore($store);
 
         $this->request->expects($this->once())
             ->method('getMethod')
@@ -55,9 +42,8 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->method('persist')
             ->with(
                 $this->callback(
-                    function (Customer $processedCustomer) use ($website, $integration) {
-                        $this->assertEquals($processedCustomer->getWebsite(), $website);
-                        $this->assertEquals($processedCustomer->getChannel(), $integration);
+                    function (Customer $processedCustomer) {
+                        $this->assertEquals($processedCustomer->getSyncState(), Customer::SYNC_TO_MAGENTO);
 
                         return true;
                     }

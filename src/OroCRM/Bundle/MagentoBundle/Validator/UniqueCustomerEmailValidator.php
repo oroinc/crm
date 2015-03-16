@@ -54,7 +54,7 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
             );
 
             if (count($customers) > 0) {
-                $this->context->addViolationAt('name', $constraint->message);
+                $this->context->addViolationAt('email', $constraint->message);
             }
         }
     }

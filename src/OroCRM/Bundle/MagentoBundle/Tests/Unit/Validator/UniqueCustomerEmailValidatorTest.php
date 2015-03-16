@@ -85,7 +85,7 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
         $context = $this->getMock('Symfony\Component\Validator\ExecutionContextInterface');
         $context->expects($this->once())
             ->method('addViolationAt')
-            ->with('name', $constraint->message);
+            ->with('email', $constraint->message);
 
         $this->assertTransportCalls($customers);
 
