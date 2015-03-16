@@ -38,16 +38,9 @@ class Task extends AbstractPageEntity
 
     }
 
-    public function init()
-    {
-        $this->subject = $this->test->byId('orocrm_task_subject');
-        $this->description = $this->test->byId('orocrm_task_description');
-
-        return $this;
-    }
-
     public function setSubject($subject)
     {
+        $this->subject = $this->test->byId('orocrm_task_subject');
         $this->subject->clear();
         $this->subject->value($subject);
         return $this;
@@ -55,11 +48,13 @@ class Task extends AbstractPageEntity
 
     public function getSubject()
     {
+        $this->subject = $this->test->byId('orocrm_task_subject');
         return $this->subject->value();
     }
 
     public function setDescription($description)
     {
+        $this->description = $this->test->byId('orocrm_task_description');
         $this->description->clear();
         $this->description->value($description);
         return $this;
@@ -67,6 +62,7 @@ class Task extends AbstractPageEntity
 
     public function getDescription()
     {
+        $this->description = $this->test->byId('orocrm_task_description');
         return $this->description->value();
     }
 
@@ -82,20 +78,10 @@ class Task extends AbstractPageEntity
         $this->dueDate->clear();
         $this->dueTime->clear();
         if (preg_match('/^(.+)\s(\d{2}\:\d{2}\s\w{2})$/', $dueDate, $dueDate)) {
-            $this->test->execute(
-                array(
-                    'script' => "$('#date_selector_orocrm_task_dueDate').val('$dueDate[1]');" .
-                        "$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
-                    'args' => array()
-                )
-            );
-            $this->test->execute(
-                array(
-                    'script' => "$('#time_selector_orocrm_task_dueDate').val('$dueDate[2]');" .
-                        "$('#date_selector_orocrm_task_dueDate').trigger('change').trigger('blur')",
-                    'args' => array()
-                )
-            );
+            $this->dueDate->click(); // focus
+            $this->dueDate->value($dueDate[1]);
+            $this->dueTime->click(); // focus
+            $this->dueTime->value($dueDate[2]);
         } else {
             throw new Exception("Value {$dueDate} is not a valid date");
         }
@@ -137,6 +123,14 @@ class Task extends AbstractPageEntity
             $this->workflow = new Workflow();
         }
         $this->workflow->process($this, $steps);
+
+        return $this;
+    }
+
+    public function createTask()
+    {
+        $this->test->byXpath("//div[@class='widget-actions-section']//button[contains(., 'Create Task')]")->click();
+        $this->waitForAjax();
 
         return $this;
     }

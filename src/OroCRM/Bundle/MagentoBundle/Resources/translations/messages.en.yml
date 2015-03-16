@@ -73,14 +73,17 @@ orocrm:
         connector:
             customer:
                 label: Customer connector
+                initial.label: Initial Customer connector
             region:
                 label: States connector
             cart:
                 label: Cart connector
+                initial.label: Initial Cart connector
             product:
                 label: Product connector
             order:
                 label: Order connector
+                initial.label: Initial Order connector
 
         customer:
             entity_label:        Magento Customer
@@ -120,6 +123,9 @@ orocrm:
             frequency.label:     Frequency
             saved.message:       Customer saved
             address_book.title:  Address Book
+            sync_state:
+                label: Sync State
+                info: Partially synced
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -204,6 +210,8 @@ orocrm:
             tax_percent.label:         Tax percent
             weight.label:              Weight
             cart.label:                Cart
+            product_image_url.label:   Product Image URL
+            product_url.label:         Product URL
 
         cartstatus:
             entity_label:        Magento Shopping Cart Status
@@ -250,6 +258,7 @@ orocrm:
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
+            initial_sync_start_date.label: Initial sync start date
 
         order:
             entity_label:        Magento Order
@@ -300,6 +309,9 @@ orocrm:
             workflow_step.label:    Workflow step
             website.label:          Website
             organization.label:     Organization
+            sync_state:
+                label: Sync State
+                info: Partially synced
 
         product:
             entity_label:         Magento Product

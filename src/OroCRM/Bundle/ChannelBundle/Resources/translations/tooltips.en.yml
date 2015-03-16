@@ -1,0 +1,3 @@
+orocrm:
+    channel:
+        tracking_website_channel_select.tooltip: Please select channel for which this tracking website belongs to. Depending on channel type different rules can be applied for customer identification.

@@ -27,6 +27,8 @@ class CartItemDataConverter extends AbstractTableDataConverter
             'tax_amount'      => 'taxAmount',
             'created_at'      => 'createdAt',
             'updated_at'      => 'updatedAt',
+            'product_image_url' => 'productImageUrl',
+            'product_url'     => 'productUrl'
         ];
     }
 

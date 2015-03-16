@@ -10,7 +10,12 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
 {
     public function testConfigPassedToConnectors()
     {
-        $config = ['sync_settings' => ['mistiming_assumption_interval' => '10 minutes']];
+        $config = [
+            'sync_settings' => [
+                'mistiming_assumption_interval' => '10 minutes',
+                'initial_import_step_interval' => '1 day'
+            ]
+        ];
 
         $container = new ContainerBuilder();
         $extension = new OroCRMMagentoExtension();
