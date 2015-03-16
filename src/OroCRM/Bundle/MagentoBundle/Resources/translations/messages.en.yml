@@ -207,6 +207,8 @@ orocrm:
             tax_percent.label:         Tax percent
             weight.label:              Weight
             cart.label:                Cart
+            product_image_url.label:   Product Image URL
+            product_url.label:         Product URL
 
         cartstatus:
             entity_label:        Shopping Cart Status
@@ -253,6 +255,7 @@ orocrm:
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
+            initial_sync_start_date.label: Initial sync start date
 
         order:
             entity_label:        Order
