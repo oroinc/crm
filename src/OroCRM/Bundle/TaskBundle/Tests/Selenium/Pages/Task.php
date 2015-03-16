@@ -38,16 +38,9 @@ class Task extends AbstractPageEntity
 
     }
 
-    public function init()
-    {
-        $this->subject = $this->test->byId('orocrm_task_subject');
-        $this->description = $this->test->byId('orocrm_task_description');
-
-        return $this;
-    }
-
     public function setSubject($subject)
     {
+        $this->subject = $this->test->byId('orocrm_task_subject');
         $this->subject->clear();
         $this->subject->value($subject);
         return $this;
@@ -55,11 +48,13 @@ class Task extends AbstractPageEntity
 
     public function getSubject()
     {
+        $this->subject = $this->test->byId('orocrm_task_subject');
         return $this->subject->value();
     }
 
     public function setDescription($description)
     {
+        $this->description = $this->test->byId('orocrm_task_description');
         $this->description->clear();
         $this->description->value($description);
         return $this;
@@ -67,6 +62,7 @@ class Task extends AbstractPageEntity
 
     public function getDescription()
     {
+        $this->description = $this->test->byId('orocrm_task_description');
         return $this->description->value();
     }
 
@@ -127,6 +123,14 @@ class Task extends AbstractPageEntity
             $this->workflow = new Workflow();
         }
         $this->workflow->process($this, $steps);
+
+        return $this;
+    }
+
+    public function createTask()
+    {
+        $this->test->byXpath("//div[@class='widget-actions-section']//button[contains(., 'Create Task')]")->click();
+        $this->waitForAjax();
 
         return $this;
     }
