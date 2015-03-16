@@ -6,8 +6,9 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
+
+use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -80,7 +81,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
             ];
 
             $channel = $trackingVisit->getTrackingWebsite()->getChannel();
-            $target = $this->em->getRepository($this->getTarget())->findOneBy(
+            $target = $this->em->getRepository($this->getIdentityTarget())->findOneBy(
                 [
                     'originId'  => $userIdentifier,
                     'dataChannel' => $channel
@@ -99,9 +100,58 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     /**
      * {@inheritdoc}
      */
-    public function getTarget()
+    public function getIdentityTarget()
     {
         return $this->settingsProvider->getCustomerIdentityFromConfig(ChannelType::TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventTargets()
+    {
+        return [
+            'OroCRM\Bundle\MagentoBundle\Entity\Order',
+            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'OroCRM\Bundle\MagentoBundle\Entity\Product',
+            'OroCRM\Bundle\MagentoBundle\Entity\Cart'
+        ];
+    }
+
+    public function isApplicableVisitEvent(TrackingVisitEvent $trackingVisitEvent)
+    {
+        $hasTrackingWebsiteChannel = $this->extendConfigProvider->hasConfig(
+            'Oro\Bundle\TrackingBundle\Entity\TrackingWebsite',
+            'channel'
+        );
+
+        if ($hasTrackingWebsiteChannel) {
+            $trackingWebsite = $trackingVisitEvent->getVisit()->getTrackingWebsite();
+            if (method_exists($trackingWebsite, 'getChannel')) {
+                /** @var Channel $channel */
+                $channel = $trackingWebsite->getChannel();
+                $type    = $channel ? $channel->getChannelType() : false;
+
+                if ($type && $type === ChannelType::TYPE) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public function processEvent(TrackingVisitEvent $trackingVisitEvent)
+    {
+        // set identifier
+        $trackingVisitEvent->addAssociationTarget($trackingVisitEvent->getVisit()->getIdentifierTarget());
+
+        if ($trackingVisitEvent->getEvent()->getName() === 'cart item added') {
+            $product = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(['originId' => (int)$trackingVisitEvent->getWebEvent()->getValue()]);
+            if ($product) {
+                $trackingVisitEvent->addAssociationTarget($product);
+            }
+        }
     }
 
     /**
