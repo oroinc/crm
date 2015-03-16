@@ -6,6 +6,8 @@ use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncConnectorInterface
 {
+    const IMPORT_JOB_NAME = 'mage_customer_import';
+
     /**
      * {@inheritdoc}
      */
@@ -27,7 +29,7 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
      */
     public function getImportJobName()
     {
-        return 'mage_customer_import';
+        return self::IMPORT_JOB_NAME;
     }
 
     /**

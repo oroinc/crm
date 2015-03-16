@@ -134,6 +134,20 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface
     protected $productType;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="product_image_url", type="text", nullable=true)
+     */
+    protected $productImageUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="product_url", type="text", nullable=true)
+     */
+    protected $productUrl;
+
+    /**
      * @param float $customPrice
      *
      * @return CartItem
@@ -359,5 +373,43 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface
     public function getTaxClassId()
     {
         return $this->taxClassId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductImageUrl()
+    {
+        return $this->productImageUrl;
+    }
+
+    /**
+     * @param string $productImageUrl
+     * @return CartItem
+     */
+    public function setProductImageUrl($productImageUrl)
+    {
+        $this->productImageUrl = $productImageUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductUrl()
+    {
+        return $this->productUrl;
+    }
+
+    /**
+     * @param string $productUrl
+     * @return CartItem
+     */
+    public function setProductUrl($productUrl)
+    {
+        $this->productUrl = $productUrl;
+
+        return $this;
     }
 }

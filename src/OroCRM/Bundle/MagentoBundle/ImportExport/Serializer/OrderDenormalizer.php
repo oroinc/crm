@@ -9,6 +9,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Service\ImportHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
 class OrderDenormalizer extends ConfigurableEntityNormalizer
 {
@@ -19,6 +20,11 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
     protected $channelImportHelper;
 
     /**
+     * @var StateManager
+     */
+    protected $stateManager;
+
+    /**
      * @param FieldHelper   $fieldHelper
      * @param ImportHelper  $importHelper
      * @param ChannelHelper $channelHelper
@@ -26,14 +32,16 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
     public function __construct(FieldHelper $fieldHelper, ImportHelper $importHelper, ChannelHelper $channelHelper)
     {
         parent::__construct($fieldHelper);
-        $this->importHelper        = $importHelper;
+
+        $this->importHelper = $importHelper;
         $this->channelImportHelper = $channelHelper;
+        $this->stateManager = new StateManager();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsNormalization($data, $format = null, array $context = array())
+    public function supportsNormalization($data, $format = null, array $context = [])
     {
         return $data instanceof Order;
     }
@@ -41,7 +49,7 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
         return $type == MagentoConnectorInterface::ORDER_TYPE;
     }
@@ -49,10 +57,23 @@ class OrderDenormalizer extends ConfigurableEntityNormalizer
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (array_key_exists('paymentDetails', $data)) {
             $data['paymentDetails'] = $this->importHelper->denormalizePaymentDetails($data['paymentDetails']);
+        }
+
+        // normalize order items if single is passed
+        if (!empty($data['items'])) {
+            /** @var array $items */
+            $items = $data['items'];
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    $data['items'] = [$items];
+
+                    break;
+                }
+            }
         }
 
         /** @var Order $order */

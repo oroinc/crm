@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -75,6 +76,18 @@ class OrderStrategy extends BaseStrategy
     /**
      * @param Order $entity
      */
+    protected function saveOriginIdContext($entity)
+    {
+        if ($entity instanceof Order) {
+            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
+            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getIncrementId();
+            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
+        }
+    }
+
+    /**
+     * @param Order $entity
+     */
     protected function processStore(Order $entity)
     {
         $entity->setStore($this->storeStrategy->process($entity->getStore()));
@@ -98,13 +111,22 @@ class OrderStrategy extends BaseStrategy
         /** @var Customer|null $customer */
         $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
 
+        $this->updateCustomer($entity, $customer);
+    }
+
+    /**
+     * @param Order $order
+     * @param Customer $customer
+     */
+    protected function updateCustomer(Order $order, Customer $customer = null)
+    {
         if ($customer instanceof Customer) {
             // now customer orders subtotal calculation support only one currency.
             // also we do not take into account order refunds due to magento does not bring subtotal data
             // customer currency needs on customer's grid to format lifetime value.
-            $customer->setCurrency($entity->getCurrency());
+            $customer->setCurrency($order->getCurrency());
         }
-        $entity->setCustomer($customer);
+        $order->setCustomer($customer);
     }
 
     /**
@@ -215,11 +237,11 @@ class OrderStrategy extends BaseStrategy
         // delete order items that not exists in remote order
         $deleted = $entityToUpdate->getItems()->filter(
             function (OrderItem $item) use ($importedOriginIds) {
-                return !in_array($item->getOriginId(), $importedOriginIds);
+                return !in_array($item->getOriginId(), $importedOriginIds, true);
             }
         );
         foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->remove($item);
+            $entityToUpdate->getItems()->removeElement($item);
         }
     }
 }

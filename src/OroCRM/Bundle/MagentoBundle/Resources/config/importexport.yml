@@ -24,6 +24,10 @@ parameters:
     orocrm_magento.mage.cart_connector.class:                                   OroCRM\Bundle\MagentoBundle\Provider\CartConnector
     orocrm_magento.mage.order_connector.class:                                  OroCRM\Bundle\MagentoBundle\Provider\OrderConnector
 
+    orocrm_magento.mage.order_connector_initial.class:                          OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialOrderConnector
+    orocrm_magento.mage.cart_connector_initial.class:                           OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialCartConnector
+    orocrm_magento.mage.customer_connector_initial.class:                       OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialCustomerConnector
+
     # normalizers
     orocrm_magento.importexport.denormalizer.region.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\RegionDenormalizer
     orocrm_magento.importexport.normalizer.cart.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\CartNormalizer
@@ -40,15 +44,29 @@ parameters:
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
     orocrm_magento.import_strategy.store.class:                                 OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StoreStrategy
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
-    orocrm_magento.import_strategy.customer_group.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerGroupStrategy
+    orocrm_magento.import.strategy.order_with_customer.add_or_update.class:     OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy
+    orocrm_magento.import.strategy.cart_with_customer.add_or_update.class:      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy
+
+    # processors
+    orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
+    orocrm_magento.provider.initial_sync_processor.class:                       OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor
+    orocrm_magento.provider.initial_schedule_processor.class:                   OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor
 
     # writers
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
     orocrm_magento.importexport.writer.abstract_export.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
     orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
 
-    # readers
+    # Readers
     orocrm_magento.importexport.reader.entity.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Reader\ContextEntityReader
+    orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
+    orocrm_magento.reader.context.class:                                        OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextReader
+    orocrm_magento.reader.order_info.class:                                     OroCRM\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
+    orocrm_magento.reader.customer_info.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
+
+   # Processor
+    orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
+    orocrm_magento.importexport.processor.context.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
 
 services:
     # Data converter
@@ -100,57 +118,84 @@ services:
             - [addNodeDataConverter, ['group', @orocrm_magento.importexport.data_converter.customer_group]]
 
     # Connectors
+    orocrm_magento.mage.order_connector_initial:
+        class: %orocrm_magento.mage.order_connector_initial.class%
+        parent: orocrm_magento.mage.order_connector
+        calls:
+            - [setClassName, [%orocrm_magento.order.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: order_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.cart_connector_initial:
+        class: %orocrm_magento.mage.cart_connector_initial.class%
+        parent: orocrm_magento.mage.cart_connector
+        calls:
+            - [setClassName, [%orocrm_magento.cart.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: cart_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.customer_connector_initial:
+        class: %orocrm_magento.mage.customer_connector_initial.class%
+        parent: orocrm_magento.mage.customer_connector
+        calls:
+            - [setClassName, [%orocrm_magento.customer.entity.class%]]
+        tags:
+            - { name: oro_integration.connector, type: customer_initial, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
     orocrm_magento.mage.customer_connector:
         class: %orocrm_magento.mage.customer_connector.class%
         arguments:
-          - @oro_importexport.context_registry
-          - @oro_integration.logger.strategy
-          - @oro_integration.provider.connector_context_mediator
-          - []
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+            - []
         calls:
-             - [setManagerRegistry, [@doctrine]]
+            - [setManagerRegistry, [@doctrine]]
         tags:
-          - { name: oro_integration.connector, type: customer, channel_type: magento }
-          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: oro_integration.connector, type: customer, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.cart_connector:
         class: %orocrm_magento.mage.cart_connector.class%
         arguments:
-          - @oro_importexport.context_registry
-          - @oro_integration.logger.strategy
-          - @oro_integration.provider.connector_context_mediator
-          - []
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+            - []
         calls:
-             - [setManagerRegistry, [@doctrine]]
+            - [setManagerRegistry, [@doctrine]]
         tags:
-          - { name: oro_integration.connector, type: cart, channel_type: magento }
-          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: oro_integration.connector, type: cart, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.order_connector:
         class: %orocrm_magento.mage.order_connector.class%
         arguments:
-          - @oro_importexport.context_registry
-          - @oro_integration.logger.strategy
-          - @oro_integration.provider.connector_context_mediator
-          - []
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+            - []
         calls:
-             - [setManagerRegistry, [@doctrine]]
+            - [setManagerRegistry, [@doctrine]]
         tags:
-          - { name: oro_integration.connector, type: order, channel_type: magento }
-          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: oro_integration.connector, type: order, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.region_connector:
         class: %orocrm_magento.mage.region_connector.class%
         arguments:
-          - @oro_importexport.context_registry
-          - @oro_integration.logger.strategy
-          - @oro_integration.provider.connector_context_mediator
-          - []
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+            - []
         calls:
-             - [setManagerRegistry, [@doctrine]]
+            - [setManagerRegistry, [@doctrine]]
         tags:
-          - { name: oro_integration.connector, type: region, channel_type: magento }
-          - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: oro_integration.connector, type: region, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     # Normalizers / Denormalizers
     orocrm_magento.importexport.denormalizer.order:
@@ -206,10 +251,10 @@ services:
         parent: orocrm_magento.import.strategy.abstract
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         calls:
-         - [setChannelHelper, [@orocrm_channel.importexport.helper.channel]]
-         - [setAddressHelper, [@orocrm_magento.importexport.address_import_helper]]
-         - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
-         - [setCustomerGroupHelper, [@orocrm_magento.importexport.customer_group_helper]]
+            - [setChannelHelper, [@orocrm_channel.importexport.helper.channel]]
+            - [setAddressHelper, [@orocrm_magento.importexport.address_import_helper]]
+            - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+            - [setCustomerGroupHelper, [@orocrm_magento.importexport.customer_group_helper]]
 
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
@@ -223,63 +268,125 @@ services:
         class: %orocrm_magento.import_strategy.cart.add_or_update.class%
         parent: orocrm_magento.import.strategy.base_strategy
         calls:
-             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
-             - [setLogger, [@oro_integration.logger.strategy]]
+            - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+            - [setLogger, [@oro_integration.logger.strategy]]
 
     orocrm_magento.import.strategy.order.add_or_update:
         class: %orocrm_magento.import_strategy.order.add_or_update.class%
         parent: orocrm_magento.import.strategy.base_strategy
         calls:
-             - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+            - [setStoreStrategy, [@orocrm_magento.import.strategy.store]]
+
+    orocrm_magento.import.strategy.order_with_customer.add_or_update:
+        parent: orocrm_magento.import.strategy.order.add_or_update
+        class: %orocrm_magento.import.strategy.order_with_customer.add_or_update.class%
+
+    orocrm_magento.import.strategy.cart_with_customer.add_or_update:
+        parent: orocrm_magento.import.strategy.cart.add_or_update
+        class: %orocrm_magento.import.strategy.cart_with_customer.add_or_update.class%
 
     # Processors
-    orocrm_magento.importexport.processor.import_customer:
+    orocrm_magento.importexport.processor.abstract:
+        class: %orocrm_magento.importexport.processor.absract.class%
         parent: oro_importexport.processor.import_abstract
         calls:
-             - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
-             - [setStrategy, [@orocrm_magento.import.strategy.customer.add_or_update]]
+            - [setContextRegistry, [@oro_importexport.context_registry]]
+    
+    orocrm_magento.importexport.processor.import_customer:
+        parent: orocrm_magento.importexport.processor.abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
+            - [setStrategy, [@orocrm_magento.import.strategy.customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
 
     orocrm_magento.importexport.processor.import_region:
         parent: oro_importexport.processor.import_abstract
         calls:
-             - [setDataConverter, [@oro_importexport.data_converter.default]]
-             - [setStrategy, [@orocrm_magento.import.strategy.region.add_or_update]]
+            - [setDataConverter, [@oro_importexport.data_converter.default]]
+            - [setStrategy, [@orocrm_magento.import.strategy.region.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
 
     orocrm_magento.importexport.processor.import_cart:
         parent: oro_importexport.processor.import_abstract
         calls:
-             - [setDataConverter, [@orocrm_magento.importexport.data_converter.cart]]
-             - [setStrategy, [@orocrm_magento.import.strategy.cart.add_or_update]]
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.cart]]
+            - [setStrategy, [@orocrm_magento.import.strategy.cart.add_or_update]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
 
     orocrm_magento.importexport.processor.import_order:
-        parent: oro_importexport.processor.import_abstract
+        parent: orocrm_magento.importexport.processor.abstract
         calls:
-             - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
-             - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
+            - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.order.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
+
+    orocrm_magento.importexport.processor.import_order_with_customer:
+        class: %orocrm_magento.importexport.processor.absract.class%
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.order]]
+            - [setStrategy, [@orocrm_magento.import.strategy.order_with_customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.order.class%]]
+            - [setContextRegistry, [@oro_importexport.context_registry]]
+
+    orocrm_magento.importexport.processor.import_cart_with_customer:
+        class: %orocrm_magento.importexport.processor.absract.class%
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.cart]]
+            - [setStrategy, [@orocrm_magento.import.strategy.cart_with_customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.cart.class%]]
+            - [setContextRegistry, [@oro_importexport.context_registry]]
 
     orocrm_magento.importexport.normalizer.datetime:
         class: %orocrm_magento.importexport.normalizer.datetime.class%
         tags:
             - { name: oro_importexport.normalizer }
 
-    # Reverse processor
-    orocrm_magento.importexport.processor.export_customer:
-        parent: oro_importexport.processor.export_abstract
-        tags:
-            - { name: oro_importexport.processor, type: export, entity: %orocrm_contact.entity.class%, alias: orocrm_magento }
+    orocrm_magento.provider.initial_processor:
+        class: %orocrm_magento.provider.initial_processor.class%
+        parent: oro_integration.sync.processor
+        abstract: true
+        calls:
+            - [setChannelClassName, [%oro_integration.entity.class%]]
 
+    orocrm_magento.provider.initial_sync_processor:
+        class: %orocrm_magento.provider.initial_sync_processor.class%
+        parent: orocrm_magento.provider.initial_processor
+        tags:
+            - { name: orocrm_magento.bundle_config.aware }
+
+    orocrm_magento.provider.initial_schedule_processor:
+        class: %orocrm_magento.provider.initial_schedule_processor.class%
+        parent: orocrm_magento.provider.initial_processor
+        tags:
+            - { name: oro_integration.sync_processor, integration: magento }
+
+    orocrm_magento.importexport.processor.context:
+        class: %orocrm_magento.importexport.processor.context.class%
+        parent: orocrm_magento.importexport.processor.abstract
+
+    orocrm_magento.importexport.processor.context_order:
+        parent: orocrm_magento.importexport.processor.context
+        calls:
+            - [setStrategy, [@orocrm_magento.import.strategy.order.add_or_update]]
+
+    orocrm_magento.importexport.processor.context_cart:
+        parent: orocrm_magento.importexport.processor.context
+        calls:
+            - [setStrategy, [@orocrm_magento.import.strategy.cart.add_or_update]]
+
+    # Export processor
     orocrm_magento.importexport.processor.customer_export:
         parent: oro_integration.importexport.processor.export
         calls:
-             - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.customer.class%, alias: orocrm_magento.customer_export }
 
@@ -308,3 +415,53 @@ services:
         class: %orocrm_magento.importexport.reader.entity.class%
         arguments:
             - @oro_importexport.context_registry
+            
+    orocrm_magento.reader.context_customer:
+        class: %orocrm_magento.reader.context_customer.class%
+        parent: orocrm_magento.mage.customer_connector
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.reader.context_customer.order:
+        parent: orocrm_magento.reader.context_customer
+        calls:
+            - [setContextKey, ['postProcessOrders']]
+
+    orocrm_magento.reader.context_customer.cart:
+        parent: orocrm_magento.reader.context_customer
+        calls:
+            - [setContextKey, ['postProcessCarts']]
+
+    orocrm_magento.reader.context:
+        class: %orocrm_magento.reader.context.class%
+        abstract: true
+        arguments:
+            - @oro_importexport.context_registry
+
+    orocrm_magento.reader.context_order:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessOrders']]
+
+    orocrm_magento.reader.context_cart:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCarts']]
+
+    orocrm_magento.reader.order_info:
+        class: %orocrm_magento.reader.order_info.class%
+        arguments:
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+        calls:
+            - [setClassName, [%orocrm_magento.entity.order.class%]]
+
+    orocrm_magento.reader.customer_info:
+        class: %orocrm_magento.reader.customer_info.class%
+        arguments:
+            - @oro_importexport.context_registry
+            - @oro_integration.logger.strategy
+            - @oro_integration.provider.connector_context_mediator
+        calls:
+            - [setClassName, [%orocrm_magento.entity.customer.class%]]

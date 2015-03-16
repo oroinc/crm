@@ -78,3 +78,7 @@
     /* hide empty button pane */
     display: none;
 }
+
+.sync-state-label.control-label {
+    padding-top: 5px !important;
+}

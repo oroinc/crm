@@ -4,11 +4,15 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 interface MagentoTransportInterface extends TransportInterface
 {
+    const ALIAS_GROUPS = 'groups';
+    const ALIAS_STORES = 'stores';
+    const ALIAS_WEBSITES = 'websites';
+    const ALIAS_REGIONS = 'regions';
+
     const WEBSITE_CODE_SEPARATOR = ' / ';
     const WEBSITE_NAME_SEPARATOR = ', ';
 
@@ -86,13 +90,21 @@ interface MagentoTransportInterface extends TransportInterface
     public function getRegions();
 
     /**
+     * Retrieve customer information from magento.
+     *
+     * @param string $originId
+     * @return object
+     */
+    public function getCustomerInfo($originId);
+
+    /**
      * Retrieve customer address list
      *
-     * @param Customer $customer
+     * @param string $originId
      *
      * @return array
      */
-    public function getCustomerAddresses(Customer $customer);
+    public function getCustomerAddresses($originId);
 
     /**
      * Parse exception from remote side and returns generic code
@@ -102,6 +114,19 @@ interface MagentoTransportInterface extends TransportInterface
      * @return int
      */
     public function getErrorCode(\Exception $e);
+
+    /**
+     * @param string $incrementId
+     */
+    public function getOrderInfo($incrementId);
+
+    /**
+     * @param array|null $dependenciesToLoad
+     * @param bool false
+     *
+     * @return array
+     */
+    public function getDependencies(array $dependenciesToLoad = null, $force = false);
 
     /**
      * @param array $customerData

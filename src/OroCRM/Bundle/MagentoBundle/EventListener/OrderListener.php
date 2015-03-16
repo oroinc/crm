@@ -11,15 +11,12 @@ use Doctrine\ORM\UnitOfWork;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class OrderListener
 {
     /** @var array */
     protected $ordersForUpdate = [];
-
-    /** @var bool */
-    protected $isInProgress = false;
 
     /**
      * @param LifecycleEventArgs $event
@@ -29,9 +26,13 @@ class OrderListener
         /** @var Order $entity */
         $entity = $event->getEntity();
 
-        // if new order has valuable subtotal
-        if ($this->isOrderValid($entity) && $entity->getSubtotalAmount()) {
-            $this->recalculateCustomerLifetime($event->getEntityManager(), $entity, true);
+        // if new order has valuable subtotal and status
+        if (
+            $this->isOrderValid($entity)
+            && $entity->getSubtotalAmount()
+            && $entity->getStatus() !== Order::STATUS_CANCELED
+        ) {
+            $this->updateCustomerLifetime($event->getEntityManager(), $entity);
         }
     }
 
@@ -55,24 +56,17 @@ class OrderListener
      */
     public function postFlush(PostFlushEventArgs $event)
     {
-        if ($this->isInProgress || count($this->ordersForUpdate) === 0) {
+        if (count($this->ordersForUpdate) === 0) {
             return;
         }
 
-        $needFlush = false;
         $orders = $this->getChangedOrders($event->getEntityManager()->getUnitOfWork());
         foreach ($orders as $order) {
             // if order was scheduled for update
             if (!empty($this->ordersForUpdate[$order->getId()])) {
-                $needFlush |= $this->recalculateCustomerLifetime($event->getEntityManager(), $order);
+                $this->updateCustomerLifetime($event->getEntityManager(), $order);
                 unset($this->ordersForUpdate[$order->getId()]);
             }
-        }
-
-        if ($needFlush) {
-            $this->isInProgress = true;
-            $event->getEntityManager()->flush();
-            $this->isInProgress = false;
         }
     }
 
@@ -120,27 +114,20 @@ class OrderListener
     /**
      * @param EntityManager $entityManager
      * @param Order $order
-     * @param bool $appendSubtotal
-     * @return bool Returns 'true' when real changes were provided
      */
-    protected function recalculateCustomerLifetime(EntityManager $entityManager, Order $order, $appendSubtotal = false)
+    protected function updateCustomerLifetime(EntityManager $entityManager, Order $order)
     {
-        $customer = $order->getCustomer();
-        $oldLifetime = (float)$customer->getLifetime();
+        /** @var CustomerRepository $customerRepository */
+        $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
 
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $entityManager->getRepository('OroCRMMagentoBundle:Order');
-        $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
-        if ($appendSubtotal && $order->getStatus() && $order->getStatus() !== Order::STATUS_CANCELED) {
-            $newLifetime += $order->getSubtotalAmount();
+        $subtotalAmount = $order->getSubtotalAmount();
+        if ($subtotalAmount) {
+            // if order status changed to canceled we should remove subtotalAmount from customer lifetime
+            if ($order->getStatus() === Order::STATUS_CANCELED) {
+                $subtotalAmount *= -1;
+            }
+
+            $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
         }
-
-        if ($newLifetime !== $oldLifetime) {
-            $customer->setLifetime($newLifetime);
-
-            return true;
-        }
-
-        return false;
     }
 }

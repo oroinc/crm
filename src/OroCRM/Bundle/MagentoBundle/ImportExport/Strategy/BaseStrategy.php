@@ -2,6 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
+
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
@@ -15,12 +20,15 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 
+use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Utils\ValidationUtils;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper;
 
-abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
+abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface, StepExecutionAwareInterface
 {
+    const CONTEXT_POST_PROCESS_IDS = 'postProcessIds';
+
     /** @var ImportStrategyHelper */
     protected $strategyHelper;
 
@@ -38,6 +46,17 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
 
     /** @var DefaultOwnerHelper */
     protected $defaultOwnerHelper;
+
+    /** @var StepExecution */
+    protected $stepExecution;
+
+    /**
+     * @param StepExecution $stepExecution
+     */
+    public function setStepExecution(StepExecution $stepExecution)
+    {
+        $this->stepExecution = $stepExecution;
+    }
 
     /**
      * @param ImportStrategyHelper $strategyHelper
@@ -102,7 +121,22 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
             $this->context->incrementAddCount();
         }
 
+        $this->saveOriginIdContext($entity);
+
         return $entity;
+    }
+
+    /**
+     * @param OriginAwareInterface $entity
+     */
+    protected function saveOriginIdContext($entity)
+    {
+        if ($entity instanceof OriginAwareInterface) {
+            /** @var OriginAwareInterface $entity */
+            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
+            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getOriginId();
+            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
+        }
     }
 
     /**
@@ -201,5 +235,17 @@ abstract class BaseStrategy implements StrategyInterface, ContextAwareInterface
     protected function getAddressCountryByCode(AbstractAddress $address, $countryCode)
     {
         return $this->addressHelper->getAddressCountryByCode($address, $countryCode);
+    }
+
+    /**
+     * @return ExecutionContext
+     */
+    protected function getExecutionContext()
+    {
+        if (!$this->stepExecution) {
+            throw new \InvalidArgumentException('Execution context is not configured');
+        }
+
+        return $this->stepExecution->getJobExecution()->getExecutionContext();
     }
 }

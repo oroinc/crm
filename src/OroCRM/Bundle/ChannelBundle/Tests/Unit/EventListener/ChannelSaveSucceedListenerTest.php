@@ -32,7 +32,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject|EntityManager */
     protected $em;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->registry        = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $this->settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
@@ -54,6 +54,16 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testOnChannelSucceedSave()
     {
+        $this->prepareEvent();
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelSucceedSave($this->event);
+
+        $this->assertConnectors();
+    }
+
+    protected function prepareEvent()
+    {
         $this->entity->setEntities(
             [
                 'OroCRM\Bundle\AcmeBundle\Entity\TestEntity1',
@@ -61,7 +71,7 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->event->expects($this->once())
+        $this->event->expects($this->atLeastOnce())
             ->method('getChannel')
             ->will($this->returnValue($this->entity));
 
@@ -80,10 +90,21 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
         $this->registry->expects($this->any())->method('getManager')->will($this->returnValue($this->em));
         $this->em->expects($this->once())->method('persist')->with($this->integration);
         $this->em->expects($this->once())->method('flush');
+    }
 
-        $channelSaveSucceedListener = new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
-        $channelSaveSucceedListener->onChannelSucceedSave($this->event);
+    /**
+     * @return ChannelSaveSucceedListener
+     */
+    protected function getListener()
+    {
+        return new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
+    }
 
-        $this->assertEquals($this->integration->getConnectors(), ['TestConnector1', 'TestConnector2']);
+    public function assertConnectors()
+    {
+        $this->assertEquals(
+            $this->integration->getConnectors(),
+            ['TestConnector1', 'TestConnector2']
+        );
     }
 }

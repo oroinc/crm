@@ -2,22 +2,22 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use Psr\Log\NullLogger;
-use Psr\Log\LoggerAwareTrait;
 use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\AbstractDependencyManager;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderInterface, LoggerAwareInterface
 {
     use LoggerAwareTrait;
-
-    const ALIAS_GROUPS   = 'groups';
-    const ALIAS_STORES   = 'stores';
-    const ALIAS_WEBSITES = 'websites';
-    const ALIAS_REGIONS  = 'regions';
 
     const DEFAULT_SYNC_RANGE = '1 month';
 
@@ -27,11 +27,11 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var \DateTime */
     protected $lastSyncDate;
 
-    /** @var int|\stdClass Last id used for initial mode, paging by created_at assuming that ids always incremented */
-    protected $lastId = null;
+    /** @var \DateTime */
+    protected $minSyncDate;
 
     /** @var string initial or update mode */
-    protected $mode = self::IMPORT_MODE_INITIAL;
+    protected $mode = self::IMPORT_MODE_UPDATE;
 
     /** @var \DateInterval */
     protected $syncRange;
@@ -45,11 +45,15 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var int */
     protected $websiteId;
 
-    /** @var array dependencies data: customer groups, stores, websites */
-    protected $dependencies = [];
-
     /** @var array */
     protected $entitiesIdsBuffer = [];
+
+    /**
+     * In case entities ids were predefined we should not load next iteration
+     *
+     * @var bool
+     */
+    protected $entitiesIdsBufferImmutable = false;
 
     /** @var null|\stdClass */
     protected $current;
@@ -57,6 +61,16 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var bool */
     protected $loaded = false;
 
+    /** @var \stdClass[] Entities buffer got from pageable remote */
+    protected $entityBuffer;
+
+    /** @var bool */
+    protected $isInitialDataLoaded = false;
+
+    /**
+     * @param SoapTransport $transport
+     * @param array $settings
+     */
     public function __construct(SoapTransport $transport, array $settings)
     {
         $this->transport = $transport;
@@ -92,10 +106,17 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function next()
     {
         do {
+            $result = true;
+
             if (!empty($this->entitiesIdsBuffer)) {
                 $entityId = array_shift($this->entitiesIdsBuffer);
-                $result   = $this->getEntity($entityId);
-            } else {
+                $result = $this->getEntity($entityId);
+                if ($result === false) {
+                    continue;
+                }
+            } elseif ($this->entitiesIdsBufferImmutable && empty($this->entitiesIdsBuffer)) {
+                $result = null;
+            } elseif (!$this->entitiesIdsBufferImmutable) {
                 $result = $this->findEntitiesToProcess();
             }
 
@@ -117,9 +138,11 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function key()
     {
-        return is_object($this->current)
-            ? $this->current->{$this->getIdFieldName()}
-            : $this->current[$this->getIdFieldName()];
+        if (is_object($this->current)) {
+            return $this->current->{$this->getIdFieldName()};
+        } else {
+            return $this->current[$this->getIdFieldName()];
+        }
     }
 
     /**
@@ -136,13 +159,18 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     public function rewind()
     {
         if (false === $this->loaded) {
-            $this->dependencies = $this->getDependencies();
-            $this->loaded       = true;
+            // Reload loaded dependencies for deltas
+            if (!$this->isInitialSync()) {
+                $this->transport->getDependencies(null, true);
+            }
+            $this->loaded = true;
         }
 
-        $this->entitiesIdsBuffer = [];
-        $this->current           = null;
-        $this->lastSyncDate      = clone $this->lastSyncDateInitialValue;
+        if (!$this->entitiesIdsBufferImmutable) {
+            $this->entitiesIdsBuffer = [];
+        }
+        $this->current = null;
+        $this->lastSyncDate = clone $this->lastSyncDateInitialValue;
         $this->filter->reset();
         $this->next();
     }
@@ -152,7 +180,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function setStartDate(\DateTime $date)
     {
-        $this->lastSyncDate             = clone $date;
+        $this->lastSyncDate = clone $date;
         $this->lastSyncDateInitialValue = clone $date;
     }
 
@@ -167,16 +195,53 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /**
      * {@inheritdoc}
      */
+    public function setMinSyncDate(\DateTime $date)
+    {
+        $this->minSyncDate = $date;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setMode($mode)
     {
         $this->mode = $mode;
     }
 
     /**
+     * @param \DateInterval $syncRange
+     */
+    public function setSyncRange(\DateInterval $syncRange)
+    {
+        $this->syncRange = $syncRange;
+    }
+
+    /**
+     * @param array $entitiesIdsBuffer
+     */
+    public function setEntitiesIdsBuffer(array $entitiesIdsBuffer)
+    {
+        $this->entitiesIdsBuffer = $entitiesIdsBuffer;
+        $this->entitiesIdsBufferImmutable = true;
+
+        $this->loadEntities($entitiesIdsBuffer);
+
+        // drop missing customer ids
+        $this->entitiesIdsBuffer = array_intersect(array_keys((array)$this->entityBuffer), $entitiesIdsBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
+    }
+
+    /**
      * @param \DateTime $date
-     * @param array     $websiteIds
-     * @param array     $storeIds
-     * @param string    $format
+     * @param array $websiteIds
+     * @param array $storeIds
+     * @param string $format
      *
      * @return array
      */
@@ -186,29 +251,13 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         array $storeIds = [],
         $format = 'Y-m-d H:i:s'
     ) {
-        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
-            if (!empty($websiteIds)) {
-                $this->filter->addWebsiteFilter($websiteIds);
-            }
+        $this->applyWebsiteFilters($websiteIds, $storeIds);
 
-            if (!empty($storeIds)) {
-                $this->filter->addStoreFilter($storeIds);
-            }
-        }
-
-        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
-        if ($initMode) {
-            $dateField = 'created_at';
-            $dateKey   = 'to';
+        if ($this->isInitialSync()) {
+            $this->filter->addDateFilter('created_at', 'from', $this->getToDate($date), $format);
+            $this->filter->addDateFilter('created_at', 'to', $date, $format);
         } else {
-            $dateField = 'updated_at';
-            $dateKey   = 'from';
-        }
-        $this->filter->addDateFilter($dateField, $dateKey, $date, $format);
-
-        $lastId = $this->getLastId();
-        if (!is_null($lastId) && $initMode) {
-            $this->filter->addLastIdFilter($lastId, $this->getIdFieldName());
+            $this->filter->addDateFilter('updated_at', 'from', $date, $format);
         }
 
         $this->logAppliedFilters($this->filter);
@@ -223,61 +272,35 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function findEntitiesToProcess()
     {
-        $now      = new \DateTime($this->transport->getServerTime(), new \DateTimeZone('UTC'));
-        $initMode = $this->mode == self::IMPORT_MODE_INITIAL;
+        if ($this->isInitialSync() && $this->isInitialDataLoaded) {
+            $this->isInitialDataLoaded = false;
+
+            return null;
+        }
+
+        $now = new \DateTime($this->transport->getServerTime(), new \DateTimeZone('UTC'));
 
         $this->logger->info('Looking for batch');
         $this->entitiesIdsBuffer = $this->getEntityIds();
 
-        // first run, ignore all data in less then start sync date
-        $lastId  = $this->getLastId();
-        $wasNull = is_null($lastId);
-        $lastId  = end($this->entitiesIdsBuffer);
-
-        if (!empty($lastId)) {
-            $this->lastId = $lastId;
-        } elseif ($wasNull) {
-            $this->lastId = 0;
+        if (!$this->isInitialSync()) {
+            //increment date for further filtering
+            $this->lastSyncDate->add($this->syncRange);
         }
 
-        // restore cursor
-        reset($this->entitiesIdsBuffer);
+        $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
 
-        // if init mode and it's first iteration we have to skip retrieved entities
-        if ($wasNull && $initMode) {
-            $this->entitiesIdsBuffer = [];
-            $this->logger->info('Pagination start point detected');
-        } else {
-            $this->logger->info(sprintf('found %d entities', count($this->entitiesIdsBuffer)));
+        if ($this->isInitialSync()) {
+            $this->isInitialDataLoaded = true;
+        } elseif (empty($this->entitiesIdsBuffer)) {
+            if ($this->lastSyncDate >= $now) {
+                return null;
+            }
+
+            return true;
         }
 
-        if ($initMode) {
-            $lastSyncDate = $this->lastSyncDate;
-        } else {
-            $lastSyncDate = clone $this->lastSyncDate;
-            $lastSyncDate->add($this->syncRange);
-        }
-
-        if (empty($this->entitiesIdsBuffer) && $lastSyncDate >= $now) {
-            $result = null;
-        } else {
-            $result = true;
-        }
-
-        //increment date for further filtering
-        $this->lastSyncDate->add($this->syncRange);
-
-        return $result;
-    }
-
-    /**
-     * Retrieve last id in queue
-     *
-     * @return int|null
-     */
-    protected function getLastId()
-    {
-        return is_object($this->lastId) ? $this->lastId->{$this->getIdFieldName()} : $this->lastId;
+        return empty($this->entitiesIdsBuffer) ? null : true;
     }
 
     /**
@@ -292,7 +315,8 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     {
         $stores = [];
 
-        foreach ((array)$this->dependencies[self::ALIAS_STORES] as $store) {
+        $dependencies = $this->transport->getDependencies([MagentoTransportInterface::ALIAS_STORES]);
+        foreach ($dependencies[MagentoTransportInterface::ALIAS_STORES] as $store) {
             if ($store['website_id'] == $websiteId) {
                 $stores[] = $store['store_id'];
             }
@@ -312,16 +336,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function addDependencyData($result)
     {
-        // fill related entities data, needed to create full representation of magento store state in this time
-        // flat array structure will be converted by data converter
-        $store   = $this->dependencies[self::ALIAS_STORES][$result->store_id];
-        $website = $this->dependencies[self::ALIAS_WEBSITES][$store['website_id']];
-
-        $result->store_code         = $store['code'];
-        $result->store_storename    = $store['name'];
-        $result->store_website_id   = $website['id'];
-        $result->store_website_code = $website['code'];
-        $result->store_website_name = $website['name'];
+        AbstractDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**
@@ -341,9 +356,9 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function logAppliedFilters(BatchFilterBag $filterBag)
     {
-        $filters  = $filterBag->getAppliedFilters();
-        $filters  = $filters['filters'];
-        $filters  = array_merge(
+        $filters = $filterBag->getAppliedFilters();
+        $filters = $filters['filters'];
+        $filters = array_merge(
             !empty($filters[BatchFilterBag::FILTER_TYPE_COMPLEX]) ? $filters[BatchFilterBag::FILTER_TYPE_COMPLEX] : [],
             !empty($filters[BatchFilterBag::FILTER_TYPE_SIMPLE]) ? $filters[BatchFilterBag::FILTER_TYPE_SIMPLE] : []
         );
@@ -351,20 +366,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
         foreach ($filters as $filter) {
             $field = $filter['key'];
             $value = $filter['value'];
-            $value = is_array($value) ? http_build_query($value, '', '; ') : '= ' . $value;
+            if (is_array($value)) {
+                $value = http_build_query($value, '', '; ');
+            } else {
+                $value = '= ' . $value;
+            }
 
             $this->logger->debug(sprintf($template, $field, urldecode($value)));
         }
-    }
-
-    /**
-     * Get dependencies data
-     *
-     * @return array
-     */
-    protected function getDependencies()
-    {
-        return [];
     }
 
     /**
@@ -390,4 +399,44 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      * @return string
      */
     abstract protected function getIdFieldName();
+
+    /**
+     * @param \DateTime $date
+     * @return \DateTime
+     */
+    protected function getToDate(\DateTime $date)
+    {
+        $toDate = clone $date;
+        $toDate->sub($this->syncRange);
+        if ($this->minSyncDate && $toDate < $this->minSyncDate) {
+            $toDate = $this->minSyncDate;
+        }
+
+        return $toDate;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isInitialSync()
+    {
+        return $this->mode === self::IMPORT_MODE_INITIAL;
+    }
+
+    /**
+     * @param array $websiteIds
+     * @param array $storeIds
+     */
+    protected function applyWebsiteFilters(array $websiteIds, array $storeIds)
+    {
+        if ($this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            if (!empty($websiteIds)) {
+                $this->filter->addWebsiteFilter($websiteIds);
+            }
+
+            if (!empty($storeIds)) {
+                $this->filter->addStoreFilter($storeIds);
+            }
+        }
+    }
 }
