@@ -56,7 +56,7 @@ class AddressImportHelper
             return;
         }
 
-        $this->updateRegionByMagentoRegionId($address, $mageRegionId, $countryCode);
+        $this->updateRegionByMagentoRegionId($address, $countryCode, $mageRegionId);
     }
 
     /**
@@ -201,11 +201,11 @@ class AddressImportHelper
 
     /**
      * @param AbstractAddress $address
-     * @param int|string|null $mageRegionId
      * @param string $countryCode
+     * @param int|string|null $mageRegionId
      * @throws InvalidItemException
      */
-    public function updateRegionByMagentoRegionId(AbstractAddress $address, $mageRegionId, $countryCode)
+    public function updateRegionByMagentoRegionId(AbstractAddress $address, $countryCode, $mageRegionId = null)
     {
         if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId]) && is_numeric($mageRegionId)) {
             $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);

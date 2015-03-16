@@ -82,6 +82,8 @@ parameters:
     orocrm_magento.form.autocomplete.customer_group.search_handler.class:   OroCRM\Bundle\MagentoBundle\Autocomplete\CustomerGroupSearchHandler
     orocrm_magento.form.autocomplete.store.search_handler.class:            OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
 
+    orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -381,3 +383,10 @@ services:
             - [setDataChannelClass, [%orocrm_channel.entity.class%]]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: "magento_store", acl_resource: "orocrm_magento_customer_view" }
+
+    orocrm_magento.validator.unique_customer_email:
+        class: %orocrm_magento.validator.unique_customer_email.class%
+        arguments:
+            - @orocrm_magento.transport.soap_transport
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
