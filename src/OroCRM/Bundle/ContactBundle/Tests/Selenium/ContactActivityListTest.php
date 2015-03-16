@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Contacts;
+namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
 
 use Oro\Bundle\TestFrameworkBundle\Pages\Objects\Login;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
