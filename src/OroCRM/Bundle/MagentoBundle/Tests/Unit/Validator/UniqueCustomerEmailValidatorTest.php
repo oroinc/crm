@@ -102,6 +102,8 @@ class UniqueCustomerEmailValidatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [[['customer_id' => 2]]],
+            [[['customer_id' => '']]],
+            [[['increment_id' => 5]]],
             [[['customer_id' => 1], ['customer_id' => 2]]]
         ];
     }

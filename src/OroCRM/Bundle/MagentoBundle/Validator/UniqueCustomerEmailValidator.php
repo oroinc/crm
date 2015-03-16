@@ -43,7 +43,7 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
                         $customerData = (array)$customerData;
                     }
                     if ($customerData
-                        && array_key_exists('customer_id', $customerData)
+                        && !empty($customerData['customer_id'])
                         && $customerData['customer_id'] == $value->getOriginId()
                     ) {
                         return false;
