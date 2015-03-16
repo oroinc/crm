@@ -24,7 +24,10 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
             'updated_at' => 'updated',
             'postcode'   => 'postalCode',
             'telephone'  => 'phone',
-            'company'    => 'organization'
+            'company'    => 'organization',
+            'city'       => 'city',
+            'street'     => 'street',
+            'street2'    => 'street2'
         ];
     }
 
@@ -37,6 +40,17 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
         if (!empty($importedRecord['street']) && strpos($importedRecord['street'], "\n") !== false) {
             list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
         }
+        $importedRecord = $this->convertImportedRegion($importedRecord);
+
+        return $importedRecord;
+    }
+
+    /**
+     * @param array $importedRecord
+     * @return array
+     */
+    protected function convertImportedRegion(array $importedRecord)
+    {
         if (empty($importedRecord['region']['code'])) {
             $importedRecord['region'] = null;
         }
@@ -49,7 +63,21 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
      */
     protected function getBackendHeader()
     {
-        // will be implemented for bidirectional sync
-        throw new \Exception('Normalization is not implemented!');
+        return array_values($this->getHeaderConversionRules());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToExportFormat(array $exportedRecord, $skipNullValues = true)
+    {
+        $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
+
+        $exportedRecord['street'] = [
+            $exportedRecord['street'],
+            $exportedRecord['street2']
+        ];
+
+        return $exportedRecord;
     }
 }

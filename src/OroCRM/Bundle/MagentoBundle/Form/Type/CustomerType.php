@@ -4,8 +4,13 @@ namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraint;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerType extends AbstractType
 {
@@ -36,6 +41,8 @@ class CustomerType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $isExisting = $builder->getData() && $builder->getData()->getId();
+
         $builder
             ->add('namePrefix', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.name_prefix.label'])
             ->add('firstName', 'text', ['label' => 'orocrm.magento.customer.first_name.label'])
@@ -52,7 +59,8 @@ class CustomerType extends AbstractType
                 [
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
-                    'required' => true
+                    'required' => true,
+                    'disabled' => $isExisting
                 ]
             )
             ->add(
@@ -61,7 +69,8 @@ class CustomerType extends AbstractType
                 [
                     'label' => 'orocrm.magento.customer.store.label',
                     'channel_field' => 'dataChannel',
-                    'required' => true
+                    'required' => true,
+                    'disabled' => $isExisting
                 ]
             )
             ->add(
@@ -85,6 +94,32 @@ class CustomerType extends AbstractType
             )
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
             ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
+
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) {
+                /** @var Customer $entity */
+                $entity = $event->getData();
+                $dataChannel = $entity->getDataChannel();
+                if ($dataChannel) {
+                    $entity->setChannel($dataChannel->getDataSource());
+                }
+
+                $store = $entity->getStore();
+                if ($store) {
+                    $entity->setWebsite($store->getWebsite());
+                }
+
+                if (!$entity->getAddresses()->isEmpty()) {
+                    /** @var Address $address */
+                    foreach ($entity->getAddresses() as $address) {
+                        if (!$address->getChannel()) {
+                            $address->setChannel($entity->getChannel());
+                        }
+                    }
+                }
+            }
+        );
     }
 
     /**

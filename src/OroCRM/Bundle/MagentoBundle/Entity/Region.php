@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class Region
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\RegionRepository")
  * @ORM\Table(
  *  name="orocrm_magento_region",
  *  indexes={

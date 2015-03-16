@@ -56,6 +56,7 @@ parameters:
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
     orocrm_magento.importexport.writer.abstract_export.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
     orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
+    orocrm_magento.importexport.writer.customer_address.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerAddressExportWriter
 
     # Readers
     orocrm_magento.importexport.reader.entity.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Reader\ContextEntityReader
@@ -64,7 +65,7 @@ parameters:
     orocrm_magento.reader.order_info.class:                                     OroCRM\Bundle\MagentoBundle\Provider\Reader\OrderInfoReader
     orocrm_magento.reader.customer_info.class:                                  OroCRM\Bundle\MagentoBundle\Provider\Reader\CustomerInfoReader
 
-   # Processor
+   # ImportExport Processor
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
     orocrm_magento.importexport.processor.context.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
 
@@ -390,6 +391,13 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.customer.class%, alias: orocrm_magento.customer_export }
 
+    orocrm_magento.importexport.processor.customer_address_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+             - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer_address]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.address.class%, alias: orocrm_magento.customer_address_export }
+
     # Writers
     orocrm_magento.writer.proxy_entity_writer:
         class: %orocrm_magento.writer.proxy_entity_writer.class%
@@ -410,11 +418,18 @@ services:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
 
+    orocrm_magento.importexport.writer.customer_address:
+        class: %orocrm_magento.importexport.writer.customer_address.class%
+        parent: orocrm_magento.importexport.writer.abstract_export
+        calls:
+            - [setMagentoRegionClass, [%orocrm_magento.entity.region.class%]]
+
     # readers
     orocrm_magento.importexport.reader.entity:
         class: %orocrm_magento.importexport.reader.entity.class%
         arguments:
             - @oro_importexport.context_registry
+            - @oro_entity.doctrine_helper
             
     orocrm_magento.reader.context_customer:
         class: %orocrm_magento.reader.context_customer.class%

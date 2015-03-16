@@ -37,9 +37,13 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * @Oro\Loggable
  *
  * TODO: Create migration to remove country and region from identity fields list CRM-2411
+ * TODO: Add sync_state field to table CRM-2411
  */
 class Address extends ExtendAddress implements OriginAwareInterface, IntegrationAwareInterface
 {
+    const SYNC_TO_MAGENTO = 1;
+    const MAGENTO_REMOVED = 2;
+
     use IntegrationEntityTrait, OriginTrait;
 
     /*
@@ -207,6 +211,13 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",cascade={"persist"})
      * @ORM\JoinColumn(name="related_contact_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @var ContactAddress
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $contactAddress;
 
@@ -215,8 +226,29 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",cascade={"persist"})
      * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $contactPhone;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $syncState;
 
     /**
      * Set contact as owner.
@@ -329,5 +361,24 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSyncState()
+    {
+        return $this->syncState;
+    }
+
+    /**
+     * @param int $syncState
+     * @return Address
+     */
+    public function setSyncState($syncState)
+    {
+        $this->syncState = $syncState;
+
+        return $this;
     }
 }

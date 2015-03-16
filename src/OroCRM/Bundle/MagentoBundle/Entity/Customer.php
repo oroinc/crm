@@ -64,6 +64,9 @@ class Customer extends ExtendCustomer implements
     OriginAwareInterface,
     IntegrationAwareInterface
 {
+    const SYNC_TO_MAGENTO = 1;
+    const MAGENTO_REMOVED = 2;
+
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
     /**
@@ -343,6 +346,13 @@ class Customer extends ExtendCustomer implements
      * @var int
      *
      * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $syncState;
 

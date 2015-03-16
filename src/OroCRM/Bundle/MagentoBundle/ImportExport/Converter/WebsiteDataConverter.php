@@ -23,7 +23,6 @@ class WebsiteDataConverter extends IntegrationAwareDataConverter
      */
     protected function getBackendHeader()
     {
-        // will be implemented for bidirectional sync
-        throw new \Exception('Normalization is not implemented!');
+        return array_values($this->getHeaderConversionRules());
     }
 }

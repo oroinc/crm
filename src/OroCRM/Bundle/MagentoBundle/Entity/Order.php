@@ -236,13 +236,6 @@ class Order extends ExtendOrder implements
     protected $customerEmail;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(name="sync_state", type="integer", nullable=true)
-     */
-    protected $syncState;
-
-    /**
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
@@ -769,25 +762,5 @@ class Order extends ExtendOrder implements
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSyncState()
-    {
-        return $this->syncState;
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * @return Order
-     */
-    public function setSyncState($syncState)
-    {
-        $this->syncState = $syncState;
-
-        return $this;
     }
 }

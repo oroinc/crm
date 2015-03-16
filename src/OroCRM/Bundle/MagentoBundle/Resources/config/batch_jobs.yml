@@ -38,6 +38,20 @@ connector:
                     parameters:
                         batch_size: 1
 
+        magento_customer_address_export:
+            title: 'Export Magento Customer Address to Magento'
+            type: export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.importexport.reader.entity
+                        processor: orocrm_magento.importexport.processor.customer_address_export
+                        writer:    orocrm_magento.importexport.writer.customer_address
+                    parameters:
+                        batch_size: 1
+
         mage_region_import:
             title: "Region import from Magento"
             type:  import

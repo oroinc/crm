@@ -81,3 +81,9 @@
         });
     </script>
 {% endblock %}
+
+{% block orocrm_magento_customer_addresses_widget %}
+    <div {% if form.vars.value and form.vars.value.originId %}class="collection-remove-disabled"{% endif %}>
+        {{ form_widget(form) }}
+    </div>
+{% endblock %}
