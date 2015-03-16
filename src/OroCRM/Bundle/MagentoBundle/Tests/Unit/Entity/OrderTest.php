@@ -81,7 +81,6 @@ class OrderTest extends AbstractEntityTestCase
             'channel'             => ['channel', $channel, $channel],
             'owner'               => ['owner', $owner, $owner],
             'organization'        => ['organization', $organization, $organization],
-            'syncState'           => ['syncState', 1, 1]
         ];
     }
 }

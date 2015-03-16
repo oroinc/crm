@@ -236,7 +236,6 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -429,6 +428,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('updated', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_1E239D647E3C61F9', []);
         $table->addUniqueIndex(['related_contact_address_id'], 'UNIQ_1E239D648137CB7B');
         $table->addUniqueIndex(['related_contact_phone_id'], 'UNIQ_1E239D64E3694F65');
