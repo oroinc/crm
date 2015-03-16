@@ -167,6 +167,7 @@ definitions:
                                 configuration:
                                     channel: $channel
                                     entity: $.data
+                                    changeSet: $.changeSet
                                     writer_skip_clear: true
                                 attribute: $.jobResult
                             - @call_method:
@@ -368,14 +369,12 @@ triggers:
             queued:   true
         -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 
     magento_customer_address_export:
         -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 

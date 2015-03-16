@@ -239,7 +239,19 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                     'prop2' => 'new local value',
                     'prop3' => 'new local value3'
                 ]
-            ]
+            ],
+            'remote data does not contains changed field' => [
+                'changeSet' => [
+                    'prop2' => [
+                        'old' => 'old value',
+                        'new' => null
+                    ]
+                ],
+                'localData' => ['prop' => 'value', 'prop2' => null],
+                'remoteData' => ['prop' => 'new value'],
+                'strategy' => 'local',
+                'expected' => ['prop' => 'new value']
+            ],
         ];
     }
 }

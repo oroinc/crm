@@ -6,6 +6,7 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
 use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
@@ -23,6 +24,19 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     protected $stateManager;
 
     /**
+     * @var TwoWaySyncStrategy
+     */
+    protected $strategy;
+
+    /**
+     * @param TwoWaySyncStrategy $strategy
+     */
+    public function setStrategy($strategy)
+    {
+        $this->strategy = $strategy;
+    }
+
+    /**
      * @param MagentoTransportInterface $transport
      */
     public function setTransport(MagentoTransportInterface $transport)
@@ -36,6 +50,18 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     public function setChannelClassName($channelClassName)
     {
         $this->channelClassName = $channelClassName;
+    }
+
+    /**
+     * @return TwoWaySyncStrategy
+     */
+    public function getStrategy()
+    {
+        if (!$this->strategy) {
+            throw new \InvalidArgumentException('Strategy is missing');
+        }
+
+        return $this->strategy;
     }
 
     /**

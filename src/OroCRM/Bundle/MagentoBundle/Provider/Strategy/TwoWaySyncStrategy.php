@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Strategy;
 
+use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 class TwoWaySyncStrategy
@@ -13,6 +14,19 @@ class TwoWaySyncStrategy
         TwoWaySyncConnectorInterface::REMOTE_WINS,
         TwoWaySyncConnectorInterface::LOCAL_WINS
     ];
+
+    /**
+     * @var DataConverterInterface
+     */
+    protected $dataConverter;
+
+    /**
+     * @param DataConverterInterface $dataConverter
+     */
+    public function __construct(DataConverterInterface $dataConverter)
+    {
+        $this->dataConverter = $dataConverter;
+    }
 
     /**
      * @param array $changeSet
@@ -42,32 +56,47 @@ class TwoWaySyncStrategy
             return $remoteData;
         }
 
-        $oldValues = array_map(
-            function ($data) {
-                if (empty($data['old'])) {
-                    return false;
-                }
-
-                return $data['old'];
-            },
-            $changeSet
-        );
-
+        $oldValues = $this->getChangeSetValues($changeSet, 'old');
         $snapshot = array_merge($localData, $oldValues);
-        $localChanges = array_keys($changeSet);
+        $localChanges = array_keys($oldValues);
         $remoteChanges = array_keys(array_diff_assoc($remoteData, $snapshot));
         $conflicts = array_intersect($remoteChanges, $localChanges);
 
         if (!$conflicts) {
-           return $remoteData;
+            return $remoteData;
         }
 
         foreach ($conflicts as $conflict) {
+            if (!array_key_exists($conflict, $remoteData)) {
+                continue;
+            }
+
             if ($strategy === TwoWaySyncConnectorInterface::LOCAL_WINS) {
                 $remoteData[$conflict] = $localData[$conflict];
             }
         }
 
         return $remoteData;
+    }
+
+    /**
+     * @param array $changeSet
+     * @param string $key
+     * @return array
+     */
+    protected function getChangeSetValues($changeSet, $key)
+    {
+        $oldValues = array_map(
+            function ($data) use ($key) {
+                if (empty($data[$key])) {
+                    return null;
+                }
+
+                return $data[$key];
+            },
+            $changeSet
+        );
+
+        return array_filter($this->dataConverter->convertToExportFormat($oldValues));
     }
 }

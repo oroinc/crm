@@ -69,6 +69,7 @@ parameters:
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
     orocrm_magento.importexport.processor.context.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
 
+    orocrm_magento.provider.strategy.two_way_sync.class:                        OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy
 services:
     # Data converter
     orocrm_magento.importexport.data_converter.cartitem:
@@ -417,6 +418,8 @@ services:
     orocrm_magento.importexport.writer.customer:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
+        calls:
+            - [setStrategy, [@orocrm_magento.provider.strategy.two_way_sync.customer]]
 
     orocrm_magento.importexport.writer.customer_address:
         class: %orocrm_magento.importexport.writer.customer_address.class%
@@ -480,3 +483,9 @@ services:
             - @oro_integration.provider.connector_context_mediator
         calls:
             - [setClassName, [%orocrm_magento.entity.customer.class%]]
+
+    # strategy
+    orocrm_magento.provider.strategy.two_way_sync.customer:
+        class: %orocrm_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - @orocrm_magento.importexport.data_converter.customer
