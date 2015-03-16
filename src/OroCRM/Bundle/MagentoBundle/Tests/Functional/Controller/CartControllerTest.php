@@ -20,8 +20,13 @@ class CartControllerTest extends AbstractController
         self::$cart = $this->getReference('cart');
     }
 
+    /**
+     * @return int
+     */
     protected function getMainEntityId()
     {
+        $this->assertNotEmpty(self::$cart);
+
         return self::$cart->getid();
     }
 
