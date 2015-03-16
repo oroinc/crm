@@ -4,22 +4,21 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
-use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
+use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
 /**
  * Magento SOAP transport
@@ -27,31 +26,32 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
  * with sessionId param using SOAP requests
  *
  * @package OroCRM\Bundle\MagentoBundle
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    const ACTION_CUSTOMER_LIST           = 'customerCustomerList';
-    const ACTION_CUSTOMER_INFO           = 'customerCustomerInfo';
-    const ACTION_CUSTOMER_UPDATE         = 'customerCustomerUpdate';
-    const ACTION_CUSTOMER_DELETE         = 'customerCustomerDelete';
-    const ACTION_CUSTOMER_CREATE         = 'customerCustomerCreate';
-    const ACTION_CUSTOMER_ADDRESS_LIST   = 'customerAddressList';
-    const ACTION_CUSTOMER_ADDRESS_INFO   = 'customerAddressInfo';
+    const ACTION_CUSTOMER_LIST = 'customerCustomerList';
+    const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
+    const ACTION_CUSTOMER_UPDATE = 'customerCustomerUpdate';
+    const ACTION_CUSTOMER_DELETE = 'customerCustomerDelete';
+    const ACTION_CUSTOMER_CREATE = 'customerCustomerCreate';
+    const ACTION_CUSTOMER_ADDRESS_LIST = 'customerAddressList';
+    const ACTION_CUSTOMER_ADDRESS_INFO = 'customerAddressInfo';
     const ACTION_CUSTOMER_ADDRESS_UPDATE = 'customerAddressUpdate';
     const ACTION_CUSTOMER_ADDRESS_DELETE = 'customerAddressDelete';
     const ACTION_CUSTOMER_ADDRESS_CREATE = 'customerAddressCreate';
-    const ACTION_ADDRESS_LIST            = 'customerAddressList';
-    const ACTION_GROUP_LIST              = 'customerGroupList';
-    const ACTION_STORE_LIST              = 'storeList';
-    const ACTION_ORDER_LIST              = 'salesOrderList';
-    const ACTION_ORDER_INFO              = 'salesOrderInfo';
-    const ACTION_CART_INFO               = 'shoppingCartInfo';
-    const ACTION_COUNTRY_LIST            = 'directoryCountryList';
-    const ACTION_REGION_LIST             = 'directoryRegionList';
-    const ACTION_PING                    = 'oroPing';
+    const ACTION_ADDRESS_LIST = 'customerAddressList';
+    const ACTION_GROUP_LIST = 'customerGroupList';
+    const ACTION_STORE_LIST = 'storeList';
+    const ACTION_ORDER_LIST = 'salesOrderList';
+    const ACTION_ORDER_INFO = 'salesOrderInfo';
+    const ACTION_CART_INFO = 'shoppingCartInfo';
+    const ACTION_COUNTRY_LIST = 'directoryCountryList';
+    const ACTION_REGION_LIST = 'directoryRegionList';
+    const ACTION_PING = 'oroPing';
 
-    const ACTION_ORO_CART_LIST     = 'oroQuoteList';
-    const ACTION_ORO_ORDER_LIST    = 'oroOrderList';
+    const ACTION_ORO_CART_LIST = 'oroQuoteList';
+    const ACTION_ORO_ORDER_LIST = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
@@ -74,6 +74,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var  string */
     protected $serverTime;
 
+    /** @var array */
+    protected $dependencies = [];
+
+    /**
+     * @param Mcrypt $encoder
+     */
     public function __construct(Mcrypt $encoder)
     {
         $this->encoder = $encoder;
@@ -88,8 +94,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
         $wsiMode = $this->settings->get('wsi_mode', false);
         $apiUser = $this->settings->get('api_user', false);
-        $apiKey  = $this->settings->get('api_key', false);
-        $apiKey  = $this->encoder->decryptData($apiKey);
+        $apiKey = $this->settings->get('api_key', false);
+        $apiKey = $this->encoder->decryptData($apiKey);
 
         if (!$apiUser || !$apiKey) {
             throw new InvalidConfigurationException(
@@ -99,7 +105,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
         // revert initial state
         $this->isExtensionInstalled = null;
-        $this->isWsiMode            = $wsiMode;
+        $this->isWsiMode = $wsiMode;
 
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = null;
@@ -113,6 +119,10 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         if (null !== $this->sessionId) {
             $params = array_merge(['sessionId' => $this->sessionId], (array)$params);
+        }
+
+        if ($this->logger) {
+            $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
         }
 
         if ($this->isWsiMode) {
@@ -147,18 +157,19 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     protected function pingMagento()
     {
         if (null === $this->isExtensionInstalled && null === $this->adminUrl) {
-            $multipleAttemptsEnabled = $this->multipleAttemptsEnabled;
-            $this->setMultipleAttemptsEnabled(false);
             try {
-                $result                     = $this->call(self::ACTION_PING);
+                $result = $this->call(self::ACTION_PING);
                 $this->isExtensionInstalled = !empty($result->version);
-                $this->adminUrl             = !empty($result->admin_url) ? $result->admin_url : false;
+                if (!empty($result->admin_url)) {
+                    $this->adminUrl = $result->admin_url;
+                } else {
+                    $this->adminUrl = false;
+                }
             } catch (\Exception $e) {
                 $this->isExtensionInstalled
                     = $this->adminUrl
                     = false;
             }
-            $this->setMultipleAttemptsEnabled($multipleAttemptsEnabled);
         }
 
         return $this;
@@ -196,6 +207,81 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         } else {
             return new OrderSoapIterator($this, $settings);
         }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrderInfo($incrementId)
+    {
+        return $this->call(self::ACTION_ORDER_INFO, ['orderIncrementId' => $incrementId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies(array $dependenciesToLoad = null, $force = false)
+    {
+        if ($force && null === $dependenciesToLoad) {
+            $dependenciesToLoad = array_keys($this->dependencies);
+        }
+
+        $dependencies = [];
+        foreach ($dependenciesToLoad as $dependencyToLoad) {
+            switch ($dependencyToLoad) {
+                case MagentoTransportInterface::ALIAS_STORES:
+                    $dependencies[$dependencyToLoad] = $this->getStoreDependency($force);
+                    break;
+                case MagentoTransportInterface::ALIAS_WEBSITES:
+                    $dependencies[$dependencyToLoad] = $this->getWebsiteDependency($force);
+                    break;
+                case MagentoTransportInterface::ALIAS_GROUPS:
+                    $dependencies[$dependencyToLoad] = $this->getCustomerGroupsDependency($force);
+                    break;
+            }
+        }
+
+        return $dependencies;
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getStoreDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_STORES, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_STORES] = iterator_to_array($this->getStores());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_STORES];
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getWebsiteDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_WEBSITES, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES] = iterator_to_array($this->getWebsites());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES];
+    }
+
+    /**
+     * @param bool $force
+     * @return array
+     */
+    protected function getCustomerGroupsDependency($force = false)
+    {
+        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_GROUPS, $this->dependencies)) {
+            $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS]
+                = iterator_to_array($this->getCustomerGroups());
+        }
+
+        return $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS];
     }
 
     /**
@@ -259,11 +345,10 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function getCustomerAddresses(Customer $customer)
+    public function getCustomerAddresses($originId)
     {
-        $customerId = $customer->getOriginId();
-        $addresses  = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $customerId]);
-        $addresses  = WSIUtils::processCollectionResponse($addresses);
+        $addresses = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
+        $addresses = WSIUtils::processCollectionResponse($addresses);
 
         return $addresses;
     }
@@ -312,10 +397,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
+    public function getCustomerInfo($originId)
+    {
+        return $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getErrorCode(\Exception $e)
     {
         if ($e instanceof \SoapFault) {
-            switch($e->faultcode) {
+            switch ($e->faultcode) {
                 case self::SOAP_FAULT_ADDRESS_DOES_NOT_EXIST:
                     return self::TRANSPORT_ERROR_ADDRESS_DOES_NOT_EXIST;
             }
@@ -354,8 +447,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         if (null === $this->serverTime) {
             $parsedResponse = $this->getLastResponseHeaders();
 
-            $this->serverTime = isset($parsedResponse['headers'], $parsedResponse['headers']['Date'])
-                ? $parsedResponse['headers']['Date'] : false;
+            if (isset($parsedResponse['headers']['Date'])) {
+                $this->serverTime = $parsedResponse['headers']['Date'];
+            } else {
+                $this->serverTime = false;
+            }
         }
     }
 }

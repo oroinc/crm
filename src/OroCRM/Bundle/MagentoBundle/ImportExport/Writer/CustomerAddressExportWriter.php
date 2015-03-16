@@ -49,7 +49,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             $this->writeExistingItem($item);
         }
 
-        parent::write([$this->getEntity()]);
+        parent::write([$entity]);
     }
 
     /**

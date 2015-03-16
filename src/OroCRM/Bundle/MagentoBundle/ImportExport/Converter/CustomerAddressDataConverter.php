@@ -70,13 +70,10 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
         $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
         $exportedRecord = $this->convertTypesToExportFormat($exportedRecord);
 
-        if (isset($exportedRecord['created_at'])) {
-            unset($exportedRecord['created_at']);
-        }
-
-        if (isset($exportedRecord['updated_at'])) {
-            unset($exportedRecord['updated_at']);
-        }
+        unset(
+            $exportedRecord['created_at'],
+            $exportedRecord['updated_at']
+        );
 
         return $exportedRecord;
     }

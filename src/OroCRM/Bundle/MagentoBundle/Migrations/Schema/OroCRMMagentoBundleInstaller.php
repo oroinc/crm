@@ -100,6 +100,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         IntegrationUpdate::updateOroIntegrationTransportTable($schema);
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
     }
 
     /**
@@ -331,6 +332,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('rfm_recency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -376,6 +378,8 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('row_total', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax_amount', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('product_image_url', 'text', ['notnull' => false]);
+        $table->addColumn('product_url', 'text', ['notnull' => false]);
         $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
@@ -424,6 +428,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('updated', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_1E239D647E3C61F9', []);
         $table->addUniqueIndex(['related_contact_address_id'], 'UNIQ_1E239D648137CB7B');
         $table->addUniqueIndex(['related_contact_phone_id'], 'UNIQ_1E239D64E3694F65');

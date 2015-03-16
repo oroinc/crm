@@ -43,7 +43,7 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
                         $customerData = (array)$customerData;
                     }
                     if ($customerData
-                        && array_key_exists('customer_id', $customerData)
+                        && !empty($customerData['customer_id'])
                         && $customerData['customer_id'] == $value->getOriginId()
                     ) {
                         return false;
@@ -54,7 +54,7 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
             );
 
             if (count($customers) > 0) {
-                $this->context->addViolationAt('name', $constraint->message);
+                $this->context->addViolationAt('email', $constraint->message);
             }
         }
     }
