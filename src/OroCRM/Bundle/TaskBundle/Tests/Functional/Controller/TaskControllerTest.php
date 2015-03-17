@@ -22,7 +22,14 @@ class TaskControllersTest extends WebTestCase
         $form = $crawler->selectButton('Save and Close')->form();
         $form['orocrm_task[subject]'] = 'New task';
         $form['orocrm_task[description]'] = 'New description';
-        $form['orocrm_task[dueDate]'] = '2014-03-04T20:00:00+0000';
+        // set DueDate = now + 10 min to prevent "Due date must not be in the past" error
+        $dueDate = new \DateTime(
+            'now',
+            new \DateTimeZone($this->getContainer()->get('oro_locale.settings')->getTimeZone())
+        );
+        $form['orocrm_task[dueDate]'] = $dueDate
+            ->add(new \DateInterval('PT10M'))
+            ->format(\DateTime::RFC3339);
         $form['orocrm_task[owner]'] = '1';
 
         $this->client->followRedirects(true);
