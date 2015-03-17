@@ -426,6 +426,7 @@ services:
         parent: orocrm_magento.importexport.writer.abstract_export
         calls:
             - [setMagentoRegionClass, [%orocrm_magento.entity.region.class%]]
+            - [setStrategy, [@orocrm_magento.provider.strategy.two_way_sync.customer_address]]
 
     # readers
     orocrm_magento.importexport.reader.entity:
@@ -489,3 +490,8 @@ services:
         class: %orocrm_magento.provider.strategy.two_way_sync.class%
         arguments:
             - @orocrm_magento.importexport.data_converter.customer
+
+    orocrm_magento.provider.strategy.two_way_sync.customer_address:
+        class: %orocrm_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - @orocrm_magento.importexport.data_converter.customer_address

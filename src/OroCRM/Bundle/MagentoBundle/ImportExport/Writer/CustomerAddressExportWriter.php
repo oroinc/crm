@@ -92,6 +92,14 @@ class CustomerAddressExportWriter extends AbstractExportWriter
         $entity = $this->getEntity();
 
         try {
+            $remoteData = $this->transport->getCustomerAddressInfo($customerAddressId);
+            $item = $this->getStrategy()->merge(
+                $this->getEntityChangeSet(),
+                $item,
+                (array)$remoteData,
+                $this->getTwoWaySyncStrategy()
+            );
+
             $result = $this->transport->updateCustomerAddress($customerAddressId, $item);
 
             if ($result) {

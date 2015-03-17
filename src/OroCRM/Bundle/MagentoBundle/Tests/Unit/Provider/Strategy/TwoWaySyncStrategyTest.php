@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
 
+use Doctrine\Common\Inflector\Inflector;
+
+use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 
 class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
@@ -11,9 +14,34 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $strategy;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DataConverterInterface
+     */
+    protected $dataConverter;
+
     protected function setUp()
     {
-        $this->strategy = new TwoWaySyncStrategy();
+        $this->dataConverter = $this->getMock('Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface');
+
+        $this->dataConverter->expects($this->any())
+            ->method('convertToExportFormat')
+            ->will(
+                $this->returnCallback(
+                    function ($item) {
+                        $keys = array_map(
+                            function ($key) {
+                                return Inflector::camelize($key);
+                            },
+                            array_keys($item)
+                        );
+
+                        return array_combine($keys, array_values($item));
+                    }
+                )
+            );
+
+
+        $this->strategy = new TwoWaySyncStrategy($this->dataConverter);
     }
 
     protected function tearDown()
@@ -251,6 +279,13 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'remoteData' => ['prop' => 'new value'],
                 'strategy' => 'local',
                 'expected' => ['prop' => 'new value']
+            ],
+            'data converter' => [
+                'changeSet' => ['propValue' => ['old' => 1, 'new' => 2]],
+                'localData' => ['prop_value' => 'value'],
+                'remoteData' => ['prop_value' => 'new value'],
+                'strategy' => 'remote',
+                'expected' => ['prop_value' => 'new value']
             ],
         ];
     }

@@ -100,27 +100,15 @@ class CustomerExportWriter extends AbstractExportWriter
 
         $customerId = $item[self::CUSTOMER_ID_KEY];
 
-
         try {
             $remoteData = $this->transport->getCustomerInfo($customerId);
             $item = $this->getStrategy()->merge(
                 $this->getEntityChangeSet(),
                 $item,
-                (array)$remoteData
+                (array)$remoteData,
+                $this->getTwoWaySyncStrategy()
             );
-        } catch (TransportException $e) {
-            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
-                $this->markRemoved($entity);
-            }
 
-            $this->logger->error($e->getMessage());
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
-
-            return;
-        }
-
-        try {
             $result = $this->transport->updateCustomer($customerId, $item);
 
             if ($result) {
@@ -143,14 +131,6 @@ class CustomerExportWriter extends AbstractExportWriter
 
             return;
         }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getEntityChangeSet()
-    {
-        return (array)$this->getContext()->getOption('changeSet');
     }
 
     /**

@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Strategy;
 use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
-class TwoWaySyncStrategy
+class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
 {
     /**
      * @var array
@@ -29,12 +29,7 @@ class TwoWaySyncStrategy
     }
 
     /**
-     * @param array $changeSet
-     * @param array $localData
-     * @param array $remoteData
-     * @param string $strategy
-     *
-     * @return array Result data
+     * {@inheritdoc}
      */
     public function merge(
         array $changeSet,
@@ -57,6 +52,13 @@ class TwoWaySyncStrategy
         }
 
         $oldValues = $this->getChangeSetValues($changeSet, 'old');
+        $newValues = $this->getChangeSetValues($changeSet, 'new');
+        foreach (array_keys($newValues) as $key) {
+            if (!array_key_exists($key, $oldValues)) {
+                $oldValues[$key] = null;
+            }
+        }
+
         $snapshot = array_merge($localData, $oldValues);
         $localChanges = array_keys($oldValues);
         $remoteChanges = array_keys(array_diff_assoc($remoteData, $snapshot));
@@ -86,7 +88,7 @@ class TwoWaySyncStrategy
      */
     protected function getChangeSetValues($changeSet, $key)
     {
-        $oldValues = array_map(
+        $values = array_map(
             function ($data) use ($key) {
                 if (empty($data[$key])) {
                     return null;
@@ -97,6 +99,6 @@ class TwoWaySyncStrategy
             $changeSet
         );
 
-        return array_filter($this->dataConverter->convertToExportFormat($oldValues));
+        return array_filter($this->dataConverter->convertToExportFormat($values));
     }
 }

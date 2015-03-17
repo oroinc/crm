@@ -4,7 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
-        exclude_definitions: [magento_customer_export]
+        exclude_definitions: [magento_customer_export, magento_customer_address_export]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -130,6 +130,11 @@ definitions:
                 object: $channel.synchronizationSettings
                 method: 'offsetGetOr'
                 method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
             - @tree:
                 conditions:
                     @and:
@@ -168,6 +173,7 @@ definitions:
                                     channel: $channel
                                     entity: $.data
                                     changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
                                 attribute: $.jobResult
                             - @call_method:
@@ -180,17 +186,23 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
         order:   20
-        exclude_definitions: [magento_customer_address_export]
+        exclude_definitions: [magento_customer_address_export, magento_customer_creation]
         actions_configuration:
             - @call_method:
                 attribute: $.isTwoWaySyncEnabled
                 object: $channel.synchronizationSettings
                 method: 'offsetGetOr'
                 method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
             - @tree:
                 conditions:
                     @and:
                         - @equal: [$channel.enabled, true]
+                        - @not_empty: $owner.originId
                         - @equal: [$.isTwoWaySyncEnabled, true]
                 actions:
                     - @assign_constant_value:
@@ -224,6 +236,8 @@ definitions:
                                 configuration:
                                     channel: $channel
                                     entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
                                 attribute: $.jobResult
                             - @call_method:
@@ -310,50 +324,6 @@ definitions:
                         arguments:
                             - $.commandName
                             - [$.channelArguments]
-
-    magento_load_customer_info:
-        label:   'Load Customer Information'
-        exclude_definitions: [magento_load_customer_info]
-        enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
-        order:   40
-        actions_configuration:
-            - @tree:
-                conditions:
-                    @not_empty: $originId
-                actions:
-                    - @assign_constant_value:
-                        attribute: $.infoSyncState
-                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
-                    - @create_object:
-                        attribute: $.stateManager
-                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
-                    - @call_method:
-                        attribute: $.isSyncRequested
-                        object: $.stateManager
-                        method: 'isInState'
-                        method_parameters: [$syncState, $.infoSyncState]
-                    - @tree:
-                        conditions:
-                            @equal: [$.isSyncRequested, true]
-                        actions:
-                            - @execute_job:
-                                parameters:
-                                    jobType: import
-                                    jobName: mage_load_customer_info
-                                    configuration:
-                                        data: $.data
-                                        channel: $channel
-                                        writer_skip_clear: true
-                                        processorAlias: 'orocrm_magento.add_or_update_customer'
-                                    attribute: $.jobResult
-                            - @call_method:
-                                conditions:
-                                    @equal: [$.jobResult.successful, true]
-                                parameters:
-                                    object: $.stateManager
-                                    method: 'removeState'
-                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
 
 triggers:
     magento_customer_creation:

@@ -6,7 +6,7 @@ use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
 use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
+use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategyInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
@@ -24,14 +24,14 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     protected $stateManager;
 
     /**
-     * @var TwoWaySyncStrategy
+     * @var TwoWaySyncStrategyInterface
      */
     protected $strategy;
 
     /**
-     * @param TwoWaySyncStrategy $strategy
+     * @param TwoWaySyncStrategyInterface $strategy
      */
-    public function setStrategy($strategy)
+    public function setStrategy(TwoWaySyncStrategyInterface $strategy)
     {
         $this->strategy = $strategy;
     }
@@ -53,7 +53,7 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
     }
 
     /**
-     * @return TwoWaySyncStrategy
+     * @return TwoWaySyncStrategyInterface
      */
     public function getStrategy()
     {
@@ -62,6 +62,22 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
         }
 
         return $this->strategy;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getEntityChangeSet()
+    {
+        return (array)$this->getContext()->getOption('changeSet');
+    }
+
+    /**
+     * @return string
+     */
+    protected function getTwoWaySyncStrategy()
+    {
+        return (string)$this->getContext()->getOption('twoWaySyncStrategy');
     }
 
     /**
