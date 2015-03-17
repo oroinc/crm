@@ -33,7 +33,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
      */
     public function getMigrationVersion()
     {
-        return 'v1_27';
+        return 'v1_28';
     }
 
     /**
