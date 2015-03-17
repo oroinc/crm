@@ -25,7 +25,8 @@ class TaskControllerTest extends WebTestCase
 
         // set DueDate = now + 10 min to prevent "Due date must not be in the past" error
         $this->task['dueDate'] = (new \DateTime('now', new \DateTimeZone('UTC')))
-            ->add(new \DateInterval('PT10M'));
+            ->add(new \DateInterval('PT10M'))
+            ->format(\DateTime::RFC3339);
 
         if (!isset($this->task['owner'])) {
             $this->task['owner'] = $this->getContainer()
