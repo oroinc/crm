@@ -175,6 +175,7 @@ definitions:
                                     changeSet: $.changeSet
                                     twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
+                                    processorAlias: orocrm_magento
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager
@@ -239,6 +240,7 @@ definitions:
                                     changeSet: $.changeSet
                                     twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
+                                    processorAlias: orocrm_magento
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager

@@ -46,7 +46,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        unset($this->strategy);
+        unset($this->strategy, $this->dataConverter);
     }
 
     /**
@@ -105,35 +105,35 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
             'local changes without conflict remote wins' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
-                        'new' => 'new value'
+                        'old' => 'old local value',
+                        'new' => 'new local value'
                     ]
                 ],
-                'localData' => ['prop' => 'value', 'prop2' => 'new value'],
-                'remoteData' => ['prop' => 'new value', 'prop2' => 'old value'],
+                'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
+                'remoteData' => ['prop' => 'new value', 'prop2' => 'old remote value'],
                 'strategy' => 'remote',
-                'expected' => ['prop' => 'new value', 'prop2' => 'old value']
+                'expected' => ['prop' => 'new value', 'prop2' => 'old remote value']
             ],
             'local changes without conflict local wins' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
-                        'new' => 'new value'
+                        'old' => 'old local value',
+                        'new' => 'new local value'
                     ]
                 ],
-                'localData' => ['prop' => 'value', 'prop2' => 'new value'],
-                'remoteData' => ['prop' => 'new value', 'prop2' => 'old value'],
+                'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
+                'remoteData' => ['prop' => 'new value', 'prop2' => 'old remote value'],
                 'strategy' => 'local',
-                'expected' => ['prop' => 'new value', 'prop2' => 'old value']
+                'expected' => ['prop' => 'new value', 'prop2' => 'new local value']
             ],
             'local changes with conflict remote wins' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
-                        'new' => 'new value'
+                        'old' => 'old local value',
+                        'new' => 'new local value'
                     ]
                 ],
-                'localData' => ['prop' => 'value', 'prop2' => 'new value'],
+                'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
                 'remoteData' => ['prop' => 'new value', 'prop2' => 'new remote value'],
                 'strategy' => 'remote',
                 'expected' => ['prop' => 'new value', 'prop2' => 'new remote value']
@@ -141,8 +141,8 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
             'local changes with conflict local wins' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
-                        'new' => 'new value'
+                        'old' => 'old local value',
+                        'new' => 'new local value'
                     ]
                 ],
                 'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
@@ -154,7 +154,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'changeSet' => [
                     'prop2' => [
                         'old' => null,
-                        'new' => 'new value'
+                        'new' => 'new local value'
                     ]
                 ],
                 'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
@@ -166,7 +166,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'changeSet' => [
                     'prop2' => [
                         'old' => null,
-                        'new' => 'new value'
+                        'new' => 'new local value'
                     ]
                 ],
                 'localData' => ['prop' => 'value', 'prop2' => 'new local value'],
@@ -177,7 +177,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
             'local changes with conflict remote wins empty new value' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
+                        'old' => 'old local value',
                         'new' => null
                     ]
                 ],
@@ -189,7 +189,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
             'local changes with conflict local wins empty new value' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
+                        'old' => 'old local value',
                         'new' => null
                     ]
                 ],
@@ -271,21 +271,21 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
             'remote data does not contains changed field' => [
                 'changeSet' => [
                     'prop2' => [
-                        'old' => 'old value',
+                        'old' => 'old local value',
                         'new' => null
                     ]
                 ],
                 'localData' => ['prop' => 'value', 'prop2' => null],
-                'remoteData' => ['prop' => 'new value'],
+                'remoteData' => ['prop' => 'new remote value'],
                 'strategy' => 'local',
-                'expected' => ['prop' => 'new value']
+                'expected' => ['prop' => 'new remote value']
             ],
             'data converter' => [
                 'changeSet' => ['propValue' => ['old' => 1, 'new' => 2]],
                 'localData' => ['prop_value' => 'value'],
-                'remoteData' => ['prop_value' => 'new value'],
+                'remoteData' => ['prop_value' => 'new remote value'],
                 'strategy' => 'remote',
-                'expected' => ['prop_value' => 'new value']
+                'expected' => ['prop_value' => 'new remote value']
             ],
         ];
     }

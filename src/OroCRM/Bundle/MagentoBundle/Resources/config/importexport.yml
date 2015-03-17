@@ -462,6 +462,11 @@ services:
         calls:
             - [setContextKey, ['postProcessOrders']]
 
+    orocrm_magento.reader.context_customer_export:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCustomer']]
+
     orocrm_magento.reader.context_cart:
         parent: orocrm_magento.reader.context
         calls:

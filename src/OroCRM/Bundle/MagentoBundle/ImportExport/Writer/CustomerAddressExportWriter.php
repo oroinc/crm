@@ -11,6 +11,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
     const CUSTOMER_ADDRESS_ID_KEY = 'customer_address_id';
     const CUSTOMER_ID_KEY = 'customer_id';
     const FAULT_CODE_NOT_EXISTS = '102';
+    const CONTEXT_CUSTOMER_ADDRESS_POST_PROCESS = 'postProcessCustomerAdderss';
 
     /**
      * @var string
@@ -96,9 +97,13 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             $item = $this->getStrategy()->merge(
                 $this->getEntityChangeSet(),
                 $item,
-                (array)$remoteData,
+                $remoteData,
                 $this->getTwoWaySyncStrategy()
             );
+
+            $this->stepExecution->getJobExecution()
+                ->getExecutionContext()
+                ->put(self::CONTEXT_CUSTOMER_ADDRESS_POST_PROCESS, [$item]);
 
             $result = $this->transport->updateCustomerAddress($customerAddressId, $item);
 
