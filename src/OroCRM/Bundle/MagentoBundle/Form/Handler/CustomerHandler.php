@@ -24,19 +24,38 @@ class CustomerHandler extends UpdateHandler
             $form->submit($this->request);
 
             if ($form->isValid()) {
-                $stateManager = new StateManager();
-                if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
-                    $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
-                }
+                $this->saveEntity($entity);
 
-                $manager = $this->doctrineHelper->getEntityManager($entity);
-                $manager->persist($entity);
-                $manager->flush();
+                if (!$entity->getOriginId()) {
+                    $this->scheduleSyncToMagento($entity);
+                }
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function saveEntity($entity)
+    {
+        $manager = $this->doctrineHelper->getEntityManager($entity);
+        $manager->persist($entity);
+        $manager->flush();
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function scheduleSyncToMagento($entity)
+    {
+        $stateManager = new StateManager();
+        if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
+            $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
+            $this->saveEntity($entity);
+        }
     }
 }

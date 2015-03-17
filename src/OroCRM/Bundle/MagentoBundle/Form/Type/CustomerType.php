@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraint;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use Symfony\Component\Validator\Constraints\Length;
 
 class CustomerType extends AbstractType
 {
@@ -93,7 +94,17 @@ class CustomerType extends AbstractType
                 ]
             )
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
-            ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
+            ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label'])
+            ->add(
+                'generatedPassword',
+                'text',
+                [
+                    'label' => 'orocrm.magento.customer.password.label',
+                    'tooltip' => 'orocrm.magento.customer.password.tooltip',
+                    'required' => false,
+                    'constraints' => [new Length(['min' => 6])]
+                ]
+            );
 
         $builder->addEventListener(
             FormEvents::SUBMIT,

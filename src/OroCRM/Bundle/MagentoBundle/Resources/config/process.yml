@@ -363,10 +363,6 @@ triggers:
 
     magento_customer_export:
         -
-            event:    create
-            priority: 10
-            queued:   true
-        -
             event:    update
             field:    syncState
             priority: 10
