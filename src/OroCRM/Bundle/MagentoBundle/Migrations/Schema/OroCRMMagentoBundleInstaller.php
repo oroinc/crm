@@ -8,6 +8,8 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
 
@@ -15,10 +17,16 @@ use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as In
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class OroCRMMagentoBundleInstaller implements
+    Installation,
+    ActivityExtensionAwareInterface,
+    IdentifierEventExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var IdentifierEventExtension */
+    protected $identifierExtension;
 
     /**
      * {@inheritdoc}
@@ -26,6 +34,14 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
     public function setActivityExtension(ActivityExtension $activityExtension)
     {
         $this->activityExtension = $activityExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIdentifierEventExtension(IdentifierEventExtension $extension)
+    {
+        $this->identifierExtension = $extension;
     }
 
     /**
@@ -949,6 +965,8 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_2A61EE7D32C8A3DE'
         );
+
+        $this->identifierExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
     }
 
     /**
