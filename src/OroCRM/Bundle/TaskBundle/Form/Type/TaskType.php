@@ -6,7 +6,13 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
+use Oro\Bundle\FormBundle\Utils\FormUtils;
+use OroCRM\Bundle\TaskBundle\Entity\Task;
 
 class TaskType extends AbstractType
 {
@@ -37,7 +43,10 @@ class TaskType extends AbstractType
                 'oro_datetime',
                 [
                     'required' => false,
-                    'label' => 'orocrm.task.due_date.label'
+                    'label' => 'orocrm.task.due_date.label',
+                    'constraints' => [
+                        $this->getDueDateValidationConstraint(new \DateTime('now', new \DateTimeZone('UTC')))
+                    ]
                 ]
             )
             ->add(
@@ -60,6 +69,29 @@ class TaskType extends AbstractType
                     'label' => 'oro.reminder.entity_plural_label'
                 ]
             );
+        $builder->addEventListener(FormEvents::POST_SET_DATA, [$this, 'postSetData']);
+    }
+
+    /**
+     * Post set data handler
+     *
+     * @param FormEvent $event
+     */
+    public function postSetData(FormEvent $event)
+    {
+        /** @var Task $data */
+        $data = $event->getData();
+        if ($data && $data->getCreatedAt()) {
+            FormUtils::replaceField(
+                $event->getForm(),
+                'dueDate',
+                [
+                    'constraints' => [
+                        $this->getDueDateValidationConstraint($data->getCreatedAt())
+                    ]
+                ]
+            );
+        }
     }
 
     /**
@@ -82,5 +114,20 @@ class TaskType extends AbstractType
     public function getName()
     {
         return 'orocrm_task';
+    }
+
+    /**
+     * @param \DateTime $startDate
+     *
+     * @return Assert\GreaterThanOrEqual
+     */
+    protected function getDueDateValidationConstraint(\DateTime $startDate)
+    {
+        return new Assert\GreaterThanOrEqual(
+            [
+                'value'   => $startDate,
+                'message' => 'Due date must not be in the past'
+            ]
+        );
     }
 }

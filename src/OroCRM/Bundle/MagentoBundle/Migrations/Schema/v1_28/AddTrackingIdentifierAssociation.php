@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_27;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_28;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -16,8 +16,6 @@ class AddTrackingIdentifierAssociation implements Migration, IdentifierEventExte
     protected $extension;
 
     /**
-     * Sets the
-     *
      * @param IdentifierEventExtension $extension
      */
     public function setIdentifierEventExtension(IdentifierEventExtension $extension)
