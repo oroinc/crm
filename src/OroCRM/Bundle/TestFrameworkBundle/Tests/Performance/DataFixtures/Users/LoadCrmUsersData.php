@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\TestFrameworkBundle\Tests\DataFixtures;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityRepository;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -31,6 +33,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
     protected $firstNamesDictionary = null;
     protected $lastNamesDictionary = null;
     protected $role;
+    /** @var  BusinessUnit */
     protected $businessUnit;
     protected $businessUnitManager;
     protected $organization;
@@ -49,6 +52,7 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $this->businessUnit        = $this->businessUnit[0];
         $organizationManager = $container->get('doctrine')->getManager();
         $organizationRepository = $organizationManager->getRepository('OroOrganizationBundle:Organization');
+
         $this->organization = $organizationRepository->getFirst();
     }
 
@@ -124,8 +128,10 @@ class LoadCrmUsersData extends AbstractFixture implements ContainerAwareInterfac
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
         $user->addRole($this->role[0]);
+        $user->setBusinessUnits(new ArrayCollection([$this->businessUnit]));
         $user->setOwner($this->businessUnit);
         $user->setOrganization($organization);
+        $user->addOrganization($organization);
         return $user;
     }
 
