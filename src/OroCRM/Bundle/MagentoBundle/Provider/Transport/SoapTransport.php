@@ -53,6 +53,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_CART_LIST = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
+    const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -366,10 +367,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function updateCustomer($customerId, array $customerData)
     {
-        return $this->call(
-            SoapTransport::ACTION_CUSTOMER_UPDATE,
-            ['customerId' => $customerId, 'customerData' => $customerData]
-        );
+        if ($this->isExtensionInstalled()) {
+            $updateEndpoint = SoapTransport::ACTION_ORO_CUSTOMER_UPDATE;
+        } else {
+            $updateEndpoint = SoapTransport::ACTION_CUSTOMER_UPDATE;
+        }
+
+        return $this->call($updateEndpoint, ['customerId' => $customerId, 'customerData' => $customerData]);
     }
 
     /**

@@ -364,14 +364,12 @@ triggers:
     magento_customer_export:
         -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 
     magento_customer_address_export:
         -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 

@@ -24,8 +24,11 @@ class CustomerHandler extends UpdateHandler
             $form->submit($this->request);
 
             if ($form->isValid()) {
+                $this->markForSync($entity);
                 $this->saveEntity($entity);
 
+                // Process trigger listen for update, because create will trigger export during import
+                // This will schedule new entity for export
                 if (!$entity->getOriginId()) {
                     $this->scheduleSyncToMagento($entity);
                 }
@@ -40,7 +43,7 @@ class CustomerHandler extends UpdateHandler
     /**
      * @param Customer $entity
      */
-    protected function saveEntity($entity)
+    protected function saveEntity(Customer $entity)
     {
         $manager = $this->doctrineHelper->getEntityManager($entity);
         $manager->persist($entity);
@@ -52,10 +55,18 @@ class CustomerHandler extends UpdateHandler
      */
     protected function scheduleSyncToMagento($entity)
     {
+        $this->markForSync($entity);
+        $this->saveEntity($entity);
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function markForSync(Customer $entity)
+    {
         $stateManager = new StateManager();
         if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
             $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
-            $this->saveEntity($entity);
         }
     }
 }
