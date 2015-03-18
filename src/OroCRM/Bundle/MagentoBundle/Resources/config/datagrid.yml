@@ -15,6 +15,7 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
+                    - channel.id as channelId
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
@@ -144,6 +145,7 @@ datagrid:
                 label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
+        action_configuration: [@orocrm_magento.datagrid.customer_actions_provider, "getCustomerActionsPermissions"]
         options:
             entityHint: customer
             export: true

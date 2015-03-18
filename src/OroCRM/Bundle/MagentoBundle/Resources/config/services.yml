@@ -86,6 +86,8 @@ parameters:
 
     orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
 
+    orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\TwoWaySyncVoter
+    orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -411,3 +413,19 @@ services:
             - @orocrm_magento.transport.soap_transport
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
+
+    orocrm_magento.security.acl.voter.customer:
+        class: %orocrm_magento.security.acl.voter.customer.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+        calls:
+            - [setClassName, [%orocrm_magento.customer.entity.class%]]
+            - [setChannelClassName, [%oro_integration.entity.class%]]
+        tags:
+            - { name: security.voter, priority: 500 }
+
+    orocrm_magento.datagrid.customer_actions_provider:
+        class: %orocrm_magento.datagrid.customer_actions_provider.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %oro_integration.entity.class%
