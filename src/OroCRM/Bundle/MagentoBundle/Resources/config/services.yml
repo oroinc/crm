@@ -181,6 +181,8 @@ services:
 
     orocrm_magento.form.type.customer_channel_selector:
         class: %orocrm_magento.form.type.customer_channel_selector.class%
+        calls:
+            - [setChannelClass, [%orocrm_channel.entity.class%]]
         tags:
             - { name: form.type, alias: orocrm_magento_customer_channel_select }
 

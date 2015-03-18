@@ -17,6 +17,22 @@ class CustomerChannelSelectType extends AbstractType
     const NAME = 'orocrm_magento_customer_channel_select';
 
     /**
+     * @var string
+     */
+    protected $channelClass;
+
+    /**
+     * @param string $channelClass
+     * @return CustomerChannelSelectType
+     */
+    public function setChannelClass($channelClass)
+    {
+        $this->channelClass = $channelClass;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getName()
@@ -42,7 +58,7 @@ class CustomerChannelSelectType extends AbstractType
             $em = $options['em'];
 
             /** @var EntityRepository $repository */
-            $repository = $em->getRepository('OroCRMChannelBundle:Channel');
+            $repository = $em->getRepository($this->channelClass);
             $entities   = $options->get('entities');
 
             /** @var QueryBuilder $queryBuilder */
