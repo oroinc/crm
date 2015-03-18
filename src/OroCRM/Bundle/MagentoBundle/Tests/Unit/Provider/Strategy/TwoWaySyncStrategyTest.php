@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
 
-use Doctrine\Common\Inflector\Inflector;
-
 use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 
@@ -30,7 +28,11 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                     function ($item) {
                         $keys = array_map(
                             function ($key) {
-                                return Inflector::camelize($key);
+                                return preg_replace(
+                                    '/(^|[a-z])([A-Z])/e',
+                                    'strtolower(strlen("\\1") ? "\\1_\\2" : "\\2")',
+                                    $key
+                                );
                             },
                             array_keys($item)
                         );
@@ -278,15 +280,25 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'localData' => ['prop' => 'value', 'prop2' => null],
                 'remoteData' => ['prop' => 'new remote value'],
                 'strategy' => 'local',
-                'expected' => ['prop' => 'new remote value']
+                'expected' => ['prop' => 'new remote value', 'prop2' => null]
             ],
             'data converter' => [
-                'changeSet' => ['propValue' => ['old' => 1, 'new' => 2]],
+                'changeSet' => ['propValue' => ['old' => 'old local value', 'new' => 'new local value']],
                 'localData' => ['prop_value' => 'value'],
                 'remoteData' => ['prop_value' => 'new remote value'],
                 'strategy' => 'remote',
                 'expected' => ['prop_value' => 'new remote value']
             ],
+            'update not conflicted remote data' => [
+                'changeSet' => [
+                    'propValue' => ['old' => 'old local value', 'new' => 'new local value'],
+                    'propValue2' => ['old' => 'old local value to remote', 'new' => 'new local value to remote']
+                ],
+                'localData' => ['prop_value' => 'value', 'prop_value2' => 'new local value to remote'],
+                'remoteData' => ['prop_value' => 'new remote value', 'prop_value2' => 'old local value to remote'],
+                'strategy' => 'remote',
+                'expected' => ['prop_value' => 'new remote value', 'prop_value2' => 'new local value to remote']
+            ]
         ];
     }
 }

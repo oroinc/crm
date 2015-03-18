@@ -60,15 +60,15 @@ connector:
                         writer:    orocrm_magento.importexport.writer.customer_address
                     parameters:
                         batch_size: 1
-#                import_merged_data:
-#                    title: export
-#                    class: Oro\Bundle\BatchBundle\Step\ItemStep
-#                    services:
-#                        reader:    ~
-#                        processor: orocrm_magento.importexport.processor.import_customer
-#                        writer:    orocrm_magento.writer.proxy_entity_writer
-#                    parameters:
-#                        batch_size: 1
+                import_merged_data:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_customer_address_export
+                        processor: orocrm_magento.importexport.processor.import_customer_address
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 1
 
         mage_region_import:
             title: "Region import from Magento"

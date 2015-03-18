@@ -45,8 +45,8 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['gender'] = $this->getOroGender($importedRecord['gender']);
         }
 
-        if (!empty($importedRecord['store']) && !empty($importedRecord['website'])) {
-            $importedRecord['store']['website'] = $importedRecord['website'];
+        if ($this->context && !empty($importedRecord['group']) && $this->context->hasOption('channel')) {
+            $importedRecord['group']['channel']['id'] = $this->context->getOption('channel');
         }
 
         return $importedRecord;

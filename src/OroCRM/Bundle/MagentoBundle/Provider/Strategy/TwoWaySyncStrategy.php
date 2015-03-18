@@ -65,7 +65,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         $conflicts = array_intersect($remoteChanges, $localChanges);
 
         if (!$conflicts) {
-            return $remoteData;
+            $conflicts = [];
         }
 
         foreach ($conflicts as $conflict) {
@@ -76,6 +76,11 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             if ($strategy === TwoWaySyncConnectorInterface::LOCAL_WINS) {
                 $remoteData[$conflict] = $localData[$conflict];
             }
+        }
+
+        $localDataForUpdate = array_diff($localChanges, $conflicts);
+        foreach ($localDataForUpdate as $property) {
+            $remoteData[$property] = $localData[$property];
         }
 
         return $remoteData;

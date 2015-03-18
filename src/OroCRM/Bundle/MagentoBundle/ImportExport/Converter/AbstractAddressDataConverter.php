@@ -12,22 +12,22 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     protected function getHeaderConversionRules()
     {
         return [
-            'firstname'  => 'firstName',
-            'lastname'   => 'lastName',
+            'firstname' => 'firstName',
+            'lastname' => 'lastName',
             'middlename' => 'middleName',
-            'prefix'     => 'namePrefix',
-            'suffix'     => 'nameSuffix',
-            'region'     => 'regionText',
-            'region_id'  => 'region:code', // Note, this is integer identifier of magento region
+            'prefix' => 'namePrefix',
+            'suffix' => 'nameSuffix',
+            'region' => 'regionText',
+            'region_id' => 'region:code', // Note, this is integer identifier of magento region
             'country_id' => 'country:iso2Code',
             'created_at' => 'created',
             'updated_at' => 'updated',
-            'postcode'   => 'postalCode',
-            'telephone'  => 'phone',
-            'company'    => 'organization',
-            'city'       => 'city',
-            'street'     => 'street',
-            'street2'    => 'street2'
+            'postcode' => 'postalCode',
+            'telephone' => 'phone',
+            'company' => 'organization',
+            'city' => 'city',
+            'street' => 'street',
+            'street2' => 'street2'
         ];
     }
 
@@ -73,10 +73,23 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     {
         $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
 
-        $exportedRecord['street'] = [
-            $exportedRecord['street'],
-            $exportedRecord['street2']
-        ];
+        $streets = [];
+
+        if (!empty($exportedRecord['street'])) {
+            $streets[] = $exportedRecord['street'];
+            unset($exportedRecord['street']);
+        }
+
+        if (!empty($exportedRecord['street2'])) {
+            $streets[] = $exportedRecord['street2'];
+            unset($exportedRecord['street2']);
+        }
+
+        if ($streets) {
+            $exportedRecord['street'] = implode("\n", $streets);
+        }
+
+        unset($exportedRecord['customer_id']);
 
         return $exportedRecord;
     }

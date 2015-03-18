@@ -170,12 +170,12 @@ definitions:
                                 jobType: export
                                 jobName: magento_customer_export
                                 configuration:
-                                    channel: $channel
+                                    channel: $channel.id
                                     entity: $.data
                                     changeSet: $.changeSet
                                     twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
-                                    processorAlias: orocrm_magento
+                                    processorAlias: orocrm_magento # to enable magento normalizers
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager
@@ -235,12 +235,12 @@ definitions:
                                 jobType: export
                                 jobName: magento_customer_address_export
                                 configuration:
-                                    channel: $channel
+                                    channel: $channel.id
                                     entity: $.data
                                     changeSet: $.changeSet
                                     twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
-                                    processorAlias: orocrm_magento
+                                    processorAlias: orocrm_magento # to enable magento normalizers
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager

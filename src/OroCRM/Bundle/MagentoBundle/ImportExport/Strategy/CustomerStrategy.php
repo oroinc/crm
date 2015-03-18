@@ -147,7 +147,7 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function processGroup(Customer $entity)
     {
         $group = $entity->getGroup();
-        if ($group) {
+        if ($group && !$group->getChannel()) {
             $group = $this->customerGroupHelper->getUniqueGroup($group);
             $group->setChannel($entity->getChannel());
             $entity->setGroup($group);
