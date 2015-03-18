@@ -97,6 +97,10 @@ class CustomerStrategy extends AbstractImportStrategy
             }
         }
 
+        if ($entity->getGroup()) {
+            $entity->getGroup()->setChannel($entity->getChannel());
+        }
+
         return parent::beforeProcessEntity($entity);
     }
 
@@ -147,7 +151,7 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function processGroup(Customer $entity)
     {
         $group = $entity->getGroup();
-        if ($group && !$group->getChannel()) {
+        if ($group) {
             $group = $this->customerGroupHelper->getUniqueGroup($group);
             $group->setChannel($entity->getChannel());
             $entity->setGroup($group);

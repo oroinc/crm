@@ -49,10 +49,6 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['store']['website'] = $importedRecord['website'];
         }
 
-        if ($this->context && !empty($importedRecord['group']) && $this->context->hasOption('channel')) {
-            $importedRecord['group']['channel']['id'] = $this->context->getOption('channel');
-        }
-
         return $importedRecord;
     }
 

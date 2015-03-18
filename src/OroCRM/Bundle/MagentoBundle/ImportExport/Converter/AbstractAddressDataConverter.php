@@ -37,8 +37,15 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
-        if (!empty($importedRecord['street']) && strpos($importedRecord['street'], "\n") !== false) {
-            list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
+
+        if (!empty($importedRecord['street'])) {
+            $streets = $importedRecord['street'];
+            if (is_string($streets) && strpos($streets, "\n") !== false) {
+                list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
+            } elseif (is_array($streets)) {
+                $importedRecord['street'] = reset($streets);
+                $importedRecord['street2'] = next($streets);
+            }
         }
         $importedRecord = $this->convertImportedRegion($importedRecord);
 
@@ -86,7 +93,7 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
         }
 
         if ($streets) {
-            $exportedRecord['street'] = implode("\n", $streets);
+            $exportedRecord['street'] = $streets;
         }
 
         unset($exportedRecord['customer_id']);

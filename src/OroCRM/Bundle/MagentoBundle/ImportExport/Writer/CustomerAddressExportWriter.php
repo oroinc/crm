@@ -105,10 +105,6 @@ class CustomerAddressExportWriter extends AbstractExportWriter
                 ->getExecutionContext()
                 ->put(self::CONTEXT_CUSTOMER_ADDRESS_POST_PROCESS, [$item]);
 
-            if (!empty($item['street']) && strpos($item['street'], "\n") !== false) {
-                $item['street'] = explode("\n", $item['street']);
-            }
-
             $result = $this->transport->updateCustomerAddress($customerAddressId, $item);
 
             if ($result) {

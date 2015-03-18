@@ -28,9 +28,11 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                     function ($item) {
                         $keys = array_map(
                             function ($key) {
-                                return preg_replace(
-                                    '/(^|[a-z])([A-Z])/e',
-                                    'strtolower(strlen("\\1") ? "\\1_\\2" : "\\2")',
+                                return preg_replace_callback(
+                                    '/[A-Z]/',
+                                    function (array $matched) {
+                                        return sprintf('_%s', strtolower(reset($matched)));
+                                    },
                                     $key
                                 );
                             },
@@ -42,6 +44,28 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
+        $this->dataConverter->expects($this->any())
+            ->method('convertToImportFormat')
+            ->will(
+                $this->returnCallback(
+                    function ($item) {
+                        $keys = array_map(
+                            function ($key) {
+                                return preg_replace_callback(
+                                    '/_[a-z]/',
+                                    function (array $matched) {
+                                        return trim(strtoupper(reset($matched)), '_');
+                                    },
+                                    $key
+                                );
+                            },
+                            array_keys($item)
+                        );
+
+                        return array_combine($keys, array_values($item));
+                    }
+                )
+            );
 
         $this->strategy = new TwoWaySyncStrategy($this->dataConverter);
     }
