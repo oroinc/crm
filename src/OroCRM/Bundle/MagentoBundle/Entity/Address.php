@@ -35,9 +35,6 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * )
  * @ORM\Entity
  * @Oro\Loggable
- *
- * TODO: Create migration to remove country and region from identity fields list CRM-2411
- * TODO: Add sync_state field to table CRM-2411
  */
 class Address extends ExtendAddress implements OriginAwareInterface, IntegrationAwareInterface
 {

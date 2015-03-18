@@ -38,6 +38,6 @@ class DropTransportConfigurable implements Migration
             ['class' => $className],
             ['class' => 'string']
         );
-        $queries->addPostQuery($dropConfigurationQuery);
+        $queries->addQuery($dropConfigurationQuery);
     }
 }
