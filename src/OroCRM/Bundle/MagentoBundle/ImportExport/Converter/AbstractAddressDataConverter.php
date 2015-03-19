@@ -96,8 +96,6 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
             $exportedRecord['street'] = $streets;
         }
 
-        unset($exportedRecord['customer_id']);
-
         return $exportedRecord;
     }
 }
