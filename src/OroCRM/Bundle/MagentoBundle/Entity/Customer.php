@@ -395,6 +395,13 @@ class Customer extends ExtendCustomer implements
     protected $password;
 
     /**
+     * @var NewsletterSubscriber
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     */
+    protected $newsletterSubscriber;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -773,5 +780,13 @@ class Customer extends ExtendCustomer implements
     public function getGeneratedPassword()
     {
         return '';
+    }
+
+    /**
+     * @return NewsletterSubscriber
+     */
+    public function getNewsletterSubscriber()
+    {
+        return $this->newsletterSubscriber;
     }
 }
