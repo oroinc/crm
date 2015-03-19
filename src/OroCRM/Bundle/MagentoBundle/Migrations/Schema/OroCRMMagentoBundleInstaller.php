@@ -8,6 +8,9 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
+use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareInterface;
+
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
 
@@ -15,10 +18,16 @@ use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as In
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwareInterface
+class OroCRMMagentoBundleInstaller implements
+    Installation,
+    ActivityExtensionAwareInterface,
+    IdentifierEventExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var IdentifierEventExtension */
+    protected $identifierEventExtension;
 
     /**
      * {@inheritdoc}
@@ -31,9 +40,17 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
     /**
      * {@inheritdoc}
      */
+    public function setIdentifierEventExtension(IdentifierEventExtension $identifierEventExtension)
+    {
+        $this->identifierEventExtension = $identifierEventExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getMigrationVersion()
     {
-        return 'v1_26';
+        return 'v1_28';
     }
 
     /**
@@ -87,6 +104,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $this->addOrocrmMagentoOrderItemsForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
+        $this->addIdentifierEventAssociations($schema);
     }
 
     /**
@@ -100,6 +118,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         IntegrationUpdate::updateOroIntegrationTransportTable($schema);
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
     }
 
     /**
@@ -235,6 +254,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -331,6 +351,7 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('rfm_recency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -376,6 +397,8 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $table->addColumn('row_total', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('tax_amount', 'money', ['precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('product_type', 'string', ['length' => 255, 'precision' => 0]);
+        $table->addColumn('product_image_url', 'text', ['notnull' => false]);
+        $table->addColumn('product_url', 'text', ['notnull' => false]);
         $table->addColumn('sku', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('qty', 'float', ['precision' => 0]);
@@ -1307,5 +1330,13 @@ class OroCRMMagentoBundleInstaller implements Installation, ActivityExtensionAwa
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
         MagentoActivities::disableActivityAssociations($schema);
+    }
+
+    /**
+     * @param Schema $schema
+     */
+    protected function addIdentifierEventAssociations(Schema $schema)
+    {
+        $this->identifierEventExtension->addIdentifierAssociation($schema, 'orocrm_magento_customer');
     }
 }

@@ -3,13 +3,14 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\AbstractBridgeIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class BaseIteratorTestCase extends \PHPUnit_Framework_TestCase
 {
     /** @var AbstractBridgeIterator */
     protected $iterator;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|SoapTransport */
     protected $transport;
 
     /** @var array */

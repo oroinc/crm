@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 class CartConnector extends AbstractMagentoConnector implements ExtensionAwareInterface
 {
+    const IMPORT_JOB_NAME = 'mage_cart_import';
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +35,7 @@ class CartConnector extends AbstractMagentoConnector implements ExtensionAwareIn
      */
     public function getImportJobName()
     {
-        return 'mage_cart_import';
+        return self::IMPORT_JOB_NAME;
     }
 
     /**

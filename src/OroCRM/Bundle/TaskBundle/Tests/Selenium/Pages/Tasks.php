@@ -30,8 +30,7 @@ class Tasks extends AbstractPageFilteredGrid
         $this->test->byXPath("//a[@title='Create Task']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $task = new Task($this->test);
-        return $task->init();
+        return new Task($this->test);
     }
 
     /**

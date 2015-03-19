@@ -31,6 +31,7 @@ parameters:
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
+    orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -65,6 +66,7 @@ parameters:
     orocrm_magento.provider.analytics.customer_frequency.class:             OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider
     orocrm_magento.provider.analytics.customer_monetary.class:              OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider
 
+    orocrm_magento.provider.tracking_customer_identificator.class:          OroCRM\Bundle\MagentoBundle\Provider\TrackingCustomerIdentification
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -191,6 +193,16 @@ services:
             - @doctrine.orm.default_entity_manager
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
+
+    orocrm_magento.event_listener.channel_save_succeed:
+        class: %orocrm_magento.event_listener.channel_save_succeed.class%
+        arguments:
+            - @orocrm_channel.provider.settings_provider
+            - @doctrine
+        calls:
+            - [setConnectorsTypeRegistry, [@oro_integration.manager.types_registry]]
+        tags:
+            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave, priority: -10 }
 
     orocrm_magento.event_listener.writer_error:
         class: %orocrm_magento.event_listener.writer_error.class%
@@ -319,3 +331,12 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.provider.tracking_customer_identificator:
+        class: %orocrm_magento.provider.tracking_customer_identificator.class%
+        arguments:
+           - @doctrine
+           - @oro_entity_config.provider.extend
+           - @orocrm_channel.provider.settings_provider
+        tags:
+           - {name: oro_tracking.provider.identification, priority: 10}

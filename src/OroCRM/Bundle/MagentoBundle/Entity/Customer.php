@@ -61,7 +61,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
-    RFMAwareInterface
+    RFMAwareInterface,
+    SyncStateAwareInterface,
+    OriginAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
 
@@ -268,6 +270,13 @@ class Customer extends ExtendCustomer implements
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
      */
     protected $currency;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     */
+    protected $syncState;
 
     /**
      * @var User
@@ -483,8 +492,8 @@ class Customer extends ExtendCustomer implements
     public function getAddressByOriginId($originId)
     {
         return $this->addresses->filter(
-            function ($item) use ($originId) {
-                return $item->getOriginId() == $originId;
+            function (Address $item) use ($originId) {
+                return $item->getOriginId() === $originId;
             }
         )->first();
     }
@@ -583,5 +592,25 @@ class Customer extends ExtendCustomer implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSyncState()
+    {
+        return $this->syncState;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return Customer
+     */
+    public function setSyncState($syncState)
+    {
+        $this->syncState = $syncState;
+
+        return $this;
     }
 }

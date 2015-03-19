@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Psr\Log\LoggerAwareInterface;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -19,6 +21,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractMagentoConnector extends AbstractConnector implements MagentoConnectorInterface
 {
+    const LAST_SYNC_KEY = 'lastSyncItemDate';
+
     /** @var MagentoTransportInterface */
     protected $transport;
 
@@ -42,7 +46,6 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     ) {
         parent::__construct($contextRegistry, $logger, $contextMediator);
         $this->bundleConfiguration = $bundleConfiguration;
-
     }
 
     /**
@@ -62,8 +65,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
 
         if (null !== $item) {
             $this->addStatusData(
-                'lastSyncItemDate',
-                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData('lastSyncItemDate'))
+                self::LAST_SYNC_KEY,
+                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
             );
         }
         $iterator = $this->getSourceIterator();
@@ -72,8 +75,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             // then just take point from what it was started
             $dateFromReadStarted = $iterator->getStartDate() ? $iterator->getStartDate()->format('Y-m-d H:i:s') : null;
             $this->addStatusData(
-                'lastSyncItemDate',
-                $this->getMaxUpdatedDate($this->getStatusData('lastSyncItemDate'), $dateFromReadStarted)
+                self::LAST_SYNC_KEY,
+                $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted)
             );
         }
 
@@ -81,48 +84,92 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
+     * @param ContextInterface $context
+     */
+    protected function initializeTransport(ContextInterface $context)
+    {
+        $this->channel   = $this->contextMediator->getChannel($context);
+        $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
+
+        $this->validateConfiguration();
+        $this->setSourceIterator($this->getConnectorSource());
+
+        if ($this->getSourceIterator() instanceof LoggerAwareInterface) {
+            $this->getSourceIterator()->setLogger($this->logger);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        parent::initializeFromContext($context);
+        $this->initializeTransport($context);
 
         // set start date and mode depending on status
-        $status      = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
-        $iterator    = $this->getSourceIterator();
+        /** @var Status $status */
+        $status = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
+        $iterator = $this->getSourceIterator();
         $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
-        if ($iterator instanceof UpdatedLoaderInterface && !empty($status) && !$isForceSync) {
-            /** @var Status $status */
-            $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-            $data = $status->getData();
+        if ($iterator instanceof UpdatedLoaderInterface && !$isForceSync) {
+            $startDate = $this->getStartDate($status);
 
-            if (!empty($data['lastSyncItemDate'])) {
-                $startDate = new \DateTime($data['lastSyncItemDate'], new \DateTimeZone('UTC'));
-            } else {
-                $startDate = clone $status->getDate();
+            if ($status) {
+                // use assumption interval in order to prevent mistiming issues
+                $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
+                $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
+                $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
+                $startDate->sub(\DateInterval::createFromDateString($intervalString));
             }
 
-            // use assumption interval in order to prevent mistiming issues
-            $intervalString = $this->bundleConfiguration['sync_settings']['mistiming_assumption_interval'];
-            $this->logger->debug(sprintf('Real start date: "%s"', $startDate->format(\DateTime::RSS)));
-            $this->logger->debug(sprintf('Subtracted the presumable mistiming interval "%s"', $intervalString));
-            $startDate->sub(\DateInterval::createFromDateString($intervalString));
+            $executionContext = $this->stepExecution->getJobExecution()->getExecutionContext();
+            $interval = $executionContext->get(InitialSyncProcessor::INTERVAL);
+            if ($interval) {
+                $iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_INITIAL);
+                $iterator->setSyncRange($interval);
+            }
+
+            $minimalSyncDate = $executionContext->get(InitialSyncProcessor::START_SYNC_DATE);
+            if ($minimalSyncDate) {
+                $iterator->setMinSyncDate($minimalSyncDate);
+            }
+
             $iterator->setStartDate($startDate);
         }
 
         // pass filters from connector
-        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
-            if ($iterator instanceof PredefinedFiltersAwareInterface) {
-                $filters           = $context->getOption('filters') ?: [];
-                $complexFilters    = $context->getOption('complex_filters') ?: [];
-                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
+        $this->setPredefinedFilters($context, $iterator);
+    }
 
-                $iterator->setPredefinedFiltersBag($predefinedFilters);
-            } else {
-                throw new \LogicException('Iterator does not support predefined filters');
-            }
+    /**
+     * @param Status $status
+     *
+     * @return \DateTime
+     */
+    protected function getStartDate(Status $status = null)
+    {
+        $jobContext = $this->stepExecution->getJobExecution()->getExecutionContext();
+        $initialSyncedTo = $jobContext->get(InitialSyncProcessor::INITIAL_SYNCED_TO);
+        if ($initialSyncedTo) {
+            return $initialSyncedTo;
         }
+
+        $lastSyncDate = $this->stepExecution->getExecutionContext()->get(self::LAST_SYNC_KEY);
+        if ($lastSyncDate) {
+            return $lastSyncDate;
+        }
+
+        if ($status) {
+            $data = $status->getData();
+            if (!empty($data[self::LAST_SYNC_KEY])) {
+                return new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
+            }
+
+            return clone $status->getDate();
+        }
+
+        return new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -187,6 +234,30 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
                 break;
             default:
                 return null;
+        }
+    }
+
+    /**
+     * @param ContextInterface $context
+     * @param \Iterator $iterator
+     */
+    protected function setPredefinedFilters(ContextInterface $context, \Iterator $iterator)
+    {
+        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
+            if ($iterator instanceof PredefinedFiltersAwareInterface) {
+                if (!$filters = $context->getOption('filters')) {
+                    $filters = [];
+                }
+                if (!$complexFilters = $context->getOption('complex_filters')) {
+                    $complexFilters = [];
+                }
+
+                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
+
+                $iterator->setPredefinedFiltersBag($predefinedFilters);
+            } else {
+                throw new \LogicException('Iterator does not support predefined filters');
+            }
         }
     }
 }
