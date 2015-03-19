@@ -24,6 +24,8 @@ parameters:
     orocrm_campaign.form.handler.email_campaign.class: OroCRM\Bundle\CampaignBundle\Form\Handler\EmailCampaignHandler
 
     orocrm_campaign.email_campaign.statistics_connector.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector
+
+    orocrm_campaign.provider.tracking_identificator.class:  OroCRM\Bundle\CampaignBundle\Provider\TrackingVisitEventIdentification
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -177,3 +179,10 @@ services:
 
     orocrm_campaign.group_by_helper:
         alias: oro_query_designer.group_by_helper
+
+    orocrm_campaign.provider.tracking_identificator:
+        class: %orocrm_campaign.provider.tracking_identificator.class%
+        arguments:
+           - @doctrine
+        tags:
+           - {name: oro_tracking.provider.identification, priority: 10}

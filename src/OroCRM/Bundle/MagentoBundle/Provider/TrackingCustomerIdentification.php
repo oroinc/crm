@@ -118,6 +118,9 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function isApplicableVisitEvent(TrackingVisitEvent $trackingVisitEvent)
     {
         $hasTrackingWebsiteChannel = $this->extendConfigProvider->hasConfig(
@@ -141,17 +144,48 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
         return false;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function processEvent(TrackingVisitEvent $trackingVisitEvent)
     {
-        // set identifier
-        $trackingVisitEvent->addAssociationTarget($trackingVisitEvent->getVisit()->getIdentifierTarget());
+        $targets = [];
 
+        // identifier
+        $targets[] = $trackingVisitEvent->getVisit()->getIdentifierTarget();
+
+        $channel = $trackingVisitEvent->getVisit()->getTrackingWebsite()->getChannel();
+
+        // process 'cart item added' event
         if ($trackingVisitEvent->getEvent()->getName() === 'cart item added') {
-            $product = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(['originId' => (int)$trackingVisitEvent->getWebEvent()->getValue()]);
-            if ($product) {
-                $trackingVisitEvent->addAssociationTarget($product);
-            }
+            $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(
+                [
+                    'originId' => (int)$trackingVisitEvent->getWebEvent()->getValue()
+                ]
+            );
         }
+
+        // process 'order successfully placed' event
+        if ($trackingVisitEvent->getEvent()->getName() === 'order successfully placed') {
+            $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
+                [
+                    'subtotalAmount' => $trackingVisitEvent->getWebEvent()->getValue(),
+                    'dataChannel' => $channel
+                ]
+            );
+        }
+
+        // process 'user entered checkout' event
+        if ($trackingVisitEvent->getEvent()->getName() === 'user entered checkout') {
+            $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Cart')->findOneBy(
+                [
+                    'subTotal'   => $trackingVisitEvent->getWebEvent()->getValue(),
+                    'dataChannel' => $channel
+                ]
+            );
+        }
+
+        return $targets;
     }
 
     /**
