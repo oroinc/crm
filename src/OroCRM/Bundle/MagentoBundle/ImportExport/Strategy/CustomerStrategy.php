@@ -97,6 +97,10 @@ class CustomerStrategy extends AbstractImportStrategy
             }
         }
 
+        if ($entity->getGroup()) {
+            $entity->getGroup()->setChannel($entity->getChannel());
+        }
+
         return parent::beforeProcessEntity($entity);
     }
 

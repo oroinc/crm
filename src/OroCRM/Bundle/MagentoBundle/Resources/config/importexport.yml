@@ -46,6 +46,7 @@ parameters:
     orocrm_magento.import_strategy.order.add_or_update.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderStrategy
     orocrm_magento.import.strategy.order_with_customer.add_or_update.class:     OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy
     orocrm_magento.import.strategy.cart_with_customer.add_or_update.class:      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy
+    orocrm_magento.import.strategy.customer_address.add_or_update.class:        OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
 
     # processors
     orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -69,6 +70,7 @@ parameters:
     orocrm_magento.importexport.processor.absract.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ImportProcessor
     orocrm_magento.importexport.processor.context.class:                        OroCRM\Bundle\MagentoBundle\ImportExport\Processor\ContextProcessor
 
+    orocrm_magento.provider.strategy.two_way_sync.class:                        OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy
 services:
     # Data converter
     orocrm_magento.importexport.data_converter.cartitem:
@@ -286,6 +288,10 @@ services:
         parent: orocrm_magento.import.strategy.cart.add_or_update
         class: %orocrm_magento.import.strategy.cart_with_customer.add_or_update.class%
 
+    orocrm_magento.import.strategy.customer_address.add_or_update:
+        class: %orocrm_magento.import.strategy.customer_address.add_or_update.class%
+        parent: orocrm_magento.import.strategy.abstract
+
     # Processors
     orocrm_magento.importexport.processor.abstract:
         class: %orocrm_magento.importexport.processor.absract.class%
@@ -301,6 +307,15 @@ services:
             - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
+
+    orocrm_magento.importexport.processor.import_customer_address:
+        parent: orocrm_magento.importexport.processor.abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer_address]]
+            - [setStrategy, [@orocrm_magento.import.strategy.customer_address.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.address.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.address.class%, alias: orocrm_magento.add_or_update_customer_address }
 
     orocrm_magento.importexport.processor.import_region:
         parent: oro_importexport.processor.import_abstract
@@ -417,12 +432,15 @@ services:
     orocrm_magento.importexport.writer.customer:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
+        calls:
+            - [setStrategy, [@orocrm_magento.provider.strategy.two_way_sync.customer]]
 
     orocrm_magento.importexport.writer.customer_address:
         class: %orocrm_magento.importexport.writer.customer_address.class%
         parent: orocrm_magento.importexport.writer.abstract_export
         calls:
             - [setMagentoRegionClass, [%orocrm_magento.entity.region.class%]]
+            - [setStrategy, [@orocrm_magento.provider.strategy.two_way_sync.customer_address]]
 
     # readers
     orocrm_magento.importexport.reader.entity:
@@ -458,6 +476,16 @@ services:
         calls:
             - [setContextKey, ['postProcessOrders']]
 
+    orocrm_magento.reader.context_customer_export:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCustomer']]
+
+    orocrm_magento.reader.context_customer_address_export:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessCustomerAddress']]
+
     orocrm_magento.reader.context_cart:
         parent: orocrm_magento.reader.context
         calls:
@@ -480,3 +508,14 @@ services:
             - @oro_integration.provider.connector_context_mediator
         calls:
             - [setClassName, [%orocrm_magento.entity.customer.class%]]
+
+    # strategy
+    orocrm_magento.provider.strategy.two_way_sync.customer:
+        class: %orocrm_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - @orocrm_magento.importexport.data_converter.customer
+
+    orocrm_magento.provider.strategy.two_way_sync.customer_address:
+        class: %orocrm_magento.provider.strategy.two_way_sync.class%
+        arguments:
+            - @orocrm_magento.importexport.data_converter.customer_address

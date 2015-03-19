@@ -12,22 +12,22 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     protected function getHeaderConversionRules()
     {
         return [
-            'firstname'  => 'firstName',
-            'lastname'   => 'lastName',
+            'firstname' => 'firstName',
+            'lastname' => 'lastName',
             'middlename' => 'middleName',
-            'prefix'     => 'namePrefix',
-            'suffix'     => 'nameSuffix',
-            'region'     => 'regionText',
-            'region_id'  => 'region:code', // Note, this is integer identifier of magento region
+            'prefix' => 'namePrefix',
+            'suffix' => 'nameSuffix',
+            'region' => 'regionText',
+            'region_id' => 'region:code', // Note, this is integer identifier of magento region
             'country_id' => 'country:iso2Code',
             'created_at' => 'created',
             'updated_at' => 'updated',
-            'postcode'   => 'postalCode',
-            'telephone'  => 'phone',
-            'company'    => 'organization',
-            'city'       => 'city',
-            'street'     => 'street',
-            'street2'    => 'street2'
+            'postcode' => 'postalCode',
+            'telephone' => 'phone',
+            'company' => 'organization',
+            'city' => 'city',
+            'street' => 'street',
+            'street2' => 'street2'
         ];
     }
 
@@ -37,8 +37,15 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
-        if (!empty($importedRecord['street']) && strpos($importedRecord['street'], "\n") !== false) {
-            list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
+
+        if (!empty($importedRecord['street'])) {
+            $streets = $importedRecord['street'];
+            if (is_string($streets) && strpos($streets, "\n") !== false) {
+                list($importedRecord['street'], $importedRecord['street2']) = explode("\n", $importedRecord['street']);
+            } elseif (is_array($streets)) {
+                $importedRecord['street'] = reset($streets);
+                $importedRecord['street2'] = next($streets);
+            }
         }
         $importedRecord = $this->convertImportedRegion($importedRecord);
 
@@ -73,10 +80,21 @@ abstract class AbstractAddressDataConverter extends IntegrationAwareDataConverte
     {
         $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
 
-        $exportedRecord['street'] = [
-            $exportedRecord['street'],
-            $exportedRecord['street2']
-        ];
+        $streets = [];
+
+        if (!empty($exportedRecord['street'])) {
+            $streets[] = $exportedRecord['street'];
+            unset($exportedRecord['street']);
+        }
+
+        if (!empty($exportedRecord['street2'])) {
+            $streets[] = $exportedRecord['street2'];
+            unset($exportedRecord['street2']);
+        }
+
+        if ($streets) {
+            $exportedRecord['street'] = $streets;
+        }
 
         return $exportedRecord;
     }
