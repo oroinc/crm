@@ -57,7 +57,7 @@ class CustomerType extends AbstractType
             ->add('vat', 'text', ['required' => false, 'label' => 'orocrm.magento.customer.vat.label'])
             ->add(
                 'dataChannel',
-                'orocrm_channel_select_type',
+                'orocrm_magento_customer_channel_select',
                 [
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
