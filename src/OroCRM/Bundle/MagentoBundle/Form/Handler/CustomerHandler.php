@@ -24,19 +24,49 @@ class CustomerHandler extends UpdateHandler
             $form->submit($this->request);
 
             if ($form->isValid()) {
-                $stateManager = new StateManager();
-                if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
-                    $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
-                }
+                $this->markForSync($entity);
+                $this->saveEntity($entity);
 
-                $manager = $this->doctrineHelper->getEntityManager($entity);
-                $manager->persist($entity);
-                $manager->flush();
+                // Process trigger listen for update, because create will trigger export during import
+                // This will schedule new entity for export
+                if (!$entity->getOriginId()) {
+                    $this->scheduleSyncToMagento($entity);
+                }
 
                 return true;
             }
         }
 
         return false;
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function saveEntity(Customer $entity)
+    {
+        $manager = $this->doctrineHelper->getEntityManager($entity);
+        $manager->persist($entity);
+        $manager->flush($entity);
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function scheduleSyncToMagento($entity)
+    {
+        $this->markForSync($entity);
+        $this->saveEntity($entity);
+    }
+
+    /**
+     * @param Customer $entity
+     */
+    protected function markForSync(Customer $entity)
+    {
+        $stateManager = new StateManager();
+        if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
+            $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
+        }
     }
 }

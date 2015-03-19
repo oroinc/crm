@@ -38,6 +38,8 @@ class CustomerExportWriter extends AbstractExportWriter
             $this->writeExistingItem($item);
         }
 
+        // Clear temporary saved password
+        $entity->setPassword(null);
         parent::write([$entity]);
     }
 

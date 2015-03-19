@@ -24,7 +24,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
             ->disableOriginalConstructor()
             ->getMock();
 
-        $entity = new Customer();
+        $entity = $this->getObject();
 
         $this->request->expects($this->once())
             ->method('getMethod')
@@ -38,20 +38,12 @@ class CustomerHandlerTest extends UpdateHandlerTest
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
             ->getMock();
-        $em->expects($this->once())
-            ->method('persist')
-            ->with(
-                $this->callback(
-                    function (Customer $processedCustomer) {
-                        $this->assertEquals($processedCustomer->getSyncState(), Customer::SYNC_TO_MAGENTO);
+        $em->expects($this->atLeastOnce())
+            ->method('persist');
 
-                        return true;
-                    }
-                )
-            );
-        $em->expects($this->once())
+        $em->expects($this->atLeastOnce())
             ->method('flush');
-        $this->doctrineHelper->expects($this->once())
+        $this->doctrineHelper->expects($this->atLeastOnce())
             ->method('getEntityManager')
             ->with($entity)
             ->will($this->returnValue($em));

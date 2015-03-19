@@ -24,6 +24,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 /**
  * Class Customer
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
  * @ORM\HasLifecycleCallbacks()
@@ -386,6 +388,13 @@ class Customer extends ExtendCustomer implements
     protected $organization;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=32, nullable=true)
+     */
+    protected $password;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -724,5 +733,45 @@ class Customer extends ExtendCustomer implements
     public function preUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return Customer
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @param string $password
+     * @return Customer
+     */
+    public function setGeneratedPassword($password)
+    {
+        if ($password) {
+            $this->setPassword($password);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeneratedPassword()
+    {
+        return '';
     }
 }

@@ -123,6 +123,9 @@ orocrm:
             frequency.label:     Frequency
             saved.message:       Customer saved
             address_book.title:  Address Book
+            password:
+                label:      Password
+                section:    Password Management
             sync_state:
                 label: Sync State
                 info: Partially synced
