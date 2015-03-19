@@ -13,13 +13,15 @@ use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 /**
  * @dbIsolation
  */
-class CustomerExportWriterTest extends AbstractExportWriterTest
+class CustomerAddressExportWriterTest extends AbstractExportWriterTest
 {
     protected function setUp()
     {
         parent::setUp();
 
-        $this->getContainer()->get('orocrm_magento.importexport.writer.customer')->setTransport($this->transport);
+        $this->getContainer()->get('orocrm_magento.importexport.writer.customer_address')->setTransport(
+            $this->transport
+        );
     }
 
     public function testCreateNew()
@@ -27,28 +29,31 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $originId = time();
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
 
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
-        $customer->setOriginId(null);
 
-        $this->transport->expects($this->never())->method('getCustomerInfo');
-        $this->transport->expects($this->never())->method('updateCustomer');
+        $this->transport->expects($this->never())->method('getCustomerAddressInfo');
+        $this->transport->expects($this->never())->method('updateCustomerAddress');
         $this->transport->expects($this->once())
-            ->method('createCustomer')
-            ->with($this->isType('array'))
+            ->method('createCustomerAddress')
+            ->with($this->isType('string'), $this->isType('array'))
             ->will($this->returnValue($originId));
+
+        /** @var Address $address */
+        $address = $customer->getAddresses()->first();
+        $address->setOriginId(null);
 
         $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
             'export',
-            'magento_customer_export',
+            'magento_customer_address_export',
             [
                 'channel' => $channel->getId(),
-                'entity' => $customer,
+                'entity' => $address,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
@@ -60,54 +65,61 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->assertEmpty($jobResult->getFailureExceptions());
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
+        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
 
-        $this->assertEquals($originId, $customer->getOriginId());
+        $this->assertEquals($originId, $address->getOriginId());
 
         $stateManager = new StateManager();
-        $this->assertTrue($stateManager->isInState($customer->getSyncState(), 0));
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::SYNC_TO_MAGENTO));
-        }
+        $this->assertTrue($stateManager->isInState($address->getSyncState(), 0));
     }
 
     public function testUpdateExisting()
     {
-        $newName = 'new name';
+        $newStreet = 'new street';
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
 
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
-        $customer->setPassword(uniqid());
+
+        /** @var Address $address */
+        $address = $customer->getAddresses()->first();
 
         $this->transport->expects($this->once())
-            ->method('getCustomerInfo')
-            ->will($this->returnValue(['firstname' => $newName, 'customer_id' => $customer->getOriginId()]));
+            ->method('getCustomerAddressInfo')
+            ->will(
+                $this->returnValue(
+                    [
+                        'street' => $newStreet,
+                        'country_id' => $address->getCountry()->getIso2Code(),
+                        'customer_address_id' => $address->getOriginId(),
+                        'customer_id' => $customer->getOriginId()
+                    ]
+                )
+            );
 
         $this->transport->expects($this->once())
-            ->method('updateCustomer')
+            ->method('updateCustomerAddress')
             ->will($this->returnValue(true));
 
-        $this->transport->expects($this->never())->method('createCustomer');
+        $this->transport->expects($this->never())->method('createCustomerAddress');
 
         $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
             'export',
-            'magento_customer_export',
+            'magento_customer_address_export',
             [
                 'channel' => $channel->getId(),
-                'entity' => $customer,
+                'entity' => $address,
                 'changeSet' => [
                     'firstName' => [
-                        'old' => $customer->getFirstName(),
-                        'new' => $newName
+                        'old' => $address->getCity(),
+                        'new' => $newStreet
                     ]
                 ],
                 'twoWaySyncStrategy' => 'remote',
@@ -120,25 +132,20 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->assertEmpty($jobResult->getFailureExceptions());
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
+        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
 
-        $this->assertEquals($newName, $customer->getFirstName());
-        $this->assertEmpty($customer->getPassword());
+        $this->assertEquals($newStreet, $address->getStreet());
 
         $stateManager = new StateManager();
-        $this->assertTrue($stateManager->isInState($customer->getSyncState(), 0));
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::SYNC_TO_MAGENTO));
-        }
+        $this->assertTrue($stateManager->isInState($address->getSyncState(), 0));
     }
 
     public function testRemovedStateIfFailed()
     {
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
@@ -146,19 +153,22 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
 
+        /** @var Address $address */
+        $address = $customer->getAddresses()->first();
+
         $e = new TransportException();
         $e->setFaultCode(102);
 
-        $this->transport->expects($this->once())->method('getCustomerInfo')->will($this->throwException($e));
-        $this->transport->expects($this->never())->method('updateCustomer');
-        $this->transport->expects($this->never())->method('createCustomer');
+        $this->transport->expects($this->once())->method('getCustomerAddressInfo')->will($this->throwException($e));
+        $this->transport->expects($this->never())->method('updateCustomerAddress');
+        $this->transport->expects($this->never())->method('createCustomerAddress');
 
         $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
             'export',
-            'magento_customer_export',
+            'magento_customer_address_export',
             [
                 'channel' => $channel->getId(),
-                'entity' => $customer,
+                'entity' => $address,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
@@ -170,20 +180,18 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->assertEmpty($jobResult->getFailureExceptions());
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
+
+        $this->getContainer()->get('doctrine')->getManager()->refresh($address);
 
         $stateManager = new StateManager();
-        $this->assertTrue($stateManager->isInState($customer->getSyncState(), Customer::MAGENTO_REMOVED));
-
-        foreach ($customer->getAddresses() as $address) {
-            $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED));
-        }
+        $this->assertTrue($stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED));
     }
 
     public function testRemovedState()
     {
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
 
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
@@ -191,16 +199,19 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
 
-        $this->transport->expects($this->never())->method('getCustomerInfo');
-        $this->transport->expects($this->never())->method('updateCustomer');
-        $this->transport->expects($this->never())->method('createCustomer');
+        /** @var Address $address */
+        $address = $customer->getAddresses()->first();
+
+        $this->transport->expects($this->never())->method('getCustomerAddressInfo');
+        $this->transport->expects($this->never())->method('updateCustomerAddress');
+        $this->transport->expects($this->never())->method('createCustomerAddress');
 
         $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
             'export',
-            'magento_customer_export',
+            'magento_customer_address_export',
             [
                 'channel' => $channel->getId(),
-                'entity' => $customer,
+                'entity' => $address,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
                 'writer_skip_clear' => true,
@@ -212,6 +223,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         $this->assertEmpty($jobResult->getFailureExceptions());
 
         // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
+        $this->assertEmpty($this->getJobs('magento_customer_address_export', BatchStatus::FAILED));
     }
 }

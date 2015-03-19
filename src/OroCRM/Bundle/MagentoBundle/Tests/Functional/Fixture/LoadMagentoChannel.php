@@ -264,6 +264,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $address->setPrimary(true);
         $address->setOrganization('oro');
         $address->setOriginId(1);
+        $address->setChannel($this->integration);
         $address->setOrganization($this->organization);
 
         $this->em->persist($address);
