@@ -8,9 +8,11 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints\Length;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
 class CustomerType extends AbstractType
 {
@@ -95,6 +97,19 @@ class CustomerType extends AbstractType
             ->add('contact', 'orocrm_contact_select', ['label' => 'orocrm.magento.customer.contact.label'])
             ->add('account', 'orocrm_account_select', ['label' => 'orocrm.magento.customer.account.label']);
 
+        if ($this->isPasswordSetAllowed($builder->getData())) {
+            $builder->add(
+                'generatedPassword',
+                'text',
+                [
+                    'label' => 'orocrm.magento.customer.password.label',
+                    'tooltip' => 'orocrm.magento.customer.password.tooltip',
+                    'required' => false,
+                    'constraints' => [new Length(['min' => 6])]
+                ]
+            );
+        }
+
         $builder->addEventListener(
             FormEvents::SUBMIT,
             function (FormEvent $event) {
@@ -143,5 +158,24 @@ class CustomerType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * Allow to set password only for new customer.
+     * Allow to set password for existing customer if Oro Bridge extension is installed.
+     *
+     * @param Customer|null $data
+     * @return bool
+     */
+    protected function isPasswordSetAllowed($data)
+    {
+        if ($data && $data instanceof Customer && $data->getChannel() && $data->getChannel()->getTransport()) {
+            /** @var MagentoSoapTransport $transport */
+            $transport = $data->getChannel()->getTransport();
+
+            return !$data->getId() || $transport->getIsExtensionInstalled();
+        }
+
+        return true;
     }
 }

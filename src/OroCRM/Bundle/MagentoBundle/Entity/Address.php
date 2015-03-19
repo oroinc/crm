@@ -178,7 +178,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     protected $nameSuffix;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
@@ -205,7 +205,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     protected $types;
 
     /**
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
      * @ORM\JoinColumn(name="related_contact_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @var ContactAddress
      * @ConfigField(
@@ -221,7 +221,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     /**
      * @var ContactPhone
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
      * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={

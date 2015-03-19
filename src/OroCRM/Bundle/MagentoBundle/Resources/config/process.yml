@@ -4,7 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
-        exclude_definitions: [magento_customer_export]
+        exclude_definitions: [magento_customer_export, magento_customer_address_export]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -130,6 +130,11 @@ definitions:
                 object: $channel.synchronizationSettings
                 method: 'offsetGetOr'
                 method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
             - @tree:
                 conditions:
                     @and:
@@ -165,9 +170,12 @@ definitions:
                                 jobType: export
                                 jobName: magento_customer_export
                                 configuration:
-                                    channel: $channel
+                                    channel: $channel.id
                                     entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager
@@ -179,17 +187,23 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
         order:   20
-        exclude_definitions: [magento_customer_address_export]
+        exclude_definitions: [magento_customer_address_export, magento_customer_creation]
         actions_configuration:
             - @call_method:
                 attribute: $.isTwoWaySyncEnabled
                 object: $channel.synchronizationSettings
                 method: 'offsetGetOr'
                 method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
             - @tree:
                 conditions:
                     @and:
                         - @equal: [$channel.enabled, true]
+                        - @not_empty: $owner.originId
                         - @equal: [$.isTwoWaySyncEnabled, true]
                 actions:
                     - @assign_constant_value:
@@ -221,9 +235,12 @@ definitions:
                                 jobType: export
                                 jobName: magento_customer_address_export
                                 configuration:
-                                    channel: $channel
+                                    channel: $channel.id
                                     entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
                                     writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
                                 attribute: $.jobResult
                             - @call_method:
                                 object: $.stateManager
@@ -319,19 +336,13 @@ triggers:
 
     magento_customer_export:
         -
-            event:    create
-            priority: 10
-            queued:   true
-        -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 
     magento_customer_address_export:
         -
             event:    update
-            field:    syncState
             priority: 10
             queued:   true
 

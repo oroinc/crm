@@ -16,7 +16,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'email' => 'email',
             'firstname' => 'firstName',
             'lastname' => 'lastName',
-//            'password' => 'password', // TODO: Add ability to set and change? customer password
+            'password' => 'password',
             'group_id' => 'group:originId',
             'prefix' => 'namePrefix',
             'suffix' => 'nameSuffix',
@@ -123,18 +123,27 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             unset($exportedRecord['group']);
         }
 
-        if (isset($exportedRecord['created_at'])) {
-            unset($exportedRecord['created_at']);
-        }
-
-        if (isset($exportedRecord['updated_at'])) {
-            unset($exportedRecord['updated_at']);
+        if (empty($exportedRecord['password'])) {
+            unset($exportedRecord['password']);
         }
 
         if (!empty($exportedRecord['gender'])) {
             $exportedRecord['gender'] = $this->getMagentoGender($exportedRecord['gender']);
         }
 
+        unset($exportedRecord['created_at'], $exportedRecord['updated_at']);
+
         return $exportedRecord;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function fillEmptyColumns(array $header, array $data)
+    {
+        $dataDiff = array_diff(array_keys($data), $header);
+        $data = array_diff_key($data, array_flip($dataDiff));
+
+        return parent::fillEmptyColumns($header, $data);
     }
 }
