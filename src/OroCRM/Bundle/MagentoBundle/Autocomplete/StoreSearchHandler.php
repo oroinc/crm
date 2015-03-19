@@ -29,12 +29,11 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
                 ->setParameter('channel', $dataChannel->getDataSource());
 
             // Limit stores to website selected in integration settings
-            $integration = $dataChannel->getDataSource();
-            if ($integration instanceof MagentoSoapTransport) {
-                $websiteId = $integration->getSettingsBag()->get('website_id');
+            $transport = $dataChannel->getDataSource()->getTransport();
+            if ($transport instanceof MagentoSoapTransport) {
+                $websiteId = $transport->getSettingsBag()->get('website_id');
                 if ($websiteId !== StoresSoapIterator::ALL_WEBSITES) {
-                    $queryBuilder->andWhere('w.id = :id')
-                        ->setParameter('id', $websiteId);
+                    $queryBuilder->andWhere('w.id = :id')->setParameter('id', $websiteId);
                 }
             }
         } else {

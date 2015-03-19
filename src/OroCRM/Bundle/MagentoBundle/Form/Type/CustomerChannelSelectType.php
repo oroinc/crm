@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -53,6 +54,10 @@ class CustomerChannelSelectType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
+        if (!$this->channelClass) {
+            throw new \InvalidArgumentException('Channel class is missing');
+        }
+
         $queryBuilderNormalizer = function (Options $options, $qb) {
             /** @var EntityManager $em */
             $em = $options['em'];
@@ -63,6 +68,14 @@ class CustomerChannelSelectType extends AbstractType
 
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = $qb($repository, $entities);
+            $queryBuilder
+                ->join('c.dataSource', 'd')
+                ->andWhere($queryBuilder->expr()->andX(
+                    $queryBuilder->expr()->eq('d.type', ':type'),
+                    $queryBuilder->expr()->eq('d.enabled', ':enabled')
+                ))
+                ->setParameter('type', ChannelType::TYPE)
+                ->setParameter('enabled', true);
 
             $filteredQb = clone $queryBuilder;
             /** @var Channel[] $channels */

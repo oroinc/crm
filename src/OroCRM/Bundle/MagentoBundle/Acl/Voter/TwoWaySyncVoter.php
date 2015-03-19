@@ -93,7 +93,7 @@ class TwoWaySyncVoter extends AbstractEntityVoter
         if (!is_array($this->channels)) {
             $this->channels = $this->doctrineHelper
                 ->getEntityRepository($this->channelClassName)
-                ->findBy(['type' => ChannelType::TYPE]);
+                ->findBy(['type' => ChannelType::TYPE, 'enabled' => true]);
         }
 
         return $this->channels;
