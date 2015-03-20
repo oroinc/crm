@@ -2,15 +2,31 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Handler;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\FormBundle\Model\UpdateHandler;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
+use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
 
 class CustomerHandler extends UpdateHandler
 {
+    /**
+     * @var CustomerStateHandler
+     */
+    protected $stateHandler;
+
+    /**
+     * @param CustomerStateHandler $stateHandler
+     * @return CustomerHandler
+     */
+    public function setStateHandler($stateHandler)
+    {
+        $this->stateHandler = $stateHandler;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -25,37 +41,30 @@ class CustomerHandler extends UpdateHandler
             $form->submit($this->request);
 
             if ($form->isValid()) {
+                $addressesToSync = [];
                 if ($entity->getId()) {
-                    $this->markForSync($entity);
+                    $this->stateHandler->markCustomerForSync($entity);
 
-                    foreach ($entity->getAddresses() as $address) {
-                        if ($address->getId()) {
-                            $this->markAddressForSync($address);
-                            $this->saveEntity($address);
+                    if (!$entity->getAddresses()->isEmpty()) {
+                        foreach ($entity->getAddresses() as $address) {
+                            if (!$address->getOriginId()) {
+                                $addressesToSync[] = $address;
+                            } else {
+                                $this->stateHandler->markAddressForSync($address);
+                            }
                         }
                     }
                 }
-
-                // get address ids to create
-                $newAddresses = [];
-                foreach ($entity->getAddresses() as $address) {
-                    if (!$address->getId()) {
-                        $newAddresses[] = $address;
-                    }
-                }
-
                 $this->saveEntity($entity);
 
                 // Process trigger listen for update, because create will trigger export during import
                 // This will schedule new entity for export
                 if (!$entity->getOriginId()) {
-                    $this->markForSync($entity);
-                    $this->saveEntity($entity);
-                } else {
-                    foreach ($newAddresses as $newAddress) {
-                        $this->markAddressForSync($newAddress);
-                        $this->saveEntity($newAddress);
-                    }
+                    $this->scheduleCustomerSyncToMagento($entity);
+                }
+
+                foreach ($addressesToSync as $address) {
+                    $this->scheduleAddressSyncToMagento($address);
                 }
 
                 return true;
@@ -72,28 +81,26 @@ class CustomerHandler extends UpdateHandler
     {
         $manager = $this->doctrineHelper->getEntityManager($entity);
         $manager->persist($entity);
-        $manager->flush($entity);
+
+        // flush entity with related entities
+        $manager->flush();
     }
 
     /**
      * @param Customer $entity
      */
-    protected function markForSync(Customer $entity)
+    protected function scheduleCustomerSyncToMagento(Customer $entity)
     {
-        $stateManager = new StateManager();
-        if (!$stateManager->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
-            $stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
-        }
+        $this->stateHandler->markCustomerForSync($entity);
+        $this->saveEntity($entity);
     }
 
     /**
      * @param Address $entity
      */
-    protected function markAddressForSync(Address $entity)
+    protected function scheduleAddressSyncToMagento(Address $entity)
     {
-        $stateManager = new StateManager();
-        if (!$stateManager->isInState($entity->getSyncState(), Address::MAGENTO_REMOVED)) {
-            $stateManager->addState($entity, 'syncState', Address::SYNC_TO_MAGENTO);
-        }
+        $this->stateHandler->markAddressForSync($entity);
+        $this->saveEntity($entity);
     }
 }
