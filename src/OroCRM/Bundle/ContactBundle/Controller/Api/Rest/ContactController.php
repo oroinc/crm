@@ -12,6 +12,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 
+use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -210,7 +211,7 @@ class ContactController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function processForm($entity)
     {
@@ -260,116 +261,10 @@ class ContactController extends RestController implements ClassResourceInterface
         // - move region name to region_text field for unknown region
         if (array_key_exists('addresses', $contactData)) {
             foreach ($contactData['addresses'] as &$address) {
-                if (!empty($address['country'])) {
-                    $countryCode = $this->getCountryCodeByName($address['country']);
-                    if (!empty($countryCode)) {
-                        $address['country'] = $countryCode;
-                    }
-                }
-                if (!empty($address['region']) && !$this->isRegionCombinedCodeByCode($address['region'])) {
-                    if (!empty($address['country'])) {
-                        $regionId = $this->getRegionCombinedCodeByCode($address['country'], $address['region']);
-                        if (!empty($regionId)) {
-                            $address['region'] = $regionId;
-                        } else {
-                            $regionId = $this->getRegionCombinedCodeByName($address['country'], $address['region']);
-                            if (!empty($regionId)) {
-                                $address['region'] = $regionId;
-                            } else {
-                                $address['region_text'] = $address['region'];
-                                unset($address['region']);
-                            }
-                        }
-                    } else {
-                        $address['region_text'] = $address['region'];
-                        unset($address['region']);
-                    }
-                }
+                AddressApiUtils::fixAddress($address, $this->get('doctrine.orm.entity_manager'));
             }
             $this->getRequest()->request->set($formAlias, $contactData);
         }
-    }
-
-    /**
-     * @param string $countryName
-     *
-     * @return string|null
-     */
-    protected function getCountryCodeByName($countryName)
-    {
-        $countryRepo = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('OroAddressBundle:Country');
-        $country = $countryRepo->createQueryBuilder('c')
-            ->select('c.iso2Code')
-            ->where('c.name = :name')
-            ->setParameter('name', $countryName)
-            ->getQuery()
-            ->getArrayResult();
-
-        return !empty($country) ? $country[0]['iso2Code'] : null;
-    }
-
-    /**
-     * @param string $region
-     *
-     * @return bool
-     */
-    protected function isRegionCombinedCodeByCode($region)
-    {
-        $regionRepo = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('OroAddressBundle:Region');
-        $region = $regionRepo->createQueryBuilder('r')
-            ->select('r.combinedCode')
-            ->where('r.combinedCode = :region')
-            ->setParameter('region', $region)
-            ->getQuery()
-            ->getArrayResult();
-
-        return !empty($region);
-    }
-
-    /**
-     * @param string $countryCode
-     * @param string $regionCode
-     *
-     * @return string|null
-     */
-    protected function getRegionCombinedCodeByCode($countryCode, $regionCode)
-    {
-        $regionRepo = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('OroAddressBundle:Region');
-        $region = $regionRepo->createQueryBuilder('r')
-            ->select('r.combinedCode')
-            ->innerJoin('r.country', 'c')
-            ->where('c.iso2Code = :country AND r.code = :region')
-            ->setParameter('country', $countryCode)
-            ->setParameter('region', $regionCode)
-            ->getQuery()
-            ->getArrayResult();
-
-        return !empty($region) ? $region[0]['combinedCode'] : null;
-    }
-
-    /**
-     * @param string $countryCode
-     * @param string $regionName
-     *
-     * @return string|null
-     */
-    protected function getRegionCombinedCodeByName($countryCode, $regionName)
-    {
-        $regionRepo = $this->get('doctrine.orm.entity_manager')
-            ->getRepository('OroAddressBundle:Region');
-        $region = $regionRepo->createQueryBuilder('r')
-            ->select('r.combinedCode')
-            ->innerJoin('r.country', 'c')
-            ->where('c.iso2Code = :country AND r.name = :region')
-            ->setParameter('country', $countryCode)
-            ->setParameter('region', $regionName)
-            ->getQuery()
-            ->getArrayResult();
-
-        return !empty($region) ? $region[0]['combinedCode'] : null;
     }
 
     /**
