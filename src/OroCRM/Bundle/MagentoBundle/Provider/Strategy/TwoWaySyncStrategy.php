@@ -35,7 +35,8 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         array $changeSet,
         array $localData,
         array $remoteData,
-        $strategy = TwoWaySyncConnectorInterface::REMOTE_WINS
+        $strategy = TwoWaySyncConnectorInterface::REMOTE_WINS,
+        array $additionalFields = []
     ) {
         if (!in_array($strategy, $this->supportedStrategies, true)) {
             throw new \InvalidArgumentException(
@@ -96,7 +97,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         }
 
         $localDataForUpdate = array_diff($localChanges, $conflicts);
-        foreach ($localDataForUpdate as $property) {
+        foreach (array_merge($localDataForUpdate, $additionalFields) as $property) {
             $remoteData[$property] = $localData[$property];
         }
 

@@ -114,7 +114,8 @@ class CustomerAddressExportWriter extends AbstractExportWriter
                 $this->getEntityChangeSet(),
                 $item,
                 $remoteData,
-                $this->getTwoWaySyncStrategy()
+                $this->getTwoWaySyncStrategy(),
+                ['is_default_shipping', 'is_default_billing']
             );
 
             $this->stepExecution->getJobExecution()

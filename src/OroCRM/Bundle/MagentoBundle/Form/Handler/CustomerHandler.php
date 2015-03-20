@@ -81,7 +81,9 @@ class CustomerHandler extends UpdateHandler
     {
         $manager = $this->doctrineHelper->getEntityManager($entity);
         $manager->persist($entity);
-        $manager->flush($entity);
+
+        // flush entity with related entities
+        $manager->flush();
     }
 
     /**
