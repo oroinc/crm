@@ -447,8 +447,7 @@ services:
         class: %orocrm_magento.importexport.reader.entity.class%
         arguments:
             - @oro_importexport.context_registry
-            - @oro_entity.doctrine_helper
-            
+
     orocrm_magento.reader.context_customer:
         class: %orocrm_magento.reader.context_customer.class%
         parent: orocrm_magento.mage.customer_connector

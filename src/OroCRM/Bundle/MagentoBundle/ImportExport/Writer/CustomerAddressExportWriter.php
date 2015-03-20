@@ -121,7 +121,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
                 $this->logger->error(sprintf('Customer address with id %s was not updated', $customerAddressId));
             }
         } catch (TransportException $e) {
-            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
+            if ($e->getFaultCode() == self::FAULT_CODE_NOT_EXISTS) {
                 $this->markRemoved($entity);
             }
 
