@@ -86,8 +86,12 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             $conflicts = [];
         }
 
-        foreach ($conflicts as $conflict) {
+        foreach (array_merge($conflicts, $additionalFields) as $conflict) {
             if (!array_key_exists($conflict, $remoteData)) {
+                continue;
+            }
+
+            if (!array_key_exists($conflict, $localData)) {
                 continue;
             }
 
@@ -97,7 +101,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         }
 
         $localDataForUpdate = array_diff($localChanges, $conflicts);
-        foreach (array_merge($localDataForUpdate, $additionalFields) as $property) {
+        foreach ($localDataForUpdate as $property) {
             $remoteData[$property] = $localData[$property];
         }
 

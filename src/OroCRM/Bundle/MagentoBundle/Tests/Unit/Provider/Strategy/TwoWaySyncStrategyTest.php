@@ -90,6 +90,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
      * @param array $remoteData
      * @param string $strategy
      * @param array $expected
+     * @param array $additionalFields
      *
      * @dataProvider mergeDataProvider
      */
@@ -98,11 +99,12 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
         array $localData,
         array $remoteData,
         $strategy,
-        array $expected
+        array $expected,
+        array $additionalFields = []
     ) {
         $this->assertEquals(
             $expected,
-            $this->strategy->merge($changeSet, $localData, $remoteData, $strategy)
+            $this->strategy->merge($changeSet, $localData, $remoteData, $strategy, $additionalFields)
         );
     }
 
@@ -322,6 +324,52 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'remoteData' => ['prop_value' => 'new remote value', 'prop_value2' => 'old local value to remote'],
                 'strategy' => 'remote',
                 'expected' => ['prop_value' => 'new remote value', 'prop_value2' => 'new local value to remote']
+            ],
+            'additional fields remote wins' => [
+                'changeSet' => [
+                    'propValue' => ['old' => 'old local value', 'new' => 'new local value'],
+                    'propValue2' => ['old' => 'old local value to remote', 'new' => 'new local value to remote']
+                ],
+                'localData' => [
+                    'prop_value' => 'value',
+                    'prop_value2' => 'new local value to remote',
+                    'prop3' => 'prop3Value local'
+                ],
+                'remoteData' => [
+                    'prop_value' => 'new remote value',
+                    'prop_value2' => 'old local value to remote',
+                    'prop3' => 'prop3Value'
+                ],
+                'strategy' => 'remote',
+                'expected' => [
+                    'prop_value' => 'new remote value',
+                    'prop_value2' => 'new local value to remote',
+                    'prop3' => 'prop3Value'
+                ],
+                'additionalFields' => ['prop3']
+            ],
+            'additional fields local wins' => [
+                'changeSet' => [
+                    'propValue' => ['old' => 'old local value', 'new' => 'new local value'],
+                    'propValue2' => ['old' => 'old local value to remote', 'new' => 'new local value to remote']
+                ],
+                'localData' => [
+                    'prop_value' => 'value',
+                    'prop_value2' => 'new local value to remote',
+                    'prop3' => 'prop3Value local'
+                ],
+                'remoteData' => [
+                    'prop_value' => 'new remote value',
+                    'prop_value2' => 'old local value to remote',
+                    'prop3' => 'prop3Value'
+                ],
+                'strategy' => 'local',
+                'expected' => [
+                    'prop_value' => 'value',
+                    'prop_value2' => 'new local value to remote',
+                    'prop3' => 'prop3Value local'
+                ],
+                'additionalFields' => ['prop3']
             ]
         ];
     }
