@@ -19,6 +19,7 @@ class MarketingListProvider
 {
     const RESULT_ITEMS_MIXIN = 'orocrm-marketing-list-items-mixin';
     const RESULT_ENTITIES_MIXIN = 'orocrm-marketing-list-entities-mixin';
+    const FULL_ENTITIES_MIXIN = 'orocrm-marketing-full-mixin';
     const MANUAL_RESULT_ITEMS_MIXIN = 'orocrm-marketing-list-manual-items-mixin';
     const MANUAL_RESULT_ENTITIES_MIXIN = 'orocrm-marketing-list-manual-entities-mixin';
 
@@ -57,15 +58,18 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     * @param string|null $mixin
      *
      * @return \Iterator
      */
-    public function getMarketingListResultIterator(MarketingList $marketingList)
+    public function getMarketingListResultIterator(MarketingList $marketingList, $mixin = null)
     {
-        if ($marketingList->isManual()) {
-            $mixin = self::MANUAL_RESULT_ITEMS_MIXIN;
-        } else {
-            $mixin = self::RESULT_ITEMS_MIXIN;
+        if (!$mixin) {
+            if ($marketingList->isManual()) {
+                $mixin = self::MANUAL_RESULT_ITEMS_MIXIN;
+            } else {
+                $mixin = self::RESULT_ITEMS_MIXIN;
+            }
         }
 
         $queryBuilder = $this->getMarketingListQueryBuilder($marketingList, $mixin);
@@ -79,15 +83,18 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     * @param string|null $mixin
      *
      * @return QueryBuilder
      */
-    public function getMarketingListEntitiesQueryBuilder(MarketingList $marketingList)
+    public function getMarketingListEntitiesQueryBuilder(MarketingList $marketingList, $mixin = null)
     {
-        if ($marketingList->isManual()) {
-            $mixin = self::MANUAL_RESULT_ENTITIES_MIXIN;
-        } else {
-            $mixin = self::RESULT_ENTITIES_MIXIN;
+        if (!$mixin) {
+            if ($marketingList->isManual()) {
+                $mixin = self::MANUAL_RESULT_ENTITIES_MIXIN;
+            } else {
+                $mixin = self::RESULT_ENTITIES_MIXIN;
+            }
         }
 
         $queryBuilder = clone $this->getMarketingListQueryBuilder($marketingList, $mixin);
@@ -108,13 +115,14 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     * @param string $mixin
      *
      * @return BufferedQueryResultIterator
      */
-    public function getMarketingListEntitiesIterator(MarketingList $marketingList)
+    public function getMarketingListEntitiesIterator(MarketingList $marketingList, $mixin = null)
     {
         return new BufferedQueryResultIterator(
-            $this->getMarketingListEntitiesQueryBuilder($marketingList),
+            $this->getMarketingListEntitiesQueryBuilder($marketingList, $mixin),
             false
         );
     }
