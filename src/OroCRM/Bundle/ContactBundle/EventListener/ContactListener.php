@@ -78,8 +78,12 @@ class ContactListener
      */
     protected function setCreatedProperties(Contact $contact, EntityManager $entityManager)
     {
-        $contact->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-        $contact->setCreatedBy($this->getUser($entityManager));
+        if (!$contact->getCreatedAt()) {
+            $contact->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        }
+        if (!$contact->getCreatedBy()) {
+            $contact->setCreatedBy($this->getUser($entityManager));
+        }
     }
 
     /**
