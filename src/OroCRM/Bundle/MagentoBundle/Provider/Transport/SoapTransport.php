@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -54,6 +55,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
+    const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -412,6 +414,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getCustomerInfo($originId)
     {
         return (array)$this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsletterSubscribers()
+    {
+        if ($this->isExtensionInstalled()) {
+            return new NewsletterSubscriberBridgeIterator($this, $this->settings->all());
+        }
+
+        throw new ExtensionRequiredException();
     }
 
     /**

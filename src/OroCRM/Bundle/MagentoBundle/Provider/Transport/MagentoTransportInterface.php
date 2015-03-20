@@ -165,4 +165,11 @@ interface MagentoTransportInterface extends TransportInterface
      * @return array
      */
     public function getCustomerAddressInfo($customerAddressId);
+
+    /**
+     * Get newsletter subscribers.
+     *
+     * @return \Iterator
+     */
+    public function getNewsletterSubscribers();
 }

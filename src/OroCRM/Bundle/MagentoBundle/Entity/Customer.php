@@ -41,6 +41,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeName="orocrm_magento_customer_index",
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-user"
+ *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",

@@ -441,6 +441,20 @@ orocrm:
             name.label:          Name
             channel.label:       Integration
 
+        newslettersubscriber:
+            entity_label:        Magento Newsletter Subscriber
+            entity_plural_label: Magento Newsletter Subscribers
+            id.label:            Id
+            origin_id.label:     Origin Id
+            channel.label:       Integration
+            change_status_at.label: Status change date
+            confirm_code.label:  Confirmation code
+            customer.label:      Customer
+            data_channel.label:  Channel
+            email.label:         Email
+            status.label:        Status
+            store.label:         Store
+
         account:
             no_customers_exist: No customers exist
 
