@@ -284,7 +284,6 @@ class ContactController extends RestController implements ClassResourceInterface
         parent::fixFormData($data, $entity);
 
         unset($data['id']);
-        unset($data['createdAt']);
         unset($data['updatedAt']);
         unset($data['email']);
         unset($data['createdBy']);
