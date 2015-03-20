@@ -77,8 +77,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return;
+            $this->stepExecution->addFailureException($e);
         }
     }
 
@@ -126,10 +125,10 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             }
 
             $this->logger->error($e->getMessage());
+            $this->stepExecution->addFailureException($e);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return;
+            $this->stepExecution->addFailureException($e);
         }
     }
 

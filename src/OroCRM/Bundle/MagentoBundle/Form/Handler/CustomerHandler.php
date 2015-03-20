@@ -27,6 +27,13 @@ class CustomerHandler extends UpdateHandler
             if ($form->isValid()) {
                 if ($entity->getId()) {
                     $this->markForSync($entity);
+
+                    foreach ($entity->getAddresses() as $address) {
+                        if ($address->getId()) {
+                            $this->markAddressForSync($address);
+                            $this->saveEntity($address);
+                        }
+                    }
                 }
 
                 // get address ids to create
