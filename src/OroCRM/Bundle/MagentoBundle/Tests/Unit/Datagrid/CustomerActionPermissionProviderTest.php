@@ -71,7 +71,7 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no channel id' => [
-                new ResultRecord([]),
+                new ResultRecord([false]),
                 ['create' => [], 'update' => []],
                 ['create' => true, 'update' => false],
                 null
@@ -100,6 +100,12 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
                 ['create' => []],
                 ['create' => true],
                 null
+            ],
+            'empty settings' => [
+                new ResultRecord(['channelId' => 1]),
+                ['create' => [], 'update' => []],
+                ['create' => true, 'update' => false],
+                $this->getChannel(null)
             ]
         ];
     }
@@ -113,7 +119,12 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
     {
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
 
-        $settings = Object::create(['isTwoWaySyncEnabled' => $isTwoWaySyncEnabled]);
+        $settings = [];
+        if (null !== $isTwoWaySyncEnabled) {
+            $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
+        }
+
+        $settings = Object::create($settings);
         $channel->expects($this->any())
             ->method('getSynchronizationSettings')
             ->will($this->returnValue($settings));
