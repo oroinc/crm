@@ -54,6 +54,7 @@ class RestContactApiTest extends WebTestCase
                 'accounts'    => [$account->getId()],
                 'groups'      => $contactGroupIds,
                 'assignedTo'  => $user->getId(),
+                'createdAt'   => '2014-03-04T20:00:00+00:00'
             ]
         ];
         $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
@@ -62,6 +63,8 @@ class RestContactApiTest extends WebTestCase
 
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
+
+        $request['id'] = $contact['id'];
 
         return $request;
     }
@@ -76,29 +79,25 @@ class RestContactApiTest extends WebTestCase
     {
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_contacts')
+            $this->getUrl('oro_api_get_contact', ['id' => $request['id']])
         );
-
-        $entities = $this->getJsonResponseContent($this->client->getResponse(), 200);
-
-        $this->assertNotEmpty($entities);
-
-        $contactName     = $request['contact']['firstName'];
-        $requiredContact = array_filter(
-            $entities,
-            function ($a) use ($contactName) {
-                return $a['firstName'] == $contactName;
-            }
-        );
-
-        $this->assertNotEmpty($requiredContact);
-        $requiredContact = reset($requiredContact);
-
-        $this->client->request('GET', $this->getUrl('oro_api_get_contact', ['id' => $requiredContact['id']]));
 
         $selectedContact = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
-        $this->assertEquals($requiredContact, $selectedContact);
+        $fields = [
+            'firstName',
+            'lastName',
+            'description',
+            'source',
+            'owner',
+            'accounts',
+            'assignedTo',
+            'createdAt'
+        ];
+        $this->assertEquals(
+            array_intersect_key($request['contact'], array_flip($fields)),
+            array_intersect_key($selectedContact, array_flip($fields))
+        );
 
         // assert addresses
         $this->assertArrayHasKey('addresses', $selectedContact);
@@ -113,11 +112,6 @@ class RestContactApiTest extends WebTestCase
             $actualGroups[] = $group['id'];
         }
         $this->assertEquals($request['contact']['groups'], $actualGroups);
-
-        // assert related entities
-        foreach (['source', 'accounts', 'assignedTo'] as $key) {
-            $this->assertEquals($request['contact'][$key], $selectedContact[$key]);
-        }
 
         return $selectedContact;
     }
