@@ -48,7 +48,7 @@ orocrm_channel:
           dependent:
               - OroCRM\Bundle\MagentoBundle\Entity\Store
           navigation_items:
-              - application_menu.sales_tab.magento_newsletter_subscriber
+              - application_menu.customers_tab.magento_newsletter_subscriber
           belongs_to:
               integration: magento
               connector: newsletter_subscriber

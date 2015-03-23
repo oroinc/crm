@@ -451,9 +451,16 @@ orocrm:
             confirm_code.label:  Confirmation code
             customer.label:      Customer
             data_channel.label:  Channel
-            email.label:         Email
-            status.label:        Status
             store.label:         Store
+            email:
+                label: Email
+                customer: Customer Email
+            status:
+                label: Status
+                subscribed: Subscribed
+                not_active: Not active
+                unsubscribed: Unsubscribed
+                unconfirmed: Unconfirmed
 
         account:
             no_customers_exist: No customers exist
