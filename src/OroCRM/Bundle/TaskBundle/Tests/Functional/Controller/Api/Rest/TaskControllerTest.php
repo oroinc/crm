@@ -23,15 +23,6 @@ class TaskControllerTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
 
-        // set DueDate = now + 10 min to prevent "Due date must not be in the past" error
-        $dueDate = new \DateTime(
-            'now',
-            new \DateTimeZone($this->getContainer()->get('oro_locale.settings')->getTimeZone())
-        );
-        $this->task['dueDate'] = $dueDate
-            ->add(new \DateInterval('PT10M'))
-            ->format(\DateTime::RFC3339);
-
         if (!isset($this->task['owner'])) {
             $this->task['owner'] = $this->getContainer()
                 ->get('doctrine')

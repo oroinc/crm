@@ -1,25 +1,20 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Form\Type;
+namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-class ContactApiType extends AbstractType
+class B2bCustomerApiType extends B2bCustomerType
 {
-    const NAME = 'contact';
-
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'createdAt',
-            'oro_datetime',
-            ['required' => false]
-        );
-
+        parent::buildForm($builder, $options);
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -30,7 +25,10 @@ class ContactApiType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'csrf_protection' => false
+                'data_class'           => 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer',
+                'intention'            => 'b2bcustomer',
+                'extra_fields_message' => 'This form should not contain extra fields: "{{ extra_fields }}"',
+                'csrf_protection'      => false
             ]
         );
     }
@@ -38,16 +36,8 @@ class ContactApiType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getParent()
-    {
-        return 'orocrm_contact';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
-        return self::NAME;
+        return 'orocrm_sales_b2bcustomer_api';
     }
 }
