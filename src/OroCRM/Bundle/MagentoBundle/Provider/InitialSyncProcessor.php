@@ -7,9 +7,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
@@ -17,6 +19,9 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
     /** @var array|null */
     protected $bundleConfiguration;
+
+    /** @var SyncProcessor[] */
+    protected $postProcessors = [];
 
     /**
      * @param ManagerRegistry $doctrineRegistry
@@ -49,6 +54,18 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     }
 
     /**
+     * @param string $connectorType
+     * @param SyncProcessor $processor
+     * @return InitialSyncProcessor
+     */
+    public function addPostProcessor($connectorType, SyncProcessor $processor)
+    {
+        $this->postProcessors[$connectorType] = $processor;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
@@ -66,7 +83,11 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $parameters[self::INTERVAL] = $interval;
 
         // Collect initial connectors
+        $postProcessConnectorTypes = array_keys($this->postProcessors);
         $connectors = $this->getConnectorsToSync($integration, $callback);
+        $postProcessConnectors = array_intersect($connectors, $postProcessConnectorTypes);
+        $connectors = array_diff($connectors, $postProcessConnectorTypes);
+
         /** @var \DateTime[] $connectorsSyncedTo */
         $connectorsSyncedTo = [];
         foreach ($connectors as $connector) {
@@ -125,6 +146,18 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                 }
             }
         } while ($syncedConnectors > 0);
+
+        if ($isSuccess && $postProcessConnectors) {
+            foreach ($postProcessConnectors as $connectorType) {
+                // Do not sync already synced connectors
+                if ($this->getLastStatusForConnector($integration, $connectorType, Status::STATUS_COMPLETED)) {
+                    continue;
+                }
+
+                $processor = $this->postProcessors[$connectorType];
+                $isSuccess = $isSuccess && $processor->process($integration, $connectorType, $parameters);
+            }
+        }
 
         return $isSuccess;
     }

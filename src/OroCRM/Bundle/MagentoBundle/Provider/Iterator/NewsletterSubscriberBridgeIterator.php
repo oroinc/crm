@@ -13,20 +13,15 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
      */
     protected $initialId;
 
-    //TODO: this is for debugging purposes. Do not forget to remove this
-    protected $mode = self::IMPORT_MODE_INITIAL;
-
     /**
-     * @param SoapTransport $transport
-     * @param array $settings
+     * @param int $initialId
+     * @return NewsletterSubscriberBridgeIterator
      */
-    public function __construct(SoapTransport $transport, array $settings)
+    public function setInitialId($initialId)
     {
-        parent::__construct($transport, $settings);
+        $this->initialId = $initialId;
 
-        if (array_key_exists('initial_id', $settings)) {
-            $this->initialId = $settings['initial_id'];
-        }
+        return $this;
     }
 
     /**
@@ -42,7 +37,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
                     [
                         'key' => $this->getIdFieldName(),
                         'value' => [
-                            'key' => 'to',
+                            'key' => 'lt',
                             'value' => $initialId
                         ]
                     ]
@@ -115,7 +110,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $subscribers = $this->getNewsletterSubscribers($filters);
 
             if (count($subscribers) > 0) {
-                $this->initialId = $subscribers[0]->{$this->getIdFieldName()};
+                $this->initialId = (int)$subscribers[0]->{$this->getIdFieldName()} + 1;
             }
         }
 

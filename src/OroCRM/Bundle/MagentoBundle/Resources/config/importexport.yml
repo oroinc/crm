@@ -56,6 +56,7 @@ parameters:
     orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
     orocrm_magento.provider.initial_sync_processor.class:                       OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor
     orocrm_magento.provider.initial_schedule_processor.class:                   OroCRM\Bundle\MagentoBundle\Provider\InitialScheduleProcessor
+    orocrm_magento.provider.newsletter_subscriber.initial_sync_processor.class: OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor
 
     # writers
     orocrm_magento.writer.proxy_entity_writer.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Writer\ProxyEntityWriter
@@ -419,9 +420,17 @@ services:
         calls:
             - [setChannelClassName, [%oro_integration.entity.class%]]
 
+    orocrm_magento.provider.newsletter_subscriber.initial_sync_processor:
+        class: %orocrm_magento.provider.newsletter_subscriber.initial_sync_processor.class%
+        parent: orocrm_magento.provider.initial_processor
+        calls:
+            - [setSubscriberClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
+
     orocrm_magento.provider.initial_sync_processor:
         class: %orocrm_magento.provider.initial_sync_processor.class%
         parent: orocrm_magento.provider.initial_processor
+        calls:
+            - [addPostProcessor, ['newsletter_subscriber_initial', @orocrm_magento.provider.newsletter_subscriber.initial_sync_processor]]
         tags:
             - { name: orocrm_magento.bundle_config.aware }
 

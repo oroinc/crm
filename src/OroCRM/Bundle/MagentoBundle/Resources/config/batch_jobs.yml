@@ -188,3 +188,17 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+
+        mage_newsletter_subscriber_import_initial:
+            title: "Initial import newsletter subscribers from Magento"
+            type:  import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.newsletter_subscriber_connector_initial
+                        processor: oro_importexport.processor.import_delegate
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25

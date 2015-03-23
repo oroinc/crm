@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberConnector;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 
 class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
 {
     const TYPE = 'newsletter_subscriber_initial';
+    const IMPORT_JOB_NAME = 'mage_newsletter_subscriber_import_initial';
 
     /**
      * @var string
@@ -26,7 +28,7 @@ class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
      */
     public function getImportJobName()
     {
-        return NewsletterSubscriberConnector::IMPORT_JOB_NAME;
+        return self::IMPORT_JOB_NAME;
     }
 
     /**
@@ -62,5 +64,16 @@ class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
     public function getType()
     {
         return self::TYPE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        parent::initializeFromContext($context);
+        /** @var NewsletterSubscriberBridgeIterator $iterator */
+        $iterator = $this->getSourceIterator();
+        $iterator->setInitialId($context->getOption('initial_id'));
     }
 }
