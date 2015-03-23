@@ -7,6 +7,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 
@@ -78,9 +80,16 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=255, nullable=true)
+     * @ORM\Column(name="status", type="string", length=11, nullable=true)
      */
     protected $status;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="confirm_code", type="string", length=32, nullable=true)
+     */
+    protected $confirmCode;
 
     /**
      * @var Customer
@@ -97,6 +106,35 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $store;
+
+    /**
+     * @var User
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $owner;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $organization;
 
     /**
      * @var \DateTime
@@ -186,6 +224,25 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     }
 
     /**
+     * @return string
+     */
+    public function getConfirmCode()
+    {
+        return $this->confirmCode;
+    }
+
+    /**
+     * @param string $confirmCode
+     * @return NewsletterSubscriber
+     */
+    public function setConfirmCode($confirmCode)
+    {
+        $this->confirmCode = $confirmCode;
+
+        return $this;
+    }
+
+    /**
      * @return Customer
      */
     public function getCustomer()
@@ -219,6 +276,44 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     public function setStore($store)
     {
         $this->store = $store;
+
+        return $this;
+    }
+
+    /**
+     * @return User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
+    }
+
+    /**
+     * @param User $owner
+     * @return NewsletterSubscriber
+     */
+    public function setOwner($owner)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * @return Organization
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * @param Organization $organization
+     * @return NewsletterSubscriber
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
 
         return $this;
     }
