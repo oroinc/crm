@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Manager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
 use Oro\Bundle\SoapBundle\Event\FindAfter;
@@ -95,17 +96,7 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
                         'primary' => 'DESC'
                     ]
                 ],
-                'addresses'    => [
-                    'excluded_fields' => ['owner'],
-                    'fields'          => [
-                        'country' => ['fields' => 'name'],
-                        'region'  => ['fields' => 'name'],
-                        'types'   => ['fields' => 'name', 'orderBy' => ['name' => 'ASC']],
-                    ],
-                    'post_serialize'  => function (array &$result) {
-                        $this->postSerializeAddress($result);
-                    }
-                ],
+                'addresses'    => AddressApiUtils::getAddressConfig(true),
                 'groups'       => [
                     'fields' => [
                         'organization' => ['fields' => 'name'],
@@ -138,21 +129,5 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
             }
         }
         $result['email'] = $email;
-    }
-
-    /**
-     * @param array $result
-     */
-    protected function postSerializeAddress(array &$result)
-    {
-        // @todo: just a temporary workaround until new API is implemented
-        // the normal solution can be to use region_name virtual field and
-        // exclusion rule declared in oro/entity.yml
-        // - for 'region' field use a region text if filled; otherwise, use region name
-        // - remove regionText field from a result
-        if (!empty($result['regionText'])) {
-            $result['region'] = $result['regionText'];
-        }
-        unset($result['regionText']);
     }
 }

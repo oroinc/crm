@@ -67,6 +67,9 @@ parameters:
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
     orocrm_magento.importexport.customer_group_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper
 
+    orocrm_magento.state_manager.class:                                     OroCRM\Bundle\MagentoBundle\Service\StateManager
+    orocrm_magento.customer_state_handler.class:                            OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler
+
     # dashboard
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
@@ -190,6 +193,8 @@ services:
         class: %orocrm_magento.form.handler.customer.class%
         parent: oro_form.model.update_handler
         scope: request
+        calls:
+            - [setStateHandler, [@orocrm_magento.customer_state_handler]]
 
     # Search handler
     orocrm_magento.form.autocomplete.order.search_handler:
@@ -437,3 +442,11 @@ services:
         arguments:
             - @oro_entity.doctrine_helper
             - %oro_integration.entity.class%
+
+    orocrm_magento.state_manager:
+        class: %orocrm_magento.state_manager.class%
+
+    orocrm_magento.customer_state_handler:
+        class: %orocrm_magento.customer_state_handler.class%
+        arguments:
+            - @orocrm_magento.state_manager

@@ -33,7 +33,7 @@ class StoreSearchHandler extends IntegrationAwareSearchHandler
             if ($transport instanceof MagentoSoapTransport) {
                 $websiteId = $transport->getSettingsBag()->get('website_id');
                 if ($websiteId !== StoresSoapIterator::ALL_WEBSITES) {
-                    $queryBuilder->andWhere('w.id = :id')->setParameter('id', $websiteId);
+                    $queryBuilder->andWhere('w.originId = :id')->setParameter('id', $websiteId);
                 }
             }
         } else {

@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Form\Handler;
 
 use Symfony\Component\Form\Form;
 
+use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
+use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 use Oro\Bundle\FormBundle\Tests\Unit\Model\UpdateHandlerTest;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerHandler;
@@ -15,6 +17,7 @@ class CustomerHandlerTest extends UpdateHandlerTest
         parent::setUp();
 
         $this->handler = new CustomerHandler($this->request, $this->session, $this->router, $this->doctrineHelper);
+        $this->handler->setStateHandler(new CustomerStateHandler(new StateManager($this->doctrineHelper)));
     }
 
     public function testSaveFormValid()

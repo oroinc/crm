@@ -8,7 +8,6 @@ use Oro\Bundle\IntegrationBundle\ImportExport\Writer\PersistentBatchWriter;
 use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategyInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
-use OroCRM\Bundle\MagentoBundle\Service\StateManager;
 
 abstract class AbstractExportWriter extends PersistentBatchWriter
 {
@@ -17,11 +16,6 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
 
     /** @var string */
     protected $channelClassName;
-
-    /**
-     * @var StateManager
-     */
-    protected $stateManager;
 
     /**
      * @var TwoWaySyncStrategyInterface
@@ -139,17 +133,5 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
         }
 
         return $entity;
-    }
-
-    /**
-     * @return StateManager
-     */
-    protected function getStateManager()
-    {
-        if (!$this->stateManager) {
-            $this->stateManager = new StateManager();
-        }
-
-        return $this->stateManager;
     }
 }

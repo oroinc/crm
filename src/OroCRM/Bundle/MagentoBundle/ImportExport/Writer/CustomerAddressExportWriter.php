@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\RegionRepository;
+use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
 
 class CustomerAddressExportWriter extends AbstractExportWriter
 {
@@ -19,13 +20,29 @@ class CustomerAddressExportWriter extends AbstractExportWriter
     protected $magentoRegionClass;
 
     /**
+     * @var CustomerStateHandler
+     */
+    protected $stateHandler;
+
+    /**
+     * @param CustomerStateHandler $stateHandler
+     * @return CustomerAddressExportWriter
+     */
+    public function setStateHandler($stateHandler)
+    {
+        $this->stateHandler = $stateHandler;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function write(array $items)
     {
         /** @var Address $entity */
         $entity = $this->getEntity();
-        if ($this->getStateManager()->isInState($entity->getSyncState(), Address::MAGENTO_REMOVED)) {
+        if ($this->stateHandler->isAddressRemoved($entity)) {
             return;
         }
 
@@ -65,7 +82,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             $customerId = $item[self::CUSTOMER_ID_KEY];
             $customerAddressId = $this->transport->createCustomerAddress($customerId, $item);
             $entity->setOriginId($customerAddressId);
-            $this->markSynced($entity);
+            $this->stateHandler->markAddressSynced($entity);
 
             $this->logger->info(
                 sprintf(
@@ -77,8 +94,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return;
+            $this->stepExecution->addFailureException($e);
         }
     }
 
@@ -98,7 +114,8 @@ class CustomerAddressExportWriter extends AbstractExportWriter
                 $this->getEntityChangeSet(),
                 $item,
                 $remoteData,
-                $this->getTwoWaySyncStrategy()
+                $this->getTwoWaySyncStrategy(),
+                ['is_default_shipping', 'is_default_billing']
             );
 
             $this->stepExecution->getJobExecution()
@@ -108,7 +125,7 @@ class CustomerAddressExportWriter extends AbstractExportWriter
             $result = $this->transport->updateCustomerAddress($customerAddressId, $item);
 
             if ($result) {
-                $this->markSynced($entity);
+                $this->stateHandler->markAddressSynced($entity);
 
                 $this->logger->info(
                     sprintf(
@@ -121,15 +138,15 @@ class CustomerAddressExportWriter extends AbstractExportWriter
                 $this->logger->error(sprintf('Customer address with id %s was not updated', $customerAddressId));
             }
         } catch (TransportException $e) {
-            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
-                $this->markRemoved($entity);
+            if ($e->getFaultCode() == self::FAULT_CODE_NOT_EXISTS) {
+                $this->stateHandler->markAddressRemoved($entity);
             }
 
             $this->logger->error($e->getMessage());
+            $this->stepExecution->addFailureException($e);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return;
+            $this->stepExecution->addFailureException($e);
         }
     }
 
@@ -154,21 +171,5 @@ class CustomerAddressExportWriter extends AbstractExportWriter
         $magentoRegionRepository = $this->registry->getRepository($this->magentoRegionClass);
 
         return $magentoRegionRepository->getMagentoRegionIdByCombinedCode($combinedCode);
-    }
-
-    /**
-     * @param Address $address
-     */
-    protected function markRemoved(Address $address)
-    {
-        $this->getStateManager()->addState($address, 'syncState', Address::MAGENTO_REMOVED);
-    }
-
-    /**
-     * @param Address $address
-     */
-    protected function markSynced(Address $address)
-    {
-        $this->getStateManager()->removeState($address, 'syncState', Address::SYNC_TO_MAGENTO);
     }
 }

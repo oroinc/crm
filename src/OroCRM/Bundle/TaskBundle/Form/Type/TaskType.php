@@ -37,18 +37,9 @@ class TaskType extends AbstractType
                     'required' => false,
                     'label' => 'orocrm.task.description.label'
                 ]
-            )
-            ->add(
-                'dueDate',
-                'oro_datetime',
-                [
-                    'required' => false,
-                    'label' => 'orocrm.task.due_date.label',
-                    'constraints' => [
-                        $this->getDueDateValidationConstraint(new \DateTime('now', new \DateTimeZone('UTC')))
-                    ]
-                ]
-            )
+            );
+        $this->addDueDateField($builder);
+        $builder
             ->add(
                 'taskPriority',
                 'translatable_entity',
@@ -79,19 +70,7 @@ class TaskType extends AbstractType
      */
     public function postSetData(FormEvent $event)
     {
-        /** @var Task $data */
-        $data = $event->getData();
-        if ($data && $data->getCreatedAt()) {
-            FormUtils::replaceField(
-                $event->getForm(),
-                'dueDate',
-                [
-                    'constraints' => [
-                        $this->getDueDateValidationConstraint($data->getCreatedAt())
-                    ]
-                ]
-            );
-        }
+        $this->updateDueDateFieldConstraints($event);
     }
 
     /**
@@ -114,6 +93,45 @@ class TaskType extends AbstractType
     public function getName()
     {
         return 'orocrm_task';
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    protected function addDueDateField(FormBuilderInterface $builder)
+    {
+        $builder
+            ->add(
+                'dueDate',
+                'oro_datetime',
+                [
+                    'required' => false,
+                    'label' => 'orocrm.task.due_date.label',
+                    'constraints' => [
+                        $this->getDueDateValidationConstraint(new \DateTime('now', new \DateTimeZone('UTC')))
+                    ]
+                ]
+            );
+    }
+
+    /**
+     * @param FormEvent $event
+     */
+    protected function updateDueDateFieldConstraints(FormEvent $event)
+    {
+        /** @var Task $data */
+        $data = $event->getData();
+        if ($data && $data->getCreatedAt()) {
+            FormUtils::replaceField(
+                $event->getForm(),
+                'dueDate',
+                [
+                    'constraints' => [
+                        $this->getDueDateValidationConstraint($data->getCreatedAt())
+                    ]
+                ]
+            );
+        }
     }
 
     /**

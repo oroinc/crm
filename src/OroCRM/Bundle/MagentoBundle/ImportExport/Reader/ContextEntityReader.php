@@ -2,8 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Reader;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 
 class ContextEntityReader extends AbstractReader
@@ -11,40 +10,32 @@ class ContextEntityReader extends AbstractReader
     const CONTEXT_KEY = 'entity';
 
     /**
-     * @var array
+     * @var object
      */
-    protected $processed = [];
-
-    /**
-     * @var DoctrineHelper
-     */
-    protected $doctrineHelper;
-
-    /**
-     * @param ContextRegistry $contextRegistry
-     * @param DoctrineHelper $doctrineHelper
-     */
-    public function __construct(ContextRegistry $contextRegistry, DoctrineHelper $doctrineHelper)
-    {
-        parent::__construct($contextRegistry);
-        $this->doctrineHelper = $doctrineHelper;
-    }
+    protected $entity;
 
     /**
      * {@inheritdoc}
      */
     public function read()
     {
-        $entity = $this->getContext()->getOption('entity');
-        if (!$entity) {
+        if (!$this->entity) {
             return null;
         }
 
-        $entityIdentifier = $this->doctrineHelper->getSingleEntityIdentifier($entity);
+        $entity = $this->entity;
+        $this->entity = null;
 
-        if (!empty($this->processed[$entityIdentifier])) {
-            return null;
-        }
+        return $entity;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function initializeFromContext(ContextInterface $context)
+    {
+        $entity = $context->getOption('entity');
+
 
         if (!is_object($entity)) {
             throw new \InvalidArgumentException(
@@ -52,8 +43,6 @@ class ContextEntityReader extends AbstractReader
             );
         }
 
-        $this->processed[$entityIdentifier] = true;
-
-        return $entity;
+        $this->entity = $entity;
     }
 }

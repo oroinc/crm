@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler;
 
 class CustomerExportWriter extends AbstractExportWriter
 {
@@ -13,13 +14,29 @@ class CustomerExportWriter extends AbstractExportWriter
     const CONTEXT_CUSTOMER_POST_PROCESS = 'postProcessCustomer';
 
     /**
+     * @var CustomerStateHandler
+     */
+    protected $stateHandler;
+
+    /**
+     * @param CustomerStateHandler $stateHandler
+     * @return CustomerExportWriter
+     */
+    public function setStateHandler($stateHandler)
+    {
+        $this->stateHandler = $stateHandler;
+
+        return $this;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function write(array $items)
     {
         /** @var Customer $entity */
         $entity = $this->getEntity();
-        if ($this->getStateManager()->isInState($entity->getSyncState(), Customer::MAGENTO_REMOVED)) {
+        if ($this->stateHandler->isCustomerRemoved($entity)) {
             return;
         }
 
@@ -53,43 +70,15 @@ class CustomerExportWriter extends AbstractExportWriter
         try {
             $customerId = $this->transport->createCustomer($item);
             $entity->setOriginId($customerId);
-            $this->markSynced($entity);
+            $this->stateHandler->markCustomerSynced($entity);
+            $this->stateHandler->markAddressesForSync($entity);
 
             $this->logger->info(
                 sprintf('Customer with id %s successfully created with data %s', $customerId, json_encode($item))
             );
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-        }
-    }
-
-    /**
-     * @param Customer $customer
-     */
-    protected function markSynced(Customer $customer)
-    {
-        $stateManager = $this->getStateManager();
-
-        if (!$stateManager->isInState($customer->getSyncState(), Customer::MAGENTO_REMOVED)) {
-            $stateManager->removeState($customer, 'syncState', Customer::SYNC_TO_MAGENTO);
-            $this->markAddressesForSync($customer);
-        }
-    }
-
-    /**
-     * @param Customer $customer
-     */
-    protected function markAddressesForSync(Customer $customer)
-    {
-        $stateManager = $this->getStateManager();
-
-        if (!$customer->getAddresses()->isEmpty()) {
-            /** @var Address $address */
-            foreach ($customer->getAddresses() as $address) {
-                if (!$stateManager->isInState($address->getSyncState(), Address::MAGENTO_REMOVED)) {
-                    $stateManager->addState($address, 'syncState', Address::SYNC_TO_MAGENTO);
-                }
-            }
+            $this->stepExecution->addFailureException($e);
         }
     }
 
@@ -119,7 +108,7 @@ class CustomerExportWriter extends AbstractExportWriter
             $result = $this->transport->updateCustomer($customerId, $item);
 
             if ($result) {
-                $this->markSynced($entity);
+                $this->stateHandler->markCustomerSynced($entity);
 
                 $this->logger->info(
                     sprintf('Customer with id %s successfully updated with data %s', $customerId, json_encode($item))
@@ -128,37 +117,15 @@ class CustomerExportWriter extends AbstractExportWriter
                 $this->logger->error(sprintf('Customer with id %s was not updated', $customerId));
             }
         } catch (TransportException $e) {
-            if ($e->getFaultCode() === self::FAULT_CODE_NOT_EXISTS) {
-                $this->markRemoved($entity);
+            if ($e->getFaultCode() == self::FAULT_CODE_NOT_EXISTS) {
+                $this->stateHandler->markCustomerRemoved($entity);
             }
 
             $this->logger->error($e->getMessage());
+            $this->stepExecution->addFailureException($e);
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
-
-            return;
-        }
-    }
-
-    /**
-     * @param Customer $customer
-     */
-    protected function markRemoved(Customer $customer)
-    {
-        $this->getStateManager()->addState($customer, 'syncState', Customer::MAGENTO_REMOVED);
-        $this->markAddressesRemoved($customer);
-    }
-
-    /**
-     * @param Customer $customer
-     */
-    protected function markAddressesRemoved(Customer $customer)
-    {
-        if (!$customer->getAddresses()->isEmpty()) {
-            /** @var Address $address */
-            foreach ($customer->getAddresses() as $address) {
-                $address->setSyncState(Address::MAGENTO_REMOVED);
-            }
+            $this->stepExecution->addFailureException($e);
         }
     }
 }
