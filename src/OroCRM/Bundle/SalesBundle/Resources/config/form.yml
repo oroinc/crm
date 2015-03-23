@@ -16,6 +16,7 @@ parameters:
     orocrm_sales.salesfunnel.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\SalesFunnelHandler
 
     orocrm_sales.b2bcustomer.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerType
+    orocrm_sales.b2bcustomer.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
     orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
 services:
@@ -169,6 +170,11 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_b2bcustomer }
 
+    orocrm_sales.b2bcustomer.form.type.api:
+        class: %orocrm_sales.b2bcustomer.form.type.api.class%
+        tags:
+            - { name: form.type, alias: orocrm_sales_b2bcustomer_api }
+
     orocrm_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
         factory_method: createNamed
@@ -177,11 +183,30 @@ services:
             - "orocrm_sales_b2bcustomer_form"
             - "orocrm_sales_b2bcustomer"
 
+    orocrm_sales.b2bcustomer.form.api:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "b2bcustomer"
+            - "orocrm_sales_b2bcustomer_api"
+
     orocrm_sales.b2bcustomer.form.handler:
         class: %orocrm_sales.b2bcustomer.form.handler.class%
         scope: request
         arguments:
             - @orocrm_sales.b2bcustomer.form
+            - @request
+            - @doctrine.orm.entity_manager
+            - @orocrm_channel.provider.request_channel
+        tags:
+            - { name: oro_tag.tag_manager }
+
+    orocrm_sales.b2bcustomer.form.handler.api:
+        class: %orocrm_sales.b2bcustomer.form.handler.class%
+        scope: request
+        arguments:
+            - @orocrm_sales.b2bcustomer.form.api
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
