@@ -245,6 +245,13 @@ class TwoWaySyncVoterTest extends \PHPUnit_Framework_TestCase
                 ['EDIT'],
                 [$this->getChannel(true), $this->getChannel(true)],
                 TwoWaySyncVoter::ACCESS_ABSTAIN
+            ],
+            [
+                $objectIdentity,
+                $objectIdentityClass,
+                ['EDIT'],
+                [$this->getChannel(null)],
+                TwoWaySyncVoter::ACCESS_DENIED
             ]
         ];
     }
@@ -282,7 +289,12 @@ class TwoWaySyncVoterTest extends \PHPUnit_Framework_TestCase
     {
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
 
-        $settings = Object::create(['isTwoWaySyncEnabled' => $isTwoWaySyncEnabled]);
+        $settings = [];
+        if (null !== $isTwoWaySyncEnabled) {
+            $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
+        }
+
+        $settings = Object::create($settings);
         $channel->expects($this->any())
             ->method('getSynchronizationSettings')
             ->will($this->returnValue($settings));

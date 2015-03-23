@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 class CustomerActionPermissionProvider
 {
@@ -69,11 +70,12 @@ class CustomerActionPermissionProvider
             return $this->channels[$channelId];
         }
 
+        /** @var Channel $channel */
         $channel = $this->doctrineHelper
             ->getEntityRepository($this->channelClassName)
             ->find($channelId);
 
-        $isTwoWaySyncEnabled = $channel->getSynchronizationSettings()->offsetGet('isTwoWaySyncEnabled');
+        $isTwoWaySyncEnabled = $channel->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
         $this->channels[$channelId] = $isTwoWaySyncEnabled;
 
         return $isTwoWaySyncEnabled;

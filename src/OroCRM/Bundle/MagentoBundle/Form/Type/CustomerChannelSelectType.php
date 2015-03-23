@@ -64,16 +64,18 @@ class CustomerChannelSelectType extends AbstractType
 
             /** @var EntityRepository $repository */
             $repository = $em->getRepository($this->channelClass);
-            $entities   = $options->get('entities');
+            $entities = $options->get('entities');
 
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = $qb($repository, $entities);
             $queryBuilder
                 ->join('c.dataSource', 'd')
-                ->andWhere($queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('d.type', ':type'),
-                    $queryBuilder->expr()->eq('d.enabled', ':enabled')
-                ))
+                ->andWhere(
+                    $queryBuilder->expr()->andX(
+                        $queryBuilder->expr()->eq('d.type', ':type'),
+                        $queryBuilder->expr()->eq('d.enabled', ':enabled')
+                    )
+                )
                 ->setParameter('type', ChannelType::TYPE)
                 ->setParameter('enabled', true);
 
@@ -83,7 +85,7 @@ class CustomerChannelSelectType extends AbstractType
             $skipEntities = [];
             foreach ($channels as $channel) {
                 $dataSource = $channel->getDataSource();
-                if (!(bool)$dataSource->getSynchronizationSettings()->offsetGet('isTwoWaySyncEnabled')) {
+                if (!(bool)$dataSource->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled')) {
                     $skipEntities[] = $channel->getId();
                 }
             }

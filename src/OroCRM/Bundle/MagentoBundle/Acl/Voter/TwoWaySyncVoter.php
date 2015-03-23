@@ -60,7 +60,7 @@ class TwoWaySyncVoter extends AbstractEntityVoter
     {
         if (is_a($this->object, $this->className, true)) {
             $syncSettings = $this->object->getChannel()->getSynchronizationSettings();
-            $isTwoWaySyncEnabled = (bool)$syncSettings->offsetGet('isTwoWaySyncEnabled');
+            $isTwoWaySyncEnabled = (bool)$syncSettings->offsetGetOr('isTwoWaySyncEnabled');
             if (!$isTwoWaySyncEnabled) {
                 return self::ACCESS_DENIED;
             }
@@ -70,7 +70,7 @@ class TwoWaySyncVoter extends AbstractEntityVoter
             $isTwoWaySyncEnabled = false;
             foreach ($this->getChannels() as $channel) {
                 $syncSettings = $channel->getSynchronizationSettings();
-                $isTwoWaySyncEnabled = $isTwoWaySyncEnabled || (bool)$syncSettings->offsetGet('isTwoWaySyncEnabled');
+                $isTwoWaySyncEnabled = $isTwoWaySyncEnabled || (bool)$syncSettings->offsetGetOr('isTwoWaySyncEnabled');
             }
 
             if (!$isTwoWaySyncEnabled) {
