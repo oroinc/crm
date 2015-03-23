@@ -97,6 +97,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         // Process all initial connectors by date interval while there are connectors to process
         $isSuccess = true;
         do {
+            break;
             $syncedConnectors = 0;
             foreach ($connectors as $connector) {
                 if ($connectorsSyncedTo[$connector] > $startSyncDate) {
