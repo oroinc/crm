@@ -75,6 +75,10 @@ class CustomerActionPermissionProvider
             ->getEntityRepository($this->channelClassName)
             ->find($channelId);
 
+        if (!$channel) {
+            return false;
+        }
+
         $isTwoWaySyncEnabled = $channel->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
         $this->channels[$channelId] = $isTwoWaySyncEnabled;
 
