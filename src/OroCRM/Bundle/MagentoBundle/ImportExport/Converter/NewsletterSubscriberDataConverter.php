@@ -16,7 +16,7 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
             'change_status_at' => 'changeStatusAt',
             'customer_id' => 'customer:originId',
             'subscriber_email' => 'email',
-            'subscriber_status' => 'status',
+            'subscriber_status' => 'status:id',
             'subscriber_confirm_code' => 'confirmCode'
         ];
     }
