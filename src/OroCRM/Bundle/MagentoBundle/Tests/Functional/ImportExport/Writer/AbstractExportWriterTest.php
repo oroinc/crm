@@ -7,7 +7,7 @@ use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class AbstractExportWriterTest extends WebTestCase
+abstract class AbstractExportWriterTest extends WebTestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface
