@@ -17,7 +17,7 @@
     {% set newsletterSubscriberInformationWidget %}
         {{ oro_widget_render({
             'widgetType': 'block',
-            'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.id})
+            'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.id, useCustomer: true})
         }) }}
     {% endset %}
 

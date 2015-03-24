@@ -7,20 +7,22 @@
             {{ ui.renderProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.status) }}
             {{ ui.renderProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.changeStatusAt|oro_format_date) }}
 
-            {%- set customerData -%}
-                {% if entity.customer is not empty %}
-                    {% set viewGranted = resource_granted('orocrm_magento_customer_view') %}
-                    {%- if viewGranted -%}
-                        <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">
+            {% if useCustomer is defined and useCustomer %}
+                {%- set customerData -%}
+                    {% if entity.customer is not empty %}
+                        {% set viewGranted = resource_granted('orocrm_magento_customer_view') %}
+                        {%- if viewGranted -%}
+                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">
+                                {{ entity.customer|oro_format_name }}
+                            </a>
+                        {%- else -%}
                             {{ entity.customer|oro_format_name }}
-                        </a>
-                    {%- else -%}
-                        {{ entity.customer|oro_format_name }}
-                    {%- endif -%}
-                {% endif %}
-            {%- endset -%}
+                        {%- endif -%}
+                    {% endif %}
+                {%- endset -%}
 
-            {{ ui.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+                {{ ui.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+            {% endif %}
         </div>
     </div>
 </div>
