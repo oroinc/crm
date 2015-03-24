@@ -60,7 +60,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         $oldValues = $this->fillEmptyValues($oldValues, $newValues);
         $snapshot = array_merge($localData, $oldValues);
         $localChanges = array_keys($oldValues);
-        $remoteChanges = array_keys(array_diff_assoc($snapshot, $remoteData));
+        $remoteChanges = $this->getRemoteChanges($remoteData, $snapshot);
 
         $conflicts = array_intersect($remoteChanges, $localChanges);
 
@@ -84,6 +84,30 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         }
 
         return $remoteData;
+    }
+
+    /**
+     * @param array $remoteData
+     * @param array $snapshot
+     * @return array
+     */
+    protected function getRemoteChanges(array $remoteData, array $snapshot)
+    {
+        $remoteChanges = [];
+        foreach ($remoteData as $key => $remoteDataItem) {
+            if (!array_key_exists($key, $snapshot)) {
+                $remoteChanges[] = $key;
+
+                continue;
+            }
+            if ($snapshot[$key] != $remoteDataItem) {
+                $remoteChanges[] = $key;
+
+                continue;
+            }
+        }
+
+        return $remoteChanges;
     }
 
     /**
