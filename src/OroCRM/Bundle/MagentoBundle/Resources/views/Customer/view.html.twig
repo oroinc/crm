@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
@@ -112,6 +113,16 @@
     {% endset %}
     {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
 
+    {% set newsletterSubscriberBlock %}
+        {% if entity.newsletterSubscriber is not empty %}
+            {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.email.label'|trans, email.email_address_simple(entity.newsletterSubscriber.email)) }}
+            {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.newsletterSubscriber.status) }}
+            {% if entity.newsletterSubscriber.changeStatusAt is not empty %}
+                {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.newsletterSubscriber.changeStatusAt|oro_format_date) }}
+            {% endif %}
+        {% endif %}
+    {% endset %}
+
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
@@ -122,6 +133,12 @@
             'title': 'orocrm.magento.customer.sales.label'|trans,
             'subblocks': [
                 {'data' : [salesTabsWidget] }
+            ]
+        },
+        {
+            'title': 'orocrm.magento.newslettersubscriber.label'|trans,
+            'subblocks': [
+                {'data' : [newsletterSubscriberBlock] }
             ]
         }
     ] %}
