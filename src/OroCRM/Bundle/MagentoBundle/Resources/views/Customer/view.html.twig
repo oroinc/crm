@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroEmailBundle::macros.html.twig' as email %}
 
 {% set fullname = entity|oro_format_name|default('N/A'|trans) %}
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
@@ -128,6 +129,25 @@
             ]
         }
     ] %}
+
+    {% if entity.newsletterSubscriber is not empty %}
+        {% set newsletterSubscriberBlock %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.newsletterSubscriber.id})
+            }) }}
+        {% endset %}
+        {% if newsletterSubscriberBlock %}
+            {% set dataBlocks = dataBlocks|merge([
+                {
+                    'title': 'orocrm.magento.newslettersubscriber.label'|trans,
+                    'subblocks': [
+                        {'data' : [newsletterSubscriberBlock] }
+                    ]
+                }
+            ]) %}
+        {% endif %}
+    {% endif %}
 
     {% set id = 'magentoCustomerView' %}
     {% set data = {'dataBlocks': dataBlocks} %}

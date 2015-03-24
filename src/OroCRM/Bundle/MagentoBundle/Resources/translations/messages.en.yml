@@ -447,6 +447,7 @@ orocrm:
             channel.label:       Integration
 
         newslettersubscriber:
+            label:               Newsletter Subscriber
             entity_label:        Magento Newsletter Subscriber
             entity_plural_label: Magento Newsletter Subscribers
             id.label:            Id
@@ -472,6 +473,9 @@ orocrm:
             action:
                 subscribe: Subscribe
                 unsubscribe: Unsubscribe
+            email.label:         Email
+            status.label:        Status
+            store.label:         Store
 
         account:
             no_customers_exist: No customers exist

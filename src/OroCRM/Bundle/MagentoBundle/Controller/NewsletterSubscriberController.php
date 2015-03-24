@@ -64,7 +64,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function infoAction(NewsletterSubscriber $newsletterSubscriber)
     {
-        return ['entity' => $newsletterSubscriber];
+        return ['entity' => $newsletterSubscriber, 'useCustomer' => $this->getRequest()->get('useCustomer')];
     }
 
     /**
