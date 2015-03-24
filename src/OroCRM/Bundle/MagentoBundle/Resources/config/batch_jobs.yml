@@ -181,7 +181,7 @@ connector:
             steps:
                 import:
                     title:     import
-                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessingItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.newsletter_subscriber_connector
                         processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
@@ -198,7 +198,7 @@ connector:
             steps:
                 import:
                     title:     import
-                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessingItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.newsletter_subscriber_connector_initial
                         processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
