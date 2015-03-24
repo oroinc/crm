@@ -13,6 +13,11 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block navButtons %}
+    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity } %}
+    {{ parent() }}
+{% endblock navButtons %}
+
 {% block content_data %}
     {% set newsletterSubscriberInformationWidget %}
         {{ oro_widget_render({

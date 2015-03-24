@@ -65,6 +65,10 @@ orocrm:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
+                is_subscriber:
+                    label: Is a Subsciber
+                    yes: Yes
+                    no: No
         channel_type:
             label:  Magento
         transport:
@@ -465,6 +469,9 @@ orocrm:
                 not_active: Not active
                 unsubscribed: Unsubscribed
                 unconfirmed: Unconfirmed
+            action:
+                subscribe: Subscribe
+                unsubscribe: Unsubscribe
 
         account:
             no_customers_exist: No customers exist

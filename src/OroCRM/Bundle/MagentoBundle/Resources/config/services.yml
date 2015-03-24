@@ -94,6 +94,8 @@ parameters:
 
     orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\TwoWaySyncVoter
     orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
+    orocrm_magento.datagrid.newsletter_subscriber_provider.class:           OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -452,3 +454,6 @@ services:
         class: %orocrm_magento.customer_state_handler.class%
         arguments:
             - @orocrm_magento.state_manager
+
+    orocrm_magento.datagrid.newsletter_subscriber_provider:
+        class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
