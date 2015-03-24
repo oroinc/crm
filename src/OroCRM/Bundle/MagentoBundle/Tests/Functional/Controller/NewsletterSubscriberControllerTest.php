@@ -32,7 +32,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         parent::postFixtureLoad();
 
-        $this->subscriber = $this->getReference('subscriber');
+        $this->subscriber = $this->getReference('newsletter_subscriber');
     }
 
     public function testView()
@@ -64,7 +64,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'channelName' => 'Magento channel',
                         'email' => 'subscriber@example.com',
                         'status' => 1,
-                        'customer' => 'John Doe',
+                        'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
                     'expectedResultCount' => 1
@@ -72,9 +72,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
             ],
             'filters' => [
                 [
-                    'gridParameters' => [
-                        'gridName' => 'magento-order-grid'
-                    ],
+                    'gridParameters' => ['gridName' => 'magento-newsletter-subscriber-grid'],
                     'gridFilters' => [
                         'magento-newsletter-subscriber-grid[_filter][status][value]' => '1'
                     ],
@@ -82,7 +80,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'channelName' => 'Magento channel',
                         'email' => 'subscriber@example.com',
                         'status' => 1,
-                        'customer' => 'John Doe',
+                        'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
                     'expectedResultCount' => 1
@@ -90,14 +88,12 @@ class NewsletterSubscriberControllerTest extends AbstractController
             ],
             'no result' => [
                 [
-                    'gridParameters' => [
-                        'gridName' => 'magento-order-grid'
-                    ],
+                    'gridParameters' => ['gridName' => 'magento-newsletter-subscriber-grid'],
                     'gridFilters' => [
                         'magento-newsletter-subscriber-grid[_filter][status][value]' => '2'
                     ],
                     'assert' => [],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 0
                 ]
             ]
         ];

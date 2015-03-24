@@ -6,6 +6,7 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -27,7 +28,8 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
             'customer' => 'customer',
             'email' => 'subscriber@example.com',
             'status' => NewsletterSubscriber::STATUS_SUBSCRIBED,
-            'originId' => '123456'
+            'originId' => '123456',
+            'reference' => 'newsletter_subscriber'
         ]
     ];
 
@@ -55,6 +57,9 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
         /** @var Store $store */
         $store = $this->getReference('store');
 
+        /** @var Channel $channel */
+        $channel = $this->getReference('default_channel');
+
         foreach ($this->subscriberData as $data) {
             $subscriber = new NewsletterSubscriber();
 
@@ -68,7 +73,8 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
                 ->setOwner($admin)
                 ->setOrganization($organization)
                 ->setOriginId($data['originId'])
-                ->setChangeStatusAt($date);
+                ->setChangeStatusAt($date)
+                ->setDataChannel($channel);
 
             if (!empty($data['customer'])) {
                 /** @var Customer $customer */
@@ -76,6 +82,8 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
 
                 $subscriber->setCustomer($customer);
             }
+
+            $this->setReference($data['reference'], $subscriber);
 
             $manager->persist($subscriber);
         }

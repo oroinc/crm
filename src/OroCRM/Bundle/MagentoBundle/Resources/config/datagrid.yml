@@ -1308,6 +1308,8 @@ datagrid:
             query:
                 select:
                     - ns.id
+                    - channel.name as channelName
+                    - website.name as websiteName
                     - ns.email
                     - ns.status
                     - ns.changeStatusAt
@@ -1320,7 +1322,14 @@ datagrid:
                 join:
                     left:
                         - { join: ns.customer, alias: customer }
+                        - { join: ns.dataChannel, alias: channel }
+                        - { join: ns.store, alias: store }
+                        - { join: store.website, alias: website }
         columns:
+            channelName:
+                label: orocrm.magento.newslettersubscriber.data_channel.label
+            websiteName:
+                label: orocrm.magento.newslettersubscriber.website.label
             email:
                 label: orocrm.magento.newslettersubscriber.email.label
             status:
@@ -1346,6 +1355,8 @@ datagrid:
                 params: [ id ]
         sorters:
             columns:
+                channelName: { data_name: channelName }
+                websiteName: { data_name: websiteName }
                 email: { data_name: ns.email }
                 status: { data_name: ns.status }
                 changeStatusAt: { data_name: ns.changeStatusAt }
@@ -1353,8 +1364,16 @@ datagrid:
                 customerEmail: { data_name: customerEmail }
                 createdAt: { data_name: ns.createdAt }
                 updatedAt: { data_name: ns.updatedAt }
+            default:
+                updatedAt: DESC
         filters:
             columns:
+                channelName:
+                    type: string
+                    data_name: channelName
+                websiteName:
+                    type: string
+                    data_name: websiteName
                 email:
                     type: string
                     data_name: ns.email

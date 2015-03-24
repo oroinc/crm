@@ -452,6 +452,7 @@ orocrm:
             customer.label:      Customer
             data_channel.label:  Channel
             store.label:         Store
+            website.label:       Website
             email:
                 label: Email
                 customer: Customer Email
