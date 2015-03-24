@@ -26,7 +26,6 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
-        // TODO: Customer search must be performed same to orders. This will be removed
         if ($this->context && $this->context->hasOption('channel')) {
             $importedRecord['customer:channel:id'] = $this->context->getOption('channel');
         }
