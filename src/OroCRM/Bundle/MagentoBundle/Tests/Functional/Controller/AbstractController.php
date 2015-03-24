@@ -14,7 +14,7 @@ abstract class AbstractController extends WebTestCase
     /** @var Integration */
     protected static $integration;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 

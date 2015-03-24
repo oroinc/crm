@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Validator;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
@@ -15,14 +14,14 @@ use OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueCustomerEmailConstra
 class UniqueCustomerEmailValidator extends ConstraintValidator
 {
     /**
-     * @var TransportInterface|MagentoTransportInterface
+     * @var MagentoTransportInterface
      */
     protected $transport;
 
     /**
-     * @param TransportInterface $transport
+     * @param MagentoTransportInterface $transport
      */
-    public function __construct(TransportInterface $transport)
+    public function __construct(MagentoTransportInterface $transport)
     {
         $this->transport = $transport;
     }

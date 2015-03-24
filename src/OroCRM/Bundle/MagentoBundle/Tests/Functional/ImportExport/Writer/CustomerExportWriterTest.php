@@ -56,8 +56,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -116,8 +116,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -166,8 +166,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -208,8 +208,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
