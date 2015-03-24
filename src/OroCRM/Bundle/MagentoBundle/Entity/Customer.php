@@ -41,6 +41,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeName="orocrm_magento_customer_index",
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-user"
+ *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
@@ -393,6 +396,13 @@ class Customer extends ExtendCustomer implements
      * @ORM\Column(name="password", type="string", length=32, nullable=true)
      */
     protected $password;
+
+    /**
+     * @var NewsletterSubscriber
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     */
+    protected $newsletterSubscriber;
 
     /**
      * {@inheritdoc}
@@ -773,5 +783,13 @@ class Customer extends ExtendCustomer implements
     public function getGeneratedPassword()
     {
         return '';
+    }
+
+    /**
+     * @return NewsletterSubscriber
+     */
+    public function getNewsletterSubscriber()
+    {
+        return $this->newsletterSubscriber;
     }
 }
