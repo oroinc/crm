@@ -8,26 +8,12 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * Class MagentoSoapTransport
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
  * @ORM\Entity
- * @Config(
- *      defaultValues={
- *          "note"={
- *              "immutable"=true
- *          },
- *          "activity"={
- *              "immutable"=true
- *          },
- *          "attachment"={
- *              "immutable"=true
- *          }
- *      }
- * )
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport

@@ -24,19 +24,51 @@ connector:
                     parameters:
                         batch_size: 25
 
-        mage_customer_reverse_sync:
-            title: "Customer's updates push to Magento"
-            type:   export
+        magento_customer_export:
+            title: 'Export Magento Customer to Magento'
+            type: export
             steps:
                 export:
                     title: export
                     class: Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
-                        reader:    oro_integration.reader.entity.by_id
-                        processor: orocrm_magento.importexport.customer.reverse.processor
-                        writer:    orocrm_magento.importexport.customer.reverse.writer
+                        reader:    orocrm_magento.importexport.reader.entity
+                        processor: orocrm_magento.importexport.processor.customer_export
+                        writer:    orocrm_magento.importexport.writer.customer
                     parameters:
-                        batch_size: 100
+                        batch_size: 1
+                import_merged_data:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_customer_export
+                        processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 1
+
+        magento_customer_address_export:
+            title: 'Export Magento Customer Address to Magento'
+            type: export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.importexport.reader.entity
+                        processor: orocrm_magento.importexport.processor.customer_address_export
+                        writer:    orocrm_magento.importexport.writer.customer_address
+                    parameters:
+                        batch_size: 1
+                import_merged_data:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_customer_address_export
+                        processor: orocrm_magento.importexport.processor.import_customer_address
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 1
 
         mage_region_import:
             title: "Region import from Magento"

@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+
 trait OriginTrait
 {
     /**
@@ -9,6 +11,13 @@ trait OriginTrait
      * @var integer
      *
      * @ORM\Column(name="origin_id", type="integer", options={"unsigned"=true}, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $originId;
 

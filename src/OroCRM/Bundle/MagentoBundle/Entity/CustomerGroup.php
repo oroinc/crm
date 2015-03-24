@@ -5,9 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
 
@@ -35,7 +33,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomerGroup;
  * )
  * @Oro\Loggable
  */
-class CustomerGroup extends ExtendCustomerGroup
+class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface, IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait;
 
@@ -44,13 +42,6 @@ class CustomerGroup extends ExtendCustomerGroup
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      * @Oro\Versioned
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     protected $name;
 }

@@ -56,38 +56,7 @@ class AddressImportHelper
             return;
         }
 
-        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId]) && is_numeric($mageRegionId)) {
-            $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
-        }
-
-        if (!empty($this->mageRegionsCache[$mageRegionId])) {
-            /** @var Region $mageRegion */
-            $mageRegion   = $this->mageRegionsCache[$mageRegionId];
-            $combinedCode = $mageRegion->getCombinedCode();
-            $regionCode   = $mageRegion->getCode();
-
-            if (!array_key_exists($combinedCode, $this->regionsCache)) {
-                $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
-            }
-
-            /**
-             * no region found in system db for corresponding magento region, use region text
-            */
-            if (empty($this->regionsCache[$combinedCode])) {
-                $address->setRegion(null);
-                $address->setRegionText($mageRegion->getName());
-            } else {
-                $this->regionsCache[$combinedCode] = $this->doctrineHelper->merge($this->regionsCache[$combinedCode]);
-                $address->setRegion($this->regionsCache[$combinedCode]);
-                $address->setRegionText(null);
-            }
-        } elseif ($address->getRegionText() || $address->getCountry()) {
-            $address->setRegion(null);
-            // unable to find corresponding region and region text is empty,
-            // it's correct case for UK addresses, if country present
-        } else {
-            throw new InvalidItemException('Unable to handle region for address', [$address]);
-        }
+        $this->updateRegionByMagentoRegionId($address, $countryCode, $mageRegionId);
     }
 
     /**
@@ -195,9 +164,9 @@ class AddressImportHelper
 
         // Simply search region by combinedCode
         $region = $this->doctrineHelper->getEntityByCriteria(
-            array(
+            [
                  'combinedCode' => $combinedCode
-            ),
+            ],
             $regionClass
         );
         if (!$region) {
@@ -205,10 +174,10 @@ class AddressImportHelper
             $em      = $this->doctrineHelper->getEntityManager($countryClass);
             $country = $em->getReference($countryClass, $countryCode);
             $region  = $this->doctrineHelper->getEntityByCriteria(
-                array(
+                [
                      'country' => $country,
                      'name'    => $combinedCode
-                ),
+                ],
                 $regionClass
             );
         }
@@ -216,17 +185,59 @@ class AddressImportHelper
             // Some numeric regions codes may be padded by 0 in ISO format and not padded in magento
             // As example FR-1 in magento and FR-01 in ISO
             $region = $this->doctrineHelper->getEntityByCriteria(
-                array(
+                [
                      'combinedCode' =>
                          BAPRegion::getRegionCombinedCode(
                              $countryCode,
                              str_pad($code, 2, '0', STR_PAD_LEFT)
                          )
-                ),
+                ],
                 $regionClass
             );
         }
 
         return $region;
+    }
+
+    /**
+     * @param AbstractAddress $address
+     * @param string $countryCode
+     * @param int|string|null $mageRegionId
+     * @throws InvalidItemException
+     */
+    public function updateRegionByMagentoRegionId(AbstractAddress $address, $countryCode, $mageRegionId = null)
+    {
+        if (!empty($mageRegionId) && empty($this->mageRegionsCache[$mageRegionId]) && is_numeric($mageRegionId)) {
+            $this->mageRegionsCache[$mageRegionId] = $this->findRegionByRegionId($mageRegionId);
+        }
+
+        if (!empty($this->mageRegionsCache[$mageRegionId])) {
+            /** @var Region $mageRegion */
+            $mageRegion = $this->mageRegionsCache[$mageRegionId];
+            $combinedCode = $mageRegion->getCombinedCode();
+            $regionCode = $mageRegion->getCode();
+
+            if (!array_key_exists($combinedCode, $this->regionsCache)) {
+                $this->regionsCache[$combinedCode] = $this->loadRegionByCode($combinedCode, $countryCode, $regionCode);
+            }
+
+            /**
+             * no region found in system db for corresponding magento region, use region text
+             */
+            if (empty($this->regionsCache[$combinedCode])) {
+                $address->setRegion(null);
+                $address->setRegionText($mageRegion->getName());
+            } else {
+                $this->regionsCache[$combinedCode] = $this->doctrineHelper->merge($this->regionsCache[$combinedCode]);
+                $address->setRegion($this->regionsCache[$combinedCode]);
+                $address->setRegionText(null);
+            }
+        } elseif ($address->getRegionText() || $address->getCountry()) {
+            $address->setRegion(null);
+            // unable to find corresponding region and region text is empty,
+            // it's correct case for UK addresses, if country present
+        } else {
+            throw new InvalidItemException('Unable to handle region for address', [$address]);
+        }
     }
 }

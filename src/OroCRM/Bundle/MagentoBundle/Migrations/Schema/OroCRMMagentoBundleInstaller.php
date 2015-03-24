@@ -50,7 +50,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_28';
+        return 'v1_29';
     }
 
     /**
@@ -254,7 +254,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
-        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -352,6 +351,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('rfm_frequency', 'integer', ['notnull' => false]);
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
         $table->addColumn('sync_state', 'integer', ['notnull' => false]);
+        $table->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -446,6 +446,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('created', 'datetime', ['precision' => 0]);
         $table->addColumn('updated', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addIndex(['owner_id'], 'IDX_1E239D647E3C61F9', []);
         $table->addUniqueIndex(['related_contact_address_id'], 'UNIQ_1E239D648137CB7B');
         $table->addUniqueIndex(['related_contact_phone_id'], 'UNIQ_1E239D64E3694F65');
@@ -1021,6 +1023,12 @@ class OroCRMMagentoBundleInstaller implements
             ['region_code'],
             ['combined_code'],
             []
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
         );
     }
 

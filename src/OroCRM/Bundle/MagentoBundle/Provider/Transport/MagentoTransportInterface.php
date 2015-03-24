@@ -93,7 +93,7 @@ interface MagentoTransportInterface extends TransportInterface
      * Retrieve customer information from magento.
      *
      * @param string $originId
-     * @return object
+     * @return array
      */
     public function getCustomerInfo($originId);
 
@@ -127,4 +127,42 @@ interface MagentoTransportInterface extends TransportInterface
      * @return array
      */
     public function getDependencies(array $dependenciesToLoad = null, $force = false);
+
+    /**
+     * @param array $customerData
+     *
+     * @return int ID of the created customer
+     */
+    public function createCustomer(array $customerData);
+
+    /**
+     * @param int $customerId
+     * @param array $customerData
+     *
+     * @return bool True if the customer is updated
+     */
+    public function updateCustomer($customerId, array $customerData);
+
+    /**
+     * @param int $customerId
+     * @param array $item
+     * @return int
+     */
+    public function createCustomerAddress($customerId, $item);
+
+    /**
+     * @param int $customerAddressId
+     * @param array $item
+     * @return bool
+     */
+    public function updateCustomerAddress($customerAddressId, $item);
+
+    /**
+     * Retrieve customer address info
+     *
+     * @param string $customerAddressId
+     *
+     * @return array
+     */
+    public function getCustomerAddressInfo($customerAddressId);
 }

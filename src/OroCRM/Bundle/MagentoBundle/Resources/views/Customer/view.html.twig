@@ -5,7 +5,7 @@
 {% oro_title_set({params : {"%customer.name%": fullname} }) %}
 
 {% block navButtons %}
-    {% if entity.channel.transport.adminUrl|default(false) %}
+    {% if entity.originId and entity.channel.transport.adminUrl|default(false) %}
         {{
             UI.clientButton({
                 'dataUrl': path('orocrm_magento_customer_orderplace', {'id': entity.id }),
@@ -34,6 +34,12 @@
                 }
             })
         }}
+    {% endif %}
+    {% if resource_granted('EDIT', entity) %}
+        {{ UI.editButton({
+            'path' : path('orocrm_magento_customer_update', { 'id': entity.id }),
+            'entity_label': 'orocrm.magento.customer.entity_label'|trans
+        }) }}
     {% endif %}
     {{ parent() }}
 {% endblock navButtons %}
@@ -100,7 +106,7 @@
                 'widgetType': 'block',
                 'contentClasses': [],
                 'url': path('orocrm_magento_customer_address_book', {id: entity.id}),
-                'title': 'Address Book'|trans
+                'title': 'orocrm.magento.customer.address_book.title'|trans
             }) }}
         </div>
     {% endset %}

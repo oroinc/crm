@@ -8,9 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
@@ -34,9 +36,12 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  * @ORM\Entity
  * @Oro\Loggable
  */
-class Address extends ExtendAddress
+class Address extends ExtendAddress implements OriginAwareInterface, IntegrationAwareInterface
 {
-    use OriginTrait;
+    const SYNC_TO_MAGENTO = 1;
+    const MAGENTO_REMOVED = 2;
+
+    use IntegrationEntityTrait, OriginTrait;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer address fields
@@ -85,6 +90,38 @@ class Address extends ExtendAddress
      * @Oro\Versioned
      */
     protected $postalCode;
+
+    /**
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
+     * @Soap\ComplexType("string", nillable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=140
+     *          }
+     *      }
+     * )
+     */
+    protected $country;
+
+    /**
+     * @var Region
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
+     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
+     * @Soap\ComplexType("string", nillable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=130
+     *          }
+     *      }
+     * )
+     */
+    protected $region;
 
     /**
      * @var string
@@ -141,7 +178,7 @@ class Address extends ExtendAddress
     protected $nameSuffix;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $owner;
@@ -168,19 +205,47 @@ class Address extends ExtendAddress
     protected $types;
 
     /**
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress")
      * @ORM\JoinColumn(name="related_contact_address_id", referencedColumnName="id", onDelete="SET NULL")
      * @var ContactAddress
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $contactAddress;
 
     /**
      * @var ContactPhone
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone",cascade={"persist"})
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactPhone")
      * @ORM\JoinColumn(name="related_contact_phone_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $contactPhone;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $syncState;
 
     /**
      * Set contact as owner.
@@ -293,5 +358,24 @@ class Address extends ExtendAddress
     public function getPhone()
     {
         return $this->phone;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSyncState()
+    {
+        return $this->syncState;
+    }
+
+    /**
+     * @param int $syncState
+     * @return Address
+     */
+    public function setSyncState($syncState)
+    {
+        $this->syncState = $syncState;
+
+        return $this;
     }
 }
