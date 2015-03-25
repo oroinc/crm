@@ -3,35 +3,31 @@
 <script type="text/html" id="{{ id|e('html_attr')|raw }}">
     <div class="accordion-group">
         <div class="accordion-heading">
-            <div class="title-item">
-                <a href="#accordion-item<%= id %>" data-toggle="collapse"
-                   class="accordion-icon accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
-                <span class="icon">
-                    <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
-                </span>
-                <span class="visual">
-                    <span class="details">
-                        {{ entityName|raw }}
-                        <% var template = (verb == 'create')
-                            ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
-                            : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
-                        %>
-                        <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
-                            user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
-                            date: '<i class="date">' + createdAt + '</i>',
-                            editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
-                            editor_date: '<i class="date">' + updatedAt + '</i>'
-                        }) %>
-                    </span>
-                    <span class="comment-count"<% if (!commentCount) { %> style="display:none"<% } %>
-                          title="<%= _.__('oro.activitylist.comment.quantity_label') %>">
-                        <i class="icon icon-comment"></i><span class="count"><%= commentCount %></span>
-                    </span>
-                    <span class="message-item message">
-                        <a href="#accordion-item<%= id %>" data-toggle="collapse"
-                           class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"><%= subject %></a>
-                    </span>
-                </span>
+            <a href="#accordion-item<%= id %>" data-toggle="collapse"
+               class="accordion-icon accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
+            <div class="icon">
+                <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
+            </div>
+            <div class="details">
+                {{ entityName|raw }}
+                <% var template = (verb == 'create')
+                    ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
+                    : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
+                %>
+                <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
+                    user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
+                    date: '<i class="date">' + createdAt + '</i>',
+                    editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
+                    editor_date: '<i class="date">' + updatedAt + '</i>'
+                }) %>
+            </div>
+            <div class="comment-count"<% if (!commentCount) { %> style="display:none"<% } %>
+                  title="<%= _.__('oro.activitylist.comment.quantity_label') %>">
+                <i class="icon icon-comment"></i><span class="count"><%= commentCount %></span>
+            </div>
+            <div class="message-item message"><%= subject %></div>
+            <div class="created-at">
+                <i class="date"><%= updatedAt %></i>
             </div>
             <div class="actions">
                 <div class="more-bar-holder">
