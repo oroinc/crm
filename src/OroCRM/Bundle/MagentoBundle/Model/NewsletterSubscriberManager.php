@@ -61,6 +61,7 @@ class NewsletterSubscriberManager
 
         $em = $this->doctrineHelper->getEntityManager($newsletterSubscriber);
         $em->persist($newsletterSubscriber);
+        $em->flush($newsletterSubscriber);
 
         return $newsletterSubscriber;
     }

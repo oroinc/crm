@@ -180,6 +180,10 @@ class NewsletterSubscriberController extends Controller
             ]
         );
 
-        return ['successful' => $jobResult->isSuccessful(), 'errors' => $jobResult->getFailureExceptions()];
+        return [
+            'successful' => $jobResult->isSuccessful(),
+            'error' => $jobResult->getFailureExceptions(),
+            'state' => $newsletterSubscriber->getStatus()->getId()
+        ];
     }
 }

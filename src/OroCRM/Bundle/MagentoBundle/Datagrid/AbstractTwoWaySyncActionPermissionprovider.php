@@ -11,7 +11,7 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
     const CHANNEL_KEY = 'channelId';
 
     /**
-     * @var array
+     * @var Channel[]
      */
     protected $channels = [];
 
@@ -48,7 +48,7 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
         }
 
         if (!empty($this->channels[$channelId])) {
-            return $this->channels[$channelId];
+            return $this->channels[$channelId]->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
         }
 
         /** @var Channel $channel */
@@ -60,9 +60,8 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
             return false;
         }
 
-        $isTwoWaySyncEnabled = $channel->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
-        $this->channels[$channelId] = $isTwoWaySyncEnabled;
+        $this->channels[$channelId] = $channel;
 
-        return $isTwoWaySyncEnabled;
+        return $channel->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
     }
 }

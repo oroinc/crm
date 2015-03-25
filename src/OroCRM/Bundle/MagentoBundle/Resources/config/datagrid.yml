@@ -169,17 +169,32 @@ datagrid:
                 icon:         edit
                 link:         update_link
             subscribe:
-                type: ajax
+                type: ajaxdelete
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
                 acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
-                type: ajax
+                type: ajaxdelete
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
                 acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
+
         action_configuration: [@orocrm_magento.datagrid.customer_actions_provider, "getCustomerActionsPermissions"]
         options:
             entityHint: customer
@@ -1442,17 +1457,31 @@ datagrid:
                 link: view_link
                 rowAction: true
             subscribe:
-                type: ajax
+                type: ajaxdelete
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
                 acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
             unsubscribe:
-                type: ajax
+                type: ajaxdelete
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
                 acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
         action_configuration: [@orocrm_magento.datagrid.newsletter_subscriber_provider, "getActionsPermissions"]
         options:
             entityHint: newsletter subscriber

@@ -1,15 +1,19 @@
+{% import 'OroUIBundle::macros.html.twig' as UI %}
 {% if resource_granted('EDIT', entity) %}
-    <div class="pull-left btn-group icons-holder">
-        {% if entity.status.id == constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber::STATUS_SUBSCRIBED') %}
-            <a href="{{ path('orocrm_magento_newsletter_subscriber_unsubscribe', { 'id': entity.id }) }}" class="btn icons-holder-text">
-                <i class="icon-envelope hide-text">{{ 'orocrm.magento.newslettersubscriber.action.unsubscribe'|trans }}</i>
-                {{ 'orocrm.magento.newslettersubscriber.action.unsubscribe'|trans }}
-            </a>
-        {% else %}
-            <a href="{{ path('orocrm_magento_newsletter_subscriber_subscribe', { 'id': entity.id }) }}" class="btn icons-holder-text">
-                <i class="icon-envelope hide-text">{{ 'orocrm.magento.newslettersubscriber.action.subscribe'|trans }}</i>
-                {{ 'orocrm.magento.newslettersubscriber.action.subscribe'|trans }}
-            </a>
-        {% endif %}
-    </div>
+    {{ UI.clientButton({
+        'dataUrl' : path('orocrm_magento_newsletter_subscriber_unsubscribe', { 'id': entity.id }),
+        'aCss' : 'no-hash subscription unsubscribe-action',
+        'label' : 'orocrm.magento.newslettersubscriber.action.unsubscribe'|trans,
+        'visible' : false
+    }) }}
+    {{ UI.clientButton({
+        'dataUrl' : path('orocrm_magento_newsletter_subscriber_subscribe', { 'id': entity.id }),
+        'aCss' : 'no-hash subscription subscribe-action',
+        'label' : 'orocrm.magento.newslettersubscriber.action.subscribe'|trans,
+        'visible' : false
+    }) }}
+
+    <div
+        data-page-component-module="orocrmmagento/js/app/components/subscription-manager"
+        data-page-component-options="{{ {currentState: entity.status.id, subscribedId: constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber::STATUS_SUBSCRIBED')}|json_encode }}"></div>
 {% endif %}
