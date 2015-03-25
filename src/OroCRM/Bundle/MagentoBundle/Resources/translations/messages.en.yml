@@ -263,6 +263,10 @@ orocrm:
             wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
             initial_sync_start_date.label: Initial sync start date
+            message:
+                native_soap: Native Magento API is used; only customers and orders will be synced
+                outdated_brige: OroBridge v.%extension_version% is used—outdated version; only customers and orders will be synced
+                uptodate_bridge: OroBridge v.%extension_version% is used; the version is current
 
         order:
             entity_label:        Magento Order

@@ -137,6 +137,8 @@ class OroCRMMagentoBundleInstaller implements
         $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('admin_url', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
+        $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
     }
 
     /**

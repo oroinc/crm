@@ -130,7 +130,7 @@ class CartExpirationProcessor
         /** @var ParameterBag $settings */
         $settings = $channel->getTransport()->getSettingsBag();
 
-        if (!$transport->isExtensionInstalled()) {
+        if (!$transport->isSupportedExtensionVersion()) {
             throw new ExtensionRequiredException();
         }
 
