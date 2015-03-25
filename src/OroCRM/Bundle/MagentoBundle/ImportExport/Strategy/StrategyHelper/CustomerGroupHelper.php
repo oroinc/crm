@@ -30,12 +30,16 @@ class CustomerGroupHelper
      */
     public function getUniqueGroup($group)
     {
-        if (!isset($this->groupEntityCache[$group->getName()])) {
-            $this->groupEntityCache[$group->getName()] = $group;
+        $key =  $group->getName();
+        if ($group->getChannel()->getId()) {
+            $key .= $group->getChannel()->getId();
         }
-        $this->groupEntityCache[$group->getName()] = $this->doctrineHelper
-            ->merge($this->groupEntityCache[$group->getName()]);
 
-        return $this->groupEntityCache[$group->getName()];
+        if (!isset($this->groupEntityCache[$key])) {
+            $this->groupEntityCache[$key] = $group;
+        }
+        $this->groupEntityCache[$key] = $this->doctrineHelper->merge($this->groupEntityCache[$key]);
+
+        return $this->groupEntityCache[$key];
     }
 }

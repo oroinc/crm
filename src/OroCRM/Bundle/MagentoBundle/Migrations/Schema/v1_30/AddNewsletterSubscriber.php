@@ -3,11 +3,25 @@
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_30;
 
 use Doctrine\DBAL\Schema\Schema;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddNewsletterSubscriber implements Migration
+class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterface
 {
+    /** @var ExtendExtension $extendExtension */
+    protected $extendExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +47,6 @@ class AddNewsletterSubscriber implements Migration
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('status', 'string', ['notnull' => false, 'length' => 11]);
         $table->addColumn('change_status_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
@@ -47,6 +60,18 @@ class AddNewsletterSubscriber implements Migration
         $table->addIndex(['organization_id'], 'idx_7c8eaa32c8a3de', []);
         $table->addIndex(['data_channel_id'], 'idx_7c8eaabdc09b73', []);
         $table->addUniqueIndex(['customer_id'], 'uniq_7c8eaa9395c3f3');
+
+        $this->extendExtension->addEnumField(
+            $schema,
+            $table,
+            'status',
+            'mage_subscr_status',
+            false,
+            false,
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM]
+            ]
+        );
     }
 
     /**

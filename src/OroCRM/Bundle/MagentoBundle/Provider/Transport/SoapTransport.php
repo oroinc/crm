@@ -17,6 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
@@ -54,6 +55,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
+    const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -412,6 +414,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function getCustomerInfo($originId)
     {
         return (array)$this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewsletterSubscribers()
+    {
+        if ($this->isExtensionInstalled()) {
+            return new NewsletterSubscriberBridgeIterator($this, $this->settings->all());
+        }
+
+        throw new ExtensionRequiredException();
     }
 
     /**
