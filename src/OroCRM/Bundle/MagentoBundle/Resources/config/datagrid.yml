@@ -1311,7 +1311,6 @@ datagrid:
                     - channel.name as channelName
                     - website.name as websiteName
                     - ns.email
-                    - ns.status
                     - ns.changeStatusAt
                     - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
                     - customer.email as customerEmail
@@ -1332,8 +1331,6 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.website.label
             email:
                 label: orocrm.magento.newslettersubscriber.email.label
-            status:
-                label: orocrm.magento.newslettersubscriber.status.label
             changeStatusAt:
                 label: orocrm.magento.newslettersubscriber.change_status_at.label
                 frontend_type: datetime
@@ -1358,7 +1355,6 @@ datagrid:
                 channelName: { data_name: channelName }
                 websiteName: { data_name: websiteName }
                 email: { data_name: ns.email }
-                status: { data_name: ns.status }
                 changeStatusAt: { data_name: ns.changeStatusAt }
                 customerName: { data_name: customerName }
                 customerEmail: { data_name: customerEmail }
@@ -1377,16 +1373,6 @@ datagrid:
                 email:
                     type: string
                     data_name: ns.email
-                status:
-                    type: choice
-                    data_name: ns.status
-                    options:
-                        field_options:
-                            choices:
-                                1: orocrm.magento.newslettersubscriber.status.subscribed
-                                2: orocrm.magento.newslettersubscriber.status.not_active
-                                3: orocrm.magento.newslettersubscriber.status.unsubscribed
-                                4: orocrm.magento.newslettersubscriber.status.unconfirmed
                 changeStatusAt:
                     type: datetime
                     data_name: ns.changeStatusAt
