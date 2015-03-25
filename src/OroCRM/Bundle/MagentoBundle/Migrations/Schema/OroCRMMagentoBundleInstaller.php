@@ -6,6 +6,9 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtension;
@@ -17,17 +20,22 @@ use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as In
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class OroCRMMagentoBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    IdentifierEventExtensionAwareInterface
+    IdentifierEventExtensionAwareInterface,
+    ExtendExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
     /** @var IdentifierEventExtension */
     protected $identifierEventExtension;
+
+    /** @var ExtendExtension $extendExtension */
+    protected $extendExtension;
 
     /**
      * {@inheritdoc}
@@ -43,6 +51,14 @@ class OroCRMMagentoBundleInstaller implements
     public function setIdentifierEventExtension(IdentifierEventExtension $identifierEventExtension)
     {
         $this->identifierEventExtension = $identifierEventExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
     }
 
     /**
@@ -774,7 +790,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('status', 'string', ['notnull' => false, 'length' => 11]);
         $table->addColumn('change_status_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
@@ -788,6 +803,18 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['organization_id'], 'idx_7c8eaa32c8a3de', []);
         $table->addIndex(['data_channel_id'], 'idx_7c8eaabdc09b73', []);
         $table->addUniqueIndex(['customer_id'], 'uniq_7c8eaa9395c3f3');
+
+        $this->extendExtension->addEnumField(
+            $schema,
+            $table,
+            'status',
+            'mage_subscr_status',
+            false,
+            false,
+            [
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM]
+            ]
+        );
     }
 
     /**

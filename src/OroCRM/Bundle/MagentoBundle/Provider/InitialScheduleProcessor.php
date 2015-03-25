@@ -54,8 +54,8 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         }
 
         if ($syncDates) {
-            $minSyncedTo = min($syncDates);
-            return $minSyncedTo > $startSyncDate;
+            $maxSyncedTo = max($syncDates);
+            return $maxSyncedTo > $startSyncDate;
         }
 
         return false;

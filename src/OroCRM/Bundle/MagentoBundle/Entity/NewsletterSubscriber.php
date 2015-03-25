@@ -80,13 +80,6 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var string
      *
-     * @ORM\Column(name="status", type="string", length=11, nullable=true)
-     */
-    protected $status;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="confirm_code", type="string", length=32, nullable=true)
      */
     protected $confirmCode;
@@ -200,25 +193,6 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     public function setEmail($email)
     {
         $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param string $status
-     * @return NewsletterSubscriber
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
 
         return $this;
     }
@@ -380,7 +354,9 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
      */
     public function prePersist()
     {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
