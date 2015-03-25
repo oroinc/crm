@@ -51,6 +51,7 @@ parameters:
     orocrm_magento.import.strategy.order_with_customer.add_or_update.class:     OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy
     orocrm_magento.import.strategy.cart_with_customer.add_or_update.class:      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy
     orocrm_magento.import.strategy.customer_address.add_or_update.class:        OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
+    orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class: OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy
 
     # processors
     orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -327,6 +328,10 @@ services:
         parent: orocrm_magento.import.strategy.cart.add_or_update
         class: %orocrm_magento.import.strategy.cart_with_customer.add_or_update.class%
 
+    orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update:
+        parent: orocrm_magento.import.strategy.newsletter_subscriber.add_or_update
+        class: %orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class%
+
     orocrm_magento.import.strategy.customer_address.add_or_update:
         class: %orocrm_magento.import.strategy.customer_address.add_or_update.class%
         parent: orocrm_magento.import.strategy.abstract
@@ -408,6 +413,15 @@ services:
             - [setEntityName, [%orocrm_magento.entity.cart.class%]]
             - [setContextRegistry, [@oro_importexport.context_registry]]
 
+    orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer:
+        class: %orocrm_magento.importexport.processor.absract.class%
+        parent: oro_importexport.processor.import_abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.newsletter_subscriber]]
+            - [setStrategy, [@orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
+            - [setContextRegistry, [@oro_importexport.context_registry]]
+
     orocrm_magento.importexport.normalizer.datetime:
         class: %orocrm_magento.importexport.normalizer.datetime.class%
         tags:
@@ -453,6 +467,11 @@ services:
         parent: orocrm_magento.importexport.processor.context
         calls:
             - [setStrategy, [@orocrm_magento.import.strategy.cart.add_or_update]]
+
+    orocrm_magento.importexport.processor.context_newsletter_subscriber:
+        parent: orocrm_magento.importexport.processor.context
+        calls:
+            - [setStrategy, [@orocrm_magento.import.strategy.newsletter_subscriber.add_or_update]]
 
     # Export processor
     orocrm_magento.importexport.processor.customer_export:
@@ -522,6 +541,11 @@ services:
         calls:
             - [setContextKey, ['postProcessCarts']]
 
+    orocrm_magento.reader.context_customer.newsletter_subscriber:
+        parent: orocrm_magento.reader.context_customer
+        calls:
+            - [setContextKey, ['postProcessSubscribers']]
+
     orocrm_magento.reader.context:
         class: %orocrm_magento.reader.context.class%
         abstract: true
@@ -547,6 +571,11 @@ services:
         parent: orocrm_magento.reader.context
         calls:
             - [setContextKey, ['postProcessCarts']]
+
+    orocrm_magento.reader.context_newsletter_subscriber:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessSubscribers']]
 
     orocrm_magento.reader.order_info:
         class: %orocrm_magento.reader.order_info.class%

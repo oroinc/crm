@@ -57,34 +57,12 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
 
         $oldValues = $this->getChangeSetValues($changeSet, 'old');
         $newValues = $this->getChangeSetValues($changeSet, 'new');
-        foreach (array_keys($newValues) as $key) {
-            if (!array_key_exists($key, $oldValues)) {
-                $oldValues[$key] = null;
-            }
-        }
-
+        $oldValues = $this->fillEmptyValues($oldValues, $newValues);
         $snapshot = array_merge($localData, $oldValues);
         $localChanges = array_keys($oldValues);
-
-        $remoteChanges = [];
-        foreach ($remoteData as $key => $remoteDataItem) {
-            if (!array_key_exists($key, $snapshot)) {
-                $remoteChanges[] = $key;
-
-                continue;
-            }
-            if ($snapshot[$key] != $remoteDataItem) {
-                $remoteChanges[] = $key;
-
-                continue;
-            }
-        }
+        $remoteChanges = $this->getRemoteChanges($remoteData, $snapshot);
 
         $conflicts = array_intersect($remoteChanges, $localChanges);
-
-        if (!$conflicts) {
-            $conflicts = [];
-        }
 
         foreach (array_merge($conflicts, $additionalFields) as $conflict) {
             if (!array_key_exists($conflict, $remoteData)) {
@@ -106,6 +84,46 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         }
 
         return $remoteData;
+    }
+
+    /**
+     * @param array $remoteData
+     * @param array $snapshot
+     * @return array
+     */
+    protected function getRemoteChanges(array $remoteData, array $snapshot)
+    {
+        $remoteChanges = [];
+        foreach ($remoteData as $key => $remoteDataItem) {
+            if (!array_key_exists($key, $snapshot)) {
+                $remoteChanges[] = $key;
+
+                continue;
+            }
+            if ($snapshot[$key] != $remoteDataItem) {
+                $remoteChanges[] = $key;
+
+                continue;
+            }
+        }
+
+        return $remoteChanges;
+    }
+
+    /**
+     * @param array $oldValues
+     * @param array $newValues
+     * @return array
+     */
+    protected function fillEmptyValues(array $oldValues, array $newValues)
+    {
+        foreach (array_keys($newValues) as $key) {
+            if (!array_key_exists($key, $oldValues)) {
+                $oldValues[$key] = null;
+            }
+        }
+
+        return $oldValues;
     }
 
     /**

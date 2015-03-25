@@ -148,15 +148,12 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         } while ($syncedConnectors > 0);
 
         if ($isSuccess && $postProcessConnectors) {
-            foreach ($postProcessConnectors as $connectorType) {
-                // Do not sync already synced connectors
-                if ($this->getLastStatusForConnector($integration, $connectorType, Status::STATUS_COMPLETED)) {
-                    continue;
-                }
-
-                $processor = $this->postProcessors[$connectorType];
-                $isSuccess = $isSuccess && $processor->process($integration, $connectorType, $parameters);
-            }
+            $isSuccess = $this->executePostProcessConnectors(
+                $integration,
+                $parameters,
+                $postProcessConnectors,
+                $startSyncDate
+            );
         }
 
         return $isSuccess;
@@ -207,5 +204,35 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $interval = \DateInterval::createFromDateString($syncInterval);
 
         return $interval;
+    }
+
+    /**
+     * @param Integration $integration
+     * @param array $parameters
+     * @param array $postProcessConnectors
+     * @param \DateTime $startSyncDate
+     * @return bool
+     */
+    protected function executePostProcessConnectors(
+        Integration $integration,
+        array $parameters,
+        array $postProcessConnectors,
+        \DateTime $startSyncDate
+    ) {
+        $isSuccess = true;
+        foreach ($postProcessConnectors as $connectorType) {
+            // Do not sync already synced connectors
+            if ($this->getLastStatusForConnector($integration, $connectorType, Status::STATUS_COMPLETED)) {
+                continue;
+            }
+
+            $processor = $this->postProcessors[$connectorType];
+            $isSuccess = $isSuccess && $processor->process($integration, $connectorType, $parameters);
+            if ($isSuccess) {
+                $this->updateSyncedTo($integration, $connectorType, $startSyncDate);
+            }
+        }
+
+        return $isSuccess;
     }
 }

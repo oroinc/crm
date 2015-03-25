@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -18,6 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 

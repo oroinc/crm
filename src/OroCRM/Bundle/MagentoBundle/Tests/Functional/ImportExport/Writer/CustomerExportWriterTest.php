@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Exception\TransportException;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -29,9 +28,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        /** @var Channel $channel */
-        $channel = $this->getReference('default_channel');
-
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
         $customer->setOriginId(null);
@@ -47,7 +43,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $channel->getId(),
+                'channel' => $customer->getChannel()->getId(),
                 'entity' => $customer,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
@@ -56,8 +52,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -81,9 +77,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        /** @var Channel $channel */
-        $channel = $this->getReference('default_channel');
-
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
         $customer->setPassword(uniqid());
@@ -102,7 +95,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $channel->getId(),
+                'channel' => $customer->getChannel()->getId(),
                 'entity' => $customer,
                 'changeSet' => [
                     'firstName' => [
@@ -116,8 +109,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -140,9 +133,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        /** @var Channel $channel */
-        $channel = $this->getReference('default_channel');
-
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
 
@@ -157,7 +147,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $channel->getId(),
+                'channel' => $customer->getChannel()->getId(),
                 'entity' => $customer,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
@@ -166,8 +156,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
@@ -185,9 +175,6 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));
 
-        /** @var Channel $channel */
-        $channel = $this->getReference('default_channel');
-
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
 
@@ -199,7 +186,7 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             'export',
             'magento_customer_export',
             [
-                'channel' => $channel->getId(),
+                'channel' => $customer->getChannel()->getId(),
                 'entity' => $customer,
                 'changeSet' => [],
                 'twoWaySyncStrategy' => 'remote',
@@ -208,8 +195,8 @@ class CustomerExportWriterTest extends AbstractExportWriterTest
             ]
         );
 
-        $this->assertTrue($jobResult->isSuccessful());
         $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_customer_export', BatchStatus::FAILED));

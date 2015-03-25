@@ -40,6 +40,7 @@ class NewsletterSubscriberInitialSyncProcessor extends AbstractInitialProcessor
     {
         /** @var EntityRepository $repository */
         $repository = $this->doctrineRegistry->getRepository($this->subscriberClassName);
+        // API return newsletter subscribers sorted by DESC, this means that latest subscriber will have minimal id
         $qb = $repository->createQueryBuilder('e')->select('MIN(e.id)');
 
         return $qb->getQuery()->getSingleScalarResult();
