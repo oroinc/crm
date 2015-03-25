@@ -1,0 +1,28 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+
+<div class="widget-content">
+    <div class="row-fluid form-horizontal">
+        <div class="responsive-block">
+            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.email.label'|trans, entity.email) }}
+            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.status) }}
+            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.changeStatusAt|oro_format_date) }}
+
+            {% if useCustomer is defined and useCustomer %}
+                {%- set customerData -%}
+                    {% if entity.customer is not empty %}
+                        {% set viewGranted = resource_granted('orocrm_magento_customer_view') %}
+                        {%- if viewGranted -%}
+                            <a href="{{ path('orocrm_magento_customer_view', {'id': entity.customer.id}) }}">
+                                {{ entity.customer|oro_format_name }}
+                            </a>
+                        {%- else -%}
+                            {{ entity.customer|oro_format_name }}
+                        {%- endif -%}
+                    {% endif %}
+                {%- endset -%}
+
+                {{ ui.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+            {% endif %}
+        </div>
+    </div>
+</div>

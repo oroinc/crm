@@ -113,16 +113,6 @@
     {% endset %}
     {% set generalSubBlocks = generalSubBlocks|merge([{'data': [customerAddressBookWidget]}]) %}
 
-    {% set newsletterSubscriberBlock %}
-        {% if entity.newsletterSubscriber is not empty %}
-            {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.email.label'|trans, email.email_address_simple(entity.newsletterSubscriber.email)) }}
-            {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.newsletterSubscriber.status) }}
-            {% if entity.newsletterSubscriber.changeStatusAt is not empty %}
-                {{ macros.renderHtmlProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.newsletterSubscriber.changeStatusAt|oro_format_date) }}
-            {% endif %}
-        {% endif %}
-    {% endset %}
-
     {% set dataBlocks = [
         {
             'title': 'General Information'|trans,
@@ -134,14 +124,27 @@
             'subblocks': [
                 {'data' : [salesTabsWidget] }
             ]
-        },
-        {
-            'title': 'orocrm.magento.newslettersubscriber.label'|trans,
-            'subblocks': [
-                {'data' : [newsletterSubscriberBlock] }
-            ]
         }
     ] %}
+
+    {% if entity.newsletterSubscriber is not empty %}
+        {% set newsletterSubscriberBlock %}
+            {{ oro_widget_render({
+                'widgetType': 'block',
+                'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.newsletterSubscriber.id})
+            }) }}
+        {% endset %}
+        {% if newsletterSubscriberBlock %}
+            {% set dataBlocks = dataBlocks|merge([
+                {
+                    'title': 'orocrm.magento.newslettersubscriber.label'|trans,
+                    'subblocks': [
+                        {'data' : [newsletterSubscriberBlock] }
+                    ]
+                }
+            ]) %}
+        {% endif %}
+    {% endif %}
 
     {% set id = 'magentoCustomerView' %}
     {% set data = {'dataBlocks': dataBlocks} %}

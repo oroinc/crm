@@ -14,13 +14,16 @@ abstract class AbstractController extends WebTestCase
     /** @var Integration */
     protected static $integration;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
     }
 
+    /**
+     * @return int
+     */
     abstract protected function getMainEntityId();
 
     protected function postFixtureLoad()

@@ -129,6 +129,7 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
+            newsletter_subscriber.label: Newsletter Subscriber
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -452,6 +453,19 @@ orocrm:
             confirm_code.label:  Confirmation code
             customer.label:      Customer
             data_channel.label:  Channel
+            store.label:         Store
+            website.label:       Website
+            organization.label:  Organization
+            owner.label:         Owner
+            email:
+                label: Email
+                customer: Customer Email
+            status:
+                label: Status
+                subscribed: Subscribed
+                not_active: Not active
+                unsubscribed: Unsubscribed
+                unconfirmed: Unconfirmed
             email.label:         Email
             status.label:        Status
             store.label:         Store

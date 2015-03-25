@@ -1298,3 +1298,105 @@ datagrid:
                 websiteName:
                     type: string
                     data_name: w.name
+
+    # @todo: channel and store
+    magento-newsletter-subscriber-grid:
+        extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
+        source:
+            type: orm
+            acl_resource: orocrm_magento_newsletter_subscriber_view
+            query:
+                select:
+                    - ns.id
+                    - channel.name as channelName
+                    - website.name as websiteName
+                    - ns.email
+                    - ns.changeStatusAt
+                    - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
+                    - customer.email as customerEmail
+                    - ns.createdAt
+                    - ns.updatedAt
+                from:
+                    - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: ns }
+                join:
+                    left:
+                        - { join: ns.customer, alias: customer }
+                        - { join: ns.dataChannel, alias: channel }
+                        - { join: ns.store, alias: store }
+                        - { join: store.website, alias: website }
+        columns:
+            channelName:
+                label: orocrm.magento.newslettersubscriber.data_channel.label
+            websiteName:
+                label: orocrm.magento.newslettersubscriber.website.label
+            email:
+                label: orocrm.magento.newslettersubscriber.email.label
+            changeStatusAt:
+                label: orocrm.magento.newslettersubscriber.change_status_at.label
+                frontend_type: datetime
+            customerName:
+                label: orocrm.magento.newslettersubscriber.customer.label
+            customerEmail:
+                label: orocrm.magento.newslettersubscriber.email.customer
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_view
+                params: [ id ]
+        sorters:
+            columns:
+                channelName: { data_name: channelName }
+                websiteName: { data_name: websiteName }
+                email: { data_name: ns.email }
+                changeStatusAt: { data_name: ns.changeStatusAt }
+                customerName: { data_name: customerName }
+                customerEmail: { data_name: customerEmail }
+                createdAt: { data_name: ns.createdAt }
+                updatedAt: { data_name: ns.updatedAt }
+            default:
+                updatedAt: DESC
+        filters:
+            columns:
+                channelName:
+                    type: string
+                    data_name: channelName
+                websiteName:
+                    type: string
+                    data_name: websiteName
+                email:
+                    type: string
+                    data_name: ns.email
+                changeStatusAt:
+                    type: datetime
+                    data_name: ns.changeStatusAt
+                customerName:
+                    type: string
+                    data_name: customerName
+                customerEmail:
+                    type: string
+                    data_name: customerEmail
+                createdAt:
+                    type: datetime
+                    data_name: ns.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: ns.updatedAt
+        actions:
+            view:
+                type: navigate
+                acl_resource: orocrm_magento_newsletter_subscriber_view
+                label: oro.grid.action.view
+                icon: eye-open
+                link: view_link
+                rowAction: true
+        options:
+            entityHint: newsletter subscriber
+            export: true
+            entity_pagination: true
