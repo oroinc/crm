@@ -1,11 +1,12 @@
-{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.email.label'|trans, entity.email) }}
-            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.status) }}
-            {{ ui.renderProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.changeStatusAt|oro_format_date) }}
+            {{ UI.renderProperty('orocrm.magento.newslettersubscriber.email.label'|trans, entity.email) }}
+            {{ UI.renderProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.status.name) }}
+            {{ UI.renderProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.changeStatusAt|oro_format_date) }}
 
             {% if useCustomer is defined and useCustomer %}
                 {%- set customerData -%}
@@ -21,8 +22,10 @@
                     {% endif %}
                 {%- endset -%}
 
-                {{ ui.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
+                {{ UI.renderHtmlProperty('orocrm.magento.newslettersubscriber.customer.label'|trans, customerData) }}
             {% endif %}
+
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>
 </div>

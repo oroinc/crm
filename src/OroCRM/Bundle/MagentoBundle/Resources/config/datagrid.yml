@@ -15,11 +15,12 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
-                    - channel.id as channelId
+                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-                    - (CASE WHEN ns.id IS NULL THEN false ELSE true END) as isSubscriber
+                    - (CASE WHEN newsletterSubscriberStatus.id = OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED THEN true ELSE false END) as isSubscriber
+                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -29,7 +30,8 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: ns }
+                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
+                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -1332,7 +1334,6 @@ datagrid:
                     type: string
                     data_name: w.name
 
-    # @todo: channel and store
     magento-newsletter-subscriber-grid:
         extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
         source:
@@ -1340,22 +1341,25 @@ datagrid:
             acl_resource: orocrm_magento_newsletter_subscriber_view
             query:
                 select:
-                    - ns.id
+                    - newsletterSubscriber.id
                     - channel.name as channelName
+                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
-                    - ns.email
-                    - ns.changeStatusAt
+                    - newsletterSubscriber.email
+                    - newsletterSubscriber.changeStatusAt
                     - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
                     - customer.email as customerEmail
-                    - ns.createdAt
-                    - ns.updatedAt
+                    - newsletterSubscriber.createdAt
+                    - newsletterSubscriber.updatedAt
+                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                 from:
-                    - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: ns }
+                    - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
                 join:
                     left:
-                        - { join: ns.customer, alias: customer }
-                        - { join: ns.dataChannel, alias: channel }
-                        - { join: ns.store, alias: store }
+                        - { join: newsletterSubscriber.customer, alias: customer }
+                        - { join: newsletterSubscriber.dataChannel, alias: channel }
+                        - { join: newsletterSubscriber.store, alias: store }
+                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
                         - { join: store.website, alias: website }
         columns:
             channelName:
@@ -1381,12 +1385,12 @@ datagrid:
             columns:
                 channelName: { data_name: channelName }
                 websiteName: { data_name: websiteName }
-                email: { data_name: ns.email }
-                changeStatusAt: { data_name: ns.changeStatusAt }
+                email: { data_name: newsletterSubscriber.email }
+                changeStatusAt: { data_name: newsletterSubscriber.changeStatusAt }
                 customerName: { data_name: customerName }
                 customerEmail: { data_name: customerEmail }
-                createdAt: { data_name: ns.createdAt }
-                updatedAt: { data_name: ns.updatedAt }
+                createdAt: { data_name: newsletterSubscriber.createdAt }
+                updatedAt: { data_name: newsletterSubscriber.updatedAt }
             default:
                 updatedAt: DESC
         filters:
@@ -1399,10 +1403,10 @@ datagrid:
                     data_name: websiteName
                 email:
                     type: string
-                    data_name: ns.email
+                    data_name: newsletterSubscriber.email
                 changeStatusAt:
                     type: datetime
-                    data_name: ns.changeStatusAt
+                    data_name: newsletterSubscriber.changeStatusAt
                 customerName:
                     type: string
                     data_name: customerName
@@ -1411,10 +1415,10 @@ datagrid:
                     data_name: customerEmail
                 createdAt:
                     type: datetime
-                    data_name: ns.createdAt
+                    data_name: newsletterSubscriber.createdAt
                 updatedAt:
                     type: datetime
-                    data_name: ns.updatedAt
+                    data_name: newsletterSubscriber.updatedAt
         properties:
             id: ~
             view_link:

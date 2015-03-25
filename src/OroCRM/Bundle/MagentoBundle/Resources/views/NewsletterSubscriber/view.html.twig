@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
-{% import 'OroUIBundle::macros.html.twig' as macros %}
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
 {% oro_title_set({params: {'%newsletter_subscriber.email%': entity.email}}) %}
 
@@ -20,6 +21,12 @@
 
 {% block content_data %}
     {% set newsletterSubscriberInformationWidget %}
+        {{ channel.renderChannelProperty(entity, 'orocrm.magento.newslettersubscriber.data_channel.label') }}
+        {{ UI.renderProperty('orocrm.magento.newslettersubscriber.channel.label'|trans, entity.channel.name) }}
+
+        {{ UI.renderProperty('orocrm.magento.newslettersubscriber.website.label'|trans, entity.store.website.name) }}
+        {{ UI.renderHtmlProperty('orocrm.magento.newslettersubscriber.store.label'|trans, entity.store.name|escape|nl2br) }}
+
         {{ oro_widget_render({
             'widgetType': 'block',
             'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.id, useCustomer: true})

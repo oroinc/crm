@@ -33,12 +33,11 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
         return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
 
-
     /**
      * {@inheritdoc}
      */
     protected function getBackendHeader()
     {
-        return array_values($this->getHeaderConversionRules());
+        return array_merge(array_values($this->getHeaderConversionRules()), ['status']);
     }
 }

@@ -64,7 +64,7 @@ parameters:
     orocrm_magento.importexport.writer.abstract_export.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Writer\AbstractExportWriter
     orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
     orocrm_magento.importexport.writer.customer_address.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerAddressExportWriter
-
+    orocrm_magento.importexport.writer.newsletter_subscriber.class:             OroCRM\Bundle\MagentoBundle\ImportExport\Writer\NewsletterSubscriberExportWriter
     # Readers
     orocrm_magento.importexport.reader.entity.class:                            OroCRM\Bundle\MagentoBundle\ImportExport\Reader\ContextEntityReader
     orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
@@ -488,6 +488,13 @@ services:
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.address.class%, alias: orocrm_magento.customer_address_export }
 
+    orocrm_magento.importexport.processor.newsletter_subscriber_export:
+        parent: oro_integration.importexport.processor.export
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.newsletter_subscriber]]
+        tags:
+            - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.newsletter_subscriber.class%, alias: orocrm_magento.newsletter_subscriber_export }
+
     # Writers
     orocrm_magento.writer.proxy_entity_writer:
         class: %orocrm_magento.writer.proxy_entity_writer.class%
@@ -518,6 +525,10 @@ services:
             - [setMagentoRegionClass, [%orocrm_magento.entity.region.class%]]
             - [setStrategy, [@orocrm_magento.provider.strategy.two_way_sync.customer_address]]
             - [setStateHandler, [@orocrm_magento.customer_state_handler]]
+
+    orocrm_magento.importexport.writer.newsletter_subscriber:
+        class: %orocrm_magento.importexport.writer.newsletter_subscriber.class%
+        parent: orocrm_magento.importexport.writer.abstract_export
 
     # readers
     orocrm_magento.importexport.reader.entity:

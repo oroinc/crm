@@ -79,7 +79,7 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
             'actions are empty' => [
                 new ResultRecord([]),
                 [],
-                [],
+                ['subscribe' => false, 'unsubscribe' => false],
                 null
             ],
             'two way sync disabled' => [
