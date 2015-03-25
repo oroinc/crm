@@ -442,6 +442,7 @@ orocrm:
             channel.label:       Integration
 
         newslettersubscriber:
+            label:               Newsletter Subscriber
             entity_label:        Magento Newsletter Subscriber
             entity_plural_label: Magento Newsletter Subscribers
             id.label:            Id
