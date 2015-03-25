@@ -31,7 +31,7 @@ class CustomerGroupHelper
     public function getUniqueGroup($group)
     {
         $key =  $group->getName();
-        if ($group->getChannel()->getId()) {
+        if ($group->getChannel()) {
             $key .= $group->getChannel()->getId();
         }
 

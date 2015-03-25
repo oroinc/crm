@@ -359,7 +359,8 @@ orocrm:
             contact_address.label: Contact address
             contact_phone.label:   Contact phone
             phone.label:           Phone
-
+            sync_state.label:      Sync State
+            channel.label:         Channel
             country_name.label:      Country name
             country_iso2_code.label: Country ISO2 code
             country_iso3_code.label: Country ISO3 code

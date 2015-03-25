@@ -7,7 +7,7 @@ use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class AbstractExportWriterTest extends WebTestCase
+abstract class AbstractExportWriterTest extends WebTestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|MagentoTransportInterface
@@ -20,12 +20,19 @@ class AbstractExportWriterTest extends WebTestCase
 
         $this->initClient();
 
+        $this->dropBatchJobs();
+
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
         $this->transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
     }
 
     protected function tearDown()
+    {
+        $this->dropBatchJobs();
+    }
+
+    protected function dropBatchJobs()
     {
         // clear DB from separate connection
         $batchJobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
