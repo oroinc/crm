@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_29;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_30;
 
 use Doctrine\DBAL\Schema\Schema;
 
