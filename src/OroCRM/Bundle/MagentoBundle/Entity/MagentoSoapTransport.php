@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 /**
  * Class MagentoSoapTransport
@@ -362,12 +363,12 @@ class MagentoSoapTransport extends Transport
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
                 [
-                    'api_user'        => $this->getApiUser(),
-                    'api_key'         => $this->getApiKey(),
-                    'wsdl_url'        => $this->getWsdlUrl(),
-                    'sync_range'      => $this->getSyncRange(),
-                    'wsi_mode'        => $this->getIsWsiMode(),
-                    'website_id'      => $this->getWebsiteId(),
+                    'api_user' => $this->getApiUser(),
+                    'api_key' => $this->getApiKey(),
+                    'wsdl_url' => $this->getWsdlUrl(),
+                    'sync_range' => $this->getSyncRange(),
+                    'wsi_mode' => $this->getIsWsiMode(),
+                    'website_id' => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
                     'initial_sync_start_date' => $this->getInitialSyncStartDate(),
                     'extension_version' => $this->getExtensionVersion(),

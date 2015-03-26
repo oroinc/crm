@@ -2,8 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -11,11 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapController extends Controller
 {
@@ -113,7 +114,7 @@ class SoapController extends Controller
     {
         $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
             ->getAvailableConnectorsTypesChoiceList(
-                'magento',
+                ChannelType::TYPE,
                 function (ConnectorInterface $connector) use ($isExtensionInstalled, $isSupportedVersion) {
                     if ($connector instanceof ExtensionAwareInterface) {
                         return $isExtensionInstalled && $isSupportedVersion;
@@ -142,7 +143,8 @@ class SoapController extends Controller
     protected function getTransportEntity(Request $request, $transport)
     {
         $data = null;
-        if ($id = $request->get('id', false)) {
+        $id = $request->get('id', false);
+        if ($id) {
             $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
         }
 
