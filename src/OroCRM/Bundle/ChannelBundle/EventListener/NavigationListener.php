@@ -40,13 +40,14 @@ class NavigationListener
 
             foreach ($setting['navigation_items'] as $item) {
                 $navigateArray = explode('.', $item);
+                $navigateArrayCount = count($navigateArray);
                 $menu          = $event->getMenu();
 
                 if ($menu->getName() !== $navigateArray[0]) {
                     continue;
                 }
 
-                for ($i = 1; $i < count($navigateArray); $i++) {
+                for ($i = 1; $i < $navigateArrayCount; $i++) {
                     if ($menu->getChild($navigateArray[$i])) {
                         /** redefinition of variable $menu */
                         $menu = $menu->getChild($navigateArray[$i]);
