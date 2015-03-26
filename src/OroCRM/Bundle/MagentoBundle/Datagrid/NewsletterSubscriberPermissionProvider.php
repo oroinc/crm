@@ -25,15 +25,16 @@ class NewsletterSubscriberPermissionProvider extends  AbstractTwoWaySyncActionPe
         $isTwoWaySyncEnabled = $this->isTwoWaySyncEnable($record);
         $statusId = (int)$record->getValue('newsletterSubscriberStatusId');
         $isSubscribed = $statusId === NewsletterSubscriber::STATUS_SUBSCRIBED;
+        $customerId = $record->getValue('customerOriginId');
 
         // @todo: check extension version
 
         if (array_key_exists('subscribe', $permissions)) {
-            $permissions['subscribe'] = $isTwoWaySyncEnabled && !$isSubscribed;
+            $permissions['subscribe'] = $isTwoWaySyncEnabled && !$isSubscribed && $customerId;
         }
 
         if (array_key_exists('unsubscribe', $permissions)) {
-            $permissions['unsubscribe'] = $isTwoWaySyncEnabled && $isSubscribed;
+            $permissions['unsubscribe'] = $isTwoWaySyncEnabled && $isSubscribed && $customerId;
         }
 
         return $permissions;

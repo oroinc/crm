@@ -57,19 +57,34 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
     {
         return [
             [
-                new ResultRecord(['channelId' => 1]),
+                new ResultRecord(['channelId' => 1, 'customerOriginId' => 1]),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
                 ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
+            ],
+            [
+                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 2, 'customerOriginId' => 1]),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
+            ],
+            [
+                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 1, 'customerOriginId' => 1]),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => false, 'unsubscribe' => true]
+            ],
+            [
+                new ResultRecord(['channelId' => 1]),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
             ],
             [
                 new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 2]),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
-                ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
+                ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
             ],
             [
                 new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 1]),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
-                ['view' => true, 'subscribe' => false, 'unsubscribe' => true]
+                ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
             ]
         ];
     }
