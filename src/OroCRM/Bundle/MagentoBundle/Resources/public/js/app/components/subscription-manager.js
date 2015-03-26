@@ -14,8 +14,6 @@ define(function (require) {
         var handleButtonsState = function (state) {
             $('.subscription').css('display', 'none');
 
-            console.log(state, subscribedId, state == subscribedId)
-
             if (state == subscribedId) {
                 $('.unsubscribe-action').css('display', 'inline-block');
             } else {
