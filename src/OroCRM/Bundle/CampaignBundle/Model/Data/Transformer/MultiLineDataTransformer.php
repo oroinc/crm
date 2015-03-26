@@ -170,7 +170,7 @@ class MultiLineDataTransformer implements TransformerInterface
             if (sizeof($fulfilledLabels) > self::MAX) {
                 $next = false;
                 foreach (array_keys($this->dateFormatMap) as $period) {
-                    if ($next == true) {
+                    if ($next === true) {
                         $this->period = $period;
 
                         return $this->getLabels();
