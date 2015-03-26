@@ -38,9 +38,8 @@ class CampaignType extends AbstractType
                 'startDate',
                 'oro_date',
                 [
-                    'label'             => 'orocrm.campaign.start_date.label',
-                    'required'          => false,
-                    'validation_groups' => ['Campaign'],
+                    'label'    => 'orocrm.campaign.start_date.label',
+                    'required' => false,
                 ]
             )
             ->add(
@@ -86,7 +85,10 @@ class CampaignType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign']);
+        $resolver->setDefaults([
+            'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
+            'validation_groups' => ['Campaign', 'Default']
+        ]);
     }
 
     /**
