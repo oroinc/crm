@@ -16,7 +16,6 @@ class CustomerDependencyManager extends AbstractDependencyManager
         }
 
         // TODO: implement convertion using customer data converter
-        //return parent::addDependencyData($result, $dependencies);
         $dependencies = $transport->getDependencies(
             [
                 MagentoTransportInterface::ALIAS_GROUPS,
