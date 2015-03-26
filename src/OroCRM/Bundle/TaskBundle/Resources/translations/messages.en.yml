@@ -37,5 +37,5 @@ orocrm:
         view_task:   View {{ entity }}
         update_task: Update {{ entity }}
         delete_task: Delete {{ entity }}
-        created_by:  assigned by {{ user }} on {{ date }}
-        changed_by:  assigned by {{ user }} at {{ date }}, updated by {{ editor }} at {{ editor_date }}
+        created_by:  assigned by {{ user }}
+        changed_by:  assigned by {{ user }}, updated by {{ editor }}
