@@ -44,6 +44,8 @@ class NewsletterSubscriberManager
                 ->setOrganization($customer->getOrganization())
                 ->setOwner($customer->getOwner())
                 ->setDataChannel($customer->getDataChannel());
+
+            $this->doctrineHelper->getEntityManager($newsletterSubscriber)->persist($newsletterSubscriber);
         }
 
         return $this->changeStatus($newsletterSubscriber, $identifier);
@@ -59,9 +61,7 @@ class NewsletterSubscriberManager
     {
         $newsletterSubscriber->setStatus($this->getStatus($identifier));
 
-        $em = $this->doctrineHelper->getEntityManager($newsletterSubscriber);
-        $em->persist($newsletterSubscriber);
-        $em->flush($newsletterSubscriber);
+        $this->doctrineHelper->getEntityManager($newsletterSubscriber)->flush();
 
         return $newsletterSubscriber;
     }

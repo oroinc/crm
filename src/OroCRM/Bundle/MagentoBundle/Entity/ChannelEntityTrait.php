@@ -24,16 +24,20 @@ trait ChannelEntityTrait
     protected $dataChannel;
 
     /**
-     * {@inheritdoc}
+     * @param Channel|null $channel
+     * @return self
+     *
      * @TODO remove null after BAP-5248
      */
     public function setDataChannel(Channel $channel = null)
     {
         $this->dataChannel = $channel;
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return Channel
      */
     public function getDataChannel()
     {
