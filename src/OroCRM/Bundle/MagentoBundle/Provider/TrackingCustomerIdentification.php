@@ -6,8 +6,9 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
-
 use Oro\Bundle\TrackingBundle\Entity\TrackingVisit;
+
+use Oro\Bundle\TrackingBundle\Entity\TrackingVisitEvent;
 use Oro\Bundle\TrackingBundle\Provider\TrackingEventIdentifierInterface;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -15,6 +16,14 @@ use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
 class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
 {
+    const EVENT_REGISTRATION_FINISHED = 'registration';
+    const EVENT_CART_ITEM_ADDED = 'cart item added';
+    const EVENT_CHECKOUT_STARTED = 'user entered checkout';
+    const EVENT_ORDER_PLACE_SUCCESS = 'order successfully placed';
+    const EVENT_ORDER_PLACED = 'order placed';
+    const EVENT_CUSTOMER_LOGIN = 'user logged in';
+    const EVENT_CUSTOMER_LOGOUT = 'user logged out';
+
     /** @var ObjectManager */
     protected $em;
 
@@ -80,9 +89,9 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
             ];
 
             $channel = $trackingVisit->getTrackingWebsite()->getChannel();
-            $target = $this->em->getRepository($this->getTarget())->findOneBy(
+            $target  = $this->em->getRepository($this->getIdentityTarget())->findOneBy(
                 [
-                    'originId'  => $userIdentifier,
+                    'originId'    => $userIdentifier,
                     'dataChannel' => $channel
                 ]
             );
@@ -99,9 +108,107 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
     /**
      * {@inheritdoc}
      */
-    public function getTarget()
+    public function getIdentityTarget()
     {
         return $this->settingsProvider->getCustomerIdentityFromConfig(ChannelType::TYPE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEventTargets()
+    {
+        return [
+            'OroCRM\Bundle\MagentoBundle\Entity\Order',
+            'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+            'OroCRM\Bundle\MagentoBundle\Entity\Product',
+            'OroCRM\Bundle\MagentoBundle\Entity\Cart'
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isApplicableVisitEvent(TrackingVisitEvent $trackingVisitEvent)
+    {
+        $hasTrackingWebsiteChannel = $this->extendConfigProvider->hasConfig(
+            'Oro\Bundle\TrackingBundle\Entity\TrackingWebsite',
+            'channel'
+        );
+
+        if ($hasTrackingWebsiteChannel) {
+            $trackingWebsite = $trackingVisitEvent->getVisit()->getTrackingWebsite();
+            if (method_exists($trackingWebsite, 'getChannel')) {
+                /** @var Channel $channel */
+                $channel = $trackingWebsite->getChannel();
+                $type    = $channel ? $channel->getChannelType() : false;
+
+                if ($type && $type === ChannelType::TYPE) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function processEvent(TrackingVisitEvent $trackingVisitEvent)
+    {
+        $targets = [];
+
+        // identifier
+        $targets[] = $trackingVisitEvent->getVisit()->getIdentifierTarget();
+
+        $channel    = $trackingVisitEvent->getVisit()->getTrackingWebsite()->getChannel();
+        $eventName  = $trackingVisitEvent->getEvent()->getName();
+        $eventValue = $trackingVisitEvent->getWebEvent()->getValue();
+
+        switch ($eventName) {
+            case self::EVENT_CART_ITEM_ADDED: // process 'cart item added' event
+                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(
+                    [
+                        'originId' => (int)$eventValue
+                    ]
+                );
+                break;
+            case self::EVENT_ORDER_PLACE_SUCCESS: // process 'order successfully placed' event
+                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
+                    [
+                        'subtotalAmount' => $eventValue,
+                        'dataChannel'    => $channel
+                    ]
+                );
+                break;
+            case self::EVENT_ORDER_PLACED: // process 'order placed' event
+                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
+                    [
+                        'incrementId' => $eventValue,
+                        'dataChannel' => $channel
+                    ]
+                );
+                break;
+            case self::EVENT_CHECKOUT_STARTED: // process 'user entered checkout' event
+                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Cart')->findOneBy(
+                    [
+                        'subTotal'    => $eventValue,
+                        'dataChannel' => $channel
+                    ]
+                );
+                break;
+            case self::EVENT_CUSTOMER_LOGOUT: // process 'user logged out' event
+                $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Customer')->findOneBy(
+                    [
+                        'originId'    => (int)$eventValue,
+                        'dataChannel' => $channel
+                    ]
+                );
+                break;
+        }
+
+        return $targets;
     }
 
     /**
