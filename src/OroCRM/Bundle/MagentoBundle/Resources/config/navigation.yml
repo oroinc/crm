@@ -46,6 +46,8 @@ oro_menu_config:
                 customers_tab:
                     children:
                         magento_customer: ~
+                marketing_tab:
+                    children:
                         magento_newsletter_subscriber: ~
 
 oro_titles:
