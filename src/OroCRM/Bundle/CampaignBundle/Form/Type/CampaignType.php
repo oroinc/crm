@@ -38,8 +38,9 @@ class CampaignType extends AbstractType
                 'startDate',
                 'oro_date',
                 [
-                    'label'    => 'orocrm.campaign.start_date.label',
-                    'required' => false,
+                    'label'             => 'orocrm.campaign.start_date.label',
+                    'required'          => false,
+                    'validation_groups' => ['Campaign'],
                 ]
             )
             ->add(
