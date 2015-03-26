@@ -36,8 +36,24 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
     /**
      * {@inheritdoc}
      */
+    public function convertToExportFormat(array $exportedRecord, $skipNullValues = true)
+    {
+        $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
+
+        if (!empty($exportedRecord['store'])) {
+            $exportedRecord['store_id'] = $exportedRecord['store']['store_id'];
+            unset($exportedRecord['store']);
+        }
+
+        return $exportedRecord;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getBackendHeader()
     {
-        return array_merge(array_values($this->getHeaderConversionRules()), ['status']);
+        return array_values($this->getHeaderConversionRules());
     }
 }

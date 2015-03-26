@@ -14,7 +14,7 @@ class NewsletterSubscriberManagerTest extends WebTestCase
 {
     protected function setUp()
     {
-        $this->initClient([], array_merge($this->generateBasicAuthHeader()));
+        $this->initClient([], $this->generateBasicAuthHeader());
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
     }
 
@@ -45,19 +45,17 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         $newsletterSubscriberBase = $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
             ->findOneBy([]);
-        $newsletterSubscriberBase->setEmail('email@example.com');
+        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
 
         $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
 
-        $this->assertEquals('email@example.com', $newsletterSubscriber->getEmail());
         $this->assertEquals($customer, $newsletterSubscriber->getCustomer());
         $this->assertEquals($newsletterSubscriberBase, $newsletterSubscriber);
 
         $this->getContainer()->get('doctrine')->getManager()->refresh($newsletterSubscriberBase);
 
         $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriberBase->getStatus()->getId());
-
     }
 
     public function testChangeStatus()
