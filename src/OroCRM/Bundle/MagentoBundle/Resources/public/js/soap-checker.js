@@ -121,7 +121,10 @@ define([
         renderSuccessMessage: function (res) {
             if (res.isExtensionInstalled || false) {
                 if (res.isSupportedVersion || false) {
-                    this.renderResult('success', __('orocrm.magento.success'));
+                    this.renderResult('success', __(
+                        'orocrm.magento.success_bridge',
+                        { extension_version: res.extensionVersion }
+                    ));
                 } else {
                     this.renderResult(
                         'warning',
