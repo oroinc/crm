@@ -44,6 +44,8 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ['getSoapClient'],
             [$encoder]
         );
+        // Do not attempt to run request several times in Unit test. This leads to sleep and test performance impact
+        $this->transport->setMultipleAttemptsEnabled(false);
 
         $this->soapClientMock = $this->getMockBuilder('\SoapClient')
             ->disableOriginalConstructor()
@@ -63,6 +65,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Init settings bag
+     * @param bool $wsiMode
      */
     protected function initSettings($wsiMode = false)
     {
@@ -141,13 +144,13 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $iteratorGetter
      * @param string $expectedType
-     * @param bool   $isExtensionInstalled
+     * @param string $extensionVersion
      * @param bool   $expectedException
      */
     public function testResultIterators(
         $iteratorGetter,
         $expectedType,
-        $isExtensionInstalled = false,
+        $extensionVersion = null,
         $expectedException = false
     ) {
         if (false !== $expectedException) {
@@ -160,7 +163,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $this->soapClientMock->expects($this->any())
             ->method('__soapCall')
             ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
-            ->will($this->returnValue((object)['version' => $isExtensionInstalled]));
+            ->will($this->returnValue((object)['version' => $extensionVersion]));
 
         $result = $this->transport->{$iteratorGetter}();
         $this->assertInstanceOf($expectedType, $result);
@@ -179,12 +182,12 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Orders with extension'                        => [
                 'getOrders',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\OrderBridgeIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts with extension'                         => [
                 'getCarts',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CartsBridgeIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Carts without extension should provoke error' => [
                 'getCarts',
@@ -199,7 +202,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Regions with extension'                       => [
                 'getRegions',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\RegionSoapIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Websites without extension'                   => [
                 'getWebsites',
@@ -208,7 +211,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Websites with extension'                      => [
                 'getWebsites',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\WebsiteSoapIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Stores without extension'                     => [
                 'getStores',
@@ -217,7 +220,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Stores with extension'                        => [
                 'getStores',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\StoresSoapIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customer groups without extension'            => [
                 'getCustomerGroups',
@@ -226,7 +229,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Customer groups with extension'               => [
                 'getCustomerGroups',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerGroupSoapIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
             'Customers without extension'                  => [
                 'getCustomers',
@@ -235,8 +238,19 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             'Customers with extension'                     => [
                 'getCustomers',
                 'OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\CustomerBridgeIterator',
-                true
+                SoapTransport::REQUIRED_EXTENSION_VERSION
             ],
+            'Newsletter Subscribers with extension' => [
+                'getNewsletterSubscribers',
+                'OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
+                SoapTransport::REQUIRED_EXTENSION_VERSION
+            ],
+            'Newsletter Subscribers without extension' => [
+                'getNewsletterSubscribers',
+                'OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator',
+                false,
+                '\LogicException'
+            ]
         ];
     }
 
@@ -244,15 +258,19 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
      * @dataProvider isExtensionInstalledProvider
      *
      * @param mixed $isInstalledResult
-     * @param mixed $adminUrlResult
      * @param mixed $soapResult
-     * @param bool  $throwsException
+     * @param bool $throwsException
+     * @param mixed $adminUrlResult
+     * @param bool|string $extensionVersion
+     * @param bool|string $magentoVersion
      */
     public function testIsExtensionInstalled(
         $isInstalledResult,
-        $adminUrlResult,
         $soapResult,
-        $throwsException = false
+        $throwsException = false,
+        $adminUrlResult = false,
+        $extensionVersion = null,
+        $magentoVersion = null
     ) {
         $this->initSettings();
         if ($throwsException) {
@@ -271,12 +289,22 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $result1 = $this->transport->isExtensionInstalled();
         $result2 = $this->transport->isExtensionInstalled();
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
-        $this->assertSame($isInstalledResult, $result1);
+        $this->assertSame($isInstalledResult, $result1, 'Is installed is not correct');
 
         $result1 = $this->transport->getAdminUrl();
         $result2 = $this->transport->getAdminUrl();
         $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
         $this->assertSame($adminUrlResult, $result1);
+
+        $result1 = $this->transport->getExtensionVersion();
+        $result2 = $this->transport->getExtensionVersion();
+        $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
+        $this->assertSame($extensionVersion, $result1, 'Extension version is not correct');
+
+        $result1 = $this->transport->getMagentoVersion();
+        $result2 = $this->transport->getMagentoVersion();
+        $this->assertSame($result1, $result2, 'All results should be same, and call remote service only once');
+        $this->assertSame($magentoVersion, $result1, 'Magento version is not correct');
     }
 
     /**
@@ -287,22 +315,27 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         return [
             'exception result is perceived as not installed' => [
                 false,
-                false,
                 null,
-                true
+                true,
+                false,
             ],
             'good result with version'                       => [
                 true,
-                'http://localhost/admin/',
                 (object)[
                     'version'     => '1.2.3',
+                    'mage_version' => '1.8.0.0',
                     'admin_url'   => 'http://localhost/admin/'
-                ]
+                ],
+                false,
+                'http://localhost/admin/',
+                '1.2.3',
+                '1.8.0.0'
             ],
             'good result with out version'                   => [
                 false,
+                (object)[null],
                 false,
-                (object)[null]
+                false
             ]
         ];
     }
@@ -422,6 +455,124 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ]
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider methodsDataProvider
+     *
+     * @param string $method
+     * @param $endpoint
+     * @param $expectedParameters
+     * @param $result
+     * @param array|null $arguments
+     * @param bool $withPing
+     */
+    public function testCalls(
+        $method,
+        $endpoint,
+        $expectedParameters,
+        $result,
+        array $arguments = null,
+        $withPing = false
+    ) {
+        $this->initSettings();
+        $this->transport->init($this->transportEntity);
+
+        $this->soapClientMock->expects($withPing ? $this->at(1) : $this->once())
+            ->method('__soapCall')
+            ->with($endpoint, $expectedParameters)
+            ->will($this->returnValue($result));
+
+        if ($withPing) {
+            $this->soapClientMock->expects($this->at(0))
+                ->method('__soapCall')
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
+                ->will(
+                    $this->returnValue(
+                        (object)[
+                            'version' => '1.2.3',
+                            'mage_version' => '1.8.0.0',
+                            'admin_url' => 'http://localhost/admin/'
+                        ]
+                    )
+                );
+        }
+
+        $this->assertEquals($result, call_user_func_array(array($this->transport, $method), $arguments));
+    }
+
+    /**
+     * @return array
+     */
+    public function methodsDataProvider()
+    {
+        return [
+            'getOrderInfo' => [
+                'getOrderInfo',
+                SoapTransport::ACTION_ORDER_INFO,
+                ['sessionId' => $this->sessionId, 'orderIncrementId' => 1],
+                [],
+                [1]
+            ],
+            'getCustomerAddresses' => [
+                'getCustomerAddresses',
+                SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
+                ['sessionId' => $this->sessionId, 'customerId' => 1],
+                [],
+                [1]
+            ],
+            'createCustomer' => [
+                'createCustomer',
+                SoapTransport::ACTION_CUSTOMER_CREATE,
+                ['sessionId' => $this->sessionId, 'customerData' => []],
+                2,
+                [[]]
+            ],
+            'createCustomerAddress' => [
+                'createCustomerAddress',
+                SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
+                ['sessionId' => $this->sessionId, 'customerId' => 3, 'addressData' => []],
+                5,
+                [3, []]
+            ],
+            'updateCustomerAddress' => [
+                'updateCustomerAddress',
+                SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE,
+                ['sessionId' => $this->sessionId, 'addressId' => 3, 'addressData' => []],
+                true,
+                [3, []]
+            ],
+            'getCustomerAddressInfo' => [
+                'getCustomerAddressInfo',
+                SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
+                ['sessionId' => $this->sessionId, 'addressId' => 11],
+                [],
+                [11]
+            ],
+            'getCustomerInfo' => [
+                'getCustomerInfo',
+                SoapTransport::ACTION_CUSTOMER_INFO,
+                ['sessionId' => $this->sessionId, 'customerId' => 3],
+                [],
+                [3]
+            ],
+            'createNewsletterSubscriber' => [
+                'createNewsletterSubscriber',
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
+                ['sessionId' => $this->sessionId, 'subscriberData' => []],
+                [],
+                [[]],
+                true
+            ],
+            'updateNewsletterSubscriber' => [
+                'updateNewsletterSubscriber',
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
+                ['sessionId' => $this->sessionId, 'subscriberId' => 3, 'subscriberData' => []],
+                [],
+                [3, []],
+                true
             ]
         ];
     }

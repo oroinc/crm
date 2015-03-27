@@ -75,7 +75,6 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
         $className = ExtendHelper::buildEnumValueClassName('mage_subscr_status');
         $enumRepo = $manager->getRepository($className);
 
-
         foreach ($this->subscriberData as $data) {
             $subscriber = new NewsletterSubscriber();
 

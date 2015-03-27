@@ -94,6 +94,9 @@ parameters:
 
     orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\TwoWaySyncVoter
     orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
+    orocrm_magento.datagrid.newsletter_subscriber_provider.class:           OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
+
+    orocrm_magento.model.newsletter_subscriber_manager.class:               OroCRM\Bundle\MagentoBundle\Model\NewsletterSubscriberManager
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -429,13 +432,25 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
 
-    orocrm_magento.security.acl.voter.customer:
+    orocrm_magento.security.acl.voter.two_way_sync:
         class: %orocrm_magento.security.acl.voter.customer.class%
+        abstract: true
         arguments:
             - @oro_entity.doctrine_helper
         calls:
-            - [setClassName, [%orocrm_magento.customer.entity.class%]]
             - [setChannelClassName, [%oro_integration.entity.class%]]
+
+    orocrm_magento.security.acl.voter.customer:
+        parent: orocrm_magento.security.acl.voter.two_way_sync
+        calls:
+            - [setClassName, [%orocrm_magento.entity.customer.class%]]
+        tags:
+            - { name: security.voter, priority: 500 }
+
+    orocrm_magento.security.acl.voter.newletter_subscriber:
+        parent: orocrm_magento.security.acl.voter.two_way_sync
+        calls:
+            - [setClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
         tags:
             - { name: security.voter, priority: 500 }
 
@@ -452,3 +467,14 @@ services:
         class: %orocrm_magento.customer_state_handler.class%
         arguments:
             - @orocrm_magento.state_manager
+
+    orocrm_magento.datagrid.newsletter_subscriber_provider:
+        class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %oro_integration.entity.class%
+
+    orocrm_magento.model.newsletter_subscriber_manager:
+        class: %orocrm_magento.model.newsletter_subscriber_manager.class%
+        arguments:
+            - @oro_entity.doctrine_helper

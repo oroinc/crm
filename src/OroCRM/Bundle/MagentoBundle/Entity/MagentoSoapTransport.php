@@ -6,8 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
+
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 /**
  * Class MagentoSoapTransport
@@ -84,6 +86,22 @@ class MagentoSoapTransport extends Transport
      * @ORM\Column(name="is_extension_installed", type="boolean")
      */
     protected $isExtensionInstalled = false;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="extension_version", type="string", length=255, nullable=true)
+     * @Oro\Versioned()
+     */
+    protected $extensionVersion;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="magento_version", type="string", length=255, nullable=true)
+     * @Oro\Versioned()
+     */
+    protected $magentoVersion;
 
     /**
      * @var boolean
@@ -271,6 +289,53 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @return string
+     */
+    public function getExtensionVersion()
+    {
+        return $this->extensionVersion;
+    }
+
+    /**
+     * @param string $extensionVersion
+     * @return MagentoSoapTransport
+     */
+    public function setExtensionVersion($extensionVersion)
+    {
+        $this->extensionVersion = $extensionVersion;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSupportedExtensionVersion()
+    {
+        return $this->getIsExtensionInstalled()
+            && version_compare($this->getExtensionVersion(), SoapTransport::REQUIRED_EXTENSION_VERSION, 'ge');
+    }
+
+    /**
+     * @return string
+     */
+    public function getMagentoVersion()
+    {
+        return $this->magentoVersion;
+    }
+
+    /**
+     * @param string $magentoVersion
+     * @return MagentoSoapTransport
+     */
+    public function setMagentoVersion($magentoVersion)
+    {
+        $this->magentoVersion = $magentoVersion;
+
+        return $this;
+    }
+
+    /**
      * @param boolean $isWsiMode
      *
      * @return MagentoSoapTransport
@@ -298,14 +363,16 @@ class MagentoSoapTransport extends Transport
         if (null === $this->settings) {
             $this->settings = new ParameterBag(
                 [
-                    'api_user'        => $this->getApiUser(),
-                    'api_key'         => $this->getApiKey(),
-                    'wsdl_url'        => $this->getWsdlUrl(),
-                    'sync_range'      => $this->getSyncRange(),
-                    'wsi_mode'        => $this->getIsWsiMode(),
-                    'website_id'      => $this->getWebsiteId(),
+                    'api_user' => $this->getApiUser(),
+                    'api_key' => $this->getApiKey(),
+                    'wsdl_url' => $this->getWsdlUrl(),
+                    'sync_range' => $this->getSyncRange(),
+                    'wsi_mode' => $this->getIsWsiMode(),
+                    'website_id' => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
-                    'initial_sync_start_date' => $this->getInitialSyncStartDate()
+                    'initial_sync_start_date' => $this->getInitialSyncStartDate(),
+                    'extension_version' => $this->getExtensionVersion(),
+                    'magento_version' => $this->getMagentoVersion(),
                 ]
             );
         }
