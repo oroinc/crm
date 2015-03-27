@@ -38,6 +38,10 @@ class NewsletterSubscriberInitialSyncProcessor extends AbstractInitialProcessor
      */
     protected function getSyncedToId()
     {
+        if (!$this->subscriberClassName) {
+            throw new \InvalidArgumentException('NewsletterSubscriber class name is missing');
+        }
+
         /** @var EntityRepository $repository */
         $repository = $this->doctrineRegistry->getRepository($this->subscriberClassName);
         // API return newsletter subscribers sorted by DESC, this means that latest subscriber will have minimal id
