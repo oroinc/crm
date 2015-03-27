@@ -71,10 +71,10 @@ class AggregateStatisticsQuery implements MigrationQuery, ConnectionAwareInterfa
         );
 
         if ($idsToRemove) {
-            $query = 'DELETE FROM orocrm_campaign_email_stats WHERE id IN (' . implode(',', $idsToRemove) . ')';
+            $query = 'DELETE FROM orocrm_campaign_email_stats WHERE id IN (?)';
             $logger->notice($query);
             if (!$dryRun) {
-                $this->connection->executeQuery($query);
+                $this->connection->executeQuery($query, array($idsToRemove));
             }
         }
     }
