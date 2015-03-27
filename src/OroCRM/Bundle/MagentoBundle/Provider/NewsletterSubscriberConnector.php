@@ -7,10 +7,16 @@ class NewsletterSubscriberConnector extends AbstractMagentoConnector
     const IMPORT_JOB_NAME = 'mage_newsletter_subscriber_import';
     const TYPE = 'newsletter_subscriber';
 
+    /** @var string */
+    protected $className;
+
     /**
-     * @var string
+     * @param string $className
      */
-    protected $entityClass;
+    public function setClassName($className)
+    {
+        $this->className = $className;
+    }
 
     /**
      * {@inheritdoc}
@@ -25,7 +31,7 @@ class NewsletterSubscriberConnector extends AbstractMagentoConnector
      */
     public function getImportEntityFQCN()
     {
-        return $this->entityClass;
+        return $this->className;
     }
 
     /**
@@ -42,17 +48,6 @@ class NewsletterSubscriberConnector extends AbstractMagentoConnector
     public function getType()
     {
         return self::TYPE;
-    }
-
-    /**
-     * @param string $entityClass
-     * @return NewsletterSubscriberConnector
-     */
-    public function setEntityClass($entityClass)
-    {
-        $this->entityClass = $entityClass;
-
-        return $this;
     }
 
     /**

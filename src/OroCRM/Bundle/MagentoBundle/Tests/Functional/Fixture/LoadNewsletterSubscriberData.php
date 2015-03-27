@@ -33,6 +33,12 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
             'status' => NewsletterSubscriber::STATUS_SUBSCRIBED,
             'originId' => '123456',
             'reference' => 'newsletter_subscriber'
+        ],
+        [
+            'email' => 'subscriber2@example.com',
+            'status' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
+            'originId' => '1234567',
+            'reference' => 'newsletter_subscriber2'
         ]
     ];
 
@@ -72,10 +78,10 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
         foreach ($this->subscriberData as $data) {
             $subscriber = new NewsletterSubscriber();
 
+            $date = new \DateTime();
+
             /** @var AbstractEnumValue $status */
             $status = $enumRepo->find($data['status']);
-
-            $date = new \DateTime();
 
             $subscriber
                 ->setEmail($data['email'])
@@ -86,8 +92,8 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
                 ->setOrganization($organization)
                 ->setOriginId($data['originId'])
                 ->setChangeStatusAt($date)
-                ->setDataChannel($channel)
-                ->setChannel($integration);
+                ->setChannel($integration)
+                ->setDataChannel($channel);
 
             if (!empty($data['customer'])) {
                 /** @var Customer $customer */

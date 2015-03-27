@@ -227,7 +227,7 @@ services:
             - []
         calls:
             - [setManagerRegistry, [@doctrine]]
-            - [setEntityClass, [%orocrm_magento.entity.newsletter_subscriber.class%]]
+            - [setClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
         tags:
             - { name: oro_integration.connector, type: newsletter_subscriber, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }

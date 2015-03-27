@@ -11,11 +11,6 @@ class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
     const IMPORT_JOB_NAME = 'mage_newsletter_subscriber_import_initial';
 
     /**
-     * @var string
-     */
-    protected $entityClass;
-
-    /**
      * {@inheritdoc}
      */
     public function getLabel()
@@ -29,25 +24,6 @@ class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
     public function getImportJobName()
     {
         return self::IMPORT_JOB_NAME;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getImportEntityFQCN()
-    {
-        return $this->entityClass;
-    }
-
-    /**
-     * @param string $entityClass
-     * @return InitialNewsletterSubscriberConnector
-     */
-    public function setEntityClass($entityClass)
-    {
-        $this->entityClass = $entityClass;
-
-        return $this;
     }
 
     /**
@@ -72,8 +48,9 @@ class InitialNewsletterSubscriberConnector extends AbstractInitialConnector
     protected function initializeFromContext(ContextInterface $context)
     {
         parent::initializeFromContext($context);
-        /** @var NewsletterSubscriberBridgeIterator $iterator */
         $iterator = $this->getSourceIterator();
-        $iterator->setInitialId($context->getOption('initial_id'));
+        if ($iterator instanceof NewsletterSubscriberBridgeIterator) {
+            $iterator->setInitialId($context->getOption('initial_id'));
+        }
     }
 }
