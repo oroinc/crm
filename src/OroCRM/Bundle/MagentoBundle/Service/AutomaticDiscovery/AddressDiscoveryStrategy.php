@@ -44,7 +44,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
      */
     public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity)
     {
-        $addressAlias = $rootAlias.'.'.$field;
+        $addressAlias = $rootAlias . '.' . $field;
 
         $fields = $configuration[Configuration::DISCOVERY_FIELDS_KEY][$field];
         if (!is_array($fields)) {

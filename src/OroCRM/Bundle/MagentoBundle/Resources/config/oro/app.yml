@@ -10,7 +10,7 @@ oro_crm_magento:
 #                phone: ~
 #                country: ~
 #        strategy:
-#            addresses: by_type
+#            addresses: any_of # any_of/by_type/shipping/billing
         options:
             match: first
             empty: false
