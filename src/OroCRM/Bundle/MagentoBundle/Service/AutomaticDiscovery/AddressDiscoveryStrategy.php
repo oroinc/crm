@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
@@ -19,6 +20,16 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
     const STRATEGY_BILLING = 'billing';
 
     /**
+     * @var array
+     */
+    public static $strategies = [
+        self::STRATEGY_ANY_OF,
+        self::STRATEGY_BY_TYPE,
+        self::STRATEGY_BILLING,
+        self::STRATEGY_SHIPPING
+    ];
+
+    /**
      * @var PropertyAccessor
      */
     protected $propertyAccessor;
@@ -31,9 +42,9 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
     /**
      * {@inheritdoc}
      */
-    public function apply(QueryBuilder $qb, $rootAlias, $field, $configuration, $entity)
+    public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity)
     {
-        $addressAlias = $rootAlias . '.' . $field;
+        $addressAlias = $rootAlias.'.'.$field;
 
         $fields = $configuration[Configuration::DISCOVERY_FIELDS_KEY][$field];
         if (!is_array($fields)) {
@@ -47,7 +58,8 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
             throw new RuntimeException('Addresses expected to be an instance of Collection');
         }
 
-        switch ($this->getMatchStrategy($field, $configuration)) {
+        $strategy = $this->getMatchStrategy($field, $configuration);
+        switch ($strategy) {
             case self::STRATEGY_ANY_OF:
                 $this->matchAnyOf($qb, $addressAlias, $addresses, $fields, $configuration);
                 break;
@@ -60,6 +72,10 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
             case self::STRATEGY_BY_TYPE:
                 $this->matchByTypeMatch($qb, $addressAlias, $addresses, $fields, $configuration);
                 break;
+            default:
+                throw new InvalidConfigurationException(
+                    sprintf('Expected one of "%s", "%s" given', implode(',', self::$strategies), $strategy)
+                );
         }
     }
 
@@ -107,19 +123,17 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
         array $configuration
     ) {
         $expr = $qb->expr()->orX();
-        $addressesFound = false;
         $idx = 0;
         foreach ($addresses as $address) {
             $addressTypes = $this->getAddressTypes($address);
-            if (!empty($addressTypes)) {
-                $addressesFound = true;
-                $alias = 'address' . $idx;
+            if ($addressTypes) {
+                $alias = 'address'.$idx;
                 $qb->leftJoin($addressAlias, $alias);
                 $expr->add($this->getMatchByTypeExpr($qb, $alias, $address, $fields, $configuration, $addressTypes));
                 $idx++;
             }
         }
-        if ($addressesFound) {
+        if ($expr->count()) {
             $qb->andWhere($expr);
         }
     }
@@ -145,7 +159,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
 
         foreach ($addresses as $address) {
             $addressTypes = $this->getAddressTypes($address);
-            if (in_array($type, $addressTypes)) {
+            if (in_array($type, $addressTypes, true)) {
                 $qb->andWhere($this->getMatchByTypeExpr($qb, $alias, $address, $fields, $configuration, [$type]));
                 break;
             }
@@ -159,7 +173,8 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
      * @param array $fields
      * @param array $configuration
      * @param array $types
-     * @return \Doctrine\ORM\Query\Expr\Andx
+     *
+     * @return Andx
      */
     protected function getMatchByTypeExpr(
         QueryBuilder $qb,
@@ -169,7 +184,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
         array $configuration,
         array $types
     ) {
-        $joinedTypes = join('_', $types);
+        $joinedTypes = implode('_', $types);
         $expr = $this->getAddressMatchExpr($qb, $address, $fields, $alias, $joinedTypes, $configuration);
 
         $typesAlias = $alias . 'Types';
@@ -190,7 +205,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
      * @param string $alias
      * @param int $idx
      * @param array $configuration
-     * @return \Doctrine\ORM\Query\Expr\Andx
+     * @return Andx
      */
     protected function getAddressMatchExpr(
         QueryBuilder $qb,
@@ -224,11 +239,8 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
         if (!empty($configuration[Configuration::DISCOVERY_STRATEGY_KEY][$field])) {
             $strategy = $configuration[Configuration::DISCOVERY_STRATEGY_KEY][$field];
         }
-        if (!in_array(
-            $strategy,
-            [self::STRATEGY_ANY_OF, self::STRATEGY_BY_TYPE, self::STRATEGY_BILLING, self::STRATEGY_SHIPPING]
-        )
-        ) {
+
+        if (!in_array($strategy, self::$strategies, true)) {
             $strategy = self::STRATEGY_ANY_OF;
         }
 
@@ -237,13 +249,14 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
 
     /**
      * @param object $address
+     *
      * @return array
      */
     protected function getAddressTypes($address)
     {
         $addressTypes = $this->propertyAccessor->getValue($address, 'types');
         if ($addressTypes) {
-            $addressTypes = array_map(
+            return array_map(
                 function ($type) {
                     if ($type instanceof AddressType) {
                         return $type->getName();
@@ -253,10 +266,8 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
                 },
                 $addressTypes->toArray()
             );
-        } else {
-            $addressTypes = [];
         }
 
-        return $addressTypes;
+        return [];
     }
 }

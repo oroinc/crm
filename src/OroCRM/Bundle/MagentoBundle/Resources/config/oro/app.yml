@@ -4,12 +4,13 @@ oro_crm_magento:
             firstName: ~
             lastName: ~
             email: ~
-            addresses:
-                postalCode: ~
-                phone: ~
-                country: ~
-        strategy:
-            addresses: by_type
+# use next configuration to match by address
+#            addresses:
+#                postalCode: ~
+#                phone: ~
+#                country: ~
+#        strategy:
+#            addresses: by_type
         options:
             match: first
             empty: false
