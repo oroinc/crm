@@ -92,6 +92,9 @@ parameters:
 
     orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\TwoWaySyncVoter
     orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
+
+    orocrm_magento.service.automatic_discovery.class:                       OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery
+    orocrm_magento.strategy.automatic_discovery.default.class:              OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -450,3 +453,16 @@ services:
         class: %orocrm_magento.customer_state_handler.class%
         arguments:
             - @orocrm_magento.state_manager
+
+    orocrm_magento.strategy.automatic_discovery.default:
+        class: %orocrm_magento.strategy.automatic_discovery.default.class%
+
+    orocrm_magento.service.automatic_discovery:
+        class: %orocrm_magento.service.automatic_discovery.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - @orocrm_magento.strategy.automatic_discovery.default
+            - %orocrm_magento.customer.entity.class%
+            - []
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }

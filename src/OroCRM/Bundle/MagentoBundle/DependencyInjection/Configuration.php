@@ -10,8 +10,13 @@ use OroCRM\Bundle\MagentoBundle\Exception\InvalidConfigurationException;
 class Configuration implements ConfigurationInterface
 {
     const DISCOVERY_NODE = 'account_discovery';
+    const DISCOVERY_MATCH_KEY = 'match';
     const DISCOVERY_MATCH_LATEST = 'latest';
     const DISCOVERY_MATCH_FIRST = 'first';
+    const DISCOVERY_EMPTY_KEY = 'empty';
+    const DISCOVERY_OPTIONS_KEY = 'options';
+    const DISCOVERY_STRATEGY_KEY = 'strategy';
+    const DISCOVERY_FIELDS_KEY = 'fields';
 
     /**
      * {@inheritdoc}
@@ -54,21 +59,21 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->arrayNode(self::DISCOVERY_NODE)
                     ->children()
-                        ->arrayNode('fields')
+                        ->arrayNode(self::DISCOVERY_FIELDS_KEY)
                             ->prototype('variable')
                             ->end()
                         ->end()
-                        ->arrayNode('strategy')
+                        ->arrayNode(self::DISCOVERY_STRATEGY_KEY)
                             ->prototype('variable')
                             ->end()
                         ->end()
-                        ->arrayNode('options')
+                        ->arrayNode(self::DISCOVERY_OPTIONS_KEY)
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->booleanNode('empty')
+                                ->booleanNode(self::DISCOVERY_EMPTY_KEY)
                                     ->defaultFalse()
                                 ->end()
-                                ->enumNode('match')
+                                ->enumNode(self::DISCOVERY_MATCH_KEY)
                                     ->values([self::DISCOVERY_MATCH_LATEST, self::DISCOVERY_MATCH_FIRST])
                                     ->defaultValue(self::DISCOVERY_MATCH_LATEST)
                                 ->end()
