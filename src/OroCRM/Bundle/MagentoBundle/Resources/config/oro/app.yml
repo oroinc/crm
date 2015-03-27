@@ -1,0 +1,14 @@
+oro_crm_magento:
+    sync_settings:
+        initial_import_step_interval: 7 days
+    account_discovery:
+        fields:
+            firstName: ~
+            lastName: ~
+            address:
+                postalCode: ~
+        strategy:
+            address: billing_only
+        options:
+            match: first
+            empty: false
