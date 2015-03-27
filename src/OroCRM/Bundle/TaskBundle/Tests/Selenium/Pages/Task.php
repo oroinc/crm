@@ -81,6 +81,7 @@ class Task extends AbstractPageEntity
             $this->dueDate->click(); // focus
             $this->dueDate->value($dueDate[1]);
             $this->dueTime->click(); // focus
+            $this->dueTime->clear();
             $this->dueTime->value($dueDate[2]);
         } else {
             throw new Exception("Value {$dueDate} is not a valid date");
