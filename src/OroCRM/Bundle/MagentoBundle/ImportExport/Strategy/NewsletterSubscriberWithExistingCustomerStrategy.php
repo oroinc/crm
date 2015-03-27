@@ -30,6 +30,10 @@ class NewsletterSubscriberWithExistingCustomerStrategy extends NewsletterSubscri
      */
     protected function isProcessingAllowed(NewsletterSubscriber $newsletterSubscriber)
     {
+        if (!$newsletterSubscriber->getCustomer()) {
+            return false;
+        }
+
         $customerId = $newsletterSubscriber->getCustomer()->getOriginId();
 
         if (!$customerId) {

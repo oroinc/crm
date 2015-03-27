@@ -6,12 +6,15 @@ use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\UserBundle\Entity\UserManager;
 use Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadAdminUserData;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
@@ -30,6 +33,12 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
             'status' => NewsletterSubscriber::STATUS_SUBSCRIBED,
             'originId' => '123456',
             'reference' => 'newsletter_subscriber'
+        ],
+        [
+            'email' => 'subscriber2@example.com',
+            'status' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
+            'originId' => '1234567',
+            'reference' => 'newsletter_subscriber2'
         ]
     ];
 
@@ -60,20 +69,31 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
 
+        /** @var Integration $channel */
+        $integration = $this->getReference('integration');
+
+        $className = ExtendHelper::buildEnumValueClassName('mage_subscr_status');
+        $enumRepo = $manager->getRepository($className);
+
+
         foreach ($this->subscriberData as $data) {
             $subscriber = new NewsletterSubscriber();
 
             $date = new \DateTime();
 
+            /** @var AbstractEnumValue $status */
+            $status = $enumRepo->find($data['status']);
+
             $subscriber
                 ->setEmail($data['email'])
-                ->setStatus($data['status'])
+                ->setStatus($status)
                 ->setConfirmCode(uniqid())
                 ->setStore($store)
                 ->setOwner($admin)
                 ->setOrganization($organization)
                 ->setOriginId($data['originId'])
                 ->setChangeStatusAt($date)
+                ->setChannel($integration)
                 ->setDataChannel($channel);
 
             if (!empty($data['customer'])) {
