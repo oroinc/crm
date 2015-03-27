@@ -99,7 +99,7 @@ class AutomaticDiscovery
 
         // Skip current entity
         $id = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-        if (!empty($id)) {
+        if (false && !empty($id)) {
             $idParameter = ':' . $idName;
             $qb->andWhere($qb->expr()->neq($idFieldName, $idParameter))
                 ->setParameter($idParameter, $id);
