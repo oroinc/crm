@@ -95,6 +95,8 @@ parameters:
 
     orocrm_magento.service.automatic_discovery.class:                       OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery
     orocrm_magento.strategy.automatic_discovery.default.class:              OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
+
+    orocrm_magento.action.automatic_discovery.class:                        OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -466,3 +468,11 @@ services:
             - []
         tags:
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.action.automatic_discovery:
+        class: %orocrm_magento.action.automatic_discovery.class%
+        arguments:
+            - @oro_workflow.context_accessor
+            - @orocrm_magento.service.automatic_discovery
+        tags:
+            - { name: oro_workflow.action, alias: automatic_discovery }

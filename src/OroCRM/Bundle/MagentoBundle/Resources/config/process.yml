@@ -92,6 +92,18 @@ definitions:
                                           method: addPhone
                                           method_parameters: [$.magentoAddress.contactPhone]
 
+            - @automatic_discovery:
+                conditions: # if Account not exists
+                    @empty: $account
+                parameters:
+                    entity: $.data
+                    attribute: $.matchedEntity
+            - @assign_value: # check matched entity and its account
+                conditions:
+                    @not_empty: $.matchedEntity
+                    @not_empty: $.matchedEntity.account
+                parameters: [$account, $.matchedEntity.account]
+
             - @tree: # set Account
                 conditions: # if Account not exists
                     @empty: $account
