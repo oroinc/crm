@@ -6,7 +6,7 @@ use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
-class NewsletterSubscriberPermissionProvider extends  AbstractTwoWaySyncActionPermissionProvider
+class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
     /**
      * @param ResultRecordInterface $record
@@ -23,18 +23,19 @@ class NewsletterSubscriberPermissionProvider extends  AbstractTwoWaySyncActionPe
         }
 
         $isTwoWaySyncEnabled = $this->isTwoWaySyncEnable($record);
+        $isSupportedExtensionVersion = $this->isSupportedExtensionVersion($record);
         $statusId = (int)$record->getValue('newsletterSubscriberStatusId');
         $isSubscribed = $statusId === NewsletterSubscriber::STATUS_SUBSCRIBED;
         $customerId = $record->getValue('customerOriginId');
 
-        // @todo: check extension version
+        $isActionAllowed = $isTwoWaySyncEnabled && $isSupportedExtensionVersion && $customerId;
 
         if (array_key_exists('subscribe', $permissions)) {
-            $permissions['subscribe'] = $isTwoWaySyncEnabled && !$isSubscribed && $customerId;
+            $permissions['subscribe'] = $isActionAllowed && !$isSubscribed;
         }
 
         if (array_key_exists('unsubscribe', $permissions)) {
-            $permissions['unsubscribe'] = $isTwoWaySyncEnabled && $isSubscribed && $customerId;
+            $permissions['unsubscribe'] = $isActionAllowed && $isSubscribed;
         }
 
         return $permissions;

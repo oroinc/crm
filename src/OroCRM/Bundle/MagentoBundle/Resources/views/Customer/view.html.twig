@@ -36,9 +36,7 @@
             })
         }}
     {% endif %}
-    {% if entity.newsletterSubscriber is not empty %}
-        {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity.newsletterSubscriber } %}
-    {% endif %}
+    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity.newsletterSubscriber, customer: entity } %}
     {% if resource_granted('EDIT', entity) %}
         {{ UI.editButton({
             'path' : path('orocrm_magento_customer_update', { 'id': entity.id }),

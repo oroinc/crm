@@ -30,10 +30,7 @@
 
             {% if entity is defined and entity.id is not empty %}
                 {% if entity.isExtensionInstalled %}
-                    {% if entity.supportedExtensionVersion %}
-                        {% set message = 'orocrm.magento.magentosoaptransport.message.uptodate_bridge'|trans({'%extension_version%': entity.extensionVersion}) %}
-                        {% set messageType = 'success' %}
-                    {% else %}
+                    {% if not entity.supportedExtensionVersion %}
                         {% set message = 'orocrm.magento.magentosoaptransport.message.outdated_brige'|trans({'%extension_version%': entity.extensionVersion}) %}
                         {% set messageType = 'warning' %}
                     {% endif %}
@@ -42,7 +39,9 @@
                     {% set messageType = 'info' %}
                 {% endif %}
 
-                <div class="alert alert-{{ messageType }} connection-status">{{ message }}</div>
+                {% if messageType is defined and message is defined %}
+                    <div class="alert alert-{{ messageType }} connection-status">{{ message }}</div>
+                {% endif %}
             {% endif %}
         </div>
     </div>

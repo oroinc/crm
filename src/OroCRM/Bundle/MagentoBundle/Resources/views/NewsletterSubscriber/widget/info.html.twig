@@ -5,7 +5,6 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.magento.newslettersubscriber.email.label'|trans, entity.email) }}
-            {{ UI.renderProperty('orocrm.magento.newslettersubscriber.status.label'|trans, entity.status.name) }}
             {{ UI.renderProperty('orocrm.magento.newslettersubscriber.change_status_at.label'|trans, entity.changeStatusAt|oro_format_date) }}
 
             {% if useCustomer is defined and useCustomer %}

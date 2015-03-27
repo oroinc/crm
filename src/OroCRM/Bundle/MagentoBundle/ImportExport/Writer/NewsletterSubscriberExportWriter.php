@@ -76,7 +76,7 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
                     )
                 );
             } else {
-                $this->logger->error(sprintf('Newsletter Subscriber with id %s was not updated', $subscriberId));
+                $this->logger->error(sprintf('Newsletter Subscriber with data %s was not created', json_encode($item)));
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());

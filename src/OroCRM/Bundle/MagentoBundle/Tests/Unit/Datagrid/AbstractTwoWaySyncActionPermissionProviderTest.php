@@ -34,10 +34,16 @@ abstract class AbstractTwoWaySyncActionPermissionProviderTest extends \PHPUnit_F
             $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
         }
 
+        $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
+        $transport->expects($this->any())->method('isSupportedExtensionVersion')->willReturn(true);
+
         $settings = Object::create($settings);
         $channel->expects($this->any())
             ->method('getSynchronizationSettings')
             ->will($this->returnValue($settings));
+        $channel->expects($this->any())
+            ->method('getTransport')
+            ->will($this->returnValue($transport));
 
         return $channel;
     }

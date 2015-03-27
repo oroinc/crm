@@ -270,7 +270,6 @@ orocrm:
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
                 outdated_brige: OroBridge v.%extension_version% is used—outdated version; only customers and orders will be synced
-                uptodate_bridge: OroBridge v.%extension_version% is used; the version is current
 
         order:
             entity_label:        Magento Order

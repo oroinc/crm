@@ -36,6 +36,7 @@ define(function (require) {
 
                     if (response.successful) {
                         messenger.notificationMessage('success', __('orocrm.magento.subscription.success'));
+                        mediator.execute('refreshPage');
                     } else {
                         messenger.notificationMessage('error', __('orocrm.magento.subscription.error'));
                         console.warn(response.error);
