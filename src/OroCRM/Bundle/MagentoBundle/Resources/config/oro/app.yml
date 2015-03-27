@@ -5,10 +5,7 @@ oro_crm_magento:
         fields:
             firstName: ~
             lastName: ~
-            address:
-                postalCode: ~
-        strategy:
-            address: billing_only
+            email: ~
         options:
             match: first
             empty: false
