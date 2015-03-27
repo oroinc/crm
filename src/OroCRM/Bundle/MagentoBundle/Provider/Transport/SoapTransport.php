@@ -59,6 +59,8 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
+    const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
+    const ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE = 'newsletterSubscriberUpdate';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
@@ -429,7 +431,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function createCustomerAddress($customerId, $item)
+    public function createCustomerAddress($customerId, array $item)
     {
         return $this->call(
             SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
@@ -440,7 +442,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function updateCustomerAddress($customerAddressId, $item)
+    public function updateCustomerAddress($customerAddressId, array $item)
     {
         return $this->call(
             SoapTransport::ACTION_CUSTOMER_ADDRESS_UPDATE,
@@ -471,6 +473,36 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         if ($this->isSupportedExtensionVersion()) {
             return new NewsletterSubscriberBridgeIterator($this, $this->settings->all());
+        }
+
+        throw new ExtensionRequiredException();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createNewsletterSubscriber(array $subscriberData)
+    {
+        if ($this->isExtensionInstalled()) {
+            return $this->call(
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
+                ['subscriberData' => $subscriberData]
+            );
+        }
+
+        throw new ExtensionRequiredException();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
+    {
+        if ($this->isExtensionInstalled()) {
+            return $this->call(
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
+                ['subscriberId' => $subscriberId, 'subscriberData' => $subscriberData]
+            );
         }
 
         throw new ExtensionRequiredException();

@@ -65,6 +65,10 @@ orocrm:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
+                is_subscriber:
+                    label: Is a Subsciber
+                    yes: Yes
+                    no: No
         channel_type:
             label:  Magento
         transport:
@@ -266,7 +270,6 @@ orocrm:
             message:
                 native_soap: Native Magento API is used; only customers and orders will be synced
                 outdated_brige: OroBridge v.%extension_version% is used—outdated version; only customers and orders will be synced
-                uptodate_bridge: OroBridge v.%extension_version% is used; the version is current
 
         order:
             entity_label:        Magento Order
@@ -471,6 +474,9 @@ orocrm:
                 not_active: Not active
                 unsubscribed: Unsubscribed
                 unconfirmed: Unconfirmed
+            action:
+                subscribe: Subscribe
+                unsubscribe: Unsubscribe
             email.label:         Email
             status.label:        Status
             store.label:         Store

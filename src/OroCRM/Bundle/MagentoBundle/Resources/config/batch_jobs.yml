@@ -47,6 +47,20 @@ connector:
                     parameters:
                         batch_size: 1
 
+        magento_newsletter_subscriber_export:
+            title: 'Export Newsletter Subscriber to Magento'
+            type: export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.importexport.reader.entity
+                        processor: orocrm_magento.importexport.processor.newsletter_subscriber_export
+                        writer:    orocrm_magento.importexport.writer.newsletter_subscriber
+                    parameters:
+                        batch_size: 1
+
         magento_customer_address_export:
             title: 'Export Magento Customer Address to Magento'
             type: export

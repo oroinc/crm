@@ -467,16 +467,38 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
      * @param $expectedParameters
      * @param $result
      * @param array|null $arguments
+     * @param bool $withPing
      */
-    public function testCalls($method, $endpoint, $expectedParameters, $result, array $arguments = null)
-    {
+    public function testCalls(
+        $method,
+        $endpoint,
+        $expectedParameters,
+        $result,
+        array $arguments = null,
+        $withPing = false
+    ) {
         $this->initSettings();
         $this->transport->init($this->transportEntity);
 
-        $this->soapClientMock->expects($this->once())
+        $this->soapClientMock->expects($withPing ? $this->at(1) : $this->once())
             ->method('__soapCall')
             ->with($endpoint, $expectedParameters)
             ->will($this->returnValue($result));
+
+        if ($withPing) {
+            $this->soapClientMock->expects($this->at(0))
+                ->method('__soapCall')
+                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
+                ->will(
+                    $this->returnValue(
+                        (object)[
+                            'version' => '1.2.3',
+                            'mage_version' => '1.8.0.0',
+                            'admin_url' => 'http://localhost/admin/'
+                        ]
+                    )
+                );
+        }
 
         $this->assertEquals($result, call_user_func_array(array($this->transport, $method), $arguments));
     }
@@ -535,6 +557,22 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ['sessionId' => $this->sessionId, 'customerId' => 3],
                 [],
                 [3]
+            ],
+            'createNewsletterSubscriber' => [
+                'createNewsletterSubscriber',
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
+                ['sessionId' => $this->sessionId, 'subscriberData' => []],
+                [],
+                [[]],
+                true
+            ],
+            'updateNewsletterSubscriber' => [
+                'updateNewsletterSubscriber',
+                SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
+                ['sessionId' => $this->sessionId, 'subscriberId' => 3, 'subscriberData' => []],
+                [],
+                [3, []],
+                true
             ]
         ];
     }

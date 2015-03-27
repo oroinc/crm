@@ -33,6 +33,27 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
         return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToExportFormat(array $exportedRecord, $skipNullValues = true)
+    {
+        $exportedRecord = parent::convertToExportFormat($exportedRecord, $skipNullValues);
+
+        // store_id can be 0
+        if (isset($exportedRecord['store']['store_id'])) {
+            $exportedRecord['store_id'] = $exportedRecord['store']['store_id'];
+            unset($exportedRecord['store']);
+        }
+
+        // Do not clear confirmCode until its empty
+        if (empty($exportedRecord['subscriber_confirm_code'])) {
+            unset($exportedRecord['subscriber_confirm_code']);
+        }
+
+        return $exportedRecord;
+    }
+
 
     /**
      * {@inheritdoc}
