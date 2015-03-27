@@ -187,4 +187,19 @@ interface MagentoTransportInterface extends TransportInterface
      * @return bool
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
+
+    /**
+     * @return bool
+     */
+    public function isSupportedExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getMagentoVersion();
 }

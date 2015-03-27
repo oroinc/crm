@@ -57,7 +57,7 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
     {
         $connectors = [];
         $initialConnectors = [];
-        $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
+        $isSupportedExtensionVersion = $this->transportEntity->isSupportedExtensionVersion();
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
@@ -67,8 +67,8 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
                     continue;
                 }
 
-                if ($isExtensionInstalled
-                    || (!$isExtensionInstalled && !$connector instanceof ExtensionAwareInterface)
+                if ($isSupportedExtensionVersion
+                    || (!$isSupportedExtensionVersion && !$connector instanceof ExtensionAwareInterface)
                 ) {
                     array_push($initialConnectors, $connectorName . InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX);
                     array_push($connectors, $connectorName);
