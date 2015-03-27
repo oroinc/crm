@@ -95,7 +95,7 @@ parameters:
 
     orocrm_magento.service.automatic_discovery.class:                       OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery
     orocrm_magento.strategy.automatic_discovery.default.class:              OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
-
+    orocrm_magento.strategy.automatic_discovery.addresses.class:            OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
     orocrm_magento.action.automatic_discovery.class:                        OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction
 services:
     orocrm_magento.transport.soap_transport:
@@ -459,6 +459,9 @@ services:
     orocrm_magento.strategy.automatic_discovery.default:
         class: %orocrm_magento.strategy.automatic_discovery.default.class%
 
+    orocrm_magento.strategy.automatic_discovery.addresses:
+        class: %orocrm_magento.strategy.automatic_discovery.addresses.class%
+
     orocrm_magento.service.automatic_discovery:
         class: %orocrm_magento.service.automatic_discovery.class%
         arguments:
@@ -466,6 +469,8 @@ services:
             - @orocrm_magento.strategy.automatic_discovery.default
             - %orocrm_magento.customer.entity.class%
             - []
+        calls:
+            - [addStrategy, ['addresses', @orocrm_magento.strategy.automatic_discovery.addresses]]
         tags:
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 

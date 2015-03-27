@@ -6,9 +6,7 @@ use Doctrine\ORM\QueryBuilder;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
-
-class DefaultDiscoveryStrategy implements DiscoveryStrategyInterface
+class DefaultDiscoveryStrategy extends AbstractDiscoveryStrategy
 {
     /**
      * {@inheritdoc}
@@ -16,23 +14,12 @@ class DefaultDiscoveryStrategy implements DiscoveryStrategyInterface
     public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $fieldValue = $propertyAccessor->getValue($entity, $field);
 
         $parameterName = ':' . $field;
         $qbFieldName = $rootAlias . '.' . $field;
-        $fieldExpr = $qb->expr()->eq($qbFieldName, $parameterName);
 
-        $options = $configuration[Configuration::DISCOVERY_OPTIONS_KEY];
-        if (!empty($options[Configuration::DISCOVERY_EMPTY_KEY])) {
-            $fieldExpr = $qb->expr()->orX(
-                $fieldExpr,
-                $qb->expr()->eq($qbFieldName, ':emptyValue'),
-                $qb->expr()->isNull($qbFieldName)
-            );
-            $qb->setParameter('emptyValue', '');
-        }
-
-        $fieldValue = $propertyAccessor->getValue($entity, $field);
-        $qb->andWhere($fieldExpr)
+        $qb->andWhere($this->getFieldExpr($qb, $qbFieldName, $parameterName, $configuration))
             ->setParameter($parameterName, $fieldValue);
     }
 }
