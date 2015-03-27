@@ -19,6 +19,12 @@ class TasksTest extends Selenium2TestCase
     {
         $subject = 'Tasks_' . mt_rand();
 
+        // set DueDate = now + 1 day to prevent "Due date must not be in the past" error
+        $dueDate = new \DateTime('now');
+        $dueDateValue = $dueDate
+            ->add(new \DateInterval('P1D'))
+            ->format('M j, Y g:i A');
+
         $login = $this->login();
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
@@ -27,7 +33,7 @@ class TasksTest extends Selenium2TestCase
             ->assertTitle('Create Task - Tasks - Activities')
             ->setSubject($subject)
             ->setDescription($subject)
-            ->setDueDate('Apr 9, 2014 12:51 PM')
+            ->setDueDate($dueDateValue)
             ->save()
             // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
             ->assertTitle("{$subject} - Tasks - Activities")

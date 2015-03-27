@@ -45,8 +45,8 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractFixture
             $oldLifetime = (float)$customer->getLifetime();
             $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
             if ($newLifetime !== $oldLifetime) {
+                $customer = $manager->merge($customer);
                 $customer->setLifetime($newLifetime);
-                $manager->persist($customer);
                 $processed++;
             }
 
