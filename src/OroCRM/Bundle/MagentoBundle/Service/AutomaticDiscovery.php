@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -93,7 +94,7 @@ class AutomaticDiscovery
         if ($this->configuration[Configuration::DISCOVERY_OPTIONS_KEY][Configuration::DISCOVERY_MATCH_KEY]
             === Configuration::DISCOVERY_MATCH_LATEST
         ) {
-            $qb->orderBy($idFieldName, 'DESC');
+            $qb->orderBy($idFieldName, Criteria::DESC);
         }
 
         // Skip current entity
@@ -130,8 +131,8 @@ class AutomaticDiscovery
     {
         if (array_key_exists($fieldName, $this->strategies)) {
             return $this->strategies[$fieldName];
-        } else {
-            return $this->defaultStrategy;
         }
+
+        return $this->defaultStrategy;
     }
 }

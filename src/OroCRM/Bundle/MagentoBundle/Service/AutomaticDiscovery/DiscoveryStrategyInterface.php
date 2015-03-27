@@ -10,9 +10,9 @@ interface DiscoveryStrategyInterface
      * @param QueryBuilder $qb
      * @param string $rootAlias
      * @param string $field
-     * @param mixed $configuration
+     * @param array $configuration
      * @param object $entity
      * @return
      */
-    public function apply(QueryBuilder $qb, $rootAlias, $field, $configuration, $entity);
+    public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity);
 }

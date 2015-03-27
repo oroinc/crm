@@ -2,18 +2,21 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
 use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
+use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 
 class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface
      */
     protected $defaultStrategy;
 
@@ -22,7 +25,11 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityClass;
 
-    protected function getDiscovery($config)
+    /**
+     * @param array $config
+     * @return AutomaticDiscovery
+     */
+    protected function getDiscovery(array $config)
     {
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
@@ -194,6 +201,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
             ->method('apply')
             ->with($qb, AutomaticDiscovery::ROOT_ALIAS, 'test1', $config[Configuration::DISCOVERY_NODE], $entity);
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|DiscoveryStrategyInterface $customStrategy */
         $customStrategy = $this
             ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface')
             ->getMock();

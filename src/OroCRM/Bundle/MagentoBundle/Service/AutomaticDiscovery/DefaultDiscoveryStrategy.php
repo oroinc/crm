@@ -13,7 +13,7 @@ class DefaultDiscoveryStrategy implements DiscoveryStrategyInterface
     /**
      * {@inheritdoc}
      */
-    public function apply(QueryBuilder $qb, $rootAlias, $field, $configuration, $entity)
+    public function apply(QueryBuilder $qb, $rootAlias, $field, array $configuration, $entity)
     {
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
