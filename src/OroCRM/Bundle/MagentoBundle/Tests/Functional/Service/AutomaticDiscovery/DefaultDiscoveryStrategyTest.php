@@ -30,7 +30,6 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
 
     /**
      * @param string $reference
-     * @param string $strategy
      * @param array $expected
      *
      * @dataProvider strategyDataProvider
@@ -62,8 +61,12 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
 
 
         $expected = array_map(
-            function ($reference) {
-                return $this->getReference($reference);
+            function ($expectedReference) use ($reference, $entity) {
+                if ($reference === $expectedReference) {
+                    return $entity;
+                }
+
+                return $this->getReference($expectedReference);
             },
             $expected
         );
