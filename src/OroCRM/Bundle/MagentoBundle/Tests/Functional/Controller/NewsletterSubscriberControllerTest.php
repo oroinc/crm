@@ -87,7 +87,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 2
                 ]
             ],
             'filters' => [
@@ -103,7 +103,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 2
                 ]
             ],
             'no result' => [

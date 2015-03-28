@@ -19,7 +19,8 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-                    - (CASE WHEN newsletterSubscriberStatus.id = OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED THEN true ELSE false END) as isSubscriber
+#                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
+                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as customerOriginId
                 from:

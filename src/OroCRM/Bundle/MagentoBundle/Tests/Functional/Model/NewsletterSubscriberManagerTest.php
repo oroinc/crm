@@ -44,7 +44,7 @@ class NewsletterSubscriberManagerTest extends WebTestCase
 
         $newsletterSubscriberBase = $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->findOneBy([]);
+            ->findOneBy(['customer' => $customer->getId()]);
         $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
 
         $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')

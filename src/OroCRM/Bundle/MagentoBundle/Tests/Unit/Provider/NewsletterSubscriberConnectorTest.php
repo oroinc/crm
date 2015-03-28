@@ -27,5 +27,4 @@ class NewsletterSubscriberConnectorTest extends MagentoConnectorTestCase
     {
         return 'getNewsletterSubscribers';
     }
-
 }
