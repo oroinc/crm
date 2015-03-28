@@ -158,11 +158,7 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
         $qb->leftJoin($addressAlias, $alias);
 
         foreach ($addresses as $address) {
-            $addressTypes = $this->getAddressTypes($address);
-            if (in_array($type, $addressTypes, true)) {
-                $qb->andWhere($this->getMatchByTypeExpr($qb, $alias, $address, $fields, $configuration, [$type]));
-                break;
-            }
+            $qb->andWhere($this->getMatchByTypeExpr($qb, $alias, $address, $fields, $configuration, [$type]));
         }
     }
 

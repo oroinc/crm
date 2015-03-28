@@ -4,9 +4,14 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Service\AutomaticDiscover
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy;
 
+/**
+ * @dbIsolation
+ */
 class AddressDiscoveryStrategyTest extends WebTestCase
 {
     /**
@@ -18,33 +23,52 @@ class AddressDiscoveryStrategyTest extends WebTestCase
     {
         $this->initClient();
 
+        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadAddressDiscoveryData']);
+
         $this->strategy = $this->getContainer()->get('orocrm_magento.strategy.automatic_discovery.addresses');
     }
 
     /**
+     * @param string $reference
      * @param string $strategy
      * @param array $expected
      *
-     * @strategyDataProvider
+     * @dataProvider strategyDataProvider
      */
-    public function testApply($strategy, array $expected)
+    public function testApply($reference, $strategy, array $expected)
     {
-        $entity = null;
+        /** @var Customer $entity */
+        $entity = $this->getReference($reference);
 
-        $em = $this->getContainer()->get('doctrine')->getRepository('OroCRMMagentoBundle:Customer');
-        $qb = $em->createQueryBuilder('c');
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $repo = $em->getRepository('OroCRMMagentoBundle:Customer');
+
+        $qb = $repo->createQueryBuilder(AutomaticDiscovery::ROOT_ALIAS);
 
         $this->strategy->apply(
             $qb,
             AutomaticDiscovery::ROOT_ALIAS,
             'addresses',
             [
-                'fields' => ['addresses' => ['postalCode']],
-                'strategy' => ['addresses' => $strategy]
+                Configuration::DISCOVERY_FIELDS_KEY => ['addresses' => ['postalCode' => []], 'email' => []],
+                Configuration::DISCOVERY_STRATEGY_KEY => ['addresses' => $strategy],
+                Configuration::DISCOVERY_OPTIONS_KEY => [
+                    Configuration::DISCOVERY_MATCH_KEY => Configuration::DISCOVERY_MATCH_FIRST,
+                    Configuration::DISCOVERY_EMPTY_KEY => false
+                ]
             ],
             $entity
         );
 
+
+        $expected = array_map(
+            function ($reference) {
+                return $this->getReference($reference);
+            },
+            $expected
+        );
+
+        $this->assertSameSize($expected, $qb->getQuery()->getResult());
         $this->assertEquals($expected, $qb->getQuery()->getResult());
     }
 
@@ -53,6 +77,47 @@ class AddressDiscoveryStrategyTest extends WebTestCase
      */
     public function strategyDataProvider()
     {
-        return [];
+        return [
+            'match any to billing' => [
+                'discovery_customer1',
+                AddressDiscoveryStrategy::STRATEGY_ANY_OF,
+                ['discovery_customer1', 'discovery_customer3', 'discovery_customer5']
+            ],
+            'match any to shipping' => [
+                'discovery_customer3',
+                AddressDiscoveryStrategy::STRATEGY_ANY_OF,
+                ['discovery_customer1', 'discovery_customer3', 'discovery_customer5']
+            ],
+            'match typed billing' => [
+                'discovery_customer1',
+                AddressDiscoveryStrategy::STRATEGY_BY_TYPE,
+                ['discovery_customer1', 'discovery_customer5']
+            ],
+            'match typed shipping' => [
+                'discovery_customer3',
+                AddressDiscoveryStrategy::STRATEGY_BY_TYPE,
+                ['discovery_customer3']
+            ],
+            'match exactly billing to billing' => [
+                'discovery_customer1',
+                AddressDiscoveryStrategy::STRATEGY_BILLING,
+                ['discovery_customer1', 'discovery_customer5']
+            ],
+            'match exactly shipping to billing' => [
+                'discovery_customer3',
+                AddressDiscoveryStrategy::STRATEGY_BILLING,
+                ['discovery_customer1', 'discovery_customer5']
+            ],
+            'match exactly billing to shipping' => [
+                'discovery_customer1',
+                AddressDiscoveryStrategy::STRATEGY_SHIPPING,
+                ['discovery_customer3']
+            ],
+            'match exactly shipping to shipping' => [
+                'discovery_customer3',
+                AddressDiscoveryStrategy::STRATEGY_SHIPPING,
+                ['discovery_customer3']
+            ]
+        ];
     }
 }
