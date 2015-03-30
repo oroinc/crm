@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -91,12 +93,17 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var array */
     protected $dependencies = [];
 
+    /** @var WsdlManager */
+    protected $wsdlManager;
+
     /**
      * @param Mcrypt $encoder
+     * @param WsdlManager $wsdlManager
      */
-    public function __construct(Mcrypt $encoder)
+    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager)
     {
         $this->encoder = $encoder;
+        $this->wsdlManager = $wsdlManager;
     }
 
     /**
@@ -104,6 +111,15 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function init(Transport $transportEntity)
     {
+        if ($transportEntity instanceof MagentoSoapTransport) {
+            $wsdlUrl = $transportEntity->getWsdlUrl();
+            if (!$this->wsdlManager->isCacheLoaded($wsdlUrl)) {
+                $this->wsdlManager->loadWsdl($wsdlUrl);
+            }
+
+            $transportEntity->setWsdlCachePath($this->wsdlManager->getCachedWsdlPath($wsdlUrl));
+        }
+
         parent::init($transportEntity);
 
         $wsiMode = $this->settings->get('wsi_mode', false);
@@ -124,6 +140,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = null;
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
+    }
+
+    /**
+     * Disable wsdl caching by PHP.
+     *
+     * {@inheritdoc}
+     */
+    protected function getSoapClient($wsdlUrl, array $options = [])
+    {
+        $options['cache_wsdl'] = WSDL_CACHE_NONE;
+
+        return parent::getSoapClient($wsdlUrl, $options);
     }
 
     /**

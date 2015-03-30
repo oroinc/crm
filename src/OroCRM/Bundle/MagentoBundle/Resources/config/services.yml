@@ -102,11 +102,14 @@ parameters:
     orocrm_magento.strategy.automatic_discovery.default.class:              OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
     orocrm_magento.strategy.automatic_discovery.addresses.class:            OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
     orocrm_magento.action.automatic_discovery.class:                        OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction
+
+    orocrm_magento.wsdl_manager.class:                                      OroCRM\Bundle\MagentoBundle\Service\WsdlManager
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
         arguments:
             - @oro_security.encoder.mcrypt
+            - @orocrm_magento.wsdl_manager
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
         calls:
@@ -509,3 +512,9 @@ services:
             - @orocrm_magento.service.automatic_discovery
         tags:
             - { name: oro_workflow.action, alias: automatic_discovery }
+
+    orocrm_magento.wsdl_manager:
+        class: %orocrm_magento.wsdl_manager.class%
+        arguments:
+            - @filesystem
+            - %kernel.cache_dir%
