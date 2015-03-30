@@ -50,6 +50,27 @@ class OrderDataConverter extends AbstractTreeDataConverter
     /**
      * {@inheritdoc}
      */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        // normalize order items if single is passed
+        if (!empty($importedRecord['items'])) {
+            /** @var array $items */
+            $items = $importedRecord['items'];
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    $importedRecord['items'] = [$items];
+
+                    break;
+                }
+            }
+        }
+
+        return parent::convertToImportFormat($importedRecord, $skipNullValues);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getBackendHeader()
     {
         // will be implemented for bidirectional sync
