@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
+use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
+use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 /**
@@ -13,6 +15,11 @@ class NewsletterSubscriberControllerTest extends AbstractController
      * @var NewsletterSubscriber
      */
     protected $subscriber;
+
+    /**
+     * @var JobExecutor
+     */
+    protected $baseJobExecutor;
 
     /**
      * {@inheritdoc}
@@ -29,6 +36,21 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
 
         $this->subscriber = $this->getReference('newsletter_subscriber');
+
+        $this->baseJobExecutor = $this->getContainer()->get('oro_importexport.job_executor');
+
+        $jobExecutor = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Job\JobExecutor')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $jobResult = new JobResult();
+        $jobResult->setSuccessful(true);
+
+        $jobExecutor->expects($this->any())
+            ->method('executeJob')
+            ->willReturn($jobResult);
+
+        $this->getContainer()->set('oro_importexport.job_executor', $jobExecutor);
     }
 
     protected function tearDown()
@@ -39,7 +61,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
 
-        unset($this->transport);
+        $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
+        unset($this->transport, $this->baseJobExecutor);
     }
 
     /**

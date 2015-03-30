@@ -104,8 +104,9 @@ class AddressDiscoveryStrategy extends AbstractDiscoveryStrategy
             );
             $idx++;
         }
-
-        $qb->andWhere($expr);
+        if ($expr->count()) {
+            $qb->andWhere($expr);
+        }
     }
 
     /**
