@@ -33,7 +33,10 @@ class NewsletterSubscriberControllerTest extends AbstractController
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
 
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
+        $this->loadFixtures(
+            ['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData'],
+            true
+        );
 
         $this->subscriber = $this->getReference('newsletter_subscriber');
 
