@@ -97,6 +97,11 @@ parameters:
     orocrm_magento.datagrid.newsletter_subscriber_provider.class:           OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
 
     orocrm_magento.model.newsletter_subscriber_manager.class:               OroCRM\Bundle\MagentoBundle\Model\NewsletterSubscriberManager
+
+    orocrm_magento.service.automatic_discovery.class:                       OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery
+    orocrm_magento.strategy.automatic_discovery.default.class:              OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DefaultDiscoveryStrategy
+    orocrm_magento.strategy.automatic_discovery.addresses.class:            OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\AddressDiscoveryStrategy
+    orocrm_magento.action.automatic_discovery.class:                        OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -478,3 +483,29 @@ services:
         class: %orocrm_magento.model.newsletter_subscriber_manager.class%
         arguments:
             - @oro_entity.doctrine_helper
+
+    orocrm_magento.strategy.automatic_discovery.default:
+        class: %orocrm_magento.strategy.automatic_discovery.default.class%
+
+    orocrm_magento.strategy.automatic_discovery.addresses:
+        class: %orocrm_magento.strategy.automatic_discovery.addresses.class%
+
+    orocrm_magento.service.automatic_discovery:
+        class: %orocrm_magento.service.automatic_discovery.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - @orocrm_magento.strategy.automatic_discovery.default
+            - %orocrm_magento.customer.entity.class%
+            - []
+        calls:
+            - [addStrategy, ['addresses', @orocrm_magento.strategy.automatic_discovery.addresses]]
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.action.automatic_discovery:
+        class: %orocrm_magento.action.automatic_discovery.class%
+        arguments:
+            - @oro_workflow.context_accessor
+            - @orocrm_magento.service.automatic_discovery
+        tags:
+            - { name: oro_workflow.action, alias: automatic_discovery }
