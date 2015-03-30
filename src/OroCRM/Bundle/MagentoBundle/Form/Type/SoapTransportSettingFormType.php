@@ -102,6 +102,8 @@ class SoapTransportSettingFormType extends AbstractType
                 ->create('isExtensionInstalled', 'hidden')
                 ->addEventSubscriber(new SoapConnectorsFormSubscriber($this->registry))
         );
+        $builder->add('magentoVersion', 'hidden')
+            ->add('extensionVersion', 'hidden');
 
         $builder->add(
             'adminUrl',

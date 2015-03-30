@@ -65,7 +65,7 @@ abstract class AbstractInfoReader extends AbstractReader
         $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
 
         // info was loaded from index action
-        if ($this->transport->isExtensionInstalled()) {
+        if ($this->transport->isSupportedExtensionVersion()) {
             return null;
         }
 
