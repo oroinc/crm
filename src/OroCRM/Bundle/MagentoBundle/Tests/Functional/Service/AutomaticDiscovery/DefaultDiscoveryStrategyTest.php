@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Service\AutomaticDiscovery;
 
+use Doctrine\Common\Collections\Criteria;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
@@ -61,18 +63,18 @@ class DefaultDiscoveryStrategyTest extends WebTestCase
 
 
         $expected = array_map(
-            function ($expectedReference) use ($reference, $entity) {
-                if ($reference === $expectedReference) {
-                    return $entity;
-                }
-
+            function ($expectedReference) {
                 return $this->getReference($expectedReference);
             },
             $expected
         );
 
-        $this->assertSameSize($expected, $qb->getQuery()->getResult());
-        $this->assertEquals($expected, $qb->getQuery()->getResult());
+        $result = $qb
+            ->addOrderBy(sprintf('%s.lastName', AutomaticDiscovery::ROOT_ALIAS), Criteria::ASC)
+            ->getQuery()
+            ->getResult();
+        $this->assertSameSize($expected, $result);
+        $this->assertEquals($expected, $result);
     }
 
     /**

@@ -18,6 +18,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             'reference' => 'discovery_customer1',
             'email' => 'discovery@example.com',
             'firstName' => 'fn1',
+            'lastName' => 'ln1',
             'addresses' => [
                 [
                     'type' => 'billing',
@@ -29,6 +30,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             'reference' => 'discovery_customer2',
             'email' => 'discovery@example.com',
             'firstName' => 'fn1',
+            'lastName' => 'ln2',
             'addresses' => [
                 [
                     'type' => 'billing',
@@ -40,6 +42,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             'reference' => 'discovery_customer3',
             'email' => 'discovery@example.com',
             'firstName' => 'fn2',
+            'lastName' => 'ln3',
             'addresses' => [
                 [
                     'type' => 'shipping',
@@ -51,6 +54,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             'reference' => 'discovery_customer4',
             'email' => 'discovery@example.com',
             'firstName' => 'fn2',
+            'lastName' => 'ln4',
             'addresses' => [
                 [
                     'type' => 'shipping',
@@ -62,6 +66,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             'reference' => 'discovery_customer5',
             'email' => 'discovery@example.com',
             'firstName' => 'fn2',
+            'lastName' => 'ln5',
             'addresses' => [
                 [
                     'type' => 'billing',
@@ -86,6 +91,7 @@ class LoadAddressDiscoveryData extends AbstractFixture
             $customer = new Customer();
             $customer->setEmail($item['email']);
             $customer->setFirstName($item['firstName']);
+            $customer->setLastName($item['lastName']);
 
             foreach ($item['addresses'] as $addressData) {
                 $address = new Address();
