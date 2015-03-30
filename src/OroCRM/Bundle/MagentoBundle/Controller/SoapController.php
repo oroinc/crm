@@ -2,19 +2,21 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use Oro\Bundle\IntegrationBundle\Provider\TransportInterface;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapController extends Controller
 {
@@ -26,55 +28,32 @@ class SoapController extends Controller
     {
         $transport = $this->get('orocrm_magento.transport.soap_transport');
         $transport->setMultipleAttemptsEnabled(false);
+        $transportEntity = $this->getTransportEntity($request, $transport);
 
-        /*
-         * Transport setting entity should be set to form
-         * in case when password should be merged from saved data
-         */
-        $data = null;
-        if ($id = $request->get('id', false)) {
-            $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
-        }
-
-        $form = $this->get('form.factory')
-            ->createNamed('soap-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
-        $form->submit($request);
-
-        /** @var MagentoSoapTransport $transportEntity */
-        $transportEntity      = $form->getData();
-        $websites             = $allowedTypesChoices = [];
-        $isExtensionInstalled = false;
-        $adminUrl             = false;
+        $response = ['success' => false];
         try {
             $transport->init($transportEntity);
-            $isExtensionInstalled = $transport->isExtensionInstalled();
-            $websites             = $this->formatWebsiteChoices($transport->getWebsites());
-            $adminUrl             = $transport->getAdminUrl();
-            $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
-                ->getAvailableConnectorsTypesChoiceList(
-                    'magento',
-                    function (ConnectorInterface $connector) use ($isExtensionInstalled) {
-                        return $connector instanceof ExtensionAwareInterface ? $isExtensionInstalled : true;
-                    }
-                );
-            $translator          = $this->get('translator');
-            foreach ($allowedTypesChoices as $name => $val) {
-                $allowedTypesChoices[$name] = $translator->trans($val);
-            }
-            $result = true;
+
+            $extensionVersion = $transport->getExtensionVersion();
+            $isExtensionInstalled = !empty($extensionVersion);
+            $isSupportedVersion = $transport->isSupportedExtensionVersion();
+            $allowedTypesChoices = $this->getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion);
+            $response = [
+                'success' => true,
+                'websites' => $this->formatWebsiteChoices($transport->getWebsites()),
+                'isExtensionInstalled' => $isExtensionInstalled,
+                'magentoVersion' => $transport->getMagentoVersion(),
+                'extensionVersion' => $extensionVersion,
+                'requiredExtensionVersion' => SoapTransport::REQUIRED_EXTENSION_VERSION,
+                'isSupportedVersion' => $isSupportedVersion,
+                'connectors' => $allowedTypesChoices,
+                'adminUrl' => $transport->getAdminUrl(),
+            ];
         } catch (\Exception $e) {
-            $result = false;
             $this->get('logger')->critical(sprintf('MageCheck error: %s: %s', $e->getCode(), $e->getMessage()));
         }
-        return new JsonResponse(
-            [
-                'success'              => $result,
-                'websites'             => $websites,
-                'isExtensionInstalled' => $isExtensionInstalled,
-                'connectors'           => $allowedTypesChoices,
-                'adminUrl'             => $adminUrl,
-            ]
-        );
+
+        return new JsonResponse($response);
     }
 
     /**
@@ -90,15 +69,15 @@ class SoapController extends Controller
     protected function formatWebsiteChoices(\Iterator $websitesSource)
     {
         $translator = $this->get('translator');
-        $websites   = iterator_to_array($websitesSource);
-        $websites   = array_map(
+        $websites = iterator_to_array($websitesSource);
+        $websites = array_map(
             function ($website) use ($translator) {
                 return [
-                    'id'    => $website['id'],
+                    'id' => $website['id'],
                     'label' => $translator->trans(
                         'Website ID: %websiteId%, Stores: %storesList%',
                         [
-                            '%websiteId%'  => $website['id'],
+                            '%websiteId%' => $website['id'],
                             '%storesList%' => $website['name']
                         ]
                     )
@@ -124,5 +103,55 @@ class SoapController extends Controller
         );
 
         return $websites;
+    }
+
+    /**
+     * @param bool $isExtensionInstalled
+     * @param bool $isSupportedVersion
+     * @return array
+     */
+    protected function getAllowedConnectorsChoices($isExtensionInstalled, $isSupportedVersion)
+    {
+        $allowedTypesChoices = $this->get('oro_integration.manager.types_registry')
+            ->getAvailableConnectorsTypesChoiceList(
+                ChannelType::TYPE,
+                function (ConnectorInterface $connector) use ($isExtensionInstalled, $isSupportedVersion) {
+                    if ($connector instanceof ExtensionAwareInterface) {
+                        return $isExtensionInstalled && $isSupportedVersion;
+                    }
+
+                    return true;
+                }
+            );
+
+        $translator = $this->get('translator');
+        foreach ($allowedTypesChoices as $name => $val) {
+            $allowedTypesChoices[$name] = $translator->trans($val);
+        }
+
+        return $allowedTypesChoices;
+    }
+
+    /**
+     * Transport setting entity should be set to form
+     * in case when password should be merged from saved data
+     *
+     * @param Request $request
+     * @param TransportInterface $transport
+     * @return MagentoSoapTransport
+     */
+    protected function getTransportEntity(Request $request, $transport)
+    {
+        $data = null;
+        $id = $request->get('id', false);
+        if ($id) {
+            $data = $this->get('doctrine.orm.entity_manager')->find($transport->getSettingsEntityFQCN(), $id);
+        }
+
+        $form = $this->get('form.factory')
+            ->createNamed('soap-check', $transport->getSettingsFormType(), $data, ['csrf_protection' => false]);
+        $form->submit($request);
+
+        return $form->getData();
     }
 }
