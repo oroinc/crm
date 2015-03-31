@@ -2,17 +2,21 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
 
+use Guzzle\Http\ClientInterface;
+
+use Symfony\Component\Filesystem\Filesystem;
+
 use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
 
 class WsdlManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Filesystem
      */
     protected $fs;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ClientInterface
      */
     protected $guzzleClient;
 
@@ -147,7 +151,19 @@ class WsdlManagerTest extends \PHPUnit_Framework_TestCase
     protected function assertClearCache($path)
     {
         $this->fs->expects($this->once())
+            ->method('exists')
+            ->with($path)
+            ->willReturn(true);
+
+        $this->fs->expects($this->once())
             ->method('remove')
             ->with($path);
+    }
+
+    public function testClearAllWsdlCaches()
+    {
+        $path = $this->manager->getWsdlCachePath();
+        $this->assertClearCache($path);
+        $this->manager->clearAllWsdlCaches();
     }
 }

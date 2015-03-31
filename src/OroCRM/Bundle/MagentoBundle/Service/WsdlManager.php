@@ -80,7 +80,10 @@ class WsdlManager
      */
     public function clearCacheForUrl($url)
     {
-        $this->fs->remove($this->getCachedWsdlPath($url));
+        $path = $this->getCachedWsdlPath($url);
+        if ($this->fs->exists($path)) {
+            $this->fs->remove($path);
+        }
     }
 
     /**
@@ -111,7 +114,9 @@ class WsdlManager
      */
     public function clearAllWsdlCaches()
     {
-        $files = new \FilesystemIterator($this->getWsdlCachePath());
-        $this->fs->remove($files);
+        $path = $this->getWsdlCachePath();
+        if ($this->fs->exists($path)) {
+            $this->fs->remove($path);
+        }
     }
 }
