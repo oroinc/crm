@@ -1,31 +1,22 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\DependencyInjection;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
-use Oro\Bundle\DataGridBundle\Common\Object;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider;
 
-class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
 {
     /**
      * @var CustomerActionPermissionProvider
      */
     protected $provider;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
-     */
-    protected $doctrineHelper;
-
     protected function setUp()
     {
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        parent::setUp();
 
         $this->provider = new CustomerActionPermissionProvider($this->doctrineHelper, '\stdClass');
     }
@@ -44,22 +35,20 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
         array $expected,
         $channel = null
     ) {
-        if ($channel) {
-            $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-                ->disableOriginalConstructor()
-                ->getMock();
+        $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-            $repository
-                ->expects($this->once())
-                ->method('find')
-                ->with($this->isType('integer'))
-                ->will($this->returnValue($channel));
+        $repository
+            ->expects($this->any())
+            ->method('find')
+            ->with($this->isType('integer'))
+            ->will($this->returnValue($channel));
 
-            $this->doctrineHelper
-                ->expects($this->once())
-                ->method('getEntityRepository')
-                ->will($this->returnValue($repository));
-        }
+        $this->doctrineHelper
+            ->expects($this->any())
+            ->method('getEntityRepository')
+            ->will($this->returnValue($repository));
 
         $this->assertEquals($expected, $this->provider->getCustomerActionsPermissions($record, $actions));
     }
@@ -108,27 +97,5 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
                 $this->getChannel(null)
             ]
         ];
-    }
-
-    /**
-     * @param bool $isTwoWaySyncEnabled
-     *
-     * @return Channel|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getChannel($isTwoWaySyncEnabled = false)
-    {
-        $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-
-        $settings = [];
-        if (null !== $isTwoWaySyncEnabled) {
-            $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
-        }
-
-        $settings = Object::create($settings);
-        $channel->expects($this->any())
-            ->method('getSynchronizationSettings')
-            ->will($this->returnValue($settings));
-
-        return $channel;
     }
 }

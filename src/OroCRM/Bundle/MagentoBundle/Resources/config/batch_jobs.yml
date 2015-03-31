@@ -47,6 +47,20 @@ connector:
                     parameters:
                         batch_size: 1
 
+        magento_newsletter_subscriber_export:
+            title: 'Export Newsletter Subscriber to Magento'
+            type: export
+            steps:
+                export:
+                    title: export
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.importexport.reader.entity
+                        processor: orocrm_magento.importexport.processor.newsletter_subscriber_export
+                        writer:    orocrm_magento.importexport.writer.newsletter_subscriber
+                    parameters:
+                        batch_size: 1
+
         magento_customer_address_export:
             title: 'Export Magento Customer Address to Magento'
             type: export
@@ -162,6 +176,72 @@ connector:
                     services:
                         reader:    orocrm_magento.reader.context_cart
                         processor: orocrm_magento.importexport.processor.context_cart
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                load_customer_info:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.customer_info
+                        processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_newsletter_subscriber_import:
+            title: "Import newsletter subscribers from Magento"
+            type:  import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
+                    services:
+                        reader:    orocrm_magento.mage.newsletter_subscriber_connector
+                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
+                    parameters:
+                        batch_size: 25
+                        post_processing_jobs: mage_newsletter_subscriber_post_process_customers
+                        context_shared_keys: postProcessSubscribers
+
+        mage_newsletter_subscriber_import_initial:
+            title: "Initial import newsletter subscribers from Magento"
+            type:  import
+            steps:
+                import:
+                    title:     import
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
+                    services:
+                        reader:    orocrm_magento.mage.newsletter_subscriber_connector_initial
+                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
+                    parameters:
+                        batch_size: 25
+                        post_processing_jobs: mage_newsletter_subscriber_post_process_customers
+                        context_shared_keys: postProcessSubscribers
+
+        mage_newsletter_subscriber_post_process_customers:
+            title: "Import customers and postponded newsletter subscribers"
+            type:  import
+            steps:
+                import_customers:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_customer.newsletter_subscriber
+                        processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                import_posponded_subscribers:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_newsletter_subscriber
+                        processor: orocrm_magento.importexport.processor.context_newsletter_subscriber
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

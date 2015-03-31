@@ -7,6 +7,7 @@ use OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener\ChannelSaveSucceedListe
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ChannelSaveSucceedListenerTest extends BaseTestCase
 {
@@ -72,8 +73,8 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $this->entity->setChannelType(ChannelType::TYPE);
         $transport = new MagentoSoapTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
-
 
         $orderConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\OrderConnector')
             ->disableOriginalConstructor()

@@ -148,14 +148,14 @@ interface MagentoTransportInterface extends TransportInterface
      * @param array $item
      * @return int
      */
-    public function createCustomerAddress($customerId, $item);
+    public function createCustomerAddress($customerId, array $item);
 
     /**
      * @param int $customerAddressId
      * @param array $item
      * @return bool
      */
-    public function updateCustomerAddress($customerAddressId, $item);
+    public function updateCustomerAddress($customerAddressId, array $item);
 
     /**
      * Retrieve customer address info
@@ -165,4 +165,41 @@ interface MagentoTransportInterface extends TransportInterface
      * @return array
      */
     public function getCustomerAddressInfo($customerAddressId);
+
+    /**
+     * Get newsletter subscribers.
+     *
+     * @return \Iterator
+     */
+    public function getNewsletterSubscribers();
+
+    /**
+     * @param array $subscriberData
+     *
+     * @return int
+     */
+    public function createNewsletterSubscriber(array $subscriberData);
+
+    /**
+     * @param int $subscriberId
+     * @param array $subscriberData
+     *
+     * @return bool
+     */
+    public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
+
+    /**
+     * @return bool
+     */
+    public function isSupportedExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getMagentoVersion();
 }
