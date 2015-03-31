@@ -33,8 +33,7 @@ use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    // TODO: Change version to new one before merge to master (1.2.0?)
-    const REQUIRED_EXTENSION_VERSION = '1.1.0';
+    const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
