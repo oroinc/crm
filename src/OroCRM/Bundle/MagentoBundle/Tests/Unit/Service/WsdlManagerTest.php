@@ -34,7 +34,7 @@ class WsdlManagerTest extends \PHPUnit_Framework_TestCase
         $this->guzzleClient = $this->getMockBuilder('Guzzle\Http\ClientInterface')
             ->setMethods(['get'])
             ->getMockForAbstractClass();
-        $this->cacheDir = '/tmp';
+        $this->cacheDir = sys_get_temp_dir();
 
         $this->manager = new WsdlManager($this->fs, $this->guzzleClient, $this->cacheDir);
     }
@@ -47,7 +47,7 @@ class WsdlManagerTest extends \PHPUnit_Framework_TestCase
     public function testGetCachedWsdlPath()
     {
         $url = 'http://test.local';
-        $expected = $this->cacheDir . DIRECTORY_SEPARATOR . 'wsdl' . DIRECTORY_SEPARATOR . md5($url) . '.wsdl';
+        $expected = $this->manager->getWsdlCachePath() . DIRECTORY_SEPARATOR . md5($url) . '.wsdl';
         $this->assertEquals($expected, $this->manager->getCachedWsdlPath($url));
     }
 

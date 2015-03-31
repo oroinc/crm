@@ -36,6 +36,8 @@ class WsdlManager
     }
 
     /**
+     * Load remote WSDL to local cache.
+     *
      * @param string $url
      * @return string
      */
@@ -50,6 +52,8 @@ class WsdlManager
     }
 
     /**
+     * Check that cache is loaded.
+     *
      * @param string $url
      * @return bool
      */
@@ -59,6 +63,8 @@ class WsdlManager
     }
 
     /**
+     * Get cache WSDL path.
+     *
      * @param string $url
      * @return string
      */
@@ -68,6 +74,8 @@ class WsdlManager
     }
 
     /**
+     * Remove cached WSDL by URL.
+     *
      * @param string $url
      */
     public function clearCacheForUrl($url)
@@ -76,6 +84,8 @@ class WsdlManager
     }
 
     /**
+     * Refresh WSDL cache by URL.
+     *
      * @param string $url
      * @return string
      */
@@ -87,10 +97,21 @@ class WsdlManager
     }
 
     /**
+     * Get WSDL cache path.
+     *
      * @return string
      */
-    protected function getWsdlCachePath()
+    public function getWsdlCachePath()
     {
-        return $this->cachePath . DIRECTORY_SEPARATOR . 'wsdl';
+        return $this->cachePath . DIRECTORY_SEPARATOR . 'oro' . DIRECTORY_SEPARATOR . 'wsdl.cache';
+    }
+
+    /**
+     * Remove all cached WSDLs.
+     */
+    public function clearAllWsdlCaches()
+    {
+        $files = new \FilesystemIterator($this->getWsdlCachePath());
+        $this->fs->remove($files);
     }
 }
