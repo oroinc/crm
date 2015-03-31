@@ -26,12 +26,14 @@ class SoapController extends Controller
      */
     public function checkAction(Request $request)
     {
+        $wsdlManager = $this->get('orocrm_magento.wsdl_manager');
         $transport = $this->get('orocrm_magento.transport.soap_transport');
         $transport->setMultipleAttemptsEnabled(false);
         $transportEntity = $this->getTransportEntity($request, $transport);
 
         $response = ['success' => false];
         try {
+            $wsdlManager->clearCacheForUrl($transportEntity->getWsdlUrl());
             $transport->init($transportEntity);
 
             $extensionVersion = $transport->getExtensionVersion();
