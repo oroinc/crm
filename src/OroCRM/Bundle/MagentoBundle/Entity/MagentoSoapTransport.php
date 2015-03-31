@@ -443,6 +443,7 @@ class MagentoSoapTransport extends Transport
     public function setWsdlCachePath($wsdlCachePath)
     {
         $this->wsdlCachePath = $wsdlCachePath;
+        $this->settings = null;
 
         return $this;
     }

@@ -111,6 +111,10 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function init(Transport $transportEntity)
     {
+        /**
+         * Cache WSDL and force transport entity to use it instead of original URL.
+         * This should be done before parent::init as settings will be cached there.
+         */
         if ($transportEntity instanceof MagentoSoapTransport) {
             $wsdlUrl = $transportEntity->getWsdlUrl();
             if (!$this->wsdlManager->isCacheLoaded($wsdlUrl)) {

@@ -109,4 +109,16 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             ]
         ];
     }
+
+    public function testWsdlUrl()
+    {
+        $url = 'http://test.local/?wsdl=1';
+        $cache = '/tmp/cached.wsdl';
+        $this->entity->setWsdlUrl($url);
+
+        $this->assertEquals($url, $this->entity->getSettingsBag()->get('wsdl_url'));
+
+        $this->entity->setWsdlCachePath($cache);
+        $this->assertEquals($cache, $this->entity->getSettingsBag()->get('wsdl_url'));
+    }
 }

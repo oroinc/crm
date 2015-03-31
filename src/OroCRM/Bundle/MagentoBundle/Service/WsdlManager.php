@@ -2,30 +2,37 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
+use Guzzle\Http\ClientInterface;
+
 use Symfony\Component\Filesystem\Filesystem;
 
 class WsdlManager
 {
-    /**
-     * @var string
-     */
-    protected $cachePath;
-
     /**
      * @var Filesystem
      */
     protected $fs;
 
     /**
-     * @param Filesystem $filesystem
-     * @param $cachePath
+     * @var ClientInterface
      */
-    public function __construct(Filesystem $filesystem, $cachePath)
-    {
-        $this->cachePath = $cachePath;
-        $this->fs = $filesystem;
+    protected $guzzleClient;
 
-        $filesystem->mkdir($this->getWsdlCachePath());
+    /**
+     * @var string
+     */
+    protected $cachePath;
+
+    /**
+     * @param Filesystem $filesystem
+     * @param ClientInterface $guzzleClient
+     * @param string $cachePath
+     */
+    public function __construct(Filesystem $filesystem, ClientInterface $guzzleClient, $cachePath)
+    {
+        $this->fs = $filesystem;
+        $this->guzzleClient = $guzzleClient;
+        $this->cachePath = $cachePath;
     }
 
     /**
@@ -34,9 +41,10 @@ class WsdlManager
      */
     public function loadWsdl($url)
     {
-        $wsdl = file_get_contents($url);
+        $response = $this->guzzleClient->get($url)->send();
+
         $cacheFilePath = $this->getCachedWsdlPath($url);
-        file_put_contents($cacheFilePath, $wsdl);
+        $this->fs->dumpFile($cacheFilePath, $response->getBody(true));
 
         return $cacheFilePath;
     }
