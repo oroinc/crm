@@ -74,7 +74,6 @@ class AddressDiscoveryStrategyTest extends WebTestCase
             ->addOrderBy(sprintf('%s.lastName', AutomaticDiscovery::ROOT_ALIAS), Criteria::ASC)
             ->getQuery()
             ->getResult();
-        $this->assertSameSize($expected, $result);
         $this->assertEquals($expected, $result);
     }
 
