@@ -17,6 +17,13 @@ orocrm:
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
                 month: Month
+            orders_over_time_chart:
+                title: Orders over time
+                description: This widget gives you a quick overview of magento orders
+                order_count: Orders count
+                date: Date
+                current_period: Current period
+                previous_period: Previous period
         datagrid:
             actions:
                 view:

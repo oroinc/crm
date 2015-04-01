@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -104,6 +106,43 @@ class OrderRepository extends EntityRepository
             if (isset($result[$channelId]['data'][$year][$month])) {
                 $result[$channelId]['data'][$year][$month] += $orderAmount;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return array
+     */
+    public function getOrdersOverTime(DateTime $from, DateTime $to)
+    {
+        $orders = $this->createQueryBuilder('o')
+            ->addSelect('YEAR(o.createdAt) AS yearCreated')
+            ->addSelect('MONTH(o.createdAt) AS monthCreated')
+            ->addSelect('DAY(o.createdAt) AS dayCreated')
+            ->andWhere('o.createdAt >= :from')
+            ->andWhere('o.createdAt <= :to')
+            ->setParameters([
+                'from' => $from,
+                'to'   => $to,
+            ])
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $result = [];
+        foreach ($orders as $order) {
+            $year  = $order['yearCreated'];
+            $month = $order['monthCreated'];
+            $day   = $order['dayCreated'];
+            if (!isset($result[$year][$month][$day])) {
+                $result[$year][$month][$day] = 0;
+            }
+
+            $result[$year][$month][$day]++;
         }
 
         return $result;

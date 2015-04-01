@@ -34,3 +34,20 @@ oro_chart:
                 default_type: integer
                 field_name: cnt
         template: OroChartsBundle:Chart:multiline.html.twig
+    orders_over_time_chart:
+        label: oro.chart.line_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.orders_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: orocrm.magento.dashboard.orders_over_time_chart.order_count
+                required: true
+                default_type: integer
+                field_name: count
+        template: OroChartsBundle:Chart:multiline.html.twig
