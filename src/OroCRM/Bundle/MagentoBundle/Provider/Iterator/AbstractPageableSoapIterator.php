@@ -95,15 +95,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function current()
     {
-        $class = explode('\\', get_class($this));
-        $this->logger->info(sprintf('Loading %s entity by id: %s', end($class), $this->key()));
-        $this->logger->debug(
-            sprintf(
-                '%0.2fMb now / %0.2fMb peak',
-                memory_get_usage(true) / 1000000,
-                memory_get_peak_usage(true) / 1000000
-            )
-        );
+        $this->logger->info(sprintf('Loading entity by id: %s', $this->key()));
 
         return $this->current;
     }

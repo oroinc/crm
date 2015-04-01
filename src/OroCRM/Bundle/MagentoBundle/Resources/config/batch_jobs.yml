@@ -167,6 +167,7 @@ connector:
                         reader:    orocrm_magento.mage.cart_connector
                         processor: orocrm_magento.importexport.processor.import_cart_with_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_cart_import_post_process_customers
