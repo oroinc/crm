@@ -335,6 +335,7 @@ services:
             - @doctrine
             - @oro_security.acl_helper
             - @oro_chart.config_provider
+            - @oro_dashboard.datetime.hepler
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
@@ -60,53 +61,58 @@ class OrderRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param AclHelper  $aclHelper
+     * @param \DateTime  $dateFrom
+     * @param \DateTime  $dateTo
+     * @param DateHelper $dateHelper
      * @return array
      */
-    public function getAverageOrderAmount(AclHelper $aclHelper)
-    {
-        /** @var \DateTime $sliceDate */
-        list($sliceDate, $monthMatch, $channelTemplate) = $this->getOrderSliceDateAndTemplates();
-
+    public function getAverageOrderAmount(
+        AclHelper $aclHelper,
+        \DateTime $dateFrom,
+        \DateTime $dateTo,
+        DateHelper $dateHelper
+    ) {
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
         $channels      = $entityManager->getRepository('OroCRMChannelBundle:Channel')
             ->getAvailableChannelNames($aclHelper, 'magento');
 
-        // prepare result template
-        $result = [];
-        foreach ($channels as $channel) {
-            $channelId = $channel['id'];
-            $channelName = $channel['name'];
-            $result[$channelId] = ['name' => $channelName, 'data' => $channelTemplate];
-        }
-
         // execute data query
         $queryBuilder = $this->createQueryBuilder('o');
         $selectClause = '
             IDENTITY(o.dataChannel) AS dataChannelId,
-            MONTH(o.createdAt) as monthCreated,
             AVG(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
                 CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
             ) as averageOrderAmount';
         $queryBuilder->select($selectClause)
-            ->where('o.createdAt > :sliceDate')->setParameter('sliceDate', $sliceDate)
-            ->groupBy('dataChannelId, monthCreated');
-        $amountStatistics = $aclHelper->apply($queryBuilder)->execute();
+            ->andWhere($queryBuilder->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $dateFrom)
+            ->setParameter('dateEnd', $dateTo)
+            ->groupBy('dataChannelId');
+        $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $queryBuilder, 'o.createdAt');
+        $amountStatistics = $aclHelper->apply($queryBuilder)->getArrayResult();
+        $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
 
+        $items             = [];
         foreach ($amountStatistics as $row) {
+            $key         = $dateHelper->getKey($dateFrom, $dateTo, $row);
             $channelId   = (int)$row['dataChannelId'];
-            $month       = (int)$row['monthCreated'];
-            $year        = $monthMatch[$month]['year'];
-            $orderAmount = (float)$row['averageOrderAmount'];
+            $channelName = $channels[$channelId]['name'];
 
-            if (isset($result[$channelId]['data'][$year][$month])) {
-                $result[$channelId]['data'][$year][$month] += $orderAmount;
+            if (!isset($items[$channelName])) {
+                $items[$channelName] = $dates;
             }
+            $items[$channelName][$key]['amount'] = (float)$row['averageOrderAmount'];
         }
 
-        return $result;
+        // restore default keys
+        foreach ($items as $channelName => $item) {
+            $items[$channelName] = array_values($item);
+        }
+
+        return $items;
     }
 
     /**

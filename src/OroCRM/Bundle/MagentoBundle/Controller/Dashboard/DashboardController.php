@@ -78,7 +78,13 @@ class DashboardController extends Controller
         $chartViewBuilder = $this->get('oro_chart.view_builder');
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
-        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView($chartViewBuilder);
+        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView(
+            $chartViewBuilder,
+            $this->get('oro_dashboard.widget_configs')
+                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->get('dateRange'),
+            $this->get('oro_dashboard.datetime.hepler')
+        );
 
         return $data;
     }
@@ -98,7 +104,12 @@ class DashboardController extends Controller
         $chartViewBuilder     = $this->get('oro_chart.view_builder');
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
-        $data['chartView'] = $customerDataProvider->getNewCustomerChartView($chartViewBuilder);
+        $data['chartView'] = $customerDataProvider->getNewCustomerChartView(
+            $chartViewBuilder,
+            $this->get('oro_dashboard.widget_configs')
+                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->get('dateRange')
+        );
 
         return $data;
     }
