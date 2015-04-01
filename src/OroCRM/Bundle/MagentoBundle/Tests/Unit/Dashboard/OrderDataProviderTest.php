@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
+use DateTime;
+
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -36,10 +38,18 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
+        $translator->expects($this->any())
+            ->method('trans')
+            ->will($this->returnCallback(function ($id) {
+                return $id;
+            }));
+
         $this->dataProvider = new OrderDataProvider(
             $this->registry,
             $this->aclHelper,
-            $this->configProvider
+            $this->configProvider,
+            $translator
         );
     }
 
@@ -133,6 +143,99 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $chartView,
             $this->dataProvider->getAverageOrderAmountChartView($chartViewBuilder)
+        );
+    }
+
+    public function testGetRevenueOverTimeChartView()
+    {
+        $sourceOrderData = [
+            [
+                2015 => [5 => [12 => 200]],
+            ],
+            [
+                2015 => [5 => [7 => 100]],
+            ],
+        ];
+        $expectedArrayData = [
+            'orocrm.magento.dashboard.revenue_over_time_chart.previous_period' => [
+                ['date' => '2015-05-12', 'amount' => 100],
+            ],
+            'orocrm.magento.dashboard.revenue_over_time_chart.current_period' => [
+                ['date' => '2015-05-12', 'amount' => 200],
+            ]
+        ];
+        $expectedOptions = [
+            'name' => 'multiline_chart',
+            'data_schema' => [
+                'label' => [
+                    'field_name' => 'date',
+                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.date',
+                    'type' => 'date',
+                ],
+                'value' => [
+                    'field_name' => 'amount',
+                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                    'type' => 'currency'
+                ],
+            ],
+        ];
+        $chartConfig = [
+            'data_schema' => [
+                'label' => [
+                    'field_name' => 'date',
+                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.date',
+                    'type' => 'date',
+                ],
+                'value' => [
+                    'field_name' => 'amount',
+                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                    'type' => 'currency'
+                ],
+            ],
+        ];
+        $from = new DateTime('2015-05-10');
+        $to = new DateTime('2015-05-15');
+        $previousFrom = new DateTime('2015-05-05');
+        $previousTo = new DateTime('2015-05-10');
+        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderRepository->expects($this->at(0))
+            ->method('getRevenueOverTime')
+            ->with($from, $to)
+            ->will($this->returnValue($sourceOrderData[0]));
+        $orderRepository->expects($this->at(1))
+            ->method('getRevenueOverTime')
+            ->with($previousFrom, $previousTo)
+            ->will($this->returnValue($sourceOrderData[1]));
+        $this->registry->expects($this->any())
+            ->method('getRepository')
+            ->with('OroCRMMagentoBundle:Order')
+            ->will($this->returnValue($orderRepository));
+        $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $chartViewBuilder = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartViewBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $chartViewBuilder->expects($this->once())
+            ->method('setOptions')
+            ->with($expectedOptions)
+            ->will($this->returnSelf());
+        $chartViewBuilder->expects($this->once())
+            ->method('setArrayData')
+            ->with($expectedArrayData)
+            ->will($this->returnSelf());
+        $chartViewBuilder->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($chartView));
+        $this->configProvider->expects($this->once())
+            ->method('getChartConfig')
+            ->with('revenue_over_time_chart')
+            ->will($this->returnValue($chartConfig));
+        $this->assertEquals(
+            $chartView,
+            $this->dataProvider->getRevenueOverTimeChartView($chartViewBuilder, $from, $to)
         );
     }
 }

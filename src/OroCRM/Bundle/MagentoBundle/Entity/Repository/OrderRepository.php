@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -104,6 +106,51 @@ class OrderRepository extends EntityRepository
             if (isset($result[$channelId]['data'][$year][$month])) {
                 $result[$channelId]['data'][$year][$month] += $orderAmount;
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return array
+     */
+    public function getRevenueOverTime(DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        $orders = $qb
+            ->select('YEAR(o.createdAt) AS yearCreated')
+            ->addSelect('MONTH(o.createdAt) AS monthCreated')
+            ->addSelect('DAY(o.createdAt) AS dayCreated')
+            ->addSelect('SUM(
+                    CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                    CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                ) AS totalOrderAmount')
+            ->addSelect('o.currency AS currency')
+            ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+            ->setParameters([
+                'from' => $from,
+                'to'   => $to,
+            ])
+            ->groupBy('yearCreated, monthCreated, dayCreated')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        $result = [];
+        foreach ($orders as $order) {
+            $year  = $order['yearCreated'];
+            $month = $order['monthCreated'];
+            $day   = $order['dayCreated'];
+
+            if (!isset($result[$year][$month][$day])) {
+                $result[$year][$month][$day] = 0;
+            }
+
+            $result[$year][$month][$day] += $order['totalOrderAmount'];
         }
 
         return $result;

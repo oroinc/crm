@@ -17,6 +17,13 @@ orocrm:
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
                 month: Month
+            revenue_over_time_chart:
+                title: Revenue over time
+                description: This widget gives you a quick overview of magento revenues
+                revenue: Revenue
+                date: Date
+                current_period: Current period
+                previous_period: Previous period
         datagrid:
             actions:
                 view:

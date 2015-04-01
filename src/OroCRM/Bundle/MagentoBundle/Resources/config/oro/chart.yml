@@ -34,3 +34,21 @@ oro_chart:
                 default_type: integer
                 field_name: cnt
         template: OroChartsBundle:Chart:multiline.html.twig
+    revenue_over_time_chart:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.revenue_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: orocrm.magento.dashboard.revenue_over_time_chart.revenue
+                required: true
+                default_type: decimal
+                field_name: amount
+                type: currency
+        template: OroChartsBundle:Chart:multiline.html.twig

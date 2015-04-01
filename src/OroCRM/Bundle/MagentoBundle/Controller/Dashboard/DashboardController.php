@@ -2,12 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
+use DateTime;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 
 class DashboardController extends Controller
@@ -101,5 +106,53 @@ class DashboardController extends Controller
         $data['chartView'] = $customerDataProvider->getNewCustomerChartView($chartViewBuilder);
 
         return $data;
+    }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_revenue_over_time_chart",
+     *      name="orocrm_magento_dashboard_revenue_over_time_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:revenueOverTimeChart.html.twig")
+     */
+    public function revenueOverTimeAction()
+    {
+        $widgetAttributes  = $this->getWidgetConfigs();
+        $orderDataProvider = $this->getOrderDataProvider();
+        $chartViewBuilder  = $this->getChartViewBuilder();
+
+        $widgetOptions = $widgetAttributes->getWidgetOptions();
+        $from = new DateTime($widgetOptions->get('from', '-1 year'));
+        $to = new DateTime($widgetOptions->get('to', 'now'));
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('revenue_over_time_chart');
+        $data['chartView'] = $orderDataProvider->getRevenueOverTimeChartView($chartViewBuilder, $from, $to);
+
+        return $data;
+    }
+
+    /**
+     * @return ChartViewBuilder
+     */
+    protected function getChartViewBuilder()
+    {
+        return $this->get('oro_chart.view_builder');
+    }
+
+    /**
+     * @return WidgetConfigs
+     */
+    protected function getWidgetConfigs()
+    {
+        return $this->get('oro_dashboard.widget_configs');
+    }
+
+    /**
+     * @return OrderDataProvider
+     */
+    protected function getOrderDataProvider()
+    {
+        return $this->get('orocrm_magento.dashboard.data_provider.order');
     }
 }
