@@ -9,12 +9,24 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 
+use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class OrderListener
 {
+    /** @var ChannelDoctrineListener */
+    protected $channelDoctrineListener;
+
+    /**
+     * @param ChannelDoctrineListener $channelDoctrineListener
+     */
+    public function __construct(ChannelDoctrineListener $channelDoctrineListener)
+    {
+        $this->channelDoctrineListener = $channelDoctrineListener;
+    }
+
     /** @var array */
     protected $ordersForUpdate = [];
 
@@ -127,7 +139,17 @@ class OrderListener
                 $subtotalAmount *= -1;
             }
 
-            $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
+            $customer = $order->getCustomer();
+            $customerRepository->updateCustomerLifetimeValue($customer, $subtotalAmount);
+
+            // schedule lifetime history update
+            if ($customer->getAccount()) {
+                $this->channelDoctrineListener->scheduleEntityUpdate(
+                    $customer,
+                    $customer->getAccount(),
+                    $customer->getDataChannel()
+                );
+            }
         }
     }
 }
