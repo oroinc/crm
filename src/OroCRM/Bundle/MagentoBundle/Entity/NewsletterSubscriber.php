@@ -87,7 +87,7 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var Customer
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer")
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscriber")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
