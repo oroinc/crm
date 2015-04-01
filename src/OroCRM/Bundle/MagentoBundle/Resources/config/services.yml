@@ -75,6 +75,7 @@ parameters:
     # dashboard
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
+    orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
 
     orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
@@ -344,6 +345,12 @@ services:
         arguments:
             - @doctrine
             - @oro_security.acl_helper
+            - @oro_chart.config_provider
+
+    orocrm_magento.dashboard.data_provider.purchase:
+        class: %orocrm_magento.dashboard.data_provider.purchase.class%
+        arguments:
+            - @doctrine
             - @oro_chart.config_provider
 
     orocrm_magento.provider.enitity_state:

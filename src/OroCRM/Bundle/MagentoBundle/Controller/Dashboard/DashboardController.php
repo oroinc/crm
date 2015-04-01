@@ -2,13 +2,18 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
+use DateTime;
+
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 
 class DashboardController extends Controller
 {
@@ -101,5 +106,50 @@ class DashboardController extends Controller
         $data['chartView'] = $customerDataProvider->getNewCustomerChartView($chartViewBuilder);
 
         return $data;
+    }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_purchase_funnel_chart",
+     *      name="orocrm_magento_dashboard_purchase_funnel_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:purchaseFunnelChart.html.twig")
+     */
+    public function purchaseFunnelAction()
+    {
+        $widgetAttributes     = $this->getWidgetConfigs();
+        $purchaseDataProvider = $this->getPurchaseDataProvider();
+        $chartViewBuilder     = $this->getChartViewBuilder();
+
+        $widgetOptions = $widgetAttributes->getWidgetOptions();
+        $from = new DateTime($widgetOptions->get('from', '-1 year'));
+        $to   = new DateTime($widgetOptions->get('to', '+ 1 week'));
+
+        $data = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+    }
+
+    /**
+     * @return ChartViewBuilder
+     */
+    protected function getChartViewBuilder()
+    {
+        return $this->get('oro_chart.view_builder');
+    }
+
+    /**
+     * @return WidgetConfigs
+     */
+    protected function getWidgetConfigs()
+    {
+        return $this->get('oro_dashboard.widget_configs');
+    }
+
+    /**
+     * @return PurchaseDataProvider
+     */
+    public function getPurchaseDataProvider()
+    {
+        return $this->get('orocrm_magento.dashboard.data_provider.purchase');
     }
 }

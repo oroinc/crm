@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
@@ -137,5 +139,25 @@ class OrderRepository extends EntityRepository
         }
 
         return [$sliceDate, $monthMatch, $channelTemplate];
+    }
+
+    /**
+     * @return int
+     */
+    public function getUniqueCustomersOrdersCount(DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        return $qb
+            ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
+            ->andWhere($qb->expr()->between('o.updatedAt', ':from', ':to'))
+            ->andwhere('o.totalPaidAmount IS NOT NULL')
+            ->setParameters([
+                'from' => $from,
+                'to'   => $to,
+            ])
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
     }
 }
