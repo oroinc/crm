@@ -110,13 +110,13 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_purchase_funnel_chart",
-     *      name="orocrm_magento_dashboard_purchase_funnel_chart",
+     *      "/orocrm_magento_dashboard_purchase_chart",
+     *      name="orocrm_magento_dashboard_purchase_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:purchaseFunnelChart.html.twig")
+     * @Template("OroCRMMagentoBundle:Dashboard:purchaseChart.html.twig")
      */
-    public function purchaseFunnelAction()
+    public function purchaseAction()
     {
         $widgetAttributes     = $this->getWidgetConfigs();
         $purchaseDataProvider = $this->getPurchaseDataProvider();
@@ -126,7 +126,10 @@ class DashboardController extends Controller
         $from = new DateTime($widgetOptions->get('from', '-1 year'));
         $to   = new DateTime($widgetOptions->get('to', '+ 1 week'));
 
-        $data = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+        $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
+        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+
+        return $data;
     }
 
     /**

@@ -26,6 +26,7 @@ parameters:
     # providers
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
+    orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -124,6 +125,11 @@ services:
         arguments:
             - @oro_integration.provider.connector_context_mediator
             - @doctrine.orm.entity_manager
+
+    orocrm_magento.provider.tracking_visit:
+        class: %orocrm_magento.provider.tracking_visit.class%
+        arguments:
+            - @doctrine
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -352,6 +358,8 @@ services:
         arguments:
             - @doctrine
             - @oro_chart.config_provider
+            - @orocrm_magento.provider.tracking_visit
+            - @translator
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider

@@ -148,7 +148,7 @@ class OrderRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('o');
 
-        return $qb
+        return (int) $qb
             ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
             ->andWhere($qb->expr()->between('o.updatedAt', ':from', ':to'))
             ->andwhere('o.totalPaidAmount IS NOT NULL')

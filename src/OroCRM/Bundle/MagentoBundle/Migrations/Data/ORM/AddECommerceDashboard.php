@@ -29,7 +29,8 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
         }
 
         $dashboard->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]))
-            ->addWidget($this->createWidgetModel('new_magento_customers_chart', [1, 0]));
+            ->addWidget($this->createWidgetModel('new_magento_customers_chart', [1, 0]))
+            ->addWidget($this->createWidgetModel('purchase_chart', [0, 1]));
 
         $manager->flush();
     }

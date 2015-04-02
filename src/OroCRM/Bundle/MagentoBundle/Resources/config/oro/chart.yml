@@ -34,3 +34,26 @@ oro_chart:
                 default_type: integer
                 field_name: cnt
         template: OroChartsBundle:Chart:multiline.html.twig
+    purchase_chart:
+        label: oro.chart.funnel_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.purchase_chart.label
+                required: true
+                default_type: string
+                field_name: label
+            value:
+                name: value
+                label: orocrm.magento.dashboard.purchase_chart.value
+                required: true
+                default_type: integer
+                type: integer
+                field_name: value
+            isNozzle:
+                name: isNozzle
+                label: orocrm.magento.dashboard.purchase_chart.is_nozzle
+                required: true
+                default_type: boolean
+                field_name: isNozzle
+        template: OroChartBundle:Chart:flow.html.twig

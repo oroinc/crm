@@ -17,6 +17,13 @@ orocrm:
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
                 month: Month
+            purchase_chart:
+                title: Purchase Funnel
+                description: This widget gives you a quick overview of purchases
+                visited: Visited
+                deeply_visited: Deeply Visited
+                added_to_cart: Added to cart
+                purchased: Purchased
         datagrid:
             actions:
                 view:

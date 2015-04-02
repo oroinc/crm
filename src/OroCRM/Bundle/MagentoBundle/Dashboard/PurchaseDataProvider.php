@@ -5,14 +5,15 @@ namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 use DateTime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
+
+use Symfony\Component\Translation\TranslatorInterface;
 
 class PurchaseDataProvider
 {
@@ -27,13 +28,31 @@ class PurchaseDataProvider
     protected $configProvider;
 
     /**
+     * @var TrackingVisitProvider
+     */
+    protected $trackingVisitProvider;
+
+    /**
+     * @var TranslatorInterface
+     */
+    protected $translator;
+
+    /**
      * @param ManagerRegistry $registry
      * @param ConfigProvider $configProvider
+     * @param TrackingVisitProvider $trackingVisitProvider
+     * @param TranslatorInterface $translator
      */
-    public function __construct(ManagerRegistry $registry, ConfigProvider $configProvider)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        ConfigProvider $configProvider,
+        TrackingVisitProvider $trackingVisitProvider,
+        TranslatorInterface $translator
+    ) {
         $this->registry = $registry;
         $this->configProvider = $configProvider;
+        $this->trackingVisitProvider = $trackingVisitProvider;
+        $this->translator = $translator;
     }
 
     /**
@@ -45,69 +64,37 @@ class PurchaseDataProvider
      */
     public function getPurchaseChartView(ChartViewBuilder $viewBuilder, DateTime $from, DateTime $to)
     {
-        $visited       = $this->getVisitedCount($from, $to);
-        $deeplyVisited = $this->getDeeplyVisitedCount($from, $to);
-        $addedToCart   = $this->getCartRepository()->getUniqueCustomerCarts($from, $to);
-        $purchased     = $this->getOrderRepository()->getUniqueCustomersOrdersCount($from, $to);
-
-        $items = [];
+        $items = [
+            [
+                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.visited'),
+                'value'    => $this->trackingVisitProvider->getVisitedCount($from, $to),
+                'isNozzle' => false,
+            ],
+            [
+                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.deeply_visited'),
+                'value'    => $this->trackingVisitProvider->getDeeplyVisitedCount($from, $to),
+                'isNozzle' => false,
+            ],
+            [
+                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.added_to_cart'),
+                'value'    => $this->getCartRepository()->getUniqueCustomerCarts($from, $to),
+                'isNozzle' => false,
+            ],
+            [
+                'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
+                'value'    => $this->getOrderRepository()->getUniqueCustomersOrdersCount($from, $to),
+                'isNozzle' => false,
+            ]
+        ];
 
         $chartOptions = array_merge_recursive(
-            ['name' => 'multiline_chart'],
-            $this->configProvider->getChartConfig('revenue_over_time_chart')
+            ['name' => 'flow_chart'],
+            $this->configProvider->getChartConfig('purchase_chart')
         );
 
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData($items)
             ->getView();
-    }
-
-    /**
-     * @return int
-     */
-    protected function getDeeplyVisitedCount(DateTime $from, DateTime $to)
-    {
-        $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
-
-        return $qb
-            ->select('COUNT(DISTINCT t.userIdentifier)')
-            ->join('t.trackingWebsite', 'tw')
-            ->join('tw.channel', 'c')
-            ->andWhere('c.channelType = :channel')
-            ->andWhere($qb->expr()->between('t.lastActionTime', ':from', ':to'))
-            ->setParameters([
-                'channel' => ChannelType::TYPE,
-                'from'    => $from,
-                'to'      => $to,
-            ])
-            ->groupBy('t.userIdentifier')
-            ->andHaving('COUNT(t.userIdentifier) > 1')
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
-    }
-
-    /**
-     * @return int
-     */
-    protected function getVisitedCount(DateTime $from, DateTime $to)
-    {
-        $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
-
-        return $qb
-            ->select('COUNT(DISTINCT t.userIdentifier)')
-            ->join('t.trackingWebsite', 'tw')
-            ->join('tw.channel', 'c')
-            ->andWhere('c.channelType = :channel')
-            ->andWhere($qb->expr()->between('t.lastActionTime', ':from', ':to'))
-            ->setParameters([
-                'channel' => ChannelType::TYPE,
-                'from'    => $from,
-                'to'      => $to,
-            ])
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
     }
 
     /**
@@ -124,13 +111,5 @@ class PurchaseDataProvider
     protected function getOrderRepository()
     {
         return $this->registry->getRepository('OroCRMMagentoBundle:Order');
-    }
-
-    /**
-     * @return EntityRepository
-     */
-    protected function getTrackingVisitRepository()
-    {
-        return $this->registry->getRepository('OroTrackingBundle:TrackingVisit');
     }
 }
