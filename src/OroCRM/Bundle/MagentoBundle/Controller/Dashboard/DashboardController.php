@@ -22,11 +22,12 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2CAction($widget)
     {
-        $dateTo = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateFrom = new \DateTime(
-            $dateTo->format('Y') . '-01-' . ((ceil($dateTo->format('n') / 3) - 1) * 3 + 1),
-            new \DateTimeZone('UTC')
-        );
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+
+        $dateTo = $dateRange['end'];
+        $dateFrom = $dateRange['start'];
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');
