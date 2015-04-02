@@ -26,5 +26,5 @@ oro_dashboard_config:
             route:       orocrm_magento_dashboard_orders_over_time_chart
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.orders_over_time_chart.description
-#            icon:        todo
+            icon:        bundles/orocrmmagento/img/number-magento-customers.png
             applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
