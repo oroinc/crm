@@ -27,6 +27,15 @@ oro_menu_config:
                 position:    60
                 description: 'orocrm.magento.customer.entity_plural_label'
 
+        magento_newsletter_subscriber:
+            label:   'orocrm.magento.newslettersubscriber.entity_plural_label'
+            route:   'orocrm_magento_newsletter_subscriber_index'
+            display: false
+            extras:
+                routes:      ['/^orocrm_magento_newsletter_subscriber_(index|view)$/']
+                position:    70
+                description: 'orocrm.magento.newslettersubscriber.entity_plural_label'
+
     tree:
         application_menu:
             children:
@@ -37,6 +46,9 @@ oro_menu_config:
                 customers_tab:
                     children:
                         magento_customer: ~
+                marketing_tab:
+                    children:
+                        magento_newsletter_subscriber: ~
 
 oro_titles:
     orocrm_magento_customer_index: ~
@@ -52,3 +64,6 @@ oro_titles:
 
     orocrm_magento_product_index:  'orocrm.magento.product.entity_plural_label'
     orocrm_magento_product_view:   %%product.name%%
+
+    orocrm_magento_newsletter_subscriber_index:  'orocrm.magento.newslettersubscriber.entity_plural_label'
+    orocrm_magento_newsletter_subscriber_view:   %%newsletter_subscriber.email%%

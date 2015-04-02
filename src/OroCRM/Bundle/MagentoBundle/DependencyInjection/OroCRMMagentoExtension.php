@@ -19,15 +19,15 @@ class OroCRMMagentoExtension extends Extension
         $loader->load('orm.yml');
         $loader->load('importexport.yml');
 
-        $configs  = $this->processConfiguration(new Configuration(), $configs);
+        $config  = $this->processConfiguration(new Configuration(), $configs);
         $services = $container->findTaggedServiceIds('orocrm_magento.bundle_config.aware');
 
         foreach ($services as $serviceId => $tagAttributes) {
             $tagAttributes = reset($tagAttributes);
             if (isset($tagAttributes['argument_number'])) {
-                $container->getDefinition($serviceId)->replaceArgument($tagAttributes['argument_number'], $configs);
+                $container->getDefinition($serviceId)->replaceArgument($tagAttributes['argument_number'], $config);
             } else {
-                $container->getDefinition($serviceId)->addArgument($configs);
+                $container->getDefinition($serviceId)->addArgument($config);
             }
         }
     }

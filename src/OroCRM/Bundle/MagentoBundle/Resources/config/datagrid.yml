@@ -14,20 +14,27 @@ datagrid:
                     - c.currency
                     - c.createdAt
                     - c.updatedAt
-                    - channel.name as channelName
-                    - channel.id as channelId
+                    - dataChannel.name as channelName
+                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
+#                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
+                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
+                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
+                    - c.originId as customerOriginId
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
-                        - { join: c.dataChannel, alias: channel }
+                        - { join: c.dataChannel, alias: dataChannel }
+                        - { join: c.channel, alias: channel }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
+                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
+                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -49,6 +56,12 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_country
             regionName:
                 label:            orocrm.magento.datagrid.columns.billing_region
+            isSubscriber:
+                label:            orocrm.magento.datagrid.columns.is_subscriber.label
+                frontend_type: select
+                choices:
+                    0: orocrm.magento.datagrid.columns.is_subscriber.no
+                    1: orocrm.magento.datagrid.columns.is_subscriber.yes
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -65,6 +78,14 @@ datagrid:
                 type: url
                 route: orocrm_magento_customer_update
                 params: [ id ]
+            subscribe_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_subscribe_customer
+                params: [ id ]
+            unsubscribe_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_unsubscribe_customer
+                params: [ id ]
         sorters:
             columns:
                 firstName:   { data_name: c.firstName }
@@ -77,6 +98,7 @@ datagrid:
                 countryName: { data_name: country.name }
                 lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
+                isSubscriber:  { data_name: isSubscriber }
             default:
                 lastName:  ASC
                 firstName: ASC
@@ -84,7 +106,7 @@ datagrid:
             columns:
                 channelName:
                     type:      entity
-                    data_name: channel.id
+                    data_name: dataChannel.id
                     options:
                         field_options:
                             class: OroCRMChannelBundle:Channel
@@ -123,6 +145,10 @@ datagrid:
                 lifetime:
                     type: number
                     data_name: c.lifetime
+                isSubscriber:
+                    label: orocrm.magento.datagrid.columns.is_subscriber.label
+                    type: boolean
+                    data_name: isSubscriber
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -145,6 +171,33 @@ datagrid:
                 label:        oro.grid.action.update
                 icon:         edit
                 link:         update_link
+            subscribe:
+                type: ajaxdelete
+                label: orocrm.magento.newslettersubscriber.action.subscribe
+                link:  subscribe_link
+                icon: plus
+                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
+            unsubscribe:
+                type: ajaxdelete
+                label: orocrm.magento.newslettersubscriber.action.unsubscribe
+                link: unsubscribe_link
+                icon: minus
+                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
+
         action_configuration: [@orocrm_magento.datagrid.customer_actions_provider, "getCustomerActionsPermissions"]
         options:
             entityHint: customer
@@ -1298,3 +1351,149 @@ datagrid:
                 websiteName:
                     type: string
                     data_name: w.name
+
+    magento-newsletter-subscriber-grid:
+        extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
+        source:
+            type: orm
+            acl_resource: orocrm_magento_newsletter_subscriber_view
+            query:
+                select:
+                    - newsletterSubscriber.id
+                    - customer.originId as customerOriginId
+                    - dataChannel.name as channelName
+                    - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
+                    - website.name as websiteName
+                    - newsletterSubscriber.email
+                    - newsletterSubscriber.changeStatusAt
+                    - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
+                    - customer.email as customerEmail
+                    - newsletterSubscriber.createdAt
+                    - newsletterSubscriber.updatedAt
+                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
+                from:
+                    - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
+                join:
+                    left:
+                        - { join: newsletterSubscriber.customer, alias: customer }
+                        - { join: newsletterSubscriber.dataChannel, alias: dataChannel }
+                        - { join: newsletterSubscriber.channel, alias: channel }
+                        - { join: newsletterSubscriber.store, alias: store }
+                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
+                        - { join: store.website, alias: website }
+        columns:
+            channelName:
+                label: orocrm.magento.newslettersubscriber.data_channel.label
+            websiteName:
+                label: orocrm.magento.newslettersubscriber.website.label
+            email:
+                label: orocrm.magento.newslettersubscriber.email.label
+            changeStatusAt:
+                label: orocrm.magento.newslettersubscriber.change_status_at.label
+                frontend_type: datetime
+            customerName:
+                label: orocrm.magento.newslettersubscriber.customer.label
+            customerEmail:
+                label: orocrm.magento.newslettersubscriber.email.customer
+            createdAt:
+                label: oro.ui.created_at
+                frontend_type: datetime
+            updatedAt:
+                label: oro.ui.updated_at
+                frontend_type: datetime
+        sorters:
+            columns:
+                channelName: { data_name: channelName }
+                websiteName: { data_name: websiteName }
+                email: { data_name: newsletterSubscriber.email }
+                changeStatusAt: { data_name: newsletterSubscriber.changeStatusAt }
+                customerName: { data_name: customerName }
+                customerEmail: { data_name: customerEmail }
+                createdAt: { data_name: newsletterSubscriber.createdAt }
+                updatedAt: { data_name: newsletterSubscriber.updatedAt }
+            default:
+                updatedAt: DESC
+        filters:
+            columns:
+                channelName:
+                    type: entity
+                    data_name: dataChannel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                websiteName:
+                    type: string
+                    data_name: websiteName
+                email:
+                    type: string
+                    data_name: newsletterSubscriber.email
+                changeStatusAt:
+                    type: datetime
+                    data_name: newsletterSubscriber.changeStatusAt
+                customerName:
+                    type: string
+                    data_name: customerName
+                customerEmail:
+                    type: string
+                    data_name: customerEmail
+                createdAt:
+                    type: datetime
+                    data_name: newsletterSubscriber.createdAt
+                updatedAt:
+                    type: datetime
+                    data_name: newsletterSubscriber.updatedAt
+        properties:
+            id: ~
+            view_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_view
+                params: [ id ]
+            subscribe_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_subscribe
+                params: [ id ]
+            unsubscribe_link:
+                type: url
+                route: orocrm_magento_newsletter_subscriber_unsubscribe
+                params: [ id ]
+        actions:
+            view:
+                type: navigate
+                acl_resource: orocrm_magento_newsletter_subscriber_view
+                label: oro.grid.action.view
+                icon: eye-open
+                link: view_link
+                rowAction: true
+            subscribe:
+                type: ajaxdelete
+                label: orocrm.magento.newslettersubscriber.action.subscribe
+                link:  subscribe_link
+                icon: plus
+                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.subscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.subscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.subscribe
+            unsubscribe:
+                type: ajaxdelete
+                label: orocrm.magento.newslettersubscriber.action.unsubscribe
+                link: unsubscribe_link
+                icon: minus
+                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                defaultMessages:
+                    confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
+                    confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
+                    confirm_cancel:  orocrm.magento.newslettersubscriber.action.confirm_cancel
+                    confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
+                    success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
+                    error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
+        action_configuration: [@orocrm_magento.datagrid.newsletter_subscriber_provider, "getActionsPermissions"]
+        options:
+            entityHint: newsletter subscriber
+            export: true
+            entity_pagination: true
