@@ -27,7 +27,6 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
         'store',
         'status',
         'cartItems',
-        'customer',
         'relatedCalls',
         'relatedEmails',
         'shippingAddress',
