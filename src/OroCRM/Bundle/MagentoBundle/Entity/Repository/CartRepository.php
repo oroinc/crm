@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use DateTime;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -186,15 +187,19 @@ class CartRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('c');
 
-        return (int) $qb
-            ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
-            ->andWhere($qb->expr()->between('c.updatedAt', ':from', ':to'))
-            ->setParameters([
-                'from' => $from,
-                'to'   => $to,
-            ])
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
+        try {
+            return (int) $qb
+                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('c.updatedAt', ':from', ':to'))
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ])
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }

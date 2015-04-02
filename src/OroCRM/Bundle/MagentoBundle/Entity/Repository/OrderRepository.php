@@ -148,16 +148,20 @@ class OrderRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('o');
 
-        return (int) $qb
-            ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
-            ->andWhere($qb->expr()->between('o.updatedAt', ':from', ':to'))
-            ->andwhere('o.totalPaidAmount IS NOT NULL')
-            ->setParameters([
-                'from' => $from,
-                'to'   => $to,
-            ])
-            ->getQuery()
-            ->getSingleScalarResult()
-        ;
+        try {
+            return (int) $qb
+                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('o.updatedAt', ':from', ':to'))
+                ->andwhere('o.totalPaidAmount IS NOT NULL')
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ])
+                ->getQuery()
+                ->getSingleScalarResult()
+            ;
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }
