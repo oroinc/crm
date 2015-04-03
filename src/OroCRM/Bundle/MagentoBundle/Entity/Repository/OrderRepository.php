@@ -13,6 +13,7 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Utils\DatePeriodUtils;
 
 class OrderRepository extends EntityRepository
 {
@@ -140,15 +141,11 @@ class OrderRepository extends EntityRepository
             ->getResult()
         ;
 
-        $result = [];
+        $result = DatePeriodUtils::getDays($from, $to);
         foreach ($orders as $order) {
             $year  = $order['yearCreated'];
             $month = $order['monthCreated'];
             $day   = $order['dayCreated'];
-
-            if (!isset($result[$year][$month][$day])) {
-                $result[$year][$month][$day] = 0;
-            }
 
             $result[$year][$month][$day] += $order['totalOrderAmount'];
         }
