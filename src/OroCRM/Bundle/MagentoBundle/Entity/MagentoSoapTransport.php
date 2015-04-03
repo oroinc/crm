@@ -119,6 +119,11 @@ class MagentoSoapTransport extends Transport
     protected $adminUrl;
 
     /**
+     * @var string
+     */
+    protected $wsdlCachePath;
+
+    /**
      * @var ParameterBag
      */
     protected $settings;
@@ -365,7 +370,7 @@ class MagentoSoapTransport extends Transport
                 [
                     'api_user' => $this->getApiUser(),
                     'api_key' => $this->getApiKey(),
-                    'wsdl_url' => $this->getWsdlUrl(),
+                    'wsdl_url' => $this->getWsdlPath(),
                     'sync_range' => $this->getSyncRange(),
                     'wsi_mode' => $this->getIsWsiMode(),
                     'website_id' => $this->getWebsiteId(),
@@ -415,6 +420,30 @@ class MagentoSoapTransport extends Transport
     public function setInitialSyncStartDate($initialSyncStartDate)
     {
         $this->initialSyncStartDate = $initialSyncStartDate;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getWsdlPath()
+    {
+        if ($this->wsdlCachePath) {
+            return $this->wsdlCachePath;
+        }
+
+        return $this->getWsdlUrl();
+    }
+
+    /**
+     * @param string $wsdlCachePath
+     * @return MagentoSoapTransport
+     */
+    public function setWsdlCachePath($wsdlCachePath)
+    {
+        $this->wsdlCachePath = $wsdlCachePath;
+        $this->settings = null;
 
         return $this;
     }
