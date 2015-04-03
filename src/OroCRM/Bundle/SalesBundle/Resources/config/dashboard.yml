@@ -25,7 +25,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
@@ -38,7 +38,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
@@ -51,7 +51,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
@@ -64,7 +64,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
@@ -77,7 +77,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
@@ -90,7 +90,7 @@ oro_dashboard_config:
             applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
             configuration:
                 dateRange:
-                    type: oro_type_date_range_filter
+                    type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
