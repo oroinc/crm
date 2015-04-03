@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
 use DateTime;
+use DateInterval;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 
@@ -12,8 +13,7 @@ use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
-
-use Symfony\Component\Translation\TranslatorInterface;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 
 class OrderDataProvider
 {
@@ -33,26 +33,26 @@ class OrderDataProvider
     protected $configProvider;
 
     /**
-     * @var TranslatorInterface
+     * @var DateTimeFormatter
      */
-    protected $translator;
+    protected $dateTimeFormatter;
 
     /**
      * @param ManagerRegistry $registry
      * @param AclHelper $aclHelper
      * @param ConfigProvider $configProvider
-     * @param TranslatorInterface $translator
+     * @param DateTimeFormatter $dateTimeFormatter
      */
     public function __construct(
         ManagerRegistry $registry,
         AclHelper $aclHelper,
         ConfigProvider $configProvider,
-        TranslatorInterface $translator
+        DateTimeFormatter $dateTimeFormatter
     ) {
         $this->registry = $registry;
         $this->aclHelper = $aclHelper;
         $this->configProvider = $configProvider;
-        $this->translator = $translator;
+        $this->dateTimeFormatter = $dateTimeFormatter;
     }
 
     /**
@@ -103,20 +103,32 @@ class OrderDataProvider
     public function getOrdersOverTimeChartView(ChartViewBuilder $viewBuilder, DateTime $from, DateTime $to)
     {
         $items = $this->createOrdersOvertimeCurrentData($from, $to);
-        $previousItems = $this->createOrdersOvertimePreviousData($from, $to);
+
+        $interval = $from->diff($to);
+        $fromDate = clone $from;
+        $previousFrom = $fromDate->sub($interval);
+        $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from, $interval);
 
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig('orders_over_time_chart')
         );
 
-        $previousPeriod = $this->translator->trans('orocrm.magento.dashboard.orders_over_time_chart.previous_period');
-        $currentPeriod = $this->translator->trans('orocrm.magento.dashboard.orders_over_time_chart.current_period');
+        $currentPeriod = sprintf(
+            '%s - %s',
+            $this->dateTimeFormatter->formatDate($from),
+            $this->dateTimeFormatter->formatDate($to)
+        );
+        $previousPeriod = sprintf(
+            '%s - %s',
+            $this->dateTimeFormatter->formatDate($previousFrom),
+            $this->dateTimeFormatter->formatDate($from)
+        );
 
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData([
                 $previousPeriod => $previousItems,
-                $currentPeriod  => $items,
+                $currentPeriod => $items,
             ])
             ->getView();
     }
@@ -149,22 +161,20 @@ class OrderDataProvider
     /**
      * @param DateTime $from
      * @param DateTime $to
+     * @param DateInterval $interval
      *
      * @return array
      */
-    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to)
+    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to, DateInterval $interval)
     {
-        $diff = $from->diff($to);
-        $fromDate = clone $from;
-        $oldFrom = $fromDate->sub($diff);
-        $result = $this->getOrderRepository()->getOrdersOverTime($oldFrom, $from);
+        $result = $this->getOrderRepository()->getOrdersOverTime($from, $to);
 
         $items = [];
         foreach ($result as $year => $yearData) {
             foreach ($yearData as $month => $monthData) {
                 foreach ($monthData as $day => $count) {
                     $date = new DateTime(sprintf('%04d-%02d-%02d', $year, $month, $day));
-                    $date->add($diff);
+                    $date->add($interval);
                     $items[] = [
                         'date' => $date->format('Y-m-d'),
                         'count' => $count,
