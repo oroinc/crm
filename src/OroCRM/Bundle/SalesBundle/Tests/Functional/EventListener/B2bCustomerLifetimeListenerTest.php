@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Tests\Unit\EventListner;
+namespace OroCRM\Bundle\SalesBundle\Tests\Functional\EventListner;
 
 use Doctrine\ORM\EntityManager;
 
@@ -143,7 +143,34 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         return $opportunity;
     }
 
+    public function testRemoveOpportunityFromB2bCustomer()
+    {
+        $em = $this->getEntityManager();
+
+        // add an opportunity to the database
+        $opportunity = new Opportunity();
+        $opportunity->setName('unset_b2bcustomer_test');
+        $opportunity->setDataChannel($this->getReference('default_channel'));
+        $opportunity->setCloseRevenue(50);
+        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        /** @var B2bCustomer $b2bCustomer */
+        $b2bCustomer = $this->getReference('default_b2bcustomer');
+        $b2bCustomer->addOpportunity($opportunity);
+        $em->persist($opportunity);
+        $em->flush();
+
+        // check preconditions
+        $this->assertEquals(50, $b2bCustomer->getLifetime());
+
+        // test that lifetime value is recalculated if "won" opportunity is removed from the customer
+        $b2bCustomer->removeOpportunity($opportunity);
+        $em->flush();
+        $this->assertEquals(0, $b2bCustomer->getLifetime());
+    }
+
     /**
+     * @depends testRemoveOpportunityFromB2bCustomer
+     *
      * Test that no processing occured for b2bcustomers that were deleted
      * assert that onFlush event listeners not throwing exceptions
      */
