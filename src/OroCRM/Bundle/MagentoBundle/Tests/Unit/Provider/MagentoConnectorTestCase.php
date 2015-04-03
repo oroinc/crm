@@ -74,7 +74,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
     public function testInitialization()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        //$this->transportMock->expects($this->once())->method('init');
 
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($this->getMock('\Iterator')));
@@ -95,8 +94,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $expectedDateInFilter = clone $status->getDate();
         $assumptionInterval   = $this->config['sync_settings']['mistiming_assumption_interval'];
         $expectedDateInFilter->sub(\DateInterval::createFromDateString($assumptionInterval));
-
-        //$this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->once())->method('setMode')
@@ -119,8 +116,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $status->setConnector($connector->getType());
 
         $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
-
-        //$this->transportMock->expects($this->once())->method('init');
 
         $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
         $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setMode');
@@ -147,7 +142,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $context = new Context(['filters' => []]);
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, null, $context);
-        //$this->transportMock->expects($this->once())->method('init');
 
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iterator));
@@ -213,7 +207,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        //$this->transportMock->expects($this->once())->method('init');
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
             ->will($this->returnValue($iteratorMock));
 
