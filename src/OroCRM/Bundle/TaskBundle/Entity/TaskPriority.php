@@ -11,16 +11,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_task_priority")
- * @Config(
- *      defaultValues={
- *          "security"={
- *              "type"="ACL"
- *          },
- *          "dataaudit"={
- *              "auditable"=true
- *          }
- *      }
- * )
+ * @Config()
  */
 class TaskPriority
 {
