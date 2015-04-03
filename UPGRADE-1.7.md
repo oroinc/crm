@@ -33,3 +33,6 @@ To inject dependency use method setManagerRegistry. This change affects all deri
 
 - Magento Customer import now works on top of Data Converters and Strategy
 - Composite denormalizers removed in favour of TreeDataConverters
+
+####OroCRMSalesBundle:
+- Added ContactId filter to Opportunities REST API - /api/rest/{version}/opportunities.{_format}?contactId={id}
