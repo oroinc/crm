@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\Query\Expr;
+
 use OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
@@ -54,6 +56,14 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
         $qb->expects($this->once())
             ->method('select')
             ->will($this->returnSelf());
+
+        $qb->expects($this->once())
+            ->method('where')
+            ->will($this->returnSelf());
+
+        $qb->expects($this->once())
+            ->method('expr')
+            ->will($this->returnValue(new Expr()));
 
         $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
             ->setMethods(['getSingleScalarResult'])

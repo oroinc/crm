@@ -38,11 +38,14 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->method('decryptData')
             ->with($this->encryptedApiKey)
             ->will($this->returnValue($this->decryptedApiKey));
+        $wsdlManager = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Service\WsdlManager')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->transport = $this->getMock(
             'OroCRM\\Bundle\\MagentoBundle\\Provider\\Transport\\SoapTransport',
             ['getSoapClient'],
-            [$encoder]
+            [$encoder, $wsdlManager]
         );
         // Do not attempt to run request several times in Unit test. This leads to sleep and test performance impact
         $this->transport->setMultipleAttemptsEnabled(false);
