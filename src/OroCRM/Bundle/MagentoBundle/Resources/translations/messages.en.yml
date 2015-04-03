@@ -91,6 +91,10 @@ orocrm:
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
+            store:
+                label: Store Connector
+            website:
+                label: Website Connector
 
         customer:
             entity_label:        Magento Customer

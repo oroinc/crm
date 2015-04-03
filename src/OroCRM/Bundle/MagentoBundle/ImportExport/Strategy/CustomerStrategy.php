@@ -21,11 +21,6 @@ class CustomerStrategy extends AbstractImportStrategy
     protected $addressHelper;
 
     /**
-     * @var StoreStrategy
-     */
-    protected $storeStrategy;
-
-    /**
      * @var CustomerGroupHelper
      */
     protected $customerGroupHelper;
@@ -54,14 +49,6 @@ class CustomerStrategy extends AbstractImportStrategy
     public function setAddressHelper(AddressImportHelper $addressHelper)
     {
         $this->addressHelper = $addressHelper;
-    }
-
-    /**
-     * @param StoreStrategy $storeStrategy
-     */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
     }
 
     /**
@@ -110,26 +97,11 @@ class CustomerStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $this->processStore($entity);
         $this->processDataChannel($entity);
         $this->processGroup($entity);
         $this->processAddresses($entity);
 
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processStore(Customer $entity)
-    {
-        $store = $entity->getStore();
-        if ($entity->getStore()) {
-            $store = $this->storeStrategy->process($store);
-
-            $entity->setStore($store);
-            $entity->setWebsite($store->getWebsite());
-        }
     }
 
     /**

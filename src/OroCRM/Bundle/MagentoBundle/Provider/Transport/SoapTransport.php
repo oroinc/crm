@@ -313,12 +313,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $dependencies = [];
         foreach ($dependenciesToLoad as $dependencyToLoad) {
             switch ($dependencyToLoad) {
-                case MagentoTransportInterface::ALIAS_STORES:
-                    $dependencies[$dependencyToLoad] = $this->getStoreDependency($force);
-                    break;
-                case MagentoTransportInterface::ALIAS_WEBSITES:
-                    $dependencies[$dependencyToLoad] = $this->getWebsiteDependency($force);
-                    break;
                 case MagentoTransportInterface::ALIAS_GROUPS:
                     $dependencies[$dependencyToLoad] = $this->getCustomerGroupsDependency($force);
                     break;
@@ -326,32 +320,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         return $dependencies;
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getStoreDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_STORES, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_STORES] = iterator_to_array($this->getStores());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_STORES];
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getWebsiteDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_WEBSITES, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES] = iterator_to_array($this->getWebsites());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES];
     }
 
     /**
