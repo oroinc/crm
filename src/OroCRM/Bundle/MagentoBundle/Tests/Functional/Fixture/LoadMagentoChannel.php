@@ -31,6 +31,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -212,6 +213,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $transport->setApiKey('key');
         $transport->setApiUser('user');
         $transport->setIsExtensionInstalled(true);
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
+        $transport->setMagentoVersion('1.9.1.0');
         $transport->setIsWsiMode(false);
         $transport->setWebsiteId('1');
         $transport->setWsdlUrl('http://localhost/magento/api/v2_soap?wsdl=1');

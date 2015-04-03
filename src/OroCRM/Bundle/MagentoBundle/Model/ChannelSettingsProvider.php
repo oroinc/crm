@@ -98,14 +98,19 @@ class ChannelSettingsProvider
 
     /**
      * @param mixed $channelId
+     * @param bool $checkExtension
      *
      * @return bool
      */
-    public function isChannelApplicable($channelId)
+    public function isChannelApplicable($channelId, $checkExtension = true)
     {
-        return $this->isEnabled($channelId)
-            && $this->isTwoWaySyncEnable($channelId)
-            && $this->isSupportedExtensionVersion($channelId);
+        $isChannelApplicable = $this->isEnabled($channelId) && $this->isTwoWaySyncEnable($channelId);
+
+        if ($checkExtension) {
+            $isChannelApplicable = $isChannelApplicable && $this->isSupportedExtensionVersion($channelId);
+        }
+
+        return $isChannelApplicable;
     }
 
     /**

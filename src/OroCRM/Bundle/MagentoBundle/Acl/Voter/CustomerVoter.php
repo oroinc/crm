@@ -19,7 +19,7 @@ class CustomerVoter extends AbstractTwoWaySyncVoter
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
         if (is_a($this->object, $this->className, true)) {
-            if (!$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId())) {
+            if (!$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId(), false)) {
                 return self::ACCESS_DENIED;
             }
 
