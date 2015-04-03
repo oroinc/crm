@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
+use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
+
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -10,7 +14,9 @@ use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 
-abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy implements LoggerAwareInterface
+abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy implements
+    LoggerAwareInterface,
+    StepExecutionAwareInterface
 {
     /**
      * @var LoggerInterface
@@ -21,6 +27,11 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
      * @var DefaultOwnerHelper
      */
     protected $ownerHelper;
+
+    /**
+     * @var StepExecution
+     */
+    protected $stepExecution;
 
     /**
      * {@inheritdoc}
@@ -39,6 +50,15 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
     }
 
     /**
+     * @param StepExecution $stepExecution
+     * @return AbstractImportStrategy
+     */
+    public function setStepExecution(StepExecution $stepExecution)
+    {
+        $this->stepExecution = $stepExecution;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function beforeProcessEntity($entity)
@@ -50,5 +70,17 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
         }
 
         return parent::beforeProcessEntity($entity);
+    }
+
+    /**
+     * @return ExecutionContext
+     */
+    protected function getExecutionContext()
+    {
+        if (!$this->stepExecution) {
+            throw new \InvalidArgumentException('Execution context is not configured');
+        }
+
+        return $this->stepExecution->getJobExecution()->getExecutionContext();
     }
 }

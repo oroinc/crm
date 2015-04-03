@@ -65,6 +65,10 @@ orocrm:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
+                is_subscriber:
+                    label: Is a Subsciber
+                    yes: Yes
+                    no: No
         channel_type:
             label:  Magento
         transport:
@@ -84,6 +88,9 @@ orocrm:
             order:
                 label: Order connector
                 initial.label: Initial Order connector
+            newsletter_subscriber:
+                label: Newsletter Subscriber Connector
+                initial.label: Initial  Newsletter Subscriber Connector
 
         customer:
             entity_label:        Magento Customer
@@ -129,6 +136,7 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
+            newsletter_subscriber.label: Newsletter Subscriber
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -262,6 +270,9 @@ orocrm:
             wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
             initial_sync_start_date.label: Initial sync start date
+            message:
+                native_soap: Native Magento API is used; only customers and orders will be synced
+                outdated_brige: OroBridge v.%extension_version% is used—outdated version; only customers and orders will be synced
 
         order:
             entity_label:        Magento Order
@@ -441,6 +452,37 @@ orocrm:
             code.label:          Code
             name.label:          Name
             channel.label:       Integration
+
+        newslettersubscriber:
+            label:               Newsletter Subscriber
+            entity_label:        Magento Newsletter Subscriber
+            entity_plural_label: Magento Newsletter Subscribers
+            id.label:            Id
+            origin_id.label:     Origin Id
+            channel.label:       Integration
+            change_status_at.label: Status change date
+            confirm_code.label:  Confirmation code
+            customer.label:      Customer
+            data_channel.label:  Channel
+            store.label:         Store
+            website.label:       Website
+            organization.label:  Organization
+            owner.label:         Owner
+            email:
+                label: Email
+                customer: Customer Email
+            status:
+                label: Status
+                subscribed: Subscribed
+                not_active: Not active
+                unsubscribed: Unsubscribed
+                unconfirmed: Unconfirmed
+            action:
+                subscribe: Subscribe
+                unsubscribe: Unsubscribe
+            email.label:         Email
+            status.label:        Status
+            store.label:         Store
 
         account:
             no_customers_exist: No customers exist
