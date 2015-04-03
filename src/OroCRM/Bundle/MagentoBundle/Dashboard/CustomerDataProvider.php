@@ -101,11 +101,12 @@ class CustomerDataProvider
             $this->configProvider->getChartConfig('new_web_customers')
         );
 
-        $chartOptions['data_schema']['label']['type']  = $this->dateHelper->getFormatStrings($past, $now)['viewType'];
+        $chartType = $this->dateHelper->getFormatStrings($past, $now)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
         $chartOptions['data_schema']['label']['label'] =
             sprintf(
                 'oro.dashboard.chart.%s.label',
-                $this->dateHelper->getFormatStrings($past, $now)['chartType']
+                $chartType
             );
 
         return $viewBuilder->setOptions($chartOptions)

@@ -61,11 +61,12 @@ class OrderDataProvider
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig('average_order_amount')
         );
-        $chartOptions['data_schema']['label']['type']  = $dateHelper->getFormatStrings($start, $end)['viewType'];
+        $chartType = $dateHelper->getFormatStrings($start, $end)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
         $chartOptions['data_schema']['label']['label'] =
             sprintf(
                 'oro.dashboard.chart.%s.label',
-                $dateHelper->getFormatStrings($start, $end)['chartType']
+                $chartType
             );
 
 
