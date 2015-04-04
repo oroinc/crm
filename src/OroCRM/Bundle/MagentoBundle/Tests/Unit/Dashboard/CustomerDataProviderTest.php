@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
+
 use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
 class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -26,6 +28,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $configProvider;
 
+    /**
+     * @var DateHelper
+     */
+    protected $dateHelper;
+
     protected function setUp()
     {
         $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -35,11 +42,13 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dateHelper = new DateHelper();
 
         $this->dataProvider = new CustomerDataProvider(
             $this->registry,
             $this->aclHelper,
-            $this->configProvider
+            $this->configProvider,
+            $this->dateHelper
         );
     }
 
@@ -49,6 +58,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedArrayData
      * @param array $expectedOptions
      * @param array $chartConfig
+     * @param array $dateRange
      * @dataProvider getNewCustomerChartViewDataProvider
      */
     public function testGetNewCustomerChartView(
@@ -56,7 +66,8 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         array $sourceData,
         array $expectedArrayData,
         array $expectedOptions,
-        array $chartConfig
+        array $chartConfig,
+        array $dateRange
     ) {
         $channelRepository = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
@@ -115,7 +126,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $chartView,
-            $this->dataProvider->getNewCustomerChartView($chartViewBuilder)
+            $this->dataProvider->getNewCustomerChartView($chartViewBuilder, $dateRange)
         );
     }
 
@@ -142,8 +153,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         foreach ($datePeriod as $dt) {
             $key = $dt->format('Y-m');
             $dates[$key] = array(
-                'month_year' => sprintf('%s-01', $key),
-                'cnt'        => 0
+                'date' => sprintf('%s-01', $key),
             );
         }
 
@@ -187,7 +197,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'label'      => 'oro.dashboard.chart.month.label',
                             'type'       => 'month'
                         ],
                         'value' => [
@@ -200,7 +210,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'label'      => 'oro.dashboard.chart.month.label',
                             'type'       => 'month',
                         ],
                         'value' => [
@@ -208,6 +218,10 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                             'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
                         ]
                     ]
+                ],
+                'dateRange' => [
+                    'start' => $past,
+                    'end' => $now
                 ]
             ]
         ];

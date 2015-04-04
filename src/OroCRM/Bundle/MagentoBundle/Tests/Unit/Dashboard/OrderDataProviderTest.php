@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -46,13 +47,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetAverageOrderAmountByCustomerChartView()
     {
         $sourceOrderData = [
-            1 => [
-                'name' => 'First',
-                'data' => [2014 => [9 => 3]],
+            'First' => [
+                ['month' => '2014-09-01', 'amount' => 3],
             ],
-            2 => [
-                'name' => 'Second',
-                'data' => [2014 => [9 => 5]],
+            'Second' => [
+                ['month' => '2014-09-01', 'amount' => 5],
             ]
         ];
         $expectedArrayData = [
@@ -68,7 +67,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month',
+                    'label' => 'oro.dashboard.chart.month.label',
                     'type' => 'month',
                 ],
                 'value' => [
@@ -96,9 +95,12 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
+        $start = new \DateTime('2012-01-01');
+        $end = new \DateTime('2015-01-01');
+        $dateHelper = new DateHelper();
         $orderRepository->expects($this->once())
             ->method('getAverageOrderAmount')
-            ->with($this->aclHelper)
+            ->with($this->aclHelper, $start, $end, $dateHelper)
             ->will($this->returnValue($sourceOrderData));
 
         $this->registry->expects($this->once())
@@ -132,7 +134,14 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $chartView,
-            $this->dataProvider->getAverageOrderAmountChartView($chartViewBuilder)
+            $this->dataProvider->getAverageOrderAmountChartView(
+                $chartViewBuilder,
+                [
+                    'start' => $start,
+                    'end' => $end
+                ],
+                $dateHelper
+            )
         );
     }
 }
