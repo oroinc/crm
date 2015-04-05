@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
-use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-
 use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
 class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -29,7 +27,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     protected $configProvider;
 
     /**
-     * @var DateHelper
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $dateHelper;
 
@@ -42,7 +40,9 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateHelper = new DateHelper();
+        $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->dataProvider = new CustomerDataProvider(
             $this->registry,
@@ -123,7 +123,35 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getChartConfig')
             ->with('new_web_customers')
             ->will($this->returnValue($chartConfig));
-
+        $this->dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(
+                [
+                    'viewType' => 'month'
+                ]
+            );
+        $this->dateHelper->expects($this->once())
+            ->method('getDatePeriod')
+            ->willReturnCallback(function($past, $now) {
+                return [
+                    '2014-02' => ['date' => '2014-02-01'],
+                    '2014-03' => ['date' => '2014-03-01'],
+                    '2014-04' => ['date' => '2014-04-01'],
+                    '2014-05' => ['date' => '2014-05-01'],
+                    '2014-06' => ['date' => '2014-06-01'],
+                    '2014-07' => ['date' => '2014-07-01'],
+                    '2014-08' => ['date' => '2014-08-01'],
+                    '2014-09' => ['date' => '2014-09-01'],
+                    '2014-10' => ['date' => '2014-10-01'],
+                    '2014-11' => ['date' => '2014-11-01'],
+                    '2014-12' => ['date' => '2014-12-01'],
+                ];
+            });
+        $this->dateHelper->expects($this->any())
+            ->method('getKey')
+            ->willReturnCallback(function($past, $now, $row) {
+                return $row['yearCreated'] . '-' . $row['monthCreated'];
+            });
         $this->assertEquals(
             $chartView,
             $this->dataProvider->getNewCustomerChartView($chartViewBuilder, $dateRange)
@@ -136,7 +164,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     public function getNewCustomerChartViewDataProvider()
     {
         $ulcTimezone = new \DateTimeZone('UTC');
-        $now  = new \DateTime('now', $ulcTimezone);
+        $now  = new \DateTime('2015-01-01', $ulcTimezone);
         $past = clone $now;
         $past = $past->sub(new \DateInterval("P11M"));
         $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $ulcTimezone);
@@ -146,7 +174,9 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
         $dates      = [];
 
-        $nowMonth = $now->format('Y-m');
+        $nowClone = clone $now;
+        $nowClone = $nowClone->sub(new \DateInterval("P1M"));
+        $nowMonth = $nowClone->format('Y-m');
 
         // create dates by date period
         /** @var \DateTime $dt */
@@ -181,14 +211,14 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     [
                         'channelId'    => 3,
                         'cnt'          => 16,
-                        'yearCreated'  => $now->format('Y'),
-                        'monthCreated' => $now->format('m'),
+                        'yearCreated'  => '2014',
+                        'monthCreated' => '12',
                     ],
                     [
                         'channelId'    => 4,
                         'cnt'          => 12,
-                        'yearCreated'  => $now->format('Y'),
-                        'monthCreated' => $now->format('m'),
+                        'yearCreated'  => '2014',
+                        'monthCreated' => '12',
                     ]
                 ],
                 'expectedArrayData' => $expected,

@@ -71,7 +71,8 @@ class CustomerDataProvider
         // get all integration channels
         $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
-        $data       = $customerRepository->getGroupedByChannelArray(
+        $dates = $this->dateHelper->getDatePeriod($past, $now);
+        $data  = $customerRepository->getGroupedByChannelArray(
             $this->aclHelper,
             $past,
             $now,
@@ -79,7 +80,6 @@ class CustomerDataProvider
             $this->dateHelper
         );
 
-        $dates = $this->dateHelper->getDatePeriod($past, $now);
 
         foreach ($data as $row) {
             $key         = $this->dateHelper->getKey($past, $now, $row);

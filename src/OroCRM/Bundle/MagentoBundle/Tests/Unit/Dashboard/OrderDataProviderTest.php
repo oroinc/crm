@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
-use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -97,7 +96,16 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $start = new \DateTime('2012-01-01');
         $end = new \DateTime('2015-01-01');
-        $dateHelper = new DateHelper();
+        $dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(
+                [
+                    'viewType' => 'month'
+                ]
+            );
         $orderRepository->expects($this->once())
             ->method('getAverageOrderAmount')
             ->with($this->aclHelper, $start, $end, $dateHelper)
