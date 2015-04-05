@@ -74,7 +74,10 @@ class B2bCustomerLifetimeListener
                     }
 
                     if ($this->isValuable($entity, isset($changeSet['closeRevenue']))
-                        || B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                        || (
+                            B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                            && $entity->getCustomer()
+                        )
                     ) {
                         $this->scheduleUpdate($entity->getCustomer());
                     }
