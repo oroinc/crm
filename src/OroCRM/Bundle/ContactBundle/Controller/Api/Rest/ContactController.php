@@ -20,6 +20,7 @@ use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\AssociatedFieldToReferenceFilter;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType;
@@ -66,6 +67,12 @@ class ContactController extends RestController implements ClassResourceInterface
      *     description="Username of owner user"
      * )
      * @QueryParam(
+     *     name="phone",
+     *     requirements=".+",
+     *     nullable=true,
+     *     description="Phone number of contact"
+     * )
+     * @QueryParam(
      *     name="assigneeId",
      *     requirements="\d+",
      *     nullable=true,
@@ -94,6 +101,13 @@ class ContactController extends RestController implements ClassResourceInterface
         $dateParamFilter  = new HttpDateTimeParameterFilter();
         $userIdFilter     = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User');
         $userNameFilter   = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User', 'username');
+        $phoneFilter      = new AssociatedFieldToReferenceFilter(
+            $this->getDoctrine(),
+            'OroCRMContactBundle:Contact',
+            'phones',
+            'phone'
+        );
+
         $filterParameters = [
             'createdAt'        => $dateParamFilter,
             'updatedAt'        => $dateParamFilter,
@@ -101,12 +115,14 @@ class ContactController extends RestController implements ClassResourceInterface
             'ownerUsername'    => $userNameFilter,
             'assigneeId'       => $userIdFilter,
             'assigneeUsername' => $userNameFilter,
+            'phone'            => $phoneFilter,
         ];
         $map              = [
             'ownerId'          => 'owner',
             'ownerUsername'    => 'owner',
             'assigneeId'       => 'assignedTo',
-            'assigneeUsername' => 'assignedTo'
+            'assigneeUsername' => 'assignedTo',
+            'phone'            => 'id', // we get IDs of contacts from filter
         ];
 
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
