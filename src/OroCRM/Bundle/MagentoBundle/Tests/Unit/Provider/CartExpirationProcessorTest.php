@@ -54,7 +54,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($settingBag));
 
         $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
-        $realTransport->expects($this->once())->method('isExtensionInstalled')->will($this->returnValue(false));
+        $realTransport->expects($this->once())->method('isSupportedExtensionVersion')->will($this->returnValue(false));
 
         $this->helper->expects($this->once())->method('getTransport')
             ->will($this->returnValue($realTransport));
@@ -80,7 +80,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($settingBag));
 
         $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
-        $realTransport->expects($this->once())->method('isExtensionInstalled')
+        $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')
             ->will($this->returnValue($testStoresArray));
@@ -121,7 +121,7 @@ class CartExpirationProcessorTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($settingBag));
 
         $realTransport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
-        $realTransport->expects($this->once())->method('isExtensionInstalled')
+        $realTransport->expects($this->once())->method('isSupportedExtensionVersion')
             ->will($this->returnValue(true));
         $realTransport->expects($this->once())->method('getStores')
             ->will($this->returnValue($testStoresArray));

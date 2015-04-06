@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConverter;
 
-class OrderDataConverter extends AbstractTableDataConverter
+class OrderDataConverter extends AbstractTreeDataConverter
 {
     /**
      * {@inheritdoc}
@@ -45,6 +45,27 @@ class OrderDataConverter extends AbstractTableDataConverter
             'updated_at'          => 'updatedAt',
             'customer_email'      => 'customerEmail',
         ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        // normalize order items if single is passed
+        if (!empty($importedRecord['items'])) {
+            /** @var array $items */
+            $items = $importedRecord['items'];
+            foreach ($items as $item) {
+                if (!is_array($item)) {
+                    $importedRecord['items'] = [$items];
+
+                    break;
+                }
+            }
+        }
+
+        return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
 
     /**

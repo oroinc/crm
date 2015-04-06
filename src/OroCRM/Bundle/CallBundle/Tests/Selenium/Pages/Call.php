@@ -70,4 +70,12 @@ class Call extends AbstractPageEntity
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$contact}')]")->click();
         return $this;
     }
+
+    public function logCall()
+    {
+        $this->test->byXpath("//div[@class='widget-actions-section']//button[contains(., 'Log call')]")->click();
+        $this->waitForAjax();
+
+        return $this;
+    }
 }

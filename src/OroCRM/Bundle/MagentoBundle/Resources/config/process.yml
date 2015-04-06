@@ -4,6 +4,7 @@ definitions:
         enabled: true
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   10
+        exclude_definitions: [magento_customer_export, magento_customer_address_export]
         actions_configuration:
             - @tree: # set Contact
                 conditions: # if Contact not exists
@@ -91,6 +92,18 @@ definitions:
                                           method: addPhone
                                           method_parameters: [$.magentoAddress.contactPhone]
 
+            - @automatic_discovery:
+                conditions: # if Account not exists
+                    @empty: $account
+                parameters:
+                    entity: $.data
+                    attribute: $.matchedEntity
+            - @assign_value: # check matched entity and its account
+                conditions:
+                    @not_empty: $.matchedEntity
+                    @not_empty: $.matchedEntity.account
+                parameters: [$account, $.matchedEntity.account]
+
             - @tree: # set Account
                 conditions: # if Account not exists
                     @empty: $account
@@ -116,6 +129,135 @@ definitions:
                             owner:          $owner
                             organization:   $organization
                     - @unset_value: [$.accountName]
+
+    magento_customer_export:
+        label:   'Export Magento Customer to Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
+        order:   20
+        exclude_definitions: [magento_customer_export, magento_customer_creation]
+        actions_configuration:
+            - @call_method:
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
+            - @tree:
+                conditions:
+                    @and:
+                        - @equal: [$channel.enabled, true]
+                        - @equal: [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_TO_MAGENTO
+                    - @assign_constant_value:
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::MAGENTO_REMOVED
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - @call_method:
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @equal: [$.isRemoteRemoved, false]
+                                - @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                jobType: export
+                                jobName: magento_customer_export
+                                configuration:
+                                    channel: $channel.id
+                                    entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
+                                    writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
+                                attribute: $.jobResult
+                            - @call_method:
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
+
+    magento_customer_address_export:
+        label:   'Export Magento Customer Address to Magento'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\Address
+        order:   20
+        exclude_definitions: [magento_customer_address_export, magento_customer_creation]
+        actions_configuration:
+            - @call_method:
+                attribute: $.isTwoWaySyncEnabled
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['isTwoWaySyncEnabled', false]
+            - @call_method:
+                attribute: $.twoWaySyncStrategy
+                object: $channel.synchronizationSettings
+                method: 'offsetGetOr'
+                method_parameters: ['syncPriority']
+            - @tree:
+                conditions:
+                    @and:
+                        - @equal: [$channel.enabled, true]
+                        - @not_empty: $owner.originId
+                        - @equal: [$.isTwoWaySyncEnabled, true]
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.scheduleSyncState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::SYNC_TO_MAGENTO
+                    - @assign_constant_value:
+                        attribute: $.remoteRemovedState
+                        value: OroCRM\Bundle\MagentoBundle\Entity\Address::MAGENTO_REMOVED
+                    - @create_object:
+                        attribute: $.stateManager
+                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
+                    - @call_method:
+                        attribute: $.isSyncRequested
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.scheduleSyncState]
+                    - @call_method:
+                        attribute: $.isRemoteRemoved
+                        object: $.stateManager
+                        method: 'isInState'
+                        method_parameters: [$syncState, $.remoteRemovedState]
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @equal: [$.isRemoteRemoved, false]
+                                - @equal: [$.isSyncRequested, true]
+                        actions:
+                            - @execute_job:
+                                jobType: export
+                                jobName: magento_customer_address_export
+                                configuration:
+                                    channel: $channel.id
+                                    entity: $.data
+                                    changeSet: $.changeSet
+                                    twoWaySyncStrategy: $.twoWaySyncStrategy
+                                    writer_skip_clear: true
+                                    processorAlias: orocrm_magento # to enable magento normalizers
+                                attribute: $.jobResult
+                            - @call_method:
+                                object: $.stateManager
+                                method: 'removeState'
+                                method_parameters: [$.data, 'syncState', $.scheduleSyncState]
 
     magento_analytics_customer_calculate:
         label:   'Calculate RFM analytics for Magento Customer'
@@ -197,55 +339,23 @@ definitions:
                             - $.commandName
                             - [$.channelArguments]
 
-    magento_load_customer_info:
-        label:   'Load Customer Information'
-        exclude_definitions: [magento_load_customer_info]
-        enabled: true
-        entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
-        order:   40
-        actions_configuration:
-            - @tree:
-                conditions:
-                    @not_empty: $originId
-                actions:
-                    - @assign_constant_value:
-                        attribute: $.infoSyncState
-                        value: OroCRM\Bundle\MagentoBundle\Entity\Customer::SYNC_INFO
-                    - @create_object:
-                        attribute: $.stateManager
-                        class: OroCRM\Bundle\MagentoBundle\Service\StateManager
-                    - @call_method:
-                        attribute: $.isSyncRequested
-                        object: $.stateManager
-                        method: 'isInState'
-                        method_parameters: [$syncState, $.infoSyncState]
-                    - @tree:
-                        conditions:
-                            @equal: [$.isSyncRequested, true]
-                        actions:
-                            - @execute_job:
-                                parameters:
-                                    jobType: import
-                                    jobName: mage_load_customer_info
-                                    configuration:
-                                        data: $.data
-                                        channel: $channel
-                                        writer_skip_clear: true
-                                        processorAlias: 'orocrm_magento.add_or_update_customer'
-                                    attribute: $.jobResult
-                            - @call_method:
-                                conditions:
-                                    @equal: [$.jobResult.successful, true]
-                                parameters:
-                                    object: $.stateManager
-                                    method: 'removeState'
-                                    method_parameters: [$.data, 'syncState', $.infoSyncState]
-
 triggers:
     magento_customer_creation:
         -
             event:    create
             priority: 5
+            queued:   true
+
+    magento_customer_export:
+        -
+            event:    update
+            priority: 10
+            queued:   true
+
+    magento_customer_address_export:
+        -
+            event:    update
+            priority: 10
             queued:   true
 
     magento_analytics_customer_calculate_imported:

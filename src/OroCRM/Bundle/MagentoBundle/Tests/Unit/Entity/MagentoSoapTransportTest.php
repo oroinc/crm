@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class MagentoSoapTransportTest extends AbstractEntityTestCase
 {
@@ -41,6 +42,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'syncRange'              => ['syncRange',            $syncRange, $syncRange],
             'is_extension_installed' => ['isExtensionInstalled', $isExtensionInstalled, $isExtensionInstalled],
             'admin_url'              => ['adminUrl',             $adminUrl, $adminUrl],
+            'extension_version'      => ['extensionVersion', '1.0.0', '1.0.0'],
+            'magento_version'      => ['magentoVersion', '1.0.0', '1.0.0']
         ];
     }
 
@@ -55,6 +58,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'website_id' => 1,
             'start_sync_date' => new \DateTime('now'),
             'initial_sync_start_date' => new \DateTime('now'),
+            'extension_version' => '1.1.0',
+            'magento_version' => '1.8.0.0'
         ];
 
         $this->entity
@@ -65,12 +70,55 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             ->setIsWsiMode($data['wsi_mode'])
             ->setWebsiteId($data['website_id'])
             ->setSyncStartDate($data['start_sync_date'])
-            ->setInitialSyncStartDate($data['initial_sync_start_date']);
+            ->setInitialSyncStartDate($data['initial_sync_start_date'])
+            ->setExtensionVersion('1.1.0')
+            ->setMagentoVersion('1.8.0.0');
 
         $settingsBag = $this->entity->getSettingsBag();
 
         $this->assertInstanceOf('Symfony\Component\HttpFoundation\ParameterBag', $settingsBag);
         $this->assertSame($settingsBag, $this->entity->getSettingsBag());
         $this->assertEquals($data, $settingsBag->all());
+    }
+
+    /**
+     * @dataProvider supportDataProvider
+     *
+     * @param bool $isExtensionInstalled
+     * @param string $extensionVersion
+     * @param bool $expected
+     */
+    public function testSupportedExtensionVersion($isExtensionInstalled, $extensionVersion, $expected)
+    {
+        $this->entity->setExtensionVersion($extensionVersion)
+            ->setIsExtensionInstalled($isExtensionInstalled);
+
+        $this->assertEquals($expected, $this->entity->isSupportedExtensionVersion());
+    }
+
+    /**
+     * @return array
+     */
+    public function supportDataProvider()
+    {
+        return [
+            [
+                true, '0.1', false,
+                true, SoapTransport::REQUIRED_EXTENSION_VERSION, true,
+                false, '', false
+            ]
+        ];
+    }
+
+    public function testWsdlUrl()
+    {
+        $url = 'http://test.local/?wsdl=1';
+        $cache = '/tmp/cached.wsdl';
+        $this->entity->setWsdlUrl($url);
+
+        $this->assertEquals($url, $this->entity->getSettingsBag()->get('wsdl_url'));
+
+        $this->entity->setWsdlCachePath($cache);
+        $this->assertEquals($cache, $this->entity->getSettingsBag()->get('wsdl_url'));
     }
 }

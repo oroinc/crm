@@ -17,7 +17,8 @@ OroCRM\Bundle\CampaignBundle\Entity\Campaign:
             - Date: ~
             - Oro\Bundle\CalendarBundle\Validator\Constraints\DateEarlierThan:
                 field: endDate
-                message: This date can't be earlier than End date
+                message: This date should be earlier than End date
+                groups: [Campaign]
         endDate:
             - Date: ~
         budget:

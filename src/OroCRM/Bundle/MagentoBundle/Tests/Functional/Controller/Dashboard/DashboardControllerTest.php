@@ -28,7 +28,7 @@ class DashboardControllerTest extends WebTestCase
         $this->client->request('GET', $this->getUrl('orocrm_magento_dashboard_new_customers_chart'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains('New Web Customers', $result->getContent());
+        $this->assertContains('New Magento Customers', $result->getContent());
 
         $aclHelper = $this->getContainer()->get('oro_security.acl_helper');
 

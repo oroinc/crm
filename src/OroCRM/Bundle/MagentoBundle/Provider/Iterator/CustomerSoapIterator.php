@@ -43,6 +43,10 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
             ]
         );
 
+        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $filters->addWebsiteFilter([$this->websiteId]);
+        }
+
         $this->loadByFilters($filters->getAppliedFilters());
     }
 

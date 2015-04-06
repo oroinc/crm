@@ -8,6 +8,9 @@ use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
+/**
+ * Used in datagrid for conversion websites list to string
+ */
 class WebsiteCollectionToString
 {
     /**

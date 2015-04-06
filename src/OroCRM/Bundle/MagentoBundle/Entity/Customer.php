@@ -10,7 +10,6 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -19,15 +18,17 @@ use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCustomer;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
  * Class Customer
  *
+ * @SuppressWarnings(PHPMD.TooManyFields)
+ *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
+ * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
@@ -40,6 +41,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeName="orocrm_magento_customer_index",
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-user"
+ *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
@@ -62,10 +66,29 @@ class Customer extends ExtendCustomer implements
     ChannelAwareInterface,
     CustomerIdentityInterface,
     RFMAwareInterface,
-    SyncStateAwareInterface,
-    OriginAwareInterface
+    OriginAwareInterface,
+    IntegrationAwareInterface
 {
+    const SYNC_TO_MAGENTO = 1;
+    const MAGENTO_REMOVED = 2;
+
     use IntegrationEntityTrait, OriginTrait, ChannelEntityTrait, RFMAwareTrait;
+
+    /**
+     * @var int
+     *
+     * @ORM\Id
+     * @ORM\Column(type="integer", name="id")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $id;
 
     /*
      * FIELDS are duplicated to enable dataaudit only for customer fields
@@ -133,9 +156,6 @@ class Customer extends ExtendCustomer implements
      * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          },
      *          "entity"={
      *              "contact_information"="email"
      *          }
@@ -201,16 +221,30 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $contact;
 
     /**
      * @var Account
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account")
      * @ORM\JoinColumn(name="account_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $account;
 
@@ -221,6 +255,13 @@ class Customer extends ExtendCustomer implements
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 
@@ -228,7 +269,14 @@ class Customer extends ExtendCustomer implements
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Cart",
-     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
      * )
      */
     protected $carts;
@@ -237,7 +285,14 @@ class Customer extends ExtendCustomer implements
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Order",
-     *     mappedBy="customer", cascade={"all"}, orphanRemoval=true
+     *     mappedBy="customer", cascade={"remove"}, orphanRemoval=true
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
      * )
      */
     protected $orders;
@@ -246,6 +301,13 @@ class Customer extends ExtendCustomer implements
      * @var boolean
      *
      * @ORM\Column(type="boolean", name="is_active")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $isActive = false;
 
@@ -258,9 +320,16 @@ class Customer extends ExtendCustomer implements
     protected $vat;
 
     /**
-     * @var double
+     * @var float
      *
      * @ORM\Column(name="lifetime", type="money", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $lifetime = 0;
 
@@ -268,6 +337,13 @@ class Customer extends ExtendCustomer implements
      * @var string
      *
      * @ORM\Column(name="currency", type="string", length=10, nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $currency;
 
@@ -275,6 +351,13 @@ class Customer extends ExtendCustomer implements
      * @var int
      *
      * @ORM\Column(name="sync_state", type="integer", nullable=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $syncState;
 
@@ -282,6 +365,13 @@ class Customer extends ExtendCustomer implements
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $owner;
 
@@ -290,8 +380,29 @@ class Customer extends ExtendCustomer implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
     protected $organization;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=32, nullable=true)
+     */
+    protected $password;
+
+    /**
+     * @var NewsletterSubscriber
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     */
+    protected $newsletterSubscriber;
 
     /**
      * {@inheritdoc}
@@ -612,5 +723,73 @@ class Customer extends ExtendCustomer implements
         $this->syncState = $syncState;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        if (!$this->createdAt) {
+            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
+
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+    }
+
+    /**
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * @param string $password
+     * @return Customer
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @param string $password
+     * @return Customer
+     */
+    public function setGeneratedPassword($password)
+    {
+        if ($password) {
+            $this->setPassword($password);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeneratedPassword()
+    {
+        return '';
+    }
+
+    /**
+     * @return NewsletterSubscriber
+     */
+    public function getNewsletterSubscriber()
+    {
+        return $this->newsletterSubscriber;
     }
 }

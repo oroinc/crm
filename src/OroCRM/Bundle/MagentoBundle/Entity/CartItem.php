@@ -37,7 +37,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class CartItem extends ExtendCartItem
+class CartItem extends ExtendCartItem implements OriginAwareInterface
 {
     use OriginTrait;
 
@@ -139,6 +139,13 @@ class CartItem extends ExtendCartItem
      * @ORM\Column(name="product_image_url", type="text", nullable=true)
      */
     protected $productImageUrl;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="product_url", type="text", nullable=true)
+     */
+    protected $productUrl;
 
     /**
      * @param float $customPrice
@@ -383,6 +390,25 @@ class CartItem extends ExtendCartItem
     public function setProductImageUrl($productImageUrl)
     {
         $this->productImageUrl = $productImageUrl;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getProductUrl()
+    {
+        return $this->productUrl;
+    }
+
+    /**
+     * @param string $productUrl
+     * @return CartItem
+     */
+    public function setProductUrl($productUrl)
+    {
+        $this->productUrl = $productUrl;
 
         return $this;
     }
