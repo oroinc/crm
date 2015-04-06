@@ -4,11 +4,13 @@ namespace OroCRM\Bundle\TaskBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="orocrm_task_priority")
+ * @Config()
  */
 class TaskPriority
 {
