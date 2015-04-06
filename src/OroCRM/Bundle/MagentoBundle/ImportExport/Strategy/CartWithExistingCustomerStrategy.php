@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class CartWithExistingCustomerStrategy extends CartStrategy
 {
@@ -36,28 +35,15 @@ class CartWithExistingCustomerStrategy extends CartStrategy
      */
     protected function isProcessingAllowed(Cart $cart)
     {
-        // customer could be array if comes new order or object if comes from DB
-        $customerId = is_object($cart->getCustomer())
-            ? $cart->getCustomer()->getOriginId()
-            : $cart->getCustomer()['originId'];
+        $this->customer = $this->findExistingEntity($cart->getCustomer());
 
-        if (!$customerId) {
-            return true;
-        }
-
-        /** @var Customer|null $customer */
-        $this->customer = $this->getEntityByCriteria(
-            ['originId' => $customerId, 'channel' => $cart->getChannel()],
-            MagentoConnectorInterface::CUSTOMER_TYPE
-        );
-
-        return (bool)$this->customer;
+        return $this->customer && $this->customer->getId();
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function updateCustomer(Cart $newCart, Customer $customer)
+    protected function updateCustomer(Cart $newCart, Customer $customer = null)
     {
         $customerToProcess = $this->customer ?: $customer;
 

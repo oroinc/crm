@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EmailBundle\Entity\Email;
@@ -79,7 +80,7 @@ class Order extends ExtendOrder implements
     /**
      * @var Customer
      *
-     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"}, inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
@@ -90,6 +91,13 @@ class Order extends ExtendOrder implements
      * @ORM\OneToMany(targetEntity="OrderAddress",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 
@@ -98,6 +106,13 @@ class Order extends ExtendOrder implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $store;
 

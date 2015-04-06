@@ -54,7 +54,6 @@ parameters:
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
-    orocrm_magento.service.import_helper.class:                             OroCRM\Bundle\MagentoBundle\Service\ImportHelper
 
     orocrm_magento.customer.manager.api.class:                              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     # datagrid helpers
@@ -292,11 +291,6 @@ services:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
         scope: prototype
-
-    orocrm_magento.service.import_helper:
-        class: %orocrm_magento.service.import_helper.class%
-        arguments:
-            - @doctrine
 
     orocrm_magento.event_listener.after_job_execution:
         class: %orocrm_magento.event_listener.integration_sync_after.class%

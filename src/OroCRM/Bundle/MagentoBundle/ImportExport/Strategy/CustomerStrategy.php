@@ -2,24 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
-    /**
-     * @var ChannelHelper
-     */
-    protected $channelHelper;
-
-    /**
-     * @var AddressImportHelper
-     */
-    protected $addressHelper;
-
     /**
      * @var CustomerGroupHelper
      */
@@ -34,22 +22,6 @@ class CustomerStrategy extends AbstractImportStrategy
      * @var array
      */
     protected $addressRegions = [];
-
-    /**
-     * @param ChannelHelper $channelHelper
-     */
-    public function setChannelHelper(ChannelHelper $channelHelper)
-    {
-        $this->channelHelper = $channelHelper;
-    }
-
-    /**
-     * @param AddressImportHelper $addressHelper
-     */
-    public function setAddressHelper(AddressImportHelper $addressHelper)
-    {
-        $this->addressHelper = $addressHelper;
-    }
 
     /**
      * @param CustomerGroupHelper $customerGroupHelper
@@ -102,19 +74,6 @@ class CustomerStrategy extends AbstractImportStrategy
         $this->processAddresses($entity);
 
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processDataChannel(Customer $entity)
-    {
-        if ($entity->getChannel()) {
-            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
-            if ($dataChannel) {
-                $entity->setDataChannel($dataChannel);
-            }
-        }
     }
 
     /**

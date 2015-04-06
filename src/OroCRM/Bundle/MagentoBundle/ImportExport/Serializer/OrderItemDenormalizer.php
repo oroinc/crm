@@ -11,7 +11,7 @@ class OrderItemDenormalizer extends AbstractNormalizer implements DenormalizerIn
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         /** @var OrderItem $object */
         $className = MagentoConnectorInterface::ORDER_ITEM_TYPE;
@@ -30,8 +30,8 @@ class OrderItemDenormalizer extends AbstractNormalizer implements DenormalizerIn
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
-        return $type == MagentoConnectorInterface::ORDER_ITEM_TYPE;
+        return $type === MagentoConnectorInterface::ORDER_ITEM_TYPE;
     }
 }

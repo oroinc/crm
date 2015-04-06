@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderWithExistingCustomerStrategy extends OrderStrategy
 {
@@ -38,33 +37,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected function isProcessingAllowed(Order $order)
     {
-        // customer could be array if comes new order or object if comes from DB
-        $customerId = is_object($order->getCustomer())
-            ? $order->getCustomer()->getOriginId()
-            : $order->getCustomer()['originId'];
+        $this->customer = $this->findExistingEntity($order->getCustomer());
 
-        if (!$customerId) {
-            return true;
-        }
-
-        /** @var Customer|null $customer */
-        $this->customer = $this->getEntityByCriteria(
-            ['originId' => $customerId, 'channel' => $order->getChannel()],
-            MagentoConnectorInterface::CUSTOMER_TYPE
-        );
-
-        return (bool)$this->customer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function processCustomer(Order $entity)
-    {
-        if ($this->customer) {
-            $this->updateCustomer($entity, $this->customer);
-        } else {
-            parent::processCustomer($entity);
-        }
+        return $this->customer && $this->customer->getId();
     }
 }
