@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
+
 class NewsletterSubscriberInitialSyncProcessor extends AbstractInitialProcessor
 {
     /**
@@ -42,6 +44,12 @@ class NewsletterSubscriberInitialSyncProcessor extends AbstractInitialProcessor
     {
         if (!$this->subscriberClassName) {
             throw new \InvalidArgumentException('NewsletterSubscriber class name is missing');
+        }
+
+        // Run initial sync from starting point even if some subscribers came from deltas.
+        $hasStarted = $this->getLastStatusForConnector($integration, InitialNewsletterSubscriberConnector::TYPE);
+        if (!$hasStarted) {
+            return null;
         }
 
         /** @var EntityRepository $repository */
