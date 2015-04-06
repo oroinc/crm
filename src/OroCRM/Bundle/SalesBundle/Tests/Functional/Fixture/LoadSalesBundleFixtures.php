@@ -9,6 +9,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -59,6 +60,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
 
         $this->createChannel();
         $this->createAccount();
+        $this->createContact();
         $this->createB2bCustomer();
         $this->createLead();
         $this->createOpportunity();
@@ -76,6 +78,21 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $this->em->flush();
 
         $this->setReference('default_account', $account);
+
+        return $this;
+    }
+
+    protected function createContact()
+    {
+        $contact = new Contact();
+        $contact->setFirstName('John');
+        $contact->setLastName('Doe');
+        $contact->setOrganization($this->organization);
+
+        $this->em->persist($contact);
+        $this->em->flush();
+
+        $this->setReference('default_contact', $contact);
 
         return $this;
     }
