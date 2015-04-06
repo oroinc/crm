@@ -1367,7 +1367,6 @@ datagrid:
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
                     - newsletterSubscriber.email
-                    - newsletterSubscriber.changeStatusAt
                     - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
                     - customer.email as customerEmail
                     - newsletterSubscriber.createdAt
@@ -1390,9 +1389,6 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.website.label
             email:
                 label: orocrm.magento.newslettersubscriber.email.label
-            changeStatusAt:
-                label: orocrm.magento.newslettersubscriber.change_status_at.label
-                frontend_type: datetime
             customerName:
                 label: orocrm.magento.newslettersubscriber.customer.label
             customerEmail:
@@ -1408,7 +1404,6 @@ datagrid:
                 channelName: { data_name: channelName }
                 websiteName: { data_name: websiteName }
                 email: { data_name: newsletterSubscriber.email }
-                changeStatusAt: { data_name: newsletterSubscriber.changeStatusAt }
                 customerName: { data_name: customerName }
                 customerEmail: { data_name: customerEmail }
                 createdAt: { data_name: newsletterSubscriber.createdAt }
@@ -1431,9 +1426,6 @@ datagrid:
                 email:
                     type: string
                     data_name: newsletterSubscriber.email
-                changeStatusAt:
-                    type: datetime
-                    data_name: newsletterSubscriber.changeStatusAt
                 customerName:
                     type: string
                     data_name: customerName

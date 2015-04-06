@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Model;
 
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -15,14 +16,17 @@ class NewsletterSubscriberManagerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateBasicAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
+        $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
     }
 
     public function testCreateFromCustomer()
     {
-        /** @var Customer $customer */
-        $customer = $this->getReference('customer');
+        /** @var Channel $integration */
+        $integration = $this->getReference('integration');
 
+        /** @var Customer $customer */
+        $customer = new Customer();
+        $customer->setChannel($integration);
         $this->assertEmpty($customer->getNewsletterSubscriber());
 
         $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
@@ -35,41 +39,22 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         $this->assertEquals($customer->getOrganization(), $newsletterSubscriber->getOrganization());
         $this->assertEquals($customer->getOwner(), $newsletterSubscriber->getOwner());
         $this->assertEquals($customer->getDataChannel(), $newsletterSubscriber->getDataChannel());
+
+        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
     }
 
     public function testGetFromCustomer()
     {
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
-
-        $newsletterSubscriberBase = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->findOneBy(['customer' => $customer->getId()]);
-        $this->getContainer()->get('doctrine')->getManager()->refresh($customer);
+        $this->assertNotEmpty($customer->getNewsletterSubscriber());
 
         $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->getOrCreateFromCustomer($customer, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
+            ->getOrCreateFromCustomer($customer);
 
         $this->assertEquals($customer, $newsletterSubscriber->getCustomer());
-        $this->assertEquals($newsletterSubscriberBase, $newsletterSubscriber);
+        $this->assertNotEmpty($newsletterSubscriber->getId());
 
-        $this->getContainer()->get('doctrine')->getManager()->refresh($newsletterSubscriberBase);
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriberBase->getStatus()->getId());
-    }
-
-    public function testChangeStatus()
-    {
-        $newsletterSubscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->findOneBy([]);
-
-        $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->changeStatus($newsletterSubscriber, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
-
-        $this->getContainer()->get('doctrine')->getManager()->refresh($newsletterSubscriber);
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
-
+        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
     }
 }
