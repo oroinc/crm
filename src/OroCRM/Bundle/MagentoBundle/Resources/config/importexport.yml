@@ -601,6 +601,11 @@ services:
         calls:
             - [setContextKey, ['postProcessSubscribers']]
 
+    orocrm_magento.reader.context_newsletter_subscriber_export:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessNewsletterSubscribers']]
+
     orocrm_magento.reader.order_info:
         class: %orocrm_magento.reader.order_info.class%
         arguments:
