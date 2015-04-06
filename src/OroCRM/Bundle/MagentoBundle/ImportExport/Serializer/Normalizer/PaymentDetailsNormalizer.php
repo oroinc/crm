@@ -25,7 +25,9 @@ class PaymentDetailsNormalizer extends ConfigurableEntityNormalizer implements D
      */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
-        $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
+        if (!empty($data['paymentDetails'])) {
+            $data['paymentDetails'] = $this->denormalizePaymentDetails($data['paymentDetails']);
+        }
 
         return parent::denormalize($data, $class, $format, $context);
     }

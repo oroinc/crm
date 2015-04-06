@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Dependency;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class CartDependencyManager extends AbstractDependencyManager
+class CartDependencyManager
 {
     /**
      * {@inheritdoc}
@@ -15,8 +15,6 @@ class CartDependencyManager extends AbstractDependencyManager
         if (!$result) {
             return;
         }
-
-        parent::addDependencyData($result, $transport);
 
         $dependencies = $transport->getDependencies([MagentoTransportInterface::ALIAS_GROUPS]);
         if (empty($result->customer_group_id)) {

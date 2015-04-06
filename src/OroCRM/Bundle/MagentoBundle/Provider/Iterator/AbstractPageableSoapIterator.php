@@ -7,7 +7,6 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\AbstractDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
@@ -336,7 +335,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function addDependencyData($result)
     {
-        AbstractDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

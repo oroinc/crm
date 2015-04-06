@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Dependency;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
-class CustomerDependencyManager extends AbstractDependencyManager
+class CustomerDependencyManager
 {
     /**
      * {@inheritdoc}

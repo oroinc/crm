@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\NewsletterSubscriberDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
@@ -86,7 +85,6 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
      */
     protected function addDependencyData($result)
     {
-        NewsletterSubscriberDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**
