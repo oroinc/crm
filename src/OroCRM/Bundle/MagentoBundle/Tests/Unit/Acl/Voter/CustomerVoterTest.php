@@ -124,7 +124,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
     {
         $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $customer->expects($this->once())
+        $customer->expects($this->any())
             ->method('getChannel')
             ->will($this->returnValue($channel));
 

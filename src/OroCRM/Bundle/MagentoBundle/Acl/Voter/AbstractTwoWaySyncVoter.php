@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Acl\Voter;
 
+use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -20,7 +21,7 @@ abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
     protected $supportedAttributes = [self::ATTRIBUTE_CREATE, self::ATTRIBUTE_EDIT];
 
     /**
-     * @var ObjectIdentityInterface
+     * @var ObjectIdentityInterface|IntegrationAwareInterface
      */
     protected $object;
 
@@ -52,6 +53,13 @@ abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
      */
     protected function getPermissionForAttribute($class, $identifier, $attribute)
     {
+        if (is_a($this->object, $this->className, true)
+            && $this->object->getChannel()
+            && !$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId(), false)
+        ) {
+            return self::ACCESS_DENIED;
+        }
+
         if (!$this->settingsProvider->hasApplicableChannels()) {
             return self::ACCESS_DENIED;
         }

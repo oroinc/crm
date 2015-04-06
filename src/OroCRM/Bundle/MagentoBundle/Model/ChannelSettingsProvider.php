@@ -43,11 +43,6 @@ class ChannelSettingsProvider
     public function isTwoWaySyncEnable($channelId)
     {
         $this->validateChannelId($channelId);
-
-        if (!empty($this->channels[$channelId])) {
-            return $this->channels[$channelId]->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
-        }
-
         $this->loadChannel($channelId);
 
         return $this->channels[$channelId]->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
@@ -61,14 +56,6 @@ class ChannelSettingsProvider
     public function isSupportedExtensionVersion($channelId)
     {
         $this->validateChannelId($channelId);
-
-        if (!empty($this->channels[$channelId])) {
-            /** @var MagentoSoapTransport $transport */
-            $transport = $this->channels[$channelId]->getTransport();
-
-            return $transport->isSupportedExtensionVersion();
-        }
-
         $this->loadChannel($channelId);
 
         /** @var MagentoSoapTransport $transport */
@@ -85,12 +72,6 @@ class ChannelSettingsProvider
     public function isEnabled($channelId)
     {
         $this->validateChannelId($channelId);
-
-        if (!empty($this->channels[$channelId])) {
-            /** @var MagentoSoapTransport $transport */
-            return $this->channels[$channelId]->isEnabled();
-        }
-
         $this->loadChannel($channelId);
 
         return $this->channels[$channelId]->isEnabled();
@@ -126,7 +107,7 @@ class ChannelSettingsProvider
             ->findBy(['type' => ChannelType::TYPE, 'enabled' => true]);
 
         if (!$channels) {
-            return $isApplicable;
+            return false;
         }
 
         foreach ($channels as $channel) {
@@ -144,10 +125,14 @@ class ChannelSettingsProvider
     }
 
     /**
-     * @param $channelId
+     * @param int $channelId
      */
     protected function loadChannel($channelId)
     {
+        if (!empty($this->channels[$channelId])) {
+            return;
+        }
+
         /** @var Channel $channel */
         $channel = $this->doctrineHelper
             ->getEntityRepository($this->channelClassName)

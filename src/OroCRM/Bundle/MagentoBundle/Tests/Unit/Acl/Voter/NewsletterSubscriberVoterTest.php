@@ -181,7 +181,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
         $newsletterSubscriber = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
 
         $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-        $newsletterSubscriber->expects($this->once())
+        $newsletterSubscriber->expects($this->any())
             ->method('getChannel')
             ->will($this->returnValue($channel));
 
