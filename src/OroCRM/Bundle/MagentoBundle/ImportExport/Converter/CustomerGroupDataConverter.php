@@ -13,7 +13,7 @@ class CustomerGroupDataConverter extends IntegrationAwareDataConverter
     {
         return [
             'customer_group_id' => 'originId',
-            'name' => 'name'
+            'customer_group_code' => 'name'
         ];
     }
 

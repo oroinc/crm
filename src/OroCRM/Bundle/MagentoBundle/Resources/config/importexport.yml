@@ -23,6 +23,7 @@ parameters:
     orocrm_magento.mage.abstract.class:                                         OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector
     orocrm_magento.mage.store.class:                                            OroCRM\Bundle\MagentoBundle\Provider\Connector\StoreConnector
     orocrm_magento.mage.website.class:                                          OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector
+    orocrm_magento.mage.customer_group.class:                                   OroCRM\Bundle\MagentoBundle\Provider\Connector\CustomerGroupConnector
 
     orocrm_magento.mage.region_connector.class:                                 OroCRM\Bundle\MagentoBundle\Provider\RegionConnector
     orocrm_magento.mage.customer_connector.class:                               OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector
@@ -151,6 +152,15 @@ services:
             - [setClassName, [%orocrm_magento.entity.store.class%]]
         tags:
             - { name: oro_integration.connector, type: store, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
+    orocrm_magento.mage.customer_group:
+        class: %orocrm_magento.mage.customer_group.class%
+        parent: orocrm_magento.connector.abstract
+        calls:
+            - [setClassName, [%orocrm_magento.entity.customer_group.class%]]
+        tags:
+            - { name: oro_integration.connector, type: customer_group, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.website:
@@ -305,6 +315,9 @@ services:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_magento.import.strategy.website:
+        parent: oro_importexport.strategy.configurable_add_or_replace
+
+    orocrm_magento.import.strategy.customer_group:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_magento.import.strategy.cart.add_or_update:
@@ -485,6 +498,15 @@ services:
             - [setEntityName, [%orocrm_magento.entity.website.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.website.class%, alias: orocrm_magento.website }
+
+    orocrm_magento.importexport.processor.customer_group:
+        parent: orocrm_magento.importexport.processor.abstract
+        calls:
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.customer_group]]
+            - [setStrategy, [@orocrm_magento.import.strategy.customer_group]]
+            - [setEntityName, [%orocrm_magento.entity.customer_group.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.customer_group.class%, alias: orocrm_magento.customer_group }
 
     # Export processor
     orocrm_magento.importexport.processor.customer_export:

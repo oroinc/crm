@@ -289,3 +289,17 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+
+        mage_customer_group_import:
+            title: "Customer groups import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.customer_group
+                        processor: orocrm_magento.importexport.processor.customer_group
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
