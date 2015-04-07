@@ -143,6 +143,15 @@ services:
         calls:
             - [setManagerRegistry, [@doctrine]]
 
+    orocrm_magento.mage.website:
+        class: %orocrm_magento.mage.website.class%
+        parent: orocrm_magento.connector.abstract
+        calls:
+            - [setClassName, [%orocrm_magento.entity.website.class%]]
+        tags:
+            - { name: oro_integration.connector, type: website, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+
     orocrm_magento.mage.store:
         class: %orocrm_magento.mage.store.class%
         parent: orocrm_magento.connector.abstract
@@ -159,15 +168,6 @@ services:
             - [setClassName, [%orocrm_magento.entity.customer_group.class%]]
         tags:
             - { name: oro_integration.connector, type: customer_group, channel_type: magento }
-            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
-
-    orocrm_magento.mage.website:
-        class: %orocrm_magento.mage.website.class%
-        parent: orocrm_magento.connector.abstract
-        calls:
-            - [setClassName, [%orocrm_magento.entity.website.class%]]
-        tags:
-            - { name: oro_integration.connector, type: website, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.order_connector_initial:

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
@@ -12,6 +13,8 @@ use Oro\Bundle\IntegrationBundle\ImportExport\Job\Executor;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 class InitialSyncProcessor extends AbstractInitialProcessor
 {
@@ -22,6 +25,9 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
     /** @var SyncProcessor[] */
     protected $postProcessors = [];
+
+    /** @var bool */
+    protected $dictionaryDataLoaded = false;
 
     /**
      * @param ManagerRegistry $doctrineRegistry
@@ -66,10 +72,34 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     }
 
     /**
+     * @param Integration $integration
+     */
+    protected function processDictionaryConnectors(Integration $integration)
+    {
+        if (!$this->dictionaryDataLoaded) {
+            /** @var ConnectorInterface[] $dictionaryConnectors */
+            $dictionaryConnectors = $this->registry->getRegisteredConnectorsTypes(
+                ChannelType::TYPE,
+                function (ConnectorInterface $connector) {
+                    return $connector instanceof DictionaryConnectorInterface;
+                }
+            )->toArray();
+
+            foreach ($dictionaryConnectors as $connector) {
+                $this->processIntegrationConnector($integration, $connector->getType());
+            }
+
+            $this->dictionaryDataLoaded = true;
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
+        $this->processDictionaryConnectors($integration);
+
         $callback = function ($connector) {
             return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
         };
