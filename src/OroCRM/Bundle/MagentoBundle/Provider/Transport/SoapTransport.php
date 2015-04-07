@@ -515,7 +515,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function createNewsletterSubscriber(array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return $this->call(
+            return (array)$this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
                 ['subscriberData' => $subscriberData]
             );
@@ -530,7 +530,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return $this->call(
+            return (array)$this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
                 ['subscriberId' => $subscriberId, 'subscriberData' => $subscriberData]
             );

@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 use Akeneo\Bundle\BatchBundle\Job\BatchStatus;
 
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
 
 /**
  * @dbIsolation
@@ -21,52 +22,26 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadNewsletterSubscriberData']);
     }
 
-    public function testCreateNew()
-    {
-        $originId = time();
-
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
-
-        /** @var NewsletterSubscriber $customer */
-        $newsletterSubscriber = $this->getReference('newsletter_subscriber');
-        $newsletterSubscriber->setOriginId(null);
-
-        $this->transport->expects($this->never())->method('updateNewsletterSubscriber');
-        $this->transport->expects($this->once())
-            ->method('createNewsletterSubscriber')
-            ->with($this->isType('array'))
-            ->will($this->returnValue($originId));
-
-        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
-            'export',
-            'magento_newsletter_subscriber_export',
-            [
-                'channel' => $newsletterSubscriber->getChannel()->getId(),
-                'entity' => $newsletterSubscriber,
-                'writer_skip_clear' => true
-            ]
-        );
-
-        $this->assertEmpty($jobResult->getFailureExceptions());
-        $this->assertTrue($jobResult->isSuccessful());
-
-        // no failed jobs
-        $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
-    }
-
     public function testUpdateExisting()
     {
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
 
-        /** @var NewsletterSubscriber $customer */
+        /** @var NewsletterSubscriber $newsletterSubscriber */
         $newsletterSubscriber = $this->getReference('newsletter_subscriber');
+
+        /** @var Store $store */
+        $store = $this->getReference('store');
 
         $this->transport->expects($this->once())
             ->method('updateNewsletterSubscriber')
-            ->will($this->returnValue(true));
-
+            ->willReturn(
+                [
+                    'subscriber_status' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
+                    'subscriber_id' => $newsletterSubscriber->getOriginId(),
+                    'store_id' => $store->getOriginId()
+                ]
+            );
         $this->transport->expects($this->never())->method('createNewsletterSubscriber');
 
         $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
@@ -75,12 +50,72 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
             [
                 'channel' => $newsletterSubscriber->getChannel()->getId(),
                 'entity' => $newsletterSubscriber,
-                'writer_skip_clear' => true
+                'writer_skip_clear' => true,
+                'statusIdentifier' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
+                'processorAlias' => 'orocrm_magento'
             ]
         );
 
-        $this->assertEmpty($jobResult->getFailureExceptions());
+        $this->assertEquals([], $jobResult->getFailureExceptions());
         $this->assertTrue($jobResult->isSuccessful());
+
+        $newsletterSubscriber = $this->getContainer()->get('doctrine')
+            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
+            ->findOneBy(['originId' => $newsletterSubscriber->getOriginId()]);
+        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
+
+        // no failed jobs
+        $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
+    }
+
+    /**
+     * @depends testUpdateExisting
+     */
+    public function testCreateNew()
+    {
+        // no failed jobs
+        $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
+
+        /** @var NewsletterSubscriber $newsletterSubscriber */
+        $newsletterSubscriber = $this->getReference('newsletter_subscriber');
+        $newsletterSubscriber->setOriginId(null);
+
+        /** @var Store $store */
+        $store = $this->getReference('store');
+
+        $originId = time();
+
+        $this->transport->expects($this->never())->method('updateNewsletterSubscriber');
+        $this->transport->expects($this->once())
+            ->method('createNewsletterSubscriber')
+            ->with($this->isType('array'))
+            ->willReturn(
+                [
+                    'subscriber_status' => NewsletterSubscriber::STATUS_SUBSCRIBED,
+                    'subscriber_id' => $originId,
+                    'store_id' => $store->getOriginId()
+                ]
+            );
+
+        $jobResult = $this->getContainer()->get('oro_importexport.job_executor')->executeJob(
+            'export',
+            'magento_newsletter_subscriber_export',
+            [
+                'channel' => $newsletterSubscriber->getChannel()->getId(),
+                'entity' => $newsletterSubscriber,
+                'writer_skip_clear' => true,
+                'statusIdentifier' => NewsletterSubscriber::STATUS_SUBSCRIBED,
+                'processorAlias' => 'orocrm_magento'
+            ]
+        );
+
+        $this->assertEquals([], $jobResult->getFailureExceptions());
+        $this->assertTrue($jobResult->isSuccessful());
+
+        $newsletterSubscriber = $this->getContainer()->get('doctrine')
+            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
+            ->findOneBy(['originId' => $originId]);
+        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
 
         // no failed jobs
         $this->assertEmpty($this->getJobs('magento_newsletter_subscriber_export', BatchStatus::FAILED));
