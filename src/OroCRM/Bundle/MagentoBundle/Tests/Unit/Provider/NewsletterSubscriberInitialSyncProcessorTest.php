@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\Query\Expr;
+
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
 
@@ -36,6 +39,14 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
         $realConnector = new InitialConnector();
         $integration = $this->getIntegration($connectors, $syncStartDate, $realConnector);
 
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->repository->expects($this->atLeastOnce())
+            ->method('getLastStatusForConnector')
+            ->with($integration, InitialNewsletterSubscriberConnector::TYPE)
+            ->will($this->returnValue($status));
+
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -54,6 +65,14 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
         $qb->expects($this->once())
             ->method('select')
             ->will($this->returnSelf());
+
+        $qb->expects($this->once())
+            ->method('where')
+            ->will($this->returnSelf());
+
+        $qb->expects($this->once())
+            ->method('expr')
+            ->will($this->returnValue(new Expr()));
 
         $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
             ->setMethods(['getSingleScalarResult'])

@@ -7,6 +7,12 @@ oro_dashboard_config:
             description: orocrm.magento.dashboard.my_sales_flow_b2c_chart.description
             icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
             applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         average_order_amount_chart:
             label:       orocrm.magento.dashboard.average_order_amount_chart.title
             route:       orocrm_magento_dashboard_average_order_amount
@@ -14,6 +20,12 @@ oro_dashboard_config:
             description: orocrm.magento.dashboard.average_order_amount_chart.description
             icon:        bundles/orocrmmagento/img/average-amount-order.png
             applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         new_magento_customers_chart:
             label:       orocrm.magento.dashboard.new_magento_customers_chart.title
             route:       orocrm_magento_dashboard_new_customers_chart
@@ -21,6 +33,12 @@ oro_dashboard_config:
             description: orocrm.magento.dashboard.new_magento_customers_chart.description
             icon:        bundles/orocrmmagento/img/number-magento-customers.png
             applicable:  @orocrm_magento.provider.enitity_state->isEntityCustomerEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         purchase_chart:
             label:       orocrm.magento.dashboard.purchase_chart.title
             route:       orocrm_magento_dashboard_purchase_chart

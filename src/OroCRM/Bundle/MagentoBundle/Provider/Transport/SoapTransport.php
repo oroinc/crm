@@ -8,17 +8,19 @@ use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CartsBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerGroupSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\CustomerSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\RegionSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
-use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\WebsiteSoapIterator;
+use OroCRM\Bundle\MagentoBundle\Service\WsdlManager;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
 /**
@@ -31,8 +33,7 @@ use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
  */
 class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterface, ServerTimeAwareInterface
 {
-    // TODO: Change version to new one before merge to master (1.2.0?)
-    const REQUIRED_EXTENSION_VERSION = '1.1.0';
+    const REQUIRED_EXTENSION_VERSION = '1.2.0';
 
     const ACTION_CUSTOMER_LIST = 'customerCustomerList';
     const ACTION_CUSTOMER_INFO = 'customerCustomerInfo';
@@ -91,12 +92,17 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var array */
     protected $dependencies = [];
 
+    /** @var WsdlManager */
+    protected $wsdlManager;
+
     /**
      * @param Mcrypt $encoder
+     * @param WsdlManager $wsdlManager
      */
-    public function __construct(Mcrypt $encoder)
+    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager)
     {
         $this->encoder = $encoder;
+        $this->wsdlManager = $wsdlManager;
     }
 
     /**
@@ -104,6 +110,19 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function init(Transport $transportEntity)
     {
+        /**
+         * Cache WSDL and force transport entity to use it instead of original URL.
+         * This should be done before parent::init as settings will be cached there.
+         */
+        if ($transportEntity instanceof MagentoSoapTransport) {
+            $wsdlUrl = $transportEntity->getWsdlUrl();
+            if (!$this->wsdlManager->isCacheLoaded($wsdlUrl)) {
+                $this->wsdlManager->loadWsdl($wsdlUrl);
+            }
+
+            $transportEntity->setWsdlCachePath($this->wsdlManager->getCachedWsdlPath($wsdlUrl));
+        }
+
         parent::init($transportEntity);
 
         $wsiMode = $this->settings->get('wsi_mode', false);
@@ -124,6 +143,18 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = null;
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
+    }
+
+    /**
+     * Disable wsdl caching by PHP.
+     *
+     * {@inheritdoc}
+     */
+    protected function getSoapClient($wsdlUrl, array $options = [])
+    {
+        $options['cache_wsdl'] = WSDL_CACHE_NONE;
+
+        return parent::getSoapClient($wsdlUrl, $options);
     }
 
     /**
@@ -484,7 +515,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function createNewsletterSubscriber(array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return $this->call(
+            return (array)$this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
                 ['subscriberData' => $subscriberData]
             );
@@ -499,7 +530,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return $this->call(
+            return (array)$this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
                 ['subscriberId' => $subscriberId, 'subscriberData' => $subscriberData]
             );

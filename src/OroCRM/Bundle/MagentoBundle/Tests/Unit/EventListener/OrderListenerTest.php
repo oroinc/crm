@@ -7,6 +7,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
+use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\EventListener\OrderListener;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -17,6 +18,18 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerRepository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelDoctrineListener
+     */
+    protected $listener;
+
+    protected function setUp()
+    {
+        $this->listener = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener')
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
 
     /**
      * @param Order|object $order
@@ -34,7 +47,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             $this->customerRepository->expects($this->never())->method('updateCustomerLifetimeValue');
         }
 
-        $listener = new OrderListener();
+        $listener = new OrderListener($this->listener);
         $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
     }
 
@@ -70,7 +83,7 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             $entityManager = $this->createEntityManagerMock();
         }
 
-        $listener = new OrderListener();
+        $listener = new OrderListener($this->listener);
         $listener->preUpdate(new PreUpdateEventArgs($order, $entityManager, $changeSet));
 
         if ($isUpdateRequired) {
@@ -113,12 +126,12 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
     public function testPostFlush($order, $newLifetime = null)
     {
         if ($newLifetime) {
-            $entityManager = $this->createEntityManagerMock($order, $newLifetime);
+            $entityManager = $this->createEntityManagerMock($order);
         } else {
             $entityManager = $this->createEntityManagerMock();
         }
 
-        $listener = new OrderListener();
+        $listener = new OrderListener($this->listener);
 
         if ($newLifetime) {
             $reflectionProperty = new \ReflectionProperty(get_class($listener), 'ordersForUpdate');
@@ -255,5 +268,55 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         }
 
         return $customer;
+    }
+
+    public function testScheduleLifetimeValueHistory()
+    {
+        $expectedLifetime = 200;
+        $order = new Order();
+
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+
+        $customer = new Customer();
+        $customer
+            ->setAccount($account)
+            ->setDataChannel($channel);
+
+        $order
+            ->setCustomer($customer)
+            ->setSubtotalAmount($expectedLifetime);
+
+        $entityManager = $this->createEntityManagerMock();
+        $this->customerRepository->expects($this->once())
+            ->method('updateCustomerLifetimeValue')
+            ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
+
+        $this->listener->expects($this->once())
+            ->method('scheduleEntityUpdate')
+            ->with($this->equalTo($customer), $this->equalTo($account), $this->equalTo($channel));
+
+        $listener = new OrderListener($this->listener);
+        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
+    }
+
+    public function testNotScheduleLifetimeValueHistoryWithoutAccount()
+    {
+        $expectedLifetime = 200;
+        $order = new Order();
+        $customer = new Customer();
+        $order
+            ->setCustomer($customer)
+            ->setSubtotalAmount($expectedLifetime);
+
+        $entityManager = $this->createEntityManagerMock();
+        $this->customerRepository->expects($this->once())
+            ->method('updateCustomerLifetimeValue')
+            ->with($this->isInstanceOf('OroCRM\Bundle\MagentoBundle\Entity\Customer'), $expectedLifetime);
+
+        $this->listener->expects($this->never())->method('scheduleEntityUpdate');
+
+        $listener = new OrderListener($this->listener);
+        $listener->prePersist(new LifecycleEventArgs($order, $entityManager));
     }
 }

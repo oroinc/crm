@@ -4,7 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class CustomerRepository extends EntityRepository
@@ -12,26 +14,27 @@ class CustomerRepository extends EntityRepository
     /**
      * Returns data grouped by created_at, data_channel_id
      *
-     * @param AclHelper $aclHelper
-     * @param \DateTime $dateFrom
-     * @param \DateTime $dateTo
-     * @param array     $ids Filter by channel ids
+     * @param AclHelper  $aclHelper
+     * @param DateHelper $dateHelper
+     * @param \DateTime  $dateFrom
+     * @param \DateTime  $dateTo
+     * @param array      $ids Filter by channel ids
      *
      * @return array
      */
     public function getGroupedByChannelArray(
         AclHelper $aclHelper,
+        DateHelper $dateHelper,
         \DateTime $dateFrom,
         \DateTime $dateTo = null,
-        $ids = array()
+        $ids = []
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
-            'YEAR(c.createdAt) as yearCreated',
-            'MONTH(c.createdAt) as monthCreated',
             'COUNT(c) as cnt',
             'IDENTITY(c.dataChannel) as channelId'
         );
+        $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $qb, 'c.createdAt');
 
         if ($dateTo) {
             $qb->andWhere($qb->expr()->between('c.createdAt', ':dateFrom', ':dateTo'))
@@ -40,8 +43,8 @@ class CustomerRepository extends EntityRepository
             $qb->andWhere('c.createdAt > :dateFrom');
         }
 
-        $qb->setParameter('dateFrom', $dateFrom)
-            ->groupBy('yearCreated', 'monthCreated', 'c.dataChannel');
+        $qb->setParameter('dateFrom', $dateFrom);
+        $qb->addGroupBy('c.dataChannel');
 
         if ($ids) {
             $qb->andWhere($qb->expr()->in('c.dataChannel', ':channelIds'))
@@ -53,7 +56,7 @@ class CustomerRepository extends EntityRepository
 
     /**
      * @param Customer $customer
-     * @param string $value
+     * @param string   $value
      */
     public function updateCustomerLifetimeValue(Customer $customer, $value)
     {
