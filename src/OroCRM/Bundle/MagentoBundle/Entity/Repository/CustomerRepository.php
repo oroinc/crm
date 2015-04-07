@@ -15,19 +15,19 @@ class CustomerRepository extends EntityRepository
      * Returns data grouped by created_at, data_channel_id
      *
      * @param AclHelper  $aclHelper
+     * @param DateHelper $dateHelper
      * @param \DateTime  $dateFrom
      * @param \DateTime  $dateTo
      * @param array      $ids Filter by channel ids
-     * @param DateHelper $dateHelper
      *
      * @return array
      */
     public function getGroupedByChannelArray(
         AclHelper $aclHelper,
+        DateHelper $dateHelper,
         \DateTime $dateFrom,
         \DateTime $dateTo = null,
-        $ids = [],
-        DateHelper $dateHelper
+        $ids = []
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
