@@ -1,8 +1,8 @@
-.quick-launchpad-toolbar.with-subwidgets{
-  overflow: hidden;
-  margin-bottom: 10px;
-}
 .quick-launchpad-toolbar {
+  &.with-subwidgets{
+    overflow: hidden;
+    /*margin-bottom: 10px;*/
+  }
   & > li.sub-widget {
     padding: 0 15px;
     margin: 15px 0;
@@ -23,12 +23,27 @@
     }
     & > div.deviation {
       overflow: hidden;
+      font-size: 11px;
       & > .deviation {
         float: left;
+        &.positive{
+          color: #9bad37;
+        }
+        &.negative{
+          color: #ff0800;
+        }
       }
       & > .date-range {
         float: right;
       }
     }
+  }
+  & > li.separator{
+    width: 96%;
+    height: 0;
+    border-bottom: 1px solid #eaeaea;
+    border-left: none;
+    margin: 0 13px;
+    padding: 0;
   }
 }

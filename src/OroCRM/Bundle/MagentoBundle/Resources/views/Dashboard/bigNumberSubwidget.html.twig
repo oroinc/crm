@@ -1,9 +1,9 @@
 <span class="title">{{ item.label|trans }}</span>
-<h2 class="value">{{ item.value.value }}</h2>
+<h2 class="value">{{ item.value.value|raw }}</h2>
 {% if item.value.deviation is defined %}
 <div class="deviation">
-    <span class="deviation" style="color: #{% if item.value.isPositive %}9bad37{% else %}ff0800{% endif %};">
-        {{ item.value.deviation }}
+    <span class="deviation {% if item.value.isPositive %}positive{% else %}negative{% endif %}">
+        {{ item.value.deviation|raw }}
     </span>
     <span class="date-range">{{ item.value.previousRange }}</span>
 </div>
