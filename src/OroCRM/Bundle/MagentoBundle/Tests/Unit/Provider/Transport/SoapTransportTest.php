@@ -512,13 +512,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     public function methodsDataProvider()
     {
         return [
-            'getOrderInfo' => [
-                'getOrderInfo',
-                SoapTransport::ACTION_ORDER_INFO,
-                ['sessionId' => $this->sessionId, 'orderIncrementId' => 1],
-                [],
-                [1]
-            ],
             'getCustomerAddresses' => [
                 'getCustomerAddresses',
                 SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,

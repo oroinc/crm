@@ -57,6 +57,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
     const ACTION_ORO_CART_LIST = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
+    const ACTION_ORO_ORDER_INFO = 'oroOrderInfo';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
@@ -298,7 +299,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getOrderInfo($incrementId)
     {
-        return $this->call(self::ACTION_ORDER_INFO, ['orderIncrementId' => $incrementId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = self::ACTION_ORO_ORDER_INFO;
+        } else {
+            $endpoint = self::ACTION_ORDER_INFO;
+        }
+
+        return $this->call($endpoint, ['orderIncrementId' => $incrementId]);
     }
 
     /**
