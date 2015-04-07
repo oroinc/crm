@@ -127,6 +127,15 @@ connector:
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
+                import_carts:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_cart.order
+                        processor: orocrm_magento.importexport.processor.import_cart
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
                 import_with_new_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep

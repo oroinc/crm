@@ -40,6 +40,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
         if ($this->context && $this->context->hasOption('channel')) {
             $importedRecord['store:channel:id'] = $this->context->getOption('channel');
             $importedRecord['website:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['group:channel:id'] = $this->context->getOption('channel');
         }
 
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);

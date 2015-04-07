@@ -63,8 +63,6 @@ class CartStrategy extends AbstractImportStrategy
             ->updateCartItems($entity->getCartItems())
             ->updateCartStatus($entity);
 
-        $this->processDataChannel($entity);
-
         return parent::afterProcessEntity($entity);
     }
 

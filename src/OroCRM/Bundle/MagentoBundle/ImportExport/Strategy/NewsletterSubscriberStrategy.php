@@ -7,26 +7,11 @@ use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 class NewsletterSubscriberStrategy extends AbstractImportStrategy
 {
     /**
-     * @var StoreStrategy
-     */
-    protected $storeStrategy;
-
-    /**
-     * @param StoreStrategy $storeStrategy
-     */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
-    }
-
-    /**
      * @param NewsletterSubscriber $entity
      * @return NewsletterSubscriber
      */
     protected function afterProcessEntity($entity)
     {
-        $this->processStore($entity);
-        $this->processDataChannel($entity);
         $this->processChangeStatusAt($entity);
 
         return parent::afterProcessEntity($entity);
@@ -48,19 +33,6 @@ class NewsletterSubscriberStrategy extends AbstractImportStrategy
             if (!$entity->getId()) {
                 $entity->setCreatedAt($entity->getChangeStatusAt());
             }
-        }
-    }
-
-    /**
-     * @param NewsletterSubscriber $entity
-     */
-    protected function processStore(NewsletterSubscriber $entity)
-    {
-        $store = $entity->getStore();
-        if ($entity->getStore()) {
-            $store = $this->storeStrategy->process($store);
-
-            $entity->setStore($store);
         }
     }
 }

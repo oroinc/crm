@@ -129,6 +129,23 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
     }
 
     /**
+     * @param ChannelAwareInterface|IntegrationAwareInterface $entity
+     *
+     * {@inheritdoc}
+     */
+    protected function afterProcessEntity($entity)
+    {
+        if ($entity->getChannel()) {
+            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
+            if ($dataChannel) {
+                $entity->setDataChannel($dataChannel);
+            }
+        }
+
+        return parent::afterProcessEntity($entity);
+    }
+
+    /**
      * @param OriginAwareInterface $entity
      */
     protected function saveOriginIdContext($entity)
@@ -142,15 +159,13 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
     }
 
     /**
-     * @param ChannelAwareInterface|IntegrationAwareInterface $entity
+     * @param string $contextKey
+     * @param mixed $dataToAppend
      */
-    protected function processDataChannel($entity)
+    protected function appendDataToContext($contextKey, $dataToAppend)
     {
-        if ($entity->getChannel()) {
-            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
-            if ($dataChannel) {
-                $entity->setDataChannel($dataChannel);
-            }
-        }
+        $data = (array)$this->getExecutionContext()->get($contextKey);
+        $data[] = $dataToAppend;
+        $this->getExecutionContext()->put($contextKey, $data);
     }
 }

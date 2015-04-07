@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CartWithExistingCustomerStrategy extends CartStrategy
 {
@@ -19,9 +20,7 @@ class CartWithExistingCustomerStrategy extends CartStrategy
     {
         $this->customer = null;
         if (!$this->isProcessingAllowed($importingCart)) {
-            $postProcessCarts = (array)$this->getExecutionContext()->get(self::CONTEXT_CART_POST_PROCESS);
-            $postProcessCarts[] = $this->context->getValue('itemData');
-            $this->getExecutionContext()->put(self::CONTEXT_CART_POST_PROCESS, $postProcessCarts);
+            $this->appendDataToContext(self::CONTEXT_CART_POST_PROCESS, $this->context->getValue('itemData'));
 
             return null;
         }
@@ -36,8 +35,16 @@ class CartWithExistingCustomerStrategy extends CartStrategy
     protected function isProcessingAllowed(Cart $cart)
     {
         $this->customer = $this->findExistingEntity($cart->getCustomer());
+        $isProcessingAllowed = true;
 
-        return $this->customer && $this->customer->getId();
+        $customerOriginId = $cart->getCustomer()->getOriginId();
+        if (!$this->customer && $customerOriginId) {
+            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
+
+            $isProcessingAllowed = false;
+        }
+
+        return $isProcessingAllowed;
     }
 
     /**

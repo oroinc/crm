@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CustomerSoapIterator extends AbstractPageableSoapIterator
@@ -90,7 +89,6 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
      */
     protected function addDependencyData($result)
     {
-        CustomerDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

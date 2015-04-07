@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CartDependencyManager;
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CartsBridgeIterator extends AbstractBridgeIterator
@@ -30,6 +30,44 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         $filters          = $this->filter->getAppliedFilters();
         $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
 
+        $this->loadByFilters($filters);
+
+        return array_keys($this->entityBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $filters->addWebsiteFilter([$this->websiteId]);
+        }
+
+        $this->loadByFilters($filters->getAppliedFilters());
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
@@ -44,8 +82,6 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         );
 
         $this->entityBuffer = array_combine($resultIds, $result);
-
-        return $resultIds;
     }
 
     /**
@@ -53,7 +89,6 @@ class CartsBridgeIterator extends AbstractBridgeIterator
      */
     protected function addDependencyData($result)
     {
-        CartDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

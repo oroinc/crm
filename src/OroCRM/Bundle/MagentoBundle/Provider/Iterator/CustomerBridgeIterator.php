@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CustomerBridgeIterator extends AbstractBridgeIterator
@@ -86,7 +85,6 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
      */
     protected function addDependencyData($result)
     {
-        CustomerDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

@@ -22,8 +22,6 @@ class CartDataConverter extends AbstractTreeDataConverter
             'customer_id'         => 'customer:originId',
             'customer_email'      => 'email',
             'customer_group_id'   => 'customer:group:originId',
-            'customer_group_code' => 'customer:group:code',
-            'customer_group_name' => 'customer:group:name',
             'customer_firstname'  => 'customer:firstName',
             'customer_lastname'   => 'customer:lastName',
             'customer_is_guest'   => 'isGuest',
@@ -53,6 +51,7 @@ class CartDataConverter extends AbstractTreeDataConverter
         if ($this->context && $this->context->hasOption('channel')) {
             $importedRecord['store:channel:id'] = $this->context->getOption('channel');
             $importedRecord['customer:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['customer:group:channel:id'] = $this->context->getOption('channel');
         }
 
         $importedRecord['cart_status'] = CartStatus::STATUS_OPEN;

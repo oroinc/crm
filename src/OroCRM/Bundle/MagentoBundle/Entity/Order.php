@@ -104,7 +104,7 @@ class Order extends ExtendOrder implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -180,7 +180,7 @@ class Order extends ExtendOrder implements
     protected $totalCanceledAmount = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cart", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Cart")
      */
     protected $cart;
 

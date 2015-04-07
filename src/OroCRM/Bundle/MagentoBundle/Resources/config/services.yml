@@ -66,7 +66,6 @@ parameters:
     # helpers
     orocrm_magento.importexport.address_import_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper
     orocrm_magento.importexport.doctrine_helper.class:                      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\DoctrineHelper
-    orocrm_magento.importexport.customer_group_helper.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper
 
     orocrm_magento.state_manager.class:                                     OroCRM\Bundle\MagentoBundle\Service\StateManager
     orocrm_magento.customer_state_handler.class:                            OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler
@@ -322,11 +321,6 @@ services:
 
     orocrm_magento.importexport.address_import_helper:
         class: %orocrm_magento.importexport.address_import_helper.class%
-        arguments:
-            - @orocrm_magento.importexport.doctrine_helper
-
-    orocrm_magento.importexport.customer_group_helper:
-        class: %orocrm_magento.importexport.customer_group_helper.class%
         arguments:
             - @orocrm_magento.importexport.doctrine_helper
 

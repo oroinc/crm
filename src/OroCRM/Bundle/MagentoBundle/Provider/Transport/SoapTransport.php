@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
@@ -454,7 +455,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO, ['addressId' => $customerAddressId]);
+        $result = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO, ['addressId' => $customerAddressId]);
+
+        return ConverterUtils::objectToArray($result);
     }
 
     /**
@@ -462,7 +465,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerInfo($originId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+        $result = $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+
+        return ConverterUtils::objectToArray($result);
     }
 
     /**
@@ -483,10 +488,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function createNewsletterSubscriber(array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return (array)$this->call(
+            $result = $this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
                 ['subscriberData' => $subscriberData]
             );
+
+            return ConverterUtils::objectToArray($result);
         }
 
         throw new ExtensionRequiredException();
@@ -498,10 +505,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return (array)$this->call(
+            $result = $this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
                 ['subscriberId' => $subscriberId, 'subscriberData' => $subscriberData]
             );
+
+            return ConverterUtils::objectToArray($result);
         }
 
         throw new ExtensionRequiredException();

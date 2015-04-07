@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
-use OroCRM\Bundle\MagentoBundle\Provider\CustomerConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
-class ContextCustomerReader extends CustomerConnector
+class ContextCartReader extends CartConnector
 {
-    const CONTEXT_POST_PROCESS_CUSTOMERS = 'postProcessCustomerIds';
+    const CONTEXT_POST_PROCESS_CARTS = 'postProcessCartsIds';
 
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class ContextCustomerReader extends CustomerConnector
             return $iterator;
         }
 
-        $iterator->setEntitiesIdsBuffer($this->getCustomerIds());
+        $iterator->setEntitiesIdsBuffer($this->getCartIds());
 
         return $iterator;
     }
@@ -28,10 +28,14 @@ class ContextCustomerReader extends CustomerConnector
     /**
      * @return array
      */
-    public function getCustomerIds()
+    public function getCartIds()
     {
+        if (!$this->transport->isSupportedExtensionVersion()) {
+            return [];
+        }
+
         $ids = (array)$this->stepExecution->getJobExecution()
-            ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CUSTOMERS);
+            ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CARTS);
 
         sort($ids);
 

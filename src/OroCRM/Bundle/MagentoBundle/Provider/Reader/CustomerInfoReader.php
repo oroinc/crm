@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
-use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
-
 class CustomerInfoReader extends AbstractInfoReader
 {
     /**
@@ -13,13 +10,8 @@ class CustomerInfoReader extends AbstractInfoReader
     protected function loadEntityInfo($originId)
     {
         $result = $this->transport->getCustomerInfo($originId);
-        $result->addresses = $this->transport->getCustomerAddresses($originId);
-        foreach ($result->addresses as $key => $val) {
-            $result->addresses[$key] = (array)$val;
-        }
+        $result['addresses'] = $this->transport->getCustomerAddresses($originId);
 
-        CustomerDependencyManager::addDependencyData($result, $this->transport);
-
-        return ConverterUtils::objectToArray($result);
+        return $result;
     }
 }

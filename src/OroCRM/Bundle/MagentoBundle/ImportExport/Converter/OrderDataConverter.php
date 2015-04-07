@@ -66,7 +66,17 @@ class OrderDataConverter extends AbstractTreeDataConverter
             $importedRecord['cart:channel:id'] = $this->context->getOption('channel');
         }
 
-        return parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+
+        if (!empty($importedRecord['paymentDetails']['method'])) {
+            $importedRecord['paymentMethod'] = $importedRecord['paymentDetails']['method'];
+        } else {
+            $importedRecord['paymentMethod'] = null;
+        }
+
+        unset($importedRecord['paymentDetails']['method']);
+
+        return $importedRecord;
     }
 
     /**

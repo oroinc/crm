@@ -48,7 +48,6 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processCart($entity);
         $this->processAddresses($this->existingEntity, $entity);
         $this->processItems($this->existingEntity, $entity);
-        $this->processDataChannel($entity);
         $this->processCustomer($entity, $entity->getCustomer());
 
         return parent::afterProcessEntity($entity);

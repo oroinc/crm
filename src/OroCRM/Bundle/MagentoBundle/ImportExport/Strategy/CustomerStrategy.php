@@ -4,15 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
-    /**
-     * @var CustomerGroupHelper
-     */
-    protected $customerGroupHelper;
-
     /**
      * @var Address[]
      */
@@ -22,17 +16,6 @@ class CustomerStrategy extends AbstractImportStrategy
      * @var array
      */
     protected $addressRegions = [];
-
-    /**
-     * @param CustomerGroupHelper $customerGroupHelper
-     * @return CustomerStrategy
-     */
-    public function setCustomerGroupHelper($customerGroupHelper)
-    {
-        $this->customerGroupHelper = $customerGroupHelper;
-
-        return $this;
-    }
 
     /**
      * @param Customer $entity
@@ -56,10 +39,6 @@ class CustomerStrategy extends AbstractImportStrategy
             }
         }
 
-        if ($entity->getGroup()) {
-            $entity->getGroup()->setChannel($entity->getChannel());
-        }
-
         return parent::beforeProcessEntity($entity);
     }
 
@@ -69,24 +48,9 @@ class CustomerStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $this->processDataChannel($entity);
-        $this->processGroup($entity);
         $this->processAddresses($entity);
 
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processGroup(Customer $entity)
-    {
-        $group = $entity->getGroup();
-        if ($group) {
-            $group = $this->customerGroupHelper->getUniqueGroup($group);
-            $group->setChannel($entity->getChannel());
-            $entity->setGroup($group);
-        }
     }
 
     /**
