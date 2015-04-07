@@ -76,8 +76,8 @@ class CustomerDataProvider
             $this->aclHelper,
             $past,
             $now,
-            $channelIds,
-            $this->dateHelper
+            $this->dateHelper,
+            $channelIds
         );
 
 

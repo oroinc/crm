@@ -17,8 +17,8 @@ class CustomerRepository extends EntityRepository
      * @param AclHelper  $aclHelper
      * @param \DateTime  $dateFrom
      * @param \DateTime  $dateTo
-     * @param array      $ids Filter by channel ids
      * @param DateHelper $dateHelper
+     * @param array      $ids Filter by channel ids
      *
      * @return array
      */
@@ -26,8 +26,8 @@ class CustomerRepository extends EntityRepository
         AclHelper $aclHelper,
         \DateTime $dateFrom,
         \DateTime $dateTo = null,
-        $ids = [],
-        DateHelper $dateHelper
+        DateHelper $dateHelper,
+        $ids = []
     ) {
         $qb = $this->createQueryBuilder('c');
         $qb->select(
