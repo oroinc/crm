@@ -108,6 +108,8 @@ parameters:
     orocrm_magento.integration_entity.remove_listener.class:                OroCRM\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener
     orocrm_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
+    orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BibNumber
+
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -542,3 +544,10 @@ services:
             - @orocrm_magento.wsdl_manager
         tags:
             - { name: doctrine.event_listener, event: preRemove }
+
+    orocrm_magento.provider.big_number:
+        class: %orocrm_magento.provider.big_number.class%
+        arguments:
+            - @doctrine
+            - @oro_locale.formatter.number
+            - @oro_locale.formatter.date_time

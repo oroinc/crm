@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
+use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
@@ -15,6 +16,30 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class OrderRepository extends EntityRepository
 {
+    public function getRevenueValueByDatePeriod(\DateTime $start, \DateTime $end)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $value = $qb->select('sum(o.totalAmount) as val')
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end)
+            ->getQuery()->getOneOrNullResult()['val'];
+
+        return $value ? : 0;
+    }
+
+    public function getOrdersNumberByDatePeriod(\DateTime $start, \DateTime $end)
+    {
+        $qb = $this->createQueryBuilder('o');
+        $value = $qb->select('count(o.id) as val')
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end)
+            ->getQuery()->getOneOrNullResult()['val'];
+
+        return $value ? : 0;
+    }
+
     /**
      * @param Cart|Customer $item
      * @param string        $field

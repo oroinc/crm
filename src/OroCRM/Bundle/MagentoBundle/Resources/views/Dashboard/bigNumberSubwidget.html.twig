@@ -1,0 +1,8 @@
+<strong>{{ item.label|trans }}</strong>
+<h2>{{ item.value.value }}</h2>
+{% if item.value.deviation is defined %}
+    <div style="color: #{% if item.value.isPositive %}9bad37{% else %}ff0800{% endif %};">
+        {{ item.value.deviation }}
+    </div>
+    <span>{{ item.value.previousRange }}</span>
+{% endif %}

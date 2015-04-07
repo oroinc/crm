@@ -39,3 +39,45 @@ oro_dashboard_config:
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
+        big_numbers_widget:
+            label:       orocrm.magento.dashboard.e_commerce_statistic.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: OroCRMMagentoBundle, name: bigNumbers }
+            acl:         orocrm_magento_cart_view
+            description: orocrm.magento.dashboard.e_commerce_statistic.description
+            icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
+            applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
+            data_items:
+                revenue:
+                    data_provider: @orocrm_magento.provider.big_number->getRevenueValues($widgetOptions$)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.revenue.label
+                    acl:           orocrm_account_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                orders_number:
+                    data_provider: @orocrm_magento.provider.big_number->getOrdersNumberValues($widgetOptions$)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.orders_number.label
+                    acl:           orocrm_account_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
+                usePreviousInterval:
+                    type: oro_type_widget_previous_date_range
+                    options:
+                       label: oro.dashboard.previous_date_range.label
+                       required: false
+                    converter_attributes:
+                        dateRangeField: dateRange
+                subWidgets:
+                    type: choice
+                    options:
+                       label: orocrm.magento.dashboard.e_commerce_statistic.sub_widgets.label
+                       required: false
+                       multiple: true
+                       expanded: true
+                       choices:
+                          - {revenue: orocrm.magento.dashboard.e_commerce_statistic.revenue.label}
+                          - {orders_number: orocrm.magento.dashboard.e_commerce_statistic.orders_number.label}

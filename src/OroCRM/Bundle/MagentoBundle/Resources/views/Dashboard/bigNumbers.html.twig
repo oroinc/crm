@@ -1,0 +1,16 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+
+{% set widgetType = 'quick-launchpad' %}
+
+{% block content %}
+    <ul class="quick-launchpad-toolbar">
+        {% set itemWidth = items|length > 0 ? (100 / items|length)|round(1) : 100 %}
+        {% for itemName, item in items %}
+            {% set width = loop.last ? 100 - ((items|length - 1) * itemWidth) : itemWidth %}
+            <li style="width: {{ width }}%">
+                {% include widgetDataItems[itemName].template with {item: item}%}
+            </li>
+        {% endfor %}
+    </ul>
+    {{ parent() }}
+{% endblock %}
