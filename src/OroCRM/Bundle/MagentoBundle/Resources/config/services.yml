@@ -253,10 +253,12 @@ services:
 
     orocrm_magento.event_listener.order:
         class: %orocrm_magento.event_listener.order.class%
+        arguments:
+            - @orocrm_channel.event_listener.doctrine
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
-            - { name: doctrine.event_listener, event: postFlush }
+            - { name: doctrine.event_listener, event: postFlush, priority: 5 }
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%

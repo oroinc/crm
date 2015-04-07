@@ -111,6 +111,9 @@ class OrderRepository extends EntityRepository
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
                 CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
             ) as averageOrderAmount';
+
+        $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
+
         $queryBuilder->select($selectClause)
             ->andWhere($queryBuilder->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $dateFrom)
@@ -118,7 +121,6 @@ class OrderRepository extends EntityRepository
             ->groupBy('dataChannelId');
         $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $queryBuilder, 'o.createdAt');
         $amountStatistics = $aclHelper->apply($queryBuilder)->getArrayResult();
-        $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
 
         $items             = [];
         foreach ($amountStatistics as $row) {
