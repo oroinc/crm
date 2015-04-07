@@ -16,22 +16,26 @@ class AttributesConverterHelper
 
     /**
      * @param array $importedRecord
-     * @param ContextInterface $context
+     * @param ContextInterface|null $context
      * @return array
      */
-    public static function addUnknownAttributes(array $importedRecord, ContextInterface $context)
+    public static function addUnknownAttributes(array $importedRecord, ContextInterface $context = null)
     {
+        $channelId = null;
+        if ($context && $context->hasOption(self::CHANNEL_KEY)) {
+            $channelId = $context->getOption(self::CHANNEL_KEY);
+        }
+
         if (!empty($importedRecord[self::ATTRIBUTES_KEY])) {
             foreach ($importedRecord[self::ATTRIBUTES_KEY] as $attribute) {
                 $name = $attribute[self::KEY];
                 $value = $attribute[self::VALUE];
 
                 $isIdentifier = substr($name, -strlen(self::ID_MARK)) === self::ID_MARK;
-                if ($isIdentifier && $context->hasOption(self::CHANNEL_KEY)) {
+                if ($isIdentifier && $channelId) {
                     $name = Inflector::camelize($name);
                     $importedRecord = self::addAttribute($importedRecord, $name, $value);
 
-                    $channelId = $context->getOption(self::CHANNEL_KEY);
                     $name = substr($name, 0, strlen($name) - strlen(self::ID_MARK) + 1);
                     $value = ['originId' => $value, self::CHANNEL_KEY => ['id' => $channelId]];
                 }
