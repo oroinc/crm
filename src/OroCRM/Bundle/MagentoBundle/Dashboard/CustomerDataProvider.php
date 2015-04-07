@@ -15,19 +15,13 @@ use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 
 class CustomerDataProvider
 {
-    /**
-     * @var ManagerRegistry
-     */
+    /** @var ManagerRegistry */
     protected $registry;
 
-    /**
-     * @var AclHelper
-     */
+    /** @var AclHelper */
     protected $aclHelper;
 
-    /**
-     * @var ConfigProvider
-     */
+    /** @var ConfigProvider */
     protected $configProvider;
 
     /** @var DateHelper */
@@ -74,9 +68,9 @@ class CustomerDataProvider
         $dates = $this->dateHelper->getDatePeriod($past, $now);
         $data  = $customerRepository->getGroupedByChannelArray(
             $this->aclHelper,
+            $this->dateHelper,
             $past,
             $now,
-            $this->dateHelper,
             $channelIds
         );
 
