@@ -3,11 +3,19 @@
 {% set widgetType = 'quick-launchpad' %}
 
 {% block content %}
-    <ul class="quick-launchpad-toolbar">
-        {% set itemWidth = items|length > 0 ? (100 / items|length)|round(1) : 100 %}
+    <ul class="quick-launchpad-toolbar with-subwidgets">
+        {#{% set itemWidth = items|length > 0 ? (100 / items|length)|round(1) : 100 %}#}
+        {% set itemWidth = 100 %}
+        {% if (items|length > 3) %}
+            {% set itemWidth = (100 / 3)|round(2)%}
+        {% else %}
+            {% set itemWidth = (100 / items|length)|round(1) %}
+        {% endif %}
+
+
         {% for itemName, item in items %}
-            {% set width = loop.last ? 100 - ((items|length - 1) * itemWidth) : itemWidth %}
-            <li style="width: {{ width }}%">
+            {#{% set width = loop.last ? 100 - ((items|length - 1) * itemWidth) : itemWidth %}#}
+            <li class="sub-widget" style="width: {{ itemWidth }}%">
                 {% include widgetDataItems[itemName].template with {item: item}%}
             </li>
         {% endfor %}
