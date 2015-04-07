@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
-use DateTime;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -134,9 +132,9 @@ class DashboardController extends Controller
         $purchaseDataProvider = $this->getPurchaseDataProvider();
         $chartViewBuilder     = $this->getChartViewBuilder();
 
-        $widgetOptions = $widgetAttributes->getWidgetOptions();
-        $from = new DateTime($widgetOptions->get('from', '-1 year'));
-        $to   = new DateTime($widgetOptions->get('to', '+ 1 week'));
+        $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
         $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
