@@ -13,15 +13,22 @@ class LeadRepository extends EntityRepository
      *
      * @param  AclHelper $aclHelper
      * @param  int       $limit
+     * @param  array     $dateRange
      * @return array     [itemCount, label]
      */
-    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10)
+    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null)
     {
         $qb   = $this->createQueryBuilder('l')
             ->select('s.id as source, count(o.id) as itemCount')
             ->leftJoin('l.opportunities', 'o')
             ->leftJoin('l.source', 's')
             ->groupBy('source');
+
+        if ($dateRange) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+                ->setParameter('dateStart', $dateRange['start'])
+                ->setParameter('dateEnd', $dateRange['end']);
+        }
         $rows = $aclHelper->apply($qb)->getArrayResult();
 
         return $this->processOpportunitiesByLeadSource($rows, $limit);
