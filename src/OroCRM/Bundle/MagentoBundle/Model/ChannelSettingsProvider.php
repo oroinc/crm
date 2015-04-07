@@ -42,10 +42,9 @@ class ChannelSettingsProvider
      */
     public function isTwoWaySyncEnable($channelId)
     {
-        $this->validateChannelId($channelId);
-        $this->loadChannel($channelId);
-
-        return $this->channels[$channelId]->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled');
+        return $this->getChannelById($channelId)
+            ->getSynchronizationSettings()
+            ->offsetGetOr('isTwoWaySyncEnabled');
     }
 
     /**
@@ -55,11 +54,8 @@ class ChannelSettingsProvider
      */
     public function isSupportedExtensionVersion($channelId)
     {
-        $this->validateChannelId($channelId);
-        $this->loadChannel($channelId);
-
         /** @var MagentoSoapTransport $transport */
-        $transport = $this->channels[$channelId]->getTransport();
+        $transport = $this->getChannelById($channelId)->getTransport();
 
         return $transport->isSupportedExtensionVersion();
     }
@@ -71,10 +67,7 @@ class ChannelSettingsProvider
      */
     public function isEnabled($channelId)
     {
-        $this->validateChannelId($channelId);
-        $this->loadChannel($channelId);
-
-        return $this->channels[$channelId]->isEnabled();
+        return $this->getChannelById($channelId)->isEnabled();
     }
 
     /**
@@ -126,23 +119,25 @@ class ChannelSettingsProvider
 
     /**
      * @param int $channelId
+     * @return Channel
      */
-    protected function loadChannel($channelId)
+    protected function getChannelById($channelId)
     {
-        if (!empty($this->channels[$channelId])) {
-            return;
+        $this->validateChannelId($channelId);
+        if (empty($this->channels[$channelId])) {
+            /** @var Channel $channel */
+            $channel = $this->doctrineHelper
+                ->getEntityRepository($this->channelClassName)
+                ->find($channelId);
+
+            if (!$channel) {
+                throw new \InvalidArgumentException(sprintf('Channel with id "%s" not found', $channelId));
+            }
+
+            $this->channels[$channelId] = $channel;
         }
 
-        /** @var Channel $channel */
-        $channel = $this->doctrineHelper
-            ->getEntityRepository($this->channelClassName)
-            ->find($channelId);
-
-        if (!$channel) {
-            throw new \InvalidArgumentException(sprintf('Channel with id "%s" not found', $channelId));
-        }
-
-        $this->channels[$channelId] = $channel;
+        return $this->channels[$channelId];
     }
 
     /**
