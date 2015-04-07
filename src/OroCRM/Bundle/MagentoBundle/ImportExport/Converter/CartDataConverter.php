@@ -50,6 +50,16 @@ class CartDataConverter extends AbstractTreeDataConverter
     /**
      * {@inheritdoc}
      */
+    public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
+    {
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+
+        return AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function getBackendHeader()
     {
         // will be implemented for bidirectional sync
