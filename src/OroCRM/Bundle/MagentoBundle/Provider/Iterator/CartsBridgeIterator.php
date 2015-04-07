@@ -87,13 +87,6 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function addDependencyData($result)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getIdFieldName()
     {
         return 'entity_id';

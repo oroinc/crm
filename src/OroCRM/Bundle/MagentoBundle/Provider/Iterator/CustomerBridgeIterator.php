@@ -83,13 +83,6 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function addDependencyData($result)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getIdFieldName()
     {
         return 'customer_id';

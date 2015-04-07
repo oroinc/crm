@@ -14,6 +14,11 @@ class ContextCartReader extends CartConnector
      */
     protected function getConnectorSource()
     {
+        // no need to load carts
+        if (!$this->transport->isSupportedExtensionVersion()) {
+            return new \ArrayIterator();
+        }
+
         $iterator = parent::getConnectorSource();
 
         if (!$iterator instanceof UpdatedLoaderInterface) {
@@ -30,12 +35,10 @@ class ContextCartReader extends CartConnector
      */
     public function getCartIds()
     {
-        if (!$this->transport->isSupportedExtensionVersion()) {
-            return [];
-        }
-
         $ids = (array)$this->stepExecution->getJobExecution()
             ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CARTS);
+
+        $this->stepExecution->getJobExecution()->getExecutionContext()->remove(self::CONTEXT_POST_PROCESS_CARTS);
 
         sort($ids);
 

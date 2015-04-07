@@ -83,13 +83,6 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function addDependencyData($result)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getIdFieldName()
     {
         return 'subscriber_id';

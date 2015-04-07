@@ -50,6 +50,8 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processItems($this->existingEntity, $entity);
         $this->processCustomer($entity, $entity->getCustomer());
 
+        $this->existingEntity = null;
+
         return parent::afterProcessEntity($entity);
     }
 

@@ -403,7 +403,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $addresses = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
         $addresses = WSIUtils::processCollectionResponse($addresses);
 
-        return $addresses;
+        return ConverterUtils::objectToArray($addresses);
     }
 
     /**

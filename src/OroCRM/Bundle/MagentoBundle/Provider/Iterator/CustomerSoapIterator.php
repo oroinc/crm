@@ -79,16 +79,8 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
         }
 
         $result = $this->entityBuffer[$id];
-        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData($result)
-    {
     }
 
     /**

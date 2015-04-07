@@ -74,6 +74,13 @@ class Order extends ExtendOrder implements
      * @var string
      *
      * @ORM\Column(name="increment_id", type="string", length=60, nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $incrementId;
 

@@ -329,15 +329,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
-     * Adds dependencies to result entity
-     *
-     * @param \stdClass $result
-     */
-    protected function addDependencyData($result)
-    {
-    }
-
-    /**
      * @param mixed $response
      *
      * @return array
