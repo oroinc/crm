@@ -42,7 +42,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_cart_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart"
+ *              "icon"="icon-shopping-cart",
+ *              "context-grid"="magento-cart-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
