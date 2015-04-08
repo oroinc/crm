@@ -85,10 +85,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function subscribeAction(NewsletterSubscriber $newsletterSubscriber)
     {
-        $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->changeStatus($newsletterSubscriber, NewsletterSubscriber::STATUS_SUBSCRIBED);
-
-        return new JsonResponse($this->doJob($newsletterSubscriber));
+        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_SUBSCRIBED));
     }
 
     /**
@@ -109,10 +106,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function unsubscribeAction(NewsletterSubscriber $newsletterSubscriber)
     {
-        $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->changeStatus($newsletterSubscriber, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
-
-        return new JsonResponse($this->doJob($newsletterSubscriber));
+        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_UNSUBSCRIBED));
     }
 
     /**
@@ -127,16 +121,16 @@ class NewsletterSubscriberController extends Controller
      * @Acl(
      *      id="orocrm_magento_newsletter_subscriber_subscribe_customer",
      *      type="entity",
-     *      permission="CREATE",
+     *      permission="EDIT",
      *      class="OroCRMMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function subscribeByCustomerAction(Customer $customer)
     {
         $newsletterSubscriber = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->getOrCreateFromCustomer($customer, NewsletterSubscriber::STATUS_SUBSCRIBED);
+            ->getOrCreateFromCustomer($customer);
 
-        return new JsonResponse($this->doJob($newsletterSubscriber));
+        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_SUBSCRIBED));
     }
 
     /**
@@ -151,39 +145,42 @@ class NewsletterSubscriberController extends Controller
      * @Acl(
      *      id="orocrm_magento_newsletter_subscriber_unsubscribe_customer",
      *      type="entity",
-     *      permission="CREATE",
+     *      permission="EDIT",
      *      class="OroCRMMagentoBundle:NewsletterSubscriber"
      * )
      */
     public function unsubscribeByCustomerAction(Customer $customer)
     {
         $newsletterSubscriber = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->getOrCreateFromCustomer($customer, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
+            ->getOrCreateFromCustomer($customer);
 
-        return new JsonResponse($this->doJob($newsletterSubscriber));
+        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_UNSUBSCRIBED));
     }
 
     /**
      * @param NewsletterSubscriber $newsletterSubscriber
+     * @param int $statusIdentifier
      *
      * @return array
      */
-    protected function doJob(NewsletterSubscriber $newsletterSubscriber)
+    protected function doJob(NewsletterSubscriber $newsletterSubscriber, $statusIdentifier)
     {
         $jobResult = $this->get('oro_importexport.job_executor')->executeJob(
             'export',
             'magento_newsletter_subscriber_export',
             [
-                'channel' => $newsletterSubscriber->getChannel(),
+                'channel' => $newsletterSubscriber->getChannel()->getId(),
                 'entity' => $newsletterSubscriber,
-                'writer_skip_clear' => true
+                'statusIdentifier' => $statusIdentifier,
+                'writer_skip_clear' => true,
+                'processorAlias' => 'orocrm_magento'
             ]
         );
 
         return [
             'successful' => $jobResult->isSuccessful(),
             'error' => $jobResult->getFailureExceptions(),
-            'state' => $newsletterSubscriber->getStatus()->getId()
+            'state' => $jobResult->isSuccessful() ? $statusIdentifier : $newsletterSubscriber->getStatus()->getId()
         ];
     }
 }

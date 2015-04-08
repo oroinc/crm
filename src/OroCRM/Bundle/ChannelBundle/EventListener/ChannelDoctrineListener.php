@@ -200,6 +200,22 @@ class ChannelDoctrineListener
     }
 
     /**
+     * @param object $customerIdentityEntity
+     * @param Account $account
+     * @param Channel $channel
+     */
+    public function scheduleEntityUpdate($customerIdentityEntity, Account $account = null, Channel $channel = null)
+    {
+        if (!$this->uow) {
+            throw new \RuntimeException('UOW is missing, listener is not initialized');
+        }
+
+        $customerIdentity = ClassUtils::getClass($customerIdentityEntity);
+
+        $this->scheduleUpdate($customerIdentity, $account, $channel);
+    }
+
+    /**
      * Returns value before change, or null otherwise
      *
      * @param array $changeSet
