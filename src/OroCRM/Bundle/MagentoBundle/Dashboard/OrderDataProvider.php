@@ -117,6 +117,13 @@ class OrderDataProvider
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig('revenue_over_time_chart')
         );
+        $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
+        $chartOptions['data_schema']['label']['label'] =
+            sprintf(
+                'oro.dashboard.chart.%s.label',
+                $chartType
+            );
 
         $currentPeriod = sprintf(
             '%s - %s',
