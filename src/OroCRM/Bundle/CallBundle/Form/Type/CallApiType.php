@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\CallBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\Callback;
+use Symfony\Component\Validator\ExecutionContextInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
@@ -15,7 +17,16 @@ class CallApiType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         // Add a hidden field to pass form validation
-        $builder->add('associations', 'hidden', ['mapped' => false]);
+        $builder->add(
+            'associations',
+            'hidden',
+            [
+                'mapped'      => false,
+                'constraints' => [
+                    new Callback([[$this, 'validateAssociations']])
+                ]
+            ]
+        );
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }
@@ -46,5 +57,23 @@ class CallApiType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * @param array                     $associations
+     * @param ExecutionContextInterface $context
+     */
+    public function validateAssociations($associations, ExecutionContextInterface $context)
+    {
+        foreach ($associations as $index => $association) {
+            if (empty($association['entityName']) || empty($association['entityId'])) {
+                $context->addViolation(
+                    'Invalid association provided at position {{index}}. Entity Name and Entity ID should not be null.',
+                    [
+                        '{{index}}' => $index+1
+                    ]
+                );
+            }
+        }
     }
 }

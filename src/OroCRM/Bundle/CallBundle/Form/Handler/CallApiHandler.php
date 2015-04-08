@@ -53,7 +53,6 @@ class CallApiHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                $this->handleAssociations($entity);
                 $this->onSuccess($entity);
 
                 return true;
@@ -61,6 +60,18 @@ class CallApiHandler
         }
 
         return false;
+    }
+
+    /**
+     * "Success" form handler
+     *
+     * @param Call $entity
+     */
+    protected function onSuccess(Call $entity)
+    {
+        $this->handleAssociations($entity);
+        $this->manager->persist($entity);
+        $this->manager->flush();
     }
 
     /**
@@ -75,28 +86,15 @@ class CallApiHandler
             return;
         }
         foreach ($associations->getData() as $association) {
-            if (!empty($association['entityName']) && !empty($association['entityId'])) {
-                $associationType = isset($association['type']) ? $association['type'] : null;
-                $target = $this->manager->getReference($association['entityName'], $association['entityId']);
-                call_user_func(
-                    [
-                        $entity,
-                        AssociationNameGenerator::generateAddTargetMethodName($associationType)
-                    ],
-                    $target
-                );
-            }
+            $associationType = isset($association['type']) ? $association['type'] : null;
+            $target = $this->manager->getReference($association['entityName'], $association['entityId']);
+            call_user_func(
+                [
+                    $entity,
+                    AssociationNameGenerator::generateAddTargetMethodName($associationType)
+                ],
+                $target
+            );
         }
-    }
-
-    /**
-     * "Success" form handler
-     *
-     * @param Call $entity
-     */
-    protected function onSuccess(Call $entity)
-    {
-        $this->manager->persist($entity);
-        $this->manager->flush();
     }
 }
