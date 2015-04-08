@@ -101,12 +101,6 @@ class ContactController extends RestController implements ClassResourceInterface
         $dateParamFilter  = new HttpDateTimeParameterFilter();
         $userIdFilter     = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User');
         $userNameFilter   = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroUserBundle:User', 'username');
-        $phoneFilter      = new AssociatedFieldToReferenceFilter(
-            $this->getDoctrine(),
-            'OroCRMContactBundle:Contact',
-            'phones',
-            'phone'
-        );
 
         $filterParameters = [
             'createdAt'        => $dateParamFilter,
@@ -115,19 +109,20 @@ class ContactController extends RestController implements ClassResourceInterface
             'ownerUsername'    => $userNameFilter,
             'assigneeId'       => $userIdFilter,
             'assigneeUsername' => $userNameFilter,
-            'phone'            => $phoneFilter,
         ];
         $map              = [
             'ownerId'          => 'owner',
             'ownerUsername'    => 'owner',
             'assigneeId'       => 'assignedTo',
             'assigneeUsername' => 'assignedTo',
-            'phone'            => 'id', // we get IDs of contacts from filter
+            'phone'            => 'phones.phone'
         ];
-
+        $joins            = [
+            'phones'
+        ];
         $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
 
-        return $this->handleGetListRequest($page, $limit, $criteria);
+        return $this->handleGetListRequest($page, $limit, $criteria, $joins);
     }
 
     /**
