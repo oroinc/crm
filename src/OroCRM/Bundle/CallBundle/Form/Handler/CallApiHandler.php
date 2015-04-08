@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\EntityExtendBundle\Tools\AssociationHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\AssociationNameGenerator;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallApiHandler
@@ -81,7 +81,7 @@ class CallApiHandler
                 call_user_func(
                     [
                         $entity,
-                        AssociationHelper::getManyToManySetterMethodName($associationType)
+                        AssociationNameGenerator::generateAddTargetMethodName($associationType)
                     ],
                     $target
                 );
