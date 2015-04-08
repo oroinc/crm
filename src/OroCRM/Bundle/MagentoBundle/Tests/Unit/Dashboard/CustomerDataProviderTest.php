@@ -26,6 +26,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $configProvider;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateHelper;
+
     protected function setUp()
     {
         $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -35,11 +40,15 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->dataProvider = new CustomerDataProvider(
             $this->registry,
             $this->aclHelper,
-            $this->configProvider
+            $this->configProvider,
+            $this->dateHelper
         );
     }
 
@@ -49,6 +58,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedArrayData
      * @param array $expectedOptions
      * @param array $chartConfig
+     * @param array $dateRange
      * @dataProvider getNewCustomerChartViewDataProvider
      */
     public function testGetNewCustomerChartView(
@@ -56,7 +66,8 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         array $sourceData,
         array $expectedArrayData,
         array $expectedOptions,
-        array $chartConfig
+        array $chartConfig,
+        array $dateRange
     ) {
         $channelRepository = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()
@@ -112,10 +123,38 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getChartConfig')
             ->with('new_web_customers')
             ->will($this->returnValue($chartConfig));
-
+        $this->dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(
+                [
+                    'viewType' => 'month'
+                ]
+            );
+        $this->dateHelper->expects($this->once())
+            ->method('getDatePeriod')
+            ->willReturnCallback(function($past, $now) {
+                return [
+                    '2014-02' => ['date' => '2014-02-01'],
+                    '2014-03' => ['date' => '2014-03-01'],
+                    '2014-04' => ['date' => '2014-04-01'],
+                    '2014-05' => ['date' => '2014-05-01'],
+                    '2014-06' => ['date' => '2014-06-01'],
+                    '2014-07' => ['date' => '2014-07-01'],
+                    '2014-08' => ['date' => '2014-08-01'],
+                    '2014-09' => ['date' => '2014-09-01'],
+                    '2014-10' => ['date' => '2014-10-01'],
+                    '2014-11' => ['date' => '2014-11-01'],
+                    '2014-12' => ['date' => '2014-12-01'],
+                ];
+            });
+        $this->dateHelper->expects($this->any())
+            ->method('getKey')
+            ->willReturnCallback(function($past, $now, $row) {
+                return $row['yearCreated'] . '-' . $row['monthCreated'];
+            });
         $this->assertEquals(
             $chartView,
-            $this->dataProvider->getNewCustomerChartView($chartViewBuilder)
+            $this->dataProvider->getNewCustomerChartView($chartViewBuilder, $dateRange)
         );
     }
 
@@ -125,7 +164,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
     public function getNewCustomerChartViewDataProvider()
     {
         $ulcTimezone = new \DateTimeZone('UTC');
-        $now  = new \DateTime('now', $ulcTimezone);
+        $now  = new \DateTime('2015-01-01', $ulcTimezone);
         $past = clone $now;
         $past = $past->sub(new \DateInterval("P11M"));
         $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $ulcTimezone);
@@ -135,15 +174,16 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
         $dates      = [];
 
-        $nowMonth = $now->format('Y-m');
+        $nowClone = clone $now;
+        $nowClone = $nowClone->sub(new \DateInterval("P1M"));
+        $nowMonth = $nowClone->format('Y-m');
 
         // create dates by date period
         /** @var \DateTime $dt */
         foreach ($datePeriod as $dt) {
             $key = $dt->format('Y-m');
             $dates[$key] = array(
-                'month_year' => sprintf('%s-01', $key),
-                'cnt'        => 0
+                'date' => sprintf('%s-01', $key),
             );
         }
 
@@ -171,14 +211,14 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     [
                         'channelId'    => 3,
                         'cnt'          => 16,
-                        'yearCreated'  => $now->format('Y'),
-                        'monthCreated' => $now->format('m'),
+                        'yearCreated'  => '2014',
+                        'monthCreated' => '12',
                     ],
                     [
                         'channelId'    => 4,
                         'cnt'          => 12,
-                        'yearCreated'  => $now->format('Y'),
-                        'monthCreated' => $now->format('m'),
+                        'yearCreated'  => '2014',
+                        'monthCreated' => '12',
                     ]
                 ],
                 'expectedArrayData' => $expected,
@@ -187,7 +227,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'label'      => 'oro.dashboard.chart.month.label',
                             'type'       => 'month'
                         ],
                         'value' => [
@@ -200,7 +240,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'month_year',
-                            'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.month',
+                            'label'      => 'oro.dashboard.chart.month.label',
                             'type'       => 'month',
                         ],
                         'value' => [
@@ -208,6 +248,10 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
                             'label'      => 'orocrm.magento.dashboard.new_magento_customers_chart.customer_count'
                         ]
                     ]
+                ],
+                'dateRange' => [
+                    'start' => $past,
+                    'end' => $now
                 ]
             ]
         ];
