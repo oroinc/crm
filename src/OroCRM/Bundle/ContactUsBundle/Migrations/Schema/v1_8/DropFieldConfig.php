@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_31;
+namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_7;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
@@ -15,15 +15,8 @@ class DropFieldConfig implements Migration
      * @var array
      */
     protected $fields = [
-        'channel_id' => [
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Cart',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\CustomerGroup',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Order',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Product',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Store',
-            'OroCRM\\Bundle\\MagentoBundle\\Entity\\Website'
-        ]
+        'channel_id' => ['OroCRM\\Bundle\\ContactUsBundle\\Entity\\ContactRequest'],
+        'contact_reason_id' => ['OroCRM\\Bundle\\ContactUsBundle\\Entity\\ContactRequest']
     ];
 
     /**
