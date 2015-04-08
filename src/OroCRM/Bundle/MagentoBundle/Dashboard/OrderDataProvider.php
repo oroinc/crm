@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
 use DateTime;
-use DateInterval;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 
@@ -39,21 +38,29 @@ class OrderDataProvider
     protected $dateTimeFormatter;
 
     /**
+     * @var DateHelper
+     */
+    protected $dateHelper;
+
+    /**
      * @param ManagerRegistry $registry
      * @param AclHelper $aclHelper
      * @param ConfigProvider $configProvider
      * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateHelper $dateHelper
      */
     public function __construct(
         ManagerRegistry $registry,
         AclHelper $aclHelper,
         ConfigProvider $configProvider,
-        DateTimeFormatter $dateTimeFormatter
+        DateTimeFormatter $dateTimeFormatter,
+        DateHelper $dateHelper
     ) {
         $this->registry = $registry;
         $this->aclHelper = $aclHelper;
         $this->configProvider = $configProvider;
         $this->dateTimeFormatter = $dateTimeFormatter;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -89,19 +96,22 @@ class OrderDataProvider
 
     /**
      * @param ChartViewBuilder $viewBuilder
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param array $dateRange
      *
      * @return ChartView
      */
-    public function getOrdersOverTimeChartView(ChartViewBuilder $viewBuilder, DateTime $from, DateTime $to)
+    public function getOrdersOverTimeChartView(ChartViewBuilder $viewBuilder, array $dateRange)
     {
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
+
         $items = $this->createOrdersOvertimeCurrentData($from, $to);
 
-        $interval = $from->diff($to);
-        $fromDate = clone $from;
-        $previousFrom = $fromDate->sub($interval);
-        $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from, $interval);
+        $diff = $to->getTimestamp() - $from->getTimestamp();
+        $previousFrom = clone $from;
+        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
+
+        $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from, $diff);
 
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
@@ -135,49 +145,47 @@ class OrderDataProvider
      */
     protected function createOrdersOvertimeCurrentData(DateTime $from, DateTime $to)
     {
-        $result = $this->getOrderRepository()->getOrdersOverTime($from, $to);
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->dateHelper, $from, $to);
 
-        $items = [];
-        foreach ($result as $year => $yearData) {
-            foreach ($yearData as $month => $monthData) {
-                foreach ($monthData as $day => $count) {
-                    $items[] = [
-                        'date' => sprintf('%04d-%02d-%02d', $year, $month, $day),
-                        'count' => $count,
-                    ];
-                }
-            }
+        $items = $this->dateHelper->getDatePeriod($from, $to);
+        foreach ($result as $row) {
+            $key = $this->dateHelper->getKey($from, $to, $row);
+            $items[$key]['count'] = $row['cnt'];
         }
 
-        return $items;
+        return array_combine(range(0, count($items) - 1), array_values($items));
     }
 
     /**
      * @param DateTime $from
      * @param DateTime $to
-     * @param DateInterval $interval
+     * @param int $diff Timestamp
      *
      * @return array
      */
-    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to, DateInterval $interval)
+    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to, $diff)
     {
-        $result = $this->getOrderRepository()->getOrdersOverTime($from, $to);
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->dateHelper, $from, $to);
 
-        $items = [];
-        foreach ($result as $year => $yearData) {
-            foreach ($yearData as $month => $monthData) {
-                foreach ($monthData as $day => $count) {
-                    $date = new DateTime(sprintf('%04d-%02d-%02d', $year, $month, $day));
-                    $date->add($interval);
-                    $items[] = [
-                        'date' => $date->format('Y-m-d'),
-                        'count' => $count,
-                    ];
-                }
-            }
+        $items = $this->dateHelper->getDatePeriod($from, $to);
+        foreach ($result as $row) {
+            $key = $this->dateHelper->getKey($from, $to, $row);
+            $items[$key]['count'] = $row['cnt'];
         }
 
-        return $items;
+        $currentFrom = $to;
+        $currentTo = clone $to;
+        $currentTo->setTimestamp($currentFrom->getTimestamp() + $diff);
+
+        $currentItems = $this->dateHelper->getDatePeriod($currentFrom, $currentTo);
+
+        $mixedItems = array_combine(array_keys($currentItems), array_values($items));
+        foreach ($mixedItems as $k => $v) {
+            $v['date'] = $k;
+            $currentItems[$k] = $v;
+        }
+
+        return array_combine(range(0, count($currentItems) - 1), array_values($currentItems));
     }
 
     /**

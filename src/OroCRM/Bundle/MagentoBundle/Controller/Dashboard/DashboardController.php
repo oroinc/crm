@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
-use DateTime;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -134,12 +132,13 @@ class DashboardController extends Controller
         $orderDataProvider = $this->getOrderDataProvider();
         $chartViewBuilder  = $this->getChartViewBuilder();
 
-        $widgetOptions = $widgetAttributes->getWidgetOptions();
-        $from = new DateTime($widgetOptions->get('from', '-1 year'));
-        $to = new DateTime($widgetOptions->get('to', 'now'));
-
         $data = $widgetAttributes->getWidgetAttributesForTwig('orders_over_time_chart');
-        $data['chartView'] = $orderDataProvider->getOrdersOverTimeChartView($chartViewBuilder, $from, $to);
+        $data['chartView'] = $orderDataProvider->getOrdersOverTimeChartView(
+            $chartViewBuilder,
+            $widgetAttributes
+                ->getWidgetOptions()
+                ->get('dateRange')
+        );
 
         return $data;
     }

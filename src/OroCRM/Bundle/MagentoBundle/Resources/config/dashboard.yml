@@ -46,3 +46,10 @@ oro_dashboard_config:
             description: orocrm.magento.dashboard.orders_over_time_chart.description
             icon:        bundles/orocrmmagento/img/number-magento-customers.png
             applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
+

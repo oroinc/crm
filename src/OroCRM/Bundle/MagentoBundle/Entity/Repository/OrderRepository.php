@@ -121,37 +121,36 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param DateHelper $dateHelper
      * @param DateTime $from
      * @param DateTime $to
      *
      * @return array
      */
-    public function getOrdersOverTime(DateTime $from, DateTime $to)
+    public function getOrdersOverTime(DateHelper $dateHelper, DateTime $from, DateTime $to)
     {
-        $orders = $this->createQueryBuilder('o')
-            ->addSelect('YEAR(o.createdAt) AS yearCreated')
-            ->addSelect('MONTH(o.createdAt) AS monthCreated')
-            ->addSelect('DAY(o.createdAt) AS dayCreated')
-            ->andWhere('o.createdAt >= :from')
-            ->andWhere('o.createdAt <= :to')
-            ->setParameters([
-                'from' => $from,
-                'to'   => $to,
-            ])
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id) AS cnt')
+        ;
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        $orders = $qb
             ->getQuery()
             ->getResult()
         ;
 
-        $result = DatePeriodUtils::getDays($from, $to);
-        foreach ($orders as $order) {
-            $year  = $order['yearCreated'];
-            $month = $order['monthCreated'];
-            $day   = $order['dayCreated'];
-
-            $result[$year][$month][$day]++;
-        }
-
-        return $result;
+        return $orders;
     }
 
     /**
