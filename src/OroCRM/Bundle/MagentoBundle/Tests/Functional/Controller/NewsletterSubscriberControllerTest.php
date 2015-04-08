@@ -155,11 +155,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
             $this->getUrl('orocrm_magento_newsletter_subscriber_unsubscribe', ['id' => $this->getMainEntityId()])
         );
 
-        $this->subscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->find($this->subscriber->getId());
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus()->getId());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $result['state']);
     }
 
     /**
@@ -172,11 +169,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
             $this->getUrl('orocrm_magento_newsletter_subscriber_subscribe', ['id' => $this->getMainEntityId()])
         );
 
-        $this->subscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->find($this->subscriber->getId());
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus()->getId());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $result['state']);
     }
 
     /**
@@ -192,11 +186,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
             )
         );
 
-        $this->subscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->find($this->subscriber->getId());
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $this->subscriber->getStatus()->getId());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $result['state']);
     }
 
     /**
@@ -211,11 +202,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                 ['id' => $this->subscriber->getCustomer()->getId()]
             )
         );
-
-        $this->subscriber = $this->getContainer()->get('doctrine')
-            ->getRepository('OroCRMMagentoBundle:NewsletterSubscriber')
-            ->find($this->subscriber->getId());
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $this->subscriber->getStatus()->getId());
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $result['state']);
     }
 }

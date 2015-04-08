@@ -176,7 +176,7 @@ interface MagentoTransportInterface extends TransportInterface
     /**
      * @param array $subscriberData
      *
-     * @return int
+     * @return array
      */
     public function createNewsletterSubscriber(array $subscriberData);
 
@@ -184,7 +184,7 @@ interface MagentoTransportInterface extends TransportInterface
      * @param int $subscriberId
      * @param array $subscriberData
      *
-     * @return bool
+     * @return array
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
 

@@ -8,30 +8,22 @@ use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $aclHelper;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
-    /**
-     * @var OrderDataProvider
-     */
+    /** @var OrderDataProvider */
     protected $dataProvider;
 
     protected function setUp()
     {
-        $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+        $this->registry       = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->aclHelper      = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
             ->disableOriginalConstructor()
             ->getMock();
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
@@ -55,50 +47,40 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAverageOrderAmountByCustomerChartView()
     {
-        $sourceOrderData = [
-            1 => [
-                'name' => 'First',
-                'data' => [2014 => [9 => 3]],
-            ],
-            2 => [
-                'name' => 'Second',
-                'data' => [2014 => [9 => 5]],
-            ]
+        $sourceOrderData   = [
+            'First'  => [['month' => '2014-09-01', 'amount' => 3]],
+            'Second' => [['month' => '2014-09-01', 'amount' => 5]]
         ];
         $expectedArrayData = [
-            'First' => [
-                ['month' => '2014-09-01', 'amount' => 3],
-            ],
-            'Second' => [
-                ['month' => '2014-09-01', 'amount' => 5],
+            'First'  => [['month' => '2014-09-01', 'amount' => 3]],
+            'Second' => [['month' => '2014-09-01', 'amount' => 5]]
+        ];
+        $expectedOptions   = [
+            'name'        => 'multiline_chart',
+            'data_schema' => [
+                'label' => [
+                    'field_name' => 'month',
+                    'label'      => 'oro.dashboard.chart.month.label',
+                    'type'       => 'month'
+                ],
+                'value' => [
+                    'field_name' => 'amount',
+                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
+                    'type'       => 'currency'
+                ]
             ]
         ];
-        $expectedOptions = [
-            'name' => 'multiline_chart',
+        $chartConfig       = [
             'data_schema' => [
                 'label' => [
                     'field_name' => 'month',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month',
-                    'type' => 'month',
+                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.month',
+                    'type'       => 'month'
                 ],
                 'value' => [
                     'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
-                    'type' => 'currency',
-                ],
-            ],
-        ];
-        $chartConfig = [
-            'data_schema' => [
-                'label' => [
-                    'field_name' => 'month',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.month',
-                    'type' => 'month',
-                ],
-                'value' => [
-                    'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
-                    'type' => 'currency'
+                    'label'      => 'orocrm.magento.dashboard.average_order_amount_chart.order_amount',
+                    'type'       => 'currency'
                 ]
             ]
         ];
@@ -106,9 +88,17 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
+        $start           = new \DateTime('2012-01-01');
+        $end             = new \DateTime('2015-01-01');
+        $dateHelper      = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(['viewType' => 'month']);
         $orderRepository->expects($this->once())
             ->method('getAverageOrderAmount')
-            ->with($this->aclHelper)
+            ->with($this->aclHelper, $start, $end, $dateHelper)
             ->will($this->returnValue($sourceOrderData));
 
         $this->registry->expects($this->once())
@@ -142,7 +132,14 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $chartView,
-            $this->dataProvider->getAverageOrderAmountChartView($chartViewBuilder)
+            $this->dataProvider->getAverageOrderAmountChartView(
+                $chartViewBuilder,
+                [
+                    'start' => $start,
+                    'end' => $end
+                ],
+                $dateHelper
+            )
         );
     }
 

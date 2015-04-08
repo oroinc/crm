@@ -168,7 +168,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     {
         $formattedSyncedTo = $syncedTo->format(\DateTime::ISO8601);
 
-        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector, Status::STATUS_COMPLETED);
         $statusData = $lastStatus->getData();
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
