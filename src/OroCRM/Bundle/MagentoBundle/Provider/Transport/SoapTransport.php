@@ -59,6 +59,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
     const ACTION_ORO_ORDER_INFO = 'oroOrderInfo';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
+    const ACTION_ORO_CUSTOMER_INFO = 'oroCustomerInfo';
+    const ACTION_ORO_CUSTOMER_ADDRESS_LIST = 'oroCustomerAddressList';
+    const ACTION_ORO_CUSTOMER_ADDRESS_INFO = 'oroCustomerAddressInfo';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
@@ -438,7 +441,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddresses($originId)
     {
-        $addresses = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_LIST;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST;
+        }
+
+        $addresses = $this->call($endpoint, ['customerId' => $originId]);
         $addresses = WSIUtils::processCollectionResponse($addresses);
 
         return $addresses;
@@ -493,7 +502,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO, ['addressId' => $customerAddressId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO;
+        }
+
+        return (array)$this->call($endpoint, ['addressId' => $customerAddressId]);
     }
 
     /**
@@ -501,7 +516,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerInfo($originId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_INFO;
+        }
+
+        return (array)$this->call($endpoint, ['customerId' => $originId]);
     }
 
     /**
