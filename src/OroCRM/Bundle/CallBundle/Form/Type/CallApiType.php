@@ -14,6 +14,9 @@ class CallApiType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // Add a hidden field to pass form validation
+        $builder->add('associations', 'hidden', ['mapped' => false]);
+
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
