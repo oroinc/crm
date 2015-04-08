@@ -20,9 +20,16 @@ orocrm:
             e_commerce_statistic:
                 title: eCommerce Statistic
                 description: eCommerce Statistic
-                sub_widgets.label: Available widgets
+                sub_widgets.label: Metrics
                 revenue.label: Revenue
-                orders_number.label: Orders number
+                orders_number.label: Orders placed
+                discounted_orders_percent.label: Discounted orders
+                new_customers_count.label: New customers
+                returning_customers_count.label: Returning customers
+                average_order_value.label: Average order value
+                abandoned_revenue.label: Abandoned revenue
+                abandoned_count.label: Abandoned carts
+                abandon_rate.label: Abandon rate
         datagrid:
             actions:
                 view:

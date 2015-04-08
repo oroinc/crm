@@ -553,3 +553,4 @@ services:
             - @doctrine
             - @oro_locale.formatter.number
             - @oro_locale.formatter.date_time
+            - @oro_security.acl_helper

@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
@@ -16,28 +15,51 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class OrderRepository extends EntityRepository
 {
-    public function getRevenueValueByDatePeriod(\DateTime $start, \DateTime $end)
-    {
-        $qb = $this->createQueryBuilder('o');
-        $value = $qb->select('sum(o.totalAmount) as val')
+    /**
+     * Get one parameter by date period
+     *
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param string    $selectFunction
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getCalculatedValueByDatePeriod(
+        \DateTime $start,
+        \DateTime $end,
+        AclHelper $aclHelper,
+        $selectFunction
+    ) {
+        $qb    = $this->createQueryBuilder('o');
+        $qb->select($selectFunction . ' as val')
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
-            ->getQuery()->getOneOrNullResult()['val'];
+            ->setParameter('dateEnd', $end);
 
-        return $value ? : 0;
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value ? $value['val'] : 0;
     }
 
-    public function getOrdersNumberByDatePeriod(\DateTime $start, \DateTime $end)
-    {
-        $qb = $this->createQueryBuilder('o');
-        $value = $qb->select('count(o.id) as val')
+
+    public function getDiscountedOrdersPercentByDatePeriod(
+        \DateTime $start,
+        \DateTime $end,
+        AclHelper $aclHelper
+    ) {
+
+        $qb    = $this->createQueryBuilder('o');
+        $qb->select(
+                'COUNT(o.id) as allOrders',
+                'SUM(CASE WHEN o.discountAmount > 0 THEN 1 ELSE 0 END) as discountedOrders'
+            )
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
-            ->getQuery()->getOneOrNullResult()['val'];
+            ->setParameter('dateEnd', $end);
 
-        return $value ? : 0;
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+        return $value['discountedOrders'] / $value['allOrders'];
     }
 
     /**
@@ -122,7 +144,7 @@ class OrderRepository extends EntityRepository
         $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $queryBuilder, 'o.createdAt');
         $amountStatistics = $aclHelper->apply($queryBuilder)->getArrayResult();
 
-        $items             = [];
+        $items = [];
         foreach ($amountStatistics as $row) {
             $key         = $dateHelper->getKey($dateFrom, $dateTo, $row);
             $channelId   = (int)$row['dataChannelId'];
@@ -156,16 +178,16 @@ class OrderRepository extends EntityRepository
         $sliceDate  = new \DateTime(sprintf('%s-%s-01', $sliceYear, $sliceMonth), new \DateTimeZone('UTC'));
 
         // calculate match for month and default channel template
-        $monthMatch = [];
+        $monthMatch      = [];
         $channelTemplate = [];
         if ($sliceYear !== $currentYear) {
             for ($i = $sliceMonth; $i <= 12; $i++) {
-                $monthMatch[$i] = ['year' => $sliceYear, 'month' => $i];
+                $monthMatch[$i]                  = ['year' => $sliceYear, 'month' => $i];
                 $channelTemplate[$sliceYear][$i] = 0;
             }
         }
         for ($i = 1; $i <= $currentMonth; $i++) {
-            $monthMatch[$i] = ['year' => $currentYear, 'month' => $i];
+            $monthMatch[$i]                    = ['year' => $currentYear, 'month' => $i];
             $channelTemplate[$currentYear][$i] = 0;
         }
 

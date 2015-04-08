@@ -12,6 +12,54 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 class CustomerRepository extends EntityRepository
 {
     /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getNewCustomersNumberWhoMadeOrderByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('COUNT(customer.id) as val')
+            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->join('orders.customer', 'customer')
+            ->having('COUNT(orders.id) > 0')
+            ->andWhere($qb->expr()->between('customer.createdAt', ':dateStart', ':dateEnd'))
+            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value ? $value['val'] : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getReturningCustomersWhoMadeOrderByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('COUNT(customer.id) as val')
+            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->join('orders.customer', 'customer')
+            ->having('COUNT(orders.id) > 0')
+            ->andWhere('customer.createdAt < :dateStart')
+            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value ? $value['val'] : 0;
+    }
+
+    /**
      * Returns data grouped by created_at, data_channel_id
      *
      * @param AclHelper  $aclHelper
