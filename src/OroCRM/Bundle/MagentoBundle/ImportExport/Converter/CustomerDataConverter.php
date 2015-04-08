@@ -135,7 +135,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $exportedRecord['gender'] = $this->getMagentoGender($exportedRecord['gender']);
         }
 
-        unset($exportedRecord['created_at'], $exportedRecord['updated_at']);
+        unset($exportedRecord['created_at'], $exportedRecord['updated_at'], $exportedRecord['addresses']);
 
         return $exportedRecord;
     }

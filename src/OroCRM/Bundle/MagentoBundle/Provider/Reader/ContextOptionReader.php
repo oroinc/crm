@@ -1,10 +1,9 @@
 <?php
-
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
-class ContextReader extends AbstractContextKeyReader
+class ContextOptionReader extends AbstractContextKeyReader
 {
     /**
      * {@inheritdoc}
@@ -15,6 +14,6 @@ class ContextReader extends AbstractContextKeyReader
             throw new \InvalidArgumentException('Context key is missing');
         }
 
-        $this->entities = (array)$this->stepExecution->getJobExecution()->getExecutionContext()->get($this->contextKey);
+        $this->entities = [$context->getOption($this->contextKey)];
     }
 }

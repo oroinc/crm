@@ -129,13 +129,14 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
     }
 
     /**
-     * @param ChannelAwareInterface|IntegrationAwareInterface $entity
-     *
      * {@inheritdoc}
      */
     protected function afterProcessEntity($entity)
     {
-        if ($entity->getChannel()) {
+        if ($entity instanceof ChannelAwareInterface
+            && $entity instanceof IntegrationAwareInterface
+            && $entity->getChannel()
+        ) {
             $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
             if ($dataChannel) {
                 $entity->setDataChannel($dataChannel);

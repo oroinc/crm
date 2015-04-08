@@ -58,7 +58,10 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
             $filters->addWebsiteFilter([$this->websiteId]);
         }
 
-        $this->loadByFilters($filters->getAppliedFilters());
+        $filters = $filters->getAppliedFilters();
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
+
+        $this->loadByFilters($filters);
     }
 
     /**
