@@ -1,0 +1,28 @@
+Magento EAV attributes support
+==============================
+
+Magento integration support automatic mapping of Magento EAV attributes to OroCRM entities.
+Supported entities are:
+ 
+ - Magento Customer
+ - Magento Customer Address
+ - Magento Order
+ - Magento Shopping Cart (Quote)
+ 
+To enable import of EAV attributes next steps should be performed:
+
+ - Latest version of [OroCRM Bridge](http://www.magentocommerce.com/magento-connect/orocrm-bridge.html) 
+    extension must be installed
+ - Enable attributes on magento side. To do this go to System -> Config, there in Customer section 
+    choose OroCRM API. In API subsection change Enable Attributes to Yes
+ - In OroCRM go to Integration settings and click Check connection button. If connection is ok save integration.
+ 
+After performing of this steps EAV attributes exposed to OroCRM. Them are mapped to entity fields by name.
+Note! entity field must be same to EAV attribute in magento but in camelCase. 
+Entity fields may be added as extended field or with migration script.
+
+Example:
+In magento EAV attribute named *some_attribute*.
+In OroCRM field name should be named *someAttribute*
+
+Only scalar attributes are supported.
