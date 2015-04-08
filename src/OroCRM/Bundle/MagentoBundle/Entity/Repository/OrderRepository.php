@@ -121,44 +121,40 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param DateHelper $dateHelper
      * @param DateTime $from
      * @param DateTime $to
      *
      * @return array
      */
-    public function getRevenueOverTime(DateTime $from, DateTime $to)
+    public function getRevenueOverTime(DateHelper $dateHelper, DateTime $from, DateTime $to)
     {
-        $qb = $this->createQueryBuilder('o');
+        $from = clone $from;
+        $to = clone $to;
 
-        $orders = $qb
-            ->select('YEAR(o.createdAt) AS yearCreated')
-            ->addSelect('MONTH(o.createdAt) AS monthCreated')
-            ->addSelect('DAY(o.createdAt) AS dayCreated')
-            ->addSelect('SUM(
+        $qb = $this->createQueryBuilder('o')
+            ->select('SUM(
                     CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
                     CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
-                ) AS totalOrderAmount')
-            ->addSelect('o.currency AS currency')
-            ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
-            ->setParameters([
-                'from' => $from,
-                'to'   => $to,
-            ])
-            ->groupBy('yearCreated, monthCreated, dayCreated')
+                ) AS amount')
+        ;
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        $orders = $qb
             ->getQuery()
             ->getResult()
         ;
 
-        $result = DatePeriodUtils::getDays($from, $to);
-        foreach ($orders as $order) {
-            $year  = $order['yearCreated'];
-            $month = $order['monthCreated'];
-            $day   = $order['dayCreated'];
-
-            $result[$year][$month][$day] += $order['totalOrderAmount'];
-        }
-
-        return $result;
+        return $orders;
     }
 
     /**
