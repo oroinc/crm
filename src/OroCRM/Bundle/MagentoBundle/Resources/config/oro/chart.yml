@@ -8,7 +8,7 @@ oro_chart:
                 required: true
                 default_type: string
                 type: month
-                field_name: month
+                field_name: date
             value:
                 name: value
                 label: orocrm.magento.dashboard.average_order_amount_chart.order_amount
@@ -26,7 +26,7 @@ oro_chart:
                 required: true
                 default_type: string
                 type: month
-                field_name: month_year
+                field_name: date
             value:
                 name: value
                 label: orocrm.magento.dashboard.new_magento_customers_chart.customer_count

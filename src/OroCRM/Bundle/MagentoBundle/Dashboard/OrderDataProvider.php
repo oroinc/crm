@@ -11,6 +11,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
@@ -57,39 +58,32 @@ class OrderDataProvider
 
     /**
      * @param ChartViewBuilder $viewBuilder
+     * @param array            $dateRange
      * @return ChartView
      */
-    public function getAverageOrderAmountChartView(ChartViewBuilder $viewBuilder)
+    public function getAverageOrderAmountChartView(ChartViewBuilder $viewBuilder, $dateRange, DateHelper $dateHelper)
     {
+        $end               = $dateRange['end'];
+        $start             = $dateRange['start'];
         /** @var OrderRepository $orderRepository */
         $orderRepository = $this->registry->getRepository('OroCRMMagentoBundle:Order');
-        $result = $orderRepository->getAverageOrderAmount($this->aclHelper);
-
-        // prepare chart items
-        $items = [];
-        foreach ($result as $channel) {
-            $channelName = $channel['name'];
-            $channelData = $channel['data'];
-
-            $items[$channelName] = [];
-
-            foreach ($channelData as $year => $monthData) {
-                foreach ($monthData as $month => $amount) {
-                    $items[$channelName][] = [
-                        'month' => sprintf('%04d-%02d-01', $year, $month),
-                        'amount' => $amount
-                    ];
-                }
-            }
-        }
+        $result = $orderRepository->getAverageOrderAmount($this->aclHelper, $start, $end, $dateHelper);
 
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig('average_order_amount')
         );
+        $chartType = $dateHelper->getFormatStrings($start, $end)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
+        $chartOptions['data_schema']['label']['label'] =
+            sprintf(
+                'oro.dashboard.chart.%s.label',
+                $chartType
+            );
+
 
         return $viewBuilder->setOptions($chartOptions)
-            ->setArrayData($items)
+            ->setArrayData($result)
             ->getView();
     }
 

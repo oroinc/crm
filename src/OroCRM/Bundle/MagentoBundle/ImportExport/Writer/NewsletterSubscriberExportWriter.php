@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
+use OroCRM\Bundle\MagentoBundle\Provider\Dependency\NewsletterSubscriberDependencyManager;
+
 class NewsletterSubscriberExportWriter extends AbstractExportWriter
 {
     const CONTEXT_POST_PROCESS_KEY = 'postProcessNewsletterSubscribers';
     const SUBSCRIBER_ID_KEY = 'subscriber_id';
+    const STATUS_KEY = 'subscriber_status';
 
     /**
      * @param array $items
@@ -20,14 +23,17 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
             return;
         }
 
+        $statusIdentifier = $this->getStatusIdentifier();
+        if ($statusIdentifier) {
+            $item[self::STATUS_KEY] = $statusIdentifier;
+        }
+
         $this->transport->init($this->getChannel()->getTransport());
         if (empty($item[self::SUBSCRIBER_ID_KEY])) {
             $this->writeNewItem($item);
         } else {
             $this->writeExistingItem($item);
         }
-
-        parent::write([$this->getEntity()]);
     }
 
     /**
@@ -36,20 +42,23 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
     protected function writeNewItem(array $item)
     {
         try {
-            $subscriberId = $this->transport->createNewsletterSubscriber($item);
+            $subscriberData = $this->transport->createNewsletterSubscriber($item);
 
-            $this->getEntity()->setOriginId($subscriberId);
+            if ($subscriberData) {
+                $this->addDependencyData($subscriberData);
 
-            if ($subscriberId) {
+                $this->stepExecution->getJobExecution()
+                    ->getExecutionContext()
+                    ->put(self::CONTEXT_POST_PROCESS_KEY, [$subscriberData]);
+
                 $this->logger->info(
                     sprintf(
-                        'Newsletter Subscriber with id %s successfully created with data %s',
-                        $subscriberId,
-                        json_encode($item)
+                        'Newsletter Subscriber with data %s successfully created',
+                        json_encode($subscriberData)
                     )
                 );
             } else {
-                $this->logger->error(sprintf('Newsletter Subscriber with id %s was not updated', $subscriberId));
+                $this->logger->error(sprintf('Newsletter Subscriber with data %s was not created', json_encode($item)));
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -65,22 +74,54 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
         $subscriberId = $item[self::SUBSCRIBER_ID_KEY];
 
         try {
-            $result = $this->transport->updateNewsletterSubscriber($subscriberId, $item);
+            $subscriberData = $this->transport->updateNewsletterSubscriber($subscriberId, $item);
 
-            if ($result) {
+            if ($subscriberData) {
+                $this->addDependencyData($subscriberData);
+
+                $this->stepExecution->getJobExecution()
+                    ->getExecutionContext()
+                    ->put(self::CONTEXT_POST_PROCESS_KEY, [$subscriberData]);
+
                 $this->logger->info(
                     sprintf(
-                        'Newsletter Subscriber with id %s successfully updated with data %s',
+                        'Newsletter Subscriber with id %s and data %s successfully updated',
+                        $subscriberId,
+                        json_encode($subscriberData)
+                    )
+                );
+            } else {
+                $this->logger->error(
+                    sprintf(
+                        'Newsletter Subscriber with id %s and data %s was not updated',
                         $subscriberId,
                         json_encode($item)
                     )
                 );
-            } else {
-                $this->logger->error(sprintf('Newsletter Subscriber with data %s was not created', json_encode($item)));
             }
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             $this->stepExecution->addFailureException($e);
         }
+    }
+
+    /**
+     * @return int
+     */
+    protected function getStatusIdentifier()
+    {
+        return (int)$this->getContext()->getOption('statusIdentifier');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function addDependencyData(&$subscriberData)
+    {
+        $objectData = (object)$subscriberData;
+
+        NewsletterSubscriberDependencyManager::addDependencyData($objectData, $this->transport);
+
+        $subscriberData = (array)$objectData;
     }
 }

@@ -60,6 +60,13 @@ connector:
                         writer:    orocrm_magento.importexport.writer.newsletter_subscriber
                     parameters:
                         batch_size: 1
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_newsletter_subscriber_export
+                        processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
 
         magento_customer_address_export:
             title: 'Export Magento Customer Address to Magento'

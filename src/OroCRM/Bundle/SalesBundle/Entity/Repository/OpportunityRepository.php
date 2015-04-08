@@ -18,15 +18,13 @@ class OpportunityRepository extends EntityRepository
      * Get opportunities by state by current quarter
      *
      * @param $aclHelper AclHelper
+     * @param  array     $dateRange
      * @return array
      */
-    public function getOpportunitiesByStatus(AclHelper $aclHelper)
+    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange)
     {
-        $dateEnd = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateStart = new \DateTime(
-            $dateEnd->format('Y') . '-01-' . ((ceil($dateEnd->format('n') / 3) - 1) * 3 + 1),
-            new \DateTimeZone('UTC')
-        );
+        $dateEnd = $dateRange['end'];
+        $dateStart = $dateRange['start'];
 
         return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
     }
@@ -46,7 +44,8 @@ class OpportunityRepository extends EntityRepository
             ->orderBy('status.name', 'ASC');
 
         $resultData = array();
-        foreach ($qb->getQuery()->getArrayResult() as $status) {
+        $data = $qb->getQuery()->getArrayResult();
+        foreach ($data as $status) {
             $name = $status['name'];
             $label = $status['label'];
             $resultData[$name] = array(

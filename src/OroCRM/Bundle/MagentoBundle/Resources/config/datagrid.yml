@@ -14,7 +14,7 @@ datagrid:
                     - c.currency
                     - c.createdAt
                     - c.updatedAt
-                    - channel.name as channelName
+                    - dataChannel.name as channelName
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
@@ -27,7 +27,8 @@ datagrid:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
                     left:
-                        - { join: c.dataChannel, alias: channel }
+                        - { join: c.dataChannel, alias: dataChannel }
+                        - { join: c.channel, alias: channel }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
@@ -105,7 +106,7 @@ datagrid:
             columns:
                 channelName:
                     type:      entity
-                    data_name: channel.id
+                    data_name: dataChannel.id
                     options:
                         field_options:
                             class: OroCRMChannelBundle:Channel
@@ -1360,11 +1361,10 @@ datagrid:
                 select:
                     - newsletterSubscriber.id
                     - customer.originId as customerOriginId
-                    - channel.name as channelName
+                    - dataChannel.name as channelName
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
                     - newsletterSubscriber.email
-                    - newsletterSubscriber.changeStatusAt
                     - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
                     - customer.email as customerEmail
                     - newsletterSubscriber.createdAt
@@ -1375,7 +1375,8 @@ datagrid:
                 join:
                     left:
                         - { join: newsletterSubscriber.customer, alias: customer }
-                        - { join: newsletterSubscriber.dataChannel, alias: channel }
+                        - { join: newsletterSubscriber.dataChannel, alias: dataChannel }
+                        - { join: newsletterSubscriber.channel, alias: channel }
                         - { join: newsletterSubscriber.store, alias: store }
                         - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
                         - { join: store.website, alias: website }
@@ -1386,9 +1387,6 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.website.label
             email:
                 label: orocrm.magento.newslettersubscriber.email.label
-            changeStatusAt:
-                label: orocrm.magento.newslettersubscriber.change_status_at.label
-                frontend_type: datetime
             customerName:
                 label: orocrm.magento.newslettersubscriber.customer.label
             customerEmail:
@@ -1404,7 +1402,6 @@ datagrid:
                 channelName: { data_name: channelName }
                 websiteName: { data_name: websiteName }
                 email: { data_name: newsletterSubscriber.email }
-                changeStatusAt: { data_name: newsletterSubscriber.changeStatusAt }
                 customerName: { data_name: customerName }
                 customerEmail: { data_name: customerEmail }
                 createdAt: { data_name: newsletterSubscriber.createdAt }
@@ -1414,17 +1411,19 @@ datagrid:
         filters:
             columns:
                 channelName:
-                    type: string
-                    data_name: channelName
+                    type: entity
+                    data_name: dataChannel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                            translatable_options: false
                 websiteName:
                     type: string
                     data_name: websiteName
                 email:
                     type: string
                     data_name: newsletterSubscriber.email
-                changeStatusAt:
-                    type: datetime
-                    data_name: newsletterSubscriber.changeStatusAt
                 customerName:
                     type: string
                     data_name: customerName
