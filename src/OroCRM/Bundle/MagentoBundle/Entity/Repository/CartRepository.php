@@ -190,7 +190,7 @@ class CartRepository extends EntityRepository
         $qb->select('SUM(cart.grandTotal) as val');
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ? : 0;
     }
 
     /**
@@ -206,7 +206,7 @@ class CartRepository extends EntityRepository
         $qb->select('COUNT(cart.grandTotal) as val');
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ? : 0;
     }
 
     /**
@@ -222,7 +222,7 @@ class CartRepository extends EntityRepository
         $qb->select('COUNT(cart.grandTotal) as val');
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ? : 0;
     }
 
     /**
@@ -245,7 +245,7 @@ class CartRepository extends EntityRepository
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
-        $allCards = $allCards ? $allCards['val'] : 0;
+        $allCards = $allCards['val'] ? : 0;
 
         if ($allCards) {
             $abandonedCartsCount = $this->getAbandonedCountByPeriod($start, $end, $aclHelper);

@@ -39,7 +39,7 @@ class OrderRepository extends EntityRepository
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ? : 0;
     }
 
 
@@ -59,7 +59,7 @@ class OrderRepository extends EntityRepository
             ->setParameter('dateEnd', $end);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
-        return $value['discountedOrders'] / $value['allOrders'];
+        return $value['allOrders'] ? $value['discountedOrders'] / $value['allOrders'] : 0;
     }
 
     /**

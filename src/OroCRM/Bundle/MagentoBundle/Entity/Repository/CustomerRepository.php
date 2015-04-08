@@ -32,7 +32,7 @@ class CustomerRepository extends EntityRepository
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ? : 0;
     }
 
     /**
@@ -56,7 +56,7 @@ class CustomerRepository extends EntityRepository
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value ? $value['val'] : 0;
+        return $value['val'] ?  : 0;
     }
 
     /**
