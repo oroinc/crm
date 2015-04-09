@@ -71,7 +71,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         $result = $this->processCollectionResponse($result);
         $resultIds = array_map(
             function ($item) {
-                return $item->{$this->getIdFieldName()};
+                return $item[$this->getIdFieldName()];
             },
             $result
         );
@@ -102,7 +102,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $subscribers = $this->getNewsletterSubscribers($filters);
 
             if (count($subscribers) > 0) {
-                $this->initialId = (int)$subscribers[0]->{$this->getIdFieldName()} + 1;
+                $this->initialId = (int)$subscribers[0][$this->getIdFieldName()] + 1;
             }
         }
 

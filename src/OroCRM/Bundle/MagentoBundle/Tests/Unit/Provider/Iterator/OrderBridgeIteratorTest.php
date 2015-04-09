@@ -17,18 +17,13 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
 
     /**
      * @param array $orderArray
-     * @param array $storeData
      * @param array $stores
-     * @param array $websites
      *
      * @dataProvider dataProvider
      */
-    public function testIteration(array $orderArray, array $storeData, array $stores, array $websites)
+    public function testIteration(array $orderArray, array $stores)
     {
-        $dependencies = [
-            MagentoTransportInterface::ALIAS_STORES => $stores,
-            MagentoTransportInterface::ALIAS_WEBSITES => $websites
-        ];
+        $dependencies = [MagentoTransportInterface::ALIAS_STORES => $stores];
         $this->transport->expects($this->atLeastOnce())
             ->method('getDependencies')
             ->will($this->returnValue($dependencies));
@@ -39,9 +34,9 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
 
         $this->assertEquals(
             [
-                1 => array_merge((array)$orderArray[0], $storeData, ['items' => []]),
-                2 => array_merge((array)$orderArray[1], $storeData, ['items' => []]),
-                3 => array_merge((array)$orderArray[2], $storeData, ['items' => []])
+                1 => array_merge((array)$orderArray[0], ['items' => []]),
+                2 => array_merge((array)$orderArray[1], ['items' => []]),
+                3 => array_merge((array)$orderArray[2], ['items' => []])
             ],
             iterator_to_array($this->iterator)
         );
@@ -51,14 +46,12 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
      * @dataProvider dataProvider
      *
      * @param string $orderArray
-     * @param string $storeData
      * @param string $stores
-     * @param string $websites
      */
-    public function testUpdateMode($orderArray, $storeData, $stores, $websites)
+    public function testUpdateMode($orderArray, $stores)
     {
         $this->iterator->setMode(UpdatedLoaderInterface::IMPORT_MODE_UPDATE);
-        $this->testIteration($orderArray, $storeData, $stores, $websites);
+        $this->testIteration($orderArray, $stores);
     }
 
     /**
@@ -92,25 +85,11 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
                     ]
                 ],
                 [
-                    'store_code' => 'admin',
-                    'store_storename' => 'Admin',
-                    'store_website_id' => 0,
-                    'store_website_code' => 'admin',
-                    'store_website_name' => 'Admin'
-                ],
-                [
                     [
                         'website_id' => 0,
                         'code' => 'admin',
                         'name' => 'Admin',
                         'store_id' => 0
-                    ]
-                ],
-                [
-                    [
-                        'id' => 0,
-                        'code' => 'admin',
-                        'name' => 'Admin'
                     ]
                 ]
             ]

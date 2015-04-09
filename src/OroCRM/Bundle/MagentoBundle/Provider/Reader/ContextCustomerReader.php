@@ -20,7 +20,9 @@ class ContextCustomerReader extends CustomerConnector
             return $iterator;
         }
 
-        $iterator->setEntitiesIdsBuffer($this->getCustomerIds());
+        $customerIds = $this->getCustomerIds();
+
+        $iterator->setEntitiesIdsBuffer($customerIds);
 
         return $iterator;
     }
@@ -35,8 +37,10 @@ class ContextCustomerReader extends CustomerConnector
 
         $this->stepExecution->getJobExecution()->getExecutionContext()->remove(self::CONTEXT_POST_PROCESS_CUSTOMERS);
 
+        $ids = array_unique(array_filter($ids));
+
         sort($ids);
 
-        return array_unique(array_filter($ids));
+        return $ids;
     }
 }

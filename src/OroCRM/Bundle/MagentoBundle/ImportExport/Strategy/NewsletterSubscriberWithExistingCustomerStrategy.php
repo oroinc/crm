@@ -32,9 +32,9 @@ class NewsletterSubscriberWithExistingCustomerStrategy extends NewsletterSubscri
         $customer = $this->databaseHelper->findOneByIdentity($newsletterSubscriber->getCustomer());
         $isProcessingAllowed = true;
 
-        $customerId = $newsletterSubscriber->getCustomer()->getOriginId();
-        if (!$customer && $customerId) {
-            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerId);
+        $customerOriginId = $newsletterSubscriber->getCustomer()->getOriginId();
+        if (!$customer && $customerOriginId) {
+            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
             $isProcessingAllowed = false;
         }

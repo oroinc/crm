@@ -8,9 +8,12 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
+use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,21 +21,6 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
      * @var \PHPUnit_Framework_MockObject_MockObject|ImportStrategyHelper
      */
     protected $strategyHelper;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ManagerRegistry
-     */
-    protected $managerRegistry;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DefaultOwnerHelper
-     */
-    protected $ownerHelper;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EntityManager
-     */
-    protected $em;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|StepExecution
@@ -44,21 +32,38 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
      */
     protected $jobExecution;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     */
+    protected $eventDispatcher;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|FieldHelper
+     */
+    protected $fieldHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DatabaseHelper
+     */
+    protected $databaseHelper;
+
     protected function setUp()
     {
-        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
+
+        $this->fieldHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\FieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fieldHelper->expects($this->any())
+            ->method('getIdentityValues')
+            ->willReturn([]);
+
+        $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->strategyHelper = $this
             ->getMockBuilder('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->strategyHelper->expects($this->any())
-            ->method('getEntityManager')
-            ->will($this->returnValue($this->em));
-        $this->managerRegistry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->ownerHelper = $this
-            ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,10 +82,10 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
     protected function tearDown()
     {
         unset(
-            $this->em,
+            $this->eventDispatcher,
             $this->strategyHelper,
-            $this->managerRegistry,
-            $this->ownerHelper,
+            $this->fieldHelper,
+            $this->databaseHelper,
             $this->strategy,
             $this->stepExecution,
             $this->jobExecution
