@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
+
 use OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider;
 
 class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
@@ -17,7 +18,7 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
     {
         parent::setUp();
 
-        $this->provider = new NewsletterSubscriberPermissionProvider($this->doctrineHelper, '\stdClass');
+        $this->provider = new NewsletterSubscriberPermissionProvider($this->settingsProvider, '\stdClass');
     }
 
     /**
@@ -29,20 +30,10 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
      */
     public function testGetActionsPermissions(ResultRecordInterface $record, array $actions, array $expected)
     {
-        $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $repository
+        $this->settingsProvider
             ->expects($this->any())
-            ->method('find')
-            ->with($this->isType('integer'))
-            ->will($this->returnValue($this->getChannel(true)));
-
-        $this->doctrineHelper
-            ->expects($this->any())
-            ->method('getEntityRepository')
-            ->will($this->returnValue($repository));
+            ->method('isChannelApplicable')
+            ->will($this->returnValue(true));
 
         $this->assertEquals(
             $expected,
@@ -56,35 +47,52 @@ class NewsletterSubscriberPermissionProviderTest extends AbstractTwoWaySyncActio
     public function permissionsDataProvider()
     {
         return [
-            [
-                new ResultRecord(['channelId' => 1, 'customerOriginId' => 1]),
+            'subscribe' => [
+                new ResultRecord(['channelId' => 1, 'customerOriginId' => 1, 'customerId' => 1]),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
                 ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
             ],
-            [
-                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 2, 'customerOriginId' => 1]),
-                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
-                ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
-            ],
-            [
-                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 1, 'customerOriginId' => 1]),
+            'unsubscribe with customer and customer origin id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'customerOriginId' => 1, 'customerId' => 1, 'newsletterSubscriberStatusId' => 1]
+                ),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
                 ['view' => true, 'subscribe' => false, 'unsubscribe' => true]
             ],
-            [
-                new ResultRecord(['channelId' => 1]),
+            'subscribe with customer and customer origin id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'customerOriginId' => 1, 'customerId' => 1, 'newsletterSubscriberStatusId' => 2]
+                ),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
+            ],
+            'unsubscribe with customer without customer origin id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'customerId' => 1, 'newsletterSubscriberStatusId' => 2]
+                ),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
                 ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
             ],
-            [
-                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 2]),
+            'subscribe with customer without customer origin id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'customerId' => 1, 'newsletterSubscriberStatusId' => 2]
+                ),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
                 ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
             ],
-            [
-                new ResultRecord(['channelId' => 1, 'newsletterSubscriberStatusId' => 1]),
+            'unsubscribe without customer id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'newsletterSubscriberStatusId' => 1]
+                ),
                 ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
-                ['view' => true, 'subscribe' => false, 'unsubscribe' => false]
+                ['view' => true, 'subscribe' => false, 'unsubscribe' => true]
+            ],
+            'subscribe without customer id' => [
+                new ResultRecord(
+                    ['channelId' => 1, 'newsletterSubscriberStatusId' => 2]
+                ),
+                ['view' => [], 'subscribe' => [], 'unsubscribe' => []],
+                ['view' => true, 'subscribe' => true, 'unsubscribe' => false]
             ]
         ];
     }

@@ -121,7 +121,7 @@ class NewsletterSubscriberController extends Controller
      * @Acl(
      *      id="orocrm_magento_newsletter_subscriber_subscribe_customer",
      *      type="entity",
-     *      permission="CREATE",
+     *      permission="EDIT",
      *      class="OroCRMMagentoBundle:NewsletterSubscriber"
      * )
      */
@@ -145,7 +145,7 @@ class NewsletterSubscriberController extends Controller
      * @Acl(
      *      id="orocrm_magento_newsletter_subscriber_unsubscribe_customer",
      *      type="entity",
-     *      permission="CREATE",
+     *      permission="EDIT",
      *      class="OroCRMMagentoBundle:NewsletterSubscriber"
      * )
      */
