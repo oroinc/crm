@@ -643,12 +643,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 [3, []],
                 true,
                 true
-            ],
+            ]
         ];
-    }
-
-    public function testConditionalCalls()
-    {
-
     }
 }

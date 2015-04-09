@@ -6,6 +6,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -508,7 +509,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO;
         }
 
-        return (array)$this->call($endpoint, ['addressId' => $customerAddressId]);
+        return ConverterUtils::objectToArray($this->call($endpoint, ['addressId' => $customerAddressId]));
     }
 
     /**
@@ -522,7 +523,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
             $endpoint = SoapTransport::ACTION_CUSTOMER_INFO;
         }
 
-        return (array)$this->call($endpoint, ['customerId' => $originId]);
+        return ConverterUtils::objectToArray($this->call($endpoint, ['customerId' => $originId]));
     }
 
     /**
