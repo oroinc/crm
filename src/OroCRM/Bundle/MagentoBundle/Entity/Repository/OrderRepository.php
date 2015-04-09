@@ -16,23 +16,38 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 class OrderRepository extends EntityRepository
 {
     /**
-     * Get one parameter by date period
-     *
      * @param \DateTime $start
      * @param \DateTime $end
-     * @param string    $selectFunction
      * @param AclHelper $aclHelper
      * @return int
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getCalculatedValueByDatePeriod(
-        \DateTime $start,
-        \DateTime $end,
-        AclHelper $aclHelper,
-        $selectFunction
-    ) {
+    public function getRevenueValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $select = 'SUM(
+             CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
+             CASE WHEN orders.discountAmount IS NOT NULL THEN orders.discountAmount ELSE 0 END
+             ) as val';
+        $qb    = $this->createQueryBuilder('orders');
+        $qb->select($select)
+            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     */
+    public function getOrdersNumberValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
         $qb    = $this->createQueryBuilder('o');
-        $qb->select($selectFunction . ' as val')
+        $qb->select('count(o.id) as val')
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
@@ -42,7 +57,37 @@ class OrderRepository extends EntityRepository
         return $value['val'] ? : 0;
     }
 
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     */
+    public function getAOVValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $select = 'SUM(
+             CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+             CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+             ) as revenue,
+             count(o.id) as ordersCount';
+        $qb    = $this->createQueryBuilder('o');
+        $qb->select($select)
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
 
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['revenue'] ? $value['revenue'] / $value['ordersCount'] : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return float|int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function getDiscountedOrdersPercentByDatePeriod(
         \DateTime $start,
         \DateTime $end,

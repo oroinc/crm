@@ -18,8 +18,10 @@ orocrm:
                 customer_count: Customers count
                 month: Month
             e_commerce_statistic:
-                title: eCommerce Statistic
-                description: eCommerce Statistic
+                no_available_metrics: No available metrics
+                no_changes: No changes
+                title: Ecommerce Statistic
+                description: eCommerce Statistic metrics
                 sub_widgets.label: Metrics
                 revenue.label: Revenue
                 orders_number.label: Orders placed

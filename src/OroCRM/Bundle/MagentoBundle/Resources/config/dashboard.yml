@@ -106,8 +106,11 @@ oro_dashboard_config:
                        required: false
                     converter_attributes:
                         dateRangeField: dateRange
+                        default_checked: true
                 subWidgets:
-                    type: choice
+                    type: oro_type_widget_items_choice
+                    converter_attributes:
+                        default_selected: all
                     options:
                        label: orocrm.magento.dashboard.e_commerce_statistic.sub_widgets.label
                        required: false

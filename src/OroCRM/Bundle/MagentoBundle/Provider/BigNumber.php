@@ -8,8 +8,9 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\TranslationBundle\Translation\Translator;
 
-class BibNumber
+class BigNumber
 {
     /** @var RegistryInterface */
     protected $doctrine;
@@ -23,22 +24,28 @@ class BibNumber
     /** @var AclHelper */
     protected $aclHelper;
 
+    /** @var Translator */
+    protected $translator;
+
     /**
      * @param RegistryInterface $doctrine
      * @param NumberFormatter   $numberFormatter
      * @param DateTimeFormatter $dateTimeFormatter
      * @param AclHelper         $aclHelper
+     * @param Translator        $translator
      */
     public function __construct(
         RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
-        AclHelper $aclHelper
+        AclHelper $aclHelper,
+        Translator $translator
     ) {
         $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
+        $this->translator        = $translator;
     }
 
     /**
@@ -51,8 +58,7 @@ class BibNumber
             $widgetOptions,
             [
                 'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getCalculatedValueByDatePeriod',
-                'methodString' => 'sum(o.totalAmount)',
+                'method'       => 'getRevenueValueByPeriod',
                 'dataType'     => 'currency',
                 'lessIsBetter' => false
             ]
@@ -69,8 +75,7 @@ class BibNumber
             $widgetOptions,
             [
                 'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getCalculatedValueByDatePeriod',
-                'methodString' => 'count(o.id)',
+                'method'       => 'getOrdersNumberValueByPeriod',
                 'dataType'     => 'integer',
                 'lessIsBetter' => false
             ]
@@ -87,8 +92,7 @@ class BibNumber
             $widgetOptions,
             [
                 'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getCalculatedValueByDatePeriod',
-                'methodString' => '(sum(o.totalAmount) / count(o.id))',
+                'method'       => 'getAOVValueByPeriod',
                 'dataType'     => 'currency',
                 'lessIsBetter' => false
             ]
@@ -106,7 +110,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Order',
                 'method'       => 'getDiscountedOrdersPercentByDatePeriod',
-                'methodString' => 'count(o.id)',
                 'dataType'     => 'percent',
                 'lessIsBetter' => false
             ]
@@ -124,7 +127,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Customer',
                 'method'       => 'getNewCustomersNumberWhoMadeOrderByPeriod',
-                'methodString' => '',
                 'dataType'     => 'integer',
                 'lessIsBetter' => false
             ]
@@ -142,7 +144,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Customer',
                 'method'       => 'getReturningCustomersWhoMadeOrderByPeriod',
-                'methodString' => '',
                 'dataType'     => 'integer',
                 'lessIsBetter' => false
             ]
@@ -160,7 +161,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Cart',
                 'method'       => 'getAbandonedRevenueByPeriod',
-                'methodString' => '',
                 'dataType'     => 'currency',
                 'lessIsBetter' => true
             ]
@@ -178,7 +178,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Cart',
                 'method'       => 'getAbandonedCountByPeriod',
-                'methodString' => '',
                 'dataType'     => 'integer',
                 'lessIsBetter' => true
             ]
@@ -196,7 +195,6 @@ class BibNumber
             [
                 'repo'         => 'OroCRMMagentoBundle:Cart',
                 'method'       => 'getAbandonRateByPeriod',
-                'methodString' => '',
                 'dataType'     => 'percent',
                 'lessIsBetter' => true
             ]
@@ -215,32 +213,35 @@ class BibNumber
         $dateRange        = $widgetOptions->get('dateRange');
         $from             = $dateRange['start'];
         $to               = $dateRange['end'];
-        $value            = $repo->{$parameters['method']}($from, $to, $this->aclHelper, $parameters['methodString']);
+        $value            = $repo->{$parameters['method']}($from, $to, $this->aclHelper);
         $result['value']  = $this->formatValue($value, $parameters['dataType']);
         $previousInterval = $widgetOptions->get('usePreviousInterval', []);
 
         if (count($previousInterval)) {
             $previousFrom = $previousInterval['start'];
             $previousTo   = $previousInterval['end'];
-            $pastResult   = $repo->{$parameters['method']}(
-                $previousFrom,
-                $previousTo,
-                $this->aclHelper,
-                $parameters['methodString']
-            );
+            $pastResult   = $repo->{$parameters['method']}($previousFrom, $previousTo, $this->aclHelper);
+
+            $result['deviation'] = $this->translator->trans('orocrm.magento.dashboard.e_commerce_statistic.no_changes');
 
             $deviation = $value - $pastResult;
-            if ($pastResult !== 0 && $parameters['dataType'] !== 'percent') {
-                $deviationPercent    = $deviation / $pastResult;
-                $result['deviation'] = sprintf(
-                    '%s (%s)',
-                    $this->formatValue($deviation, $parameters['dataType'], true),
-                    $this->formatValue($deviationPercent, 'percent', true)
-                );
+            if ($pastResult != 0 && $parameters['dataType'] !== 'percent') {
+                if ($deviation != 0) {
+                    $deviationPercent     = $deviation / $pastResult;
+                    $result['deviation']  = sprintf(
+                        '%s (%s)',
+                        $this->formatValue($deviation, $parameters['dataType'], true),
+                        $this->formatValue($deviationPercent, 'percent', true)
+                    );
+                    $result['isPositive'] = ($deviation >= 0 && !$parameters['lessIsBetter']);
+                }
             } else {
-                $result['deviation'] = $this->formatValue($deviation, $parameters['dataType'], true);
+                if (round(($deviation) * 100, 0) != 0) {
+                    $result['deviation']  = $this->formatValue($deviation, $parameters['dataType'], true);
+                    $result['isPositive'] = ($deviation >= 0 && !$parameters['lessIsBetter']);
+                }
             }
-            $result['isPositive']    = ($deviation >= 0 && !$parameters['lessIsBetter']);
+
             $result['previousRange'] = sprintf(
                 '%s - %s',
                 $this->dateTimeFormatter->formatDate($previousFrom),
