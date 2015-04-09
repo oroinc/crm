@@ -18,7 +18,8 @@ To enable import of EAV attributes next steps should be performed:
  - In OroCRM go to Integration settings and click Check connection button. If connection is ok save integration.
  
 After performing of this steps EAV attributes exposed to OroCRM. Them are mapped to entity fields by name.
-Note! entity field must be same to EAV attribute in magento but in camelCase. 
+Note! Entity field name must be same to EAV attribute in magento but in camelCase. Field type must match according EAV attribute type.
+Only Table column Storage Type is supported.
 Entity fields may be added as extended field or with migration script.
 
 Example:
