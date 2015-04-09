@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
+
+use Oro\Bundle\EntityExtendBundle\Tools\AssociationNameGenerator;
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallApiHandler
 {
@@ -52,6 +54,7 @@ class CallApiHandler
 
             if ($this->form->isValid()) {
                 $this->onSuccess($entity);
+
                 return true;
             }
         }
@@ -66,7 +69,32 @@ class CallApiHandler
      */
     protected function onSuccess(Call $entity)
     {
+        $this->handleAssociations($entity);
         $this->manager->persist($entity);
         $this->manager->flush();
+    }
+
+    /**
+     * Add associations to call item
+     *
+     * @param Call $entity
+     */
+    protected function handleAssociations(Call $entity)
+    {
+        $associations = $this->form->get('associations');
+        if (empty($associations)) {
+            return;
+        }
+        foreach ($associations->getData() as $association) {
+            $associationType = isset($association['type']) ? $association['type'] : null;
+            $target = $this->manager->getReference($association['entityName'], $association['entityId']);
+            call_user_func(
+                [
+                    $entity,
+                    AssociationNameGenerator::generateAddTargetMethodName($associationType)
+                ],
+                $target
+            );
+        }
     }
 }
