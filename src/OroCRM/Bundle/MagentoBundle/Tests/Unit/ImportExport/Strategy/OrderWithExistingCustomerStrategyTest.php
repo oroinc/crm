@@ -4,15 +4,16 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\OrderWithExistingCustomerStrategy;
 
-class OrderWithExistingCustomerStrategyTest extends AbstractExistingCustomerStrategyTest
+class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
 {
     /**
-     * @return OrderWithExistingCustomerStrategy
+     * {@inheritdoc}
      */
     protected function getStrategy()
     {

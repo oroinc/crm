@@ -8,7 +8,7 @@ use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
+class RegionDenormalizer implements DenormalizerInterface
 {
     /**
      * {@inheritdoc}

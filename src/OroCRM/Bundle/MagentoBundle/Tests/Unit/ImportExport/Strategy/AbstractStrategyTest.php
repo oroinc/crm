@@ -5,17 +5,21 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\EntityManager;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_TestCase
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
+
+abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|ImportStrategyHelper
@@ -47,6 +51,21 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
      */
     protected $databaseHelper;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DefaultOwnerHelper
+     */
+    protected $defaultOwnerHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChannelHelper
+     */
+    protected $channelHelper;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -54,8 +73,13 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
         $this->fieldHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\FieldHelper')
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->fieldHelper->expects($this->any())
             ->method('getIdentityValues')
+            ->willReturn([]);
+
+        $this->fieldHelper->expects($this->any())
+            ->method('getFields')
             ->willReturn([]);
 
         $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
@@ -64,6 +88,16 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
 
         $this->strategyHelper = $this
             ->getMockBuilder('Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->defaultOwnerHelper = $this
+            ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->channelHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -77,6 +111,8 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
 
         $this->stepExecution->expects($this->any())->method('getJobExecution')
             ->will($this->returnValue($this->jobExecution));
+
+        $this->logger = new NullLogger();
     }
 
     protected function tearDown()
@@ -88,12 +124,15 @@ abstract class AbstractExistingCustomerStrategyTest extends \PHPUnit_Framework_T
             $this->databaseHelper,
             $this->strategy,
             $this->stepExecution,
-            $this->jobExecution
+            $this->jobExecution,
+            $this->defaultOwnerHelper,
+            $this->logger,
+            $this->channelHelper
         );
     }
 
     /**
-     * @return StrategyInterface
+     * @return StrategyInterface|AbstractImportStrategy
      */
     abstract protected function getStrategy();
 }

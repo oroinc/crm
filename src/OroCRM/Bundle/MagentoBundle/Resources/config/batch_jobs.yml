@@ -220,7 +220,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_newsletter_subscriber_post_process_customers
-                        context_shared_keys: postProcessSubscribers
+                        context_shared_keys: postProcessSubscribers,postProcessCustomerIds
 
         mage_newsletter_subscriber_import_initial:
             title: "Initial import newsletter subscribers from Magento"
@@ -237,7 +237,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_newsletter_subscriber_post_process_customers
-                        context_shared_keys: postProcessSubscribers
+                        context_shared_keys: postProcessSubscribers,postProcessCustomerIds
 
         mage_newsletter_subscriber_post_process_customers:
             title: "Import customers and postponded newsletter subscribers"

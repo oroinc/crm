@@ -186,7 +186,7 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *              "full"=false
      *          }
      *      }
-     * )s
+     * )
      */
     protected $owner;
 

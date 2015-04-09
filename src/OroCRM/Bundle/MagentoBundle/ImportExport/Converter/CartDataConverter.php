@@ -55,8 +55,9 @@ class CartDataConverter extends AbstractTreeDataConverter
         }
 
         $importedRecord['cart_status'] = CartStatus::STATUS_OPEN;
-        if (isset($data['is_active'])) {
-            $importedRecord['cart_status'] = $data['is_active'] ? CartStatus::STATUS_OPEN : CartStatus::STATUS_EXPIRED;
+        if (array_key_exists('is_active', $importedRecord)) {
+            $importedRecord['cart_status'] = $importedRecord['is_active'] ?
+                CartStatus::STATUS_OPEN : CartStatus::STATUS_EXPIRED;
         }
 
         return parent::convertToImportFormat($importedRecord, $skipNullValues);

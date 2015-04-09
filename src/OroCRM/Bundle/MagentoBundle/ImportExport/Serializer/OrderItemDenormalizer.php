@@ -6,7 +6,7 @@ use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class OrderItemDenormalizer extends AbstractNormalizer implements DenormalizerInterface
+class OrderItemDenormalizer implements DenormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -25,6 +25,26 @@ class OrderItemDenormalizer extends AbstractNormalizer implements DenormalizerIn
         }
 
         return $object;
+    }
+
+    /**
+     * @param object $resultObject
+     * @param array  $data
+     */
+    protected function fillResultObject($resultObject, array $data)
+    {
+        $reflectionObject = new \ReflectionObject($resultObject);
+        $importedEntityProperties = $reflectionObject->getProperties();
+
+        /** @var \ReflectionProperty $reflectionProperty */
+        foreach ($importedEntityProperties as $reflectionProperty) {
+            $reflectionProperty->setAccessible(true);
+            $name = $reflectionProperty->getName();
+
+            if (array_key_exists($name, $data) && !is_null($data[$name])) {
+                $reflectionProperty->setValue($resultObject, $data[$name]);
+            }
+        }
     }
 
     /**
