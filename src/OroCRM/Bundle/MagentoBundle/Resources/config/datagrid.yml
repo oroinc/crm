@@ -1530,6 +1530,8 @@ datagrid:
                         - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
                         - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
+            id:
+                label:            orocrm.magento.customer.id.label
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
             websiteName:
@@ -1623,6 +1625,8 @@ datagrid:
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
         columns:
+            id:
+                label:            orocrm.magento.order.id.label
             channelName:
                 label:            orocrm.magento.order.data_channel.label
             websiteName:
@@ -1772,6 +1776,8 @@ datagrid:
                         - { join: address.region, alias: region }
                         - { join: cs.website, alias: cw }
         columns:
+            id:
+                label:            orocrm.magento.cart.id.label
             channelName:
                 label:            orocrm.magento.cart.data_channel.label
             websiteName:

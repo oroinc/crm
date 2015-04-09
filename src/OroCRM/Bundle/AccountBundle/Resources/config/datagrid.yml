@@ -400,6 +400,8 @@ datagrid:
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
         columns:
+            id:
+                label:        orocrm.account.id.label
             name:
                 label:         orocrm.account.name.label
             contactName:
