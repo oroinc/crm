@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
 
 use DateTime;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
+
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 
 class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
@@ -20,6 +23,12 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     /** @var OrderDataProvider */
     protected $dataProvider;
 
+    /** @var DateHelper */
+    protected $dateHelper;
+
+    /** @var DateTimeFormatter */
+    protected $dateTimeFormatter;
+
     protected function setUp()
     {
         $this->registry       = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -29,19 +38,19 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->configProvider = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ConfigProvider')
             ->disableOriginalConstructor()
             ->getMock();
-
-        $translator = $this->getMock('Symfony\Component\Translation\TranslatorInterface');
-        $translator->expects($this->any())
-            ->method('trans')
-            ->will($this->returnCallback(function ($id) {
-                return $id;
-            }));
+        $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->dataProvider = new OrderDataProvider(
             $this->registry,
             $this->aclHelper,
             $this->configProvider,
-            $translator
+            $this->dateTimeFormatter,
+            $this->dateHelper
         );
     }
 
@@ -143,68 +152,73 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetRevenueOverTimeChartView()
+    /**
+     * @dataProvider getRevenueOverTimeChartViewDataProvider
+     */
+    public function testGetRevenueOverTimeChartView($sourceData, $expectedArrayData, $expectedOptions, $chartConfig)
     {
-        $sourceOrderData = [
-            [
-                2015 => [5 => [12 => 200]],
-            ],
-            [
-                2015 => [5 => [7 => 100]],
-            ],
-        ];
-        $expectedArrayData = [
-            'orocrm.magento.dashboard.revenue_over_time_chart.previous_period' => [
-                ['date' => '2015-05-12', 'amount' => 100],
-            ],
-            'orocrm.magento.dashboard.revenue_over_time_chart.current_period' => [
-                ['date' => '2015-05-12', 'amount' => 200],
-            ]
-        ];
-        $expectedOptions = [
-            'name' => 'multiline_chart',
-            'data_schema' => [
-                'label' => [
-                    'field_name' => 'date',
-                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.date',
-                    'type' => 'date',
-                ],
-                'value' => [
-                    'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
-                    'type' => 'currency'
-                ],
-            ],
-        ];
-        $chartConfig = [
-            'data_schema' => [
-                'label' => [
-                    'field_name' => 'date',
-                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.date',
-                    'type' => 'date',
-                ],
-                'value' => [
-                    'field_name' => 'amount',
-                    'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
-                    'type' => 'currency'
-                ],
-            ],
-        ];
         $from = new DateTime('2015-05-10');
         $to = new DateTime('2015-05-15');
         $previousFrom = new DateTime('2015-05-05');
         $previousTo = new DateTime('2015-05-10');
+
+        $this->dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(
+                [
+                    'viewType' => 'day'
+                ]
+            );
+        $this->dateHelper->expects($this->exactly(3))
+            ->method('getDatePeriod')
+            ->withConsecutive(
+                [$from, $to],
+                [$previousFrom, $previousTo],
+                [$from, $to]
+            )
+            ->will($this->onConsecutiveCalls(
+                [
+                    '2015-05-10' => ['date' => '2015-05-10'],
+                    '2015-05-11' => ['date' => '2015-05-11'],
+                    '2015-05-12' => ['date' => '2015-05-12'],
+                    '2015-05-13' => ['date' => '2015-05-13'],
+                    '2015-05-14' => ['date' => '2015-05-14'],
+                ],
+                [
+                    '2015-05-05' => ['date' => '2015-05-05'],
+                    '2015-05-06' => ['date' => '2015-05-06'],
+                    '2015-05-07' => ['date' => '2015-05-07'],
+                    '2015-05-08' => ['date' => '2015-05-08'],
+                    '2015-05-09' => ['date' => '2015-05-09'],
+                ],
+                [
+                    '2015-05-10' => ['date' => '2015-05-10'],
+                    '2015-05-11' => ['date' => '2015-05-11'],
+                    '2015-05-12' => ['date' => '2015-05-12'],
+                    '2015-05-13' => ['date' => '2015-05-13'],
+                    '2015-05-14' => ['date' => '2015-05-14'],
+                ]
+            ));
+        $this->dateHelper->expects($this->any())
+            ->method('getKey')
+            ->willReturnCallback(function($from, $to, $row) {
+                return implode('-', [$row['yearCreated'], $row['monthCreated'], $row['dayCreated']]);
+            });
+        $this->dateTimeFormatter->expects($this->exactly(4))
+            ->method('formatDate')
+            ->will($this->onConsecutiveCalls('2015-05-10', '2015-05-15', '2015-05-05', '2015-05-10'));
+
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
             ->getMock();
         $orderRepository->expects($this->at(0))
             ->method('getRevenueOverTime')
-            ->with($from, $to)
-            ->will($this->returnValue($sourceOrderData[0]));
+            ->with($this->dateHelper, $from, $to)
+            ->will($this->returnValue($sourceData[0]));
         $orderRepository->expects($this->at(1))
             ->method('getRevenueOverTime')
-            ->with($previousFrom, $previousTo)
-            ->will($this->returnValue($sourceOrderData[1]));
+            ->with($this->dateHelper, $previousFrom, $previousTo)
+            ->will($this->returnValue($sourceData[1]));
         $this->registry->expects($this->any())
             ->method('getRepository')
             ->with('OroCRMMagentoBundle:Order')
@@ -232,7 +246,78 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($chartConfig));
         $this->assertEquals(
             $chartView,
-            $this->dataProvider->getRevenueOverTimeChartView($chartViewBuilder, $from, $to)
+            $this->dataProvider->getRevenueOverTimeChartView($chartViewBuilder, ['start' => $from, 'end' => $to])
         );
+    }
+
+    public function getRevenueOverTimeChartViewDataProvider()
+    {
+        return [
+            [
+                $sourceOrderData = [
+                    [
+                        [
+                            'yearCreated'  => '2015',
+                            'monthCreated' => '05',
+                            'dayCreated'   => '12',
+                            'amount'       => 200,
+                        ],
+                    ],
+                    [
+                        [
+                            'yearCreated'  => '2015',
+                            'monthCreated' => '05',
+                            'dayCreated'   => '07',
+                            'amount'       => 100,
+                        ],
+                    ],
+                ],
+                $expectedArrayData = [
+                    '2015-05-10 - 2015-05-15' => [
+                        ['date' => '2015-05-10'],
+                        ['date' => '2015-05-11'],
+                        ['date' => '2015-05-12', 'amount' => 200],
+                        ['date' => '2015-05-13'],
+                        ['date' => '2015-05-14'],
+                    ],
+                    '2015-05-05 - 2015-05-10' => [
+                        ['date' => '2015-05-10'],
+                        ['date' => '2015-05-11'],
+                        ['date' => '2015-05-12', 'amount' => 100],
+                        ['date' => '2015-05-13'],
+                        ['date' => '2015-05-14'],
+                    ],
+                ],
+                $expectedOptions = [
+                    'name' => 'multiline_chart',
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'date',
+                            'label' => 'oro.dashboard.chart.day.label',
+                            'type' => 'day',
+                        ],
+                        'value' => [
+                            'field_name' => 'amount',
+                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'type' => 'currency'
+                        ],
+                    ],
+                ],
+                $chartConfig = [
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'date',
+                            'label' => 'oro.dashboard.chart.day.label',
+                            'type' => 'day',
+                        ],
+                        'value' => [
+                            'field_name' => 'amount',
+                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'type' => 'currency'
+                        ],
+                    ],
+                ],
+            ]
+        ];
     }
 }
