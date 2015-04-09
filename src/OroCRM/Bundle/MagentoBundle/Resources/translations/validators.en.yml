@@ -1,0 +1,3 @@
+orocrm:
+    magento:
+        unique_customer_email.message: This email address already in use. Please, provide another one.

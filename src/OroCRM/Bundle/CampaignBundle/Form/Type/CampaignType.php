@@ -85,7 +85,10 @@ class CampaignType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign']);
+        $resolver->setDefaults([
+            'data_class' => 'OroCRM\Bundle\CampaignBundle\Entity\Campaign',
+            'validation_groups' => ['Campaign', 'Default']
+        ]);
     }
 
     /**

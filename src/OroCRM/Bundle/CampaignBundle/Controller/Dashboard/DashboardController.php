@@ -25,7 +25,13 @@ class DashboardController extends Controller
     {
         $items = $this->getDoctrine()
             ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsLeads($this->get('oro_security.acl_helper'), self::CAMPAIGN_LEAD_COUNT);
+            ->getCampaignsLeads(
+                $this->get('oro_security.acl_helper'),
+                self::CAMPAIGN_LEAD_COUNT,
+                $this->get('oro_dashboard.widget_configs')
+                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                    ->get('dateRange')
+            );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
@@ -57,7 +63,13 @@ class DashboardController extends Controller
     {
         $items = $this->getDoctrine()
             ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsOpportunities($this->get('oro_security.acl_helper'), self::CAMPAIGN_OPPORTUNITY_COUNT);
+            ->getCampaignsOpportunities(
+                $this->get('oro_security.acl_helper'),
+                self::CAMPAIGN_OPPORTUNITY_COUNT,
+                $this->get('oro_dashboard.widget_configs')
+                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                    ->get('dateRange')
+            );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
@@ -89,7 +101,13 @@ class DashboardController extends Controller
     {
         $items = $this->getDoctrine()
             ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsByCloseRevenue($this->get('oro_security.acl_helper'), self::CAMPAIGN_CLOSE_REVENUE_COUNT);
+            ->getCampaignsByCloseRevenue(
+                $this->get('oro_security.acl_helper'),
+                self::CAMPAIGN_CLOSE_REVENUE_COUNT,
+                $this->get('oro_dashboard.widget_configs')
+                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                    ->get('dateRange')
+            );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')

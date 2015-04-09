@@ -13,14 +13,12 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
 /**
@@ -70,7 +68,8 @@ class Cart extends ExtendCart implements
     ChannelAwareInterface,
     FirstNameInterface,
     LastNameInterface,
-    OriginAwareInterface
+    OriginAwareInterface,
+    IntegrationAwareInterface
 {
     use IntegrationEntityTrait, OriginTrait, NamesAwareTrait, ChannelEntityTrait;
 

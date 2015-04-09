@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\IntegrationBundle\Model\IntegrationEntityTrait;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
 
@@ -39,7 +38,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  * )
  * @Oro\Loggable
  */
-class Product extends ExtendProduct
+class Product extends ExtendProduct implements IntegrationAwareInterface
 {
     use IntegrationEntityTrait;
 

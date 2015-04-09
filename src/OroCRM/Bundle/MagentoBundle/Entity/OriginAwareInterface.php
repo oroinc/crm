@@ -5,13 +5,14 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 interface OriginAwareInterface
 {
     /**
-     * @return string
-     */
-    public function getOriginId();
-
-    /**
-     * @param string $originId
-     * @return string
+     * @param int $originId
+     *
+     * @return OriginAwareInterface
      */
     public function setOriginId($originId);
+
+    /**
+     * @return int
+     */
+    public function getOriginId();
 }

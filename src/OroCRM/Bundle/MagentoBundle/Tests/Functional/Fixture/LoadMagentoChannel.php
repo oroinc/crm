@@ -2,34 +2,36 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\UserBundle\Model\Gender;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
+use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\DataGridBundle\Common\Object;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\UserBundle\Model\Gender;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
-use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\Store;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Address as MagentoAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -188,9 +190,12 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $integration = new Integration();
         $integration->setName('Demo Web store');
         $integration->setType('magento');
-        $integration->setConnectors(["customer", "order", "cart", "region"]);
+        $integration->setConnectors(['customer', 'order', 'cart', 'region']);
         $integration->setTransport($this->transport);
         $integration->setOrganization($this->organization);
+
+        $synchronizationSettings = Object::create(['isTwoWaySyncEnabled' => true]);
+        $integration->setSynchronizationSettings($synchronizationSettings);
 
         $this->em->persist($integration);
         $this->integration = $integration;
@@ -208,6 +213,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $transport->setApiKey('key');
         $transport->setApiUser('user');
         $transport->setIsExtensionInstalled(true);
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
+        $transport->setMagentoVersion('1.9.1.0');
         $transport->setIsWsiMode(false);
         $transport->setWebsiteId('1');
         $transport->setWsdlUrl('http://localhost/magento/api/v2_soap?wsdl=1');
@@ -264,6 +271,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $address->setPrimary(true);
         $address->setOrganization('oro');
         $address->setOriginId(1);
+        $address->setChannel($this->integration);
         $address->setOrganization($this->organization);
 
         $this->em->persist($address);
@@ -389,6 +397,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customerGroup->setOriginId(1);
 
         $this->em->persist($customerGroup);
+        $this->setReference('customer_group', $customerGroup);
         $this->customerGroup = $customerGroup;
 
         return $this;
@@ -482,6 +491,10 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         return $order;
     }
 
+    /**
+     * @param Order $order
+     * @return OrderItem
+     */
     protected function createBaseOrderItem(Order $order)
     {
         $orderItem = new OrderItem();

@@ -14,13 +14,16 @@ abstract class AbstractController extends WebTestCase
     /** @var Integration */
     protected static $integration;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
     }
 
+    /**
+     * @return int
+     */
     abstract protected function getMainEntityId();
 
     protected function postFixtureLoad()
@@ -59,7 +62,7 @@ abstract class AbstractController extends WebTestCase
         foreach ($result['data'] as $row) {
             if ($shouldAssertData) {
                 foreach ($requestData['assert'] as $fieldName => $value) {
-                    $this->assertEquals($value, $row[$fieldName]);
+                    $this->assertEquals($value, $row[$fieldName], sprintf('Incorrect value for %s', $fieldName));
                 }
                 break;
             }

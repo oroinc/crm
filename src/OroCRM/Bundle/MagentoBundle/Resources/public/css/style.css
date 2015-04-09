@@ -79,6 +79,6 @@
     display: none;
 }
 
-.sync-state-label.control-label {
-    padding-top: 5px !important;
+.collection-remove-disabled + .removeRow {
+    display: none;
 }

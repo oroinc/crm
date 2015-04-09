@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
@@ -60,6 +62,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function saveEntity($entity)
     {
+        /** @var EntityManager $em */
         $em = $this->doctrineRegistry->getManager();
         $em->persist($entity);
         $em->flush($entity);
@@ -68,11 +71,12 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     /**
      * @param Integration $integration
      * @param string $connector
+     * @param int|null $code
      * @return null|Status
      */
-    protected function getLastStatusForConnector(Integration $integration, $connector)
+    protected function getLastStatusForConnector(Integration $integration, $connector, $code = null)
     {
-        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector);
+        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
     }
 
     /**
@@ -82,7 +86,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function getSyncedTo(Integration $integration, $connector)
     {
-        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector, Status::STATUS_COMPLETED);
         if ($lastStatus) {
             $statusData = $lastStatus->getData();
             if (!empty($statusData[self::INITIAL_SYNCED_TO])) {
