@@ -21,7 +21,7 @@ orocrm:
                 title: Purchase Funnel
                 description: This widget gives you a quick overview of purchases
                 visited: Visited
-                deeply_visited: Deeply Visited
+                deeply_visited: Browsed
                 added_to_cart: Added to cart
                 purchased: Purchased
         datagrid:
