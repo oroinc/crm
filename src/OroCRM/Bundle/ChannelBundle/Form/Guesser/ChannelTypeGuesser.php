@@ -20,7 +20,7 @@ class ChannelTypeGuesser implements FormTypeGuesserInterface
                 [
                     'constraints' => [new Assert\NotBlank()]
                 ],
-                TypeGuess::VERY_HIGH_CONFIDENCE
+                TypeGuess::HIGH_CONFIDENCE
             );
         }
     }

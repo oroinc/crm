@@ -120,7 +120,7 @@ services:
     orocrm_channel.form.guesser.channel:
         class: %orocrm_channel.form.guesser.channel.class%
         tags:
-            - { name: form.type_guesser, priority: 10 }
+            - { name: form.type_guesser, priority: 20 }
 
     # handlers
     orocrm_channel.channel_form.handler:
