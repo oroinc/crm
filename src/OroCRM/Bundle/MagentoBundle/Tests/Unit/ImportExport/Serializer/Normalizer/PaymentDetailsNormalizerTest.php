@@ -106,7 +106,8 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
             [null, ['incrementId' => 1]],
             [null, ['paymentDetails' => ['cc_type' => 'cc_type']]],
             [null, ['paymentDetails' => ['cc_last4' => 'cc_last4']]],
-            ['Card [cc_type, cc_last4]', ['paymentDetails' => ['cc_type' => 'cc_type', 'cc_last4' => 'cc_last4']]]
+            ['Card [cc_type, cc_last4]', ['paymentDetails' => ['cc_type' => 'cc_type', 'cc_last4' => 'cc_last4']]],
+            ['Card [cc_type, cc_last4]', ['paymentDetails' => ['cc_type' => ' cc_type ', 'cc_last4' => ' cc_last4 ']]]
         ];
     }
 }

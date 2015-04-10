@@ -4,6 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
@@ -143,13 +146,12 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function updateAddresses(Cart $entity)
     {
-        $addresses = ['ShippingAddress', 'BillingAddress'];
+        $addresses = ['shippingAddress', 'billingAddress'];
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($addresses as $addressName) {
-            $addressGetter = 'get'.$addressName;
-            $setter = 'set'.$addressName;
             /** @var CartAddress $address */
-            $address = $entity->$addressGetter();
+            $address = $propertyAccessor->getValue($entity, $addressName);
 
             if (!$address) {
                 continue;
@@ -160,8 +162,8 @@ class CartStrategy extends AbstractImportStrategy
             $originAddressId = $address->getOriginId();
 
             /** @var CartAddress $existingAddress */
-            $existingAddress = $this->existingEntity->$addressGetter();
-            if ($existingAddress && $existingAddress->getOriginId() === $originAddressId) {
+            $existingAddress = $propertyAccessor->getValue($this->existingEntity, $addressName);
+            if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
                 $this->strategyHelper->importEntity(
                     $existingAddress,
                     $address,
@@ -172,9 +174,9 @@ class CartStrategy extends AbstractImportStrategy
 
             $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if ($address->getCountry()) {
-                $entity->$setter($address);
+                $propertyAccessor->setValue($entity, $addressName, $address);
             } else {
-                $entity->$setter(null);
+                $propertyAccessor->setValue($entity, $addressName, null);
             }
         }
 
@@ -192,7 +194,7 @@ class CartStrategy extends AbstractImportStrategy
     {
         // allow to modify status only for "open" carts
         // because magento can only expire cart, so for different statuses this useless
-        if ($this->existingEntity->getStatus()->getName() !== 'open') {
+        if ($this->existingEntity->getStatus()->getName() !== CartStatus::STATUS_OPEN) {
             $status = $this->existingEntity->getStatus();
         } else {
             $status = $cart->getStatus();

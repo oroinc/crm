@@ -13,7 +13,7 @@ class PaymentDetailsNormalizer extends ConfigurableEntityNormalizer implements D
     protected $supportedClass;
 
     /**
-     * @param \string $supportedClass
+     * @param string $supportedClass
      */
     public function setSupportedClass($supportedClass)
     {

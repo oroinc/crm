@@ -16,7 +16,7 @@ class ContextCartReader extends CartConnector
     {
         // no need to load carts
         if (!$this->transport->isSupportedExtensionVersion()) {
-            return new \ArrayIterator();
+            return new \EmptyIterator();
         }
 
         $iterator = parent::getConnectorSource();

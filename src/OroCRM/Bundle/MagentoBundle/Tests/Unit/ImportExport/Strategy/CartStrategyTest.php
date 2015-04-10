@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
@@ -9,7 +11,6 @@ use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class CartStrategyTest extends AbstractStrategyTest
 {
