@@ -32,6 +32,7 @@ orocrm:
                 abandoned_revenue.label: Abandoned revenue
                 abandoned_count.label: Abandoned carts
                 abandon_rate.label: Abandon rate
+                site_visits.label: Site visits
         datagrid:
             actions:
                 view:

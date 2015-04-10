@@ -50,195 +50,52 @@ class BigNumber
 
     /**
      * @param WidgetOptionBag $widgetOptions
+     * @param                 $getterName
+     * @param                 $dataType
+     * @param bool            $lessIsBetter
      * @return array
      */
-    public function getRevenueValues(WidgetOptionBag $widgetOptions)
+    public function getBigNumberValues(WidgetOptionBag $widgetOptions, $getterName, $dataType, $lessIsBetter = false)
     {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getRevenueValueByPeriod',
-                'dataType'     => 'currency',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getOrdersNumberValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getOrdersNumberValueByPeriod',
-                'dataType'     => 'integer',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getAOVValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getAOVValueByPeriod',
-                'dataType'     => 'currency',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getDiscountedOrdersPercentValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Order',
-                'method'       => 'getDiscountedOrdersPercentByDatePeriod',
-                'dataType'     => 'percent',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getNewCustomersCountValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Customer',
-                'method'       => 'getNewCustomersNumberWhoMadeOrderByPeriod',
-                'dataType'     => 'integer',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getReturningCustomersCountValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Customer',
-                'method'       => 'getReturningCustomersWhoMadeOrderByPeriod',
-                'dataType'     => 'integer',
-                'lessIsBetter' => false
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getAbandonedRevenueValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Cart',
-                'method'       => 'getAbandonedRevenueByPeriod',
-                'dataType'     => 'currency',
-                'lessIsBetter' => true
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getAbandonedCountValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Cart',
-                'method'       => 'getAbandonedCountByPeriod',
-                'dataType'     => 'integer',
-                'lessIsBetter' => true
-            ]
-        );
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     * @return array
-     */
-    public function getAbandonRateValues(WidgetOptionBag $widgetOptions)
-    {
-        return $this->getBigNumberValues(
-            $widgetOptions,
-            [
-                'repo'         => 'OroCRMMagentoBundle:Cart',
-                'method'       => 'getAbandonRateByPeriod',
-                'dataType'     => 'percent',
-                'lessIsBetter' => true
-            ]
-        );
-    }
-
-    /**
-     * @param $widgetOptions
-     * @param $parameters
-     * @return mixed
-     */
-    protected function getBigNumberValues($widgetOptions, $parameters)
-    {
+        $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
-        $repo             = $this->doctrine->getRepository($parameters['repo']);
         $dateRange        = $widgetOptions->get('dateRange');
         $from             = $dateRange['start'];
         $to               = $dateRange['end'];
-        $value            = $repo->{$parameters['method']}($from, $to, $this->aclHelper);
-        $result['value']  = $this->formatValue($value, $parameters['dataType']);
+        $value            = $this->{$getterName}($from, $to);
+        $result['value']  = $this->formatValue($value, $dataType);
         $previousInterval = $widgetOptions->get('usePreviousInterval', []);
 
         if (count($previousInterval)) {
             $previousFrom = $previousInterval['start'];
             $previousTo   = $previousInterval['end'];
-            $pastResult   = $repo->{$parameters['method']}($previousFrom, $previousTo, $this->aclHelper);
+            $pastResult   = $this->{$getterName}($previousFrom, $previousTo);
 
             $result['deviation'] = $this->translator->trans('orocrm.magento.dashboard.e_commerce_statistic.no_changes');
 
             $deviation = $value - $pastResult;
-            if ($pastResult != 0 && $parameters['dataType'] !== 'percent') {
+            if ($pastResult != 0 && $dataType !== 'percent') {
                 if ($deviation != 0) {
                     $deviationPercent     = $deviation / $pastResult;
                     $result['deviation']  = sprintf(
                         '%s (%s)',
-                        $this->formatValue($deviation, $parameters['dataType'], true),
+                        $this->formatValue($deviation, $dataType, true),
                         $this->formatValue($deviationPercent, 'percent', true)
                     );
-                    $result['isPositive'] = ($deviation >= 0 && !$parameters['lessIsBetter']);
+                    if (!$lessIsBetter) {
+                        $result['isPositive'] = $deviation > 0;
+                    } else {
+                        $result['isPositive'] = !($deviation > 0);
+                    }
                 }
             } else {
                 if (round(($deviation) * 100, 0) != 0) {
-                    $result['deviation']  = $this->formatValue($deviation, $parameters['dataType'], true);
-                    $result['isPositive'] = ($deviation >= 0 && !$parameters['lessIsBetter']);
+                    $result['deviation']  = $this->formatValue($deviation, $dataType, true);
+                    if (!$lessIsBetter) {
+                        $result['isPositive'] = $deviation > 0;
+                    } else {
+                        $result['isPositive'] = !($deviation > 0);
+                    }
                 }
             }
 
@@ -250,6 +107,126 @@ class BigNumber
         }
 
         return $result;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getRevenueValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->getRevenueValueByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getOrdersNumberValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->getOrdersNumberValueByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getAOVValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->getAOVValueByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return float
+     */
+    protected function getDiscountedOrdersPercentValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->getDiscountedOrdersPercentByDatePeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getNewCustomersCountValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Customer')
+            ->getNewCustomersNumberWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getReturningCustomersCountValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Customer')
+            ->getReturningCustomersWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getAbandonedRevenueValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Cart')
+            ->getAbandonedRevenueByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getAbandonedCountValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Cart')
+            ->getAbandonedCountByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return float|null
+     */
+    protected function getAbandonRateValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Cart')
+            ->getAbandonRateByPeriod($start, $end, $this->aclHelper);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getSiteVisitsValues(\DateTime $start, \DateTime $end)
+    {
+        return $this->doctrine
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
     }
 
     /**

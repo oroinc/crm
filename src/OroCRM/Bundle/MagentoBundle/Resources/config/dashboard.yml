@@ -49,48 +49,53 @@ oro_dashboard_config:
             applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
             data_items:
                 revenue:
-                    data_provider: @orocrm_magento.provider.big_number->getRevenueValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getRevenueValues, currency)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.revenue.label
                     acl:           orocrm_magento_order_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 orders_number:
-                    data_provider: @orocrm_magento.provider.big_number->getOrdersNumberValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrdersNumberValues, integer)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.orders_number.label
                     acl:           orocrm_magento_order_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 discounted_orders_percent:
-                    data_provider: @orocrm_magento.provider.big_number->getDiscountedOrdersPercentValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getDiscountedOrdersPercentValues, percent)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.discounted_orders_percent.label
                     acl:           orocrm_magento_order_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_customers_count:
-                    data_provider: @orocrm_magento.provider.big_number->getNewCustomersCountValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getNewCustomersCountValues, integer)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.new_customers_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 returning_customers_count:
-                    data_provider: @orocrm_magento.provider.big_number->getReturningCustomersCountValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getReturningCustomersCountValues, integer)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.returning_customers_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 average_order_value:
-                    data_provider: @orocrm_magento.provider.big_number->getAOVValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAOVValues, currency)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.average_order_value.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandoned_revenue:
-                    data_provider: @orocrm_magento.provider.big_number->getAbandonedRevenueValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonedRevenueValues, currency, true)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandoned_count:
-                    data_provider: @orocrm_magento.provider.big_number->getAbandonedCountValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonedCountValues, integer, true)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandon_rate:
-                    data_provider: @orocrm_magento.provider.big_number->getAbandonRateValues($widgetOptions$)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonRateValues, percent, true)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                site_visits:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getSiteVisitsValues, integer)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.site_visits.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
@@ -126,3 +131,4 @@ oro_dashboard_config:
                           - {abandoned_revenue: orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label}
                           - {abandoned_count: orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label}
                           - {abandon_rate: orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label}
+                          - {site_visits: orocrm.magento.dashboard.e_commerce_statistic.site_visits.label}
