@@ -98,6 +98,16 @@ oro_dashboard_config:
                     label:         orocrm.magento.dashboard.e_commerce_statistic.site_visits.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                order_conversion:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrderConversionValues, percent)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                customer_conversion:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrderConversionValues, percent)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -132,3 +142,5 @@ oro_dashboard_config:
                           - {abandoned_count: orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label}
                           - {abandon_rate: orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label}
                           - {site_visits: orocrm.magento.dashboard.e_commerce_statistic.site_visits.label}
+                          - {order_conversion: orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label}
+                          - {customer_conversion: orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label}

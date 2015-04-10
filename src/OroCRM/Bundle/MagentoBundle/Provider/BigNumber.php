@@ -76,8 +76,8 @@ class BigNumber
             $deviation = $value - $pastResult;
             if ($pastResult != 0 && $dataType !== 'percent') {
                 if ($deviation != 0) {
-                    $deviationPercent     = $deviation / $pastResult;
-                    $result['deviation']  = sprintf(
+                    $deviationPercent    = $deviation / $pastResult;
+                    $result['deviation'] = sprintf(
                         '%s (%s)',
                         $this->formatValue($deviation, $dataType, true),
                         $this->formatValue($deviationPercent, 'percent', true)
@@ -90,7 +90,7 @@ class BigNumber
                 }
             } else {
                 if (round(($deviation) * 100, 0) != 0) {
-                    $result['deviation']  = $this->formatValue($deviation, $dataType, true);
+                    $result['deviation'] = $this->formatValue($deviation, $dataType, true);
                     if (!$lessIsBetter) {
                         $result['isPositive'] = $deviation > 0;
                     } else {
@@ -227,6 +227,50 @@ class BigNumber
         return $this->doctrine
             ->getRepository('OroCRMChannelBundle:Channel')
             ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getOrderConversionValues(\DateTime $start, \DateTime $end)
+    {
+        $result = 0;
+
+        $ordersCount = $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Order')
+            ->getOrdersNumberValueByPeriod($start, $end, $this->aclHelper);
+        $visits      = $this->doctrine
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
+        if ($visits != 0) {
+            $result = $ordersCount / $visits;
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @return int
+     */
+    protected function getCustomerConversionValues(\DateTime $start, \DateTime $end)
+    {
+        $result = 0;
+
+        $customers = $this->doctrine
+            ->getRepository('OroCRMMagentoBundle:Customer')
+            ->getNewCustomersNumberWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
+        $visits    = $this->doctrine
+            ->getRepository('OroCRMChannelBundle:Channel')
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
+        if ($visits != 0) {
+            $result = $customers / $visits;
+        }
+
+        return $result;
     }
 
     /**
