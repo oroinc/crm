@@ -16,8 +16,6 @@ class OrderStrategy extends BaseStrategy
         'id',
         'store',
         'items',
-        'cart',
-        'customer',
         'addresses',
         'workflowItem',
         'workflowStep',
