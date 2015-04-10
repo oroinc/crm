@@ -18,6 +18,7 @@ parameters:
     orocrm_channel.form.type.multiple_entity_channel_aware.class:         OroCRM\Bundle\ChannelBundle\Form\Type\MultipleEntityChannelAwareType
     orocrm_channel.form.embedded_type_extension.class:                    OroCRM\Bundle\ChannelBundle\Form\Extension\EmbeddedFormTypeExtension
     orocrm_channel.form.integration_type_extension.class:                 OroCRM\Bundle\ChannelBundle\Form\Extension\IntegrationTypeExtension
+    orocrm_channel.form.guesser.channel.class:                            OroCRM\Bundle\ChannelBundle\Form\Guesser\ChannelTypeGuesser
 
 
     # manager
@@ -115,6 +116,11 @@ services:
         factory_method:               createNamed
         factory_service:              form.factory
         arguments:                    ["orocrm_channel_form", "orocrm_channel_form", null]
+
+    orocrm_channel.form.guesser.channel:
+        class: %orocrm_channel.form.guesser.channel.class%
+        tags:
+            - { name: form.type_guesser, priority: 10 }
 
     # handlers
     orocrm_channel.channel_form.handler:
