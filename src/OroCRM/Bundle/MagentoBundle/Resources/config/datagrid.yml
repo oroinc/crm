@@ -22,7 +22,8 @@ datagrid:
 #                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
                     - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
-                    - c.originId as customerOriginId
+                    - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -1360,12 +1361,12 @@ datagrid:
             query:
                 select:
                     - newsletterSubscriber.id
-                    - customer.originId as customerOriginId
+                    - customer.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - customer.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - dataChannel.name as channelName
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
                     - newsletterSubscriber.email
-                    - newsletterSubscriber.changeStatusAt
                     - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
                     - customer.email as customerEmail
                     - newsletterSubscriber.createdAt
@@ -1388,9 +1389,6 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.website.label
             email:
                 label: orocrm.magento.newslettersubscriber.email.label
-            changeStatusAt:
-                label: orocrm.magento.newslettersubscriber.change_status_at.label
-                frontend_type: datetime
             customerName:
                 label: orocrm.magento.newslettersubscriber.customer.label
             customerEmail:
@@ -1406,7 +1404,6 @@ datagrid:
                 channelName: { data_name: channelName }
                 websiteName: { data_name: websiteName }
                 email: { data_name: newsletterSubscriber.email }
-                changeStatusAt: { data_name: newsletterSubscriber.changeStatusAt }
                 customerName: { data_name: customerName }
                 customerEmail: { data_name: customerEmail }
                 createdAt: { data_name: newsletterSubscriber.createdAt }
@@ -1429,9 +1426,6 @@ datagrid:
                 email:
                     type: string
                     data_name: newsletterSubscriber.email
-                changeStatusAt:
-                    type: datetime
-                    data_name: newsletterSubscriber.changeStatusAt
                 customerName:
                     type: string
                     data_name: customerName

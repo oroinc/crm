@@ -22,13 +22,14 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
             $permissions[$action] = true;
         }
 
-        $isTwoWaySyncEnabled = $this->isTwoWaySyncEnable($record);
-        $isSupportedExtensionVersion = $this->isSupportedExtensionVersion($record);
+        $isChannelApplicable = $this->isChannelApplicable($record);
+        $customerId = $record->getValue(self::CUSTOMER_ID);
+        $customerOriginId = $record->getValue(self::CUSTOMER_ORIGIN_ID);
+
+        $isActionAllowed = $isChannelApplicable && (($customerOriginId && $customerId) || !$customerId);
+
         $statusId = (int)$record->getValue('newsletterSubscriberStatusId');
         $isSubscribed = $statusId === NewsletterSubscriber::STATUS_SUBSCRIBED;
-        $customerId = $record->getValue('customerOriginId');
-
-        $isActionAllowed = $isTwoWaySyncEnabled && $isSupportedExtensionVersion && $customerId;
 
         if (array_key_exists('subscribe', $permissions)) {
             $permissions['subscribe'] = $isActionAllowed && !$isSubscribed;
