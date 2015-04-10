@@ -81,11 +81,11 @@ class CallApiHandler
      */
     protected function handleAssociations(Call $entity)
     {
-        $associations = $this->form->get('associations');
+        $associations = $this->form->get('associations')->getData();
         if (empty($associations)) {
             return;
         }
-        foreach ($associations->getData() as $association) {
+        foreach ($associations as $association) {
             $associationType = isset($association['type']) ? $association['type'] : null;
             $target = $this->manager->getReference($association['entityName'], $association['entityId']);
             call_user_func(
