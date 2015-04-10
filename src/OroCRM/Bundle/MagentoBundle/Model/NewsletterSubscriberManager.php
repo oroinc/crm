@@ -26,11 +26,10 @@ class NewsletterSubscriberManager
 
     /**
      * @param Customer $customer
-     * @param int $identifier
      *
      * @return NewsletterSubscriber
      */
-    public function getOrCreateFromCustomer(Customer $customer, $identifier = NewsletterSubscriber::STATUS_SUBSCRIBED)
+    public function getOrCreateFromCustomer(Customer $customer)
     {
         $newsletterSubscriber = $customer->getNewsletterSubscriber();
 
@@ -43,25 +42,9 @@ class NewsletterSubscriberManager
                 ->setStore($customer->getStore())
                 ->setOrganization($customer->getOrganization())
                 ->setOwner($customer->getOwner())
+                ->setStatus($this->getStatus(NewsletterSubscriber::STATUS_UNSUBSCRIBED))
                 ->setDataChannel($customer->getDataChannel());
-
-            $this->doctrineHelper->getEntityManager($newsletterSubscriber)->persist($newsletterSubscriber);
         }
-
-        return $this->changeStatus($newsletterSubscriber, $identifier);
-    }
-
-    /**
-     * @param NewsletterSubscriber $newsletterSubscriber
-     * @param int $identifier
-     *
-     * @return NewsletterSubscriber
-     */
-    public function changeStatus(NewsletterSubscriber $newsletterSubscriber, $identifier)
-    {
-        $newsletterSubscriber->setStatus($this->getStatus($identifier));
-
-        $this->doctrineHelper->getEntityManager($newsletterSubscriber)->flush();
 
         return $newsletterSubscriber;
     }
