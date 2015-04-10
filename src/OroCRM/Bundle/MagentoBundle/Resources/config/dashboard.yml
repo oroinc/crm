@@ -104,7 +104,7 @@ oro_dashboard_config:
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
                 customer_conversion:
-                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrderConversionValues, percent)
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getCustomerConversionValues, percent)
                     label:         orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label
                     acl:           orocrm_magento_customer_view
                     template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
