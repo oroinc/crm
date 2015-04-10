@@ -30,12 +30,12 @@ Content:
 $request = [
     "call" => [
         "subject"      => 'Subject',
-        "owner"        => '1',
+        "owner"        => 1,
         "duration"     => '00:00:05',
-        "direction"    => 'outgoing',
+        "direction"    => 'outgoing', // can be 'outgoing' or 'incoming'
         "callDateTime" => '2015-01-01T12:00:00',
         "phoneNumber"  => '123-123-123',
-        "callStatus"   => 'completed',
+        "callStatus"   => 'completed', // can be 'completed' or 'in_progress'
         "associations" => [
             [
                 "entityName" => 'Oro\Bundle\UserBundle\Entity\User',
@@ -45,6 +45,7 @@ $request = [
             [
                 "entityName" => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
                 "entityId"   => 2,
+                "type"       => 'activity'
             ],
         ]
     ]
