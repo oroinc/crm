@@ -2,11 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -29,6 +35,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setOwnerHelper($this->defaultOwnerHelper);
         $strategy->setLogger($this->logger);
         $strategy->setChannelHelper($this->channelHelper);
+        $strategy->setAddressHelper($this->addressHelper);
 
         return $strategy;
     }
@@ -54,14 +61,7 @@ class CartStrategyTest extends AbstractStrategyTest
             ->will($this->returnValue($execution));
         $strategy->setStepExecution($this->stepExecution);
 
-        $this->databaseHelper->expects($this->once())->method('getEntityReference')->will(
-            $this->returnCallback(
-                function ($item) {
-                    return $item;
-                }
-            )
-        );
-
+        $this->databaseHelper->expects($this->once())->method('getEntityReference')->will($this->returnArgument(0));
         $this->databaseHelper->expects($this->once())->method('findOneByIdentity')->willReturn($databaseEntity);
 
         $this->assertEquals($expected, $strategy->process($entity));
@@ -69,6 +69,8 @@ class CartStrategyTest extends AbstractStrategyTest
 
     /**
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function contactInfoDataProvider()
     {
@@ -91,40 +93,153 @@ class CartStrategyTest extends AbstractStrategyTest
                 )
             ],
             'change status' => [
-                $this->getEntity(
+                'expected' => $this->getEntity(
                     ['itemsCount' => 1, 'email' => 'user@example.com', 'status' => new CartStatus('expired')]
                 ),
-                $this->getEntity(
+                'entity' => $this->getEntity(
                     ['itemsCount' => 1, 'email' => 'user@example.com', 'status' => new CartStatus('expired')]
                 ),
-                $this->getEntity(
+                'databaseEntity' => $this->getEntity(
                     ['itemsCount' => 1, 'email' => 'user@example.com', 'status' => new CartStatus('open')]
                 )
             ],
             'update customer email' => [
-                $this->getEntity(
+                'expected' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
                         'customer' => $this->getCustomer('user@example.com')
                     ]
                 ),
-                $this->getEntity(
+                'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
                         'customer' => $this->getCustomer('customer@example.com')
                     ]
                 ),
-                $this->getEntity(
+                'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
                         'customer' => $this->getCustomer('database@example.com')
                     ]
                 )
+            ],
+            'add new cart item and remove old' => [
+                'expected' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                    ]
+                ),
+                'entity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                    ]
+                ),
+                'databaseEntity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                    ]
+                )
+            ],
+            'add new cart item and keep old one' => [
+                'expected' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                    ]
+                ),
+                'entity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                    ]
+                ),
+                'databaseEntity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                    ]
+                )
+            ],
+            'update existing address' => [
+                'expected' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'shippingAddress' => $this->getAddress('US')
+                    ]
+                ),
+                'entity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'shippingAddress' => $this->getAddress('US')
+                    ]
+                ),
+                'databaseEntity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'shippingAddress' => $this->getAddress('US')
+                    ]
+                )
+            ],
+            'drop without country' => [
+                'expected' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'billingAddress' => null
+                    ]
+                ),
+                'entity' => $this->getEntity(
+                    [
+                        'itemsCount' => 1,
+                        'email' => 'user@example.com',
+                        'billingAddress' => $this->getAddress()
+                    ]
+                )
             ]
         ];
+    }
+
+    /**
+     * @param int $originId
+     *
+     * @return CartItem
+     */
+    protected function getCartItem($originId)
+    {
+        $cartItem = new CartItem();
+        $cartItem->setOriginId($originId);
+
+        return $cartItem;
+    }
+
+    /**
+     * @param string $countryCode
+     * @return CartAddress
+     */
+    protected function getAddress($countryCode = null)
+    {
+        $address = new CartAddress();
+
+        if ($countryCode) {
+            $address->setCountry(new Country($countryCode));
+        }
+
+        return $address;
     }
 
     /**
@@ -154,6 +269,20 @@ class CartStrategyTest extends AbstractStrategyTest
         $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($properties as $property => $value) {
+            if ($value instanceof ArrayCollection) {
+                foreach ($value as $item) {
+                    try {
+                        $propertyAccessor->setValue($item, 'cart', $cart);
+                    } catch (NoSuchPropertyException $e) {
+                    }
+                }
+            } elseif (is_object($value)) {
+                try {
+                    $propertyAccessor->setValue($value, 'cart', $cart);
+                } catch (NoSuchPropertyException $e) {
+                }
+            }
+
             $propertyAccessor->setValue($cart, $property, $value);
         }
 

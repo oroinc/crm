@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\Collection;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;

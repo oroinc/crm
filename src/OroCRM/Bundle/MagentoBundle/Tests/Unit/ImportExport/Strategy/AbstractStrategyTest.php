@@ -16,6 +16,7 @@ use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\StrategyInterface;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
 
@@ -62,6 +63,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
     protected $channelHelper;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|AddressImportHelper
+     */
+    protected $addressHelper;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -101,6 +107,11 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->addressHelper = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()
             ->getMock();
@@ -127,7 +138,8 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             $this->jobExecution,
             $this->defaultOwnerHelper,
             $this->logger,
-            $this->channelHelper
+            $this->channelHelper,
+            $this->addressHelper
         );
     }
 
