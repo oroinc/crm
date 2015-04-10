@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Form\Guesser;
 
-use Symfony\Component\Form\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Symfony\Component\Form\Guess\ValueGuess;
 use Symfony\Component\Form\FormTypeGuesserInterface;
