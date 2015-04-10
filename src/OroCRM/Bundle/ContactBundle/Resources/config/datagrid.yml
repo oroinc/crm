@@ -590,6 +590,8 @@ datagrid:
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
+            id:
+                label:        orocrm.contact.id.label
             firstName:
                 label:         orocrm.contact.first_name.label
             lastName:

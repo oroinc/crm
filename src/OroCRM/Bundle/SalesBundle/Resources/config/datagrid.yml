@@ -1043,6 +1043,8 @@ datagrid:
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
+            id:
+                label:         orocrm.sales.lead.id.label
             channelName:
                 label:         orocrm.sales.lead.data_channel.label
             name:
@@ -1138,6 +1140,8 @@ datagrid:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
         columns:
+            id:
+                label:         orocrm.sales.opportunity.id.label
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
             name:
@@ -1222,6 +1226,8 @@ datagrid:
                     left:
                         - { join: c.dataChannel, alias: channel }
         columns:
+            id:
+                label:          orocrm.sales.b2bcustomer.id.label
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
             name:

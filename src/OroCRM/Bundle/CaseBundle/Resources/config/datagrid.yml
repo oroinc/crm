@@ -233,6 +233,8 @@ datagrid:
                         - { join: caseEntity.status, alias: status }
                         - { join: caseEntity.priority, alias: priority }
         columns:
+            id:
+                label: orocrm.case.datagrid.id.label
             subject:
                 type: twig
                 label: orocrm.case.datagrid.subject.label
