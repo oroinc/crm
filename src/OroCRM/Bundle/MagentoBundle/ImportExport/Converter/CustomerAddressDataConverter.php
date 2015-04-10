@@ -27,6 +27,7 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
 
         if (!empty($importedRecord['is_default_shipping'])) {
             $importedRecord['types'][] = ['name' => AddressType::TYPE_SHIPPING];

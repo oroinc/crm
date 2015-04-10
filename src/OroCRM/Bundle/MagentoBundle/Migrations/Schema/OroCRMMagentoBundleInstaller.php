@@ -386,6 +386,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('rfm_monetary', 'integer', ['notnull' => false]);
         $table->addColumn('sync_state', 'integer', ['notnull' => false]);
         $table->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
+        $table->addColumn('created_in', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('is_confirmed', 'boolean', ['notnull' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);

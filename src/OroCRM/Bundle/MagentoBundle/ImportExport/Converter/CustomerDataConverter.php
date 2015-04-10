@@ -27,6 +27,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'customer_id' => 'originId',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
+            'created_in' => 'createdIn'
         ];
     }
 
@@ -36,6 +37,9 @@ class CustomerDataConverter extends AbstractTreeDataConverter
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+
+        $importedRecord['confirmed'] = empty($importedRecord['confirmation']);
 
         if (!empty($importedRecord['birthday'])) {
             $importedRecord['birthday'] = substr($importedRecord['birthday'], 0, 10);

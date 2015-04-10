@@ -7,6 +7,7 @@ Bundle provides integration with Magento e-commerce solution.
 
 * [B2C Workflows](./Resources/doc/reference/workflows.md)
 * [Automatic accounts discovery](./Resources/doc/reference/account_discovery.md)
+* [EAV attributes support](./Resources/doc/reference/eav_attributes_support.md)
 
 ### Notes
 

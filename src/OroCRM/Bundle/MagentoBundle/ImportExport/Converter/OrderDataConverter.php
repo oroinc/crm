@@ -65,7 +65,9 @@ class OrderDataConverter extends AbstractTreeDataConverter
             }
         }
 
-        return parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+
+        return AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
     }
 
     /**
