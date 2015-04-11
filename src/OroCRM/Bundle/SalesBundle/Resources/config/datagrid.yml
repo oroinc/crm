@@ -1107,10 +1107,6 @@ datagrid:
                  email:
                     type: string
                     data_name: l.email
-                 phoneNumber:
-                    type: string
-                    enabled: falsek
-                    data_name: l.phoneNumber
 
     sales-opportunity-for-context-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
