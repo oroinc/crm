@@ -1577,6 +1577,9 @@ datagrid:
         options:
             entityHint: customer
             entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
 
     magento-order-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
@@ -1736,6 +1739,9 @@ datagrid:
         options:
             entityHint: order
             entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
 
     magento-cart-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
@@ -1875,3 +1881,6 @@ datagrid:
         options:
             entityHint: cart
             entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
