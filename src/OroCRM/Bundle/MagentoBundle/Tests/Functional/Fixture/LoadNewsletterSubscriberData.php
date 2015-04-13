@@ -69,7 +69,7 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
         /** @var Channel $channel */
         $channel = $this->getReference('default_channel');
 
-        /** @var Integration $channel */
+        /** @var Integration $integration */
         $integration = $this->getReference('integration');
 
         $className = ExtendHelper::buildEnumValueClassName('mage_subscr_status');
@@ -79,6 +79,7 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
             $subscriber = new NewsletterSubscriber();
 
             $date = new \DateTime();
+            $date->modify('-1 day');
 
             /** @var AbstractEnumValue $status */
             $status = $enumRepo->find($data['status']);
@@ -92,6 +93,8 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
                 ->setOrganization($organization)
                 ->setOriginId($data['originId'])
                 ->setChangeStatusAt($date)
+                ->setCreatedAt($date)
+                ->setUpdatedAt($date)
                 ->setChannel($integration)
                 ->setDataChannel($channel);
 
