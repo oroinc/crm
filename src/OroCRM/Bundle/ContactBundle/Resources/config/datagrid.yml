@@ -590,6 +590,8 @@ datagrid:
             hints:
                 - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
         columns:
+            id:
+                label:        orocrm.contact.id.label
             firstName:
                 label:         orocrm.contact.first_name.label
             lastName:
@@ -605,8 +607,6 @@ datagrid:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
                 label:         orocrm.contact.contactaddress.region.label
-            addressPostalCode:
-                label:         orocrm.contact.contactaddress.postal_code.label
         sorters:
             columns:
                 firstName:
@@ -623,8 +623,6 @@ datagrid:
                     data_name: country.name
                 regionLabel:
                     data_name: regionLabel
-                addressPostalCode:
-                    data_name: address.postalCode
             default:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
@@ -672,3 +670,6 @@ datagrid:
         options:
             entityHint: contact
             entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10

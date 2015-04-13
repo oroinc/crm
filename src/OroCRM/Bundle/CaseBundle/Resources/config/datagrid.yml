@@ -207,6 +207,10 @@ datagrid:
             entity_pagination: false
 
     cases-for-context-grid:
+        options:
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
         source:
             type: orm
             acl_resource: orocrm_case_view
@@ -233,6 +237,8 @@ datagrid:
                         - { join: caseEntity.status, alias: status }
                         - { join: caseEntity.priority, alias: priority }
         columns:
+            id:
+                label: orocrm.case.datagrid.id.label
             subject:
                 type: twig
                 label: orocrm.case.datagrid.subject.label
