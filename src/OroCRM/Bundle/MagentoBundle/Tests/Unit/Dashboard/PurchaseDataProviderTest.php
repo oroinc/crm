@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
@@ -33,6 +34,11 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
      */
     private $dataProvider;
 
+    /**
+     * @var AclHelper
+     */
+    private $aclHelper;
+
     public function setUp()
     {
         $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -53,11 +59,16 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
                 return $id;
             }));
 
+        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->dataProvider = new PurchaseDataProvider(
             $this->registry,
             $this->configProvider,
             $this->trackingVisitProvider,
-            $translator
+            $translator,
+            $this->aclHelper
         );
     }
 
