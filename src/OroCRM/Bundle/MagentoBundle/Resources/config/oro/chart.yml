@@ -58,4 +58,7 @@ oro_chart:
                 default_type: decimal
                 field_name: amount
                 type: currency
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig
