@@ -30,14 +30,14 @@ class RegionStrategy extends AbstractImportStrategy
         $itemData = null,
         array $searchContext = []
     ) {
-        $exc = [];
+        $excluded = [];
 
         if (!$entity->getName()) {
             // do not update name if it's empty, due to bug in magento API
-            $exc = ['name'];
+            $excluded = ['name'];
         }
 
         return $this->doctrineHelper
-            ->findAndReplaceEntity($entity, MagentoConnectorInterface::REGION_TYPE, 'combinedCode', $exc);
+            ->findAndReplaceEntity($entity, MagentoConnectorInterface::REGION_TYPE, 'combinedCode', $excluded);
     }
 }

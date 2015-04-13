@@ -6,7 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 
 class StoreConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
-    const TYPE = 'store';
+    const TYPE = 'store_dictionary';
 
     /**
      * {@inheritdoc}

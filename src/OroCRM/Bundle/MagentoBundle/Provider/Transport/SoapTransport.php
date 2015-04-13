@@ -305,41 +305,6 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /**
      * {@inheritdoc}
      */
-    public function getDependencies(array $dependenciesToLoad = null, $force = false)
-    {
-        if ($force && null === $dependenciesToLoad) {
-            $dependenciesToLoad = array_keys($this->dependencies);
-        }
-
-        $dependencies = [];
-        foreach ($dependenciesToLoad as $dependencyToLoad) {
-            switch ($dependencyToLoad) {
-                case MagentoTransportInterface::ALIAS_GROUPS:
-                    $dependencies[$dependencyToLoad] = $this->getCustomerGroupsDependency($force);
-                    break;
-            }
-        }
-
-        return $dependencies;
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getCustomerGroupsDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_GROUPS, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS]
-                = iterator_to_array($this->getCustomerGroups());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCarts()
     {
         if ($this->isSupportedExtensionVersion()) {

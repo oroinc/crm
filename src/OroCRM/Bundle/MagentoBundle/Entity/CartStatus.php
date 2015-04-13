@@ -22,6 +22,7 @@ class CartStatus
 {
     const STATUS_OPEN = 'open';
     const STATUS_EXPIRED = 'expired';
+    const STATUS_PURCHASED = 'purchased';
 
     /**
      * @ORM\Column(name="name", type="string", length=32)

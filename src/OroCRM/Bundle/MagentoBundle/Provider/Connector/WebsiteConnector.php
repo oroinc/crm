@@ -6,7 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 
 class WebsiteConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
-    const TYPE = 'website';
+    const TYPE = 'website_dictionary';
 
     /**
      * {@inheritdoc}

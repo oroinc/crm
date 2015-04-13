@@ -6,7 +6,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 
 class CustomerGroupConnector extends AbstractMagentoConnector implements DictionaryConnectorInterface
 {
-    const TYPE = 'customer_group';
+    const TYPE = 'customer_group_dictionary';
 
     /**
      * {@inheritdoc}

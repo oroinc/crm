@@ -95,7 +95,7 @@ class OrderStrategy extends AbstractImportStrategy
         if ($cart) {
             $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
             /** @var CartStatus $purchasedStatus */
-            $purchasedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'purchased');
+            $this->databaseHelper->findOneBy($statusClass, ['name' => CartStatus::STATUS_PURCHASED]);
             if ($purchasedStatus) {
                 $cart->setStatus($purchasedStatus);
             }

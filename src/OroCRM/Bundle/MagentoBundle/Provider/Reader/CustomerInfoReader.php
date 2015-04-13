@@ -10,7 +10,9 @@ class CustomerInfoReader extends AbstractInfoReader
     protected function loadEntityInfo($originId)
     {
         $result = $this->transport->getCustomerInfo($originId);
-        $result['addresses'] = $this->transport->getCustomerAddresses($originId);
+        if (!array_key_exists('addresses', $result)) {
+            $result['addresses'] = $this->transport->getCustomerAddresses($originId);
+        }
 
         return $result;
     }

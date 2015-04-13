@@ -26,8 +26,8 @@ class LoadShoppingCartStatusData extends AbstractFixture implements
 
     /** @var array */
     protected $dataV1 = array(
-        'expired'   => 'Expired',
-        'purchased' => 'Purchased',
+        CartStatus::STATUS_EXPIRED => 'Expired',
+        CartStatus::STATUS_PURCHASED => 'Purchased',
     );
 
     /**

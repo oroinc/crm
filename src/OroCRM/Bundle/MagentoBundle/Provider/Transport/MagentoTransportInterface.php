@@ -121,14 +121,6 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrderInfo($incrementId);
 
     /**
-     * @param array|null $dependenciesToLoad
-     * @param bool false
-     *
-     * @return array
-     */
-    public function getDependencies(array $dependenciesToLoad = null, $force = false);
-
-    /**
      * @param array $customerData
      *
      * @return int ID of the created customer

@@ -121,10 +121,8 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
                     if (count($diff)) {
                         $array[$baseKey] = $diff;
                     }
-                } else {
-                    if ($baseValue != $newData[$baseKey]) {
-                        $array[$baseKey] = $baseValue;
-                    }
+                } elseif ($baseValue != $newData[$baseKey]) {
+                    $array[$baseKey] = $baseValue;
                 }
             } else {
                 $array[$baseKey] = $baseValue;

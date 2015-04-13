@@ -149,7 +149,7 @@ services:
         calls:
             - [setClassName, [%orocrm_magento.entity.website.class%]]
         tags:
-            - { name: oro_integration.connector, type: website, channel_type: magento }
+            - { name: oro_integration.connector, type: website_dictionary, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.store:
@@ -158,7 +158,7 @@ services:
         calls:
             - [setClassName, [%orocrm_magento.entity.store.class%]]
         tags:
-            - { name: oro_integration.connector, type: store, channel_type: magento }
+            - { name: oro_integration.connector, type: store_dictionary, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.customer_group:
@@ -167,7 +167,7 @@ services:
         calls:
             - [setClassName, [%orocrm_magento.entity.customer_group.class%]]
         tags:
-            - { name: oro_integration.connector, type: customer_group, channel_type: magento }
+            - { name: oro_integration.connector, type: customer_group_dictionary, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.order_connector_initial:

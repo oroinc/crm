@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\OrderBridgeIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderBridgeIteratorTest extends BaseIteratorTestCase
 {
@@ -23,13 +23,13 @@ class OrderBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIteration(array $orderArray, array $stores)
     {
-        $dependencies = [MagentoTransportInterface::ALIAS_STORES => $stores];
-        $this->transport->expects($this->atLeastOnce())
-            ->method('getDependencies')
-            ->will($this->returnValue($dependencies));
+        $this->transport->expects($this->once())
+            ->method('getStores')
+            ->will($this->returnValue($stores));
 
-        $this->transport->expects($this->once())->method('call')
-            ->with($this->equalTo('oroOrderList'))
+        $this->transport->expects($this->once())
+            ->method('call')
+            ->with($this->equalTo(SoapTransport::ACTION_ORO_ORDER_LIST))
             ->will($this->returnValue($orderArray));
 
         $this->assertEquals(
