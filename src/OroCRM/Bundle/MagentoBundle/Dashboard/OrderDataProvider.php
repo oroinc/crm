@@ -152,7 +152,7 @@ class OrderDataProvider
      */
     protected function createOrdersOvertimeCurrentData(DateTime $from, DateTime $to)
     {
-        $result = $this->getOrderRepository()->getOrdersOverTime($this->dateHelper, $from, $to);
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
 
         $items = $this->dateHelper->getDatePeriod($from, $to);
         foreach ($result as $row) {
@@ -172,7 +172,7 @@ class OrderDataProvider
      */
     protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to, $diff)
     {
-        $result = $this->getOrderRepository()->getOrdersOverTime($this->dateHelper, $from, $to);
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
 
         $items = $this->dateHelper->getDatePeriod($from, $to);
         foreach ($result as $row) {

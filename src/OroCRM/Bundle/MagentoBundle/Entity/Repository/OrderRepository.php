@@ -14,7 +14,6 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Utils\DatePeriodUtils;
 
 class OrderRepository extends EntityRepository
 {
@@ -123,12 +122,16 @@ class OrderRepository extends EntityRepository
     /**
      * @param DateHelper $dateHelper
      * @param DateTime $from
-     * @param DateTime $to
+     * @param DateTime|null $to
      *
      * @return array
      */
-    public function getOrdersOverTime(DateHelper $dateHelper, DateTime $from, DateTime $to)
-    {
+    public function getOrdersOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
         $from = clone $from;
         $to = clone $to;
 
@@ -145,12 +148,7 @@ class OrderRepository extends EntityRepository
         }
         $qb->setParameter('from', $from);
 
-        $orders = $qb
-            ->getQuery()
-            ->getResult()
-        ;
-
-        return $orders;
+        return $aclHelper->apply($qb)->getResult();
     }
 
     /**
