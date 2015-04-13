@@ -27,7 +27,7 @@ class CallApiHandlerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
-     * @var CallHandler
+     * @var CallApiHandler
      */
     protected $handler;
 
