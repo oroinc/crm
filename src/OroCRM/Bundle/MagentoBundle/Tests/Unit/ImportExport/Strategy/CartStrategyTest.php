@@ -115,13 +115,13 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'customer' => $this->getCustomer('customer@example.com')
+                        'customer' => $this->getCustomer()
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
-                        'email' => 'user@example.com',
+                        'email' => 'database@example.com',
                         'customer' => $this->getCustomer('database@example.com')
                     ]
                 )
@@ -246,10 +246,12 @@ class CartStrategyTest extends AbstractStrategyTest
      * @param string $email
      * @return Customer
      */
-    protected function getCustomer($email)
+    protected function getCustomer($email = null)
     {
         $customer = new Customer();
-        $customer->setEmail($email);
+        if ($email) {
+            $customer->setEmail($email);
+        }
 
         return $customer;
     }
