@@ -111,7 +111,7 @@ class OrderDataProvider
         $previousFrom = clone $from;
         $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
 
-        $previousItems = $this->createRevenueOverTimePreviousData($previousFrom, $from, $diff);
+        $previousItems = $this->createRevenueOverTimePreviousData($previousFrom, $from);
 
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
@@ -125,16 +125,8 @@ class OrderDataProvider
                 $chartType
             );
 
-        $currentPeriod = sprintf(
-            '%s - %s',
-            $this->dateTimeFormatter->formatDate($from),
-            $this->dateTimeFormatter->formatDate($to)
-        );
-        $previousPeriod = sprintf(
-            '%s - %s',
-            $this->dateTimeFormatter->formatDate($previousFrom),
-            $this->dateTimeFormatter->formatDate($from)
-        );
+        $currentPeriod = $this->createPeriodLabel($from, $to);
+        $previousPeriod = $this->createPeriodLabel($previousFrom, $from);
 
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData([
@@ -148,19 +140,28 @@ class OrderDataProvider
      * @param DateTime $from
      * @param DateTime $to
      *
+     * @return string
+     */
+    protected function createPeriodLabel(DateTime $from, DateTime $to)
+    {
+        return sprintf(
+            '%s - %s',
+            $this->dateTimeFormatter->formatDate($from),
+            $this->dateTimeFormatter->formatDate($to)
+        );
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
      * @return array
      */
     protected function createRevenueOverTimeCurrentData(DateTime $from, DateTime $to)
     {
-        $result = $this->getOrderRepository()->getRevenueOverTime($this->dateHelper, $from, $to);
+        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
 
-        $items = $this->dateHelper->getDatePeriod($from, $to);
-        foreach ($result as $row) {
-            $key = $this->dateHelper->getKey($from, $to, $row);
-            $items[$key]['amount'] = $row['amount'];
-        }
-
-        return array_combine(range(0, count($items) - 1), array_values($items));
+        return $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'amount', 'amount');
     }
 
     /**
@@ -170,29 +171,11 @@ class OrderDataProvider
      *
      * @return array
      */
-    protected function createRevenueOverTimePreviousData(DateTime $from, DateTime $to, $diff)
+    protected function createRevenueOverTimePreviousData(DateTime $from, DateTime $to)
     {
-        $result = $this->getOrderRepository()->getRevenueOverTime($this->dateHelper, $from, $to);
+        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
 
-        $items = $this->dateHelper->getDatePeriod($from, $to);
-        foreach ($result as $row) {
-            $key = $this->dateHelper->getKey($from, $to, $row);
-            $items[$key]['amount'] = $row['amount'];
-        }
-
-        $currentFrom = $to;
-        $currentTo = clone $to;
-        $currentTo->setTimestamp($currentFrom->getTimestamp() + $diff);
-
-        $currentItems = $this->dateHelper->getDatePeriod($currentFrom, $currentTo);
-
-        $mixedItems = array_combine(array_keys($currentItems), array_values($items));
-        foreach ($mixedItems as $k => $v) {
-            $v['date'] = $currentItems[$k]['date'];
-            $currentItems[$k] = $v;
-        }
-
-        return array_combine(range(0, count($currentItems) - 1), array_values($currentItems));
+        return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'amount', 'amount');
     }
 
     /**

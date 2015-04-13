@@ -121,14 +121,19 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper
      * @param DateHelper $dateHelper
      * @param DateTime $from
-     * @param DateTime $to
+     * @param DateTime|null $to
      *
      * @return array
      */
-    public function getRevenueOverTime(DateHelper $dateHelper, DateTime $from, DateTime $to)
-    {
+    public function getRevenueOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
         $from = clone $from;
         $to = clone $to;
 
@@ -149,12 +154,7 @@ class OrderRepository extends EntityRepository
         }
         $qb->setParameter('from', $from);
 
-        $orders = $qb
-            ->getQuery()
-            ->getResult()
-        ;
-
-        return $orders;
+        return $aclHelper->apply($qb)->getResult();
     }
 
     /**

@@ -6,9 +6,37 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
+use Oro\Bundle\DashboardBundle\Model\WidgetModel;
+use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class AddECommerceDashboard extends AbstractDashboardFixture implements DependentFixtureInterface
+class AddECommerceDashboard extends AbstractDashboardFixture implements
+    DependentFixtureInterface,
+    VersionedFixtureInterface
 {
+    /** @var array */
+    protected $widgets = [
+        [
+            'name' => 'average_order_amount_chart',
+            'layout' => [0, 0],
+        ],
+        [
+            'name' => 'new_magento_customers_chart',
+            'layout' => [1, 0],
+        ],
+        [
+            'name' => 'revenue_over_time_chart',
+            'layout' => [0, 1],
+        ],
+    ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getVersion()
+    {
+        return '1.0';
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,9 +56,17 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements Dependen
             $dashboard->setLabel($this->container->get('translator')->trans('orocrm.magento.dashboard.e_commerce'));
         }
 
-        $dashboard->addWidget($this->createWidgetModel('average_order_amount_chart', [0, 0]))
-            ->addWidget($this->createWidgetModel('new_magento_customers_chart', [1, 0]))
-            ->addWidget($this->createWidgetModel('revenue_over_time_chart', [0, 1]));
+        foreach ($this->widgets as $widgetData) {
+            $widgets = $dashboard->getWidgets()->filter(function (WidgetModel $widget) use ($widgetData) {
+                return $widget->getName() === $widgetData['name'];
+            });
+
+            if (count($widgets)) {
+                continue;
+            }
+
+            $dashboard->addWidget($this->createWidgetModel($widgetData['name'], $widgetData['layout']));
+        }
 
         $manager->flush();
     }

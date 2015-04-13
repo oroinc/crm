@@ -169,41 +169,12 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                     'viewType' => 'day'
                 ]
             );
-        $this->dateHelper->expects($this->exactly(3))
-            ->method('getDatePeriod')
-            ->withConsecutive(
-                [$from, $to],
-                [$previousFrom, $previousTo],
-                [$from, $to]
-            )
-            ->will($this->onConsecutiveCalls(
-                [
-                    '2015-05-10' => ['date' => '2015-05-10'],
-                    '2015-05-11' => ['date' => '2015-05-11'],
-                    '2015-05-12' => ['date' => '2015-05-12'],
-                    '2015-05-13' => ['date' => '2015-05-13'],
-                    '2015-05-14' => ['date' => '2015-05-14'],
-                ],
-                [
-                    '2015-05-05' => ['date' => '2015-05-05'],
-                    '2015-05-06' => ['date' => '2015-05-06'],
-                    '2015-05-07' => ['date' => '2015-05-07'],
-                    '2015-05-08' => ['date' => '2015-05-08'],
-                    '2015-05-09' => ['date' => '2015-05-09'],
-                ],
-                [
-                    '2015-05-10' => ['date' => '2015-05-10'],
-                    '2015-05-11' => ['date' => '2015-05-11'],
-                    '2015-05-12' => ['date' => '2015-05-12'],
-                    '2015-05-13' => ['date' => '2015-05-13'],
-                    '2015-05-14' => ['date' => '2015-05-14'],
-                ]
-            ));
-        $this->dateHelper->expects($this->any())
-            ->method('getKey')
-            ->willReturnCallback(function($from, $to, $row) {
-                return implode('-', [$row['yearCreated'], $row['monthCreated'], $row['dayCreated']]);
-            });
+        $this->dateHelper->expects($this->once())
+            ->method('convertToCurrentPeriod')
+            ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));
+        $this->dateHelper->expects($this->once())
+            ->method('convertToPreviousPeriod')
+            ->will($this->returnValue($expectedArrayData['2015-05-05 - 2015-05-10']));
         $this->dateTimeFormatter->expects($this->exactly(4))
             ->method('formatDate')
             ->will($this->onConsecutiveCalls('2015-05-10', '2015-05-15', '2015-05-05', '2015-05-10'));
@@ -213,11 +184,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $orderRepository->expects($this->at(0))
             ->method('getRevenueOverTime')
-            ->with($this->dateHelper, $from, $to)
+            ->with($this->aclHelper, $this->dateHelper, $from, $to)
             ->will($this->returnValue($sourceData[0]));
         $orderRepository->expects($this->at(1))
             ->method('getRevenueOverTime')
-            ->with($this->dateHelper, $previousFrom, $previousTo)
+            ->with($this->aclHelper, $this->dateHelper, $previousFrom, $previousTo)
             ->will($this->returnValue($sourceData[1]));
         $this->registry->expects($this->any())
             ->method('getRepository')
