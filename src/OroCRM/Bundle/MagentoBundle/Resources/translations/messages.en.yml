@@ -17,6 +17,24 @@ orocrm:
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
                 month: Month
+            e_commerce_statistic:
+                no_available_metrics: No available metrics
+                no_changes: No changes
+                title: Ecommerce Statistic
+                description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
+                sub_widgets.label: Metrics
+                revenue.label: Revenue
+                orders_number.label: Orders placed
+                discounted_orders_percent.label: Discounted orders
+                new_customers_count.label: New customers
+                returning_customers_count.label: Returning customers
+                average_order_value.label: Average order value
+                abandoned_revenue.label: Abandoned revenue
+                abandoned_count.label: Abandoned carts
+                abandon_rate.label: Abandon rate
+                site_visits.label: Site visits
+                order_conversion.label: Order conversion rate
+                customer_conversion.label: Customer conversion rate
         datagrid:
             actions:
                 view:
