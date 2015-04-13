@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
-use Oro\Bundle\ChartBundle\Model\ConfigProvider;
-
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\ChartBundle\Model\ConfigProvider;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
 
@@ -31,16 +31,16 @@ class CustomerDataProvider
 
     /**
      * @param ManagerRegistry $registry
-     * @param AclHelper $aclHelper
-     * @param ConfigProvider $configProvider
+     * @param AclHelper       $aclHelper
+     * @param ConfigProvider  $configProvider
      */
     public function __construct(
         ManagerRegistry $registry,
         AclHelper $aclHelper,
         ConfigProvider $configProvider
     ) {
-        $this->registry   = $registry;
-        $this->aclHelper  = $aclHelper;
+        $this->registry       = $registry;
+        $this->aclHelper      = $aclHelper;
         $this->configProvider = $configProvider;
     }
 
@@ -58,34 +58,89 @@ class CustomerDataProvider
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
 
         $utcTimezone = new \DateTimeZone('UTC');
-        $now  = new \DateTime('now', $utcTimezone);
-        $past = clone $now;
-        $past = $past->sub(new \DateInterval("P11M"));
-        $past = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $utcTimezone);
+        $now         = new \DateTime('now', $utcTimezone);
+        $past        = clone $now;
+        $past        = $past->sub(new \DateInterval('P11M'));
+        $past        = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $utcTimezone);
 
         $past->setTime(0, 0, 0);
-
-        $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
-        $dates      = [];
-        $items      = [];
 
         // get all integration channels
         $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
         $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, null, $channelIds);
+        $now        = $this->getMaxDate($data);
+        $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
+        $dates      = $this->getDatesFromPeriod($datePeriod);
+        $items      = $this->buildItemsList($data, $channels, $dates);
 
-        // create dates by date period
+        $chartOptions = array_merge_recursive(
+            ['name' => 'multiline_chart'],
+            $this->configProvider->getChartConfig('new_web_customers')
+        );
+
+        return $viewBuilder->setOptions($chartOptions)
+            ->setArrayData($items)
+            ->getView();
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return \DateTime
+     */
+    protected function getMaxDate(array $data)
+    {
+        $maxYear  = 0;
+        $maxMonth = 0;
+
+        foreach ($data as $row) {
+            $iterationDate = strtotime(sprintf('%s-%s-01', $row['yearCreated'], $row['monthCreated']));
+            $maxDate       = strtotime(sprintf('%s-%s-01', $maxYear, $maxMonth));
+
+            if ($iterationDate > $maxDate) {
+                $maxYear  = (int)$row['yearCreated'];
+                $maxMonth = (int)$row['monthCreated'];
+            }
+        }
+
+        return new \DateTime(sprintf('%s-%s-01', $maxYear, $maxMonth + 1));
+    }
+
+    /**
+     * @param $datePeriod
+     *
+     * @return array
+     */
+    protected function getDatesFromPeriod($datePeriod)
+    {
+        $result = [];
+
         /** @var \DateTime $dt */
         foreach ($datePeriod as $dt) {
-            $key = $dt->format('Y-m');
-            $dates[$key] = [
+            $key          = $dt->format('Y-m');
+            $result[$key] = [
                 'month_year' => sprintf('%s-01', $key),
                 'cnt'        => 0
             ];
         }
 
+        return $result;
+    }
+
+    /**
+     * @param array $data
+     * @param array $channels
+     * @param array $dates
+     *
+     * @return array
+     */
+    protected function buildItemsList(array $data, array $channels, array $dates)
+    {
+        $items = [];
+
         foreach ($data as $row) {
-            $key         = date("Y-m", strtotime(sprintf('%s-%s', $row['yearCreated'], $row['monthCreated'])));
+            $key         = date('Y-m', strtotime(sprintf('%s-%s', $row['yearCreated'], $row['monthCreated'])));
             $channelId   = (int)$row['channelId'];
             $channelName = $channels[$channelId]['name'];
 
@@ -100,13 +155,6 @@ class CustomerDataProvider
             $items[$channelName] = array_values($item);
         }
 
-        $chartOptions = array_merge_recursive(
-            ['name' => 'multiline_chart'],
-            $this->configProvider->getChartConfig('new_web_customers')
-        );
-
-        return $viewBuilder->setOptions($chartOptions)
-            ->setArrayData($items)
-            ->getView();
+        return $items;
     }
 }
