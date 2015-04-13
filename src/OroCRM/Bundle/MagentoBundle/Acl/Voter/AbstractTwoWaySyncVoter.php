@@ -51,25 +51,6 @@ abstract class AbstractTwoWaySyncVoter extends AbstractEntityVoter
     /**
      * {@inheritdoc}
      */
-    protected function getPermissionForAttribute($class, $identifier, $attribute)
-    {
-        if (is_a($this->object, $this->className, true)
-            && $this->object->getChannel()
-            && !$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId(), false)
-        ) {
-            return self::ACCESS_DENIED;
-        }
-
-        if (!$this->settingsProvider->hasApplicableChannels()) {
-            return self::ACCESS_DENIED;
-        }
-
-        return self::ACCESS_ABSTAIN;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function getEntityIdentifier($object)
     {
         $identifier = parent::getEntityIdentifier($object);
