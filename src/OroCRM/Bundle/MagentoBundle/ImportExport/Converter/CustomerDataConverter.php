@@ -53,6 +53,8 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['gender'] = $this->getOroGender($importedRecord['gender']);
         }
 
+        unset($importedRecord['password']);
+
         return $importedRecord;
     }
 
