@@ -18,6 +18,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\IdentifierToReferenceFilter;
 
 /**
  * @RouteResource("opportunity")
@@ -40,6 +41,12 @@ class OpportunityController extends RestController implements ClassResourceInter
      *      nullable=true,
      *      description="Number of items per page. defaults to 10."
      * )
+     * @QueryParam(
+     *     name="contactId",
+     *     requirements="\d+",
+     *     nullable=true,
+     *     description="Id of contact"
+     * )
      * @ApiDoc(
      *      description="Get all opportunities",
      *      resource=true
@@ -49,10 +56,20 @@ class OpportunityController extends RestController implements ClassResourceInter
      */
     public function cgetAction()
     {
-        $page = (int) $this->getRequest()->get('page', 1);
+        $page  = (int) $this->getRequest()->get('page', 1);
         $limit = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
 
-        return $this->handleGetListRequest($page, $limit);
+        $contactIdFilter  = new IdentifierToReferenceFilter($this->getDoctrine(), 'OroCRMContactBundle:Contact');
+        $filterParameters = [
+            'contactId' => $contactIdFilter,
+        ];
+        $map              = [
+            'contactId' => 'contact',
+        ];
+
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
+
+        return $this->handleGetListRequest($page, $limit, $criteria);
     }
 
     /**

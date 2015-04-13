@@ -8,7 +8,7 @@ oro_chart:
                 required: true
                 default_type: string
                 type: month
-                field_name: month
+                field_name: date
             value:
                 name: value
                 label: orocrm.magento.dashboard.average_order_amount_chart.order_amount
@@ -16,7 +16,11 @@ oro_chart:
                 default_type: decimal
                 type: currency
                 field_name: amount
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig
+
     new_web_customers:
         label: oro.chart.multiline_chart.label
         data_schema:
@@ -26,11 +30,14 @@ oro_chart:
                 required: true
                 default_type: string
                 type: month
-                field_name: month_year
+                field_name: date
             value:
                 name: value
                 label: orocrm.magento.dashboard.new_magento_customers_chart.customer_count
                 required: true
                 default_type: integer
                 field_name: cnt
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig

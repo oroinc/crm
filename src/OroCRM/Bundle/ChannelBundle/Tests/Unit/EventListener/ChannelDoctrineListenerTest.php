@@ -13,6 +13,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Customer;
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeHistoryRepository;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer as CustomerEntity;
 
 class ChannelDoctrineListenerTest extends OrmTestCase
 {
@@ -166,5 +167,43 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         $reflectionProperty->setValue($this->channelDoctrineListener, $queue);
 
         $this->channelDoctrineListener->postFlush($args);
+    }
+
+    public function testScheduleEntityUpdate()
+    {
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+
+        $customer = new CustomerEntity();
+        $customer
+            ->setAccount($account)
+            ->setDataChannel($channel);
+
+        $this->uow->expects($this->exactly(2))->method('isScheduledForDelete')->willReturn(false);
+
+        $reflectionProperty = new \ReflectionProperty(get_class($this->channelDoctrineListener), 'uow');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->channelDoctrineListener, $this->uow);
+
+        $this->assertAttributeEmpty('queued', $this->channelDoctrineListener);
+        $this->channelDoctrineListener->scheduleEntityUpdate($customer, $account, $channel);
+        $this->assertAttributeNotEmpty('queued', $this->channelDoctrineListener);
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage UOW is missing, listener is not initialized
+     */
+    public function testScheduleEntityUpdateFailed()
+    {
+        $account = $this->getMock('OroCRM\Bundle\AccountBundle\Entity\Account');
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+
+        $customer = new CustomerEntity();
+        $customer
+            ->setAccount($account)
+            ->setDataChannel($channel);
+
+        $this->channelDoctrineListener->scheduleEntityUpdate($customer, $account, $channel);
     }
 }

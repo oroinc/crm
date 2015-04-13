@@ -14,7 +14,7 @@ class CustomerActionPermissionProvider extends NewsletterSubscriberPermissionPro
      */
     public function getCustomerActionsPermissions(ResultRecordInterface $record, array $actions)
     {
-        $isTwoWaySyncEnabled = $this->isTwoWaySyncEnable($record);
+        $isTwoWaySyncEnabled = $this->isChannelApplicable($record);
         $permissions = parent::getActionsPermissions($record, $actions);
 
         if (array_key_exists('update', $permissions)) {

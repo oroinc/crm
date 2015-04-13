@@ -30,6 +30,10 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
             $importedRecord['customer:channel:id'] = $this->context->getOption('channel');
         }
 
+        if (array_key_exists('customer_id', $importedRecord)) {
+            $importedRecord['customer_id'] = filter_var($importedRecord['customer_id'], FILTER_SANITIZE_NUMBER_INT);
+        }
+
         return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
 

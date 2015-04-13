@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider;
 
 class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
@@ -18,13 +18,13 @@ class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermi
     {
         parent::setUp();
 
-        $this->provider = new CustomerActionPermissionProvider($this->doctrineHelper, '\stdClass');
+        $this->provider = new CustomerActionPermissionProvider($this->settingsProvider, '\stdClass');
     }
 
     /**
      * @param ResultRecordInterface $record
      * @param array $actions
-     * @param \PHPUnit_Framework_MockObject_MockObject|Channel $channel
+     * @param bool $isChannelApplicable
      * @param array $expected
      *
      * @dataProvider permissionsDataProvider
@@ -33,22 +33,12 @@ class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermi
         ResultRecordInterface $record,
         array $actions,
         array $expected,
-        $channel = null
+        $isChannelApplicable = false
     ) {
-        $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $repository
+        $this->settingsProvider
             ->expects($this->any())
-            ->method('find')
-            ->with($this->isType('integer'))
-            ->will($this->returnValue($channel));
-
-        $this->doctrineHelper
-            ->expects($this->any())
-            ->method('getEntityRepository')
-            ->will($this->returnValue($repository));
+            ->method('isChannelApplicable')
+            ->will($this->returnValue($isChannelApplicable));
 
         $this->assertEquals($expected, $this->provider->getCustomerActionsPermissions($record, $actions));
     }
@@ -60,41 +50,29 @@ class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermi
     {
         return [
             'no channel id' => [
-                new ResultRecord([false]),
-                ['create' => [], 'update' => []],
-                ['create' => true, 'update' => false],
-                null
-            ],
-            'actions are empty' => [
                 new ResultRecord([]),
-                [],
-                [],
-                null
+                ['create' => [], 'update' => []],
+                ['create' => true, 'update' => false]
             ],
+            'actions are empty' => [new ResultRecord([]), [], []],
             'two way sync disabled' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => [], 'update' => []],
                 ['create' => true, 'update' => false],
-                $this->getChannel()
+                false
 
-            ],
-            'two way sync enabled' => [
-                new ResultRecord(['channelId' => 1]),
-                ['create' => [], 'update' => []],
-                ['create' => true, 'update' => true],
-                $this->getChannel(true)
             ],
             'missing update action' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => []],
                 ['create' => true],
-                null
+                true
             ],
-            'empty settings' => [
+            'channel applicable' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => [], 'update' => []],
-                ['create' => true, 'update' => false],
-                $this->getChannel(null)
+                ['create' => true, 'update' => true],
+                true
             ]
         ];
     }
