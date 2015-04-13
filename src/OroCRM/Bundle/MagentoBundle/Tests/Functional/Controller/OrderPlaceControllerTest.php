@@ -282,7 +282,7 @@ class OrderPlaceControllerTest extends WebTestCase
             'customer_email'       => 'valibaba@pochta.com',
             'customer_firstname'   => 'asdf',
             'customer_lastname'    => 'asdf',
-            'quote_id'             => '368',
+            'quote_id'             => '100',
             'is_virtual'           => '0',
             'customer_group_id'    => '1',
             'customer_note_notify' => '0',

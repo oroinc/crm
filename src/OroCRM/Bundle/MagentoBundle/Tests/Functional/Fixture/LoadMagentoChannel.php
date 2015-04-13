@@ -467,7 +467,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setChannel($this->integration);
         $order->setDataChannel($this->channel);
         $order->setStatus('open');
-        $order->setIncrementId('one');
+        $order->setIncrementId('100000307');
         $order->setCreatedAt(new \DateTime('now'));
         $order->setUpdatedAt(new \DateTime('now'));
         $order->setCart($cart);
@@ -482,7 +482,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setTotalRefundedAmount(4);
         $order->setTotalCanceledAmount(0);
         $order->setShippingMethod('some unique shipping method');
-        $order->setRemoteIp('unique ip');
+        $order->setRemoteIp('127.0.0.1');
         $order->setGiftMessage('some very unique gift message');
         $order->setOwner($this->getUser());
         $order->setOrganization($this->organization);
