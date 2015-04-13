@@ -94,8 +94,8 @@ class CustomerDataProvider
         $maxMonth = 0;
 
         foreach ($data as $row) {
-            $iterationDate = strtotime(sprintf('%s-%s-01', $row['yearCreated'], $row['monthCreated']));
-            $maxDate       = strtotime(sprintf('%s-%s-01', $maxYear, $maxMonth));
+            $iterationDate = strtotime(sprintf('%s-%s', $row['yearCreated'], $row['monthCreated']));
+            $maxDate       = strtotime(sprintf('%s-%s', $maxYear, $maxMonth));
 
             if ($iterationDate > $maxDate) {
                 $maxYear  = (int)$row['yearCreated'];
@@ -103,7 +103,7 @@ class CustomerDataProvider
             }
         }
 
-        return new \DateTime(sprintf('%s-%s-01', $maxYear, $maxMonth + 1));
+        return new \DateTime(sprintf('%s-%s', $maxYear, $maxMonth + 1));
     }
 
     /**
