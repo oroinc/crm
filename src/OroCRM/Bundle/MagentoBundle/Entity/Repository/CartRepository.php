@@ -44,14 +44,14 @@ class CartRepository extends EntityRepository
         AclHelper $aclHelper = null
     ) {
         if (!$workflow) {
-            return array('items' => array(), 'nozzleSteps' => array());
+            return ['items' => [], 'nozzleSteps' => []];
         }
 
         $steps = $workflow->getStepManager()->getOrderedSteps();
 
         // regular and final steps should be calculated separately
-        $regularSteps = array();
-        $finalSteps   = array();
+        $regularSteps = [];
+        $finalSteps   = [];
         foreach ($steps as $step) {
             if (!in_array($step->getName(), $this->excludedSteps)) {
                 if ($step->isFinal()) {
@@ -67,16 +67,16 @@ class CartRepository extends EntityRepository
         $finalStepsData   = $this->getStepData($finalSteps, $dateFrom, $dateTo, $aclHelper);
 
         // final calculation
-        $data = array();
+        $data = [];
         foreach ($steps as $step) {
-            $stepName  = $step->getName();
+            $stepName = $step->getName();
             if (!in_array($stepName, $this->excludedSteps)) {
                 if ($step->isFinal()) {
                     $stepValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-                    $data[] = array('label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true);
+                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true];
                 } else {
                     $stepValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
-                    $data[] = array('label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false);
+                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false];
                 }
             }
         }
@@ -97,7 +97,7 @@ class CartRepository extends EntityRepository
         \DateTime $dateTo = null,
         AclHelper $aclHelper = null
     ) {
-        $stepData = array();
+        $stepData = [];
 
         if (!$steps) {
             return $stepData;
@@ -175,5 +175,104 @@ class CartRepository extends EntityRepository
             ->setParameter('statusName', $status);
 
         return new BufferedQueryResultIterator($qb);
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getAbandonedRevenueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb = $this->getAbandonedQB($start, $end);
+        $qb->select('SUM(cart.grandTotal) as val');
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getAbandonedCountByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb = $this->getAbandonedQB($start, $end);
+        $qb->select('COUNT(cart.grandTotal) as val');
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getAbandonedRateByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb = $this->getAbandonedQB($start, $end);
+        $qb->select('COUNT(cart.grandTotal) as val');
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return float|null
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getAbandonRateByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $result = null;
+
+        $qb = $this->createQueryBuilder('cart');
+        $qb ->join('cart.status', 'cstatus')
+            ->select('SUM(cart.grandTotal) as val')
+            ->andWhere('cstatus.name = :statusName')
+            ->setParameter('statusName', 'open')
+            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+        $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
+        $allCards = $allCards['val'] ? : 0;
+
+        if ($allCards) {
+            $abandonedCartsCount = $this->getAbandonedCountByPeriod($start, $end, $aclHelper);
+
+            $result = $abandonedCartsCount / $allCards;
+        }
+
+        return $result;
+    }
+
+    protected function getAbandonedQB(\DateTime $start, \DateTime $end)
+    {
+        $qb = $this->createQueryBuilder('cart');
+        return $qb ->join('cart.status', 'cstatus')
+            ->andWhere('cstatus.name = :statusName')
+            ->setParameter('statusName', 'open')
+            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end)
+            ->andWhere(
+                $qb->expr()->not(
+                    $qb->expr()->exists(
+                        $this->_em->getRepository('OroCRMMagentoBundle:Order')
+                            ->createQueryBuilder('mOrder')
+                            ->where('mOrder.cart = cart')
+                    )
+                )
+            );
     }
 }
