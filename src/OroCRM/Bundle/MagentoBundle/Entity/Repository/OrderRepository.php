@@ -150,24 +150,27 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
      * @return int
      */
-    public function getUniqueCustomersOrdersCount(DateTime $from, DateTime $to)
+    public function getUniqueBuyersCount(AclHelper $aclHelper, DateTime $from, DateTime $to)
     {
         $qb = $this->createQueryBuilder('o');
 
         try {
-            return (int) $qb
+            $qb
                 ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
                 ->andWhere($qb->expr()->between('o.updatedAt', ':from', ':to'))
                 ->andwhere('o.totalPaidAmount IS NOT NULL')
                 ->setParameters([
                     'from' => $from,
                     'to'   => $to,
-                ])
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }

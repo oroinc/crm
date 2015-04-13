@@ -6,14 +6,15 @@ use DateTime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
 use OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider;
-
-use Symfony\Component\Translation\TranslatorInterface;
 
 class PurchaseDataProvider
 {
@@ -38,21 +39,29 @@ class PurchaseDataProvider
     protected $translator;
 
     /**
+     * @var AclHelper
+     */
+    protected $aclHelper;
+
+    /**
      * @param ManagerRegistry $registry
      * @param ConfigProvider $configProvider
      * @param TrackingVisitProvider $trackingVisitProvider
      * @param TranslatorInterface $translator
+     * @param AclHelper $aclHelper
      */
     public function __construct(
         ManagerRegistry $registry,
         ConfigProvider $configProvider,
         TrackingVisitProvider $trackingVisitProvider,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        AclHelper $aclHelper
     ) {
         $this->registry = $registry;
         $this->configProvider = $configProvider;
         $this->trackingVisitProvider = $trackingVisitProvider;
         $this->translator = $translator;
+        $this->aclHelper = $aclHelper;
     }
 
     /**
@@ -77,12 +86,12 @@ class PurchaseDataProvider
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.added_to_cart'),
-                'value'    => $this->getCartRepository()->getUniqueCustomerCarts($from, $to),
+                'value'    => $this->getCartRepository()->getCustomersCountWhatMakeCarts($this->aclHelper, $from, $to),
                 'isNozzle' => false,
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
-                'value'    => $this->getOrderRepository()->getUniqueCustomersOrdersCount($from, $to),
+                'value'    => $this->getOrderRepository()->getUniqueBuyersCount($this->aclHelper, $from, $to),
                 'isNozzle' => false,
             ]
         ];

@@ -141,6 +141,7 @@ services:
         class: %orocrm_magento.provider.tracking_visit.class%
         arguments:
             - @doctrine
+            - @oro_security.acl_helper
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -374,6 +375,7 @@ services:
             - @oro_chart.config_provider
             - @orocrm_magento.provider.tracking_visit
             - @translator
+            - @oro_security.acl_helper
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider

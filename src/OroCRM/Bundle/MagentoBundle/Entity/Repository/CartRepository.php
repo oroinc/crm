@@ -181,23 +181,26 @@ class CartRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
      * @return int
      */
-    public function getUniqueCustomerCarts(DateTime $from, DateTime $to)
+    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, DateTime $from, DateTime $to)
     {
         $qb = $this->createQueryBuilder('c');
 
         try {
-            return (int) $qb
+            $qb
                 ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
                 ->andWhere($qb->expr()->between('c.updatedAt', ':from', ':to'))
                 ->setParameters([
                     'from' => $from,
                     'to'   => $to,
-                ])
-                ->getQuery()
-                ->getSingleScalarResult()
-            ;
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }

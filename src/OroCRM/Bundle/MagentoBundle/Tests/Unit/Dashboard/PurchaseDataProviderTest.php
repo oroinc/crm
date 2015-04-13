@@ -119,7 +119,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $cartRepository->expects($this->once())
-            ->method('getUniqueCustomerCarts')
+            ->method('getCustomersCountWhatMakeCarts')
             ->will($this->returnValue(30));
         $this->registry->expects($this->at(0))
             ->method('getRepository')
@@ -129,7 +129,7 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderRepository->expects($this->once())
-            ->method('getUniqueCustomersOrdersCount')
+            ->method('getUniqueBuyersCount')
             ->will($this->returnValue(13));
         $this->registry->expects($this->at(1))
             ->method('getRepository')
