@@ -54,7 +54,13 @@ class RestContactApiTest extends WebTestCase
                 'accounts'    => [$account->getId()],
                 'groups'      => $contactGroupIds,
                 'assignedTo'  => $user->getId(),
-                'createdAt'   => '2014-03-04T20:00:00+00:00'
+                'createdAt'   => '2014-03-04T20:00:00+00:00',
+                'phones'      => [
+                    [
+                        'phone'   => '123-45-67',
+                        'primary' => 1
+                    ],
+                ],
             ]
         ];
         $this->client->request('POST', $this->getUrl('oro_api_post_contact'), $request);
@@ -163,6 +169,12 @@ class RestContactApiTest extends WebTestCase
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
 
         $this->client->request('GET', $baseUrl . '?assigneeUsername<>' . self::USER_NAME);
+        $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
+
+        $this->client->request('GET', $baseUrl . '?phone=' . $requestData['contact']['phones'][0]['phone']);
+        $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
+
+        $this->client->request('GET', $baseUrl . '?phone<>' .$requestData['contact']['phones'][0]['phone']);
         $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
     }
 
