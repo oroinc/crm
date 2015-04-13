@@ -58,8 +58,7 @@ class CustomerDataProvider
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
 
         $utcTimezone = new \DateTimeZone('UTC');
-        $now         = new \DateTime('now', $utcTimezone);
-        $past        = clone $now;
+        $past        = new \DateTime('now', $utcTimezone);
         $past        = $past->sub(new \DateInterval('P11M'));
         $past        = \DateTime::createFromFormat('Y-m-d', $past->format('Y-m-01'), $utcTimezone);
 
@@ -69,8 +68,8 @@ class CustomerDataProvider
         $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, 'magento');
         $channelIds = array_keys($channels);
         $data       = $customerRepository->getGroupedByChannelArray($this->aclHelper, $past, null, $channelIds);
-        $now        = $this->getMaxDate($data);
-        $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $now);
+        $latestDate = $this->getMaxDate($data);
+        $datePeriod = new \DatePeriod($past, new \DateInterval('P1M'), $latestDate);
         $dates      = $this->getDatesFromPeriod($datePeriod);
         $items      = $this->buildItemsList($data, $channels, $dates);
 
