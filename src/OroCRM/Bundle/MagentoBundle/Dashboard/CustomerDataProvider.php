@@ -103,7 +103,7 @@ class CustomerDataProvider
             }
         }
 
-        return new \DateTime(sprintf('%s-%s', $maxYear, $maxMonth + 1));
+        return new \DateTime(strtotime(sprintf('%s-%s', $maxYear, $maxMonth + 1)));
     }
 
     /**
