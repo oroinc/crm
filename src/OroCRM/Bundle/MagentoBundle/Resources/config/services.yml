@@ -92,7 +92,10 @@ parameters:
 
     orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
 
-    orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\TwoWaySyncVoter
+    orocrm_magento.security.acl.voter.two_way_sync.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter
+    orocrm_magento.security.acl.voter.newletter_subscriber.class:           OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
+    orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\CustomerVoter
+
     orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
     orocrm_magento.datagrid.newsletter_subscriber_provider.class:           OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
 
@@ -110,6 +113,7 @@ parameters:
 
     orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
 
+    orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -450,14 +454,15 @@ services:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
 
     orocrm_magento.security.acl.voter.two_way_sync:
-        class: %orocrm_magento.security.acl.voter.customer.class%
+        class: %orocrm_magento.security.acl.voter.two_way_sync.class%
         abstract: true
         arguments:
             - @oro_entity.doctrine_helper
         calls:
-            - [setChannelClassName, [%oro_integration.entity.class%]]
+            - [setSettingsProvider, [@orocrm_magento.model.channel_settings_provider]]
 
     orocrm_magento.security.acl.voter.customer:
+        class: %orocrm_magento.security.acl.voter.customer.class%
         parent: orocrm_magento.security.acl.voter.two_way_sync
         calls:
             - [setClassName, [%orocrm_magento.entity.customer.class%]]
@@ -465,6 +470,7 @@ services:
             - { name: security.voter, priority: 500 }
 
     orocrm_magento.security.acl.voter.newletter_subscriber:
+        class: %orocrm_magento.security.acl.voter.newletter_subscriber.class%
         parent: orocrm_magento.security.acl.voter.two_way_sync
         calls:
             - [setClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
@@ -474,8 +480,7 @@ services:
     orocrm_magento.datagrid.customer_actions_provider:
         class: %orocrm_magento.datagrid.customer_actions_provider.class%
         arguments:
-            - @oro_entity.doctrine_helper
-            - %oro_integration.entity.class%
+            - @orocrm_magento.model.channel_settings_provider
 
     orocrm_magento.state_manager:
         class: %orocrm_magento.state_manager.class%
@@ -488,8 +493,7 @@ services:
     orocrm_magento.datagrid.newsletter_subscriber_provider:
         class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
         arguments:
-            - @oro_entity.doctrine_helper
-            - %oro_integration.entity.class%
+            - @orocrm_magento.model.channel_settings_provider
 
     orocrm_magento.model.newsletter_subscriber_manager:
         class: %orocrm_magento.model.newsletter_subscriber_manager.class%
@@ -546,6 +550,12 @@ services:
             - @orocrm_magento.wsdl_manager
         tags:
             - { name: doctrine.event_listener, event: preRemove }
+
+    orocrm_magento.model.channel_settings_provider:
+        class: %orocrm_magento.model.channel_settings_provider.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - %oro_integration.entity.class%
 
     orocrm_magento.provider.big_number:
         class: %orocrm_magento.provider.big_number.class%

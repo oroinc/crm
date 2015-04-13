@@ -1,5 +1,5 @@
-"Task created successfully": "Task created successfully"
-"Create task": "Create task"
+"Task created successfully": Task created successfully
+"Create task": Create task
 orocrm:
     task:
         assigned_tasks_widget:

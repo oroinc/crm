@@ -16,7 +16,11 @@ oro_chart:
                 default_type: decimal
                 type: currency
                 field_name: amount
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig
+
     new_web_customers:
         label: oro.chart.multiline_chart.label
         data_schema:
@@ -33,4 +37,7 @@ oro_chart:
                 required: true
                 default_type: integer
                 field_name: cnt
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig

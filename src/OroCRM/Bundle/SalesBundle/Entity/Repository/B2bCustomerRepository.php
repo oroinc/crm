@@ -11,16 +11,14 @@ class B2bCustomerRepository extends EntityRepository
     const VALUABLE_STATUS = 'won';
 
     /**
-     * Calculates new lifetime value for customer
+     * Calculates the lifetime value for the given customer
      *
-     * @param B2bCustomer $b2bCustomer
+     * @param B2bCustomer $customer
      *
-     * @return bool Returns true if value was changed, false otherwise
+     * @return float
      */
-    public function calculateLifetime(B2bCustomer $b2bCustomer)
+    public function calculateLifetimeValue(B2bCustomer $customer)
     {
-        $currentLifetime = $b2bCustomer->getLifetime();
-
         $qb = $this->getEntityManager()->getRepository('OroCRMSalesBundle:Opportunity')
             ->createQueryBuilder('o');
         $qb->select('SUM(o.closeRevenue)');
@@ -28,10 +26,26 @@ class B2bCustomerRepository extends EntityRepository
         $qb->innerJoin('o.status', 's');
         $qb->andWhere('c = :customer');
         $qb->andWhere('s.name = :status');
-        $qb->setParameter('customer', $b2bCustomer);
+        $qb->setParameter('customer', $customer);
         $qb->setParameter('status', self::VALUABLE_STATUS);
 
-        $b2bCustomer->setLifetime($qb->getQuery()->getSingleScalarResult());
+        return (float)$qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Calculates new lifetime value for customer
+     *
+     * @param B2bCustomer $b2bCustomer
+     *
+     * @return bool Returns true if value was changed, false otherwise
+     *
+     * @deprecated Use {@see calculateLifetimeValue} instead
+     */
+    public function calculateLifetime(B2bCustomer $b2bCustomer)
+    {
+        $currentLifetime = $b2bCustomer->getLifetime();
+
+        $b2bCustomer->setLifetime($this->calculateLifetimeValue($b2bCustomer));
 
         return $b2bCustomer->getLifetime() != $currentLifetime;
     }

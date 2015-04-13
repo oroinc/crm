@@ -22,7 +22,8 @@ datagrid:
 #                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
                     - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
-                    - c.originId as customerOriginId
+                    - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -1360,7 +1361,8 @@ datagrid:
             query:
                 select:
                     - newsletterSubscriber.id
-                    - customer.originId as customerOriginId
+                    - customer.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
+                    - customer.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - dataChannel.name as channelName
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
