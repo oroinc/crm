@@ -103,7 +103,7 @@ class CustomerDataProvider
             }
         }
 
-        $result = (empty($maxYear) && empty($maxMonth)) ? '' : sprintf('%s-%s', $maxYear, $maxMonth + 1);
+        $result = (empty($maxYear) && empty($maxMonth)) ? 'now' : sprintf('%s-%s', $maxYear, $maxMonth + 1);
 
         return new \DateTime($result);
     }
