@@ -194,7 +194,7 @@ class CartRepository extends EntityRepository
         try {
             $qb
                 ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
-                ->andWhere($qb->expr()->between('c.updatedAt', ':from', ':to'))
+                ->andWhere($qb->expr()->between('c.createdAt', ':from', ':to'))
                 ->setParameters([
                     'from' => $from,
                     'to'   => $to,
