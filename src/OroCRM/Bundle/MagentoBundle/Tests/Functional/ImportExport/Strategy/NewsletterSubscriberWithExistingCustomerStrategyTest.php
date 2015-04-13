@@ -71,7 +71,7 @@ class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
         /** @var NewsletterSubscriber $newsletterSubscriber */
         $newsletterSubscriber = $this->getReference('newsletter_subscriber2');
         $customer = new Customer();
-        $originId = uniqid();
+        $originId = time();
         $customer->setOriginId($originId);
         $newsletterSubscriber->setCustomer($customer);
 
