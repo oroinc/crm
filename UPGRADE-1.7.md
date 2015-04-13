@@ -33,3 +33,9 @@ To inject dependency use method setManagerRegistry. This change affects all deri
 
 - Magento Customer import now works on top of Data Converters and Strategy
 - Composite denormalizers removed in favour of TreeDataConverters
+
+- Added `oro:magento:lifetime:recalculate` CLI command that can be used to force recalculation of lifetime values for Magento customers and accounts
+
+####OroCRMSalesBundle:
+- The `calculateLifetime` method of `OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository` is deprecated. Use `calculateLifetimeValue` method instead
+- Added `oro:b2b:lifetime:recalculate` CLI command that can be used to force recalculation of lifetime values for B2B customers and accounts
