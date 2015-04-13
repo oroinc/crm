@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
+use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderAddress;
@@ -65,6 +69,24 @@ class OrderAddress extends ExtendOrderAddress
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      */
     protected $phone;
+
+    /**
+     * @var Country
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Country")
+     * @ORM\JoinColumn(name="country_code", referencedColumnName="iso2_code")
+     * @Soap\ComplexType("string", nillable=false)
+     */
+    protected $country;
+
+    /**
+     * @var Region
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Region")
+     * @ORM\JoinColumn(name="region_code", referencedColumnName="combined_code")
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $region;
 
     /**
      * Unset no used fields from mapping

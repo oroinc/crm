@@ -17,7 +17,8 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
             'customer_id' => 'customer:originId',
             'subscriber_email' => 'email',
             'subscriber_status' => 'status:id',
-            'subscriber_confirm_code' => 'confirmCode'
+            'subscriber_confirm_code' => 'confirmCode',
+            'store_id' => 'store:originId'
         ];
     }
 
@@ -28,6 +29,7 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
     {
         if ($this->context && $this->context->hasOption('channel')) {
             $importedRecord['customer:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['store:channel:id'] = $this->context->getOption('channel');
         }
 
         if (array_key_exists('customer_id', $importedRecord)) {

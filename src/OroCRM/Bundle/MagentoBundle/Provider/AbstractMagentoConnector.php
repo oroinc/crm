@@ -32,6 +32,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     /** @var ManagerRegistry */
     protected $managerRegistry;
 
+    /** @var string */
+    protected $className;
+
     /**
      * @param ContextRegistry          $contextRegistry
      * @param LoggerStrategy           $logger
@@ -54,6 +57,26 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     public function setManagerRegistry(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
+    }
+
+    /**
+     * @param string $className
+     */
+    public function setClassName($className)
+    {
+        $this->className = $className;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getImportEntityFQCN()
+    {
+        if (!$this->className) {
+            throw new \InvalidArgumentException(sprintf('Entity FQCN is missing for "%s" connector', $this->getType()));
+        }
+
+        return $this->className;
     }
 
     /**

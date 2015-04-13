@@ -16,7 +16,7 @@ class StoresSoapIterator extends AbstractLoadeableSoapIterator
     protected function getData()
     {
         $data   = [];
-        $result = $this->transport->call(SOAPTransport::ACTION_STORE_LIST);
+        $result = $this->transport->call(SoapTransport::ACTION_STORE_LIST);
         $result = $this->processCollectionResponse($result);
 
         if (!empty($result) && is_array($result)) {

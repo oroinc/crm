@@ -109,6 +109,10 @@ orocrm:
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
+            store:
+                label: Store Connector
+            website:
+                label: Website Connector
 
         customer:
             entity_label:        Magento Customer
@@ -421,6 +425,7 @@ orocrm:
             country_iso3_code.label: Country ISO3 Code
             region_name.label:       Region
             region_code.label:       Region ISO code
+            channel.label:       Integration
 
         orderaddress:
             entity_label:        Magento Order Address
@@ -442,7 +447,6 @@ orocrm:
             owner.label:         Owner
             types.label:         Types
             street.label:        Street
-
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code
             country_iso3_code.label: Country ISO3 Code

@@ -26,6 +26,10 @@ class CustomerAddressDataConverter extends AbstractAddressDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
+        if ($this->context && $this->context->hasOption('channel')) {
+            $importedRecord['owner:channel:id'] = $this->context->getOption('channel');
+        }
+
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
 
         if (!empty($importedRecord['is_default_shipping'])) {

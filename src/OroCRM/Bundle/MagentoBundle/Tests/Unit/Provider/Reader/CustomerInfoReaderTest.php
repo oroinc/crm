@@ -42,34 +42,20 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
             ->will(
                 $this->returnCallback(
                     function ($customerId) {
-                        $object = new \stdClass();
-                        $object->origin_id = $customerId;
-                        $object->group_id = 0;
-                        $object->store_id = 0;
-                        $object->website_id = 0;
-
-                        return $object;
+                        return [
+                            'origin_id' => $customerId,
+                            'group_id' => 0,
+                            'store_id' => 0,
+                            'website_id' => 0
+                        ];
                     }
                 )
             );
 
-        $address = new \stdClass();
-        $address->zip = uniqid();
+        $address = ['zip' => uniqid()];
         $this->transport->expects($this->once())
             ->method('getCustomerAddresses')
             ->will($this->returnValue([$address]));
-
-        $this->transport->expects($this->atLeastOnce())
-            ->method('getDependencies')
-            ->will(
-                $this->returnValue(
-                    [
-                        'groups' => [['customer_group_id' => $originId]],
-                        'websites' => [['id' => $originId]],
-                        'stores' => [['website_id' => $originId]]
-                    ]
-                )
-            );
 
         $reader = $this->getReader();
         $reader->setStepExecution($this->stepExecutionMock);
@@ -81,11 +67,8 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
                 'store_id' => 0,
                 'website_id' => 0,
                 'addresses' => [
-                    ['zip' => $address->zip]
-                ],
-                'group' => ['customer_group_id' => $originId, 'originId' => $originId],
-                'store' => ['website_id' => $originId, 'originId' => 0],
-                'website' => ['id' => $originId, 'originId' => $originId]
+                    ['zip' => $address['zip']]
+                ]
             ],
             $reader->read()
         );
