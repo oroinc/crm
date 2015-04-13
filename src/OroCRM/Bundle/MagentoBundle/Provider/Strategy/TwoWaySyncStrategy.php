@@ -2,7 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Strategy;
 
-use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
+use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
+
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
+use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor;
+use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
@@ -16,16 +21,34 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
     ];
 
     /**
-     * @var DataConverterInterface
+     * @var StepExecutionAwareImportProcessor
      */
-    protected $dataConverter;
+    protected $importProcessor;
 
     /**
-     * @param DataConverterInterface $dataConverter
+     * @var StepExecutionAwareExportProcessor
      */
-    public function __construct(DataConverterInterface $dataConverter)
+    protected $exportProcessor;
+
+    /**
+     * @param StepExecutionAwareImportProcessor $importProcessor
+     * @param StepExecutionAwareExportProcessor $exportProcessor
+     */
+    public function __construct(
+        StepExecutionAwareImportProcessor $importProcessor,
+        StepExecutionAwareExportProcessor $exportProcessor
+    ) {
+        $this->importProcessor = $importProcessor;
+        $this->exportProcessor = $exportProcessor;
+    }
+
+    /**
+     * @param StepExecution $stepExecution
+     */
+    public function setStepExecution(StepExecution $stepExecution)
     {
-        $this->dataConverter = $dataConverter;
+        $this->importProcessor->setStepExecution($stepExecution);
+        $this->exportProcessor->setStepExecution($stepExecution);
     }
 
     /**
@@ -52,17 +75,13 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             return $remoteData;
         }
 
-        $importRemoteData = $this->dataConverter->convertToImportFormat($remoteData);
-        $remoteData = $this->dataConverter->convertToExportFormat($importRemoteData);
-
+        $remoteData = $this->normalize($remoteData);
         $oldValues = $this->getChangeSetValues($changeSet, 'old');
-        $newValues = $this->getChangeSetValues($changeSet, 'new');
-        $oldValues = $this->fillEmptyValues($oldValues, $newValues);
-        $snapshot = array_merge($localData, $oldValues);
-        $localChanges = array_keys($oldValues);
-        $remoteChanges = $this->getRemoteChanges($remoteData, $snapshot);
-
-        $conflicts = array_intersect($remoteChanges, $localChanges);
+        $oldValues = $this->fillEmptyValues($oldValues, $this->getChangeSetValues($changeSet, 'new'));
+        $snapshot = $this->getSnapshot($localData, $oldValues);
+        $localChanges = $this->getDiff($localData, $snapshot);
+        $remoteChanges = $this->getDiff($remoteData, $snapshot);
+        $conflicts = array_keys(array_intersect_key($remoteChanges, $localChanges));
 
         foreach (array_merge($conflicts, $additionalFields) as $conflict) {
             if (!array_key_exists($conflict, $remoteData)) {
@@ -78,7 +97,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             }
         }
 
-        $localDataForUpdate = array_diff($localChanges, $conflicts);
+        $localDataForUpdate = array_diff_key(array_keys($localChanges), $conflicts);
         foreach ($localDataForUpdate as $property) {
             $remoteData[$property] = $localData[$property];
         }
@@ -87,27 +106,59 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
     }
 
     /**
-     * @param array $remoteData
-     * @param array $snapshot
+     * @param array $baseData
+     * @param array $newData
      * @return array
      */
-    protected function getRemoteChanges(array $remoteData, array $snapshot)
+    protected function getDiff(array $baseData, array $newData)
     {
-        $remoteChanges = [];
-        foreach ($remoteData as $key => $remoteDataItem) {
-            if (!array_key_exists($key, $snapshot)) {
-                $remoteChanges[] = $key;
+        $array = [];
 
-                continue;
-            }
-            if ($snapshot[$key] != $remoteDataItem) {
-                $remoteChanges[] = $key;
-
-                continue;
+        foreach ($baseData as $baseKey => $baseValue) {
+            if (array_key_exists($baseKey, $newData)) {
+                if (is_array($baseValue)) {
+                    $diff = $this->getDiff($baseValue, $newData[$baseKey]);
+                    if (count($diff)) {
+                        $array[$baseKey] = $diff;
+                    }
+                } elseif ($baseValue != $newData[$baseKey]) {
+                    $array[$baseKey] = $baseValue;
+                }
+            } else {
+                $array[$baseKey] = $baseValue;
             }
         }
 
-        return $remoteChanges;
+        return $array;
+    }
+
+    /**
+     * @param array $localData
+     * @param array $oldValues
+     * @return array
+     */
+    protected function getSnapshot(array $localData, array $oldValues)
+    {
+        $object = $this->importProcessor->process($localData);
+
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+
+        foreach ($oldValues as $propertyName => $value) {
+            $propertyAccessor->setValue($object, $propertyName, $value);
+        }
+
+        return $this->exportProcessor->process($object);
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function normalize(array $data)
+    {
+        $object = $this->importProcessor->process($data);
+
+        return $this->exportProcessor->process($object);
     }
 
     /**
@@ -117,7 +168,8 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
      */
     protected function fillEmptyValues(array $oldValues, array $newValues)
     {
-        foreach (array_keys($newValues) as $key) {
+        $keysToCheck = array_keys($newValues);
+        foreach ($keysToCheck as $key) {
             if (!array_key_exists($key, $oldValues)) {
                 $oldValues[$key] = null;
             }
@@ -144,6 +196,6 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             $changeSet
         );
 
-        return array_filter($this->dataConverter->convertToExportFormat($values));
+        return array_filter($values);
     }
 }

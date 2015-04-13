@@ -115,13 +115,14 @@ class OrderPlaceControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
 
-        $this->assertContains('Cart Information', $result->getContent());
-        $this->assertContains(self::TEST_NEW_EMAIL, $result->getContent());
-        $this->assertContains((string)self::TEST_NEW_ITEMS_QTY, $result->getContent());
-        $this->assertContains((string)'Expired', $result->getContent());
+        $resultContent = $result->getContent();
+        $this->assertContains('Cart Information', $resultContent);
+        $this->assertContains(self::TEST_NEW_EMAIL, $resultContent);
+        $this->assertContains((string)self::TEST_NEW_ITEMS_QTY, $resultContent);
+        $this->assertContains('Expired', $resultContent);
 
-        $this->assertContains('Customer Information', $result->getContent());
-        $this->assertContains('test@example.com', $result->getContent());
+        $this->assertContains('Customer Information', $resultContent);
+        $this->assertContains('test@example.com', $resultContent);
     }
 
     /**
@@ -281,7 +282,7 @@ class OrderPlaceControllerTest extends WebTestCase
             'customer_email'       => 'valibaba@pochta.com',
             'customer_firstname'   => 'asdf',
             'customer_lastname'    => 'asdf',
-            'quote_id'             => '368',
+            'quote_id'             => '100',
             'is_virtual'           => '0',
             'customer_group_id'    => '1',
             'customer_note_notify' => '0',

@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\OrderDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class OrderSoapIterator extends AbstractPageableSoapIterator
@@ -65,17 +64,8 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
         }
 
         $result = $this->entityBuffer[$id];
-        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData($result)
-    {
-        OrderDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

@@ -3,10 +3,12 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener as BaseChannelSaveSucceedListener;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
@@ -55,6 +57,12 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
      */
     protected function getConnectors(array $entities)
     {
+        $dictionaryConnectors = $this->typeRegistry->getRegisteredConnectorsTypes(
+            ChannelType::TYPE,
+            function (ConnectorInterface $connector) {
+                return $connector instanceof DictionaryConnectorInterface;
+            }
+        )->toArray();
         $connectors = [];
         $initialConnectors = [];
         $isSupportedExtensionVersion = $this->transportEntity->isSupportedExtensionVersion();
@@ -76,6 +84,6 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
             }
         }
 
-        return array_merge($initialConnectors, $connectors);
+        return array_merge(array_keys($dictionaryConnectors), $initialConnectors, $connectors);
     }
 }

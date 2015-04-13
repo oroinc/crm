@@ -7,8 +7,6 @@ use Psr\Log\LoggerAwareTrait;
 use Psr\Log\NullLogger;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\AbstractDependencyManager;
-use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 use OroCRM\Bundle\MagentoBundle\Utils\WSIUtils;
 
@@ -58,14 +56,14 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     /** @var null|\stdClass */
     protected $current;
 
-    /** @var bool */
-    protected $loaded = false;
-
     /** @var \stdClass[] Entities buffer got from pageable remote */
     protected $entityBuffer;
 
     /** @var bool */
     protected $isInitialDataLoaded = false;
+
+    /** @var array */
+    protected $storesByWebsite = [];
 
     /**
      * @param SoapTransport $transport
@@ -158,14 +156,6 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     public function rewind()
     {
-        if (false === $this->loaded) {
-            // Reload loaded dependencies for deltas
-            if (!$this->isInitialSync()) {
-                $this->transport->getDependencies(null, true);
-            }
-            $this->loaded = true;
-        }
-
         if (!$this->entitiesIdsBufferImmutable) {
             $this->entitiesIdsBuffer = [];
         }
@@ -313,30 +303,20 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
      */
     protected function getStoresByWebsiteId($websiteId)
     {
-        $stores = [];
-
-        $dependencies = $this->transport->getDependencies([MagentoTransportInterface::ALIAS_STORES]);
-        foreach ($dependencies[MagentoTransportInterface::ALIAS_STORES] as $store) {
-            if ($store['website_id'] == $websiteId) {
-                $stores[] = $store['store_id'];
+        if (empty($this->storesByWebsite)) {
+            $this->storesByWebsite[$websiteId] = [];
+            $storesList = $this->transport->getStores();
+            foreach ($storesList as $store) {
+                $this->storesByWebsite[$store['website_id']][] = $store['store_id'];
             }
         }
 
-        if (empty($stores)) {
+        $stores = $this->storesByWebsite[$websiteId];
+        if (empty($this->storesByWebsite[$websiteId])) {
             throw new \LogicException(sprintf('Could not resolve store dependency for website id: %d', $websiteId));
         }
 
         return $stores;
-    }
-
-    /**
-     * Adds dependencies to result entity
-     *
-     * @param \stdClass $result
-     */
-    protected function addDependencyData($result)
-    {
-        AbstractDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class NewsletterSubscriberWithExistingCustomerStrategy extends NewsletterSubscriberStrategy
 {
@@ -14,9 +15,7 @@ class NewsletterSubscriberWithExistingCustomerStrategy extends NewsletterSubscri
     public function process($entity)
     {
         if (!$this->isProcessingAllowed($entity)) {
-            $process = (array)$this->getExecutionContext()->get(self::NEWSLETTER_SUBSCRIBER_POST_PROCESS);
-            $process[] = $this->context->getValue('itemData');
-            $this->getExecutionContext()->put(self::NEWSLETTER_SUBSCRIBER_POST_PROCESS, $process);
+            $this->appendDataToContext(self::NEWSLETTER_SUBSCRIBER_POST_PROCESS, $this->context->getValue('itemData'));
 
             return null;
         }
@@ -30,16 +29,21 @@ class NewsletterSubscriberWithExistingCustomerStrategy extends NewsletterSubscri
      */
     protected function isProcessingAllowed(NewsletterSubscriber $newsletterSubscriber)
     {
-        if (!$newsletterSubscriber->getCustomer()) {
-            return false;
+        $customer = null;
+        $customerOriginId = null;
+        $isProcessingAllowed = true;
+
+        if ($newsletterSubscriber->getCustomer()) {
+            $customerOriginId = $newsletterSubscriber->getCustomer()->getOriginId();
+            $customer = $this->databaseHelper->findOneByIdentity($newsletterSubscriber->getCustomer());
         }
 
-        $customerId = $newsletterSubscriber->getCustomer()->getOriginId();
+        if (!$customer && $customerOriginId) {
+            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
-        if (!$customerId) {
-            return true;
+            $isProcessingAllowed = false;
         }
 
-        return (bool)$this->databaseHelper->findOneByIdentity($newsletterSubscriber->getCustomer());
+        return $isProcessingAllowed;
     }
 }
