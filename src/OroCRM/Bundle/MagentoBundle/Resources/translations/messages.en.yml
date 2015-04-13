@@ -21,7 +21,7 @@ orocrm:
                 no_available_metrics: No available metrics
                 no_changes: No changes
                 title: Ecommerce Statistic
-                description: eCommerce Statistic metrics
+                description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
                 sub_widgets.label: Metrics
                 revenue.label: Revenue
                 orders_number.label: Orders placed
