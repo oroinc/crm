@@ -5,19 +5,19 @@
 {% block content %}
     {% if items|length %}
         <ul class="quick-launchpad-toolbar with-subwidgets">
-            {% if (items|length > 3) %}
-                {% set itemWidth = (100 / 3)|round(2)%}
-            {% else %}
-                {% set itemWidth = (100 / items|length)|round(1) %}
+        {% if (items|length > 3) %}
+            {% set itemWidth = (100 / 3)|round(2)%}
+        {% else %}
+            {% set itemWidth = (100 / items|length)|round(1) %}
+        {% endif %}
+        {% for itemName, item in items %}
+            <li class="sub-widget" style="width: {{ itemWidth }}%">
+                {% include widgetDataItems[itemName].template with {item: item}%}
+            </li>
+            {% if not loop.last and loop.index % 3 == 0 %}
+            <li class="separator"> &nbsp; </li>
             {% endif %}
-            {% for itemName, item in items %}
-                <li class="sub-widget" style="width: {{ itemWidth }}%">
-                    {% include widgetDataItems[itemName].template with {item: item}%}
-                </li>
-                {% if not loop.last and loop.index % 3 == 0 %}
-                    <li class="separator"> &nbsp; </li>
-                {% endif %}
-            {% endfor %}
+        {% endfor %}
         </ul>
     {% else %}
         <div class="container-fluid">
@@ -26,6 +26,4 @@
             </div>
         </div>
     {% endif %}
-
-    {{ parent() }}
 {% endblock %}
