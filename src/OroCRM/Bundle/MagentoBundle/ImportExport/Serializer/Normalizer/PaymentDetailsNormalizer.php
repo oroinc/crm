@@ -23,6 +23,14 @@ class PaymentDetailsNormalizer extends ConfigurableEntityNormalizer implements D
     /**
      * {@inheritdoc}
      */
+    public function supportsNormalization($data, $format = null, array $context = [])
+    {
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (!empty($data['paymentDetails'])) {

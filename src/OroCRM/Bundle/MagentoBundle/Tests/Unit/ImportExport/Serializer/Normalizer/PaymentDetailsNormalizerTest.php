@@ -110,4 +110,9 @@ class PaymentDetailsNormalizerTest extends \PHPUnit_Framework_TestCase
             ['Card [cc_type, cc_last4]', ['paymentDetails' => ['cc_type' => ' cc_type ', 'cc_last4' => ' cc_last4 ']]]
         ];
     }
+
+    public function testSupportsNormalization()
+    {
+        $this->assertFalse($this->normalizer->supportsNormalization([]));
+    }
 }
