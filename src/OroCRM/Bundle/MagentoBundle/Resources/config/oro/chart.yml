@@ -57,4 +57,7 @@ oro_chart:
                 required: true
                 default_type: integer
                 field_name: count
+        xaxis:
+            mode: time
+            noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig

@@ -188,7 +188,7 @@ class OrderDataProvider
 
         $mixedItems = array_combine(array_keys($currentItems), array_values($items));
         foreach ($mixedItems as $k => $v) {
-            $v['date'] = $k;
+            $v['date'] = $currentItems[$k]['date'];
             $currentItems[$k] = $v;
         }
 
