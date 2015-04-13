@@ -138,6 +138,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     protected function createCart($billing, $shipping, Customer $customer, ArrayCollection $item, $status)
     {
         $cart = new Cart();
+        $cart->setOriginId(100);
         $cart->setChannel($this->integration);
         $cart->setDataChannel($this->channel);
         $cart->setBillingAddress($billing);

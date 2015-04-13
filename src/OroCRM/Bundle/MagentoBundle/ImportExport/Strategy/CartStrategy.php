@@ -81,7 +81,7 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function updateCustomer(Cart $cart, Customer $customer = null)
     {
-        if ($customer) {
+        if ($customer && !$customer->getEmail()) {
             $customer->setEmail($cart->getEmail());
         }
 
