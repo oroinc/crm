@@ -111,6 +111,8 @@ parameters:
     orocrm_magento.integration_entity.remove_listener.class:                OroCRM\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener
     orocrm_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
+    orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
+
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 services:
     orocrm_magento.transport.soap_transport:
@@ -554,3 +556,12 @@ services:
         arguments:
             - @oro_entity.doctrine_helper
             - %oro_integration.entity.class%
+
+    orocrm_magento.provider.big_number:
+        class: %orocrm_magento.provider.big_number.class%
+        arguments:
+            - @doctrine
+            - @oro_locale.formatter.number
+            - @oro_locale.formatter.date_time
+            - @oro_security.acl_helper
+            - @translator
