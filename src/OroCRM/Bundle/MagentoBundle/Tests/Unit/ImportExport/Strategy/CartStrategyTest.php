@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
