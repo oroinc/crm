@@ -102,7 +102,9 @@ class OrderDataProvider
      */
     public function getOrdersOverTimeChartView(ChartViewBuilder $viewBuilder, array $dateRange)
     {
+        /* @var $from DateTime */
         $from = $dateRange['start'];
+        /* @var $to DateTime */
         $to = $dateRange['end'];
 
         $items = $this->createOrdersOvertimeCurrentData($from, $to);
@@ -170,7 +172,9 @@ class OrderDataProvider
      */
     public function getRevenueOverTimeChartView(ChartViewBuilder $viewBuilder, array $dateRange)
     {
+        /* @var $from DateTime */
         $from = $dateRange['start'];
+        /* @var $to DateTime */
         $to = $dateRange['end'];
 
         $items = $this->createRevenueOverTimeCurrentData($from, $to);

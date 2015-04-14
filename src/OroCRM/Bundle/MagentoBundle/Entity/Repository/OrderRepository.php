@@ -6,6 +6,7 @@ use DateTime;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -14,7 +15,6 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Utils\DatePeriodUtils;
 
 class OrderRepository extends EntityRepository
 {
@@ -212,6 +212,7 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper,
      * @param DateHelper $dateHelper
      * @param DateTime $from
      * @param DateTime|null $to
@@ -228,8 +229,7 @@ class OrderRepository extends EntityRepository
         $to = clone $to;
 
         $qb = $this->createQueryBuilder('o')
-            ->select('COUNT(o.id) AS cnt')
-        ;
+            ->select('COUNT(o.id) AS cnt');
 
         $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
         if ($to) {
@@ -264,8 +264,7 @@ class OrderRepository extends EntityRepository
             ->select('SUM(
                     CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
                     CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
-                ) AS amount')
-        ;
+                ) AS amount');
 
         $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
 
