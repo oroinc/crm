@@ -86,7 +86,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             ->setCode('admin')
             ->setName('Admin')
             ->setWebsite($website);
-        $om->persist($website);
+        $om->persist($store);
 
         $group = new CustomerGroup();
         $group->setName('General');
