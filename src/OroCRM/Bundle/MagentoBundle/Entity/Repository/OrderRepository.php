@@ -326,7 +326,6 @@ class OrderRepository extends EntityRepository
             $qb
                 ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
                 ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
-                ->andwhere('o.totalPaidAmount IS NOT NULL')
                 ->setParameters([
                     'from' => $from,
                     'to'   => $to,

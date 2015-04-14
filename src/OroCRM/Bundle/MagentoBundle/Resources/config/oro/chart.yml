@@ -103,3 +103,4 @@ oro_chart:
                 label: orocrm.magento.dashboard.purchase_chart.is_nozzle
                 required: true
                 default_type: boolean
+        template: OroChartBundle:Chart:flow.html.twig

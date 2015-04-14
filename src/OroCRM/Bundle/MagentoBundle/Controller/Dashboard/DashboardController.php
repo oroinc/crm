@@ -121,6 +121,30 @@ class DashboardController extends Controller
 
     /**
      * @Route(
+     *      "/orocrm_magento_dashboard_purchase_chart",
+     *      name="orocrm_magento_dashboard_purchase_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:purchaseChart.html.twig")
+     */
+    public function purchaseAction()
+    {
+        $widgetAttributes     = $this->getWidgetConfigs();
+        $purchaseDataProvider = $this->getPurchaseDataProvider();
+        $chartViewBuilder     = $this->getChartViewBuilder();
+
+        $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
+        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+
+        return $data;
+    }
+
+    /**
+     * @Route(
      *      "/orocrm_magento_dashboard_revenue_over_time_chart",
      *      name="orocrm_magento_dashboard_revenue_over_time_chart",
      *      requirements={"widget"="[\w_-]+"}
