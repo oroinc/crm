@@ -17,17 +17,24 @@ class CallControllerTest extends WebTestCase
 
     public function testCreate()
     {
-        $request = array(
-            "call" => array (
-                "subject" => 'Test Call ' . mt_rand(),
-                "owner" => '1',
-                "duration" => '00:00:05',
-                "direction" => 'outgoing',
+        $request = [
+            "call" => [
+                "subject"      => 'Test Call ' . mt_rand(),
+                "owner"        => '1',
+                "duration"     => '00:00:05',
+                "direction"    => 'outgoing',
                 "callDateTime" => date('c'),
-                "phoneNumber" => '123-123=123',
-                "callStatus" => 'completed'
-            )
-        );
+                "phoneNumber"  => '123-123=123',
+                "callStatus"   => 'completed',
+                "associations" => [
+                    [
+                        "entityName" => 'Oro\Bundle\UserBundle\Entity\User',
+                        "entityId"   => 1,
+                        "type"       => 'activity'
+                    ],
+                ]
+            ]
+        ];
         $this->client->request(
             'POST',
             $this->getUrl('oro_api_post_call'),

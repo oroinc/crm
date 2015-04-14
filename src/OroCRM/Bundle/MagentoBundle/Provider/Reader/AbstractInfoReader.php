@@ -8,7 +8,7 @@ use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorContextMediator;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\BaseStrategy;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
 abstract class AbstractInfoReader extends AbstractReader
@@ -75,7 +75,7 @@ abstract class AbstractInfoReader extends AbstractReader
 
         $entitiesIds = $this->stepExecution->getJobExecution()
             ->getExecutionContext()
-            ->get(BaseStrategy::CONTEXT_POST_PROCESS_IDS);
+            ->get(AbstractImportStrategy::CONTEXT_POST_PROCESS_IDS);
 
         if (empty($entitiesIds[$this->className])) {
             return;

@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
@@ -193,5 +195,24 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->process($integration);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getIntegration(array $connectors = [], \DateTime $syncStartDate = null, $realConnector = null)
+    {
+        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dictionaryConnector->expects($this->any())
+            ->method('getType')
+            ->willReturn('dictionary');
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
+
+        return parent::getIntegration($connectors, $syncStartDate, $realConnector);
     }
 }

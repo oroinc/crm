@@ -109,7 +109,6 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
         }
 
         $result = $this->entityBuffer[$id];
-        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
     }

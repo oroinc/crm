@@ -50,7 +50,7 @@ class AddNewsletterSubscriber implements Migration, ExtendExtensionAwareInterfac
         $table->addColumn('change_status_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
-        $table->addColumn('origin_id', 'integer', ['notnull' => false]);
+        $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('confirm_code', 'string', ['notnull' => false, 'length' => 32]);
         $table->addIndex(['channel_id'], 'idx_7c8eaa72f5a1aa', []);
         $table->setPrimaryKey(['id']);

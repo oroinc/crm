@@ -201,6 +201,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('created', 'datetime', ['precision' => 0]);
         $table->addColumn('updated', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addIndex(['country_code'], 'IDX_6978F651F026BB7C', []);
         $table->addIndex(['region_code'], 'IDX_6978F651AEB327AF', []);
         $table->setPrimaryKey(['id']);
@@ -811,7 +812,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('change_status_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
-        $table->addColumn('origin_id', 'integer', ['notnull' => false]);
+        $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('confirm_code', 'string', ['notnull' => false, 'length' => 32]);
         $table->addIndex(['channel_id'], 'idx_7c8eaa72f5a1aa', []);
         $table->setPrimaryKey(['id']);
@@ -853,6 +854,12 @@ class OroCRMMagentoBundleInstaller implements
             ['region_code'],
             ['combined_code'],
             []
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
         );
     }
 

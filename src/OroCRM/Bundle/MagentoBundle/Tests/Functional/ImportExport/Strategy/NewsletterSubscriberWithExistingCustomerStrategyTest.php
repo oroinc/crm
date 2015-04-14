@@ -8,6 +8,7 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy;
 
@@ -47,7 +48,7 @@ class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
         $this->strategy->setStepExecution($this->stepExecution);
     }
 
-    public function testProcessSuccessful()
+    public function testProcessWithCustomer()
     {
         /** @var NewsletterSubscriber $newsletterSubscriber */
         $newsletterSubscriber = $this->getReference('newsletter_subscriber');
@@ -59,20 +60,54 @@ class NewsletterSubscriberWithExistingCustomerStrategyTest extends WebTestCase
         $this->assertEmpty(
             $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessSubscribers')
         );
+
+        $this->assertEmpty(
+            $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessCustomerIds')
+        );
     }
 
-    public function testProcessFailed()
+    public function testProcessLoadCustomer()
     {
         /** @var NewsletterSubscriber $newsletterSubscriber */
         $newsletterSubscriber = $this->getReference('newsletter_subscriber2');
+        $customer = new Customer();
+        $originId = time();
+        $customer->setOriginId($originId);
+        $newsletterSubscriber->setCustomer($customer);
 
         $this->strategy->setEntityName(get_class($newsletterSubscriber));
 
         $this->assertEquals(null, $this->strategy->process($newsletterSubscriber));
 
-        $this->assertEquals(
-            [['itemProp' => 'itemValue']],
+        $this->assertNotEmpty(
             $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessSubscribers')
+        );
+
+        $this->assertEquals(
+            [$originId],
+            $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessCustomerIds')
+        );
+    }
+
+    public function testProcessWithoutCustomer()
+    {
+        /** @var NewsletterSubscriber $newsletterSubscriber */
+        $newsletterSubscriber = $this->getReference('newsletter_subscriber2');
+        $newsletterSubscriber->setCustomer(null);
+        $em = $this->getContainer()->get('doctrine')->getManager();
+        $em->persist($newsletterSubscriber);
+        $em->flush($newsletterSubscriber);
+
+        $this->strategy->setEntityName(get_class($newsletterSubscriber));
+
+        $this->assertEquals($newsletterSubscriber, $this->strategy->process($newsletterSubscriber));
+
+        $this->assertEmpty(
+            $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessSubscribers')
+        );
+
+        $this->assertEmpty(
+            $this->stepExecution->getJobExecution()->getExecutionContext()->get('postProcessCustomerIds')
         );
     }
 }

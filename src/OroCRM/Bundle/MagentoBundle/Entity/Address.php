@@ -180,6 +180,13 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
     /**
      * @ORM\ManyToOne(targetEntity="Customer", inversedBy="addresses")
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="CASCADE")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $owner;
 

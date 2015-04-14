@@ -14,11 +14,6 @@ class OrderDataConverter extends AbstractTreeDataConverter
         return [
             'increment_id'        => 'incrementId',
             'store_id'            => 'store:originId',
-            'store_storename'     => 'store:name',
-            'store_code'          => 'store:code',
-            'store_website_id'    => 'store:website:originId',
-            'store_website_code'  => 'store:website:code',
-            'store_website_name'  => 'store:website:name',
             'customer_id'         => 'customer:originId',
             'is_virtual'          => 'isVirtual',
             'customer_is_guest'   => 'isGuest',
@@ -43,7 +38,7 @@ class OrderDataConverter extends AbstractTreeDataConverter
             'billing_address'     => 'addresses:1',
             'created_at'          => 'createdAt',
             'updated_at'          => 'updatedAt',
-            'customer_email'      => 'customerEmail',
+            'customer_email'      => 'customerEmail'
         ];
     }
 
@@ -65,9 +60,24 @@ class OrderDataConverter extends AbstractTreeDataConverter
             }
         }
 
-        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        if ($this->context && $this->context->hasOption('channel')) {
+            $importedRecord['store:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['customer:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['cart:channel:id'] = $this->context->getOption('channel');
+        }
 
-        return AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+        $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+
+        if (!empty($importedRecord['paymentDetails']['method'])) {
+            $importedRecord['paymentMethod'] = $importedRecord['paymentDetails']['method'];
+        } else {
+            $importedRecord['paymentMethod'] = null;
+        }
+
+        unset($importedRecord['paymentDetails']['method']);
+
+        return $importedRecord;
     }
 
     /**

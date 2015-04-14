@@ -85,7 +85,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->extension->isApplicable($config));
 
-        $qb = $this->getQbMock();
+        $qb         = $this->getQbMock();
         $dataSource = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
             ->disableOriginalConstructor()
@@ -131,14 +131,14 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider applicableDataProvider
      *
-     * @param int|null $marketingListId
+     * @param int|null    $marketingListId
      * @param object|null $marketingList
-     * @param bool $expected
+     * @param bool        $expected
      */
     public function testIsApplicable($marketingListId, $marketingList, $expected)
     {
         $gridName = 'test_grid';
-        $config = $this->assertIsApplicable($marketingListId, $marketingList, $gridName, true);
+        $config   = $this->assertIsApplicable($marketingListId, $marketingList, $gridName, true);
 
         $this->assertEquals($expected, $this->extension->isApplicable($config));
     }
@@ -174,12 +174,13 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      * @param array $dqlParts
      * @param bool  $isMixin
      * @param bool  $expected
+     * @param       bool false
      *
      * @dataProvider dataSourceDataProvider
      */
-    public function testVisitDatasource($dqlParts, $isMixin, $expected)
+    public function testVisitDatasource($dqlParts, $isMixin, $expected, $isObject = false)
     {
-        $marketingListId = 1;
+        $marketingListId        = 1;
         $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
@@ -192,7 +193,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
                 ->method('isManual');
         }
         $gridName = 'test_grid';
-        $config = $this->assertIsApplicable($marketingListId, $nonManualMarketingList, $gridName, $isMixin);
+        $config   = $this->assertIsApplicable($marketingListId, $nonManualMarketingList, $gridName, $isMixin);
 
         $dataSource = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
@@ -206,9 +207,13 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             $where = $dqlParts['where'];
             $parts = $where->getParts();
 
-            if ($expected) {
+            if ($expected && !$isObject) {
                 $qb
-                    ->expects($this->exactly(sizeof($parts)))
+                    ->expects($this->exactly(count($parts)))
+                    ->method('andWhere');
+            } elseif ($expected && $isObject) {
+                $qb
+                    ->expects(static::any())
                     ->method('andWhere');
             }
 
@@ -243,10 +248,11 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param int|null $marketingListId
+     * @param int|null    $marketingListId
      * @param object|null $marketingList
-     * @param string $gridName
-     * @param bool $isMixin
+     * @param string      $gridName
+     * @param bool        $isMixin
+     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function assertIsApplicable($marketingListId, $marketingList, $gridName, $isMixin)
@@ -309,6 +315,11 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('select')
             ->will($this->returnSelf());
 
+        $qb
+            ->expects($this->any())
+            ->method('andWhere')
+            ->will($this->returnSelf());
+
         $expr = $this
             ->getMockBuilder('Doctrine\ORM\Query\Expr')
             ->disableOriginalConstructor()
@@ -329,6 +340,11 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->method('orX')
             ->will($this->returnValue($orX));
 
+        $expr
+            ->expects($this->any())
+            ->method('exists')
+            ->will($this->returnValue($orX));
+
         return $qb;
     }
 
@@ -345,9 +361,9 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             [['where' => new Andx(['test'])], false, false],
             [['where' => new Andx(['test'])], true, true],
             [['where' => new Andx([new Func('func condition', ['argument'])])], false, false],
-            [['where' => new Andx([new Func('func condition', ['argument'])])], true, true],
+            [['where' => new Andx([new Func('func condition', ['argument'])])], true, true, true],
             [['where' => new Andx(['test', new Func('func condition', ['argument'])])], false, false],
-            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], true, true],
+            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], true, true, true]
         ];
     }
 

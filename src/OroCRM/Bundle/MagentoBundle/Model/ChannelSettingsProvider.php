@@ -88,9 +88,11 @@ class ChannelSettingsProvider
     }
 
     /**
+     * @param bool $checkExtension
+     *
      * @return bool
      */
-    public function hasApplicableChannels()
+    public function hasApplicableChannels($checkExtension = true)
     {
         $isApplicable = false;
 
@@ -107,11 +109,13 @@ class ChannelSettingsProvider
             $channelId = $channel->getId();
             $this->channels[$channelId] = $channel;
 
-            $channelApplicable = $this->isEnabled($channelId)
-                && $this->isTwoWaySyncEnable($channelId)
-                && $this->isSupportedExtensionVersion($channelId);
+            $isChannelApplicable = $this->isEnabled($channelId) && $this->isTwoWaySyncEnable($channelId);
 
-            $isApplicable = $isApplicable || $channelApplicable;
+            if ($checkExtension) {
+                $isChannelApplicable = $isChannelApplicable && $this->isSupportedExtensionVersion($channelId);
+            }
+
+            $isApplicable = $isApplicable || $isChannelApplicable;
         }
 
         return $isApplicable;

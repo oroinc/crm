@@ -118,7 +118,7 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
     /**
      * @var Website[]|ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
+     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
      * @ORM\JoinTable(name="orocrm_magento_prod_to_website",
      *      joinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="CASCADE")}
