@@ -132,7 +132,11 @@ class OrderListener
         $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
         $newLifetime = $customerRepository->calculateLifetimeValue($customer);
         if ($appendSubtotal) {
-            $newLifetime += $order->getSubtotalAmount();
+            $discountAmount = $order->getDiscountAmount();
+            $orderLifetimeValue  = $discountAmount
+                ? $order->getSubtotalAmount() - $discountAmount
+                : $order->getSubtotalAmount();
+            $newLifetime += $orderLifetimeValue;
         }
 
         if ($newLifetime !== $oldLifetime) {
