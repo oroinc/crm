@@ -140,21 +140,6 @@ class OrderDataProvider
      * @param DateTime $from
      * @param DateTime $to
      *
-     * @return string
-     */
-    protected function createPeriodLabel(DateTime $from, DateTime $to)
-    {
-        return sprintf(
-            '%s - %s',
-            $this->dateTimeFormatter->formatDate($from),
-            $this->dateTimeFormatter->formatDate($to)
-        );
-    }
-
-    /**
-     * @param DateTime $from
-     * @param DateTime $to
-     *
      * @return array
      */
     protected function createOrdersOvertimeCurrentData(DateTime $from, DateTime $to)
@@ -175,6 +160,90 @@ class OrderDataProvider
         $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
 
         return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'cnt', 'count');
+    }
+
+    /**
+     * @param ChartViewBuilder $viewBuilder
+     * @param array $dateRange
+     *
+     * @return ChartView
+     */
+    public function getRevenueOverTimeChartView(ChartViewBuilder $viewBuilder, array $dateRange)
+    {
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
+
+        $items = $this->createRevenueOverTimeCurrentData($from, $to);
+
+        $diff = $to->getTimestamp() - $from->getTimestamp();
+        $previousFrom = clone $from;
+        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
+
+        $previousItems = $this->createRevenueOverTimePreviousData($previousFrom, $from);
+
+        $chartOptions = array_merge_recursive(
+            ['name' => 'multiline_chart'],
+            $this->configProvider->getChartConfig('revenue_over_time_chart')
+        );
+        $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
+        $chartOptions['data_schema']['label']['label'] =
+            sprintf(
+                'oro.dashboard.chart.%s.label',
+                $chartType
+            );
+
+        $currentPeriod = $this->createPeriodLabel($from, $to);
+        $previousPeriod = $this->createPeriodLabel($previousFrom, $from);
+
+        return $viewBuilder->setOptions($chartOptions)
+            ->setArrayData([
+                $previousPeriod => $previousItems,
+                $currentPeriod  => $items,
+            ])
+            ->getView();
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return string
+     */
+    protected function createPeriodLabel(DateTime $from, DateTime $to)
+    {
+        return sprintf(
+            '%s - %s',
+            $this->dateTimeFormatter->formatDate($from),
+            $this->dateTimeFormatter->formatDate($to)
+        );
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return array
+     */
+    protected function createRevenueOverTimeCurrentData(DateTime $from, DateTime $to)
+    {
+        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+
+        return $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'amount', 'amount');
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     * @param int $diff Timestamp
+     *
+     * @return array
+     */
+    protected function createRevenueOverTimePreviousData(DateTime $from, DateTime $to)
+    {
+        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+
+        return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'amount', 'amount');
     }
 
     /**

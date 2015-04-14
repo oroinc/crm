@@ -298,4 +298,144 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
+
+    /**
+     * @dataProvider getRevenueOverTimeChartViewDataProvider
+     */
+    public function testGetRevenueOverTimeChartView($sourceData, $expectedArrayData, $expectedOptions, $chartConfig)
+    {
+        $from = new DateTime('2015-05-10');
+        $to = new DateTime('2015-05-15');
+        $previousFrom = new DateTime('2015-05-05');
+        $previousTo = new DateTime('2015-05-10');
+
+        $this->dateHelper->expects($this->any())
+            ->method('getFormatStrings')
+            ->willReturn(
+                [
+                    'viewType' => 'day'
+                ]
+            );
+        $this->dateHelper->expects($this->once())
+            ->method('convertToCurrentPeriod')
+            ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));
+        $this->dateHelper->expects($this->once())
+            ->method('convertToPreviousPeriod')
+            ->will($this->returnValue($expectedArrayData['2015-05-05 - 2015-05-10']));
+        $this->dateTimeFormatter->expects($this->exactly(4))
+            ->method('formatDate')
+            ->will($this->onConsecutiveCalls('2015-05-10', '2015-05-15', '2015-05-05', '2015-05-10'));
+
+        $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $orderRepository->expects($this->at(0))
+            ->method('getRevenueOverTime')
+            ->with($this->aclHelper, $this->dateHelper, $from, $to)
+            ->will($this->returnValue($sourceData[0]));
+        $orderRepository->expects($this->at(1))
+            ->method('getRevenueOverTime')
+            ->with($this->aclHelper, $this->dateHelper, $previousFrom, $previousTo)
+            ->will($this->returnValue($sourceData[1]));
+        $this->registry->expects($this->any())
+            ->method('getRepository')
+            ->with('OroCRMMagentoBundle:Order')
+            ->will($this->returnValue($orderRepository));
+        $chartView = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartView')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $chartViewBuilder = $this->getMockBuilder('Oro\Bundle\ChartBundle\Model\ChartViewBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $chartViewBuilder->expects($this->once())
+            ->method('setOptions')
+            ->with($expectedOptions)
+            ->will($this->returnSelf());
+        $chartViewBuilder->expects($this->once())
+            ->method('setArrayData')
+            ->with($expectedArrayData)
+            ->will($this->returnSelf());
+        $chartViewBuilder->expects($this->once())
+            ->method('getView')
+            ->will($this->returnValue($chartView));
+        $this->configProvider->expects($this->once())
+            ->method('getChartConfig')
+            ->with('revenue_over_time_chart')
+            ->will($this->returnValue($chartConfig));
+        $this->assertEquals(
+            $chartView,
+            $this->dataProvider->getRevenueOverTimeChartView($chartViewBuilder, ['start' => $from, 'end' => $to])
+        );
+    }
+
+    public function getRevenueOverTimeChartViewDataProvider()
+    {
+        return [
+            [
+                $sourceOrderData = [
+                    [
+                        [
+                            'yearCreated'  => '2015',
+                            'monthCreated' => '05',
+                            'dayCreated'   => '12',
+                            'amount'       => 200,
+                        ],
+                    ],
+                    [
+                        [
+                            'yearCreated'  => '2015',
+                            'monthCreated' => '05',
+                            'dayCreated'   => '07',
+                            'amount'       => 100,
+                        ],
+                    ],
+                ],
+                $expectedArrayData = [
+                    '2015-05-10 - 2015-05-15' => [
+                        ['date' => '2015-05-10'],
+                        ['date' => '2015-05-11'],
+                        ['date' => '2015-05-12', 'amount' => 200],
+                        ['date' => '2015-05-13'],
+                        ['date' => '2015-05-14'],
+                    ],
+                    '2015-05-05 - 2015-05-10' => [
+                        ['date' => '2015-05-10'],
+                        ['date' => '2015-05-11'],
+                        ['date' => '2015-05-12', 'amount' => 100],
+                        ['date' => '2015-05-13'],
+                        ['date' => '2015-05-14'],
+                    ],
+                ],
+                $expectedOptions = [
+                    'name' => 'multiline_chart',
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'date',
+                            'label' => 'oro.dashboard.chart.day.label',
+                            'type' => 'day',
+                        ],
+                        'value' => [
+                            'field_name' => 'amount',
+                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'type' => 'currency'
+                        ],
+                    ],
+                ],
+                $chartConfig = [
+                    'data_schema' => [
+                        'label' => [
+                            'field_name' => 'date',
+                            'label' => 'oro.dashboard.chart.day.label',
+                            'type' => 'day',
+                        ],
+                        'value' => [
+                            'field_name' => 'amount',
+                            'label' => 'orocrm.magento.dashboard.revenue_over_time_chart.revenue',
+                            'type' => 'currency'
+                        ],
+                    ],
+                ],
+            ]
+        ];
+    }
 }

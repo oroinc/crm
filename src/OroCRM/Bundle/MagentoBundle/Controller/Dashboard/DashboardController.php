@@ -121,24 +121,25 @@ class DashboardController extends Controller
 
     /**
      * @Route(
-     *      "/orocrm_magento_dashboard_purchase_chart",
-     *      name="orocrm_magento_dashboard_purchase_chart",
+     *      "/orocrm_magento_dashboard_revenue_over_time_chart",
+     *      name="orocrm_magento_dashboard_revenue_over_time_chart",
      *      requirements={"widget"="[\w_-]+"}
      * )
-     * @Template("OroCRMMagentoBundle:Dashboard:purchaseChart.html.twig")
+     * @Template("OroCRMMagentoBundle:Dashboard:revenueOverTimeChart.html.twig")
      */
-    public function purchaseAction()
+    public function revenueOverTimeAction()
     {
-        $widgetAttributes     = $this->getWidgetConfigs();
-        $purchaseDataProvider = $this->getPurchaseDataProvider();
-        $chartViewBuilder     = $this->getChartViewBuilder();
+        $widgetAttributes  = $this->getWidgetConfigs();
+        $orderDataProvider = $this->getOrderDataProvider();
+        $chartViewBuilder  = $this->getChartViewBuilder();
 
-        $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
-        $from = $dateRange['start'];
-        $to = $dateRange['end'];
-
-        $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
-        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+        $data = $widgetAttributes->getWidgetAttributesForTwig('revenue_over_time_chart');
+        $data['chartView'] = $orderDataProvider->getRevenueOverTimeChartView(
+            $chartViewBuilder,
+            $widgetAttributes
+                ->getWidgetOptions()
+                ->get('dateRange')
+        );
 
         return $data;
     }

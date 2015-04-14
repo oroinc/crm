@@ -14,6 +14,7 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Utils\DatePeriodUtils;
 
 class OrderRepository extends EntityRepository
 {
@@ -232,6 +233,43 @@ class OrderRepository extends EntityRepository
         ;
 
         $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getRevenueOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('SUM(
+                    CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                    CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                ) AS amount')
+        ;
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+
         if ($to) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
                 ->setParameter('to', $to);
