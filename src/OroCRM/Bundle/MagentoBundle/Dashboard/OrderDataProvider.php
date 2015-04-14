@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
+use DateTime;
+
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
@@ -11,6 +13,7 @@ use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 
 class OrderDataProvider
 {
@@ -30,18 +33,34 @@ class OrderDataProvider
     protected $configProvider;
 
     /**
+     * @var DateTimeFormatter
+     */
+    protected $dateTimeFormatter;
+
+    /**
+     * @var DateHelper
+     */
+    protected $dateHelper;
+
+    /**
      * @param ManagerRegistry $registry
      * @param AclHelper $aclHelper
      * @param ConfigProvider $configProvider
+     * @param DateTimeFormatter $dateTimeFormatter
+     * @param DateHelper $dateHelper
      */
     public function __construct(
         ManagerRegistry $registry,
         AclHelper $aclHelper,
-        ConfigProvider $configProvider
+        ConfigProvider $configProvider,
+        DateTimeFormatter $dateTimeFormatter,
+        DateHelper $dateHelper
     ) {
         $this->registry = $registry;
         $this->aclHelper = $aclHelper;
         $this->configProvider = $configProvider;
+        $this->dateTimeFormatter = $dateTimeFormatter;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
@@ -73,5 +92,96 @@ class OrderDataProvider
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData($result)
             ->getView();
+    }
+
+    /**
+     * @param ChartViewBuilder $viewBuilder
+     * @param array $dateRange
+     *
+     * @return ChartView
+     */
+    public function getOrdersOverTimeChartView(ChartViewBuilder $viewBuilder, array $dateRange)
+    {
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
+
+        $items = $this->createOrdersOvertimeCurrentData($from, $to);
+
+        $diff = $to->getTimestamp() - $from->getTimestamp();
+        $previousFrom = clone $from;
+        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
+
+        $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from);
+
+        $chartOptions = array_merge_recursive(
+            ['name' => 'multiline_chart'],
+            $this->configProvider->getChartConfig('orders_over_time_chart')
+        );
+        $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
+        $chartOptions['data_schema']['label']['type']  = $chartType;
+        $chartOptions['data_schema']['label']['label'] =
+            sprintf(
+                'oro.dashboard.chart.%s.label',
+                $chartType
+            );
+
+        $currentPeriod = $this->createPeriodLabel($from, $to);
+        $previousPeriod = $this->createPeriodLabel($previousFrom, $from);
+
+        return $viewBuilder->setOptions($chartOptions)
+            ->setArrayData([
+                $previousPeriod => $previousItems,
+                $currentPeriod => $items,
+            ])
+            ->getView();
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return string
+     */
+    protected function createPeriodLabel(DateTime $from, DateTime $to)
+    {
+        return sprintf(
+            '%s - %s',
+            $this->dateTimeFormatter->formatDate($from),
+            $this->dateTimeFormatter->formatDate($to)
+        );
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return array
+     */
+    protected function createOrdersOvertimeCurrentData(DateTime $from, DateTime $to)
+    {
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+
+        return $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'cnt', 'count');
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return array
+     */
+    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to)
+    {
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+
+        return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'cnt', 'count');
+    }
+
+    /**
+     * @return OrderRepository
+     */
+    protected function getOrderRepository()
+    {
+        return $this->registry->getRepository('OroCRMMagentoBundle:Order');
     }
 }

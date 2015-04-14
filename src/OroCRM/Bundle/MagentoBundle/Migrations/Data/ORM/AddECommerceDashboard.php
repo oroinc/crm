@@ -24,6 +24,10 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements
             'layout' => [1, 0],
         ],
         [
+            'name' => 'orders_over_time_chart',
+            'layout' => [0, 1],
+        ],
+        [
             'name' => 'purchase_chart',
             'layout' => [0, 1],
         ],

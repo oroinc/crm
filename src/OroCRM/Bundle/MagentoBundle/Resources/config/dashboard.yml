@@ -144,6 +144,19 @@ oro_dashboard_config:
                           - {site_visits: orocrm.magento.dashboard.e_commerce_statistic.site_visits.label}
                           - {order_conversion: orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label}
                           - {customer_conversion: orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label}
+        orders_over_time_chart:
+            label:       orocrm.magento.dashboard.orders_over_time_chart.title
+            route:       orocrm_magento_dashboard_orders_over_time_chart
+            acl:         orocrm_magento_order_view
+            description: orocrm.magento.dashboard.orders_over_time_chart.description
+            icon:        bundles/orocrmmagento/img/number-magento-customers.png
+            applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         purchase_chart:
             label:       orocrm.magento.dashboard.purchase_chart.title
             route:       orocrm_magento_dashboard_purchase_chart

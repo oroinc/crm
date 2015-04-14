@@ -212,6 +212,38 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getOrdersOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id) AS cnt')
+        ;
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
      * @return array
      */
     protected function getOrderSliceDateAndTemplates()
