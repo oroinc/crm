@@ -92,12 +92,17 @@ class PurchaseDataProvider
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
                 'value'    => $this->getOrderRepository()->getUniqueBuyersCount($this->aclHelper, $from, $to),
-                'isNozzle' => false,
+                'isNozzle' => true,
             ]
         ];
 
         $chartOptions = array_merge_recursive(
-            ['name' => 'flow_chart'],
+            [
+                'name' => 'flow_chart',
+                'settings' => [
+                    'quarterDate' => $from,
+                ],
+            ],
             $this->configProvider->getChartConfig('purchase_chart')
         );
 
