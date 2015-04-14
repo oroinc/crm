@@ -94,4 +94,14 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     {
         return 'entity_id';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Cart by id: %s', $this->key()));
+
+        return $this->current;
+    }
 }

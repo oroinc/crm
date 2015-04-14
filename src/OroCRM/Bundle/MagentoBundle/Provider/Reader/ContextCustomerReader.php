@@ -35,8 +35,6 @@ class ContextCustomerReader extends CustomerConnector
         $ids = (array)$this->stepExecution->getJobExecution()
             ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CUSTOMERS);
 
-        $this->stepExecution->getJobExecution()->getExecutionContext()->remove(self::CONTEXT_POST_PROCESS_CUSTOMERS);
-
         $ids = array_unique(array_filter($ids));
 
         sort($ids);
