@@ -6,8 +6,40 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use Doctrine\ORM\EntityRepository;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+
 class CustomerRepository extends EntityRepository
 {
+    /**
+     * Calculates the lifetime value for the given customer
+     *
+     * @param Customer $customer
+     *
+     * @return float
+     */
+    public function calculateLifetimeValue(Customer $customer)
+    {
+        $qb = $this->getEntityManager()->getRepository('OroCRMMagentoBundle:Order')
+            ->createQueryBuilder('o');
+
+        $qb
+            ->select('SUM(
+                CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                )')
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->eq('o.customer', ':customer'),
+                    $qb->expr()->neq($qb->expr()->lower('o.status'), ':status')
+                )
+            )
+            ->setParameter('customer', $customer)
+            ->setParameter('status', Order::STATUS_CANCELED);
+
+        return (float)$qb->getQuery()->getSingleScalarResult();
+    }
+
     /**
      * Returns data grouped by created_at, data_channel_id
      *
