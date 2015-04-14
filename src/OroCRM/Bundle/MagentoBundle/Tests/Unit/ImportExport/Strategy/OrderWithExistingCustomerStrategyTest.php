@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -47,13 +47,29 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
     {
         $customer = new Customer();
         $customer->setOriginId(1);
-        $channel = new Channel();
+        $transport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $transport->expects($this->once())
+            ->method('isSupportedExtensionVersion')
+            ->will($this->returnValue(true));
+        $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $channel->expects($this->once())
+            ->method('getTransport')
+            ->will($this->returnValue($transport));
         $order = new Order();
         $cart = new Cart();
         $cart->setOriginId(1);
         $order->setCustomer($customer);
         $order->setChannel($channel);
         $order->setCart($cart);
+
+        $this->databaseHelper->expects($this->once())
+            ->method('findOneByIdentity')
+            ->with($channel)
+            ->will($this->returnValue($channel));
 
         $strategy = $this->getStrategy();
 

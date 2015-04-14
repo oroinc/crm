@@ -117,8 +117,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $this->validateConfiguration();
         $this->setSourceIterator($this->getConnectorSource());
 
-        if ($this->getSourceIterator() instanceof LoggerAwareInterface) {
-            $this->getSourceIterator()->setLogger($this->logger);
+        $sourceIterator = $this->getSourceIterator();
+        if ($sourceIterator instanceof LoggerAwareInterface) {
+            $sourceIterator->setLogger($this->logger);
         }
     }
 
@@ -266,16 +267,21 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      */
     protected function setPredefinedFilters(ContextInterface $context, \Iterator $iterator)
     {
-        if ($context->hasOption('filters') || $context->hasOption('complex_filters')) {
-            if ($iterator instanceof PredefinedFiltersAwareInterface) {
-                if (!$filters = $context->getOption('filters')) {
-                    $filters = [];
-                }
-                if (!$complexFilters = $context->getOption('complex_filters')) {
-                    $complexFilters = [];
-                }
+        $filters = null;
+        if ($context->hasOption('filters')) {
+            $filters = $context->getOption('filters');
+            $context->removeOption('filters');
+        }
 
-                $predefinedFilters = new BatchFilterBag($filters, $complexFilters);
+        $complexFilters = null;
+        if ($context->hasOption('complex_filters')) {
+            $complexFilters = $context->getOption('complex_filters');
+            $context->removeOption('complex_filters');
+        }
+
+        if ($filters || $complexFilters) {
+            if ($iterator instanceof PredefinedFiltersAwareInterface) {
+                $predefinedFilters = new BatchFilterBag((array)$filters, (array)$complexFilters);
 
                 $iterator->setPredefinedFiltersBag($predefinedFilters);
             } else {
