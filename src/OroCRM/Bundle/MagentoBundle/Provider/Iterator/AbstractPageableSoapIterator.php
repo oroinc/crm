@@ -250,6 +250,7 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
             $this->filter->addDateFilter('updated_at', 'from', $date, $format);
         }
 
+        $this->modifyFilters();
         $this->logAppliedFilters($this->filter);
 
         return $this->filter->getAppliedFilters();
@@ -418,5 +419,12 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
                 $this->filter->addStoreFilter($storeIds);
             }
         }
+    }
+
+    /**
+     * Modify filters before applying.
+     */
+    protected function modifyFilters()
+    {
     }
 }

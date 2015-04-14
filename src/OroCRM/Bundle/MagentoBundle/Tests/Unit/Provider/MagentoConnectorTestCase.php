@@ -152,7 +152,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         } else {
             $iterator->expects($this->once())->method('setPredefinedFiltersBag');
         }
-        $context = new Context(['filters' => []]);
+        $context = new Context(['filters' => ['test' => 1]]);
 
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, null, $context);
 
