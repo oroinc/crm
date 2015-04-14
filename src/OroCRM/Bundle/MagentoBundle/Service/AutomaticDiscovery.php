@@ -3,10 +3,14 @@
 namespace OroCRM\Bundle\MagentoBundle\Service;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 use OroCRM\Bundle\MagentoBundle\DependencyInjection\Configuration;
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery\DiscoveryStrategyInterface;
 
@@ -40,18 +44,26 @@ class AutomaticDiscovery
     protected $defaultStrategy;
 
     /**
+     * @var OwnershipMetadataProvider
+     */
+    protected $ownershipMetadata;
+
+    /**
      * @param DoctrineHelper $doctrineHelper
      * @param DiscoveryStrategyInterface $defaultStrategy
+     * @param OwnershipMetadataProvider $ownershipMetadata
      * @param string $discoveryEntityClass
      * @param array $configuration
      */
     public function __construct(
         DoctrineHelper $doctrineHelper,
         DiscoveryStrategyInterface $defaultStrategy,
+        OwnershipMetadataProvider $ownershipMetadata,
         $discoveryEntityClass,
         array $configuration
     ) {
         $this->doctrineHelper = $doctrineHelper;
+        $this->ownershipMetadata = $ownershipMetadata;
         $this->defaultStrategy = $defaultStrategy;
         $this->discoveryEntityClass = $discoveryEntityClass;
 
@@ -104,6 +116,21 @@ class AutomaticDiscovery
             $qb->andWhere($qb->expr()->neq($idFieldName, $idParameter))
                 ->setParameter($idParameter, $id);
         }
+
+        // Add organization limits
+        $organizationField = $this->ownershipMetadata
+            ->getMetadata(ClassUtils::getClass($entity))
+            ->getOrganizationFieldName();
+
+        if ($organizationField) {
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+            $organization = $propertyAccessor->getValue($entity, $organizationField);
+
+            $qb
+                ->andWhere(sprintf('o.%s = :organization', $organizationField))
+                ->setParameter('organization', $organization);
+        }
+
         // Get only 1 match
         $qb->setMaxResults(1);
 
