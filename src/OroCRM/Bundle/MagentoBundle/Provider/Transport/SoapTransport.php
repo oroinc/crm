@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Transport;
 
-use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -58,7 +58,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
     const ACTION_ORO_CART_LIST = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
+    const ACTION_ORO_ORDER_INFO = 'oroOrderInfo';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
+    const ACTION_ORO_CUSTOMER_INFO = 'oroCustomerInfo';
+    const ACTION_ORO_CUSTOMER_ADDRESS_LIST = 'oroCustomerAddressList';
+    const ACTION_ORO_CUSTOMER_ADDRESS_INFO = 'oroCustomerAddressInfo';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
@@ -299,7 +303,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getOrderInfo($incrementId)
     {
-        return $this->call(self::ACTION_ORDER_INFO, ['orderIncrementId' => $incrementId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = self::ACTION_ORO_ORDER_INFO;
+        } else {
+            $endpoint = self::ACTION_ORDER_INFO;
+        }
+
+        return $this->call($endpoint, ['orderIncrementId' => $incrementId]);
     }
 
     /**
@@ -365,7 +375,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddresses($originId)
     {
-        $addresses = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_LIST;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST;
+        }
+
+        $addresses = $this->call($endpoint, ['customerId' => $originId]);
         $addresses = WSIUtils::processCollectionResponse($addresses);
 
         return ConverterUtils::objectToArray($addresses);
@@ -420,9 +436,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        $result = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO, ['addressId' => $customerAddressId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO;
+        }
 
-        return ConverterUtils::objectToArray($result);
+        return ConverterUtils::objectToArray($this->call($endpoint, ['addressId' => $customerAddressId]));
     }
 
     /**
@@ -430,9 +450,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerInfo($originId)
     {
-        $result = $this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_INFO;
+        }
 
-        return ConverterUtils::objectToArray($result);
+        return ConverterUtils::objectToArray($this->call($endpoint, ['customerId' => $originId]));
     }
 
     /**
