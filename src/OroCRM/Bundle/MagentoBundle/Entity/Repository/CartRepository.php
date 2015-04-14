@@ -13,6 +13,7 @@ use Oro\Bundle\WorkflowBundle\Model\Workflow;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class CartRepository extends EntityRepository
 {
@@ -28,8 +29,8 @@ class CartRepository extends EntityRepository
      * @var array
      */
     protected $excludedStatuses = [
-        'purchased',
-        'expired'
+        CartStatus::STATUS_PURCHASED,
+        CartStatus::STATUS_EXPIRED
     ];
 
     /**

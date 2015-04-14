@@ -27,7 +27,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md"
+ *              "icon"="icon-user-md",
+ *              "context-grid"="orocrm-sales-b2bcustomers-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

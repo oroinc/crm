@@ -96,15 +96,14 @@ class OrderRepository extends EntityRepository
         \DateTime $end,
         AclHelper $aclHelper
     ) {
-
-        $qb    = $this->createQueryBuilder('o');
+        $qb = $this->createQueryBuilder('o');
         $qb->select(
             'COUNT(o.id) as allOrders',
             'SUM(CASE WHEN o.discountAmount > 0 THEN 1 ELSE 0 END) as discountedOrders'
-        )
-        ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-        ->setParameter('dateStart', $start)
-        ->setParameter('dateEnd', $end);
+        );
+        $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
+        $qb->setParameter('dateStart', $start);
+        $qb->setParameter('dateEnd', $end);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
         return $value['allOrders'] ? $value['discountedOrders'] / $value['allOrders'] : 0;

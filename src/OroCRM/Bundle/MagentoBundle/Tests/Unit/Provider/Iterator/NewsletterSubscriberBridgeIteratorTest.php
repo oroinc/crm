@@ -28,20 +28,15 @@ class NewsletterSubscriberBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIteration(array $data, array $stores)
     {
-        $dependencies = [MagentoTransportInterface::ALIAS_STORES => $stores];
-        $this->transport->expects($this->atLeastOnce())
-            ->method('getDependencies')
-            ->will($this->returnValue($dependencies));
-
         $this->transport->expects($this->atLeastOnce())->method('call')
             ->with($this->equalTo('newsletterSubscriberList'))
             ->will($this->returnValue($data));
 
         $this->assertEquals(
             [
-                1 => array_merge((array)$data[0], ['store' => $stores[1]]),
-                2 => array_merge((array)$data[1], ['store' => $stores[1]]),
-                3 => array_merge((array)$data[2], ['store' => $stores[1]])
+                1 => (array)$data[0],
+                2 => (array)$data[1],
+                3 => (array)$data[2]
             ],
             iterator_to_array($this->iterator)
         );
@@ -55,11 +50,6 @@ class NewsletterSubscriberBridgeIteratorTest extends BaseIteratorTestCase
      */
     public function testIterationWithInitialId(array $data, array $stores)
     {
-        $dependencies = [MagentoTransportInterface::ALIAS_STORES => $stores];
-        $this->transport->expects($this->atLeastOnce())
-            ->method('getDependencies')
-            ->will($this->returnValue($dependencies));
-
         $this->iterator->setInitialId(time());
 
         $this->transport->expects($this->once())->method('call')
@@ -68,9 +58,9 @@ class NewsletterSubscriberBridgeIteratorTest extends BaseIteratorTestCase
 
         $this->assertEquals(
             [
-                1 => array_merge((array)$data[0], ['store' => $stores[1]]),
-                2 => array_merge((array)$data[1], ['store' => $stores[1]]),
-                3 => array_merge((array)$data[2], ['store' => $stores[1]])
+                1 => (array)$data[0],
+                2 => (array)$data[1],
+                3 => (array)$data[2]
             ],
             iterator_to_array($this->iterator)
         );

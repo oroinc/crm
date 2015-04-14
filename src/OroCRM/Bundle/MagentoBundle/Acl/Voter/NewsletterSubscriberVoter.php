@@ -22,6 +22,17 @@ class NewsletterSubscriberVoter extends AbstractTwoWaySyncVoter
             return self::ACCESS_DENIED;
         }
 
-        return parent::getPermissionForAttribute($class, $identifier, $attribute);
+        if (is_a($this->object, $this->className, true)
+            && $this->object->getChannel()
+            && !$this->settingsProvider->isChannelApplicable($this->object->getChannel()->getId())
+        ) {
+            return self::ACCESS_DENIED;
+        }
+
+        if (!$this->settingsProvider->hasApplicableChannels()) {
+            return self::ACCESS_DENIED;
+        }
+
+        return self::ACCESS_ABSTAIN;
     }
 }

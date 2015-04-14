@@ -136,10 +136,11 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $expected
      * @param array $channels
+     * @param bool $checkExtension
      *
      * @dataProvider channelsDataProvider
      */
-    public function testHasApplicableChannels($expected, array $channels)
+    public function testHasApplicableChannels($expected, array $channels, $checkExtension = true)
     {
         $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
             ->disableOriginalConstructor()
@@ -153,7 +154,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityRepository')
             ->will($this->returnValue($repository));
 
-        $this->assertEquals($expected, $this->provider->hasApplicableChannels());
+        $this->assertEquals($expected, $this->provider->hasApplicableChannels($checkExtension));
     }
 
     /**
@@ -166,7 +167,11 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
             [false, [$this->getChannel(false, false, false, 2)]],
             [true, [$this->getChannel(true, true, true, 2)]],
             [true, [$this->getChannel(true, true, true, 2), $this->getChannel(false, false, false, 3)]],
-            [true, [$this->getChannel(true, true, true, 2), $this->getChannel(true, true, true, 3)]]
+            [true, [$this->getChannel(true, true, true, 2), $this->getChannel(true, true, true, 3)]],
+            [false, [$this->getChannel(false, false, false, 2)], false],
+            [true, [$this->getChannel(true, true, false, 2)], false],
+            [true, [$this->getChannel(true, true, false, 2), $this->getChannel(false, false, false, 3)], false],
+            [true, [$this->getChannel(true, true, false, 2), $this->getChannel(true, true, true, 3)], false]
         ];
     }
 

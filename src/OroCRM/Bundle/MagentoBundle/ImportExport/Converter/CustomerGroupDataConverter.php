@@ -13,7 +13,7 @@ class CustomerGroupDataConverter extends IntegrationAwareDataConverter
     {
         return [
             'customer_group_id' => 'originId',
-            'name' => 'name'
+            'customer_group_code' => 'name'
         ];
     }
 
@@ -23,5 +23,16 @@ class CustomerGroupDataConverter extends IntegrationAwareDataConverter
     protected function getBackendHeader()
     {
         return array_values($this->getHeaderConversionRules());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function fillEmptyColumns(array $header, array $data)
+    {
+        $dataDiff = array_diff(array_keys($data), $header);
+        $data = array_diff_key($data, array_flip($dataDiff));
+
+        return parent::fillEmptyColumns($header, $data);
     }
 }
