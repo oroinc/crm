@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Processor;
 
-class ContextProcessor extends ImportProcessor
+use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
+
+class ContextProcessor extends StepExecutionAwareImportProcessor
 {
     /**
      * {@inheritdoc}

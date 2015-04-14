@@ -30,6 +30,7 @@ class RestOpportunityTest extends WebTestCase
                 'name'        => 'opportunity_name_' . mt_rand(1, 500),
                 'owner'       => '1',
                 'customer'    => $this->getReference('default_b2bcustomer')->getId(),
+                'contact'     => $this->getReference('default_contact')->getId(),
                 'dataChannel' => $this->getReference('default_channel')->getId()
             ]
         ];
@@ -78,7 +79,6 @@ class RestOpportunityTest extends WebTestCase
      */
     public function testPutOpportunity($request)
     {
-
         $request['opportunity']['name'] .= '_updated';
 
         $this->client->request(
@@ -107,12 +107,10 @@ class RestOpportunityTest extends WebTestCase
     /**
      * @depends testPutOpportunity
      */
-    public function testGetOpportunitys($request)
+    public function testGetOpportunities($request)
     {
-        $this->client->request(
-            'GET',
-            $this->getUrl('oro_api_get_opportunities')
-        );
+        $baseUrl = $this->getUrl('oro_api_get_opportunities');
+        $this->client->request('GET', $baseUrl);
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
@@ -122,6 +120,12 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
+
+        $this->client->request('GET', $baseUrl . '?contactId=' . $request['opportunity']['contact']);
+        $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));
+
+        $this->client->request('GET', $baseUrl . '?contactId<>' . $request['opportunity']['contact']);
+        $this->assertEmpty($this->getJsonResponseContent($this->client->getResponse(), 200));
     }
 
     /**

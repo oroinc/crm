@@ -27,6 +27,8 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'customer_id' => 'originId',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
+            'store_id' => 'store:originId',
+            'website_id' => 'website:originId'
         ];
     }
 
@@ -35,6 +37,12 @@ class CustomerDataConverter extends AbstractTreeDataConverter
      */
     public function convertToImportFormat(array $importedRecord, $skipNullValues = true)
     {
+        if ($this->context && $this->context->hasOption('channel')) {
+            $importedRecord['store:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['website:channel:id'] = $this->context->getOption('channel');
+            $importedRecord['group:channel:id'] = $this->context->getOption('channel');
+        }
+
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
 
         if (!empty($importedRecord['birthday'])) {
@@ -45,9 +53,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['gender'] = $this->getOroGender($importedRecord['gender']);
         }
 
-        if (!empty($importedRecord['store']) && !empty($importedRecord['website'])) {
-            $importedRecord['store']['website'] = $importedRecord['website'];
-        }
+        unset($importedRecord['password']);
 
         return $importedRecord;
     }
@@ -58,7 +64,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
      */
     protected function getOroGender($gender)
     {
-        if (is_integer($gender)) {
+        if (is_int($gender)) {
             if ($gender == 1) {
                 $gender = Gender::MALE;
             }
@@ -131,7 +137,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $exportedRecord['gender'] = $this->getMagentoGender($exportedRecord['gender']);
         }
 
-        unset($exportedRecord['created_at'], $exportedRecord['updated_at']);
+        unset($exportedRecord['created_at'], $exportedRecord['updated_at'], $exportedRecord['addresses']);
 
         return $exportedRecord;
     }

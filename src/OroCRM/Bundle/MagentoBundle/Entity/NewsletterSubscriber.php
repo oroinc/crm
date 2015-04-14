@@ -14,7 +14,6 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
 
 /**
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  * @ORM\Table(name="orocrm_magento_newsl_subscr")
  * @Config(
  *      defaultValues={
@@ -347,24 +346,5 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
         $this->updatedAt = $updatedAt;
 
         return $this;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        }
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }

@@ -21,7 +21,7 @@ class B2bCustomerLifetimeListener
     /** @var EntityManager */
     protected $em;
 
-    /** @var array */
+    /** @var B2bCustomer[] */
     protected $queued = [];
 
     /** @var bool */
@@ -74,7 +74,10 @@ class B2bCustomerLifetimeListener
                     }
 
                     if ($this->isValuable($entity, isset($changeSet['closeRevenue']))
-                        || B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                        || (
+                            B2bCustomerRepository::VALUABLE_STATUS === $this->getOldStatus($entity, $changeSet)
+                            && $entity->getCustomer()
+                        )
                     ) {
                         $this->scheduleUpdate($entity->getCustomer());
                     }
@@ -102,7 +105,11 @@ class B2bCustomerLifetimeListener
                 continue;
             }
 
-            $flushRequired |= $repo->calculateLifetime($b2bCustomer);
+            $newLifetimeValue = $repo->calculateLifetimeValue($b2bCustomer);
+            if ($newLifetimeValue != $b2bCustomer->getLifetime()) {
+                $b2bCustomer->setLifetime($newLifetimeValue);
+                $flushRequired = true;
+            }
         }
 
         if ($flushRequired) {

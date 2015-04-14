@@ -121,14 +121,6 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrderInfo($incrementId);
 
     /**
-     * @param array|null $dependenciesToLoad
-     * @param bool false
-     *
-     * @return array
-     */
-    public function getDependencies(array $dependenciesToLoad = null, $force = false);
-
-    /**
      * @param array $customerData
      *
      * @return int ID of the created customer
@@ -176,7 +168,7 @@ interface MagentoTransportInterface extends TransportInterface
     /**
      * @param array $subscriberData
      *
-     * @return int
+     * @return array
      */
     public function createNewsletterSubscriber(array $subscriberData);
 
@@ -184,7 +176,7 @@ interface MagentoTransportInterface extends TransportInterface
      * @param int $subscriberId
      * @param array $subscriberData
      *
-     * @return bool
+     * @return array
      */
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
 

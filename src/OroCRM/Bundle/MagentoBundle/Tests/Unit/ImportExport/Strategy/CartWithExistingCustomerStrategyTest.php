@@ -1,24 +1,26 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Importexport\Strategy;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy;
 
-class CartWithExistingCustomerStrategyTest extends AbstractExistingCustomerStrategyTest
+class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
 {
     /**
-     * @return CartWithExistingCustomerStrategy
+     * {@inheritdoc}
      */
     protected function getStrategy()
     {
         return new CartWithExistingCustomerStrategy(
+            $this->eventDispatcher,
             $this->strategyHelper,
-            $this->managerRegistry,
-            $this->ownerHelper
+            $this->fieldHelper,
+            $this->databaseHelper
         );
     }
 
@@ -34,16 +36,6 @@ class CartWithExistingCustomerStrategyTest extends AbstractExistingCustomerStrat
         $cart = new Cart();
         $cart->setCustomer($customer);
         $cart->setChannel($channel);
-
-        $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repository->expects($this->once())
-            ->method('findOneBy')
-            ->with(['originId' => $customer->getOriginId(), 'channel' => $channel]);
-        $this->em->expects($this->once())
-            ->method('getRepository')
-            ->will($this->returnValue($repository));
 
         $this->assertNull($this->getStrategy()->process($cart));
     }
@@ -64,16 +56,6 @@ class CartWithExistingCustomerStrategyTest extends AbstractExistingCustomerStrat
             ->will($this->returnValue($execution));
         $strategy->setStepExecution($this->stepExecution);
 
-        $repository = $this->getMockBuilder('\Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $repository->expects($this->once())
-            ->method('findOneBy')
-            ->with(['originId' => $customer->getOriginId(), 'channel' => $channel]);
-        $this->em->expects($this->once())
-            ->method('getRepository')
-            ->will($this->returnValue($repository));
-
         $cartItem = ['customerId' => uniqid()];
         /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
         $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
@@ -82,12 +64,12 @@ class CartWithExistingCustomerStrategyTest extends AbstractExistingCustomerStrat
             ->will($this->returnValue($cartItem));
         $strategy->setImportExportContext($context);
 
-        $execution->expects($this->once())
+        $execution->expects($this->exactly(2))
             ->method('get')
-            ->with(CartWithExistingCustomerStrategy::CONTEXT_CART_POST_PROCESS);
-        $execution->expects($this->once())
+            ->with($this->isType('string'));
+        $execution->expects($this->exactly(2))
             ->method('put')
-            ->with(CartWithExistingCustomerStrategy::CONTEXT_CART_POST_PROCESS, [$cartItem]);
+            ->with($this->isType('string'), $this->isType('array'));
 
         $this->assertNull($strategy->process($cart));
     }

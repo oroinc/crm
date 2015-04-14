@@ -136,35 +136,44 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
         if ($expectedConfig) {
             $this->jobExecutor->expects($this->any())
                 ->method('executeJob')
-                ->with(
-                    ProcessorRegistry::TYPE_IMPORT,
-                    'test job',
-                    $this->callback(
-                        function (array $config) use ($expectedConfig) {
-                            $this->assertArrayHasKey(ProcessorRegistry::TYPE_IMPORT, $config);
+                ->withConsecutive(
+                    [
+                        // load dictionary
+                        $this->equalTo(ProcessorRegistry::TYPE_IMPORT),
+                        $this->equalTo('test job'),
+                        $this->isType('array')
+                    ],
+                    [
+                        // load initial
+                        $this->equalTo(ProcessorRegistry::TYPE_IMPORT),
+                        $this->equalTo('test job'),
+                        $this->callback(
+                            function (array $config) use ($expectedConfig) {
+                                $this->assertArrayHasKey(ProcessorRegistry::TYPE_IMPORT, $config);
 
-                            $diff = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $expectedConfig);
-                            if (!$diff) {
-                                $this->assertEquals($expectedConfig, $config[ProcessorRegistry::TYPE_IMPORT]);
+                                $diff = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $expectedConfig);
+                                if (!$diff) {
+                                    $this->assertEquals($expectedConfig, $config[ProcessorRegistry::TYPE_IMPORT]);
+
+                                    return true;
+                                }
+
+                                $intersect = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $diff);
+                                $this->assertEquals($expectedConfig, $intersect);
+
+                                if ($diff) {
+                                    $this->assertArrayHasKey('initialSyncedTo', $diff);
+
+                                    /** @var \DateTime $date */
+                                    $date = $diff['initialSyncedTo'];
+                                    $interval = $date->diff(new \DateTime('now', new \DateTimeZone('UTC')));
+                                    $this->assertEmpty($interval->m);
+                                }
 
                                 return true;
                             }
-
-                            $intersect = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $diff);
-                            $this->assertEquals($expectedConfig, $intersect);
-
-                            if ($diff) {
-                                $this->assertArrayHasKey('initialSyncedTo', $diff);
-
-                                /** @var \DateTime $date */
-                                $date = $diff['initialSyncedTo'];
-                                $interval = $date->diff(new \DateTime('now', new \DateTimeZone('UTC')));
-                                $this->assertEmpty($interval->m);
-                            }
-
-                            return true;
-                        }
-                    )
+                        )
+                    ]
                 )
                 ->will($this->returnValue($jobResult));
         } else {
