@@ -168,7 +168,15 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
+            $this->logger->debug(
+                sprintf(
+                    '[%.1fMB/%.1fMB] Call %s action with %s parameters',
+                    memory_get_usage() / 1024 / 1024,
+                    memory_get_peak_usage() / 1024 / 1024,
+                    $action,
+                    json_encode($params)
+                )
+            );
         }
 
         if ($this->isWsiMode) {

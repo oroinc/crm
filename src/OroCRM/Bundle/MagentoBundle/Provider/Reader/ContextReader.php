@@ -16,6 +16,5 @@ class ContextReader extends AbstractContextKeyReader
         }
 
         $this->entities = (array)$this->stepExecution->getJobExecution()->getExecutionContext()->get($this->contextKey);
-        $this->stepExecution->getJobExecution()->getExecutionContext()->remove($this->contextKey);
     }
 }
