@@ -39,7 +39,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_order_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="icon-list-alt",
+ *              "context-grid"="magento-order-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
