@@ -86,10 +86,10 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             ->will($this->returnValue($orderItemDate));
         $strategy->setImportExportContext($context);
 
-        $execution->expects($this->exactly(3))
+        $execution->expects($this->exactly(4))
             ->method('get')
             ->with($this->isType('string'));
-        $execution->expects($this->exactly(3))
+        $execution->expects($this->exactly(4))
             ->method('put')
             ->with($this->isType('string'), $this->isType('array'));
 

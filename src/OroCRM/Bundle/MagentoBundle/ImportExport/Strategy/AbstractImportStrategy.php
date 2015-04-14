@@ -6,8 +6,6 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -18,7 +16,6 @@ use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
-use OroCRM\Bundle\MagentoBundle\Entity\OriginAwareInterface;
 
 abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy implements
     LoggerAwareInterface,
@@ -121,16 +118,6 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
     /**
      * {@inheritdoc}
      */
-    protected function validateAndUpdateContext($entity)
-    {
-        $this->saveOriginIdContext($entity);
-
-        return parent::validateAndUpdateContext($entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function afterProcessEntity($entity)
     {
         if ($entity instanceof ChannelAwareInterface
@@ -144,19 +131,6 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
         }
 
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param OriginAwareInterface $entity
-     */
-    protected function saveOriginIdContext($entity)
-    {
-        if ($entity instanceof OriginAwareInterface) {
-            /** @var OriginAwareInterface $entity */
-            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
-            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getOriginId();
-            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
-        }
     }
 
     /**

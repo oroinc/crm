@@ -120,7 +120,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_order_import_post_process_customers_and_info
-                        context_shared_keys: postProcessOrders,postProcessCustomerIds,postProcessCartsIds
+                        context_shared_keys: postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
 
         mage_order_import_post_process_customers_and_info:
             title: "Import customers and postponded orders"
