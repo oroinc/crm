@@ -51,7 +51,9 @@ class CustomerTest extends AbstractEntityTestCase
             'recency'      => ['recency', 1, 1],
             'frequency'    => ['frequency', 2, 2],
             'monetary'     => ['monetary', 3, 3],
-            'syncState'    => ['syncState', 1, 1]
+            'syncState'    => ['syncState', 1, 1],
+            'confirmed'    => ['confirmed', false, false],
+            'createdIn'    => ['createdIn', 'Admin', 'Admin']
         ];
     }
 
@@ -63,7 +65,6 @@ class CustomerTest extends AbstractEntityTestCase
 
         $this->entity->addAddress($this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Address'));
         $this->entity->setOrganization($this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization'));
-
 
         $this->assertInstanceOf('Doctrine\Common\Collections\Collection', $this->entity->getAddresses());
         $this->assertInstanceOf('Oro\Bundle\OrganizationBundle\Entity\Organization', $this->entity->getOrganization());

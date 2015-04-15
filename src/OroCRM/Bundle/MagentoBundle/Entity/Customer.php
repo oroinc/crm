@@ -226,6 +226,20 @@ class Customer extends ExtendCustomer implements
     protected $store;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="created_in", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $createdIn;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_confirmed", type="boolean", nullable=true)
+     */
+    protected $confirmed = true;
+
+    /**
      * @var CustomerGroup
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup")
@@ -491,6 +505,44 @@ class Customer extends ExtendCustomer implements
     public function getStoreName()
     {
         return $this->store ? $this->store->getName() : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * @param bool $confirmed
+     * @return Customer
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedIn()
+    {
+        return $this->createdIn;
+    }
+
+    /**
+     * @param string $createdIn
+     * @return Customer
+     */
+    public function setCreatedIn($createdIn)
+    {
+        $this->createdIn = $createdIn;
+
+        return $this;
     }
 
     /**

@@ -67,6 +67,7 @@ class OrderDataConverter extends AbstractTreeDataConverter
         }
 
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
 
         if (!empty($importedRecord['paymentDetails']['method'])) {
             $importedRecord['paymentMethod'] = $importedRecord['paymentDetails']['method'];

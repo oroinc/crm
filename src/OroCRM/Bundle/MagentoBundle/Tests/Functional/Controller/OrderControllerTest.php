@@ -35,7 +35,7 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('Send email', $result->getContent());
         $this->assertContains('Log call', $result->getContent());
         $this->assertContains('Sync Data', $result->getContent());
-        $this->assertContains('$34.40', $result->getContent());
+        $this->assertContains('$4.40', $result->getContent());
         $this->assertContains('open', $result->getContent());
         $this->assertContains('customer@email.com', $result->getContent());
         $this->assertContains('$12.47', $result->getContent());
