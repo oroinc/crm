@@ -10,7 +10,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 class OrderWithExistingCustomerStrategy extends OrderStrategy
 {
     const CONTEXT_ORDER_POST_PROCESS = 'postProcessOrders';
-    const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
 
     /**
      * @param Order $importingOrder
@@ -21,7 +20,6 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
     {
         if (!$this->isProcessingAllowed($importingOrder)) {
             $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS, $this->context->getValue('itemData'));
-            $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS_IDS, $importingOrder->getIncrementId());
 
             return null;
         }

@@ -7,13 +7,22 @@ connector:
             steps:
                 import:
                     title:     import
-                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.customer_connector
                         processor: oro_importexport.processor.import_delegate
                         writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
+                        batch_size: 25
+                        post_processing_jobs: mage_customer_load_customer_info
+                        context_shared_keys: postProcessCustomerIds
+
+        mage_customer_load_customer_info:
+            title: "Import customers and postponded orders"
+            type:  import
+            steps:
                 load_customer_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep

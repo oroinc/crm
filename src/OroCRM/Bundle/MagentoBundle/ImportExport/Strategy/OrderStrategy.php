@@ -11,6 +11,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderStrategy extends AbstractImportStrategy
 {
+    const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
+
     /**
      * @var Order
      */
@@ -49,6 +51,8 @@ class OrderStrategy extends AbstractImportStrategy
         $this->processCustomer($entity, $entity->getCustomer());
 
         $this->existingEntity = null;
+
+        $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS_IDS, $entity->getIncrementId());
 
         return parent::afterProcessEntity($entity);
     }

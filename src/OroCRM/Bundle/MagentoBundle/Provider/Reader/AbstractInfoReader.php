@@ -84,7 +84,6 @@ abstract class AbstractInfoReader extends AbstractContextKeyReader
             return null;
         }
 
-        $this->logger->info(sprintf('Loading entity info by id: %s', $originId));
         $data = null;
 
         try {
