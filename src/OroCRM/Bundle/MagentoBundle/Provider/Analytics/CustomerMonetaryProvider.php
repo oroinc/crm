@@ -31,7 +31,7 @@ class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
         $qb
             ->select('SUM(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
                 )')
             ->join('c.orders', 'o')
             ->where(
