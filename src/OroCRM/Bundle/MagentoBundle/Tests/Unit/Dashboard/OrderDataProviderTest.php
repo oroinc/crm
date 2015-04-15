@@ -106,6 +106,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
         $dateHelper->expects($this->any())
             ->method('getFormatStrings')
             ->willReturn(['viewType' => 'month']);
+        $dateHelper->expects($this->once())
+            ->method('getPeriod')
+            ->willReturnCallback(function($dateRange) {
+                return [$dateRange['start'], $dateRange['end']];
+            });
         $orderRepository->expects($this->once())
             ->method('getAverageOrderAmount')
             ->with($this->aclHelper, $start, $end, $dateHelper)
@@ -170,6 +175,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                     'viewType' => 'day'
                 ]
             );
+        $this->dateHelper->expects($this->once())
+            ->method('getPeriod')
+            ->willReturnCallback(function($dateRange) {
+                return [$dateRange['start'], $dateRange['end']];
+            });
         $this->dateHelper->expects($this->once())
             ->method('convertToCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));
@@ -316,6 +326,11 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                     'viewType' => 'day'
                 ]
             );
+        $this->dateHelper->expects($this->once())
+            ->method('getPeriod')
+            ->willReturnCallback(function($dateRange) {
+                return [$dateRange['start'], $dateRange['end']];
+            });
         $this->dateHelper->expects($this->once())
             ->method('convertToCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));

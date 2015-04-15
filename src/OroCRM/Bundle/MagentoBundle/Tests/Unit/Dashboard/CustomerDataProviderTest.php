@@ -152,6 +152,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturnCallback(function($past, $now, $row) {
                 return $row['yearCreated'] . '-' . $row['monthCreated'];
             });
+        $this->dateHelper->expects($this->once())
+            ->method('getPeriod')
+            ->willReturnCallback(function($dateRange) {
+                return [$dateRange['start'], $dateRange['end']];
+            });
         $this->assertEquals(
             $chartView,
             $this->dataProvider->getNewCustomerChartView($chartViewBuilder, $dateRange)

@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
@@ -60,16 +61,12 @@ class BigNumber
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
         $dateRange        = $widgetOptions->get('dateRange');
-        $from             = $dateRange['start'];
-        $to               = $dateRange['end'];
-        $value            = $this->{$getterName}($from, $to);
+        $value            = $this->{$getterName}($dateRange);
         $result['value']  = $this->formatValue($value, $dataType);
         $previousInterval = $widgetOptions->get('usePreviousInterval', []);
 
         if (count($previousInterval)) {
-            $previousFrom = $previousInterval['start'];
-            $previousTo   = $previousInterval['end'];
-            $pastResult   = $this->{$getterName}($previousFrom, $previousTo);
+            $pastResult = $this->{$getterName}($previousInterval);
 
             $result['deviation'] = $this->translator->trans('orocrm.magento.dashboard.e_commerce_statistic.no_changes');
 
@@ -101,8 +98,8 @@ class BigNumber
 
             $result['previousRange'] = sprintf(
                 '%s - %s',
-                $this->dateTimeFormatter->formatDate($previousFrom),
-                $this->dateTimeFormatter->formatDate($previousTo)
+                $this->dateTimeFormatter->formatDate($previousInterval['start']),
+                $this->dateTimeFormatter->formatDate($previousInterval['end'])
             );
         }
 
@@ -110,133 +107,144 @@ class BigNumber
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getRevenueValues(\DateTime $start, \DateTime $end)
+    protected function getRevenueValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Order')
             ->getRevenueValueByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getOrdersNumberValues(\DateTime $start, \DateTime $end)
+    protected function getOrdersNumberValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Order')
             ->getOrdersNumberValueByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getAOVValues(\DateTime $start, \DateTime $end)
+    protected function getAOVValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Order')
             ->getAOVValueByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return float
      */
-    protected function getDiscountedOrdersPercentValues(\DateTime $start, \DateTime $end)
+    protected function getDiscountedOrdersPercentValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Order')
             ->getDiscountedOrdersPercentByDatePeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getNewCustomersCountValues(\DateTime $start, \DateTime $end)
+    protected function getNewCustomersCountValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Customer')
             ->getNewCustomersNumberWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getReturningCustomersCountValues(\DateTime $start, \DateTime $end)
+    protected function getReturningCustomersCountValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Customer')
             ->getReturningCustomersWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getAbandonedRevenueValues(\DateTime $start, \DateTime $end)
+    protected function getAbandonedRevenueValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Cart')
             ->getAbandonedRevenueByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getAbandonedCountValues(\DateTime $start, \DateTime $end)
+    protected function getAbandonedCountValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Cart')
             ->getAbandonedCountByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return float|null
      */
-    protected function getAbandonRateValues(\DateTime $start, \DateTime $end)
+    protected function getAbandonRateValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Cart', 'createdAt');
+
         return $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Cart')
             ->getAbandonRateByPeriod($start, $end, $this->aclHelper);
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getSiteVisitsValues(\DateTime $start, \DateTime $end)
+    protected function getSiteVisitsValues($dateRange)
     {
+        list($start, $end) = $this->getPeriod($dateRange, 'OroTrackingBundle:TrackingVisit', 'firstActionTime');
+
         return $this->doctrine
             ->getRepository('OroCRMChannelBundle:Channel')
             ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getOrderConversionValues(\DateTime $start, \DateTime $end)
+    protected function getOrderConversionValues($dateRange)
     {
         $result = 0;
+
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
 
         $ordersCount = $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Order')
@@ -252,13 +260,14 @@ class BigNumber
     }
 
     /**
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array $dateRange
      * @return int
      */
-    protected function getCustomerConversionValues(\DateTime $start, \DateTime $end)
+    protected function getCustomerConversionValues($dateRange)
     {
         $result = 0;
+
+        list($start, $end) = $this->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
 
         $customers = $this->doctrine
             ->getRepository('OroCRMMagentoBundle:Customer')
@@ -271,6 +280,29 @@ class BigNumber
         }
 
         return $result;
+    }
+
+    /**
+     * @param array  $dateRange
+     * @param string $entity
+     * @param string $field
+     * @return array
+     */
+    protected function getPeriod($dateRange, $entity, $field)
+    {
+        $start = $dateRange['start'];
+        $end   = $dateRange['end'];
+
+        if ($dateRange['type'] === AbstractDateFilterType::TYPE_LESS_THAN) {
+            $qb    = $this->doctrine
+                ->getRepository($entity)
+                ->createQueryBuilder('e')
+                ->select(sprintf('MIN(e.%s) as val', $field));
+            $start = $this->aclHelper->apply($qb)->getSingleScalarResult();
+            $start = new \DateTime($start, new \DateTimeZone('UTC'));
+        }
+
+        return [$start, $end];
     }
 
     /**

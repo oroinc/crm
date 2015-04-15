@@ -61,6 +61,8 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * get Average Order Amount by given period
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
