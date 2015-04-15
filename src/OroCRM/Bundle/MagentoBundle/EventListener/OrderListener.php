@@ -136,7 +136,7 @@ class OrderListener
         if ($subtotalAmount) {
             $discountAmount = $order->getDiscountAmount();
             $lifetimeValue  = $discountAmount
-                ? $subtotalAmount - $discountAmount
+                ? $subtotalAmount - abs($discountAmount)
                 : $subtotalAmount;
             // if order status changed to canceled we should remove order lifetime value from customer lifetime
             if ($order->getStatus() === Order::STATUS_CANCELED) {
