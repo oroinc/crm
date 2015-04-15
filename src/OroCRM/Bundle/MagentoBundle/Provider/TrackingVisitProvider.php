@@ -10,8 +10,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
-
 class TrackingVisitProvider
 {
     /**

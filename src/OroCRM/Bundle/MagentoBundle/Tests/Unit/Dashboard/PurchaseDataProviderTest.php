@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Dashboard;
 
 use DateTime;
 
@@ -74,6 +74,8 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPurchaseChartView()
     {
+        $from = new DateTime();
+
         $expectedArrayData = [
             [
                 'label'    => 'orocrm.magento.dashboard.purchase_chart.visited',
@@ -93,11 +95,14 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             [
                 'label'    => 'orocrm.magento.dashboard.purchase_chart.purchased',
                 'value'    => 13,
-                'isNozzle' => false,
+                'isNozzle' => true,
             ]
         ];
         $expectedOptions = [
             'name' => 'flow_chart',
+            'settings' => [
+                'quarterDate' => $from,
+            ],
             'data_schema' => [
                 'label' => [
                     'field_name' => 'label',
@@ -168,6 +173,6 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->with('purchase_chart')
             ->will($this->returnValue($chartConfig));
 
-        $this->dataProvider->getPurchaseChartView($chartViewBuilder, new DateTime(), new DateTime());
+        $this->dataProvider->getPurchaseChartView($chartViewBuilder, $from, new DateTime());
     }
 }
