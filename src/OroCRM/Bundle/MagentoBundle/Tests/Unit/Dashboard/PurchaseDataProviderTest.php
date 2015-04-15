@@ -75,7 +75,6 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetPurchaseChartView()
     {
         $from = new DateTime();
-
         $expectedArrayData = [
             [
                 'label'    => 'orocrm.magento.dashboard.purchase_chart.visited',
@@ -122,7 +121,6 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $chartConfig = ['data_schema' => $expectedOptions['data_schema']];
-
         $this->trackingVisitProvider
             ->expects($this->once())
             ->method('getVisitedCount')
@@ -172,7 +170,6 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getChartConfig')
             ->with('purchase_chart')
             ->will($this->returnValue($chartConfig));
-
         $this->dataProvider->getPurchaseChartView($chartViewBuilder, $from, new DateTime());
     }
 }

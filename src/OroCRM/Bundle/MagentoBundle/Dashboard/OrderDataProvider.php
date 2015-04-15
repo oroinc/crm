@@ -161,7 +161,8 @@ class OrderDataProvider
         );
         $previousItems = $this->dateHelper->combinePreviousDataWithCurrentPeriod(
             $previousFrom,
-            $from, $previousResult,
+            $from,
+            $previousResult,
             'amount',
             'amount'
         );
