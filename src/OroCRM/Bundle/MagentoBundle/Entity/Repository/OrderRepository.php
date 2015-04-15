@@ -90,7 +90,7 @@ class OrderRepository extends EntityRepository
             MONTH(o.createdAt) as monthCreated,
             AVG(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
             ) as averageOrderAmount';
         $queryBuilder->select($selectClause)
             ->where('o.createdAt > :sliceDate')->setParameter('sliceDate', $sliceDate)
