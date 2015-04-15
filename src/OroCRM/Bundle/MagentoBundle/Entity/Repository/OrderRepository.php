@@ -25,7 +25,7 @@ class OrderRepository extends EntityRepository
     {
         $select = 'SUM(
              CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
-             CASE WHEN orders.discountAmount IS NOT NULL THEN orders.discountAmount ELSE 0 END
+             CASE WHEN orders.discountAmount IS NOT NULL THEN ABS(orders.discountAmount) ELSE 0 END
              ) as val';
         $qb    = $this->createQueryBuilder('orders');
         $qb->select($select)
@@ -67,7 +67,7 @@ class OrderRepository extends EntityRepository
     {
         $select = 'SUM(
              CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-             CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+             CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
              ) as revenue,
              count(o.id) as ordersCount';
         $qb    = $this->createQueryBuilder('o');
@@ -177,7 +177,7 @@ class OrderRepository extends EntityRepository
             IDENTITY(o.dataChannel) AS dataChannelId,
             AVG(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
             ) as averageOrderAmount';
 
         $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
