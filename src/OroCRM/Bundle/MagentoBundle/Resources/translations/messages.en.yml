@@ -35,6 +35,27 @@ orocrm:
                 site_visits.label: Site visits
                 order_conversion.label: Order conversion rate
                 customer_conversion.label: Customer conversion rate
+            revenue_over_time_chart:
+                title: Revenue over time
+                description: This widget gives you a quick overview of magento revenues
+                revenue: Revenue
+                date: Date
+                current_period: Current period
+                previous_period: Previous period
+            orders_over_time_chart:
+                title: Orders over time
+                description: This widget gives you a quick overview of magento orders
+                order_count: Orders count
+                date: Date
+                current_period: Current period
+                previous_period: Previous period
+            purchase_chart:
+                title: Purchase Funnel
+                description: This widget gives you a quick overview of purchases
+                visited: Visited
+                deeply_visited: Browsed
+                added_to_cart: Added to cart
+                purchased: Purchased
         datagrid:
             actions:
                 view:

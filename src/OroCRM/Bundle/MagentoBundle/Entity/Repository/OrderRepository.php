@@ -2,8 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -211,6 +214,74 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper,
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getOrdersOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id) AS cnt');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getRevenueOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('SUM(
+                    CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                    CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
+                ) AS amount');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
      * @return array
      */
     protected function getOrderSliceDateAndTemplates()
@@ -238,5 +309,31 @@ class OrderRepository extends EntityRepository
         }
 
         return [$sliceDate, $monthMatch, $channelTemplate];
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return int
+     */
+    public function getUniqueBuyersCount(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        try {
+            $qb
+                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }
