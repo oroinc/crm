@@ -72,6 +72,9 @@ class PurchaseDataProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetPurchaseChartView()
     {
         $from = new DateTime();
