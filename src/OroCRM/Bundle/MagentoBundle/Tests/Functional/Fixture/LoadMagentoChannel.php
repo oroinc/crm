@@ -474,7 +474,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setStore($this->store);
         $order->setCustomer($customer);
         $order->setCustomerEmail('customer@email.com');
-        $order->setDiscountAmount(34.40);
+        $order->setDiscountAmount(4.40);
         $order->setTaxAmount(12.47);
         $order->setShippingAmount(5);
         $order->setTotalPaidAmount(17.85);
