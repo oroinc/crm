@@ -179,7 +179,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->dateTimeFormatter->expects($this->exactly(4))
             ->method('formatDate')
-            ->will($this->onConsecutiveCalls('2015-05-10', '2015-05-15', '2015-05-05', '2015-05-10'));
+            ->will($this->onConsecutiveCalls('2015-05-05', '2015-05-10', '2015-05-10', '2015-05-15'));
 
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
@@ -251,14 +251,14 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 $expectedArrayData = [
-                    '2015-05-10 - 2015-05-15' => [
+                    '2015-05-05 - 2015-05-10' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
                         ['date' => '2015-05-12', 'count' => 5],
                         ['date' => '2015-05-13'],
                         ['date' => '2015-05-14'],
                     ],
-                    '2015-05-05 - 2015-05-10' => [
+                    '2015-05-10 - 2015-05-15' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
                         ['date' => '2015-05-12', 'count' => 3],
@@ -324,7 +324,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($expectedArrayData['2015-05-05 - 2015-05-10']));
         $this->dateTimeFormatter->expects($this->exactly(4))
             ->method('formatDate')
-            ->will($this->onConsecutiveCalls('2015-05-10', '2015-05-15', '2015-05-05', '2015-05-10'));
+            ->will($this->onConsecutiveCalls('2015-05-05', '2015-05-10', '2015-05-10', '2015-05-15'));
 
         $orderRepository = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository')
             ->disableOriginalConstructor()
@@ -391,14 +391,14 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 $expectedArrayData = [
-                    '2015-05-10 - 2015-05-15' => [
+                    '2015-05-05 - 2015-05-10' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
                         ['date' => '2015-05-12', 'amount' => 100],
                         ['date' => '2015-05-13'],
                         ['date' => '2015-05-14'],
                     ],
-                    '2015-05-05 - 2015-05-10' => [
+                    '2015-05-10 - 2015-05-15' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
                         ['date' => '2015-05-12', 'amount' => 200],
