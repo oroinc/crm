@@ -40,18 +40,19 @@ define(function (require) {
                 if ($label.hasClass('required')) {
                     $label
                         .removeClass('required')
-                        .find('em').remove();
+                        .find('em').html('&nbsp;');
                 }
             }
             if (_.contains(showOn, $(this).val())) {
                 $scheduledFor
                     .removeClass('hide')
                     .removeData('validation-ignore');
+                $scheduledFor.find('input').removeClass('hide');
 
                 if (!$label.hasClass('required')) {
                     $label
                         .addClass('required')
-                        .append('<em>*</em>');
+                        .find('em').html('*');
                 }
             }
         });
