@@ -127,7 +127,7 @@ class AutomaticDiscovery
             $organization = $propertyAccessor->getValue($entity, $organizationField);
 
             $qb
-                ->andWhere(sprintf('o.%s = :organization', $organizationField))
+                ->andWhere(sprintf('%s.%s = :organization', self::ROOT_ALIAS, $organizationField))
                 ->setParameter('organization', $organization);
         }
 
