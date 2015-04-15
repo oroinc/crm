@@ -512,6 +512,7 @@ services:
         class: %orocrm_magento.writer.proxy_entity_writer.class%
         arguments:
             - @oro_integration.writer.persistent_batch_writer
+            - @oro_importexport.field.database_helper
         calls:
             - [setLogger, [@oro_integration.logger.strategy]]
 

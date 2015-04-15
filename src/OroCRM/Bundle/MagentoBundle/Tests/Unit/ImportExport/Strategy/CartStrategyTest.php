@@ -57,18 +57,12 @@ class CartStrategyTest extends AbstractStrategyTest
         $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
 
         $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
-        $jobInstance = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobInstance');
-        $jobInstance->expects($this->any())->method('getRawConfiguration')
-            ->will($this->returnValue(['writer_skip_clear' => true]));
         $this->jobExecution->expects($this->any())->method('getExecutionContext')
             ->will($this->returnValue($execution));
-        $this->jobExecution->expects($this->any())->method('getJobInstance')
-            ->will($this->returnValue($jobInstance));
         $strategy->setStepExecution($this->stepExecution);
 
         $this->databaseHelper->expects($this->once())->method('getEntityReference')->will($this->returnArgument(0));
         $this->databaseHelper->expects($this->once())->method('findOneByIdentity')->willReturn($databaseEntity);
-        $this->databaseHelper->expects($this->once())->method('onClear');
 
         $this->assertEquals($expected, $strategy->process($entity));
     }

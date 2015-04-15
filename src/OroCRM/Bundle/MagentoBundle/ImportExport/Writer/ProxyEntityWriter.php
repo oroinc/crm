@@ -10,6 +10,9 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
+use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -21,12 +24,20 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
     /** @var ItemWriterInterface */
     protected $writer;
 
+    /** @var DatabaseHelper */
+    protected $databaseHelper;
+
+    /** @var StepExecution */
+    protected $stepExecution;
+
     /**
      * @param ItemWriterInterface $writer
+     * @param DatabaseHelper $databaseHelper
      */
-    public function __construct(ItemWriterInterface $writer)
+    public function __construct(ItemWriterInterface $writer, DatabaseHelper $databaseHelper)
     {
         $this->writer = $writer;
+        $this->databaseHelper = $databaseHelper;
         $this->logger = new NullLogger();
     }
 
@@ -58,7 +69,25 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
             }
         }
 
-        return $this->writer->write($uniqueItems);
+        $this->writer->write($uniqueItems);
+
+        $configuration = $this->getConfiguration();
+        if (!empty($configuration[EntityWriter::SKIP_CLEAR])) {
+            // force entity cache clear if write with cache clear is skipped
+            $this->databaseHelper->onClear();
+        }
+    }
+
+    /**
+     * @return array
+     */
+    protected function getConfiguration()
+    {
+        if (!$this->stepExecution) {
+            throw new \InvalidArgumentException('Execution context is not configured');
+        }
+
+        return $this->stepExecution->getJobExecution()->getJobInstance()->getRawConfiguration();
     }
 
     /**
@@ -66,6 +95,8 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
      */
     public function setStepExecution(StepExecution $stepExecution)
     {
+        $this->stepExecution = $stepExecution;
+
         if ($this->writer instanceof StepExecutionAwareInterface) {
             $this->writer->setStepExecution($stepExecution);
         }

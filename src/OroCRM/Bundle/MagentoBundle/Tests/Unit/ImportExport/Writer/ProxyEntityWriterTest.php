@@ -2,7 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
+use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
+
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -17,10 +20,36 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     /** @var ProxyEntityWriter */
     protected $writer;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DatabaseHelper
+     */
+    protected $databaseHelper;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecution
+     */
+    protected $jobExecution;
+
     protected function setUp()
     {
         $this->wrapped = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface');
-        $this->writer  = new ProxyEntityWriter($this->wrapped);
+
+        $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->jobExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\JobExecution')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $jobInstance = $this->getMock('Akeneo\Bundle\BatchBundle\Entity\JobInstance');
+        $jobInstance->expects($this->any())->method('getRawConfiguration')
+            ->will($this->returnValue(['writer_skip_clear' => true]));
+
+        $this->jobExecution->expects($this->any())->method('getJobInstance')
+            ->will($this->returnValue($jobInstance));
+
+        $this->writer  = new ProxyEntityWriter($this->wrapped, $this->databaseHelper);
     }
 
     protected function tearDown()
@@ -38,6 +67,12 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->wrapped->expects($this->once())->method('write')
             ->with($this->equalTo($expectedItems));
+
+        $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
+            ->disableOriginalConstructor()->getMock();
+        $stepExecution->expects($this->any())->method('getJobExecution')->willReturn($this->jobExecution);
+        $this->databaseHelper->expects($this->once())->method('onClear');
+        $this->writer->setStepExecution($stepExecution);
 
         $this->writer->write($items);
     }
@@ -89,9 +124,10 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     public function testSetStepExecutionSetToWrappedWriter()
     {
         $wrapped       = $this->getMock('OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
-        $writer        = new ProxyEntityWriter($wrapped);
+        $writer        = new ProxyEntityWriter($wrapped, $this->databaseHelper);
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()->getMock();
+        $stepExecution->expects($this->any())->method('getJobExecution')->willReturn($this->jobExecution);
         $wrapped->expects($this->once())->method('setStepExecution')
             ->with($this->equalTo($stepExecution));
 
@@ -102,6 +138,7 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     {
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()->getMock();
+        $stepExecution->expects($this->any())->method('getJobExecution')->willReturn($this->jobExecution);
 
         $this->writer->setStepExecution($stepExecution);
     }
