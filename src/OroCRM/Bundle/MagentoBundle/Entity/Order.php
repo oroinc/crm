@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EmailBundle\Entity\Email;
@@ -38,7 +39,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_order_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="icon-list-alt",
+ *              "context-grid"="magento-order-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -73,13 +75,20 @@ class Order extends ExtendOrder implements
      * @var string
      *
      * @ORM\Column(name="increment_id", type="string", length=60, nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "identity"=true
+     *          }
+     *      }
+     * )
      */
     protected $incrementId;
 
     /**
      * @var Customer
      *
-     * @ORM\ManyToOne(targetEntity="Customer", cascade={"persist"}, inversedBy="orders")
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="orders")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
@@ -90,14 +99,28 @@ class Order extends ExtendOrder implements
      * @ORM\OneToMany(targetEntity="OrderAddress",
      *     mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $addresses;
 
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $store;
 
@@ -165,7 +188,7 @@ class Order extends ExtendOrder implements
     protected $totalCanceledAmount = 0;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Cart", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Cart")
      */
     protected $cart;
 

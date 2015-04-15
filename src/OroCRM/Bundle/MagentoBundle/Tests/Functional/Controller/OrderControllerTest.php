@@ -35,7 +35,7 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('Send email', $result->getContent());
         $this->assertContains('Log call', $result->getContent());
         $this->assertContains('Sync Data', $result->getContent());
-        $this->assertContains('$34.40', $result->getContent());
+        $this->assertContains('$4.40', $result->getContent());
         $this->assertContains('open', $result->getContent());
         $this->assertContains('customer@email.com', $result->getContent());
         $this->assertContains('$12.47', $result->getContent());
@@ -45,7 +45,7 @@ class OrderControllerTest extends AbstractController
         $this->assertContains('$4.00', $result->getContent());
         $this->assertContains('$0.00', $result->getContent());
         $this->assertContains('Some unique shipping method', $result->getContent());
-        $this->assertContains('unique ip', $result->getContent());
+        $this->assertContains('127.0.0.1', $result->getContent());
         $this->assertContains('some very unique gift message', $result->getContent());
         $this->assertContains('web site', $result->getContent());
         $this->assertContains('Demo Web store', $result->getContent());

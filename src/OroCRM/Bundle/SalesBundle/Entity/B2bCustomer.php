@@ -25,9 +25,12 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
  * @Config(
+ *      routeName="orocrm_sales_b2bcustomer_index",
+ *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md"
+ *              "icon"="icon-user-md",
+ *              "context-grid"="orocrm-sales-b2bcustomers-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

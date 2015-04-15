@@ -8,20 +8,19 @@ use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
 use OroCRM\Bundle\MagentoBundle\Entity\Region;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInterface
+class RegionDenormalizer implements DenormalizerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, $class, $format = null, array $context = array())
+    public function denormalize($data, $class, $format = null, array $context = [])
     {
         if (empty($data)) {
             return false;
         }
 
         /** @var Region $resultObject */
-        $className    = MagentoConnectorInterface::REGION_TYPE;
-        $resultObject = new $className();
+        $resultObject = new $class();
 
         if (isset($data['region_id'])) {
             $resultObject->setRegionId($data['region_id']);
@@ -53,8 +52,8 @@ class RegionDenormalizer extends AbstractNormalizer implements DenormalizerInter
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, $type, $format = null, array $context = array())
+    public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
-        return $type == MagentoConnectorInterface::REGION_TYPE;
+        return $type === MagentoConnectorInterface::REGION_TYPE;
     }
 }

@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendStore;
 
@@ -70,8 +71,15 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
     /**
      * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="cascade", nullable=false)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $website;
 

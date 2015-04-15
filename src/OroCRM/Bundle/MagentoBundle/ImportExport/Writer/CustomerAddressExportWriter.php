@@ -110,6 +110,8 @@ class CustomerAddressExportWriter extends AbstractExportWriter
 
         try {
             $remoteData = $this->transport->getCustomerAddressInfo($customerAddressId);
+            $remoteData[self::CUSTOMER_ID_KEY] = $entity->getOwner()->getOriginId();
+
             $item = $this->getStrategy()->merge(
                 $this->getEntityChangeSet(),
                 $item,

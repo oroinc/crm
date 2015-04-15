@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Component\Log\OutputLogger;
+
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
@@ -40,6 +41,12 @@ class InitialSyncCommand extends ContainerAwareCommand
                 InputOption::VALUE_REQUIRED,
                 'Sync will be performed for given integration id'
             )
+            ->addOption(
+                'skip-dictionary',
+                null,
+                InputOption::VALUE_NONE,
+                'Skip dictionaries synchronization'
+            )
             ->setDescription('Run initial synchronization for magento channel.');
     }
 
@@ -48,6 +55,7 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
         $logger = $this->getLogger($output);
         $this->initEntityManager();
@@ -73,7 +81,7 @@ class InitialSyncCommand extends ContainerAwareCommand
         try {
             $logger->notice(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
-            $result = $processor->process($integration);
+            $result = $processor->process($integration, null, ['skip-dictionary' => $skipDictionary]);
             $exitCode = $result ?: self::STATUS_FAILED;
         } catch (\Exception $e) {
             $logger->critical($e->getMessage(), ['exception' => $e]);

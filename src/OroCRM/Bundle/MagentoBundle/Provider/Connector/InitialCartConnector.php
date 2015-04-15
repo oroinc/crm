@@ -2,10 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 
+use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\CartConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 
-class InitialCartConnector extends AbstractInitialConnector implements ExtensionAwareInterface
+class InitialCartConnector extends AbstractMagentoConnector implements
+    ExtensionAwareInterface,
+    InitialConnectorInterface
 {
     const TYPE = 'cart_initial';
 

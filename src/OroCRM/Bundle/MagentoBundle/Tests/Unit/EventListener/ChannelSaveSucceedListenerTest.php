@@ -2,11 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener\ChannelSaveSucceedListenerTest as BaseTestCase;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class ChannelSaveSucceedListenerTest extends BaseTestCase
 {
@@ -72,8 +75,8 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $this->entity->setChannelType(ChannelType::TYPE);
         $transport = new MagentoSoapTransport();
         $transport->setIsExtensionInstalled($isExtensionInstalled);
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
         $this->integration->setTransport($transport);
-
 
         $orderConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\OrderConnector')
             ->disableOriginalConstructor()
@@ -82,6 +85,9 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $cartConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\CartConnector')
             ->disableOriginalConstructor()
             ->getMock();
+
+        $dictionaryConnector = $this
+            ->getMock('OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface');
 
         $this->typesRegistry->expects($this->any())
             ->method('getConnectorType')
@@ -102,6 +108,10 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
                 )
             );
 
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
+
         $this->prepareEvent();
         $this->getListener()->onChannelSucceedSave($this->event);
 
@@ -115,6 +125,10 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $transport->setIsExtensionInstalled(false);
         $this->integration->setTransport($transport);
 
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection([]));
+
         $this->prepareEvent();
         $this->getListener()->onChannelSucceedSave($this->event);
     }
@@ -125,8 +139,16 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
     public function extensionDataProvider()
     {
         return [
-            [false, ['TestConnector1_initial', 'TestConnector1']],
-            [true, ['TestConnector1_initial', 'TestConnector2_initial', 'TestConnector1', 'TestConnector2']]
+            [false, ['dictionaryConnector', 'TestConnector1_initial', 'TestConnector1']],
+            [true,
+                [
+                    'dictionaryConnector',
+                    'TestConnector1_initial',
+                    'TestConnector2_initial',
+                    'TestConnector1',
+                    'TestConnector2'
+                ]
+            ]
         ];
     }
 

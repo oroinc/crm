@@ -77,11 +77,13 @@ class Task extends AbstractPageEntity
         $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
         $this->dueDate->clear();
         $this->dueTime->clear();
-        if (preg_match('/^(.+)\s(\d{2}\:\d{2}\s\w{2})$/', $dueDate, $dueDate)) {
+        $dueDateParts = [];
+        if (preg_match('/^(.+)\s(\d{1,2}\:\d{2}\s\w{2})$/', $dueDate, $dueDateParts)) {
             $this->dueDate->click(); // focus
-            $this->dueDate->value($dueDate[1]);
+            $this->dueDate->value($dueDateParts[1]);
             $this->dueTime->click(); // focus
-            $this->dueTime->value($dueDate[2]);
+            $this->dueTime->clear();
+            $this->dueTime->value($dueDateParts[2]);
         } else {
             throw new Exception("Value {$dueDate} is not a valid date");
         }

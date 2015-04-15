@@ -3,38 +3,9 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
-use Oro\Bundle\ImportExportBundle\Reader\AbstractReader;
 
-class ContextReader extends AbstractReader
+class ContextReader extends AbstractContextKeyReader
 {
-    /** @var string */
-    protected $contextKey;
-
-    /**
-     * @param string $contextKey
-     */
-    public function setContextKey($contextKey)
-    {
-        $this->contextKey = $contextKey;
-    }
-
-    /**
-     * @var array[]
-     */
-    protected $entities;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function read()
-    {
-        if (!$this->entities) {
-            return null;
-        }
-
-        return array_shift($this->entities);
-    }
-
     /**
      * {@inheritdoc}
      */

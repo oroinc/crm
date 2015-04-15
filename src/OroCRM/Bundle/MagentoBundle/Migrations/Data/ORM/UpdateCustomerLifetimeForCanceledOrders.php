@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 /**
  * Recalculate lifetime value for customers who has canceled orders.
@@ -23,8 +23,8 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractFixture
     public function load(ObjectManager $manager)
     {
         /** @var EntityManager $manager */
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $manager->getRepository('OroCRMMagentoBundle:Order');
+        /** @var CustomerRepository $customerRepo */
+        $customerRepo = $manager->getRepository('OroCRMMagentoBundle:Customer');
         $queryBuilder = $manager->createQueryBuilder('c');
         $queryBuilder->select('c')
             ->from('OroCRMMagentoBundle:Customer', 'c')
@@ -43,10 +43,10 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractFixture
         $processed = 0;
         foreach ($iterator as $customer) {
             $oldLifetime = (float)$customer->getLifetime();
-            $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
+            $newLifetime = $customerRepo->calculateLifetimeValue($customer);
             if ($newLifetime !== $oldLifetime) {
+                $customer = $manager->merge($customer);
                 $customer->setLifetime($newLifetime);
-                $manager->persist($customer);
                 $processed++;
             }
 

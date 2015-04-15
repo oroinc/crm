@@ -1,39 +1,30 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\DependencyInjection;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Datagrid;
 
-use Oro\Bundle\DataGridBundle\Common\Object;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecord;
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider;
 
-class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
+class CustomerActionPermissionProviderTest extends AbstractTwoWaySyncActionPermissionProviderTest
 {
     /**
      * @var CustomerActionPermissionProvider
      */
     protected $provider;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
-     */
-    protected $doctrineHelper;
-
     protected function setUp()
     {
-        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
+        parent::setUp();
 
-        $this->provider = new CustomerActionPermissionProvider($this->doctrineHelper, '\stdClass');
+        $this->provider = new CustomerActionPermissionProvider($this->settingsProvider, '\stdClass');
     }
 
     /**
      * @param ResultRecordInterface $record
      * @param array $actions
-     * @param \PHPUnit_Framework_MockObject_MockObject|Channel $channel
+     * @param bool $isChannelApplicable
      * @param array $expected
      *
      * @dataProvider permissionsDataProvider
@@ -42,24 +33,12 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
         ResultRecordInterface $record,
         array $actions,
         array $expected,
-        $channel = null
+        $isChannelApplicable = false
     ) {
-        if ($channel) {
-            $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
-                ->disableOriginalConstructor()
-                ->getMock();
-
-            $repository
-                ->expects($this->once())
-                ->method('find')
-                ->with($this->isType('integer'))
-                ->will($this->returnValue($channel));
-
-            $this->doctrineHelper
-                ->expects($this->once())
-                ->method('getEntityRepository')
-                ->will($this->returnValue($repository));
-        }
+        $this->settingsProvider
+            ->expects($this->any())
+            ->method('isChannelApplicable')
+            ->will($this->returnValue($isChannelApplicable));
 
         $this->assertEquals($expected, $this->provider->getCustomerActionsPermissions($record, $actions));
     }
@@ -71,64 +50,30 @@ class CustomerActionPermissionProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'no channel id' => [
-                new ResultRecord([false]),
-                ['create' => [], 'update' => []],
-                ['create' => true, 'update' => false],
-                null
-            ],
-            'actions are empty' => [
                 new ResultRecord([]),
-                [],
-                [],
-                null
+                ['create' => [], 'update' => []],
+                ['create' => true, 'update' => false]
             ],
+            'actions are empty' => [new ResultRecord([]), [], []],
             'two way sync disabled' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => [], 'update' => []],
                 ['create' => true, 'update' => false],
-                $this->getChannel()
+                false
 
-            ],
-            'two way sync enabled' => [
-                new ResultRecord(['channelId' => 1]),
-                ['create' => [], 'update' => []],
-                ['create' => true, 'update' => true],
-                $this->getChannel(true)
             ],
             'missing update action' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => []],
                 ['create' => true],
-                null
+                true
             ],
-            'empty settings' => [
+            'channel applicable' => [
                 new ResultRecord(['channelId' => 1]),
                 ['create' => [], 'update' => []],
-                ['create' => true, 'update' => false],
-                $this->getChannel(null)
+                ['create' => true, 'update' => true],
+                true
             ]
         ];
-    }
-
-    /**
-     * @param bool $isTwoWaySyncEnabled
-     *
-     * @return Channel|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getChannel($isTwoWaySyncEnabled = false)
-    {
-        $channel = $this->getMock('Oro\Bundle\IntegrationBundle\Entity\Channel');
-
-        $settings = [];
-        if (null !== $isTwoWaySyncEnabled) {
-            $settings['isTwoWaySyncEnabled'] = $isTwoWaySyncEnabled;
-        }
-
-        $settings = Object::create($settings);
-        $channel->expects($this->any())
-            ->method('getSynchronizationSettings')
-            ->will($this->returnValue($settings));
-
-        return $channel;
     }
 }

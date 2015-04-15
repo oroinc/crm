@@ -2,14 +2,20 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {
+    const DICTIONARY_CONNECTOR_SUFFIX = '_dictionary';
     const INITIAL_SYNC_START_DATE = 'initialSyncStartDate';
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
     const CONNECTORS_INITIAL_SYNCED_TO = 'connectorsInitialSyncedTo';
@@ -60,6 +66,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function saveEntity($entity)
     {
+        /** @var EntityManager $em */
         $em = $this->doctrineRegistry->getManager();
         $em->persist($entity);
         $em->flush($entity);
@@ -68,11 +75,12 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     /**
      * @param Integration $integration
      * @param string $connector
+     * @param int|null $code
      * @return null|Status
      */
-    protected function getLastStatusForConnector(Integration $integration, $connector)
+    protected function getLastStatusForConnector(Integration $integration, $connector, $code = null)
     {
-        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector);
+        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
     }
 
     /**
@@ -82,7 +90,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function getSyncedTo(Integration $integration, $connector)
     {
-        $lastStatus = $this->getLastStatusForConnector($integration, $connector);
+        $lastStatus = $this->getLastStatusForConnector($integration, $connector, Status::STATUS_COMPLETED);
         if ($lastStatus) {
             $statusData = $lastStatus->getData();
             if (!empty($statusData[self::INITIAL_SYNCED_TO])) {
@@ -107,5 +115,23 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         }
 
         return $this->doctrineRegistry->getRepository($this->channelClassName);
+    }
+
+    /**
+     * @param Integration $integration
+     */
+    protected function processDictionaryConnectors(Integration $integration)
+    {
+        /** @var ConnectorInterface[] $dictionaryConnectors */
+        $dictionaryConnectors = $this->registry->getRegisteredConnectorsTypes(
+            ChannelType::TYPE,
+            function (ConnectorInterface $connector) {
+                return $connector instanceof DictionaryConnectorInterface;
+            }
+        )->toArray();
+
+        foreach ($dictionaryConnectors as $connector) {
+            $this->processIntegrationConnector($integration, $connector->getType());
+        }
     }
 }

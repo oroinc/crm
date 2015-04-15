@@ -14,6 +14,7 @@ class CustomerGroupSearchHandler extends IntegrationAwareSearchHandler
         $queryBuilder = $this->entityRepository->createQueryBuilder('e');
         $queryBuilder
             ->where($queryBuilder->expr()->like('LOWER(e.name)', ':searchTerm'))
+            ->andWhere('e.originId > 0')
             ->setParameter('searchTerm', '%' . strtolower($searchTerm) . '%')
 
             ->addOrderBy('e.name', 'ASC')

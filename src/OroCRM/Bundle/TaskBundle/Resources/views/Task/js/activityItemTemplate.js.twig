@@ -1,75 +1,37 @@
+{% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.js.twig' %}
 {% set entityClass = 'OroCRM\\Bundle\\TaskBundle\\Entity\\Task' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
-<script type="text/html" id="{{ id|e('html_attr')|raw }}">
-    <div class="accordion-group">
-        <div class="accordion-heading">
-            <div class="title-item">
-                <a href="#accordion-item<%= id %>" data-toggle="collapse"
-                   class="accordion-icon accordion-toggle<% if (collapsed) { %> collapsed<% } %>"></a>
-                <span class="icon">
-                    <i class="{{ oro_entity_config_value(entityClass, 'icon')|raw }}"></i>
-                </span>
-                <span class="visual">
-                    <span class="details">
-                        {{ entityName|raw }}
-                        <% var template = (verb == 'create')
-                            ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
-                            : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
-                        %>
-                        <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
-                            user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
-                            date: '<i class="date">' + createdAt + '</i>',
-                            editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
-                            editor_date: '<i class="date">' + updatedAt + '</i>'
-                        }) %>
-                    </span>
-                    <span class="comment-count"<% if (!commentCount) { %> style="display:none"<% } %>
-                          title="<%= _.__('oro.activitylist.comment.quantity_label') %>">
-                        <i class="icon icon-comment"></i><span class="count"><%= commentCount %></span>
-                    </span>
-                    <span class="message-item message">
-                        <a href="#accordion-item<%= id %>" data-toggle="collapse"
-                           class="accordion-toggle<% if (collapsed) { %> collapsed<% } %>"><%= subject %></a>
-                    </span>
-                </span>
-            </div>
-            <div class="actions">
-                <div class="more-bar-holder">
-                    <div class="dropdown"><a data-toggle="dropdown" class="dropdown-toggle activity-item" href="javascript:void(0);">...</a>
-                        <ul class="dropdown-menu activity-item pull-right launchers-dropdown-menu">
-                            <li>
-                                <ul class="nav nav-pills icons-holder launchers-list">
-                                    <li class="launcher-item">
-                                        <a href="javascript:void(0);" class="action item-edit-button" title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
-                                            <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
-                                        </a>
-                                    </li>
-                                    <li class="launcher-item">
-                                        <a href="javascript:void(0);" class="action item-remove-button" title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
-                                            <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="accordion-body collapse<% if (!collapsed) { %> in<% } %>" id="accordion-item<%= id %>">
-            <div class="message">
-                {# Do NOT remove. Placeholder for activity view #}
-                <div class="info responsive-cell"></div>
-                <% if (has_comments && commentable) { %>
-                <div class="responsive-cell">
-                    <h5 class="user-fieldset">
-                        <span><%= _.__('oro.comment.entity_plural_label') %></span>
-                    </h5>
-                    {# paceholder for comments block#}
-                    <div class="comment"></div>
-                </div>
-                <% } %>
-            </div>
-        </div>
-    </div>
-</script>
+
+{% block activityDetails %}
+    {{ entityName|raw }}
+    <% var template = (verb == 'create')
+        ? {{ 'orocrm.task.created_by'|trans|json_encode|raw }}
+        : {{ 'orocrm.task.changed_by'|trans|json_encode|raw }};
+    %>
+    <%= _.template(template, { interpolate: /\{\{(.+?)\}\}/g })({
+        user: '<a class="user" href="' + owner_url + '">' +  _.escape(owner) + '</a>',
+        date: '<i class="date">' + createdAt + '</i>',
+        editor: '<a class="user" href="' + editor_url + '">' +  _.escape(editor) + '</a>',
+        editor_date: '<i class="date">' + updatedAt + '</i>'
+    }) %>
+{% endblock %}
+
+{% block activityActions %}
+    {% set action %}
+    <a href="#" class="action item-edit-button"
+       title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
+        <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+    </a>
+    {% endset %}
+    {% set actions = [action] %}
+
+    {% set action %}
+    <a href="#" class="action item-remove-button"
+       title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
+        <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+    </a>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {{ parent() }}
+{% endblock %}
