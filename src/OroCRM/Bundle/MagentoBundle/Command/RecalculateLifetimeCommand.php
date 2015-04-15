@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\ChannelBundle\Command\RecalculateLifetimeCommand as AbstractRecalculateLifetimeCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
@@ -39,9 +39,9 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
      */
     protected function calculateCustomerLifetime(EntityManager $em, $customer)
     {
-        /** @var OrderRepository $orderRepo */
-        $orderRepo     = $em->getRepository('OroCRMMagentoBundle:Order');
-        $lifetimeValue = $orderRepo->getCustomerOrdersSubtotalAmount($customer);
+        /** @var CustomerRepository $customerRepo */
+        $customerRepo  = $em->getRepository('OroCRMMagentoBundle:Customer');
+        $lifetimeValue = $customerRepo->calculateLifetimeValue($customer);
 
         return $lifetimeValue;
     }
