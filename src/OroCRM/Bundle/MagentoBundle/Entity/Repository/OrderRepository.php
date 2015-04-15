@@ -263,7 +263,7 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o')
             ->select('SUM(
                     CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                    CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                    CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
                 ) AS amount');
 
         $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
