@@ -40,6 +40,8 @@ class OrderRepository extends EntityRepository
      *
      * @param Customer $customer
      * @return float
+     *
+     * @deprecated Use CustomerRepository::calculateLifetimeValue to get lifetime value for customer
      */
     public function getCustomerOrdersSubtotalAmount(Customer $customer)
     {
