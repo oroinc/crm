@@ -174,7 +174,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('convertToCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));
         $this->dateHelper->expects($this->once())
-            ->method('convertToPreviousPeriod')
+            ->method('combinePreviousDataWithCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-05 - 2015-05-10']));
 
         $this->dateTimeFormatter->expects($this->exactly(4))
@@ -320,7 +320,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('convertToCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-10 - 2015-05-15']));
         $this->dateHelper->expects($this->once())
-            ->method('convertToPreviousPeriod')
+            ->method('combinePreviousDataWithCurrentPeriod')
             ->will($this->returnValue($expectedArrayData['2015-05-05 - 2015-05-10']));
         $this->dateTimeFormatter->expects($this->exactly(4))
             ->method('formatDate')

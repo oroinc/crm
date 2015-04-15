@@ -107,58 +107,31 @@ class OrderDataProvider
         /* @var $to DateTime */
         $to = $dateRange['end'];
 
-        $items = $this->createOrdersOvertimeCurrentData($from, $to);
+        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+        $items = $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'cnt', 'count');
 
         $previousFrom = $this->createPreviousFrom($from, $to);
-        $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from);
-
-        $chartOptions = array_merge_recursive(
-            ['name' => 'multiline_chart'],
-            $this->configProvider->getChartConfig('orders_over_time_chart')
+        $previousResult = $this->getOrderRepository()->getOrdersOverTime(
+            $this->aclHelper,
+            $this->dateHelper,
+            $previousFrom,
+            $from
         );
+        $previousItems = $this->dateHelper->combinePreviousDataWithCurrentPeriod(
+            $previousFrom,
+            $from,
+            $previousResult,
+            'cnt',
+            'count'
+        );
+
         $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
-        $chartOptions['data_schema']['label']['type']  = $chartType;
-        $chartOptions['data_schema']['label']['label'] =
-            sprintf(
-                'oro.dashboard.chart.%s.label',
-                $chartType
-            );
+        $data = [
+            $this->createPeriodLabel($previousFrom, $from) => $previousItems,
+            $this->createPeriodLabel($from, $to)           => $items,
+        ];
 
-        $currentPeriod = $this->createPeriodLabel($from, $to);
-        $previousPeriod = $this->createPeriodLabel($previousFrom, $from);
-
-        return $viewBuilder->setOptions($chartOptions)
-            ->setArrayData([
-                $previousPeriod => $previousItems,
-                $currentPeriod => $items,
-            ])
-            ->getView();
-    }
-
-    /**
-     * @param DateTime $from
-     * @param DateTime $to
-     *
-     * @return array
-     */
-    protected function createOrdersOvertimeCurrentData(DateTime $from, DateTime $to)
-    {
-        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
-
-        return $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'cnt', 'count');
-    }
-
-    /**
-     * @param DateTime $from
-     * @param DateTime $to
-     *
-     * @return array
-     */
-    protected function createOrdersOvertimePreviousData(DateTime $from, DateTime $to)
-    {
-        $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
-
-        return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'cnt', 'count');
+        return $this->createPeriodChartView($viewBuilder, 'orders_over_time_chart', $chartType, $data);
     }
 
     /**
@@ -174,31 +147,57 @@ class OrderDataProvider
         /* @var $to DateTime */
         $to = $dateRange['end'];
 
-        $items = $this->createRevenueOverTimeCurrentData($from, $to);
+        $orderRepository = $this->getOrderRepository();
+
+        $result = $orderRepository->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
+        $items = $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'amount', 'amount');
 
         $previousFrom = $this->createPreviousFrom($from, $to);
-        $previousItems = $this->createRevenueOverTimePreviousData($previousFrom, $from);
+        $previousResult = $orderRepository->getRevenueOverTime(
+            $this->aclHelper,
+            $this->dateHelper,
+            $previousFrom,
+            $from
+        );
+        $previousItems = $this->dateHelper->combinePreviousDataWithCurrentPeriod(
+            $previousFrom,
+            $from, $previousResult,
+            'amount',
+            'amount'
+        );
 
+        $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
+        $data = [
+            $this->createPeriodLabel($previousFrom, $from) => $previousItems,
+            $this->createPeriodLabel($from, $to)           => $items,
+        ];
+
+        return $this->createPeriodChartView($viewBuilder, 'revenue_over_time_chart', $chartType, $data);
+    }
+
+    /**
+     * @param ChartViewBuilder $viewBuilder
+     * @param string $chart
+     * @param string $type
+     * @param array $data
+     *
+     * @return ChartView
+     */
+    protected function createPeriodChartView(ChartViewBuilder $viewBuilder, $chart, $type, array $data)
+    {
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
-            $this->configProvider->getChartConfig('revenue_over_time_chart')
+            $this->configProvider->getChartConfig($chart)
         );
-        $chartType = $this->dateHelper->getFormatStrings($from, $to)['viewType'];
-        $chartOptions['data_schema']['label']['type']  = $chartType;
+        $chartOptions['data_schema']['label']['type']  = $type;
         $chartOptions['data_schema']['label']['label'] =
             sprintf(
                 'oro.dashboard.chart.%s.label',
-                $chartType
+                $type
             );
 
-        $currentPeriod = $this->createPeriodLabel($from, $to);
-        $previousPeriod = $this->createPeriodLabel($previousFrom, $from);
-
         return $viewBuilder->setOptions($chartOptions)
-            ->setArrayData([
-                $previousPeriod => $previousItems,
-                $currentPeriod  => $items,
-            ])
+            ->setArrayData($data)
             ->getView();
     }
 
@@ -230,33 +229,6 @@ class OrderDataProvider
             $this->dateTimeFormatter->formatDate($from),
             $this->dateTimeFormatter->formatDate($to)
         );
-    }
-
-    /**
-     * @param DateTime $from
-     * @param DateTime $to
-     *
-     * @return array
-     */
-    protected function createRevenueOverTimeCurrentData(DateTime $from, DateTime $to)
-    {
-        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
-
-        return $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'amount', 'amount');
-    }
-
-    /**
-     * @param DateTime $from
-     * @param DateTime $to
-     * @param int $diff Timestamp
-     *
-     * @return array
-     */
-    protected function createRevenueOverTimePreviousData(DateTime $from, DateTime $to)
-    {
-        $result = $this->getOrderRepository()->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);
-
-        return $this->dateHelper->convertToPreviousPeriod($from, $to, $result, 'amount', 'amount');
     }
 
     /**
