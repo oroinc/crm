@@ -20,7 +20,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
 #                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
-                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 3 ELSE (CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL THEN 2 ELSE 1 END) END) as isSubscriber
+                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 'yes' ELSE (CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL THEN 'no' ELSE 'unknown' END) END) as isSubscriber
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
@@ -62,9 +62,9 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.is_subscriber.label
                 frontend_type: select
                 choices:
-                    1: orocrm.magento.datagrid.columns.is_subscriber.unknown
-                    2: orocrm.magento.datagrid.columns.is_subscriber.no
-                    3: orocrm.magento.datagrid.columns.is_subscriber.yes
+                    unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
+                    no: orocrm.magento.datagrid.columns.is_subscriber.no
+                    yes: orocrm.magento.datagrid.columns.is_subscriber.yes
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -150,7 +150,13 @@ datagrid:
                     data_name: c.lifetime
                 isSubscriber:
                     label: orocrm.magento.datagrid.columns.is_subscriber.label
-                    type: boolean
+                    type: single_choice
+                    options:
+                        field_options:
+                            choices:
+                                unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
+                                no: orocrm.magento.datagrid.columns.is_subscriber.no
+                                yes: orocrm.magento.datagrid.columns.is_subscriber.yes
                     data_name: isSubscriber
                 createdAt:
                     type:      datetime
