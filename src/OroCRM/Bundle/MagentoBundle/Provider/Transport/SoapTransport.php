@@ -6,6 +6,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Provider\SOAPTransport as BaseSOAPTransport;
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -57,7 +58,11 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
     const ACTION_ORO_CART_LIST = 'oroQuoteList';
     const ACTION_ORO_ORDER_LIST = 'oroOrderList';
+    const ACTION_ORO_ORDER_INFO = 'oroOrderInfo';
     const ACTION_ORO_CUSTOMER_LIST = 'oroCustomerList';
+    const ACTION_ORO_CUSTOMER_INFO = 'oroCustomerInfo';
+    const ACTION_ORO_CUSTOMER_ADDRESS_LIST = 'oroCustomerAddressList';
+    const ACTION_ORO_CUSTOMER_ADDRESS_INFO = 'oroCustomerAddressInfo';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
@@ -298,74 +303,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getOrderInfo($incrementId)
     {
-        return $this->call(self::ACTION_ORDER_INFO, ['orderIncrementId' => $incrementId]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDependencies(array $dependenciesToLoad = null, $force = false)
-    {
-        if ($force && null === $dependenciesToLoad) {
-            $dependenciesToLoad = array_keys($this->dependencies);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = self::ACTION_ORO_ORDER_INFO;
+        } else {
+            $endpoint = self::ACTION_ORDER_INFO;
         }
 
-        $dependencies = [];
-        foreach ($dependenciesToLoad as $dependencyToLoad) {
-            switch ($dependencyToLoad) {
-                case MagentoTransportInterface::ALIAS_STORES:
-                    $dependencies[$dependencyToLoad] = $this->getStoreDependency($force);
-                    break;
-                case MagentoTransportInterface::ALIAS_WEBSITES:
-                    $dependencies[$dependencyToLoad] = $this->getWebsiteDependency($force);
-                    break;
-                case MagentoTransportInterface::ALIAS_GROUPS:
-                    $dependencies[$dependencyToLoad] = $this->getCustomerGroupsDependency($force);
-                    break;
-            }
-        }
-
-        return $dependencies;
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getStoreDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_STORES, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_STORES] = iterator_to_array($this->getStores());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_STORES];
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getWebsiteDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_WEBSITES, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES] = iterator_to_array($this->getWebsites());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_WEBSITES];
-    }
-
-    /**
-     * @param bool $force
-     * @return array
-     */
-    protected function getCustomerGroupsDependency($force = false)
-    {
-        if ($force || !array_key_exists(MagentoTransportInterface::ALIAS_GROUPS, $this->dependencies)) {
-            $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS]
-                = iterator_to_array($this->getCustomerGroups());
-        }
-
-        return $this->dependencies[MagentoTransportInterface::ALIAS_GROUPS];
+        return $this->call($endpoint, ['orderIncrementId' => $incrementId]);
     }
 
     /**
@@ -431,10 +375,16 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddresses($originId)
     {
-        $addresses = $this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_LIST;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST;
+        }
+
+        $addresses = $this->call($endpoint, ['customerId' => $originId]);
         $addresses = WSIUtils::processCollectionResponse($addresses);
 
-        return $addresses;
+        return ConverterUtils::objectToArray($addresses);
     }
 
     /**
@@ -486,7 +436,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerAddressInfo($customerAddressId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO, ['addressId' => $customerAddressId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO;
+        }
+
+        return ConverterUtils::objectToArray($this->call($endpoint, ['addressId' => $customerAddressId]));
     }
 
     /**
@@ -494,7 +450,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCustomerInfo($originId)
     {
-        return (array)$this->call(SoapTransport::ACTION_CUSTOMER_INFO, ['customerId' => $originId]);
+        if ($this->isSupportedExtensionVersion()) {
+            $endpoint = SoapTransport::ACTION_ORO_CUSTOMER_INFO;
+        } else {
+            $endpoint = SoapTransport::ACTION_CUSTOMER_INFO;
+        }
+
+        return ConverterUtils::objectToArray($this->call($endpoint, ['customerId' => $originId]));
     }
 
     /**
@@ -515,10 +477,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function createNewsletterSubscriber(array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return (array)$this->call(
+            $result = $this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE,
                 ['subscriberData' => $subscriberData]
             );
+
+            return ConverterUtils::objectToArray($result);
         }
 
         throw new ExtensionRequiredException();
@@ -530,10 +494,12 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     public function updateNewsletterSubscriber($subscriberId, array $subscriberData)
     {
         if ($this->isExtensionInstalled()) {
-            return (array)$this->call(
+            $result = $this->call(
                 SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE,
                 ['subscriberId' => $subscriberId, 'subscriberData' => $subscriberData]
             );
+
+            return ConverterUtils::objectToArray($result);
         }
 
         throw new ExtensionRequiredException();

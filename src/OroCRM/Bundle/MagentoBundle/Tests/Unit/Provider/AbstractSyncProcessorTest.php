@@ -137,10 +137,16 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
             $this->jobExecutor->expects($this->any())
                 ->method('executeJob')
                 ->with(
-                    ProcessorRegistry::TYPE_IMPORT,
-                    'test job',
+                    // load initial
+                    $this->equalTo(ProcessorRegistry::TYPE_IMPORT),
+                    $this->equalTo('test job'),
                     $this->callback(
                         function (array $config) use ($expectedConfig) {
+                            // dictionary
+                            if (!array_key_exists('initialSyncInterval', $config)) {
+                                return true;
+                            }
+
                             $this->assertArrayHasKey(ProcessorRegistry::TYPE_IMPORT, $config);
 
                             $diff = array_diff_key($config[ProcessorRegistry::TYPE_IMPORT], $expectedConfig);

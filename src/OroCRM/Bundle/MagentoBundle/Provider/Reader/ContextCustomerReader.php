@@ -7,16 +7,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface;
 
 class ContextCustomerReader extends CustomerConnector
 {
-    /** @var string */
-    protected $contextKey;
-
-    /**
-     * @param string $contextKey
-     */
-    public function setContextKey($contextKey)
-    {
-        $this->contextKey = $contextKey;
-    }
+    const CONTEXT_POST_PROCESS_CUSTOMERS = 'postProcessCustomerIds';
 
     /**
      * {@inheritdoc}
@@ -29,7 +20,9 @@ class ContextCustomerReader extends CustomerConnector
             return $iterator;
         }
 
-        $iterator->setEntitiesIdsBuffer($this->getCustomerIds());
+        $customerIds = $this->getCustomerIds();
+
+        $iterator->setEntitiesIdsBuffer($customerIds);
 
         return $iterator;
     }
@@ -39,25 +32,15 @@ class ContextCustomerReader extends CustomerConnector
      */
     public function getCustomerIds()
     {
-        if (!$this->contextKey) {
-            throw new \InvalidArgumentException('Context key is missing');
-        }
+        $ids = (array)$this->stepExecution->getJobExecution()
+            ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CUSTOMERS);
 
-        $entities = (array)$this->stepExecution->getJobExecution()->getExecutionContext()->get($this->contextKey);
+        $this->stepExecution->getJobExecution()->getExecutionContext()->remove(self::CONTEXT_POST_PROCESS_CUSTOMERS);
 
-        $entitiesIdsBuffer = array_map(
-            function (array $entity) {
-                if (empty($entity['customer']['originId'])) {
-                    return false;
-                }
+        $ids = array_unique(array_filter($ids));
 
-                return $entity['customer']['originId'];
-            },
-            $entities
-        );
+        sort($ids);
 
-        sort($entitiesIdsBuffer);
-
-        return array_unique(array_filter($entitiesIdsBuffer));
+        return $ids;
     }
 }

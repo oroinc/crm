@@ -17,6 +17,24 @@ orocrm:
                 description: This widget gives you a quick overview of new magento customers
                 customer_count: Customers count
                 month: Month
+            e_commerce_statistic:
+                no_available_metrics: No available metrics
+                no_changes: No changes
+                title: Ecommerce Statistic
+                description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
+                sub_widgets.label: Metrics
+                revenue.label: Revenue
+                orders_number.label: Orders placed
+                discounted_orders_percent.label: Discounted orders
+                new_customers_count.label: New customers
+                returning_customers_count.label: Returning customers
+                average_order_value.label: Average order value
+                abandoned_revenue.label: Abandoned revenue
+                abandoned_count.label: Abandoned carts
+                abandon_rate.label: Abandon rate
+                site_visits.label: Site visits
+                order_conversion.label: Order conversion rate
+                customer_conversion.label: Customer conversion rate
         datagrid:
             actions:
                 view:
@@ -91,6 +109,10 @@ orocrm:
             newsletter_subscriber:
                 label: Newsletter Subscriber Connector
                 initial.label: Initial  Newsletter Subscriber Connector
+            store:
+                label: Store Connector
+            website:
+                label: Website Connector
 
         customer:
             entity_label:        Magento Customer
@@ -137,6 +159,8 @@ orocrm:
                 label: Sync State
                 info: Partially synced
             newsletter_subscriber.label: Newsletter Subscriber
+            confirmed.label: Confirmed
+            created_in.label: Created In
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -403,6 +427,7 @@ orocrm:
             country_iso3_code.label: Country ISO3 Code
             region_name.label:       Region
             region_code.label:       Region ISO code
+            channel.label:       Integration
 
         orderaddress:
             entity_label:        Magento Order Address
@@ -424,7 +449,6 @@ orocrm:
             owner.label:         Owner
             types.label:         Types
             street.label:        Street
-
             country_name.label:      Country
             country_iso2_code.label: Country ISO2 Code
             country_iso3_code.label: Country ISO3 Code

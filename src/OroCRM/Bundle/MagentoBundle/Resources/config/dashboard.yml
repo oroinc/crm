@@ -39,3 +39,108 @@ oro_dashboard_config:
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
+        big_numbers_widget:
+            label:       orocrm.magento.dashboard.e_commerce_statistic.title
+            route:       oro_dashboard_itemized_data_widget
+            route_parameters: { bundle: OroCRMMagentoBundle, name: bigNumbers }
+            acl:         orocrm_magento_cart_view
+            description: orocrm.magento.dashboard.e_commerce_statistic.description
+            icon:        bundles/orocrmmagento/img/icon-big_numbers.png
+            applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
+            data_items:
+                revenue:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getRevenueValues, currency)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.revenue.label
+                    acl:           orocrm_magento_order_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                orders_number:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrdersNumberValues, integer)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.orders_number.label
+                    acl:           orocrm_magento_order_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                discounted_orders_percent:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getDiscountedOrdersPercentValues, percent)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.discounted_orders_percent.label
+                    acl:           orocrm_magento_order_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                new_customers_count:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getNewCustomersCountValues, integer)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.new_customers_count.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                returning_customers_count:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getReturningCustomersCountValues, integer)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.returning_customers_count.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                average_order_value:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAOVValues, currency)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.average_order_value.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                abandoned_revenue:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonedRevenueValues, currency, true)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                abandoned_count:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonedCountValues, integer, true)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                abandon_rate:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getAbandonRateValues, percent, true)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                site_visits:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getSiteVisitsValues, integer)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.site_visits.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                order_conversion:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getOrderConversionValues, percent)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+                customer_conversion:
+                    data_provider: @orocrm_magento.provider.big_number->getBigNumberValues($widgetOptions$, getCustomerConversionValues, percent)
+                    label:         orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label
+                    acl:           orocrm_magento_customer_view
+                    template:      OroCRMMagentoBundle:Dashboard:bigNumberSubwidget.html.twig
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
+                usePreviousInterval:
+                    type: oro_type_widget_previous_date_range
+                    options:
+                       label: oro.dashboard.previous_date_range.label
+                       required: false
+                    converter_attributes:
+                        dateRangeField: dateRange
+                        default_checked: true
+                subWidgets:
+                    type: oro_type_widget_items_choice
+                    converter_attributes:
+                        default_selected: all
+                    options:
+                       label: orocrm.magento.dashboard.e_commerce_statistic.sub_widgets.label
+                       required: false
+                       multiple: true
+                       expanded: true
+                       choices:
+                          - {revenue: orocrm.magento.dashboard.e_commerce_statistic.revenue.label}
+                          - {orders_number: orocrm.magento.dashboard.e_commerce_statistic.orders_number.label}
+                          - {discounted_orders_percent: orocrm.magento.dashboard.e_commerce_statistic.discounted_orders_percent.label}
+                          - {new_customers_count: orocrm.magento.dashboard.e_commerce_statistic.new_customers_count.label}
+                          - {returning_customers_count: orocrm.magento.dashboard.e_commerce_statistic.returning_customers_count.label}
+                          - {average_order_value: orocrm.magento.dashboard.e_commerce_statistic.average_order_value.label}
+                          - {abandoned_revenue: orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label}
+                          - {abandoned_count: orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label}
+                          - {abandon_rate: orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label}
+                          - {site_visits: orocrm.magento.dashboard.e_commerce_statistic.site_visits.label}
+                          - {order_conversion: orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label}
+                          - {customer_conversion: orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label}

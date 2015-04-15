@@ -7,11 +7,15 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use Oro\Bundle\IntegrationBundle\Provider\SyncProcessor;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {
+    const DICTIONARY_CONNECTOR_SUFFIX = '_dictionary';
     const INITIAL_SYNC_START_DATE = 'initialSyncStartDate';
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
     const CONNECTORS_INITIAL_SYNCED_TO = 'connectorsInitialSyncedTo';
@@ -111,5 +115,23 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         }
 
         return $this->doctrineRegistry->getRepository($this->channelClassName);
+    }
+
+    /**
+     * @param Integration $integration
+     */
+    protected function processDictionaryConnectors(Integration $integration)
+    {
+        /** @var ConnectorInterface[] $dictionaryConnectors */
+        $dictionaryConnectors = $this->registry->getRegisteredConnectorsTypes(
+            ChannelType::TYPE,
+            function (ConnectorInterface $connector) {
+                return $connector instanceof DictionaryConnectorInterface;
+            }
+        )->toArray();
+
+        foreach ($dictionaryConnectors as $connector) {
+            $this->processIntegrationConnector($integration, $connector->getType());
+        }
     }
 }
