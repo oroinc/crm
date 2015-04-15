@@ -109,10 +109,7 @@ class OrderDataProvider
 
         $items = $this->createOrdersOvertimeCurrentData($from, $to);
 
-        $diff = $to->getTimestamp() - $from->getTimestamp();
-        $previousFrom = clone $from;
-        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
-
+        $previousFrom = $this->createPreviousFrom($from, $to);
         $previousItems = $this->createOrdersOvertimePreviousData($previousFrom, $from);
 
         $chartOptions = array_merge_recursive(
@@ -179,10 +176,7 @@ class OrderDataProvider
 
         $items = $this->createRevenueOverTimeCurrentData($from, $to);
 
-        $diff = $to->getTimestamp() - $from->getTimestamp();
-        $previousFrom = clone $from;
-        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
-
+        $previousFrom = $this->createPreviousFrom($from, $to);
         $previousItems = $this->createRevenueOverTimePreviousData($previousFrom, $from);
 
         $chartOptions = array_merge_recursive(
@@ -206,6 +200,21 @@ class OrderDataProvider
                 $currentPeriod  => $items,
             ])
             ->getView();
+    }
+
+    /**
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return DateTime
+     */
+    protected function createPreviousFrom(DateTime $from, DateTime $to)
+    {
+        $diff = $to->getTimestamp() - $from->getTimestamp();
+        $previousFrom = clone $from;
+        $previousFrom->setTimestamp($previousFrom->getTimestamp() - $diff);
+
+        return $previousFrom;
     }
 
     /**
