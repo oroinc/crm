@@ -180,6 +180,8 @@ orocrm:
                 label: Sync State
                 info: Partially synced
             newsletter_subscriber.label: Newsletter Subscriber
+            confirmed.label: Confirmed
+            created_in.label: Created In
 
         customergroup:
             entity_label:        Magento Customer Group

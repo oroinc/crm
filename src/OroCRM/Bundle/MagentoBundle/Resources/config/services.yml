@@ -518,12 +518,13 @@ services:
         arguments:
             - @oro_entity.doctrine_helper
             - @orocrm_magento.strategy.automatic_discovery.default
+            - @oro_security.owner.ownership_metadata_provider
             - %orocrm_magento.customer.entity.class%
             - []
         calls:
             - [addStrategy, ['addresses', @orocrm_magento.strategy.automatic_discovery.addresses]]
         tags:
-            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 4 }
 
     orocrm_magento.action.automatic_discovery:
         class: %orocrm_magento.action.automatic_discovery.class%
