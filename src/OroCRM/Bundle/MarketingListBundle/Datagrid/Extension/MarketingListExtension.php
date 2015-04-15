@@ -12,6 +12,7 @@ use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 /**
@@ -138,18 +139,19 @@ class MarketingListExtension extends AbstractExtension
      */
     protected function createItemsFunc(QueryBuilder $qb)
     {
+        /** @var From[] $from */
+        $from  = $qb->getDQLPart('from');
+        $alias = $from ? $from[0]->getAlias() : 't1';
+
         $itemsQb = clone $qb;
         $itemsQb->resetDQLParts();
 
         $itemsQb
             ->select('mli.entityId')
             ->from('OroCRMMarketingListBundle:MarketingListItem', 'item')
-            ->where('item.marketingList = :marketingListId');
+            ->andWhere('item.marketingList = :marketingListId')
+            ->andWhere('item.id = ' . $alias . '.id');
 
-        /** @var From[] $from */
-        $from = $qb->getDQLPart('from');
-        $alias = $from ? $from[0]->getAlias() : 't1';
-
-        return new Func($alias . '.id IN', [$itemsQb->getDQL()]);
+        return new Func('EXISTS', $itemsQb->getDQL());
     }
 }

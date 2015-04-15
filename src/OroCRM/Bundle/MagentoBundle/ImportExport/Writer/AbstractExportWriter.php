@@ -55,6 +55,8 @@ abstract class AbstractExportWriter extends PersistentBatchWriter
             throw new \InvalidArgumentException('Strategy is missing');
         }
 
+        $this->strategy->setStepExecution($this->stepExecution);
+
         return $this->strategy;
     }
 

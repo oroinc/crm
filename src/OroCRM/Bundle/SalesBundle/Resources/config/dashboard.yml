@@ -23,6 +23,12 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.opportunities_by_lead_source_chart.description
             icon:        bundles/orocrmsales/img/opportunities_by_lead_source.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
@@ -30,6 +36,12 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.opportunities_by_state.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart
@@ -37,6 +49,12 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.my_sales_flow_b2b_chart.description
             icon:        bundles/orocrmsales/img/my_sales_flow_b2b.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         campaigns_leads:
             label:       orocrm.campaign.dashboard.campaigns_leads.title
             route:       orocrm_campaign_dashboard_campaigns_leads_chart
@@ -44,6 +62,12 @@ oro_dashboard_config:
             description: orocrm.campaign.dashboard.campaigns_leads.description
             icon:        bundles/orocrmcampaign/img/Lead-generation-of-most-recently-created-campaigns.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         campaigns_opportunity:
             label:       orocrm.campaign.dashboard.campaigns_opportunity.title
             route:       orocrm_campaign_dashboard_campaigns_opportunity_chart
@@ -51,6 +75,12 @@ oro_dashboard_config:
             description: orocrm.campaign.dashboard.campaigns_opportunity.description
             icon:        bundles/orocrmcampaign/img/Top-5-opportunity-generating-campaigns.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         campaigns_by_close_revenue:
             label:       orocrm.campaign.dashboard.campaigns_by_close_revenue.title
             route:       orocrm_campaign_dashboard_campaigns_by_close_revenue_chart
@@ -58,3 +88,9 @@ oro_dashboard_config:
             description: orocrm.campaign.dashboard.campaigns_by_close_revenue.description
             icon:        bundles/orocrmcampaign/img/Top-5-revenue-generating-campaigns.png
             applicable:  @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true

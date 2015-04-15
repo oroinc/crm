@@ -41,6 +41,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeName="orocrm_magento_customer_index",
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
+ *          "entity"={
+ *              "icon"="icon-user",
+ *              "context-grid"="magento-customers-for-context-grid"
+ *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
@@ -194,24 +198,59 @@ class Customer extends ExtendCustomer implements
     /**
      * @var Website
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
      * @ORM\JoinColumn(name="website_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $website;
 
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $store;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="created_in", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     */
+    protected $createdIn;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_confirmed", type="boolean", nullable=true)
+     */
+    protected $confirmed = true;
+
+    /**
      * @var CustomerGroup
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup")
      * @ORM\JoinColumn(name="customer_group_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $group;
 
@@ -395,6 +434,13 @@ class Customer extends ExtendCustomer implements
     protected $password;
 
     /**
+     * @var NewsletterSubscriber
+     *
+     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     */
+    protected $newsletterSubscriber;
+
+    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -459,6 +505,44 @@ class Customer extends ExtendCustomer implements
     public function getStoreName()
     {
         return $this->store ? $this->store->getName() : null;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isConfirmed()
+    {
+        return $this->confirmed;
+    }
+
+    /**
+     * @param bool $confirmed
+     * @return Customer
+     */
+    public function setConfirmed($confirmed)
+    {
+        $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCreatedIn()
+    {
+        return $this->createdIn;
+    }
+
+    /**
+     * @param string $createdIn
+     * @return Customer
+     */
+    public function setCreatedIn($createdIn)
+    {
+        $this->createdIn = $createdIn;
+
+        return $this;
     }
 
     /**
@@ -773,5 +857,13 @@ class Customer extends ExtendCustomer implements
     public function getGeneratedPassword()
     {
         return '';
+    }
+
+    /**
+     * @return NewsletterSubscriber
+     */
+    public function getNewsletterSubscriber()
+    {
+        return $this->newsletterSubscriber;
     }
 }

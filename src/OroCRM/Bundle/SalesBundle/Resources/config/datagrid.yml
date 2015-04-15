@@ -1015,3 +1015,235 @@ datagrid:
                     data_name: email.email
             default:
                 createdAt: DESC
+
+    sales-lead-for-context-grid:
+        extended_entity_name: %orocrm_sales.lead.entity.class%
+        options:
+            entityHint: leads
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+        source:
+            type: orm
+            acl_resource: orocrm_sales_lead_view
+            query:
+                select:
+                    - l.id
+                    - l.name
+                    - l.firstName
+                    - l.lastName
+                    - l.email
+                    - l.phoneNumber
+                    - status.label as statusLabel
+                    - channel.name as channelName
+                from:
+                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                join:
+                    left:
+                        - { join: l.status, alias: status }
+                        - { join: l.dataChannel, alias: channel }
+            hints:
+                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+        columns:
+            id:
+                label:         orocrm.sales.lead.id.label
+            channelName:
+                label:         orocrm.sales.lead.data_channel.label
+            name:
+                label:         orocrm.sales.lead.name.label
+            statusLabel:
+                label:         orocrm.sales.lead.status.label
+            firstName:
+                label:         orocrm.sales.lead.first_name.label
+            lastName:
+                label:         orocrm.sales.lead.last_name.label
+            email:
+                label:         orocrm.sales.lead.email.label
+        sorters:
+            columns:
+                channelName:
+                    data_name: channelName
+                name:
+                    data_name: l.name
+                statusLabel:
+                    data_name: statusLabel
+                firstName:
+                    data_name: l.firstName
+                lastName:
+                    data_name: l.lastName
+                email:
+                    data_name: l.email
+            default:
+                createdAt:  DESC
+        filters:
+            columns:
+                 channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                 name:
+                    type: string
+                    data_name: l.name
+                 statusLabel:
+                    type: entity
+                    data_name: status.name
+                    enabled: false
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:LeadStatus
+                            property: label
+                            translatable_options: false
+                 firstName:
+                    type: string
+                    data_name: l.firstName
+                 lastName:
+                    type: string
+                    data_name: l.lastName
+                 email:
+                    type: string
+                    data_name: l.email
+
+    sales-opportunity-for-context-grid:
+        extended_entity_name: %orocrm_sales.opportunity.class%
+        options:
+            entityHint: opportunities
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+        source:
+            type: orm
+            acl_resource: orocrm_sales_opportunity_view
+            query:
+                select:
+                    - o.id
+                    - o.name
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - status.label as statusLabel
+                    - email.email as primaryEmail
+                    - channel.name as channelName
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                from:
+                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.contact , alias: contact }
+                        - { join: o.status, alias: status }
+                        - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: o.dataChannel, alias: channel }
+                        - { join: o.owner, alias: owner }
+        columns:
+            id:
+                label:         orocrm.sales.opportunity.id.label
+            channelName:
+                label:         orocrm.sales.opportunity.data_channel.label
+            name:
+                label:         orocrm.sales.opportunity.name.label
+            statusLabel:
+                label:         orocrm.sales.opportunity.status.label
+            primaryEmail:
+                label:         orocrm.contact.email.label
+            ownerName:
+                label:         orocrm.sales.opportunity.owner.label
+        sorters:
+            columns:
+                channelName:
+                    data_name: channelName
+                name:
+                    data_name: o.name
+                statusLabel:
+                    data_name: status.label
+                primaryEmail:
+                    data_name: email.email
+                ownerName:
+                    data_name: ownerName
+            default:
+                createdAt: DESC
+        filters:
+            columns:
+                channelName:
+                    type: entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                name:
+                    type: string
+                    data_name: o.name
+                statusLabel:
+                    type: entity
+                    data_name: status.name
+                    options:
+                        field_options:
+                            class: OroCRMSalesBundle:OpportunityStatus
+                            property: label
+                            translatable_options: false
+                primaryEmail:
+                    type: string
+                    data_name: email.email
+                ownerName:
+                    type:      string
+                    data_name: ownerName
+
+    orocrm-sales-b2bcustomers-for-context-grid:
+        extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        source:
+            type: orm
+            acl_resource: orocrm_sales_b2bcustomer_view
+            query:
+                select:
+                    - c.id
+                    - c.name
+                    - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
+                    - channel.name as channelName
+                from:
+                    - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
+                join:
+                    left:
+                        - { join: c.dataChannel, alias: channel }
+        columns:
+            id:
+                label:          orocrm.sales.b2bcustomer.id.label
+            channelName:
+                label:          orocrm.sales.b2bcustomer.data_channel.label
+            name:
+                label:          orocrm.sales.b2bcustomer.name.label
+            lifetime:
+                label:          orocrm.sales.b2bcustomer.lifetime.label
+                frontend_type:  currency
+        sorters:
+            columns:
+                channelName: { data_name: channelName }
+                name:        { data_name: c.name }
+                lifetime:    { data_name: c.lifetime }
+            default:
+                name: ASC
+        filters:
+            columns:
+                 channelName:
+                    type:      entity
+                    data_name: channel.id
+                    options:
+                        field_options:
+                            class: OroCRMChannelBundle:Channel
+                            property: name
+                            translatable_options: false
+                 name:
+                    type:      string
+                    data_name: c.name
+                 lifetime:
+                    type: number
+                    data_name: c.lifetime
+        options:
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+

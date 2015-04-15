@@ -210,7 +210,7 @@ class Lead extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$campaign}')]",
-            "Owner autocomplete doesn't return search value"
+            "Campaign autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$campaign}')]")->click();
 

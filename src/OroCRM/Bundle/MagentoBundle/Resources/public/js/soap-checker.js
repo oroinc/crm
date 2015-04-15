@@ -22,7 +22,15 @@ define([
         route:           'orocrm_magento_soap_check',
         url:             null,
         id:              null,
-        requiredOptions: ['websiteSelectEl', 'websitesListEl', 'isExtensionInstalledEl', 'connectorsEl', 'adminUrlEl'],
+        requiredOptions: [
+            'websiteSelectEl',
+            'websitesListEl',
+            'isExtensionInstalledEl',
+            'connectorsEl',
+            'adminUrlEl',
+            'extensionVersionEl',
+            'magentoVersionEl'
+        ],
 
         resultTemplate: _.template(
             '<div class="alert alert-<%= type %> connection-status"><%= message %></div>'
@@ -93,12 +101,59 @@ define([
          * @param res {object}
          */
         responseHandler: function (res) {
-            var success = res.success || false,
-                message = success ? __('orocrm.magento.success') : __('orocrm.magento.not_valid_parameters');
+            if (res.success || false) {
+                this.handleWebsites(res);
+                this.handleIsExtensionInstalled(res);
+                this.handleAdminUrl(res);
+                this.handleConnectors(res);
+                this.handleExtensionVersion(res);
+                this.handleMagentoVersion(res);
 
-            // websitesModificationAllowed might be undefined, but it should not be false
-            // false is equal - denied
-            if (success && this.options.websitesModificationAllowed !== false && res.websites) {
+                this.renderSuccessMessage(res);
+            } else {
+                this.renderErrorMessage();
+            }
+        },
+
+        /**
+         * @param {Object} res
+         */
+        renderSuccessMessage: function (res) {
+            if (res.isExtensionInstalled || false) {
+                if (res.isSupportedVersion || false) {
+                    this.renderResult('success', __(
+                        'orocrm.magento.success_bridge',
+                        { extension_version: res.extensionVersion }
+                    ));
+                } else {
+                    this.renderResult(
+                        'warning',
+                        __(
+                            'orocrm.magento.outdated_warning',
+                            {
+                                extension_version: res.extensionVersion,
+                                required_version: res.requiredExtensionVersion
+                            }
+                        )
+                    );
+                }
+            } else {
+                this.renderResult('success', __('orocrm.magento.success'));
+            }
+        },
+
+        renderErrorMessage: function () {
+            this.renderResult('error', __('orocrm.magento.not_valid_parameters'));
+        },
+
+        /**
+         * websitesModificationAllowed might be undefined, but it should not be false
+         * false is equal - denied
+         *
+         * @param {Object} res
+         */
+        handleWebsites: function (res) {
+            if (this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl);
 
@@ -109,15 +164,28 @@ define([
                 });
                 $websiteSelectEl.trigger('change');
             }
+        },
 
-            if (success) {
-                var $isExtensionInstalledEl = $(this.options.isExtensionInstalledEl),
-                    $adminUrlEl = $(this.options.adminUrlEl);
-                $isExtensionInstalledEl.val(res.isExtensionInstalled || false ? 1 : 0);
-                $adminUrlEl.val((res.adminUrl) ? res.adminUrl : '');
-            }
+        /**
+         * @param {Object} res
+         */
+        handleIsExtensionInstalled: function(res) {
+            $(this.options.isExtensionInstalledEl)
+                .val(res.isExtensionInstalled || false ? 1 : 0);
+        },
 
-            if (success && res.connectors) {
+        /**
+         * @param {Object} res
+         */
+        handleAdminUrl: function(res) {
+            $(this.options.adminUrlEl).val(res.adminUrl || '');
+        },
+
+        /**
+         * @param {Object} res
+         */
+        handleConnectors: function(res) {
+            if (res.connectors) {
                 var connectors = res.connectors,
                     $form = this.$el.parents('form'),
                     $connectorsEl = $form.find(this.options.connectorsEl),
@@ -144,7 +212,14 @@ define([
                     }
                 }
             }
-            this.renderResult(success ? 'success' : 'error', message);
+        },
+
+        handleExtensionVersion: function(res) {
+            $(this.options.extensionVersionEl).val(res.extensionVersion || '');
+        },
+
+        handleMagentoVersion: function(res) {
+            $(this.options.magentoVersionEl).val(res.magentoVersion || '');
         },
 
         /**
@@ -154,7 +229,9 @@ define([
          * @param message string
          */
         renderResult: function (type, message) {
-            messenger.notificationFlashMessage(type, message, {container: this.$el.parent(), template: this.resultTemplate});
+            var container = this.$el.parent();
+            container.find('.alert').remove();
+            messenger.notificationMessage(type, message, {container: container, template: this.resultTemplate});
         }
     });
 });

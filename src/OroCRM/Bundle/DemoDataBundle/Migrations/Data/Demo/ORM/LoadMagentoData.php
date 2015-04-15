@@ -3,38 +3,34 @@
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\Persistence\ObjectManager;
 
-use JMS\JobQueueBundle\Entity\Job;
-use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
+use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
 
+use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
+use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-
-use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
-use Oro\Bundle\UserBundle\Entity\User;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -90,7 +86,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             ->setCode('admin')
             ->setName('Admin')
             ->setWebsite($website);
-        $om->persist($website);
+        $om->persist($store);
 
         $group = new CustomerGroup();
         $group->setName('General');
@@ -99,6 +95,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $transport = new MagentoSoapTransport();
         $transport->setApiUser('api_user');
         $transport->setApiKey('api_key');
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
+        $transport->setIsExtensionInstalled(true);
+        $transport->setMagentoVersion('1.9.1.0');
         $transport->setWsdlUrl('http://magento.domain');
         $om->persist($transport);
 

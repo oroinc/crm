@@ -3,21 +3,33 @@
 namespace OroCRM\Bundle\CampaignBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+
+use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension;
+use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMCampaignBundleInstaller implements Installation
+class OroCRMCampaignBundleInstaller implements Installation, VisitEventAssociationExtensionAwareInterface
 {
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
+    }
+
+    /** @var VisitEventAssociationExtension */
+    protected $extension;
+
+    public function setVisitEventAssociationExtension(VisitEventAssociationExtension $extension)
+    {
+        $this->extension = $extension;
     }
 
     /**
@@ -39,6 +51,8 @@ class OroCRMCampaignBundleInstaller implements Installation
         $this->addOrocrmEmailCampaignStatisticsForeignKeys($schema);
         $this->addOrocrmCampaignTeSummaryForeignKeys($schema);
         $this->addOrocrmCmpgnTransportStngsForeignKeysForInternalTransport($schema);
+
+        $this->extension->addVisitEventAssociation($schema, 'orocrm_campaign');
     }
 
     /**

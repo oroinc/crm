@@ -31,6 +31,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
 use OroCRM\Bundle\MagentoBundle\Entity\Website;
+use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterface
 {
@@ -137,6 +138,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
     protected function createCart($billing, $shipping, Customer $customer, ArrayCollection $item, $status)
     {
         $cart = new Cart();
+        $cart->setOriginId(100);
         $cart->setChannel($this->integration);
         $cart->setDataChannel($this->channel);
         $cart->setBillingAddress($billing);
@@ -212,6 +214,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $transport->setApiKey('key');
         $transport->setApiUser('user');
         $transport->setIsExtensionInstalled(true);
+        $transport->setExtensionVersion(SoapTransport::REQUIRED_EXTENSION_VERSION);
+        $transport->setMagentoVersion('1.9.1.0');
         $transport->setIsWsiMode(false);
         $transport->setWebsiteId('1');
         $transport->setWsdlUrl('http://localhost/magento/api/v2_soap?wsdl=1');
@@ -463,14 +467,14 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setChannel($this->integration);
         $order->setDataChannel($this->channel);
         $order->setStatus('open');
-        $order->setIncrementId('one');
+        $order->setIncrementId('100000307');
         $order->setCreatedAt(new \DateTime('now'));
         $order->setUpdatedAt(new \DateTime('now'));
         $order->setCart($cart);
         $order->setStore($this->store);
         $order->setCustomer($customer);
         $order->setCustomerEmail('customer@email.com');
-        $order->setDiscountAmount(34.40);
+        $order->setDiscountAmount(4.40);
         $order->setTaxAmount(12.47);
         $order->setShippingAmount(5);
         $order->setTotalPaidAmount(17.85);
@@ -478,7 +482,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $order->setTotalRefundedAmount(4);
         $order->setTotalCanceledAmount(0);
         $order->setShippingMethod('some unique shipping method');
-        $order->setRemoteIp('unique ip');
+        $order->setRemoteIp('127.0.0.1');
         $order->setGiftMessage('some very unique gift message');
         $order->setOwner($this->getUser());
         $order->setOrganization($this->organization);
