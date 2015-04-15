@@ -20,6 +20,8 @@ parameters:
 
     orocrm_magento.entity.newsletter_subscriber.class:                      OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber
 
+    orocrm_magento.entity.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 

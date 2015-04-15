@@ -87,6 +87,7 @@ orocrm:
                     label: Is a Subsciber
                     yes: Yes
                     no: No
+                    unknown: Not defined
         channel_type:
             label:  Magento
         transport:
