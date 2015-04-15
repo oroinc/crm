@@ -53,6 +53,9 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['birthday'] = substr($importedRecord['birthday'], 0, 10);
         }
 
+        if (empty($importedRecord['gender']) && !empty($importedRecord['gender_name'])) {
+            $importedRecord['gender'] = $importedRecord['gender_name'];
+        }
         if (!empty($importedRecord['gender'])) {
             $importedRecord['gender'] = $this->getOroGender($importedRecord['gender']);
         }
@@ -68,7 +71,7 @@ class CustomerDataConverter extends AbstractTreeDataConverter
      */
     protected function getOroGender($gender)
     {
-        if (is_int($gender)) {
+        if (is_numeric($gender)) {
             if ($gender == 1) {
                 $gender = Gender::MALE;
             }
