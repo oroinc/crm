@@ -6,6 +6,7 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -94,6 +95,12 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
      */
     protected function beforeProcessEntity($entity)
     {
+        $configuration = $this->getConfiguration();
+        if (!empty($configuration[EntityWriter::SKIP_CLEAR])) {
+            // force entity cache clear if write with cache clear is skipped
+            $this->databaseHelper->onClear();
+        }
+
         if ($entity instanceof IntegrationAwareInterface) {
             /** @var Channel $channel */
             $channel = $this->databaseHelper->getEntityReference($entity->getChannel());
@@ -113,6 +120,18 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
         }
 
         return $this->stepExecution->getJobExecution()->getExecutionContext();
+    }
+
+    /**
+     * @return ExecutionContext
+     */
+    protected function getConfiguration()
+    {
+        if (!$this->stepExecution) {
+            throw new \InvalidArgumentException('Execution context is not configured');
+        }
+
+        return $this->stepExecution->getJobExecution()->getJobInstance()->getRawConfiguration();
     }
 
     /**
