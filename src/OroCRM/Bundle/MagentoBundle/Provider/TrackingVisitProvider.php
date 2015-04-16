@@ -24,7 +24,7 @@ class TrackingVisitProvider
 
     /**
      * @param ManagerRegistry $registry
-     * @param AclHelper $aclHelper
+     * @param AclHelper       $aclHelper
      */
     public function __construct(ManagerRegistry $registry, AclHelper $aclHelper)
     {
@@ -54,7 +54,6 @@ class TrackingVisitProvider
                     'from'    => $from,
                     'to'      => $to,
                 ])
-                ->groupBy('t.userIdentifier')
                 ->andHaving('COUNT(t.userIdentifier) > 1');
 
             return (int) $this->aclHelper->apply($qb)->getSingleScalarResult();

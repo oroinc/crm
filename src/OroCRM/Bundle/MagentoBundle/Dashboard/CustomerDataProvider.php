@@ -58,8 +58,7 @@ class CustomerDataProvider
 
         /** @var ChannelRepository $channelRepository */
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
-        $now               = $dateRange['end'];
-        $past              = $dateRange['start'];
+        list($past, $now)  = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
         $items             = [];
 
         // get all integration channels

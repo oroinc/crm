@@ -61,6 +61,8 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * get Average Order Amount by given period
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
@@ -99,14 +101,14 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o');
         $qb->select(
             'COUNT(o.id) as allOrders',
-            'SUM(CASE WHEN o.discountAmount > 0 THEN 1 ELSE 0 END) as discountedOrders'
+            'SUM(CASE WHEN (o.discountAmount IS NOT NULL AND o.discountAmount <> 0) THEN 1 ELSE 0 END) as discounted'
         );
         $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
         $qb->setParameter('dateStart', $start);
         $qb->setParameter('dateEnd', $end);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
-        return $value['allOrders'] ? $value['discountedOrders'] / $value['allOrders'] : 0;
+        return $value['allOrders'] ? $value['discounted'] / $value['allOrders'] : 0;
     }
 
     /**

@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM;
 
 use Doctrine\DBAL\Types\Type;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Util\ClassUtils;
@@ -157,14 +158,10 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
         $lifetimeColumnName = $customerMetadata->getColumnName($lifetimeFieldName);
 
         $this->em->getConnection()->executeUpdate(
-            'UPDATE orocrm_channel_lifetime_hist SET status = :status'
-            . sprintf(
-                ' WHERE data_channel_id = %d AND account_id IN (%s)',
-                $channel->getId(),
-                implode(',', $accountIds)
-            ),
-            ['status' => false],
-            ['status' => 'boolean']
+            'UPDATE orocrm_channel_lifetime_hist SET status = :status
+             WHERE data_channel_id = :channel_id AND account_id IN (:account_ids)',
+            ['status' => false, 'channel_id' => $channel->getId(), 'account_ids' => $accountIds],
+            ['status' => Type::BOOLEAN, 'channel_id' => Type::INTEGER, 'account_ids' => Connection::PARAM_INT_ARRAY]
         );
         $this->em->getConnection()->executeUpdate(
             'INSERT INTO orocrm_channel_lifetime_hist'
@@ -176,14 +173,14 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
                 $lifetimeColumnName
             )
             . sprintf(' FROM %s AS e', $customerMetadata->getTableName())
-            . sprintf(
-                ' WHERE e.data_channel_id = %d AND e.account_id IN (%s)',
-                $channel->getId(),
-                implode(',', $accountIds)
-            )
+            . ' WHERE e.data_channel_id = :channel_id AND e.account_id IN (:account_ids)'
             . ' GROUP BY hist_account_id, hist_data_channel_id, hist_status, hist_created_at',
-            ['created_at' => new \DateTime(null, new \DateTimeZone('UTC'))],
-            ['created_at' => Type::DATETIME]
+            [
+                'created_at' => new \DateTime(null, new \DateTimeZone('UTC')),
+                'channel_id' => $channel->getId(),
+                'account_ids' => $accountIds
+            ],
+            ['created_at' => Type::DATETIME, 'channel_id' => Type::INTEGER,'account_ids' => Connection::PARAM_INT_ARRAY]
             // dirty workaround due to http://www.doctrine-project.org/jira/browse/DBAL-630
             // TODO revert changes when doctrine version >= 2.5 in scope of BAP-5577
         );
