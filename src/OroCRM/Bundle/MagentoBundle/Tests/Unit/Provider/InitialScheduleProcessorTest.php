@@ -15,9 +15,18 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
     /** @var InitialScheduleProcessor */
     protected $processor;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $doctrineHelper;
+
     protected function setUp()
     {
         parent::setUp();
+
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->processor = new InitialScheduleProcessor(
             $this->registry,
@@ -29,6 +38,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
+        $this->processor->setDoctrineHelper($this->doctrineHelper);
     }
 
     public function testProcessFirstInitial()
@@ -47,6 +57,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob();
 
@@ -91,6 +102,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -107,7 +119,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessJobRunning()
     {
-        $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
 
@@ -131,6 +142,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
             ->will($this->returnValue(2));
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -182,7 +194,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
-
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -214,5 +226,27 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
 
         return parent::getIntegration($connectors, $syncStartDate, $realConnector);
+    }
+
+    /**
+     * @param object $entity
+     */
+    protected function assertReloadEntityCall($entity)
+    {
+        $class = get_class($entity);
+        $id = 1;
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityClass')
+            ->with($entity)
+            ->will($this->returnValue($class));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityIdentifier')
+            ->will($this->returnValue($id));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntity')
+            ->with($class, $id)
+            ->will($this->returnValue($entity));
     }
 }
