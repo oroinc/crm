@@ -67,6 +67,8 @@ class OrderDataProvider
     /**
      * @param ChartViewBuilder $viewBuilder
      * @param array            $dateRange
+     * @param DateHelper       $dateHelper
+     *
      * @return ChartView
      */
     public function getAverageOrderAmountChartView(ChartViewBuilder $viewBuilder, $dateRange, DateHelper $dateHelper)
@@ -76,18 +78,17 @@ class OrderDataProvider
         $orderRepository = $this->registry->getRepository('OroCRMMagentoBundle:Order');
         $result          = $orderRepository->getAverageOrderAmount($this->aclHelper, $start, $end, $dateHelper);
 
-        $chartOptions                                  = array_merge_recursive(
+        $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig('average_order_amount')
         );
-        $chartType                                     = $dateHelper->getFormatStrings($start, $end)['viewType'];
+        $chartType = $dateHelper->getFormatStrings($start, $end)['viewType'];
         $chartOptions['data_schema']['label']['type']  = $chartType;
         $chartOptions['data_schema']['label']['label'] =
             sprintf(
                 'oro.dashboard.chart.%s.label',
                 $chartType
             );
-
 
         return $viewBuilder->setOptions($chartOptions)
             ->setArrayData($result)
@@ -184,7 +185,7 @@ class OrderDataProvider
      */
     protected function createPeriodChartView(ChartViewBuilder $viewBuilder, $chart, $type, array $data)
     {
-        $chartOptions                                  = array_merge_recursive(
+        $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
             $this->configProvider->getChartConfig($chart)
         );

@@ -29,6 +29,9 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     /** @var DateTimeFormatter */
     protected $dateTimeFormatter;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->registry       = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -108,7 +111,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(['viewType' => 'month']);
         $dateHelper->expects($this->once())
             ->method('getPeriod')
-            ->willReturnCallback(function($dateRange) {
+            ->willReturnCallback(function ($dateRange) {
                 return [$dateRange['start'], $dateRange['end']];
             });
         $orderRepository->expects($this->once())
@@ -149,10 +152,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             $chartView,
             $this->dataProvider->getAverageOrderAmountChartView(
                 $chartViewBuilder,
-                [
-                    'start' => $start,
-                    'end' => $end
-                ],
+                ['start' => $start, 'end' => $end],
                 $dateHelper
             )
         );
@@ -177,7 +177,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             );
         $this->dateHelper->expects($this->once())
             ->method('getPeriod')
-            ->willReturnCallback(function($dateRange) {
+            ->willReturnCallback(function ($dateRange) {
                 return [$dateRange['start'], $dateRange['end']];
             });
         $this->dateHelper->expects($this->once())
@@ -242,7 +242,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                $sourceOrderData = [
+                'sourceOrderData' => [
                     [
                         [
                             'yearCreated'  => '2015',
@@ -260,7 +260,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
-                $expectedArrayData = [
+                'expectedArrayData' => [
                     '2015-05-05 - 2015-05-10' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
@@ -276,7 +276,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ['date' => '2015-05-14'],
                     ],
                 ],
-                $expectedOptions = [
+                'expectedOptions' => [
                     'name' => 'multiline_chart',
                     'data_schema' => [
                         'label' => [
@@ -291,7 +291,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
-                $chartConfig = [
+                'chartConfig' => [
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'date',
@@ -304,8 +304,8 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                             'type' => 'integer'
                         ],
                     ],
-                ],
-            ],
+                ]
+            ]
         ];
     }
 
@@ -328,7 +328,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
             );
         $this->dateHelper->expects($this->once())
             ->method('getPeriod')
-            ->willReturnCallback(function($dateRange) {
+            ->willReturnCallback(function ($dateRange) {
                 return [$dateRange['start'], $dateRange['end']];
             });
         $this->dateHelper->expects($this->once())
@@ -387,7 +387,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                $sourceOrderData = [
+                'sourceOrderData' => [
                     [
                         [
                             'yearCreated'  => '2015',
@@ -405,7 +405,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
-                $expectedArrayData = [
+                'expectedArrayData' => [
                     '2015-05-05 - 2015-05-10' => [
                         ['date' => '2015-05-10'],
                         ['date' => '2015-05-11'],
@@ -421,7 +421,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ['date' => '2015-05-14'],
                     ],
                 ],
-                $expectedOptions = [
+                'expectedOptions' => [
                     'name' => 'multiline_chart',
                     'data_schema' => [
                         'label' => [
@@ -436,7 +436,7 @@ class OrderDataProviderTest extends \PHPUnit_Framework_TestCase
                         ],
                     ],
                 ],
-                $chartConfig = [
+                'chartConfig' => [
                     'data_schema' => [
                         'label' => [
                             'field_name' => 'date',

@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
+use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -308,6 +308,8 @@ class BigNumber
     /**
      * @param mixed  $value
      * @param string $type
+     * @param bool   $isDeviant
+     *
      * @return string
      */
     protected function formatValue($value, $type = '', $isDeviant = false)
