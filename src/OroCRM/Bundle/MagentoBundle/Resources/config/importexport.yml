@@ -418,6 +418,7 @@ services:
         abstract: true
         calls:
             - [setChannelClassName, [%oro_integration.entity.class%]]
+            - [setDoctrineHelper, [@oro_entity.doctrine_helper]]
 
     orocrm_magento.provider.newsletter_subscriber.initial_sync_processor:
         class: %orocrm_magento.provider.newsletter_subscriber.initial_sync_processor.class%
