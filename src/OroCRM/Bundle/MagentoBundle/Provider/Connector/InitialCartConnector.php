@@ -43,4 +43,12 @@ class InitialCartConnector extends AbstractMagentoConnector implements
     {
         return $this->transport->getCarts();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

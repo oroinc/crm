@@ -57,4 +57,12 @@ class NewsletterSubscriberConnector extends AbstractMagentoConnector implements 
     {
         return $this->transport->getNewsletterSubscribers();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }
