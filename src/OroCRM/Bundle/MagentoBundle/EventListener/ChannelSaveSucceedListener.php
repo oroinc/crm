@@ -10,6 +10,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
 /**
@@ -66,6 +67,7 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
         $connectors = [];
         $initialConnectors = [];
         $isSupportedExtensionVersion = $this->transportEntity->isSupportedExtensionVersion();
+        $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
@@ -75,8 +77,11 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
                     continue;
                 }
 
-                if ($isSupportedExtensionVersion
-                    || (!$isSupportedExtensionVersion && !$connector instanceof ExtensionAwareInterface)
+                $isExtensionApplicable = $connector instanceof ExtensionVersionAwareInterface ?
+                    $isSupportedExtensionVersion : $isExtensionInstalled;
+
+                if ($isExtensionApplicable
+                    || (!$isExtensionApplicable && !$connector instanceof ExtensionAwareInterface)
                 ) {
                     array_push($initialConnectors, $connectorName . InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX);
                     array_push($connectors, $connectorName);
