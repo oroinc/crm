@@ -11,7 +11,7 @@ class OrderInfoReader extends AbstractInfoReader
      */
     protected function loadEntityInfo($originId)
     {
-        $this->logger->info(sprintf('Loading Order info by id: %s', $originId));
+        $this->logger->info(sprintf('Loading Order info by incrementId: %s', $originId));
 
         $result = $this->transport->getOrderInfo($originId);
 

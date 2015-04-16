@@ -11,7 +11,6 @@ use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
-use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -26,9 +25,6 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
 
     /** @var DatabaseHelper */
     protected $databaseHelper;
-
-    /** @var StepExecution */
-    protected $stepExecution;
 
     /**
      * @param ItemWriterInterface $writer
@@ -71,23 +67,8 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
 
         $this->writer->write($uniqueItems);
 
-        $configuration = $this->getConfiguration();
-        if (!empty($configuration[EntityWriter::SKIP_CLEAR])) {
-            // force entity cache clear if write with cache clear is skipped
-            $this->databaseHelper->onClear();
-        }
-    }
-
-    /**
-     * @return array
-     */
-    protected function getConfiguration()
-    {
-        if (!$this->stepExecution) {
-            throw new \InvalidArgumentException('Execution context is not configured');
-        }
-
-        return $this->stepExecution->getJobExecution()->getJobInstance()->getRawConfiguration();
+        // force entity cache clear if clear is skipped
+        $this->databaseHelper->onClear();
     }
 
     /**
@@ -95,8 +76,6 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
      */
     public function setStepExecution(StepExecution $stepExecution)
     {
-        $this->stepExecution = $stepExecution;
-
         if ($this->writer instanceof StepExecutionAwareInterface) {
             $this->writer->setStepExecution($stepExecution);
         }

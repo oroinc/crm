@@ -62,7 +62,9 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function processAddresses(Customer $entity)
     {
         if (!$entity->getAddresses()->isEmpty()) {
+            /** @var Address $address */
             foreach ($entity->getAddresses() as $address) {
+                $address->setOwner($entity);
                 $originId = $address->getOriginId();
                 if (array_key_exists($originId, $this->importingAddresses)) {
                     $remoteAddress = $this->importingAddresses[$originId];
