@@ -9,12 +9,24 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 
+use OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class OrderListener
 {
+    /** @var ChannelDoctrineListener */
+    protected $channelDoctrineListener;
+
+    /**
+     * @param ChannelDoctrineListener $channelDoctrineListener
+     */
+    public function __construct(ChannelDoctrineListener $channelDoctrineListener)
+    {
+        $this->channelDoctrineListener = $channelDoctrineListener;
+    }
+
     /** @var array */
     protected $ordersForUpdate = [];
 
@@ -45,7 +57,7 @@ class OrderListener
 
         // if subtotal or status has been changed
         if ($this->isOrderValid($entity)
-            && array_intersect(['subtotalAmount', 'status'], array_keys($event->getEntityChangeSet()))
+            && array_intersect(['subtotalAmount', 'discountAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
@@ -122,12 +134,26 @@ class OrderListener
 
         $subtotalAmount = $order->getSubtotalAmount();
         if ($subtotalAmount) {
-            // if order status changed to canceled we should remove subtotalAmount from customer lifetime
+            $discountAmount = $order->getDiscountAmount();
+            $lifetimeValue  = $discountAmount
+                ? $subtotalAmount - abs($discountAmount)
+                : $subtotalAmount;
+            // if order status changed to canceled we should remove order lifetime value from customer lifetime
             if ($order->getStatus() === Order::STATUS_CANCELED) {
-                $subtotalAmount *= -1;
+                $lifetimeValue *= -1;
             }
 
-            $customerRepository->updateCustomerLifetimeValue($order->getCustomer(), $subtotalAmount);
+            $customer = $order->getCustomer();
+            $customerRepository->updateCustomerLifetimeValue($customer, $lifetimeValue);
+
+            // schedule lifetime history update
+            if ($customer->getAccount()) {
+                $this->channelDoctrineListener->scheduleEntityUpdate(
+                    $customer,
+                    $customer->getAccount(),
+                    $customer->getDataChannel()
+                );
+            }
         }
     }
 }

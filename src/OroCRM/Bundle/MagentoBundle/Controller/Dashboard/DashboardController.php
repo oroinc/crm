@@ -7,8 +7,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
+use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
+use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 
 class DashboardController extends Controller
 {
@@ -22,11 +26,12 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2CAction($widget)
     {
-        $dateTo = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateFrom = new \DateTime(
-            $dateTo->format('Y') . '-01-' . ((ceil($dateTo->format('n') / 3) - 1) * 3 + 1),
-            new \DateTimeZone('UTC')
-        );
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+
+        $dateTo = $dateRange['end'];
+        $dateFrom = $dateRange['start'];
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');
@@ -78,7 +83,13 @@ class DashboardController extends Controller
         $chartViewBuilder = $this->get('oro_chart.view_builder');
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
-        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView($chartViewBuilder);
+        $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView(
+            $chartViewBuilder,
+            $this->get('oro_dashboard.widget_configs')
+                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->get('dateRange'),
+            $this->get('oro_dashboard.datetime.hepler')
+        );
 
         return $data;
     }
@@ -98,8 +109,119 @@ class DashboardController extends Controller
         $chartViewBuilder     = $this->get('oro_chart.view_builder');
 
         $data = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
-        $data['chartView'] = $customerDataProvider->getNewCustomerChartView($chartViewBuilder);
+        $data['chartView'] = $customerDataProvider->getNewCustomerChartView(
+            $chartViewBuilder,
+            $this->get('oro_dashboard.widget_configs')
+                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->get('dateRange')
+        );
 
         return $data;
+    }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_purchase_chart",
+     *      name="orocrm_magento_dashboard_purchase_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:purchaseChart.html.twig")
+     */
+    public function purchaseAction()
+    {
+        $widgetAttributes     = $this->getWidgetConfigs();
+        $purchaseDataProvider = $this->getPurchaseDataProvider();
+        $chartViewBuilder     = $this->getChartViewBuilder();
+
+        $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
+        $from = $dateRange['start'];
+        $to = $dateRange['end'];
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
+        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+
+        return $data;
+    }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_revenue_over_time_chart",
+     *      name="orocrm_magento_dashboard_revenue_over_time_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:revenueOverTimeChart.html.twig")
+     */
+    public function revenueOverTimeAction()
+    {
+        $widgetAttributes  = $this->getWidgetConfigs();
+        $orderDataProvider = $this->getOrderDataProvider();
+        $chartViewBuilder  = $this->getChartViewBuilder();
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('revenue_over_time_chart');
+        $data['chartView'] = $orderDataProvider->getRevenueOverTimeChartView(
+            $chartViewBuilder,
+            $widgetAttributes
+                ->getWidgetOptions()
+                ->get('dateRange')
+        );
+
+        return $data;
+    }
+
+    /**
+     * @Route(
+     *      "/orocrm_magento_dashboard_orders_over_time_chart",
+     *      name="orocrm_magento_dashboard_orders_over_time_chart",
+     *      requirements={"widget"="[\w_-]+"}
+     * )
+     * @Template("OroCRMMagentoBundle:Dashboard:ordersOverTimeChart.html.twig")
+     */
+    public function ordersOverTimeAction()
+    {
+        $widgetAttributes  = $this->getWidgetConfigs();
+        $orderDataProvider = $this->getOrderDataProvider();
+        $chartViewBuilder  = $this->getChartViewBuilder();
+
+        $data = $widgetAttributes->getWidgetAttributesForTwig('orders_over_time_chart');
+        $data['chartView'] = $orderDataProvider->getOrdersOverTimeChartView(
+            $chartViewBuilder,
+            $widgetAttributes
+                ->getWidgetOptions()
+                ->get('dateRange')
+        );
+
+        return $data;
+    }
+
+    /**
+     * @return ChartViewBuilder
+     */
+    protected function getChartViewBuilder()
+    {
+        return $this->get('oro_chart.view_builder');
+    }
+
+    /**
+     * @return WidgetConfigs
+     */
+    protected function getWidgetConfigs()
+    {
+        return $this->get('oro_dashboard.widget_configs');
+    }
+
+    /**
+     * @return OrderDataProvider
+     */
+    protected function getOrderDataProvider()
+    {
+        return $this->get('orocrm_magento.dashboard.data_provider.order');
+    }
+
+    /**
+     * @return PurchaseDataProvider
+     */
+    public function getPurchaseDataProvider()
+    {
+        return $this->get('orocrm_magento.dashboard.data_provider.purchase');
     }
 }

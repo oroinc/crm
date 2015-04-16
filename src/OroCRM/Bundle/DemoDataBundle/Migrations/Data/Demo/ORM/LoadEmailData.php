@@ -112,7 +112,8 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
                 $thread = new EmailThread();
                 $om->persist($thread);
                 $email->setThread($thread);
-                for ($j = 0; $j < rand(1, 7); ++$j) {
+                $randomNumber = rand(1, 7);
+                for ($j = 0; $j < $randomNumber; ++$j) {
                     $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
                     $email->setSubject('Re: ' . $email->getSubject());
                     $email->setThread($thread);

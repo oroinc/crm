@@ -140,7 +140,6 @@ class LoadUsersData extends AbstractFixture implements DependentFixtureInterface
         $user->setEmail($email);
         $user->setUsername($username);
         $user->setFirstName($firstName);
-        //$user->setMiddlename($middleName);
         $user->setLastName($lastName);
         $user->setBirthday($birthday);
         $user->setOwner($this->getBusinessUnit('Acme, General'));

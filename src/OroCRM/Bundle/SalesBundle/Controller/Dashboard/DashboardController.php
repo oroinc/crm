@@ -32,7 +32,13 @@ class DashboardController extends Controller
 
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
-            ->getOpportunitiesByLeadSource($this->get('oro_security.acl_helper'));
+            ->getOpportunitiesByLeadSource(
+                $this->get('oro_security.acl_helper'),
+                10,
+                $this->get('oro_dashboard.widget_configs')
+                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                    ->get('dateRange')
+            );
 
         // prepare chart data
         if (empty($data)) {
@@ -87,7 +93,12 @@ class DashboardController extends Controller
     {
         $items = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Opportunity')
-            ->getOpportunitiesByStatus($this->get('oro_security.acl_helper'));
+            ->getOpportunitiesByStatus(
+                $this->get('oro_security.acl_helper'),
+                $this->get('oro_dashboard.widget_configs')
+                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                    ->get('dateRange')
+            );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
@@ -121,11 +132,12 @@ class DashboardController extends Controller
      */
     public function mySalesFlowB2BAction($widget)
     {
-        $dateTo = new \DateTime('now', new \DateTimeZone('UTC'));
-        $dateFrom = new \DateTime(
-            $dateTo->format('Y') . '-01-' . ((ceil($dateTo->format('n') / 3) - 1) * 3 + 1),
-            new \DateTimeZone('UTC')
-        );
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+
+        $dateTo = $dateRange['end'];
+        $dateFrom = $dateRange['start'];
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');

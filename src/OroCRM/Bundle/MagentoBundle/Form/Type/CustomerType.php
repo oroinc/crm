@@ -173,7 +173,7 @@ class CustomerType extends AbstractType
             /** @var MagentoSoapTransport $transport */
             $transport = $data->getChannel()->getTransport();
 
-            return !$data->getId() || $transport->getIsExtensionInstalled();
+            return !$data->getId() || $transport->isSupportedExtensionVersion();
         }
 
         return true;

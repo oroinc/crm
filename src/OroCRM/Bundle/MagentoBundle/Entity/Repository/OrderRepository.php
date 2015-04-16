@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
@@ -14,6 +18,97 @@ use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class OrderRepository extends EntityRepository
 {
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     */
+    public function getRevenueValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $select = 'SUM(
+             CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
+             CASE WHEN orders.discountAmount IS NOT NULL THEN ABS(orders.discountAmount) ELSE 0 END
+             ) as val';
+        $qb    = $this->createQueryBuilder('orders');
+        $qb->select($select)
+            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     */
+    public function getOrdersNumberValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $qb    = $this->createQueryBuilder('o');
+        $qb->select('count(o.id) as val')
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['val'] ? : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return int
+     */
+    public function getAOVValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    {
+        $select = 'SUM(
+             CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+             CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
+             ) as revenue,
+             count(o.id) as ordersCount';
+        $qb    = $this->createQueryBuilder('o');
+        $qb->select($select)
+            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
+        return $value['revenue'] ? $value['revenue'] / $value['ordersCount'] : 0;
+    }
+
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param AclHelper $aclHelper
+     * @return float|int
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getDiscountedOrdersPercentByDatePeriod(
+        \DateTime $start,
+        \DateTime $end,
+        AclHelper $aclHelper
+    ) {
+        $qb = $this->createQueryBuilder('o');
+        $qb->select(
+            'COUNT(o.id) as allOrders',
+            'SUM(CASE WHEN (o.discountAmount IS NOT NULL AND o.discountAmount <> 0) THEN 1 ELSE 0 END) as discounted'
+        );
+        $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
+        $qb->setParameter('dateStart', $start);
+        $qb->setParameter('dateEnd', $end);
+
+        $value = $aclHelper->apply($qb)->getOneOrNullResult();
+        return $value['allOrders'] ? $value['discounted'] / $value['allOrders'] : 0;
+    }
+
     /**
      * @param Cart|Customer $item
      * @param string        $field
@@ -40,6 +135,8 @@ class OrderRepository extends EntityRepository
      *
      * @param Customer $customer
      * @return float
+     *
+     * @deprecated Use CustomerRepository::calculateLifetimeValue to get lifetime value for customer
      */
     public function getCustomerOrdersSubtotalAmount(Customer $customer)
     {
@@ -60,53 +157,128 @@ class OrderRepository extends EntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
+     * @param AclHelper  $aclHelper
+     * @param \DateTime  $dateFrom
+     * @param \DateTime  $dateTo
+     * @param DateHelper $dateHelper
      * @return array
      */
-    public function getAverageOrderAmount(AclHelper $aclHelper)
-    {
-        /** @var \DateTime $sliceDate */
-        list($sliceDate, $monthMatch, $channelTemplate) = $this->getOrderSliceDateAndTemplates();
-
+    public function getAverageOrderAmount(
+        AclHelper $aclHelper,
+        \DateTime $dateFrom,
+        \DateTime $dateTo,
+        DateHelper $dateHelper
+    ) {
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
         $channels      = $entityManager->getRepository('OroCRMChannelBundle:Channel')
             ->getAvailableChannelNames($aclHelper, 'magento');
 
-        // prepare result template
-        $result = [];
-        foreach ($channels as $channel) {
-            $channelId = $channel['id'];
-            $channelName = $channel['name'];
-            $result[$channelId] = ['name' => $channelName, 'data' => $channelTemplate];
-        }
-
         // execute data query
         $queryBuilder = $this->createQueryBuilder('o');
         $selectClause = '
             IDENTITY(o.dataChannel) AS dataChannelId,
-            MONTH(o.createdAt) as monthCreated,
             AVG(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
             ) as averageOrderAmount';
+
+        $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
+
         $queryBuilder->select($selectClause)
-            ->where('o.createdAt > :sliceDate')->setParameter('sliceDate', $sliceDate)
-            ->groupBy('dataChannelId, monthCreated');
-        $amountStatistics = $aclHelper->apply($queryBuilder)->execute();
+            ->andWhere($queryBuilder->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+            ->setParameter('dateStart', $dateFrom)
+            ->setParameter('dateEnd', $dateTo)
+            ->groupBy('dataChannelId');
+        $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $queryBuilder, 'o.createdAt');
+        $amountStatistics = $aclHelper->apply($queryBuilder)->getArrayResult();
 
+        $items = [];
         foreach ($amountStatistics as $row) {
+            $key         = $dateHelper->getKey($dateFrom, $dateTo, $row);
             $channelId   = (int)$row['dataChannelId'];
-            $month       = (int)$row['monthCreated'];
-            $year        = $monthMatch[$month]['year'];
-            $orderAmount = (float)$row['averageOrderAmount'];
+            $channelName = $channels[$channelId]['name'];
 
-            if (isset($result[$channelId]['data'][$year][$month])) {
-                $result[$channelId]['data'][$year][$month] += $orderAmount;
+            if (!isset($items[$channelName])) {
+                $items[$channelName] = $dates;
             }
+            $items[$channelName][$key]['amount'] = (float)$row['averageOrderAmount'];
         }
 
-        return $result;
+        // restore default keys
+        foreach ($items as $channelName => $item) {
+            $items[$channelName] = array_values($item);
+        }
+
+        return $items;
+    }
+
+    /**
+     * @param AclHelper $aclHelper,
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getOrdersOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id) AS cnt');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getRevenueOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('SUM(
+                    CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                    CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
+                ) AS amount');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
     }
 
     /**
@@ -123,19 +295,45 @@ class OrderRepository extends EntityRepository
         $sliceDate  = new \DateTime(sprintf('%s-%s-01', $sliceYear, $sliceMonth), new \DateTimeZone('UTC'));
 
         // calculate match for month and default channel template
-        $monthMatch = [];
+        $monthMatch      = [];
         $channelTemplate = [];
         if ($sliceYear !== $currentYear) {
             for ($i = $sliceMonth; $i <= 12; $i++) {
-                $monthMatch[$i] = ['year' => $sliceYear, 'month' => $i];
+                $monthMatch[$i]                  = ['year' => $sliceYear, 'month' => $i];
                 $channelTemplate[$sliceYear][$i] = 0;
             }
         }
         for ($i = 1; $i <= $currentMonth; $i++) {
-            $monthMatch[$i] = ['year' => $currentYear, 'month' => $i];
+            $monthMatch[$i]                    = ['year' => $currentYear, 'month' => $i];
             $channelTemplate[$currentYear][$i] = 0;
         }
 
         return [$sliceDate, $monthMatch, $channelTemplate];
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return int
+     */
+    public function getUniqueBuyersCount(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        try {
+            $qb
+                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }

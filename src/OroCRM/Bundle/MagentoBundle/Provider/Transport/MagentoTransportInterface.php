@@ -121,14 +121,6 @@ interface MagentoTransportInterface extends TransportInterface
     public function getOrderInfo($incrementId);
 
     /**
-     * @param array|null $dependenciesToLoad
-     * @param bool false
-     *
-     * @return array
-     */
-    public function getDependencies(array $dependenciesToLoad = null, $force = false);
-
-    /**
      * @param array $customerData
      *
      * @return int ID of the created customer
@@ -148,14 +140,14 @@ interface MagentoTransportInterface extends TransportInterface
      * @param array $item
      * @return int
      */
-    public function createCustomerAddress($customerId, $item);
+    public function createCustomerAddress($customerId, array $item);
 
     /**
      * @param int $customerAddressId
      * @param array $item
      * @return bool
      */
-    public function updateCustomerAddress($customerAddressId, $item);
+    public function updateCustomerAddress($customerAddressId, array $item);
 
     /**
      * Retrieve customer address info
@@ -165,4 +157,41 @@ interface MagentoTransportInterface extends TransportInterface
      * @return array
      */
     public function getCustomerAddressInfo($customerAddressId);
+
+    /**
+     * Get newsletter subscribers.
+     *
+     * @return \Iterator
+     */
+    public function getNewsletterSubscribers();
+
+    /**
+     * @param array $subscriberData
+     *
+     * @return array
+     */
+    public function createNewsletterSubscriber(array $subscriberData);
+
+    /**
+     * @param int $subscriberId
+     * @param array $subscriberData
+     *
+     * @return array
+     */
+    public function updateNewsletterSubscriber($subscriberId, array $subscriberData);
+
+    /**
+     * @return bool
+     */
+    public function isSupportedExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getExtensionVersion();
+
+    /**
+     * @return string
+     */
+    public function getMagentoVersion();
 }

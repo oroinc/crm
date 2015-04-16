@@ -3,10 +3,12 @@
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener as BaseChannelSaveSucceedListener;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 
@@ -55,9 +57,15 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
      */
     protected function getConnectors(array $entities)
     {
+        $dictionaryConnectors = $this->typeRegistry->getRegisteredConnectorsTypes(
+            ChannelType::TYPE,
+            function (ConnectorInterface $connector) {
+                return $connector instanceof DictionaryConnectorInterface;
+            }
+        )->toArray();
         $connectors = [];
         $initialConnectors = [];
-        $isExtensionInstalled = $this->transportEntity->getIsExtensionInstalled();
+        $isSupportedExtensionVersion = $this->transportEntity->isSupportedExtensionVersion();
 
         foreach ($entities as $entity) {
             $connectorName = $this->settingsProvider->getIntegrationConnectorName($entity);
@@ -67,8 +75,8 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
                     continue;
                 }
 
-                if ($isExtensionInstalled
-                    || (!$isExtensionInstalled && !$connector instanceof ExtensionAwareInterface)
+                if ($isSupportedExtensionVersion
+                    || (!$isSupportedExtensionVersion && !$connector instanceof ExtensionAwareInterface)
                 ) {
                     array_push($initialConnectors, $connectorName . InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX);
                     array_push($connectors, $connectorName);
@@ -76,6 +84,6 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
             }
         }
 
-        return array_merge($initialConnectors, $connectors);
+        return array_merge(array_keys($dictionaryConnectors), $initialConnectors, $connectors);
     }
 }

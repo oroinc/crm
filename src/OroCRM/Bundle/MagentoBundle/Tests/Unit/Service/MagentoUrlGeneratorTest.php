@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service\Provider;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
 
 use OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator;
 use OroCRM\Bundle\MagentoBundle\Exception\ExtensionRequiredException;

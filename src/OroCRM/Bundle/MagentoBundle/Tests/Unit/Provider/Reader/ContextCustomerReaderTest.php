@@ -18,11 +18,7 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
         LoggerStrategy $logger,
         ConnectorContextMediator $contextMediator
     ) {
-        $reader = new ContextCustomerReader($contextRegistry, $logger, $contextMediator, $this->config);
-
-        $reader->setContextKey('postProcessOrders');
-
-        return $reader;
+        return new ContextCustomerReader($contextRegistry, $logger, $contextMediator, $this->config);
     }
 
     /**
@@ -41,25 +37,6 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
         return true;
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Context key is missing
-     */
-    public function testFailedWithoutExecutionContext()
-    {
-        /** @var ContextCustomerReader $connector */
-        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
-        $connector->setContextKey(null);
-
-        $iterator = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Iterator\UpdatedLoaderInterface');
-        $iterator->expects($this->never())->method('setEntitiesIdsBuffer');
-
-        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
-            ->will($this->returnValue($iterator));
-
-        $connector->setStepExecution($this->stepExecutionMock);
-    }
-
     public function testInitializationWithNotMatchedIterator()
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
@@ -74,12 +51,12 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     }
 
     /**
-     * @param array $orders
+     * @param array $ids
      * @param array $expectedIds
      *
      * @dataProvider customersDataProvider
      */
-    public function testInitializationWithCustomerIds(array $orders = [], array $expectedIds = [])
+    public function testInitializationWithCustomerIds(array $ids, array $expectedIds = [])
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
@@ -96,15 +73,19 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
             ->method('get')
             ->will(
                 $this->returnCallback(
-                    function ($key) use ($orders) {
-                        if ($key === 'postProcessOrders') {
-                            return $orders;
+                    function ($key) use ($ids) {
+                        if ($key === 'postProcessCustomerIds') {
+                            return $ids;
                         }
 
                         return false;
                     }
                 )
             );
+
+        $this->executionContextMock->expects($this->any())
+            ->method('remove')
+            ->with($this->equalTo('postProcessCustomerIds'));
 
         $connector->setStepExecution($this->stepExecutionMock);
     }
@@ -114,50 +95,9 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
      */
     public function customersDataProvider()
     {
-        $originId = uniqid();
-        $originId2 = uniqid();
-
         return [
-            'empty orders' => [],
-            'order without customer' => [[$this->getOrder()]],
-            'order with customer without originId' => [[$this->getOrder([])]],
-            'nullable originId' => [[$this->getOrder([], false)]],
-            'invalid originId' => [[$this->getOrder([], 0)]],
-            'valid order' => [[$this->getOrder([], $originId)], [$originId]],
-            'multiple orders' => [
-                [
-                    $this->getOrder([], $originId),
-                    $this->getOrder([], $originId2)
-                ],
-                [$originId, $originId2]
-            ],
-            'duplicate customer ids' => [
-                [
-                    $this->getOrder([], $originId),
-                    $this->getOrder([], $originId)
-                ],
-                [$originId]
-            ]
+            'empty' => [[], []],
+            'not empty' => [[1, null, '', 2, false, true], [1, 2]]
         ];
-    }
-
-    /**
-     * @param mixed $customerData
-     * @param mixed $originId
-     * @return array
-     */
-    protected function getOrder($customerData = null, $originId = null)
-    {
-        $order = [];
-
-        if (null !== $customerData) {
-            if ($originId) {
-                $customerData['originId'] = $originId;
-            }
-
-            $order['customer'] = $customerData;
-        }
-
-        return $order;
     }
 }

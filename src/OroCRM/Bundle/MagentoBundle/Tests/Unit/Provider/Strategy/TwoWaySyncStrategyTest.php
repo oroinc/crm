@@ -2,7 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Strategy;
 
-use Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface;
+use Doctrine\Common\Util\Inflector;
+
+use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor;
+use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
+
 use OroCRM\Bundle\MagentoBundle\Provider\Strategy\TwoWaySyncStrategy;
 
 class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
@@ -13,28 +17,54 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
     protected $strategy;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DataConverterInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecutionAwareImportProcessor
      */
-    protected $dataConverter;
+    protected $importProcessor;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|StepExecutionAwareExportProcessor
+     */
+    protected $exportProcessor;
 
     protected function setUp()
     {
-        $this->dataConverter = $this->getMock('Oro\Bundle\ImportExportBundle\Converter\DataConverterInterface');
+        $this->importProcessor = $this
+            ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->dataConverter->expects($this->any())
-            ->method('convertToExportFormat')
+        $this->exportProcessor = $this
+            ->getMockBuilder('Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->importProcessor->expects($this->any())
+            ->method('process')
             ->will(
                 $this->returnCallback(
                     function ($item) {
                         $keys = array_map(
                             function ($key) {
-                                return preg_replace_callback(
-                                    '/[A-Z]/',
-                                    function (array $matched) {
-                                        return sprintf('_%s', strtolower(reset($matched)));
-                                    },
-                                    $key
-                                );
+                                return Inflector::camelize($key);
+                            },
+                            array_keys($item)
+                        );
+
+                        return (object)array_combine($keys, array_values($item));
+                    }
+                )
+            );
+
+        $this->exportProcessor->expects($this->any())
+            ->method('process')
+            ->will(
+                $this->returnCallback(
+                    function ($item) {
+                        $item = (array)$item;
+
+                        $keys = array_map(
+                            function ($key) {
+                                return Inflector::tableize($key);
                             },
                             array_keys($item)
                         );
@@ -44,35 +74,12 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->dataConverter->expects($this->any())
-            ->method('convertToImportFormat')
-            ->will(
-                $this->returnCallback(
-                    function ($item) {
-                        $keys = array_map(
-                            function ($key) {
-                                return preg_replace_callback(
-                                    '/_[a-z]/',
-                                    function (array $matched) {
-                                        return trim(strtoupper(reset($matched)), '_');
-                                    },
-                                    $key
-                                );
-                            },
-                            array_keys($item)
-                        );
-
-                        return array_combine($keys, array_values($item));
-                    }
-                )
-            );
-
-        $this->strategy = new TwoWaySyncStrategy($this->dataConverter);
+        $this->strategy = new TwoWaySyncStrategy($this->importProcessor, $this->exportProcessor);
     }
 
     protected function tearDown()
     {
-        unset($this->strategy, $this->dataConverter);
+        unset($this->strategy, $this->importProcessor, $this->exportProcessor);
     }
 
     /**
@@ -94,7 +101,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider mergeDataProvider
      */
-    public function testMergeRemoteWins(
+    public function testMerge(
         array $changeSet,
         array $localData,
         array $remoteData,
@@ -308,7 +315,7 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'strategy' => 'local',
                 'expected' => ['prop' => 'new remote value', 'prop2' => null]
             ],
-            'data converter' => [
+            'normalization' => [
                 'changeSet' => ['propValue' => ['old' => 'old local value', 'new' => 'new local value']],
                 'localData' => ['prop_value' => 'value'],
                 'remoteData' => ['prop_value' => 'new remote value'],
