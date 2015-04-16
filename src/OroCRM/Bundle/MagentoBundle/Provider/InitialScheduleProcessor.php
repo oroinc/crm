@@ -219,12 +219,14 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         $em = $this->doctrineRegistry->getManager();
 
         $statuses = $this->getChannelRepository()->getConnectorStatuses($integration, $connectorName);
-        foreach ($statuses as $status) {
-            $statusData = $status->getData();
-            $statusData[self::SKIP_STATUS] = true;
-            $status->setData($statusData);
-            $em->persist($status);
+        if ($statuses) {
+            foreach ($statuses as $status) {
+                $statusData = $status->getData();
+                $statusData[self::SKIP_STATUS] = true;
+                $status->setData($statusData);
+                $em->persist($status);
+            }
+            $em->flush($statuses);
         }
-        $em->flush($statuses);
     }
 }
