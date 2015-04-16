@@ -74,7 +74,7 @@ class AggregateStatisticsQuery implements MigrationQuery, ConnectionAwareInterfa
             $query = 'DELETE FROM orocrm_campaign_email_stats WHERE id IN (?)';
             $logger->notice($query);
             if (!$dryRun) {
-                $this->connection->executeQuery($query, array($idsToRemove), array(Connection::PARAM_INT_ARRAY));
+                $this->connection->executeQuery($query, [$idsToRemove], [Connection::PARAM_INT_ARRAY]);
             }
         }
     }
