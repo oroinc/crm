@@ -38,7 +38,7 @@ class AverageLifetimeWidgetProvider
     {
         $start = $dateRange['start'];
         $end = $dateRange['end'];
-        $dates         = $items = [];
+        $dates = $items = [];
         $period = new \DatePeriod($start, new \DateInterval('P1M'), $end);
         /** @var \DateTime $dt */
         foreach ($period as $dt) {
