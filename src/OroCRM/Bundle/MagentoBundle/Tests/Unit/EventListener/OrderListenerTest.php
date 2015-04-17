@@ -160,21 +160,21 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function createEntityManagerMock($customer = null, $newLifetime = null)
     {
-        $orderRepository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+        $customerRepository = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
-            ->setMethods(['getCustomerOrdersSubtotalAmount'])
+            ->setMethods(['calculateLifetimeValue'])
             ->getMock();
 
         if ($customer && $newLifetime) {
-            $orderRepository
+            $customerRepository
                 ->expects($this->once())
-                ->method('getCustomerOrdersSubtotalAmount')
+                ->method('calculateLifetimeValue')
                 ->with($customer)
                 ->will($this->returnValue($newLifetime));
         } else {
-            $orderRepository
+            $customerRepository
                 ->expects($this->never())
-                ->method('getCustomerOrdersSubtotalAmount');
+                ->method('calculateLifetimeValue');
         }
 
         $unitOfWork = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
@@ -221,8 +221,8 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
         $entityManager
             ->expects($this->any())
             ->method('getRepository')
-            ->with('OroCRMMagentoBundle:Order')
-            ->will($this->returnValue($orderRepository));
+            ->with('OroCRMMagentoBundle:Customer')
+            ->will($this->returnValue($customerRepository));
         $entityManager
             ->expects($this->any())
             ->method('getUnitOfWork')
