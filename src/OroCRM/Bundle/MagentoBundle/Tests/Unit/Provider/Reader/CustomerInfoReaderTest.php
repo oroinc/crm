@@ -13,7 +13,7 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
     protected function getReader()
     {
         $reader = new CustomerInfoReader($this->contextRegistry, $this->logger, $this->contextMediator);
-        $reader->setClassName('OroCRM\Bundle\MagentoBundle\Entity\Customer');
+        $reader->setContextKey('customerIds');
 
         return $reader;
     }
@@ -27,7 +27,17 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
     {
         $this->executionContext->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($data));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($data) {
+                        if (empty($data[$key])) {
+                            return null;
+                        }
+
+                        return $data[$key];
+                    }
+                )
+            );
 
         $originId = 123;
         $expectedData = new Customer();
@@ -83,8 +93,8 @@ class CustomerInfoReaderTest extends AbstractInfoReaderTest
         return [
             [
                 [
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer' => [123],
-                    'OroCRM\Bundle\MagentoBundle\Entity\Order' => [321]
+                    'customerIds' => [123],
+                    'orderIds' => [321]
                 ]
             ]
         ];

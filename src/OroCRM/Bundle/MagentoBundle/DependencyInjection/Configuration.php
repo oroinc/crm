@@ -44,7 +44,7 @@ class Configuration implements ConfigurationInterface
                             ->example('10 minutes')
                         ->end()
                         ->scalarNode('initial_import_step_interval')
-                            ->defaultValue('1 day')
+                            ->defaultValue('7 days')
                             ->cannotBeEmpty()
                             ->info(
                                 'This interval will be used in initial sync, ' .
@@ -53,7 +53,7 @@ class Configuration implements ConfigurationInterface
                                 'previous date by step interval.' .
                                 'Should be \DateInterval::createFromDateString argument value'
                             )
-                            ->example('1 day')
+                            ->example('14 days')
                         ->end()
                     ->end()
                 ->end()
