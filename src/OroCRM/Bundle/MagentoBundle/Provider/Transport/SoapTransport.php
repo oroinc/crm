@@ -63,6 +63,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_CUSTOMER_INFO = 'oroCustomerInfo';
     const ACTION_ORO_CUSTOMER_ADDRESS_LIST = 'oroCustomerAddressList';
     const ACTION_ORO_CUSTOMER_ADDRESS_INFO = 'oroCustomerAddressInfo';
+    const ACTION_ORO_CUSTOMER_CREATE = 'oroCustomerCreate';
     const ACTION_ORO_CUSTOMER_UPDATE = 'oroCustomerUpdate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
@@ -416,7 +417,13 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function createCustomer(array $customerData)
     {
-        return $this->call(SoapTransport::ACTION_CUSTOMER_CREATE, ['customerData' => $customerData]);
+        if ($this->isSupportedExtensionVersion()) {
+            $createEndpoint = SoapTransport::ACTION_ORO_CUSTOMER_CREATE;
+        } else {
+            $createEndpoint = SoapTransport::ACTION_CUSTOMER_CREATE;
+        }
+
+        return $this->call($createEndpoint, ['customerData' => $customerData]);
     }
 
     /**
