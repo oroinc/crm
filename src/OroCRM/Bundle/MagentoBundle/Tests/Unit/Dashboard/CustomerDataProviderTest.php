@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Dashboard;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
@@ -102,7 +102,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $chartViewBuilder->expects($this->once())
             ->method('setArrayData')
-            ->with($expectedArrayData)
+            ->with($this->equalTo($expectedArrayData, 0, 10, true))
             ->will($this->returnSelf());
         $chartViewBuilder->expects($this->once())
             ->method('getView')
