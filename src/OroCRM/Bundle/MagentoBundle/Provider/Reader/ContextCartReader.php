@@ -38,8 +38,6 @@ class ContextCartReader extends CartConnector
         $ids = (array)$this->stepExecution->getJobExecution()
             ->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_CARTS);
 
-        $this->stepExecution->getJobExecution()->getExecutionContext()->remove(self::CONTEXT_POST_PROCESS_CARTS);
-
         sort($ids);
 
         return array_unique(array_filter($ids));

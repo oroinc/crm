@@ -51,4 +51,14 @@ class OrderBridgeIterator extends AbstractBridgeIterator
     {
         return 'order_id';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Order by id: %s', $this->key()));
+
+        return $this->current;
+    }
 }
