@@ -24,7 +24,6 @@ class DashboardController extends Controller
      */
     public function averageLifetimeSalesAction($widget)
     {
-
         $dateRange = $this->get('oro_dashboard.widget_configs')
             ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
             ->get('dateRange');
