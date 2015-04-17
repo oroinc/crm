@@ -41,3 +41,66 @@ oro_chart:
             mode: time
             noTicks: 12
         template: OroChartsBundle:Chart:multiline.html.twig
+    revenue_over_time_chart:
+        label: oro.chart.multiline_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.revenue_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: orocrm.magento.dashboard.revenue_over_time_chart.revenue
+                required: true
+                default_type: decimal
+                field_name: amount
+                type: currency
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+    orders_over_time_chart:
+        label: oro.chart.line_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.orders_over_time_chart.date
+                required: true
+                default_type: date
+                type: date
+                field_name: date
+            value:
+                name: value
+                label: orocrm.magento.dashboard.orders_over_time_chart.order_count
+                required: true
+                default_type: integer
+                field_name: count
+        xaxis:
+            mode: time
+            noTicks: 12
+        template: OroChartsBundle:Chart:multiline.html.twig
+    purchase_chart:
+        label: oro.chart.funnel_chart.label
+        data_schema:
+            label:
+                name: label
+                label: orocrm.magento.dashboard.purchase_chart.label
+                required: true
+                default_type: string
+                field_name: label
+            value:
+                name: value
+                label: orocrm.magento.dashboard.purchase_chart.value
+                required: true
+                default_type: integer
+                type: integer
+                field_name: value
+            isNozzle:
+                name: isNozzle
+                label: orocrm.magento.dashboard.purchase_chart.is_nozzle
+                required: true
+                default_type: boolean
+        template: OroChartBundle:Chart:flow.html.twig
