@@ -2,8 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -25,7 +28,7 @@ class OrderRepository extends EntityRepository
     {
         $select = 'SUM(
              CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
-             CASE WHEN orders.discountAmount IS NOT NULL THEN orders.discountAmount ELSE 0 END
+             CASE WHEN orders.discountAmount IS NOT NULL THEN ABS(orders.discountAmount) ELSE 0 END
              ) as val';
         $qb    = $this->createQueryBuilder('orders');
         $qb->select($select)
@@ -58,6 +61,8 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * get Average Order Amount by given period
+     *
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
@@ -67,7 +72,7 @@ class OrderRepository extends EntityRepository
     {
         $select = 'SUM(
              CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-             CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+             CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
              ) as revenue,
              count(o.id) as ordersCount';
         $qb    = $this->createQueryBuilder('o');
@@ -96,14 +101,14 @@ class OrderRepository extends EntityRepository
         $qb = $this->createQueryBuilder('o');
         $qb->select(
             'COUNT(o.id) as allOrders',
-            'SUM(CASE WHEN o.discountAmount > 0 THEN 1 ELSE 0 END) as discountedOrders'
+            'SUM(CASE WHEN (o.discountAmount IS NOT NULL AND o.discountAmount <> 0) THEN 1 ELSE 0 END) as discounted'
         );
         $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
         $qb->setParameter('dateStart', $start);
         $qb->setParameter('dateEnd', $end);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
-        return $value['allOrders'] ? $value['discountedOrders'] / $value['allOrders'] : 0;
+        return $value['allOrders'] ? $value['discounted'] / $value['allOrders'] : 0;
     }
 
     /**
@@ -177,7 +182,7 @@ class OrderRepository extends EntityRepository
             IDENTITY(o.dataChannel) AS dataChannelId,
             AVG(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
-                CASE WHEN o.discountAmount IS NOT NULL THEN o.discountAmount ELSE 0 END
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
             ) as averageOrderAmount';
 
         $dates = $dateHelper->getDatePeriod($dateFrom, $dateTo);
@@ -211,6 +216,74 @@ class OrderRepository extends EntityRepository
     }
 
     /**
+     * @param AclHelper $aclHelper,
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getOrdersOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('COUNT(o.id) AS cnt');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateHelper $dateHelper
+     * @param DateTime $from
+     * @param DateTime|null $to
+     *
+     * @return array
+     */
+    public function getRevenueOverTime(
+        AclHelper $aclHelper,
+        DateHelper $dateHelper,
+        DateTime $from,
+        DateTime $to = null
+    ) {
+        $from = clone $from;
+        $to = clone $to;
+
+        $qb = $this->createQueryBuilder('o')
+            ->select('SUM(
+                    CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                    CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
+                ) AS amount');
+
+        $dateHelper->addDatePartsSelect($from, $to, $qb, 'o.createdAt');
+
+        if ($to) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameter('to', $to);
+        } else {
+            $qb->andWhere('o.createdAt > :from');
+        }
+        $qb->setParameter('from', $from);
+
+        return $aclHelper->apply($qb)->getResult();
+    }
+
+    /**
      * @return array
      */
     protected function getOrderSliceDateAndTemplates()
@@ -238,5 +311,31 @@ class OrderRepository extends EntityRepository
         }
 
         return [$sliceDate, $monthMatch, $channelTemplate];
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return int
+     */
+    public function getUniqueBuyersCount(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('o');
+
+        try {
+            $qb
+                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }
