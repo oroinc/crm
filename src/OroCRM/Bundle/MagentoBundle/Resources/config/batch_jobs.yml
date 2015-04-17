@@ -20,7 +20,7 @@ connector:
                         context_shared_keys: postProcessCustomerIds
 
         mage_customer_load_customer_info:
-            title: "Import customers and postponded orders"
+            title: "Import customers info and addresses"
             type:  import
             steps:
                 load_customer_info:
