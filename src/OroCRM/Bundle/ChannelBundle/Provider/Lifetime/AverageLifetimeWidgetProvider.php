@@ -32,6 +32,7 @@ class AverageLifetimeWidgetProvider
 
     /**
      * @param $dateRange array with key start, end and type values is DateTime
+     *
      * @return array
      */
     public function getChartData($dateRange)
