@@ -2,7 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -275,5 +278,31 @@ class CartRepository extends EntityRepository
                     )
                 )
             );
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $from
+     * @param DateTime $to
+     *
+     * @return int
+     */
+    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        try {
+            $qb
+                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
+                ->andWhere($qb->expr()->between('c.createdAt', ':from', ':to'))
+                ->setParameters([
+                    'from' => $from,
+                    'to'   => $to,
+                ]);
+
+            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            return 0;
+        }
     }
 }

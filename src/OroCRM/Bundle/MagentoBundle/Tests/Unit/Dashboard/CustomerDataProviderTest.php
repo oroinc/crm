@@ -6,31 +6,24 @@ use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
 class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $registry;
 
-    /**
-     * @var CustomerDataProvider
-     */
+    /** @var CustomerDataProvider */
     protected $dataProvider;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $aclHelper;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $configProvider;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $dateHelper;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->registry   = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -59,6 +52,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $expectedOptions
      * @param array $chartConfig
      * @param array $dateRange
+     *
      * @dataProvider getNewCustomerChartViewDataProvider
      */
     public function testGetNewCustomerChartView(
@@ -126,13 +120,11 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         $this->dateHelper->expects($this->any())
             ->method('getFormatStrings')
             ->willReturn(
-                [
-                    'viewType' => 'month'
-                ]
+                ['viewType' => 'month']
             );
         $this->dateHelper->expects($this->once())
             ->method('getDatePeriod')
-            ->willReturnCallback(function($past, $now) {
+            ->willReturnCallback(function ($past, $now) {
                 return [
                     '2014-02' => ['date' => '2014-02-01'],
                     '2014-03' => ['date' => '2014-03-01'],
@@ -149,8 +141,13 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             });
         $this->dateHelper->expects($this->any())
             ->method('getKey')
-            ->willReturnCallback(function($past, $now, $row) {
+            ->willReturnCallback(function ($past, $now, $row) {
                 return $row['yearCreated'] . '-' . $row['monthCreated'];
+            });
+        $this->dateHelper->expects($this->once())
+            ->method('getPeriod')
+            ->willReturnCallback(function ($dateRange) {
+                return [$dateRange['start'], $dateRange['end']];
             });
         $this->assertEquals(
             $chartView,
@@ -182,9 +179,9 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
         /** @var \DateTime $dt */
         foreach ($datePeriod as $dt) {
             $key = $dt->format('Y-m');
-            $dates[$key] = array(
+            $dates[$key] = [
                 'date' => sprintf('%s-01', $key),
-            );
+            ];
         }
 
         $expected = [];
