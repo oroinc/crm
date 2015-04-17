@@ -6,6 +6,7 @@ use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -218,15 +219,22 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     {
         $em = $this->doctrineRegistry->getManager();
 
-        $statuses = $this->getChannelRepository()->getConnectorStatuses($integration, $connectorName);
-        if ($statuses) {
-            foreach ($statuses as $status) {
-                $statusData = $status->getData();
-                $statusData[self::SKIP_STATUS] = true;
-                $status->setData($statusData);
-                $em->persist($status);
+        $processedStatuses = [];
+        $statusesIterator = $this->getChannelRepository()->getConnectorStatuses($integration, $connectorName);
+        foreach ($statusesIterator as $status) {
+            $processedStatuses[] = $status;
+            $statusData = $status->getData();
+            $statusData[self::SKIP_STATUS] = true;
+            $status->setData($statusData);
+
+            if (count($processedStatuses) === ChannelRepository::BUFFER_SIZE) {
+                $em->flush($processedStatuses);
+                $processedStatuses = [];
             }
-            $em->flush($statuses);
+        }
+
+        if ($processedStatuses) {
+            $em->flush($processedStatuses);
         }
     }
 }

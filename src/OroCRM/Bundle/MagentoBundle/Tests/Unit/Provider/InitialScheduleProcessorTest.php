@@ -257,7 +257,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->repository->expects($this->once())
             ->method('getConnectorStatuses')
             ->with($integration, $connector)
-            ->will($this->returnValue([$status]));
+            ->will($this->returnValue(new \ArrayIterator([$status])));
 
         $this->assertConnectorStatusCall($integration, $connector, $status);
 
