@@ -15,7 +15,6 @@ connector:
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
-                        batch_size: 25
                         post_processing_jobs: mage_customer_load_customer_info
                         context_shared_keys: postProcessCustomerIds
 
