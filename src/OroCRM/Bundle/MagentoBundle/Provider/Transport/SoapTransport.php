@@ -100,6 +100,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     /** @var WsdlManager */
     protected $wsdlManager;
 
+    /** @var array */
+    protected $auth = [];
+
     /**
      * @param Mcrypt $encoder
      * @param WsdlManager $wsdlManager
@@ -121,10 +124,20 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
          */
         if ($transportEntity instanceof MagentoSoapTransport) {
             $wsdlUrl = $transportEntity->getWsdlUrl();
+
+            // Save auth information to be able to perform requests.
+            $urlParts = parse_url($wsdlUrl);
+            if (isset($urlParts['user'], $urlParts['pass'])) {
+                $this->auth['login'] = $urlParts['user'];
+                $this->auth['password'] = $urlParts['pass'];
+            }
+
+            // Load WSDL to local cache.
             if (!$this->wsdlManager->isCacheLoaded($wsdlUrl)) {
                 $this->wsdlManager->loadWsdl($wsdlUrl);
             }
 
+            // Set cached WSDL path to transport entity.
             $transportEntity->setWsdlCachePath($this->wsdlManager->getCachedWsdlPath($wsdlUrl));
         }
 
@@ -158,6 +171,9 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     protected function getSoapClient($wsdlUrl, array $options = [])
     {
         $options['cache_wsdl'] = WSDL_CACHE_NONE;
+        if (!isset($options['login'], $options['password'])) {
+            $options = array_merge($options, $this->auth);
+        }
 
         return parent::getSoapClient($wsdlUrl, $options);
     }
@@ -172,7 +188,15 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         }
 
         if ($this->logger) {
-            $this->logger->debug(sprintf('Call %s action with %s parameters', $action, json_encode($params)));
+            $this->logger->debug(
+                sprintf(
+                    '[%.1fMB/%.1fMB] Call %s action with %s parameters',
+                    memory_get_usage() / 1024 / 1024,
+                    memory_get_peak_usage() / 1024 / 1024,
+                    $action,
+                    json_encode($params)
+                )
+            );
         }
 
         if ($this->isWsiMode) {
@@ -317,7 +341,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCarts()
     {
-        if ($this->isSupportedExtensionVersion()) {
+        if ($this->isExtensionInstalled()) {
             return new CartsBridgeIterator($this, $this->settings->all());
         }
 

@@ -177,7 +177,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param object $entity
-     * @return null|object
+     * @return Integration
      */
     protected function reloadEntity($entity)
     {

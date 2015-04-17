@@ -5,11 +5,11 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Connector;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
-use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\NewsletterSubscriberBridgeIterator;
 
 class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector implements
-    ExtensionAwareInterface,
+    ExtensionVersionAwareInterface,
     InitialConnectorInterface
 {
     const TYPE = 'newsletter_subscriber_initial';

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
@@ -50,6 +51,8 @@ class CustomerStrategy extends AbstractImportStrategy
     {
         $this->processAddresses($entity);
 
+        $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $entity->getOriginId());
+
         return parent::afterProcessEntity($entity);
     }
 
@@ -59,7 +62,9 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function processAddresses(Customer $entity)
     {
         if (!$entity->getAddresses()->isEmpty()) {
+            /** @var Address $address */
             foreach ($entity->getAddresses() as $address) {
+                $address->setOwner($entity);
                 $originId = $address->getOriginId();
                 if (array_key_exists($originId, $this->importingAddresses)) {
                     $remoteAddress = $this->importingAddresses[$originId];

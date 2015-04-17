@@ -101,4 +101,14 @@ class CustomerSoapIterator extends AbstractPageableSoapIterator
 
         return $result;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Customer by id: %s', $this->key()));
+
+        return $this->current;
+    }
 }

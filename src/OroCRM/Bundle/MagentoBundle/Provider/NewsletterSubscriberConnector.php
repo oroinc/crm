@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-class NewsletterSubscriberConnector extends AbstractMagentoConnector implements ExtensionAwareInterface
+class NewsletterSubscriberConnector extends AbstractMagentoConnector implements ExtensionVersionAwareInterface
 {
     const IMPORT_JOB_NAME = 'mage_newsletter_subscriber_import';
     const TYPE = 'newsletter_subscriber';
