@@ -341,7 +341,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
      */
     public function getCarts()
     {
-        if ($this->isSupportedExtensionVersion()) {
+        if ($this->isExtensionInstalled()) {
             return new CartsBridgeIterator($this, $this->settings->all());
         }
 
