@@ -436,6 +436,8 @@ services:
     orocrm_magento.provider.initial_schedule_processor:
         class: %orocrm_magento.provider.initial_schedule_processor.class%
         parent: orocrm_magento.provider.initial_processor
+        calls:
+            - [setDoctrineHelper, [@oro_entity.doctrine_helper]]
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 
