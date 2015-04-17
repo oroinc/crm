@@ -102,7 +102,7 @@ class CustomerDataProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $chartViewBuilder->expects($this->once())
             ->method('setArrayData')
-            ->with($this->equalTo($expectedArrayData, 0, 10, true))
+            ->with($expectedArrayData)
             ->will($this->returnSelf());
         $chartViewBuilder->expects($this->once())
             ->method('getView')
