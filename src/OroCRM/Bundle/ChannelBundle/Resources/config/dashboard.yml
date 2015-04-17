@@ -10,3 +10,9 @@ oro_dashboard_config:
             acl:         orocrm_channel_view
             description: orocrm.channel.dashboard.average_lifetime_sales_chart.description
             icon:        bundles/orocrmchannel/img/average_lifetime_sales_chart.png
+            configuration:
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                        label: oro.dashboard.date_range.label
+                    show_on_widget: true

@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
+use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider;
+
 /**
  * @Route("/dashboard")
  */
@@ -22,7 +24,15 @@ class DashboardController extends Controller
      */
     public function averageLifetimeSalesAction($widget)
     {
-        $data         = $this->get('orocrm_channel.provider.lifetime.average_widget_provider')->getChartData();
+
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+        /**
+         * @var $widgetProvider AverageLifetimeWidgetProvider
+         */
+        $widgetProvider = $this->get('orocrm_channel.provider.lifetime.average_widget_provider');
+        $data         = $widgetProvider->getChartData($dateRange);
         $widgetAttr   = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
