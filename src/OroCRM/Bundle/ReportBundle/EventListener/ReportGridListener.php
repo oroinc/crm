@@ -70,7 +70,6 @@ class ReportGridListener
             $groupAlias = $period;
             $sortAlias = $period;
         } else {
-            //$groupAlias = sprintf('%s, %sSorting', $period, $period);
             $groupAlias = $period;
             $sortAlias  = sprintf('%sSorting', $period);
         }

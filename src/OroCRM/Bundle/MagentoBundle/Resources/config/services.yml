@@ -20,12 +20,15 @@ parameters:
 
     orocrm_magento.entity.newsletter_subscriber.class:                      OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber
 
+    orocrm_magento.entity.soap_transport.class:                             OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+
     # transport
     orocrm_magento.transport.soap_transport.class:                          OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport
 
     # providers
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
+    orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -73,6 +76,7 @@ parameters:
     # dashboard
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
+    orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
 
     orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
@@ -134,6 +138,12 @@ services:
         arguments:
             - @oro_integration.provider.connector_context_mediator
             - @doctrine.orm.entity_manager
+
+    orocrm_magento.provider.tracking_visit:
+        class: %orocrm_magento.provider.tracking_visit.class%
+        arguments:
+            - @doctrine
+            - @oro_security.acl_helper
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -341,6 +351,8 @@ services:
             - @doctrine
             - @oro_security.acl_helper
             - @oro_chart.config_provider
+            - @oro_locale.formatter.date_time
+            - @oro_dashboard.datetime.hepler
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
@@ -349,6 +361,15 @@ services:
             - @oro_security.acl_helper
             - @oro_chart.config_provider
             - @oro_dashboard.datetime.hepler
+
+    orocrm_magento.dashboard.data_provider.purchase:
+        class: %orocrm_magento.dashboard.data_provider.purchase.class%
+        arguments:
+            - @doctrine
+            - @oro_chart.config_provider
+            - @orocrm_magento.provider.tracking_visit
+            - @translator
+            - @oro_security.acl_helper
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
@@ -499,12 +520,13 @@ services:
         arguments:
             - @oro_entity.doctrine_helper
             - @orocrm_magento.strategy.automatic_discovery.default
+            - @oro_security.owner.ownership_metadata_provider
             - %orocrm_magento.customer.entity.class%
             - []
         calls:
             - [addStrategy, ['addresses', @orocrm_magento.strategy.automatic_discovery.addresses]]
         tags:
-            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 4 }
 
     orocrm_magento.action.automatic_discovery:
         class: %orocrm_magento.action.automatic_discovery.class%

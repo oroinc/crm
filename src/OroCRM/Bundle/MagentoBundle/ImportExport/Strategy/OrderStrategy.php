@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -13,6 +11,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderStrategy extends AbstractImportStrategy
 {
+    const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
+
     /**
      * @var Order
      */
@@ -52,19 +52,9 @@ class OrderStrategy extends AbstractImportStrategy
 
         $this->existingEntity = null;
 
-        return parent::afterProcessEntity($entity);
-    }
+        $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS_IDS, $entity->getIncrementId());
 
-    /**
-     * @param Order $entity
-     */
-    protected function saveOriginIdContext($entity)
-    {
-        if ($entity instanceof Order) {
-            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
-            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getIncrementId();
-            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
-        }
+        return parent::afterProcessEntity($entity);
     }
 
     /**

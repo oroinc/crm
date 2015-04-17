@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -61,7 +60,7 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         $this
-            ->updateCustomer($entity, $entity->getCustomer())
+            ->updateCustomer($entity)
             ->updateAddresses($entity)
             ->updateCartItems($entity->getCartItems())
             ->updateCartStatus($entity);
@@ -75,12 +74,12 @@ class CartStrategy extends AbstractImportStrategy
      * Update Customer email
      *
      * @param Cart $cart
-     * @param Customer $customer
      *
      * @return CartStrategy
      */
-    protected function updateCustomer(Cart $cart, Customer $customer = null)
+    protected function updateCustomer(Cart $cart)
     {
+        $customer = $cart->getCustomer();
         if ($customer && !$customer->getEmail()) {
             $customer->setEmail($cart->getEmail());
         }

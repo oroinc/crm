@@ -28,7 +28,8 @@ class CustomerDataConverter extends AbstractTreeDataConverter
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
             'store_id' => 'store:originId',
-            'website_id' => 'website:originId'
+            'website_id' => 'website:originId',
+            'created_in' => 'createdIn'
         ];
     }
 
@@ -44,6 +45,9 @@ class CustomerDataConverter extends AbstractTreeDataConverter
         }
 
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
+        $importedRecord = AttributesConverterHelper::addUnknownAttributes($importedRecord, $this->context);
+
+        $importedRecord['confirmed'] = empty($importedRecord['confirmation']);
 
         if (!empty($importedRecord['birthday'])) {
             $importedRecord['birthday'] = substr($importedRecord['birthday'], 0, 10);
