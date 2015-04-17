@@ -9,6 +9,7 @@ orocrm:
             subject.label:                  Subject
             related_contact.label:          Related Contact
             related_account.label:          Related Account
+            related_account.label:          Related Account
             owner.label:                    Owner
             assigned_to.label:              Assigned To
             reported_on.label:              Reported On

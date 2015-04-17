@@ -58,3 +58,6 @@ orocrm:
         call_date_time.label:  Call date & time
         organization.label:    Organization
 
+        block:
+            additional: Additional
+
