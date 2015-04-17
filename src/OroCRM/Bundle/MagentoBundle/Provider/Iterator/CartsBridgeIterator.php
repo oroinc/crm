@@ -57,7 +57,7 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         );
 
         if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
-            $filters->addWebsiteFilter([$this->websiteId]);
+            $filters->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
         }
 
         $filters = $filters->getAppliedFilters();
@@ -93,5 +93,15 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function getIdFieldName()
     {
         return 'entity_id';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Cart by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

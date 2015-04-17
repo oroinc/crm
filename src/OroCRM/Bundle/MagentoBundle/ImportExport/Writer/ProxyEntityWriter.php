@@ -10,6 +10,8 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -21,12 +23,17 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
     /** @var ItemWriterInterface */
     protected $writer;
 
+    /** @var DatabaseHelper */
+    protected $databaseHelper;
+
     /**
      * @param ItemWriterInterface $writer
+     * @param DatabaseHelper $databaseHelper
      */
-    public function __construct(ItemWriterInterface $writer)
+    public function __construct(ItemWriterInterface $writer, DatabaseHelper $databaseHelper)
     {
         $this->writer = $writer;
+        $this->databaseHelper = $databaseHelper;
         $this->logger = new NullLogger();
     }
 
@@ -58,7 +65,10 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
             }
         }
 
-        return $this->writer->write($uniqueItems);
+        $this->writer->write($uniqueItems);
+
+        // force entity cache clear if clear is skipped
+        $this->databaseHelper->onClear();
     }
 
     /**

@@ -90,4 +90,14 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
     {
         return 'customer_id';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Customer by id: %s', $this->key()));
+
+        return $this->current;
+    }
 }

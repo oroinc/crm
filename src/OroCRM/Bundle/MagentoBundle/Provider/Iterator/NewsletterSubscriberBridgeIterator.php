@@ -129,4 +129,14 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
 
         return ConverterUtils::objectToArray($result);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading NewsletterSubscriber by id: %s', $this->key()));
+
+        return $this->current;
+    }
 }
