@@ -70,12 +70,9 @@ define([
         };
         var formStartState = getFormState();
         var startChannelType = $el.val();
-        var lastSelectedChannelType;
 
         var isAllowOpenConfirmDialog = function() {
-            return startChannelType != 'placeholder' &&
-                    lastSelectedChannelType != 'placeholder' &&
-                    getFormState() != formStartState;
+            return startChannelType != '' && getFormState() != formStartState;
         };
 
         var processChangeType = function() {
@@ -104,9 +101,6 @@ define([
         };
 
         $el.on('change', function changeTypeHandler(e) {
-
-            lastSelectedChannelType = $(this).val();
-
             var prevEl  = e.removed,
                 confirm = new DeleteConfirmation({
                     title:   __('orocrm.channel.confirmation.title'),

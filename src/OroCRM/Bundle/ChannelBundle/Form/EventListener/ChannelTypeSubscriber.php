@@ -11,7 +11,6 @@ use Oro\Bundle\FormBundle\Utils\FormUtils;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelType;
 
 class ChannelTypeSubscriber implements EventSubscriberInterface
 {
@@ -53,17 +52,13 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!$data->getChannelType()) {
-            $data->setChannelType($this->getFirstChannelType());
-        }
-
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
 
         $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
         $data->setCustomerIdentity($customerIdentity);
-        if ($customerIdentity != ChannelType::PLACEHOLDER_CLASS) {
+        if (!empty($customerIdentity)) {
             $this->addEnititesToChannel($data, [$customerIdentity]);
         }
 
@@ -133,7 +128,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $settingsProvider = $this->settingsProvider;
 
         return function (FormInterface $form) use ($settingsProvider, $channelType) {
-            if ($channelType && $channelType != ChannelType::PLACEHOLDER_TYPE) {
+            if ($channelType) {
                 $integrationType = $settingsProvider->getIntegrationType($channelType);
                 if (false !== $integrationType) {
                     $form->add(

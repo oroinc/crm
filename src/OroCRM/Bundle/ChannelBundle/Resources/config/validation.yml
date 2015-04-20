@@ -9,9 +9,6 @@ OroCRM\Bundle\ChannelBundle\Entity\Channel:
                 max: 250
         channelType:
             - NotBlank: ~
-            - Regex:
-                pattern: '/placeholder/'
-                match: false
 OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity:
     properties:
         name:
