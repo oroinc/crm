@@ -47,12 +47,10 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
      * @param array $channelsData
      * @param array $averageData
      * @param array $expectedResult
+     * @param array $dates
      */
-    public function testGetChartData(array $channelsData, array $averageData, array $expectedResult)
+    public function testGetChartData(array $channelsData, array $averageData, array $expectedResult, array $dates)
     {
-        $this->localeSettings->expects($this->once())->method('getTimeZone')
-            ->will($this->returnValue(self::TEST_TZ));
-
         $channelRepo = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository')
             ->disableOriginalConstructor()->getMock();
         $averageRepo = $this
@@ -76,7 +74,7 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->assertEquals($expectedResult, $this->provider->getChartData());
+        $this->assertEquals($expectedResult, $this->provider->getChartData($dates));
     }
 
     /**
@@ -121,7 +119,11 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
             'regular case' => [
                 '$channelsData'   => $channels,
                 '$averageData'    => $averageData,
-                '$expectedResult' => $expected
+                '$expectedResult' => $expected,
+                '$dates'          => [
+                    'start' => $start,
+                    'end'   => $end
+                ]
             ]
         ];
     }
