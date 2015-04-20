@@ -25,11 +25,6 @@ class UpdateCreatedUpdatedLabels implements Migration
                 'entityName' => 'OroCRM\Bundle\TaskBundle\Entity\Task',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at'
-            ],
-            [
-                'entityName' => 'OroCRM\Bundle\TaskBundle\Entity\Task',
-                'field' => 'serialized_data',
-                'value' => 'oro.entity_serialized_fields.data.label'
             ]
         ];
 
