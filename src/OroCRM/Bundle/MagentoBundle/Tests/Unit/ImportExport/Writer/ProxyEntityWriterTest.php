@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 
+use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -17,10 +19,20 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     /** @var ProxyEntityWriter */
     protected $writer;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DatabaseHelper
+     */
+    protected $databaseHelper;
+
     protected function setUp()
     {
         $this->wrapped = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface');
-        $this->writer  = new ProxyEntityWriter($this->wrapped);
+
+        $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->writer  = new ProxyEntityWriter($this->wrapped, $this->databaseHelper);
     }
 
     protected function tearDown()
@@ -38,6 +50,11 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     {
         $this->wrapped->expects($this->once())->method('write')
             ->with($this->equalTo($expectedItems));
+
+        $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
+            ->disableOriginalConstructor()->getMock();
+        $this->databaseHelper->expects($this->once())->method('onClear');
+        $this->writer->setStepExecution($stepExecution);
 
         $this->writer->write($items);
     }
@@ -89,7 +106,7 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
     public function testSetStepExecutionSetToWrappedWriter()
     {
         $wrapped       = $this->getMock('OroCRM\Bundle\MagentoBundle\Tests\Unit\Stub\StepExecutionAwareWriter');
-        $writer        = new ProxyEntityWriter($wrapped);
+        $writer        = new ProxyEntityWriter($wrapped, $this->databaseHelper);
         $stepExecution = $this->getMockBuilder('Akeneo\Bundle\BatchBundle\Entity\StepExecution')
             ->disableOriginalConstructor()->getMock();
         $wrapped->expects($this->once())->method('setStepExecution')
