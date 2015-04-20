@@ -27,11 +27,6 @@ class UpdateCreatedUpdatedLabels implements Migration
                 'value' => 'oro.ui.updated_at'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                'field' => 'serialized_data',
-                'value' => 'oro.entity_serialized_fields.data.label'
-            ],
-            [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'createdAt',
                 'value' => 'oro.ui.created_at'
@@ -40,11 +35,6 @@ class UpdateCreatedUpdatedLabels implements Migration
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'updatedAt',
                 'value' => 'oro.ui.updated_at'
-            ],
-            [
-                'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                'field' => 'serialized_data',
-                'value' => 'oro.entity_serialized_fields.data.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',

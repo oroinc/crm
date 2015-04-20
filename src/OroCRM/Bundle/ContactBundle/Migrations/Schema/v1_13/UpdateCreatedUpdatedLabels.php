@@ -27,11 +27,6 @@ class UpdateCreatedUpdatedLabels implements Migration
                 'value' => 'oro.ui.updated_at'
             ],
             [
-                'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                'field' => 'serialized_data',
-                'value' => 'oro.entity_serialized_fields.data.label'
-            ],
-            [
                 'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
                 'field' => 'created',
                 'value' => 'oro.ui.created_at'
