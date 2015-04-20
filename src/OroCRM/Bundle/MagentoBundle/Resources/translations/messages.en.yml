@@ -136,7 +136,8 @@ orocrm:
                 label: Store Connector
             website:
                 label: Website Connector
-
+            customer_group:
+                label: Customer Group Connector
         customer:
             entity_label:        Magento Customer
             entity_plural_label: Magento Customers
