@@ -42,7 +42,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_cart_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart"
+ *              "icon"="icon-shopping-cart",
+ *              "context-grid"="magento-cart-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -84,7 +85,7 @@ class Cart extends ExtendCart implements
     protected $cartItems;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="carts",cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Customer", inversedBy="carts")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $customer;
@@ -92,8 +93,15 @@ class Cart extends ExtendCart implements
     /**
      * @var Store
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store", cascade="PERSIST")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Store")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $store;
 
@@ -220,6 +228,13 @@ class Cart extends ExtendCart implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CartStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name", onDelete="SET NULL")
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=false
+     *          }
+     *      }
+     * )
      */
     protected $status;
 

@@ -12,12 +12,17 @@ use Psr\Log\LoggerInterface;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
+use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
+use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 
 abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy implements
     LoggerAwareInterface,
     StepExecutionAwareInterface
 {
+    const CONTEXT_POST_PROCESS_IDS = 'postProcessIds';
+
     /**
      * @var LoggerInterface
      */
@@ -32,6 +37,16 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
      * @var StepExecution
      */
     protected $stepExecution;
+
+    /**
+     * @var ChannelHelper
+     */
+    protected $channelHelper;
+
+    /**
+     * @var AddressImportHelper
+     */
+    protected $addressHelper;
 
     /**
      * {@inheritdoc}
@@ -51,11 +66,26 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
 
     /**
      * @param StepExecution $stepExecution
-     * @return AbstractImportStrategy
      */
     public function setStepExecution(StepExecution $stepExecution)
     {
         $this->stepExecution = $stepExecution;
+    }
+
+    /**
+     * @param ChannelHelper $channelHelper
+     */
+    public function setChannelHelper(ChannelHelper $channelHelper)
+    {
+        $this->channelHelper = $channelHelper;
+    }
+
+    /**
+     * @param AddressImportHelper $addressHelper
+     */
+    public function setAddressHelper(AddressImportHelper $addressHelper)
+    {
+        $this->addressHelper = $addressHelper;
     }
 
     /**
@@ -82,5 +112,34 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
         }
 
         return $this->stepExecution->getJobExecution()->getExecutionContext();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function afterProcessEntity($entity)
+    {
+        if ($entity instanceof ChannelAwareInterface
+            && $entity instanceof IntegrationAwareInterface
+            && $entity->getChannel()
+        ) {
+            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
+            if ($dataChannel) {
+                $entity->setDataChannel($dataChannel);
+            }
+        }
+
+        return parent::afterProcessEntity($entity);
+    }
+
+    /**
+     * @param string $contextKey
+     * @param mixed $dataToAppend
+     */
+    protected function appendDataToContext($contextKey, $dataToAppend)
+    {
+        $data = (array)$this->getExecutionContext()->get($contextKey);
+        $data[] = $dataToAppend;
+        $this->getExecutionContext()->put($contextKey, $data);
     }
 }

@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Reader;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\OrderDependencyManager;
 
 class OrderInfoReader extends AbstractInfoReader
 {
@@ -12,9 +11,9 @@ class OrderInfoReader extends AbstractInfoReader
      */
     protected function loadEntityInfo($originId)
     {
-        $result = $this->transport->getOrderInfo($originId);
+        $this->logger->info(sprintf('Loading Order info by incrementId: %s', $originId));
 
-        OrderDependencyManager::addDependencyData($result, $this->transport);
+        $result = $this->transport->getOrderInfo($originId);
 
         return ConverterUtils::objectToArray($result);
     }

@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Strategy;
 
-interface TwoWaySyncStrategyInterface
+use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
+
+interface TwoWaySyncStrategyInterface extends StepExecutionAwareInterface
 {
     /**
      * @param array $changeSet

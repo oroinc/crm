@@ -13,7 +13,7 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
     protected function getReader()
     {
         $reader = new OrderInfoReader($this->contextRegistry, $this->logger, $this->contextMediator);
-        $reader->setClassName('OroCRM\Bundle\MagentoBundle\Entity\Order');
+        $reader->setContextKey('orderIds');
 
         return $reader;
     }
@@ -27,7 +27,17 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
     {
         $this->executionContext->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($data));
+            ->will(
+                $this->returnCallback(
+                    function ($key) use ($data) {
+                        if (empty($data[$key])) {
+                            return null;
+                        }
+
+                        return $data[$key];
+                    }
+                )
+            );
 
         $originId = 321;
         $expectedData = new Order();
@@ -51,31 +61,13 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
                 )
             );
 
-        $this->transport->expects($this->once())
-            ->method('getDependencies')
-            ->will(
-                $this->returnValue(
-                    [
-                        'groups' => [['customer_group_id' => $originId]],
-                        'websites' => [$originId => ['id' => $originId, 'code' => 'code', 'name' => 'name']],
-                        'stores' => [['website_id' => $originId, 'code' => 'code', 'name' => 'name']]
-                    ]
-                )
-            );
-
         $reader = $this->getReader();
         $reader->setStepExecution($this->stepExecutionMock);
 
         $this->assertEquals(
             [
                 'origin_id' => $originId,
-                'store_id' => 0,
-                'store_code' => 'code',
-                'store_storename' => 'name',
-                'store_website_id' => $originId,
-                'store_website_code' => 'code',
-                'store_website_name' => 'name',
-                'payment_method' => null
+                'store_id' => 0
             ],
             $reader->read()
         );
@@ -91,8 +83,8 @@ class OrderInfoReaderTest extends AbstractInfoReaderTest
         return [
             [
                 [
-                    'OroCRM\Bundle\MagentoBundle\Entity\Customer' => [123],
-                    'OroCRM\Bundle\MagentoBundle\Entity\Order' => [321]
+                    'customerIds' => [123],
+                    'orderIds' => [321]
                 ]
             ]
         ];

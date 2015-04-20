@@ -29,7 +29,10 @@ class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
 
         $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $qb
-            ->select('SUM(o.subtotalAmount)')
+            ->select('SUM(
+                CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
+                CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
+                )')
             ->join('c.orders', 'o')
             ->where(
                 $qb->expr()->andX(

@@ -57,7 +57,7 @@ class OrderListener
 
         // if subtotal or status has been changed
         if ($this->isOrderValid($entity)
-            && array_intersect(['subtotalAmount', 'status'], array_keys($event->getEntityChangeSet()))
+            && array_intersect(['subtotalAmount', 'discountAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
@@ -134,13 +134,17 @@ class OrderListener
 
         $subtotalAmount = $order->getSubtotalAmount();
         if ($subtotalAmount) {
-            // if order status changed to canceled we should remove subtotalAmount from customer lifetime
+            $discountAmount = $order->getDiscountAmount();
+            $lifetimeValue  = $discountAmount
+                ? $subtotalAmount - abs($discountAmount)
+                : $subtotalAmount;
+            // if order status changed to canceled we should remove order lifetime value from customer lifetime
             if ($order->getStatus() === Order::STATUS_CANCELED) {
-                $subtotalAmount *= -1;
+                $lifetimeValue *= -1;
             }
 
             $customer = $order->getCustomer();
-            $customerRepository->updateCustomerLifetimeValue($customer, $subtotalAmount);
+            $customerRepository->updateCustomerLifetimeValue($customer, $lifetimeValue);
 
             // schedule lifetime history update
             if ($customer->getAccount()) {

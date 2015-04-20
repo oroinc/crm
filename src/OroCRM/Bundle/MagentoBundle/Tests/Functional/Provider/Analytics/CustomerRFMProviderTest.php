@@ -81,7 +81,7 @@ class CustomerRFMProviderTest extends WebTestCase
                 'expectedValue' => [
                     'recency' => 2,
                     'frequency' => 2,
-                    'monetary' => 31
+                    'monetary' => 22.2 // (15.5 - 4.40) + (15.5 - 4.40)
                 ]
             ],
         ];

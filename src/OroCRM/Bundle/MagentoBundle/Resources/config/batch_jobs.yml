@@ -7,13 +7,21 @@ connector:
             steps:
                 import:
                     title:     import
-                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.customer_connector
                         processor: oro_importexport.processor.import_delegate
                         writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
+                        post_processing_jobs: mage_customer_load_customer_info
+                        context_shared_keys: postProcessCustomerIds
+
+        mage_customer_load_customer_info:
+            title: "Import customers info and addresses"
+            type:  import
+            steps:
                 load_customer_info:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
@@ -111,19 +119,36 @@ connector:
             steps:
                 import_with_existing_customers:
                     title:     import
-                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.order_connector
                         processor: orocrm_magento.importexport.processor.import_order_with_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
+                        post_processing_jobs: mage_order_import_post_process_customers_and_info
+                        context_shared_keys: postProcessOrders,postProcessCustomerIds,postProcessCartsIds,postProcessOrderIds
+
+        mage_order_import_post_process_customers_and_info:
+            title: "Import customers and postponded orders"
+            type:  import
+            steps:
                 import_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.reader.context_customer.order
                         processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                import_carts:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_cart.order
+                        processor: orocrm_magento.importexport.processor.import_cart
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
@@ -161,13 +186,21 @@ connector:
             steps:
                 import_with_existing_customers:
                     title:     import
-                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    class:     Oro\Bundle\ImportExportBundle\Job\Step\PostProcessItemStep
                     services:
                         reader:    orocrm_magento.mage.cart_connector
                         processor: orocrm_magento.importexport.processor.import_cart_with_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
+                        job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
+                        post_processing_jobs: mage_cart_import_post_process_customers
+                        context_shared_keys: postProcessCarts,postProcessCustomerIds
+
+        mage_cart_import_post_process_customers:
+            title: "Import customers and postponded carts"
+            type:  import
+            steps:
                 import_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
@@ -211,7 +244,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_newsletter_subscriber_post_process_customers
-                        context_shared_keys: postProcessSubscribers
+                        context_shared_keys: postProcessSubscribers,postProcessCustomerIds
 
         mage_newsletter_subscriber_import_initial:
             title: "Initial import newsletter subscribers from Magento"
@@ -228,7 +261,7 @@ connector:
                     parameters:
                         batch_size: 25
                         post_processing_jobs: mage_newsletter_subscriber_post_process_customers
-                        context_shared_keys: postProcessSubscribers
+                        context_shared_keys: postProcessSubscribers,postProcessCustomerIds
 
         mage_newsletter_subscriber_post_process_customers:
             title: "Import customers and postponded newsletter subscribers"
@@ -258,6 +291,48 @@ connector:
                     services:
                         reader:    orocrm_magento.reader.customer_info
                         processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_store_import:
+            title: "Store import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.store
+                        processor: orocrm_magento.importexport.processor.store
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_website_import:
+            title: "Website import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.website
+                        processor: orocrm_magento.importexport.processor.website
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+
+        mage_customer_group_import:
+            title: "Customer groups import from Magento"
+            type:  import
+            steps:
+                import:
+                    title: import
+                    class: Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.mage.customer_group
+                        processor: orocrm_magento.importexport.processor.customer_group
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25

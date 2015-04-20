@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use JMS\JobQueueBundle\Entity\Job;
+
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
@@ -16,11 +18,28 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 {
     const INITIAL_SYNC_STARTED = 'initialSyncedStarted';
 
+
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     * @return AbstractInitialProcessor
+     */
+    public function setDoctrineHelper($doctrineHelper)
+    {
+        $this->doctrineHelper = $doctrineHelper;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function process(Integration $integration, $connector = null, array $parameters = [])
     {
+        $this->processDictionaryConnectors($integration);
+        $integration = $this->reloadEntity($integration);
         $this->scheduleInitialSyncIfRequired($integration);
 
         /** @var MagentoSoapTransport $transport */
@@ -84,7 +103,8 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     {
         if (null === $callback) {
             $callback = function ($connector) {
-                return strpos($connector, InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX) === false;
+                return strpos($connector, InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX) === false
+                    && strpos($connector, self::DICTIONARY_CONNECTOR_SUFFIX) === false;
             };
         }
 
@@ -122,9 +142,14 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
                 $transport->getSyncStartDate()
             )
         ) {
+            $this->logger->info('Scheduling initial synchronization');
             $job = new Job(
                 InitialSyncCommand::COMMAND_NAME,
-                [sprintf('--integration-id=%s', $integration->getId()), '-v']
+                [
+                    sprintf('--integration-id=%s', $integration->getId()),
+                    '--skip-dictionary',
+                    '-v'
+                ]
             );
             $this->saveEntity($job);
         }
@@ -144,5 +169,17 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
             $transport->setInitialSyncStartDate($initialSyncStartDate);
             $this->saveEntity($transport);
         }
+    }
+
+    /**
+     * @param object $entity
+     * @return Integration
+     */
+    protected function reloadEntity($entity)
+    {
+        return $this->doctrineHelper->getEntity(
+            $this->doctrineHelper->getEntityClass($entity),
+            $this->doctrineHelper->getEntityIdentifier($entity)
+        );
     }
 }

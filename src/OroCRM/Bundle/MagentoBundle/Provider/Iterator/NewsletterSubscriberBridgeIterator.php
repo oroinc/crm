@@ -2,8 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
+use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\NewsletterSubscriberDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
@@ -71,7 +71,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         $result = $this->processCollectionResponse($result);
         $resultIds = array_map(
             function ($item) {
-                return $item->{$this->getIdFieldName()};
+                return $item[$this->getIdFieldName()];
             },
             $result
         );
@@ -79,14 +79,6 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         $this->entityBuffer = array_combine($resultIds, $result);
 
         return $resultIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData($result)
-    {
-        NewsletterSubscriberDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**
@@ -110,7 +102,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $subscribers = $this->getNewsletterSubscribers($filters);
 
             if (count($subscribers) > 0) {
-                $this->initialId = (int)$subscribers[0]->{$this->getIdFieldName()} + 1;
+                $this->initialId = (int)$subscribers[0][$this->getIdFieldName()] + 1;
             }
         }
 
@@ -133,6 +125,18 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
      */
     protected function getNewsletterSubscribers(array $filters = [])
     {
-        return $this->transport->call(SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST, $filters);
+        $result = $this->transport->call(SoapTransport::ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST, $filters);
+
+        return ConverterUtils::objectToArray($result);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading NewsletterSubscriber by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CartDependencyManager;
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CartsBridgeIterator extends AbstractBridgeIterator
@@ -30,6 +30,47 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         $filters          = $this->filter->getAppliedFilters();
         $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
 
+        $this->loadByFilters($filters);
+
+        return array_keys($this->entityBuffer);
+    }
+
+    /**
+     * @param array $ids
+     */
+    protected function loadEntities(array $ids)
+    {
+        if (!$ids) {
+            return;
+        }
+
+        $filters = new BatchFilterBag();
+        $filters->addComplexFilter(
+            'in',
+            [
+                'key' => $this->getIdFieldName(),
+                'value' => [
+                    'key' => 'in',
+                    'value' => implode(',', $ids)
+                ]
+            ]
+        );
+
+        if (null !== $this->websiteId && $this->websiteId !== StoresSoapIterator::ALL_WEBSITES) {
+            $filters->addStoreFilter($this->getStoresByWebsiteId($this->websiteId));
+        }
+
+        $filters = $filters->getAppliedFilters();
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
+
+        $this->loadByFilters($filters);
+    }
+
+    /**
+     * @param array $filters
+     */
+    protected function loadByFilters(array $filters)
+    {
         $result = $this->transport->call(SoapTransport::ACTION_ORO_CART_LIST, $filters);
         $result = $this->processCollectionResponse($result);
 
@@ -44,16 +85,6 @@ class CartsBridgeIterator extends AbstractBridgeIterator
         );
 
         $this->entityBuffer = array_combine($resultIds, $result);
-
-        return $resultIds;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData($result)
-    {
-        CartDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**
@@ -62,5 +93,15 @@ class CartsBridgeIterator extends AbstractBridgeIterator
     protected function getIdFieldName()
     {
         return 'entity_id';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Cart by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

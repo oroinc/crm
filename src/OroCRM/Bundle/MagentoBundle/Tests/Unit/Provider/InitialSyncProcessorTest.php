@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
@@ -55,6 +56,15 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
+        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dictionaryConnector->expects($this->once())->method('getType')->willReturn('dictionary');
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
+
         $this->assertConnectorStatusCall($integration, $connector, $status);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -65,7 +75,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'channelType' => 'testChannelType',
                 'start_sync_date' => $syncStartDate,
                 AbstractInitialProcessor::INTERVAL => $interval,
-                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo,
+                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
             ]
         );
 
@@ -113,6 +123,15 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
+        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dictionaryConnector->expects($this->once())->method('getType')->willReturn('dictionary');
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
+
         $this->assertConnectorStatusCall($integration, $connector, $status);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -123,7 +142,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'channelType' => 'testChannelType',
                 'start_sync_date' => $syncStartDate,
                 AbstractInitialProcessor::INTERVAL => $interval,
-                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo,
+                AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo
             ]
         );
 
@@ -170,6 +189,15 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 )
             );
 
+        $dictionaryConnector = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Connector\WebsiteConnector')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dictionaryConnector->expects($this->once())->method('getType')->willReturn('dictionary');
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
+
         $this->assertConnectorStatusCall($integration, $connector, $status);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
@@ -179,7 +207,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'channel' => 'testChannel',
                 'channelType' => 'testChannelType',
                 'start_sync_date' => $syncStartDate,
-                AbstractInitialProcessor::INTERVAL => $interval,
+                AbstractInitialProcessor::INTERVAL => $interval
             ]
         );
 

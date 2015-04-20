@@ -44,7 +44,8 @@ class MagentoDeleteProvider implements DeleteProviderInterface
             ->removeFromEntityByChannelId('OroCRMMagentoBundle:Customer')
             ->removeFromEntityByChannelId('OroCRMMagentoBundle:Store')
             ->removeFromEntityByChannelId('OroCRMMagentoBundle:Website')
-            ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup');
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:CustomerGroup')
+            ->removeFromEntityByChannelId('OroCRMMagentoBundle:NewsletterSubscriber');
     }
 
     /**

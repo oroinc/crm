@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
@@ -22,6 +23,9 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
     /** @var SyncProcessor[] */
     protected $postProcessors = [];
+
+    /** @var bool */
+    protected $dictionaryDataLoaded = false;
 
     /**
      * @param ManagerRegistry $doctrineRegistry
@@ -68,8 +72,24 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     /**
      * {@inheritdoc}
      */
+    protected function processDictionaryConnectors(Integration $integration)
+    {
+        if (!$this->dictionaryDataLoaded) {
+            parent::processDictionaryConnectors($integration);
+
+            $this->dictionaryDataLoaded = true;
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
+        if (empty($parameters['skip-dictionary'])) {
+            $this->processDictionaryConnectors($integration);
+        }
+
         $callback = function ($connector) {
             return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
         };

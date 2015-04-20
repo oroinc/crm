@@ -4,11 +4,36 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use Oro\Bundle\IntegrationBundle\Utils\ConverterUtils;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\OrderDependencyManager;
+use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class OrderSoapIterator extends AbstractPageableSoapIterator
+class OrderSoapIterator extends AbstractPageableSoapIterator implements PredefinedFiltersAwareInterface
 {
+    /**
+     * @var BatchFilterBag
+     */
+    protected $predefinedFilters;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setPredefinedFiltersBag(BatchFilterBag $bag)
+    {
+        $this->predefinedFilters = $bag;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function modifyFilters()
+    {
+        if (null !== $this->predefinedFilters) {
+            $this->filter->merge($this->predefinedFilters);
+        }
+
+        parent::modifyFilters();
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -65,17 +90,8 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
         }
 
         $result = $this->entityBuffer[$id];
-        $this->addDependencyData($result);
 
         return ConverterUtils::objectToArray($result);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData($result)
-    {
-        OrderDependencyManager::addDependencyData($result, $this->transport);
     }
 
     /**
@@ -84,5 +100,15 @@ class OrderSoapIterator extends AbstractPageableSoapIterator
     protected function getIdFieldName()
     {
         return 'order_id';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Order by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

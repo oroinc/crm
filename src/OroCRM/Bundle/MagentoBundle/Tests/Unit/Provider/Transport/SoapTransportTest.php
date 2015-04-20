@@ -471,6 +471,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
      * @param $result
      * @param array|null $arguments
      * @param bool $withPing
+     * @param bool $extensionInstalled
      */
     public function testCalls(
         $method,
@@ -478,7 +479,8 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $expectedParameters,
         $result,
         array $arguments = null,
-        $withPing = false
+        $withPing = false,
+        $extensionInstalled = true
     ) {
         $this->initSettings();
         $this->transport->init($this->transportEntity);
@@ -489,49 +491,49 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($result));
 
         if ($withPing) {
+            if ($extensionInstalled) {
+                $pingResponse = (object)[
+                    'version' => '1.2.3',
+                    'mage_version' => '1.8.0.0',
+                    'admin_url' => 'http://localhost/admin/'
+                ];
+            } else {
+                $pingResponse = null;
+            }
+
             $this->soapClientMock->expects($this->at(0))
                 ->method('__soapCall')
                 ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
-                ->will(
-                    $this->returnValue(
-                        (object)[
-                            'version' => '1.2.3',
-                            'mage_version' => '1.8.0.0',
-                            'admin_url' => 'http://localhost/admin/'
-                        ]
-                    )
-                );
+                ->will($this->returnValue($pingResponse));
         }
 
         $this->assertEquals($result, call_user_func_array(array($this->transport, $method), $arguments));
     }
 
     /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function methodsDataProvider()
     {
         return [
-            'getOrderInfo' => [
-                'getOrderInfo',
-                SoapTransport::ACTION_ORDER_INFO,
-                ['sessionId' => $this->sessionId, 'orderIncrementId' => 1],
+            'getCustomerAddresses oro' => [
+                'getCustomerAddresses',
+                SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_LIST,
+                ['sessionId' => $this->sessionId, 'customerId' => 1],
                 [],
-                [1]
+                [1],
+                true,
+                true
             ],
-            'getCustomerAddresses' => [
+            'getCustomerAddresses native' => [
                 'getCustomerAddresses',
                 SoapTransport::ACTION_CUSTOMER_ADDRESS_LIST,
                 ['sessionId' => $this->sessionId, 'customerId' => 1],
                 [],
-                [1]
-            ],
-            'createCustomer' => [
-                'createCustomer',
-                SoapTransport::ACTION_CUSTOMER_CREATE,
-                ['sessionId' => $this->sessionId, 'customerData' => []],
-                2,
-                [[]]
+                [1],
+                true,
+                false
             ],
             'createCustomerAddress' => [
                 'createCustomerAddress',
@@ -547,19 +549,41 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 true,
                 [3, []]
             ],
-            'getCustomerAddressInfo' => [
+            'getCustomerAddressInfo native' => [
                 'getCustomerAddressInfo',
                 SoapTransport::ACTION_CUSTOMER_ADDRESS_INFO,
                 ['sessionId' => $this->sessionId, 'addressId' => 11],
                 [],
-                [11]
+                [11],
+                true,
+                false
             ],
-            'getCustomerInfo' => [
+            'getCustomerAddressInfo oro' => [
+                'getCustomerAddressInfo',
+                SoapTransport::ACTION_ORO_CUSTOMER_ADDRESS_INFO,
+                ['sessionId' => $this->sessionId, 'addressId' => 11],
+                [],
+                [11],
+                true,
+                true
+            ],
+            'getCustomerInfo native' => [
                 'getCustomerInfo',
                 SoapTransport::ACTION_CUSTOMER_INFO,
                 ['sessionId' => $this->sessionId, 'customerId' => 3],
                 [],
-                [3]
+                [3],
+                true,
+                false
+            ],
+            'getCustomerInfo oro' => [
+                'getCustomerInfo',
+                SoapTransport::ACTION_ORO_CUSTOMER_INFO,
+                ['sessionId' => $this->sessionId, 'customerId' => 3],
+                [],
+                [3],
+                true,
+                true
             ],
             'createNewsletterSubscriber' => [
                 'createNewsletterSubscriber',
@@ -575,6 +599,60 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ['sessionId' => $this->sessionId, 'subscriberId' => 3, 'subscriberData' => []],
                 [],
                 [3, []],
+                true
+            ],
+            'getOrderInfo native' => [
+                'getOrderInfo',
+                SoapTransport::ACTION_ORDER_INFO,
+                ['sessionId' => $this->sessionId, 'orderIncrementId' => 3],
+                [],
+                [3],
+                true,
+                false
+            ],
+            'getOrderInfo oro' => [
+                'getOrderInfo',
+                SoapTransport::ACTION_ORO_ORDER_INFO,
+                ['sessionId' => $this->sessionId, 'orderIncrementId' => 3],
+                [],
+                [3],
+                true,
+                true
+            ],
+            'createCustomer native' => [
+                'createCustomer',
+                SoapTransport::ACTION_CUSTOMER_CREATE,
+                ['sessionId' => $this->sessionId, 'customerData' => []],
+                [],
+                [[]],
+                true,
+                false
+            ],
+            'createCustomer oro' => [
+                'createCustomer',
+                SoapTransport::ACTION_ORO_CUSTOMER_CREATE,
+                ['sessionId' => $this->sessionId, 'customerData' => []],
+                [],
+                [[]],
+                true,
+                true
+            ],
+            'updateCustomer native' => [
+                'updateCustomer',
+                SoapTransport::ACTION_CUSTOMER_UPDATE,
+                ['sessionId' => $this->sessionId, 'customerId' => 3, 'customerData' => []],
+                [],
+                [3, []],
+                true,
+                false
+            ],
+            'updateCustomer oro' => [
+                'updateCustomer',
+                SoapTransport::ACTION_ORO_CUSTOMER_UPDATE,
+                ['sessionId' => $this->sessionId, 'customerId' => 3, 'customerData' => []],
+                [],
+                [3, []],
+                true,
                 true
             ]
         ];

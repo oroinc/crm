@@ -2,29 +2,24 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class OrderWithExistingCustomerStrategy extends OrderStrategy
 {
     const CONTEXT_ORDER_POST_PROCESS = 'postProcessOrders';
 
     /**
-     * @var Customer|null
-     */
-    protected $customer;
-
-    /**
+     * @param Order $importingOrder
+     *
      * {@inheritdoc}
      */
     public function process($importingOrder)
     {
-        $this->customer = null;
         if (!$this->isProcessingAllowed($importingOrder)) {
-            $postProcessOrders = (array)$this->getExecutionContext()->get(self::CONTEXT_ORDER_POST_PROCESS);
-            $postProcessOrders[] = $this->context->getValue('itemData');
-            $this->getExecutionContext()->put(self::CONTEXT_ORDER_POST_PROCESS, $postProcessOrders);
+            $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS, $this->context->getValue('itemData'));
 
             return null;
         }
@@ -38,33 +33,29 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
      */
     protected function isProcessingAllowed(Order $order)
     {
-        // customer could be array if comes new order or object if comes from DB
-        $customerId = is_object($order->getCustomer())
-            ? $order->getCustomer()->getOriginId()
-            : $order->getCustomer()['originId'];
+        $isProcessingAllowed = true;
+        $customer = $this->findExistingEntity($order->getCustomer());
+        $customerOriginId = $order->getCustomer()->getOriginId();
+        if (!$customer && $customerOriginId) {
+            $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
-        if (!$customerId) {
-            return true;
+            $isProcessingAllowed = false;
         }
 
-        /** @var Customer|null $customer */
-        $this->customer = $this->getEntityByCriteria(
-            ['originId' => $customerId, 'channel' => $order->getChannel()],
-            MagentoConnectorInterface::CUSTOMER_TYPE
-        );
+        // Do not try to load cart if bridge does not installed
+        /** @var MagentoSoapTransport $transport */
+        $channel = $this->databaseHelper->findOneByIdentity($order->getChannel());
+        $transport = $channel->getTransport();
+        if ($transport->isSupportedExtensionVersion()) {
+            $cart = $this->findExistingEntity($order->getCart());
+            $cartOriginId = $order->getCart()->getOriginId();
+            if (!$cart && $cartOriginId) {
+                $this->appendDataToContext(ContextCartReader::CONTEXT_POST_PROCESS_CARTS, $cartOriginId);
 
-        return (bool)$this->customer;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function processCustomer(Order $entity)
-    {
-        if ($this->customer) {
-            $this->updateCustomer($entity, $this->customer);
-        } else {
-            parent::processCustomer($entity);
+                $isProcessingAllowed = false;
+            }
         }
+
+        return $isProcessingAllowed;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Writer;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\NewsletterSubscriberDependencyManager;
-
 class NewsletterSubscriberExportWriter extends AbstractExportWriter
 {
     const CONTEXT_POST_PROCESS_KEY = 'postProcessNewsletterSubscribers';
@@ -45,8 +43,6 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
             $subscriberData = $this->transport->createNewsletterSubscriber($item);
 
             if ($subscriberData) {
-                $this->addDependencyData($subscriberData);
-
                 $this->stepExecution->getJobExecution()
                     ->getExecutionContext()
                     ->put(self::CONTEXT_POST_PROCESS_KEY, [$subscriberData]);
@@ -77,8 +73,6 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
             $subscriberData = $this->transport->updateNewsletterSubscriber($subscriberId, $item);
 
             if ($subscriberData) {
-                $this->addDependencyData($subscriberData);
-
                 $this->stepExecution->getJobExecution()
                     ->getExecutionContext()
                     ->put(self::CONTEXT_POST_PROCESS_KEY, [$subscriberData]);
@@ -111,17 +105,5 @@ class NewsletterSubscriberExportWriter extends AbstractExportWriter
     protected function getStatusIdentifier()
     {
         return (int)$this->getContext()->getOption('statusIdentifier');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function addDependencyData(&$subscriberData)
-    {
-        $objectData = (object)$subscriberData;
-
-        NewsletterSubscriberDependencyManager::addDependencyData($objectData, $this->transport);
-
-        $subscriberData = (array)$objectData;
     }
 }

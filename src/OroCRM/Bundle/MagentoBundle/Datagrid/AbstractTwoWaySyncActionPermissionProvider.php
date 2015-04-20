@@ -26,13 +26,14 @@ abstract class AbstractTwoWaySyncActionPermissionProvider
 
     /**
      * @param ResultRecordInterface $record
+     * @param bool $checkExtension
      *
      * @return bool
      */
-    protected function isChannelApplicable(ResultRecordInterface $record)
+    protected function isChannelApplicable(ResultRecordInterface $record, $checkExtension = true)
     {
         $channelId = $record->getValue(self::CHANNEL_KEY);
 
-        return $this->channelSettingsProvider->isChannelApplicable($channelId);
+        return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
     }
 }

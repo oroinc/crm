@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Iterator;
 
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
-use OroCRM\Bundle\MagentoBundle\Provider\Dependency\CustomerDependencyManager;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class CustomerBridgeIterator extends AbstractBridgeIterator
@@ -59,7 +58,10 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
             $filters->addWebsiteFilter([$this->websiteId]);
         }
 
-        $this->loadByFilters($filters->getAppliedFilters());
+        $filters = $filters->getAppliedFilters();
+        $filters['pager'] = ['page' => $this->getCurrentPage(), 'pageSize' => $this->pageSize];
+
+        $this->loadByFilters($filters);
     }
 
     /**
@@ -84,16 +86,18 @@ class CustomerBridgeIterator extends AbstractBridgeIterator
     /**
      * {@inheritdoc}
      */
-    protected function addDependencyData($result)
+    protected function getIdFieldName()
     {
-        CustomerDependencyManager::addDependencyData($result, $this->transport);
+        return 'customer_id';
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function getIdFieldName()
+    public function current()
     {
-        return 'customer_id';
+        $this->logger->info(sprintf('Loading Customer by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

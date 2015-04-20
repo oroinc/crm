@@ -2,34 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
-use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\CustomerGroupHelper;
+use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
 class CustomerStrategy extends AbstractImportStrategy
 {
-    /**
-     * @var ChannelHelper
-     */
-    protected $channelHelper;
-
-    /**
-     * @var AddressImportHelper
-     */
-    protected $addressHelper;
-
-    /**
-     * @var StoreStrategy
-     */
-    protected $storeStrategy;
-
-    /**
-     * @var CustomerGroupHelper
-     */
-    protected $customerGroupHelper;
-
     /**
      * @var Address[]
      */
@@ -39,41 +17,6 @@ class CustomerStrategy extends AbstractImportStrategy
      * @var array
      */
     protected $addressRegions = [];
-
-    /**
-     * @param ChannelHelper $channelHelper
-     */
-    public function setChannelHelper(ChannelHelper $channelHelper)
-    {
-        $this->channelHelper = $channelHelper;
-    }
-
-    /**
-     * @param AddressImportHelper $addressHelper
-     */
-    public function setAddressHelper(AddressImportHelper $addressHelper)
-    {
-        $this->addressHelper = $addressHelper;
-    }
-
-    /**
-     * @param StoreStrategy $storeStrategy
-     */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
-    }
-
-    /**
-     * @param CustomerGroupHelper $customerGroupHelper
-     * @return CustomerStrategy
-     */
-    public function setCustomerGroupHelper($customerGroupHelper)
-    {
-        $this->customerGroupHelper = $customerGroupHelper;
-
-        return $this;
-    }
 
     /**
      * @param Customer $entity
@@ -97,10 +40,6 @@ class CustomerStrategy extends AbstractImportStrategy
             }
         }
 
-        if ($entity->getGroup()) {
-            $entity->getGroup()->setChannel($entity->getChannel());
-        }
-
         return parent::beforeProcessEntity($entity);
     }
 
@@ -110,52 +49,11 @@ class CustomerStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $this->processStore($entity);
-        $this->processDataChannel($entity);
-        $this->processGroup($entity);
         $this->processAddresses($entity);
 
+        $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $entity->getOriginId());
+
         return parent::afterProcessEntity($entity);
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processStore(Customer $entity)
-    {
-        $store = $entity->getStore();
-        if ($entity->getStore()) {
-            $store = $this->storeStrategy->process($store);
-
-            $entity->setStore($store);
-            $entity->setWebsite($store->getWebsite());
-        }
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processDataChannel(Customer $entity)
-    {
-        if ($entity->getChannel()) {
-            $dataChannel = $this->channelHelper->getChannel($entity->getChannel());
-            if ($dataChannel) {
-                $entity->setDataChannel($dataChannel);
-            }
-        }
-    }
-
-    /**
-     * @param Customer $entity
-     */
-    protected function processGroup(Customer $entity)
-    {
-        $group = $entity->getGroup();
-        if ($group) {
-            $group = $this->customerGroupHelper->getUniqueGroup($group);
-            $group->setChannel($entity->getChannel());
-            $entity->setGroup($group);
-        }
     }
 
     /**
@@ -164,7 +62,9 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function processAddresses(Customer $entity)
     {
         if (!$entity->getAddresses()->isEmpty()) {
+            /** @var Address $address */
             foreach ($entity->getAddresses() as $address) {
+                $address->setOwner($entity);
                 $originId = $address->getOriginId();
                 if (array_key_exists($originId, $this->importingAddresses)) {
                     $remoteAddress = $this->importingAddresses[$originId];

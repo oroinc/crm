@@ -19,7 +19,6 @@ class LoadGroupData extends AbstractFixture
         $groups = array('Sales Group','Marketing Group');
         foreach ($groups as $group) {
             $contactGroup = new Group($group);
-            //$contactGroup->setOwner($this->getReference('default_user'));
             $manager->persist($contactGroup);
         }
         $manager->flush();

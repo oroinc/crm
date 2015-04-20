@@ -2,137 +2,97 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\LoggerAwareInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class CartStrategy extends BaseStrategy implements LoggerAwareInterface
+class CartStrategy extends AbstractImportStrategy
 {
-    use LoggerAwareTrait;
-
-    const ENTITY_NAME = 'OroCRM\Bundle\MagentoBundle\Entity\Cart';
-
-    /** @var StoreStrategy */
-    protected $storeStrategy;
-
-    /** @var array */
-    protected static $fieldsForManualUpdate = [
-        'id',
-        'store',
-        'status',
-        'cartItems',
-        'customer',
-        'relatedCalls',
-        'relatedEmails',
-        'shippingAddress',
-        'billingAddress',
-        'workflowItem',
-        'workflowStep',
-        'opportunity',
-        'owner',
-        'organization',
-        'channel',
-        'dataChannel'
-    ];
-
     /**
-     * @param StoreStrategy $storeStrategy
+     * @var Cart
      */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
-    }
+    protected $existingEntity;
 
     /**
+     * @param Cart $entity
+     *
      * {@inheritdoc}
      */
-    public function process($newEntity)
+    protected function beforeProcessEntity($entity)
     {
-        $oid = $newEntity->getOriginId();
-
-        /** @var Cart $newEntity */
-        /** @var Cart $existingEntity */
-        $existingEntity = $this->getEntityByCriteria(
-            ['originId' => $oid, 'channel' => $newEntity->getChannel()],
-            $newEntity
-        );
-        if ($existingEntity) {
-            $this->strategyHelper->importEntity($existingEntity, $newEntity, self::$fieldsForManualUpdate);
-            // force unset "status error message" that might be set during manual sync form UI
-            $existingEntity->setStatusMessage(null);
-        } else {
-            $hasContactInfo = ($newEntity->getBillingAddress() && $newEntity->getBillingAddress()->getPhone())
-                || $newEntity->getEmail();
-
-            if (!$newEntity->getItemsCount()) {
-                $this->context->incrementErrorEntriesCount();
-                $this->logger->debug(sprintf('Cart ID: %d was skipped because it does not have items', $oid));
-
-                return null;
-            } elseif (!$hasContactInfo) {
-                $this->context->incrementErrorEntriesCount();
-                $this->logger->debug(sprintf('Cart ID: %d was skipped because lack of contact info', $oid));
-
-                return null;
-            }
-            $existingEntity = $newEntity;
-
-            // populate owner only for newly created entities
-            $this->defaultOwnerHelper->populateChannelOwner($newEntity, $newEntity->getChannel());
+        $this->existingEntity = $this->databaseHelper->findOneByIdentity($entity);
+        if (!$this->existingEntity) {
+            $this->existingEntity = $entity;
         }
 
-        $this->updateCartStatus($existingEntity, $newEntity->getStatus());
-        if (!$existingEntity->getStore() || !$existingEntity->getStore()->getId()) {
-            $existingEntity->setStore(
-                $this->storeStrategy->process($newEntity->getStore())
-            );
-        }
-        $newEntity->getCustomer()->setChannel($newEntity->getChannel());
-        $this->updateCustomer($existingEntity, $newEntity->getCustomer())
-            ->updateAddresses($existingEntity, $newEntity)
-            ->updateCartItems($existingEntity, $newEntity->getCartItems());
-
-        return $this->validateAndUpdateContext($existingEntity);
+        return parent::beforeProcessEntity($entity);
     }
 
     /**
-     * Assign existing customer, if not found - set null
+     * @param Cart $entity
      *
-     * @param Cart     $newCart
-     * @param Customer $customer
+     * {@inheritdoc}
+     */
+    protected function afterProcessEntity($entity)
+    {
+        $hasContactInfo = ($entity->getBillingAddress() && $entity->getBillingAddress()->getPhone())
+            || $entity->getEmail();
+
+        if (!$entity->getItemsCount()) {
+            $this->context->incrementErrorEntriesCount();
+            $this->logger->debug(
+                sprintf('Cart ID: %d was skipped because it does not have items', $entity->getOriginId())
+            );
+
+            return null;
+        } elseif (!$hasContactInfo) {
+            $this->context->incrementErrorEntriesCount();
+            $this->logger->debug(
+                sprintf('Cart ID: %d was skipped because lack of contact info', $entity->getOriginId())
+            );
+
+            return null;
+        }
+
+        $this
+            ->updateCustomer($entity)
+            ->updateAddresses($entity)
+            ->updateCartItems($entity->getCartItems())
+            ->updateCartStatus($entity);
+
+        $this->existingEntity = null;
+
+        return parent::afterProcessEntity($entity);
+    }
+
+    /**
+     * Update Customer email
+     *
+     * @param Cart $cart
      *
      * @return CartStrategy
      */
-    protected function updateCustomer(Cart $newCart, Customer $customer)
+    protected function updateCustomer(Cart $cart)
     {
-        $existingCustomer = $this->getEntityByCriteria(
-            ['originId' => $customer->getOriginId(), 'channel' => $customer->getChannel()],
-            $customer
-        );
-
-        if ($existingCustomer) {
-            $newCart->setCustomer($existingCustomer);
-        } else {
-            $newCart->setCustomer(null);
+        $customer = $cart->getCustomer();
+        if ($customer && !$customer->getEmail()) {
+            $customer->setEmail($cart->getEmail());
         }
 
         return $this;
     }
 
     /**
-     * @param Cart            $cart
-     * @param ArrayCollection $cartItems imported items
+     * @param Collection $cartItems imported items
      *
      * @return CartStrategy
      */
-    protected function updateCartItems(Cart $cart, ArrayCollection $cartItems)
+    protected function updateCartItems(Collection $cartItems)
     {
         $importedOriginIds = $cartItems->map(
             function (CartItem $item) {
@@ -145,7 +105,7 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
         foreach ($cartItems as $item) {
             $originId = $item->getOriginId();
 
-            $existingItem = $cart->getCartItems()->filter(
+            $existingItem = $this->existingEntity->getCartItems()->filter(
                 function (CartItem $item) use ($originId) {
                     return $item->getOriginId() === $originId;
                 }
@@ -157,54 +117,52 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
             }
 
             if (!$item->getCart()) {
-                $item->setCart($cart);
+                $item->setCart($this->existingEntity);
             }
 
-            if (!$cart->getCartItems()->contains($item)) {
-                $cart->getCartItems()->add($item);
+            if (!$this->existingEntity->getCartItems()->contains($item)) {
+                $this->existingEntity->getCartItems()->add($item);
             }
         }
 
         // delete cart items that not exists in remote cart
-        $deletedCartItems = $cart->getCartItems()->filter(
+        $deletedCartItems = $this->existingEntity->getCartItems()->filter(
             function (CartItem $item) use ($importedOriginIds) {
                 return !in_array($item->getOriginId(), $importedOriginIds, true);
             }
         );
         foreach ($deletedCartItems as $item) {
-            $cart->getCartItems()->removeElement($item);
+            $this->existingEntity->getCartItems()->removeElement($item);
         }
 
         return $this;
     }
 
     /**
-     * @param Cart $newCart
-     * @param Cart $importedCart
+     * @param Cart $entity
      *
      * @return CartStrategy
      */
-    protected function updateAddresses(Cart $newCart, Cart $importedCart)
+    protected function updateAddresses(Cart $entity)
     {
-        $addresses = ['ShippingAddress', 'BillingAddress'];
+        $addresses = ['shippingAddress', 'billingAddress'];
+        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($addresses as $addressName) {
-            $addressGetter = 'get' . $addressName;
-            $setter        = 'set' . $addressName;
             /** @var CartAddress $address */
-            $address = $importedCart->$addressGetter();
+            $address = $propertyAccessor->getValue($entity, $addressName);
 
             if (!$address) {
                 continue;
             }
 
             // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId    = $address->getRegion() ? $address->getRegion()->getCode() : null;
+            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $originAddressId = $address->getOriginId();
 
             /** @var CartAddress $existingAddress */
-            $existingAddress = $newCart->$addressGetter();
-            if ($existingAddress && $existingAddress->getOriginId() === $originAddressId) {
+            $existingAddress = $propertyAccessor->getValue($this->existingEntity, $addressName);
+            if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
                 $this->strategyHelper->importEntity(
                     $existingAddress,
                     $address,
@@ -213,11 +171,11 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
                 $address = $existingAddress;
             }
 
-            $this->updateAddressCountryRegion($address, $mageRegionId);
+            $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if ($address->getCountry()) {
-                $newCart->$setter($address);
+                $propertyAccessor->setValue($entity, $addressName, $address);
             } else {
-                $newCart->$setter(null);
+                $propertyAccessor->setValue($entity, $addressName, null);
             }
         }
 
@@ -227,17 +185,22 @@ class CartStrategy extends BaseStrategy implements LoggerAwareInterface
     /**
      * Update cart status
      *
-     * @param Cart       $existingEntity
-     * @param CartStatus $status
+     * @param Cart $cart
+     *
+     * @return CartStrategy
      */
-    protected function updateCartStatus(Cart $existingEntity, CartStatus $status)
+    protected function updateCartStatus(Cart $cart)
     {
         // allow to modify status only for "open" carts
         // because magento can only expire cart, so for different statuses this useless
-        if ($existingEntity->getStatus()->getName() !== 'open') {
-            $status = $existingEntity->getStatus();
+        if ($this->existingEntity->getStatus()->getName() !== CartStatus::STATUS_OPEN) {
+            $status = $this->existingEntity->getStatus();
+        } else {
+            $status = $cart->getStatus();
         }
 
-        $existingEntity->setStatus($this->doctrineHelper->merge($status));
+        $cart->setStatus($status);
+
+        return $this;
     }
 }

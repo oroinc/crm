@@ -33,25 +33,30 @@ define(function (require) {
 
         $schedule.on('change', function () {
             if (_.contains(hideOn, $(this).val())) {
-                $scheduledFor
-                    .addClass('hide')
-                    .data('validation-ignore', true);
+                $scheduledFor.addClass('hide');
+                $scheduledFor.find('input').each(function() {
+                    $(this).rules('remove', 'NotBlank');
+                });
 
                 if ($label.hasClass('required')) {
                     $label
                         .removeClass('required')
-                        .find('em').remove();
+                        .find('em').html('&nbsp;');
                 }
             }
             if (_.contains(showOn, $(this).val())) {
-                $scheduledFor
-                    .removeClass('hide')
-                    .removeData('validation-ignore');
+                $scheduledFor.removeClass('hide');
+
+                $scheduledFor.find('input').each(function() {
+                    $(this)
+                        .removeClass('hide')
+                        .rules('add', 'NotBlank');
+                });
 
                 if (!$label.hasClass('required')) {
                     $label
                         .addClass('required')
-                        .append('<em>*</em>');
+                        .find('em').html('*');
                 }
             }
         });

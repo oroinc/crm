@@ -2,123 +2,66 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
-use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class OrderStrategy extends BaseStrategy
+class OrderStrategy extends AbstractImportStrategy
 {
-    /** @var array */
-    protected static $attributesToUpdateManual = [
-        'id',
-        'store',
-        'items',
-        'cart',
-        'customer',
-        'addresses',
-        'workflowItem',
-        'workflowStep',
-        'relatedCalls',
-        'relatedEmails',
-        'organization',
-        'owner',
-        'channel',
-        'dataChannel'
-    ];
-
-    /** @var StoreStrategy */
-    protected $storeStrategy;
+    const CONTEXT_ORDER_POST_PROCESS_IDS = 'postProcessOrderIds';
 
     /**
-     * @param StoreStrategy $storeStrategy
+     * @var Order
      */
-    public function setStoreStrategy(StoreStrategy $storeStrategy)
-    {
-        $this->storeStrategy = $storeStrategy;
-    }
+    protected $existingEntity;
 
     /**
+     * @param Order $entity
+     *
      * {@inheritdoc}
      */
-    public function process($importingOrder)
+    protected function beforeProcessEntity($entity)
     {
-        /** @var Order $importingOrder */
-        if (!$importingOrder->getUpdatedAt() && $importingOrder->getCreatedAt()) {
-            $importingOrder->setUpdatedAt($importingOrder->getCreatedAt());
+        $this->existingEntity = $this->databaseHelper->findOneByIdentity($entity);
+        if (!$this->existingEntity) {
+            $this->existingEntity = $entity;
         }
 
-        $criteria = ['incrementId' => $importingOrder->getIncrementId(), 'channel' => $importingOrder->getChannel()];
-        $order    = $this->getEntityByCriteria($criteria, $importingOrder);
-
-        if ($order) {
-            $this->strategyHelper->importEntity($order, $importingOrder, self::$attributesToUpdateManual);
-        } else {
-            $order = $importingOrder;
-
-            // populate owner only for newly created entities
-            $this->defaultOwnerHelper->populateChannelOwner($order, $order->getChannel());
-        }
-        /** @var Order $order */
-        $this->processStore($order);
-        $this->processCustomer($order);
-        $this->processCart($order);
-        $this->processAddresses($order, $importingOrder);
-        $this->processItems($order, $importingOrder);
-
-        // check errors, update context increments
-        return $this->validateAndUpdateContext($order);
+        return parent::beforeProcessEntity($entity);
     }
 
     /**
      * @param Order $entity
-     */
-    protected function saveOriginIdContext($entity)
-    {
-        if ($entity instanceof Order) {
-            $postProcessIds = (array)$this->getExecutionContext()->get(self::CONTEXT_POST_PROCESS_IDS);
-            $postProcessIds[ClassUtils::getClass($entity)][] = $entity->getIncrementId();
-            $this->getExecutionContext()->put(self::CONTEXT_POST_PROCESS_IDS, $postProcessIds);
-        }
-    }
-
-    /**
-     * @param Order $entity
-     */
-    protected function processStore(Order $entity)
-    {
-        $entity->setStore($this->storeStrategy->process($entity->getStore()));
-    }
-
-    /**
-     * If customer exists then add relation to it,
-     * do nothing otherwise
      *
-     * @param Order $entity
+     * {@inheritdoc}
      */
-    protected function processCustomer(Order $entity)
+    protected function afterProcessEntity($entity)
     {
-        // customer could be array if comes new order or object if comes from DB
-        $customerId = is_object($entity->getCustomer())
-            ? $entity->getCustomer()->getOriginId()
-            : $entity->getCustomer()['originId'];
+        if (!$entity->getUpdatedAt() && $entity->getCreatedAt()) {
+            $entity->setUpdatedAt($entity->getCreatedAt());
+        }
 
-        $criteria = ['originId' => $customerId, 'channel' => $entity->getChannel()];
+        /** @var Order $order */
+        $this->processCart($entity);
+        $this->processAddresses($this->existingEntity, $entity);
+        $this->processItems($this->existingEntity, $entity);
+        $this->processCustomer($entity, $entity->getCustomer());
 
-        /** @var Customer|null $customer */
-        $customer = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CUSTOMER_TYPE);
+        $this->existingEntity = null;
 
-        $this->updateCustomer($entity, $customer);
+        $this->appendDataToContext(self::CONTEXT_ORDER_POST_PROCESS_IDS, $entity->getIncrementId());
+
+        return parent::afterProcessEntity($entity);
     }
 
     /**
      * @param Order $order
      * @param Customer $customer
      */
-    protected function updateCustomer(Order $order, Customer $customer = null)
+    protected function processCustomer(Order $order, Customer $customer = null)
     {
         if ($customer instanceof Customer) {
             // now customer orders subtotal calculation support only one currency.
@@ -137,19 +80,13 @@ class OrderStrategy extends BaseStrategy
      */
     protected function processCart(Order $entity)
     {
-        // cart could be array if comes new order or object if comes from DB
-        $cartId = is_object($entity->getCart())
-            ? $entity->getCart()->getOriginId()
-            : $entity->getCart()['originId'];
-
-        $criteria = ['originId' => $cartId, 'channel' => $entity->getChannel()];
-
-        /** @var Cart|null $cart */
-        $cart = $this->getEntityByCriteria($criteria, MagentoConnectorInterface::CART_TYPE);
+        $cart = $entity->getCart();
 
         if ($cart) {
-            $statusClass     = MagentoConnectorInterface::CART_STATUS_TYPE;
-            $purchasedStatus = $this->strategyHelper->getEntityManager($statusClass)->find($statusClass, 'purchased');
+            $statusClass = MagentoConnectorInterface::CART_STATUS_TYPE;
+            /** @var CartStatus $purchasedStatus */
+            $purchasedStatus = $this->databaseHelper
+                ->findOneBy($statusClass, ['name' => CartStatus::STATUS_PURCHASED]);
             if ($purchasedStatus) {
                 $cart->setStatus($purchasedStatus);
             }
@@ -184,13 +121,13 @@ class OrderStrategy extends BaseStrategy
                 $address = $existingAddress;
             }
 
-            $this->updateAddressCountryRegion($address, $mageRegionId);
+            $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if (!$address->getCountry()) {
                 $entityToUpdate->getAddresses()->offsetUnset($k);
                 continue;
             }
 
-            $this->updateAddressTypes($address);
+            $this->addressHelper->updateAddressTypes($address);
 
             $address->setOwner($entityToUpdate);
             $entityToUpdate->getAddresses()->set($k, $address);
