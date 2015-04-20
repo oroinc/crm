@@ -15,12 +15,16 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface;
+use OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface;
 use OroCRM\Bundle\MagentoBundle\Provider\Iterator\StoresSoapIterator;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class SoapController extends Controller
 {
     /**
+     * @param Request $request
+     * @return JsonResponse
+     *
      * @Route("/check", name="orocrm_magento_soap_check")
      * @AclAncestor("oro_integration_update")
      */
@@ -118,8 +122,12 @@ class SoapController extends Controller
             ->getAvailableConnectorsTypesChoiceList(
                 ChannelType::TYPE,
                 function (ConnectorInterface $connector) use ($isExtensionInstalled, $isSupportedVersion) {
-                    if ($connector instanceof ExtensionAwareInterface) {
+                    if ($connector instanceof ExtensionVersionAwareInterface) {
                         return $isExtensionInstalled && $isSupportedVersion;
+                    }
+
+                    if ($connector instanceof ExtensionAwareInterface) {
+                        return $isExtensionInstalled;
                     }
 
                     return true;

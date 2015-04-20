@@ -118,6 +118,82 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $this->assertEquals($expectedConnectors, $this->integration->getConnectors());
     }
 
+    /**
+     * @param bool $isExtensionInstalled
+     * @param string $version
+     * @param array $expectedConnectors
+     *
+     * @dataProvider installedExtensionDataProvider
+     */
+    public function testCartConnectorNotRelyOnVersion($isExtensionInstalled, $version, array $expectedConnectors)
+    {
+        $this->entity->setChannelType(ChannelType::TYPE);
+        $transport = new MagentoSoapTransport();
+        $transport->setIsExtensionInstalled($isExtensionInstalled);
+        $transport->setExtensionVersion($version);
+        $this->integration->setTransport($transport);
+
+        $extensionAwareConnector = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\ExtensionAwareInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $versionAwareConnector = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\ExtensionVersionAwareInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getConnectorType')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            'magento',
+                            'TestConnector1',
+                            $versionAwareConnector
+                        ],
+                        [
+                            'magento',
+                            'TestConnector2',
+                            $extensionAwareConnector
+                        ]
+                    ]
+                )
+            );
+
+        $this->typesRegistry->expects($this->any())
+            ->method('getRegisteredConnectorsTypes')
+            ->willReturn(new ArrayCollection());
+
+        $this->prepareEvent();
+        $this->getListener()->onChannelSucceedSave($this->event);
+
+        $this->assertEquals($expectedConnectors, $this->integration->getConnectors());
+    }
+
+    /**
+     * @return array
+     */
+    public function installedExtensionDataProvider()
+    {
+        return [
+            [
+                false,
+                SoapTransport::REQUIRED_EXTENSION_VERSION,
+                []
+            ],
+            [
+                true,
+                0,
+                [
+                    'TestConnector2_initial',
+                    'TestConnector2'
+                ]
+            ]
+        ];
+    }
+
     public function testOnChannelSucceedSave()
     {
         $this->entity->setChannelType(ChannelType::TYPE);
