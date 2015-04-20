@@ -190,6 +190,8 @@ class ChannelHandlerTest extends \PHPUnit_Framework_TestCase
 
         $expectedEntity = clone $entity;
         $expectedEntity->setChannelType($expectedType);
+        $expectedEntity->setStatus(true);
+
         $this->form->expects($this->once())
             ->method('setData')
             ->with($expectedEntity);
