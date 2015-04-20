@@ -29,10 +29,8 @@ class CategoriesValidator extends ConstraintValidator
             return;
         }
 
-        if ($this->validateCount($value, $constraint)) {
-            if ($this->validateBlank($value, $constraint)) {
-                $this->validateOrder($value, $constraint);
-            }
+        if ($this->validateCount($value, $constraint) && $this->validateBlank($value, $constraint)) {
+            $this->validateOrder($value, $constraint);
         }
     }
 
@@ -59,9 +57,14 @@ class CategoriesValidator extends ConstraintValidator
         }
 
         if (!$hasEmpty) {
-            for ($i = 1; $i < $orderedByIndex->count() - 1; $i++) {
-                /** @var RFMMetricCategory $category */
-                $category = $orderedByIndex[$i];
+            $orderedByIndexWithoutEmpty = $orderedByIndex->filter(
+                function (RFMMetricCategory $category) use ($orderedByIndex) {
+                    return !in_array($category, [$orderedByIndex->first(), $orderedByIndex->last()], true);
+                }
+            );
+
+            /** @var RFMMetricCategory $category */
+            foreach ($orderedByIndexWithoutEmpty->toArray() as $category) {
                 $min = $category->getMinValue();
                 $max = $category->getMaxValue();
 
