@@ -54,6 +54,10 @@ class ChannelHandler
      */
     public function process(Channel $entity)
     {
+        if (!$entity->getId() && in_array($this->request->getMethod(), ['GET'])) {
+            $entity->setStatus(Channel::STATUS_ACTIVE);
+        }
+
         $this->handleRequestChannelType($entity);
         $this->form->setData($entity);
 

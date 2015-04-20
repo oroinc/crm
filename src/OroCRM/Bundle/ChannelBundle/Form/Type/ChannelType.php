@@ -17,6 +17,8 @@ use OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber;
 class ChannelType extends AbstractType
 {
     const NAME = 'orocrm_channel_form';
+    const PLACEHOLDER_TYPE = "placeholder";
+    const PLACEHOLDER_CLASS = "OroCRM\\Bundle\\ChannelBundle\\Entity\\Placeholder";
 
     /** @var SettingsProvider */
     protected $settingsProvider;

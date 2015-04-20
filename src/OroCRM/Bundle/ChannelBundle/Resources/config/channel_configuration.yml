@@ -6,3 +6,10 @@ orocrm_channel:
     channel_types:
         custom:
             label: orocrm.channel.channel_type.custom.label
+        placeholder:
+            label: orocrm.channel.form.select_channel_type.label
+            priority: -1000
+            entities: ~
+            integration_type: placeholder
+            customer_identity: OroCRM\Bundle\ChannelBundle\Entity\Placeholder
+            lifetime_value: lifetime

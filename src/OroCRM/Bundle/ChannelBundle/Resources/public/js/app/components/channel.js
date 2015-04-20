@@ -23,10 +23,15 @@ define([
      * @param {Array.} lockedEntities
      */
     function initializeEntityComponent(selector, metadata, lockedEntities) {
-        var $storageEl = $(selector),
-            value = $storageEl.val(),
-            entities = value ? JSON.parse(value) : [],
-            entityComponentView = new EntityComponentView({
+        var $storageEl = $(selector);
+        var value = $storageEl.val();
+        var entities = value ? JSON.parse(value) : [];
+
+        if(entities.length == 0) {
+            return;
+        }
+
+        var entityComponentView = new EntityComponentView({
                 data: entities,
                 mode: EntityComponentView.prototype.MODES.EDIT_MODE,
                 metadata: metadata,
@@ -64,6 +69,14 @@ define([
             return result;
         };
         var formStartState = getFormState();
+        var startChannelType = $el.val();
+        var lastSelectedChannelType;
+
+        var isAllowOpenConfirmDialog = function() {
+            return startChannelType != 'placeholder' &&
+                    lastSelectedChannelType != 'placeholder' &&
+                    getFormState() != formStartState;
+        };
 
         var processChangeType = function() {
             var data,
@@ -91,6 +104,9 @@ define([
         };
 
         $el.on('change', function changeTypeHandler(e) {
+
+            lastSelectedChannelType = $(this).val();
+
             var prevEl  = e.removed,
                 confirm = new DeleteConfirmation({
                     title:   __('orocrm.channel.confirmation.title'),
@@ -103,7 +119,7 @@ define([
                 $el.select2('val', prevEl.id)
             });
 
-            if (getFormState() != formStartState) {
+            if (isAllowOpenConfirmDialog()) {
                 confirm.open();
             } else {
                 processChangeType();
