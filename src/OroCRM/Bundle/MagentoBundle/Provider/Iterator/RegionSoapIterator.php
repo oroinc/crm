@@ -7,7 +7,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 class RegionSoapIterator extends AbstractPageableSoapIterator
 {
     /** @var array */
-    protected $countriesBuffer = null;
+    protected $countriesBuffer;
 
     /** @var array */
     protected $regionsBuffer = [];
@@ -72,5 +72,15 @@ class RegionSoapIterator extends AbstractPageableSoapIterator
     protected function getIdFieldName()
     {
         return 'code';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        $this->logger->info(sprintf('Loading Region by id: %s', $this->key()));
+
+        return $this->current;
     }
 }

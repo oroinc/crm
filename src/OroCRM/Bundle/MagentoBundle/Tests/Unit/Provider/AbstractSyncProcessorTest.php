@@ -116,8 +116,8 @@ abstract class AbstractSyncProcessorTest extends \PHPUnit_Framework_TestCase
 
     public function assertProcessCalls()
     {
-        $this->logger->expects($this->never())
-            ->method('critical');
+        $this->logger->expects($this->any())->method('critical')->with($this->equalTo(''));
+        $this->logger->expects($this->never())->method('critical');
 
         $this->processorRegistry->expects($this->any())
             ->method('getProcessorAliasesByEntity')
