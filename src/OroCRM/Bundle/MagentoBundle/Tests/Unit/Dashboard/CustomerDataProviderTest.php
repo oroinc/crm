@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Converter;
+namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Dashboard;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider;
 
