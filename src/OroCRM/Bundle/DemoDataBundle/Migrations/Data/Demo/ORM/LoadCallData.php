@@ -69,6 +69,9 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
     ) {
         $accounts = $om->getRepository('OroCRMAccountBundle:Account')->findAll();
         $contacts = $om->getRepository('OroCRMContactBundle:Contact')->findAll();
+        $callStatus = $om->getRepository('OroCRMCallBundle:CallStatus')->findOneBy([
+            'name' => 'completed',
+        ]);
         $directions = [
             'incoming' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(['name' => 'incoming']),
             'outgoing' => $om->getRepository('OroCRMCallBundle:CallDirection')->findOneBy(['name' => 'outgoing'])
@@ -83,6 +86,7 @@ class LoadCallData extends AbstractFixture implements DependentFixtureInterface,
             /** @var Account $account */
             $account = $accounts[$accountRandom];
             $call = new Call();
+            $call->setCallStatus($callStatus);
             $call->setOrganization($this->organization);
             $call->setOwner($contact->getOwner());
             $call->setSubject($this->subjects[array_rand($this->subjects)]);
