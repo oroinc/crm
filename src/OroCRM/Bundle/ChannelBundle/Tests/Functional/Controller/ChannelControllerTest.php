@@ -131,7 +131,7 @@ class ChannelControllerTest extends WebTestCase
         );
 
         $this->client->getResponse();
-        $this->assertContains('Channel activated', $crawler->html());
+        $this->assertContains('Channel deactivated', $crawler->html());
 
         return $channel;
     }
