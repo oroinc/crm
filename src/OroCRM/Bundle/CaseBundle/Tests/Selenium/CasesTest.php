@@ -56,7 +56,7 @@ class CasesTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Cases - Activities');
+            ->assertTitle('All - Cases - Activities');
 
         return $newSubject;
     }
