@@ -20,7 +20,6 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
  */
 class MarketingListExtension extends AbstractExtension
 {
-    const OPTIONS_MIXIN_PATH = '[options][mixin]';
     const NAME_PATH = '[name]';
 
     /**
@@ -53,10 +52,6 @@ class MarketingListExtension extends AbstractExtension
         }
 
         if ($config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) !== OrmDatasource::TYPE) {
-            return false;
-        }
-
-        if (!$config->offsetGetByPath(self::OPTIONS_MIXIN_PATH, false)) {
             return false;
         }
 
