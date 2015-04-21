@@ -52,6 +52,8 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
+        $this->setDefaultValues($data);
+
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
         $datasourceModifier($form);
@@ -115,6 +117,17 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
 
         if (!$data->getId()) {
             $data->setCustomerIdentity($customerIdentity);
+        }
+    }
+
+    /**
+     * @param object $object
+     */
+    protected function setDefaultValues($object)
+    {
+        //set default status to active
+        if ($object && $object instanceof Channel && !$object->getChannelType()) {
+            $object->setStatus(Channel::STATUS_ACTIVE);
         }
     }
 

@@ -94,8 +94,7 @@ class ChannelType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel',
-                'status' => Channel::STATUS_ACTIVE
+                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
             ]
         );
     }
