@@ -134,9 +134,8 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         /** @var Status $status */
         $status = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
         $iterator = $this->getSourceIterator();
-        $isForceSync = $context->getOption('force') && $this->supportsForceSync();
 
-        if ($iterator instanceof UpdatedLoaderInterface && !$isForceSync) {
+        if ($iterator instanceof UpdatedLoaderInterface) {
             $startDate = $this->getStartDate($status);
 
             if ($status) {
@@ -179,18 +178,24 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             return $initialSyncedTo;
         }
 
+        // If connector has status use it's information for start date
+        if ($status) {
+            $data = $status->getData();
+            if (empty($data[AbstractInitialProcessor::SKIP_STATUS])) {
+                if (!empty($data[self::LAST_SYNC_KEY])) {
+                    return new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
+                }
+
+                return clone $status->getDate();
+            }
+        }
+
+        // If there is no status and LAST_SYNC_KEY is present in contexts use it
         $lastSyncDate = $this->stepExecution->getExecutionContext()->get(self::LAST_SYNC_KEY);
         if ($lastSyncDate) {
             return $lastSyncDate;
-        }
-
-        if ($status) {
-            $data = $status->getData();
-            if (!empty($data[self::LAST_SYNC_KEY])) {
-                return new \DateTime($data[self::LAST_SYNC_KEY], new \DateTimeZone('UTC'));
-            }
-
-            return clone $status->getDate();
+        } elseif ($jobContext->get(self::LAST_SYNC_KEY)) {
+            return $jobContext->get(self::LAST_SYNC_KEY);
         }
 
         return new \DateTime('now', new \DateTimeZone('UTC'));
