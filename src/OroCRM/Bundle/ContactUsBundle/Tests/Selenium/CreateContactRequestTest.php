@@ -18,8 +18,6 @@ class CreateContactRequestTest extends Selenium2TestCase
      */
     public function testCreateChannel()
     {
-        $name = 'Channel_' . mt_rand();
-
         $login = $this->login();
         /** @var Channels $login */
         $login->openChannels('OroCRM\Bundle\ChannelBundle')
@@ -27,23 +25,22 @@ class CreateContactRequestTest extends Selenium2TestCase
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setType('Custom')
-            ->setName($name)
+            ->setName('Channel_' . mt_rand())
             ->setStatus('Active')
             ->addEntity('Contact Request')
             ->save()
             ->assertMessage('Channel saved');
-
-        return $name;
     }
 
     /**
+     * @depends testCreateChannel
      * @return string
      */
     public function testCreateContactRequest()
     {
         $firstName = 'First name_' . mt_rand(10, 99);
-        $lastName = 'Last name_' . mt_rand(10, 99);
-        $email = 'Email_' . mt_rand(10, 99) . '@mail.com';
+        $lastName  = 'Last name_' . mt_rand(10, 99);
+        $email     = 'Email_' . mt_rand(10, 99) . '@mail.com';
 
         $login = $this->login();
         /** @var ContactRequests $login */
