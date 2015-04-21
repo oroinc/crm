@@ -24,7 +24,7 @@ class CreateContactRequestTest extends Selenium2TestCase
         $login = $this->login();
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
-            ->assertTitle('Contact Requests - Activities')
+            ->assertTitle('All - Contact Requests - Activities')
             ->add()
             ->assertTitle('Create contact request - Contact Requests - Activities')
             ->setFirstName($firstName)
@@ -76,7 +76,7 @@ class CreateContactRequestTest extends Selenium2TestCase
             ->filterBy('Email', $email)
             ->open(array($email))
             ->delete()
-            ->assertTitle('Contact Requests - Activities')
+            ->assertTitle('All - Contact Requests - Activities')
             ->assertMessage('Contact Request deleted');
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle');

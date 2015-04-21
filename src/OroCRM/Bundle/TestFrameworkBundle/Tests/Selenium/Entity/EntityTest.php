@@ -19,7 +19,7 @@ class EntityTest extends Selenium2TestCase
         $login = $this->login();
         /** @var  ConfigEntities $login*/
         $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
-            ->assertTitle('Entity Management - Entities - System')
+            ->assertTitle('All - Entity Management - Entities - System')
             ->open(array($entityName))
             ->assertTitle("{$entityName} - Entity Management - Entities - System")
             ->createField()
@@ -30,7 +30,7 @@ class EntityTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Field saved')
             ->updateSchema()
-            ->assertTitle('Entity Management - Entities - System')
+            ->assertTitle('All - Entity Management - Entities - System')
             ->close()
             ->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
