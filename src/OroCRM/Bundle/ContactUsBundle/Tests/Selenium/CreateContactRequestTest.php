@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactUsBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
 
 /**
@@ -12,6 +13,29 @@ use OroCRM\Bundle\ContactUsBundle\Tests\Selenium\Pages\ContactRequests;
  */
 class CreateContactRequestTest extends Selenium2TestCase
 {
+    /**
+     * @return string
+     */
+    public function testCreateChannel()
+    {
+        $name = 'Channel_' . mt_rand();
+
+        $login = $this->login();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('Custom')
+            ->setName($name)
+            ->setStatus('Active')
+            ->addEntity('Contact Request')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $name;
+    }
+
     /**
      * @return string
      */
@@ -52,7 +76,7 @@ class CreateContactRequestTest extends Selenium2TestCase
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
-            ->open(array($email))
+            ->open([$email])
             ->edit()
             ->setEmail($newEmail)
             ->save()
@@ -74,7 +98,7 @@ class CreateContactRequestTest extends Selenium2TestCase
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
-            ->open(array($email))
+            ->open([$email])
             ->delete()
             ->assertTitle('All - Contact Requests - Activities')
             ->assertMessage('Contact Request deleted');
