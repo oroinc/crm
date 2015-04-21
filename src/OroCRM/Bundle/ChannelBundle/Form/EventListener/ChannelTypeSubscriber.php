@@ -61,13 +61,13 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
         $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
         $data->setCustomerIdentity($customerIdentity);
         if (!empty($customerIdentity)) {
-            $this->addEnititesToChannel($data, [$customerIdentity]);
+            $this->addEntitiesToChannel($data, [$customerIdentity]);
         }
 
         // pre-fill entities for new instances
         if (!$data->getId()) {
             $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-            $this->addEnititesToChannel($data, $channelTypeEntities);
+            $this->addEntitiesToChannel($data, $channelTypeEntities);
         }
     }
 
@@ -126,7 +126,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     protected function setDefaultValues($object)
     {
         //set default status to active
-        if ($object && $object instanceof Channel && !$object->getChannelType()) {
+        if ($object instanceof Channel && !$object->getChannelType()) {
             $object->setStatus(Channel::STATUS_ACTIVE);
         }
     }
@@ -174,7 +174,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      * @param Channel $channel
      * @param array   $entitiesToAdd
      */
-    protected function addEnititesToChannel(Channel $channel, array $entitiesToAdd)
+    protected function addEntitiesToChannel(Channel $channel, array $entitiesToAdd)
     {
         $entities         = $channel->getEntities();
         $entities         = is_array($entities) ? $entities : [];
