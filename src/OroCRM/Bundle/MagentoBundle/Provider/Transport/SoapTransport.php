@@ -316,7 +316,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         $settings = $this->settings->all();
 
-        if ($this->isSupportedExtensionVersion()) {
+        if ($this->isExtensionInstalled()) {
             return new OrderBridgeIterator($this, $settings);
         } else {
             return new OrderSoapIterator($this, $settings);
@@ -356,7 +356,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     {
         $settings = $this->settings->all();
 
-        if ($this->isSupportedExtensionVersion()) {
+        if ($this->isExtensionInstalled()) {
             return new CustomerBridgeIterator($this, $settings);
         } else {
             return new CustomerSoapIterator($this, $settings);
