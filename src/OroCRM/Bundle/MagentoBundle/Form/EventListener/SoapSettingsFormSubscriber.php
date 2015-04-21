@@ -9,8 +9,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 use Oro\Bundle\FormBundle\Utils\FormUtils;
 use Oro\Bundle\SecurityBundle\Encoder\Mcrypt;
-use Oro\Bundle\IntegrationBundle\Utils\FormUtils as IntegrationFormUtils;
-use Oro\Bundle\IntegrationBundle\Entity\Channel;
 
 class SoapSettingsFormSubscriber implements EventSubscriberInterface
 {
@@ -52,8 +50,6 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
 
         $modifier = $this->getModifierWebsitesList($data->getWebsites());
         $modifier($form);
-
-        $this->muteFields($form);
 
         if ($data->getId()) {
             // change label for apiKey field
@@ -98,8 +94,6 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
             $modifier($form);
         }
 
-        $this->muteFields($form);
-
         $event->setData($data);
     }
 
@@ -122,31 +116,5 @@ class SoapSettingsFormSubscriber implements EventSubscriberInterface
 
             FormUtils::replaceField($form, 'websiteId', ['choices' => $choices], ['choice_list']);
         };
-    }
-
-    /**
-     * Disable fields that are not allowed to be modified since channel has at least one sync completed
-     *
-     * @param FormInterface $form
-     */
-    protected function muteFields(FormInterface $form)
-    {
-        if (!$form->getParent()) {
-            return;
-        }
-
-        /** @var Channel $channel */
-        $channel = $form->getParent()->getData();
-        // if channel is new
-        if (!$channel || !$channel->getId()) {
-            return;
-        }
-
-        if (IntegrationFormUtils::wasSyncedAtLeastOnce($channel)) {
-            // disable start sync date
-            FormUtils::replaceField($form, 'syncStartDate', ['disabled' => true]);
-            // disable websites selector
-            FormUtils::replaceField($form, 'websiteId', ['disabled' => true]);
-        }
     }
 }

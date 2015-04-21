@@ -93,6 +93,7 @@ parameters:
     orocrm_magento.form.autocomplete.store.search_handler.class:            OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
 
     orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
+    orocrm_magento.validator.start_sync_date.class:                         OroCRM\Bundle\MagentoBundle\Validator\StartSyncDateValidator
 
     orocrm_magento.security.acl.voter.two_way_sync.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter
     orocrm_magento.security.acl.voter.newletter_subscriber.class:           OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
@@ -461,6 +462,13 @@ services:
             - @orocrm_magento.transport.soap_transport
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
+
+    orocrm_magento.validator.start_sync_date:
+        class: %orocrm_magento.validator.start_sync_date.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_magento.validator.start_sync_date }
 
     orocrm_magento.security.acl.voter.two_way_sync:
         class: %orocrm_magento.security.acl.voter.two_way_sync.class%

@@ -1,3 +1,4 @@
 orocrm:
     magento:
         unique_customer_email.message: This email address already in use. Please, provide another one.
+        start_sync_date.message: New date should be less or equals than previously defined.
