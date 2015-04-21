@@ -6,9 +6,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\EmbeddedFormBundle\Form\Type\EmbeddedFormInterface;
-use Oro\Bundle\EmbeddedFormBundle\Form\Type\CustomLayoutFormInterface;
 
-class ContactRequestType extends AbstractType implements EmbeddedFormInterface, CustomLayoutFormInterface
+class ContactRequestType extends AbstractType implements EmbeddedFormInterface
 {
     /**
      * {@inheritdoc}
@@ -185,13 +184,5 @@ CSS;
     public function getDefaultSuccessMessage()
     {
         return '<p>Form has been submitted successfully</p>{back_link}';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFormLayout()
-    {
-        return 'OroCRMContactUsBundle::form.html.twig';
     }
 }

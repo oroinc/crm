@@ -45,4 +45,12 @@ class OrderConnector extends AbstractMagentoConnector
     {
         return $this->transport->getOrders();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

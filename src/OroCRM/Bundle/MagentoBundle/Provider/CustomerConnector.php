@@ -59,7 +59,7 @@ class CustomerConnector extends AbstractMagentoConnector implements TwoWaySyncCo
     /**
      * {@inheritdoc}
      */
-    protected function supportsForceSync()
+    public function supportsForceSync()
     {
         return true;
     }
