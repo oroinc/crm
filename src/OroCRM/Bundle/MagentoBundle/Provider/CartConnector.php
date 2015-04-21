@@ -45,4 +45,12 @@ class CartConnector extends AbstractMagentoConnector implements ExtensionAwareIn
     {
         return $this->transport->getCarts();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

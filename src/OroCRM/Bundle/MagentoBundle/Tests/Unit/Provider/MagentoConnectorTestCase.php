@@ -119,26 +119,6 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $connector->setStepExecution($this->stepExecutionMock);
     }
 
-    public function testInitializationInForceMode()
-    {
-        $channel   = new Channel();
-        $context   = new Context(['force' => true]);
-        $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock, $channel, $context);
-
-        $status = new Status();
-        $status->setCode($status::STATUS_COMPLETED);
-        $status->setConnector($connector->getType());
-
-        $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
-
-        $iterator = $this->getMock('OroCRM\\Bundle\\MagentoBundle\\Provider\\Iterator\\UpdatedLoaderInterface');
-        $iterator->expects($this->exactly((int)!$this->supportsForceMode()))->method('setStartDate');
-        $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())
-            ->will($this->returnValue($iterator));
-
-        $connector->setStepExecution($this->stepExecutionMock);
-    }
-
     /**
      * @dataProvider predefinedIteratorProvider
      *

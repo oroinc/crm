@@ -58,4 +58,12 @@ class InitialNewsletterSubscriberConnector extends AbstractMagentoConnector impl
             $iterator->setInitialId($context->getOption('initial_id'));
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

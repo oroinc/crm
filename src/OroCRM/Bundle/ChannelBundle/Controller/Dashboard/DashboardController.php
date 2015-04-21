@@ -22,8 +22,11 @@ class DashboardController extends Controller
      */
     public function averageLifetimeSalesAction($widget)
     {
-        $data         = $this->get('orocrm_channel.provider.lifetime.average_widget_provider')->getChartData();
-        $widgetAttr   = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+        $data = $this->get('orocrm_channel.provider.lifetime.average_widget_provider')->getChartData($dateRange);
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $chartOptions = array_merge_recursive(
             ['name' => 'multiline_chart'],
             $this->get('oro_chart.config_provider')->getChartConfig('average_lifetime_sales')
