@@ -68,7 +68,7 @@ class AclTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }

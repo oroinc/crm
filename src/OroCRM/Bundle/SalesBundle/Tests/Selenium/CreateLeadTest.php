@@ -31,7 +31,7 @@ class CreateLeadTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('Leads - Sales')
+            ->assertTitle('All - Leads - Sales')
             ->add()
             ->assertTitle('Create Lead - Leads - Sales')
             ->setName($name)
@@ -48,7 +48,7 @@ class CreateLeadTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Lead saved')
             ->toGrid()
-            ->assertTitle('Leads - Sales');
+            ->assertTitle('All - Leads - Sales');
 
         return $name;
     }
@@ -74,7 +74,7 @@ class CreateLeadTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Lead saved')
             ->toGrid()
-            ->assertTitle('Leads - Sales')
+            ->assertTitle('All - Leads - Sales')
             ->close();
 
         return $newName;
@@ -92,7 +92,7 @@ class CreateLeadTest extends Selenium2TestCase
             ->filterBy('Lead name', $name)
             ->open(array($name))
             ->delete()
-            ->assertTitle('Leads - Sales')
+            ->assertTitle('All - Leads - Sales')
             ->assertMessage('Lead deleted')
             ->assertNoDataMessage('No records found');
     }
