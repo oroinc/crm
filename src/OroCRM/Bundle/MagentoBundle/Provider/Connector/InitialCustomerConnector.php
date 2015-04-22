@@ -40,4 +40,12 @@ class InitialCustomerConnector extends AbstractMagentoConnector implements Initi
     {
         return $this->transport->getCustomers();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

@@ -22,7 +22,7 @@ class CreateEmbeddedFormTest extends Selenium2TestCase
         $login = $this->login();
         /** @var EmbeddedForms $login */
         $login->openEmbeddedForms('Oro\Bundle\EmbeddedFormBundle')
-            ->assertTitle('Embedded Forms - Integrations - System')
+            ->assertTitle('All - Embedded Forms - Integrations - System')
             ->add()
             ->assertTitle('Create Embedded Form - Embedded Forms - Integrations - System')
             ->setTitle($title)
@@ -31,7 +31,7 @@ class CreateEmbeddedFormTest extends Selenium2TestCase
             ->assertTitle($title . ' - Embedded Forms - Integrations - System')
             ->checkPreview()
             ->toGrid()
-            ->assertTitle('Embedded Forms - Integrations - System');
+            ->assertTitle('All - Embedded Forms - Integrations - System');
 
         return $title;
     }

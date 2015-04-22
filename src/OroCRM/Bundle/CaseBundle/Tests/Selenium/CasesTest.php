@@ -22,7 +22,7 @@ class CasesTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Cases $login */
         $login->openCases('OroCRM\Bundle\CaseBundle')
-            ->assertTitle('Cases - Activities')
+            ->assertTitle('All - Cases - Activities')
             ->add()
             ->assertTitle('Create Case - Cases - Activities')
             ->setSubject($subject)
@@ -30,7 +30,7 @@ class CasesTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Cases - Activities');
+            ->assertTitle('All - Cases - Activities');
 
         return $subject;
     }
@@ -56,7 +56,7 @@ class CasesTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Cases - Activities');
+            ->assertTitle('All - Cases - Activities');
 
         return $newSubject;
     }
@@ -80,7 +80,7 @@ class CasesTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Case saved')
             ->toGrid()
-            ->assertTitle('Cases - Activities');
+            ->assertTitle('All - Cases - Activities');
 
         $data = $login->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
@@ -114,7 +114,7 @@ class CasesTest extends Selenium2TestCase
             ->filterBy('Subject', $subject)
             ->open(array($subject))
             ->delete()
-            ->assertTitle('Cases - Activities')
+            ->assertTitle('All - Cases - Activities')
             ->assertMessage('Case deleted');
         /** @var Cases $login */
         $login->openCases('OroCRM\Bundle\CaseBundle');
