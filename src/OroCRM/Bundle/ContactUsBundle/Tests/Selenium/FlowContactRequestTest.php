@@ -18,8 +18,8 @@ class FlowContactRequestTest extends Selenium2TestCase
     public function testCreateContactRequest()
     {
         $firstName = 'First name_' . mt_rand(10, 99);
-        $lastName = 'Last name_' . mt_rand(10, 99);
-        $email = 'Email_' . mt_rand(10, 99) . '@mail.com';
+        $lastName  = 'Last name_' . mt_rand(10, 99);
+        $email     = 'Email_' . mt_rand(10, 99) . '@mail.com';
 
         $login = $this->login();
         /** @var ContactRequests $login */
@@ -33,7 +33,8 @@ class FlowContactRequestTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Contact request has been saved successfully')
             ->assertTitle($firstName . ' ' . $lastName . ' - Contact Requests - Activities')
-            ->checkStep('Open');
+            ->checkStep('Open')
+            ->close();
 
         return $email;
     }
@@ -46,13 +47,13 @@ class FlowContactRequestTest extends Selenium2TestCase
     public function testFlowContactRequest($email)
     {
         $callSubject = 'Call_' . mt_rand(10, 99);
-        $feedback = 'Test feedback_' . mt_rand(10, 99);
+        $feedback    = 'Test feedback_' . mt_rand(10, 99);
 
         $login = $this->login();
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
-            ->open(array($email))
+            ->open([$email])
             ->logCall()
             ->setCallSubject($callSubject)
             ->submit()

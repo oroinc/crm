@@ -282,7 +282,7 @@ class EmailCampaign extends ExtendEmailCampaign
      *
      * @return EmailCampaign
      */
-    public function setCampaign(Campaign $campaign)
+    public function setCampaign(Campaign $campaign = null)
     {
         $this->campaign = $campaign;
 

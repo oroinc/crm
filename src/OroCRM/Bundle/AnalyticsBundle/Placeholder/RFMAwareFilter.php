@@ -33,6 +33,10 @@ class RFMAwareFilter
 
         $customerIdentity = $entity->getCustomerIdentity();
 
+        if (empty($customerIdentity)) {
+            return false;
+        }
+
         return in_array($this->interface, class_implements($customerIdentity), true);
     }
 
