@@ -1588,6 +1588,7 @@ datagrid:
             toolbarOptions:
                 pageSize:
                     default_per_page: 10
+            routerEnabled: false
 
     magento-order-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
@@ -1750,6 +1751,7 @@ datagrid:
             toolbarOptions:
                 pageSize:
                     default_per_page: 10
+            routerEnabled: false
 
     magento-cart-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
@@ -1892,3 +1894,4 @@ datagrid:
             toolbarOptions:
                 pageSize:
                     default_per_page: 10
+            routerEnabled: false
