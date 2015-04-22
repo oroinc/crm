@@ -339,6 +339,38 @@ definitions:
                             - $.commandName
                             - [$.channelArguments]
 
+    magento_schedule_integration:
+        label:   'Shedule integration'
+        enabled: true
+        entity:  OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport
+        order:   10
+        actions_configuration:
+            - @find_entity:
+                parameters:
+                    class: Oro\Bundle\IntegrationBundle\Entity\Channel
+                    attribute: $.integration
+                    where:
+                        transport: $id
+            - @tree:
+                conditions:
+                    @and:
+                        - @not_empty: $.integration
+                actions:
+                    - @assign_constant_value:
+                        attribute: $.commandName
+                        value: Oro\Bundle\IntegrationBundle\Command\SyncCommand::COMMAND_NAME
+                    - @format_string:
+                        attribute: $.channelArguments
+                        string: '--integration-id=%integration_id%'
+                        arguments:
+                            integration_id: $.integration.id
+                    - @create_entity:
+                        class: JMS\JobQueueBundle\Entity\Job
+                        attribute: $.syncJob
+                        arguments:
+                            - $.commandName
+                            - [$.channelArguments]
+
 triggers:
     magento_customer_creation:
         -
@@ -370,3 +402,10 @@ triggers:
             priority: 10
             queued:   true
             field:    subtotalAmmount
+
+    magento_schedule_integration:
+        -
+            event:    update
+            priority: 50
+            queued:   true
+            field:    syncStartDate

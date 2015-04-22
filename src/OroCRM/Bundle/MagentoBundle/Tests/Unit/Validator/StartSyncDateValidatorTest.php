@@ -3,12 +3,13 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Validator;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\QueryBuilder;
+
 use Symfony\Component\Validator\ExecutionContextInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 use OroCRM\Bundle\MagentoBundle\Validator\StartSyncDateValidator;
