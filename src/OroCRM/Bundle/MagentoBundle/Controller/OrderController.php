@@ -41,6 +41,8 @@ class OrderController extends Controller
      *      class="OroCRMMagentoBundle:Order"
      * )
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function viewAction(Order $order)
     {
@@ -51,6 +53,8 @@ class OrderController extends Controller
      * @Route("/info/{id}", name="orocrm_magento_order_widget_info", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function infoAction(Order $order)
     {
@@ -61,6 +65,8 @@ class OrderController extends Controller
      * @Route("/widget/grid/{id}", name="orocrm_magento_order_widget_items", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_cart_view")
      * @Template
+     * @param Order $order
+     * @return array
      */
     public function itemsAction(Order $order)
     {
@@ -77,10 +83,13 @@ class OrderController extends Controller
      * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
      * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
      */
     public function customerOrdersAction(Customer $customer, Channel $channel)
     {
-        return array('customer' => $customer, 'channel' => $channel);
+        return ['customer' => $customer, 'channel' => $channel];
     }
 
     /**
@@ -92,15 +101,20 @@ class OrderController extends Controller
      * @ParamConverter("customer", class="OroCRMMagentoBundle:Customer", options={"id"="customerId"})
      * @ParamConverter("channel", class="OroIntegrationBundle:Channel", options={"id"="channelId"})
      * @Template
+     * @param Customer $customer
+     * @param Channel $channel
+     * @return array
      */
     public function customerOrdersWidgetAction(Customer $customer, Channel $channel)
     {
-        return array('customer' => $customer, 'channel' => $channel);
+        return ['customer' => $customer, 'channel' => $channel];
     }
 
     /**
      * @Route("/actualize/{id}", name="orocrm_magento_order_actualize", requirements={"id"="\d+"}))
      * @AclAncestor("orocrm_magento_order_view")
+     * @param Order $order
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function actualizeAction(Order $order)
     {

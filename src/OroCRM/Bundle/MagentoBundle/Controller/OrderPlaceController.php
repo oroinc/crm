@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
@@ -27,7 +28,9 @@ class OrderPlaceController extends Controller
     /**
      * @Route("/cart/{id}", name="orocrm_magento_orderplace_cart", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
-     * @Template("OroCRMMagentoBundle:OrderPlace:place.html.twig")
+     * @Template("OroCRMMagentoBundle:OrderPlace:widget/place.html.twig")
+     * @param Cart $cart
+     * @return array
      */
     public function cartAction(Cart $cart)
     {
@@ -54,6 +57,8 @@ class OrderPlaceController extends Controller
     /**
      * @Route("/sync/{id}", name="orocrm_magento_orderplace_new_cart_order_sync", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
+     * @param Cart $cart
+     * @return JsonResponse
      */
     public function syncAction(Cart $cart)
     {
@@ -63,7 +68,7 @@ class OrderPlaceController extends Controller
         try {
             $isOrderLoaded = $this->loadOrderInformation(
                 $cart->getChannel(),
-                ['filters' => ['quote_id' => $cart->getOriginId()]]
+                ['filters' => ['quote_id' => $cart->getOriginId()], EntityWriter::SKIP_CLEAR => true]
             );
 
             if (!$isOrderLoaded) {
@@ -82,7 +87,6 @@ class OrderPlaceController extends Controller
             $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
 
             // in import process we have EntityManager#clear()
-            $cart = $em->merge($cart);
             $em->flush();
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
             $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
@@ -101,7 +105,9 @@ class OrderPlaceController extends Controller
     /**
      * @Route("/customer/{id}", name="orocrm_magento_widget_customer_orderplace", requirements={"id"="\d+"}))
      * @AclAncestor("oro_workflow")
-     * @Template("OroCRMMagentoBundle:OrderPlace:place.html.twig")
+     * @Template("OroCRMMagentoBundle:OrderPlace:widget/place.html.twig")
+     * @param Customer $customer
+     * @return array
      */
     public function customerAction(Customer $customer)
     {
@@ -131,6 +137,8 @@ class OrderPlaceController extends Controller
      *   name="orocrm_magento_orderplace_new_customer_order_sync", requirements={"id"="\d+"})
      * )
      * @AclAncestor("oro_workflow")
+     * @param Customer $customer
+     * @return JsonResponse
      */
     public function customerSyncAction(Customer $customer)
     {

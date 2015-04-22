@@ -2,13 +2,16 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
 
+use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
+use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Service\InformationLoader;
 
 class InformationLoaderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ConnectorInterface
      */
     protected $connector;
 
@@ -18,7 +21,7 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
     protected $processorAlias;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|JobExecutor
      */
     protected $jobExecutor;
 
@@ -76,6 +79,7 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
             ->with(ProcessorRegistry::TYPE_IMPORT, 'test_import', $expectedConfig)
             ->will($this->returnValue($jobResult));
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Channel $channel */
         $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()
             ->getMock();
