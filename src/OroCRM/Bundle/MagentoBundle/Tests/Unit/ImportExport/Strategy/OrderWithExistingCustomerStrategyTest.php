@@ -51,7 +51,7 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             ->disableOriginalConstructor()
             ->getMock();
         $transport->expects($this->once())
-            ->method('isSupportedExtensionVersion')
+            ->method('getIsExtensionInstalled')
             ->will($this->returnValue(true));
         $channel = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Channel')
             ->disableOriginalConstructor()

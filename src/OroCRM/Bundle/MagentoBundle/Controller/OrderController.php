@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
@@ -106,10 +107,8 @@ class OrderController extends Controller
         $result = false;
 
         try {
-            $processor = $this->get('oro_integration.sync.processor');
-            $result = $processor->process(
+            $result = $this->loadOrderInformation(
                 $order->getChannel(),
-                'order',
                 ['filters' => ['increment_id' => $order->getIncrementId()]]
             );
         } catch (\LogicException $e) {
@@ -129,5 +128,17 @@ class OrderController extends Controller
         }
 
         return $this->redirect($this->generateUrl('orocrm_magento_order_view', ['id' => $order->getId()]));
+    }
+
+    /**
+     * @param Channel $channel
+     * @param array $configuration
+     * @return bool
+     */
+    protected function loadOrderInformation(Channel $channel, array $configuration = [])
+    {
+        $orderInformationLoader = $this->get('orocrm_magento.service.order.information_loader');
+
+        return $orderInformationLoader->load($channel, $configuration);
     }
 }

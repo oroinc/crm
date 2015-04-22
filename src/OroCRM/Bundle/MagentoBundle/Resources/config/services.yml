@@ -116,6 +116,8 @@ parameters:
     orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
 
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
+
+    orocrm_magento.service.information_loader.class:                        OroCRM\Bundle\MagentoBundle\Service\InformationLoader
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -575,3 +577,10 @@ services:
             - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
             - @translator
+
+    orocrm_magento.service.order.information_loader:
+        class: %orocrm_magento.service.information_loader.class%
+        arguments:
+            - @oro_importexport.job_executor
+            - @orocrm_magento.mage.order_connector
+            - "orocrm_magento.add_or_update_order"
