@@ -23,10 +23,15 @@ define([
      * @param {Array.} lockedEntities
      */
     function initializeEntityComponent(selector, metadata, lockedEntities) {
-        var $storageEl = $(selector),
-            value = $storageEl.val(),
-            entities = value ? JSON.parse(value) : [],
-            entityComponentView = new EntityComponentView({
+        var $storageEl = $(selector);
+        var value = $storageEl.val();
+        var entities = value ? JSON.parse(value) : [];
+
+        if(entities.length == 0) {
+            return;
+        }
+
+        var entityComponentView = new EntityComponentView({
                 data: entities,
                 mode: EntityComponentView.prototype.MODES.EDIT_MODE,
                 metadata: metadata,
@@ -64,6 +69,11 @@ define([
             return result;
         };
         var formStartState = getFormState();
+        var startChannelType = $el.val();
+
+        var isAllowOpenConfirmDialog = function() {
+            return startChannelType != '' && getFormState() != formStartState;
+        };
 
         var processChangeType = function() {
             var data,
@@ -103,7 +113,7 @@ define([
                 $el.select2('val', prevEl.id)
             });
 
-            if (getFormState() != formStartState) {
+            if (isAllowOpenConfirmDialog()) {
                 confirm.open();
             } else {
                 processChangeType();

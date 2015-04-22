@@ -27,7 +27,7 @@ class CreateOpportunityTest extends Selenium2TestCase
         $customer = $this->createB2BCustomer($login, $accountName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('Opportunities - Sales')
+            ->assertTitle('All - Opportunities - Sales')
             ->add()
             ->assertTitle('Create Opportunity - Opportunities - Sales')
             ->setName($opportunityName)
@@ -42,7 +42,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Opportunity saved')
             ->toGrid()
-            ->assertTitle('Opportunities - Sales');
+            ->assertTitle('All - Opportunities - Sales');
 
         return $opportunityName;
     }
@@ -104,7 +104,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Opportunity saved')
             ->toGrid()
-            ->assertTitle('Opportunities - Sales')
+            ->assertTitle('All - Opportunities - Sales')
             ->close();
 
         return $newName;
@@ -122,7 +122,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->filterBy('Opportunity name', $name)
             ->open(array($name))
             ->delete()
-            ->assertTitle('Opportunities - Sales')
+            ->assertTitle('All - Opportunities - Sales')
             ->assertMessage('Opportunity deleted')
             ->assertNoDataMessage('No records found');
     }
