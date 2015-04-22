@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Validator;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\EntityRepository;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 
@@ -16,14 +16,14 @@ use OroCRM\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint;
 class StartSyncDateValidator extends ConstraintValidator
 {
     /**
-     * @var RegistryInterface
+     * @var ManagerRegistry
      */
     protected $registry;
 
     /**
-     * @param RegistryInterface $registry
+     * @param ManagerRegistry $registry
      */
-    public function __construct(RegistryInterface $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         $this->registry = $registry;
     }
@@ -94,8 +94,6 @@ class StartSyncDateValidator extends ConstraintValidator
      */
     protected function getRepository()
     {
-        return $this->registry
-            ->getManager()
-            ->getRepository($this->context->getClassName());
+        return $this->registry->getRepository($this->context->getClassName());
     }
 }
