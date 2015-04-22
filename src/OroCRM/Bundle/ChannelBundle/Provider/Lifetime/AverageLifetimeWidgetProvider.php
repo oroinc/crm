@@ -31,21 +31,15 @@ class AverageLifetimeWidgetProvider
     }
 
     /**
+     * @param $dateRange array with key start, end and type values is DateTime
+     *
      * @return array
      */
-    public function getChartData()
+    public function getChartData($dateRange)
     {
-        $dates         = $items = [];
-        $localTimezone = new \DateTimeZone($this->localeSettings->getTimeZone());
-
-        // created end date in local timezone
-        $now = new \DateTime('now', $localTimezone);
-        // convert local date to search criteria format in UTC
-        $end = \DateTime::createFromFormat(\DateTime::ISO8601, $now->format('Y-m-01\T00:00:00+0000'));
-        $end->add(new \DateInterval('P1M'));
-        $start = clone $end;
-        $start->sub(new \DateInterval('P1Y'));
-
+        $start = $dateRange['start'];
+        $end = $dateRange['end'];
+        $dates = $items = [];
         $period = new \DatePeriod($start, new \DateInterval('P1M'), $end);
         /** @var \DateTime $dt */
         foreach ($period as $dt) {

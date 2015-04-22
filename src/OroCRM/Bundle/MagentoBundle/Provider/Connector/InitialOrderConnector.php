@@ -40,4 +40,12 @@ class InitialOrderConnector extends AbstractMagentoConnector implements InitialC
     {
         return $this->transport->getOrders();
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsForceSync()
+    {
+        return true;
+    }
 }

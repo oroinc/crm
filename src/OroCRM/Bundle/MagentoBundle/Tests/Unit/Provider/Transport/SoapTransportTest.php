@@ -535,13 +535,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 true,
                 false
             ],
-            'createCustomer' => [
-                'createCustomer',
-                SoapTransport::ACTION_CUSTOMER_CREATE,
-                ['sessionId' => $this->sessionId, 'customerData' => []],
-                2,
-                [[]]
-            ],
             'createCustomerAddress' => [
                 'createCustomerAddress',
                 SoapTransport::ACTION_CUSTOMER_ADDRESS_CREATE,
@@ -623,6 +616,24 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ['sessionId' => $this->sessionId, 'orderIncrementId' => 3],
                 [],
                 [3],
+                true,
+                true
+            ],
+            'createCustomer native' => [
+                'createCustomer',
+                SoapTransport::ACTION_CUSTOMER_CREATE,
+                ['sessionId' => $this->sessionId, 'customerData' => []],
+                [],
+                [[]],
+                true,
+                false
+            ],
+            'createCustomer oro' => [
+                'createCustomer',
+                SoapTransport::ACTION_ORO_CUSTOMER_CREATE,
+                ['sessionId' => $this->sessionId, 'customerData' => []],
+                [],
+                [[]],
                 true,
                 true
             ],

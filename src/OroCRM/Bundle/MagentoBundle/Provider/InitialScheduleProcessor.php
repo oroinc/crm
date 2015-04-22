@@ -4,7 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use JMS\JobQueueBundle\Entity\Job;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
+use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 
@@ -17,12 +20,31 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 {
     const INITIAL_SYNC_STARTED = 'initialSyncedStarted';
 
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
+    /**
+     * @param DoctrineHelper $doctrineHelper
+     * @return AbstractInitialProcessor
+     */
+    public function setDoctrineHelper($doctrineHelper)
+    {
+        $this->doctrineHelper = $doctrineHelper;
+
+        return $this;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function process(Integration $integration, $connector = null, array $parameters = [])
     {
+        if (!empty($parameters['force'])) {
+            $this->forceSync($integration);
+        }
+
         $this->processDictionaryConnectors($integration);
+        $integration = $this->reloadEntity($integration);
         $this->scheduleInitialSyncIfRequired($integration);
 
         /** @var MagentoSoapTransport $transport */
@@ -151,6 +173,68 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
             $initialSyncStartDate = $this->getInitialSyncStartDate($integration);
             $transport->setInitialSyncStartDate($initialSyncStartDate);
             $this->saveEntity($transport);
+        }
+    }
+
+    /**
+     * @param object $entity
+     * @return Integration
+     */
+    protected function reloadEntity($entity)
+    {
+        return $this->doctrineHelper->getEntity(
+            $this->doctrineHelper->getEntityClass($entity),
+            $this->doctrineHelper->getEntityIdentifier($entity)
+        );
+    }
+
+    /**
+     * Reset connector statuses and transport initial sync start date.
+     *
+     * @param Integration $integration
+     */
+    protected function forceSync(Integration $integration)
+    {
+        $connectors = $integration->getConnectors();
+        foreach ($connectors as $connectorName) {
+            $connector = $this->registry->getConnectorType($integration->getType(), $connectorName);
+            if ($connector instanceof ForceConnectorInterface && $connector->supportsForceSync()) {
+                $this->markConnectorSyncStatusesSkipped($integration, $connectorName);
+            }
+        }
+
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate(null);
+        $this->saveEntity($transport);
+    }
+
+    /**
+     * Mark connector statuses as skipped for further checks.
+     *
+     * @param Integration $integration
+     * @param string $connectorName
+     */
+    protected function markConnectorSyncStatusesSkipped(Integration $integration, $connectorName)
+    {
+        $em = $this->doctrineRegistry->getManager();
+
+        $processedStatuses = [];
+        $statusesIterator = $this->getChannelRepository()->getConnectorStatuses($integration, $connectorName);
+        foreach ($statusesIterator as $status) {
+            $processedStatuses[] = $status;
+            $statusData = $status->getData();
+            $statusData[self::SKIP_STATUS] = true;
+            $status->setData($statusData);
+
+            if (count($processedStatuses) === ChannelRepository::BUFFER_SIZE) {
+                $em->flush($processedStatuses);
+                $processedStatuses = [];
+            }
+        }
+
+        if ($processedStatuses) {
+            $em->flush($processedStatuses);
         }
     }
 }

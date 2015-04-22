@@ -20,6 +20,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
     const CONNECTORS_INITIAL_SYNCED_TO = 'connectorsInitialSyncedTo';
     const START_SYNC_DATE = 'start_sync_date';
+    const SKIP_STATUS = 'skip';
     const INTERVAL = 'initialSyncInterval';
 
     /** @var string */
@@ -80,7 +81,15 @@ abstract class AbstractInitialProcessor extends SyncProcessor
      */
     protected function getLastStatusForConnector(Integration $integration, $connector, $code = null)
     {
-        return $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
+        $status = $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
+        if ($status) {
+            $statusData = $status->getData();
+            if (!empty($statusData[self::SKIP_STATUS])) {
+                return null;
+            }
+        }
+
+        return $status;
     }
 
     /**

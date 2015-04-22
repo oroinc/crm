@@ -436,6 +436,8 @@ services:
     orocrm_magento.provider.initial_schedule_processor:
         class: %orocrm_magento.provider.initial_schedule_processor.class%
         parent: orocrm_magento.provider.initial_processor
+        calls:
+            - [setDoctrineHelper, [@oro_entity.doctrine_helper]]
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 
@@ -512,6 +514,7 @@ services:
         class: %orocrm_magento.writer.proxy_entity_writer.class%
         arguments:
             - @oro_integration.writer.persistent_batch_writer
+            - @oro_importexport.field.database_helper
         calls:
             - [setLogger, [@oro_integration.logger.strategy]]
 
@@ -613,7 +616,7 @@ services:
             - @oro_integration.logger.strategy
             - @oro_integration.provider.connector_context_mediator
         calls:
-            - [setClassName, [%orocrm_magento.entity.order.class%]]
+            - [setContextKey, ['postProcessOrderIds']]
 
     orocrm_magento.reader.customer_info:
         class: %orocrm_magento.reader.customer_info.class%
@@ -622,7 +625,7 @@ services:
             - @oro_integration.logger.strategy
             - @oro_integration.provider.connector_context_mediator
         calls:
-            - [setClassName, [%orocrm_magento.entity.customer.class%]]
+            - [setContextKey, ['postProcessCustomerIds']]
 
     # strategy
     orocrm_magento.provider.strategy.two_way_sync.customer:

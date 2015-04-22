@@ -15,9 +15,18 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
     /** @var InitialScheduleProcessor */
     protected $processor;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $doctrineHelper;
+
     protected function setUp()
     {
         parent::setUp();
+
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->processor = new InitialScheduleProcessor(
             $this->registry,
@@ -29,6 +38,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
+        $this->processor->setDoctrineHelper($this->doctrineHelper);
     }
 
     public function testProcessFirstInitial()
@@ -47,6 +57,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob();
 
@@ -91,6 +102,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -107,7 +119,6 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
     public function testProcessJobRunning()
     {
-        $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
         $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
         $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
 
@@ -131,6 +142,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
             ->will($this->returnValue(2));
 
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -182,7 +194,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
-
+        $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
@@ -193,6 +205,121 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
                 AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
             ]
         );
+
+        $this->processor->process($integration);
+    }
+
+    public function testProcessForce()
+    {
+        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
+        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
+        $syncedTo = $syncStartDate->sub(new \DateInterval('P1D'));
+
+        $connector = 'testConnector_initial';
+        $connectors = [$connector];
+
+        $connectorInstance = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Provider\AbstractConnector')
+            ->disableOriginalConstructor()
+            ->setMethods(['supportsForceSync', 'getImportJobName'])
+            ->getMockForAbstractClass();
+        $connectorInstance->expects($this->once())
+            ->method('supportsForceSync')
+            ->will($this->returnValue(true));
+        $connectorInstance->expects($this->any())
+            ->method('getImportJobName')
+            ->will($this->returnValue('test job'));
+        $integration = $this->getIntegration($connectors, $syncStartDate, $connectorInstance);
+
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate($initialStartDate);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                    ]
+                )
+            );
+        $status->expects($this->once())
+            ->method('setData')
+            ->with(
+                [
+                    AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601),
+                    AbstractInitialProcessor::SKIP_STATUS => true
+                ]
+            );
+        $this->repository->expects($this->once())
+            ->method('getConnectorStatuses')
+            ->with($integration, $connector)
+            ->will($this->returnValue(new \ArrayIterator([$status])));
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
+
+        $this->em->expects($this->atLeastOnce())
+            ->method('persist');
+        $this->em->expects($this->atLeastOnce())
+            ->method('flush');
+        $this->repository->expects($this->once())
+            ->method('getRunningSyncJobsCount')
+            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
+
+        $this->assertReloadEntityCall($integration);
+        $this->assertProcessCalls();
+        $this->assertExecuteJob(
+            [
+                'processorAlias' => false,
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
+                AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
+            ]
+        );
+
+        $this->processor->process($integration, null, ['force' => true]);
+    }
+
+    public function testProcessInitialAfterForce()
+    {
+        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
+        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $initialStartDate->format(\DateTime::ISO8601),
+                        AbstractInitialProcessor::SKIP_STATUS => true
+                    ]
+                )
+            );
+
+        $connector = 'testConnector_initial';
+        $connectors = [$connector];
+        $integration = $this->getIntegration($connectors, $syncStartDate);
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
+
+        $this->em->expects($this->exactly(2))
+            ->method('persist');
+        $this->em->expects($this->exactly(2))
+            ->method('flush');
+        $this->repository->expects($this->once())
+            ->method('getRunningSyncJobsCount')
+            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
+
+        $this->assertReloadEntityCall($integration);
+        $this->assertProcessCalls();
+        $this->assertExecuteJob();
 
         $this->processor->process($integration);
     }
@@ -214,5 +341,27 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
 
         return parent::getIntegration($connectors, $syncStartDate, $realConnector);
+    }
+
+    /**
+     * @param object $entity
+     */
+    protected function assertReloadEntityCall($entity)
+    {
+        $class = get_class($entity);
+        $id = 1;
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityClass')
+            ->with($entity)
+            ->will($this->returnValue($class));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntityIdentifier')
+            ->will($this->returnValue($id));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('getEntity')
+            ->with($class, $id)
+            ->will($this->returnValue($entity));
     }
 }

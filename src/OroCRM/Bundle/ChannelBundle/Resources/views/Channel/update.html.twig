@@ -66,21 +66,24 @@
             'subblocks': [{
                 'title': '',
                 'data':  [
-                    form_row(form.status),
                     form_row(form.name),
                     form_row(form.channelType),
+                    form_row(form.status),
                     form.dataSource is defined ? form_row(form.dataSource) : '',
                 ]
             }]
-        },
-        {
+        }
+    ] %}
+
+    {% if form.vars.value.entities|length > 0 %}
+        {% set dataBlocks = dataBlocks|merge([{
             'title': 'Entities'|trans,
             'subblocks': [{
                 'title': '',
                 'data':  [ form_row(form.entities) ]
             }]
-        }
-    ] %}
+        }]) %}
+    {% endif %}
 
     {% set additional %}{% placeholder orocrm_channel_additional_block with {entity: entity, form: form} %}{% endset %}
     {% if additional|trim %}
