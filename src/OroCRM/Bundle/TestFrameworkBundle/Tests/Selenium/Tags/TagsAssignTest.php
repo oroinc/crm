@@ -104,7 +104,6 @@ class TagsAssignTest extends Selenium2TestCase
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->setUsername($userName)
-            ->setOwner('Main')
             ->enable()
             ->setFirstpassword('123123q')
             ->setSecondpassword('123123q')
