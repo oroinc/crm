@@ -58,6 +58,7 @@ class ChannelType extends AbstractType
                 'required' => true,
                 'label'    => 'orocrm.channel.channel_type.label',
                 'configs'  => ['placeholder' => 'orocrm.channel.form.select_channel_type.label'],
+                'empty_value'     => '',
             ]
         );
         $builder->add(
@@ -91,7 +92,11 @@ class ChannelType extends AbstractType
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel']);
+        $resolver->setDefaults(
+            [
+                'data_class' => 'OroCRM\\Bundle\\ChannelBundle\\Entity\\Channel'
+            ]
+        );
     }
 
     /**

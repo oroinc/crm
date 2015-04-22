@@ -52,9 +52,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if (!$data->getChannelType()) {
-            $data->setChannelType($this->getFirstChannelType());
-        }
+        $this->setDefaultValues($data);
 
         // builds datasource field
         $datasourceModifier = $this->getDatasourceModifierClosure($data->getChannelType());
@@ -62,12 +60,14 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
 
         $customerIdentity = $this->settingsProvider->getCustomerIdentityFromConfig($data->getChannelType());
         $data->setCustomerIdentity($customerIdentity);
-        $this->addEnititesToChannel($data, [$customerIdentity]);
+        if (!empty($customerIdentity)) {
+            $this->addEntitiesToChannel($data, [$customerIdentity]);
+        }
 
         // pre-fill entities for new instances
         if (!$data->getId()) {
             $channelTypeEntities = $this->settingsProvider->getEntitiesByChannelType($data->getChannelType());
-            $this->addEnititesToChannel($data, $channelTypeEntities);
+            $this->addEntitiesToChannel($data, $channelTypeEntities);
         }
     }
 
@@ -121,6 +121,17 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param object $object
+     */
+    protected function setDefaultValues($object)
+    {
+        //set default status to active
+        if ($object instanceof Channel && !$object->getChannelType()) {
+            $object->setStatus(Channel::STATUS_ACTIVE);
+        }
+    }
+
+    /**
      * @param string $channelType
      *
      * @return callable
@@ -163,7 +174,7 @@ class ChannelTypeSubscriber implements EventSubscriberInterface
      * @param Channel $channel
      * @param array   $entitiesToAdd
      */
-    protected function addEnititesToChannel(Channel $channel, array $entitiesToAdd)
+    protected function addEntitiesToChannel(Channel $channel, array $entitiesToAdd)
     {
         $entities         = $channel->getEntities();
         $entities         = is_array($entities) ? $entities : [];

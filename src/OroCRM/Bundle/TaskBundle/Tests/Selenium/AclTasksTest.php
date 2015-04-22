@@ -21,7 +21,7 @@ class AclTasksTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('Roles - User Management - System')
+            ->assertTitle('All - Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclTasksTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -87,7 +87,7 @@ class AclTasksTest extends Selenium2TestCase
             // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
             ->assertTitle("{$subject} - Tasks - Activities")
             ->toGrid()
-            ->assertTitle('Tasks - Activities');
+            ->assertTitle('All - Tasks - Activities');
 
         return $subject;
     }

@@ -20,7 +20,6 @@ use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
  */
 class MarketingListExtension extends AbstractExtension
 {
-    const OPTIONS_MIXIN_PATH = '[options][mixin]';
     const NAME_PATH = '[name]';
 
     /**
@@ -53,10 +52,6 @@ class MarketingListExtension extends AbstractExtension
         }
 
         if ($config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) !== OrmDatasource::TYPE) {
-            return false;
-        }
-
-        if (!$config->offsetGetByPath(self::OPTIONS_MIXIN_PATH, false)) {
             return false;
         }
 
@@ -139,18 +134,13 @@ class MarketingListExtension extends AbstractExtension
      */
     protected function createItemsFunc(QueryBuilder $qb)
     {
-        /** @var From[] $from */
-        $from  = $qb->getDQLPart('from');
-        $alias = $from ? $from[0]->getAlias() : 't1';
-
         $itemsQb = clone $qb;
         $itemsQb->resetDQLParts();
 
         $itemsQb
-            ->select('mli.entityId')
+            ->select('item.entityId')
             ->from('OroCRMMarketingListBundle:MarketingListItem', 'item')
-            ->andWhere('item.marketingList = :marketingListId')
-            ->andWhere('item.id = ' . $alias . '.id');
+            ->andWhere('item.marketingList = :marketingListId');
 
         return new Func('EXISTS', $itemsQb->getDQL());
     }
