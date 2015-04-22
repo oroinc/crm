@@ -127,7 +127,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
             $integration->getId()
         );
 
-        return $initialJobsRunning > 1;
+        return $initialJobsRunning > 0;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
@@ -16,7 +17,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
     protected $processor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|DoctrineHelper
      */
     protected $doctrineHelper;
 
@@ -140,7 +141,61 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->repository->expects($this->once())
             ->method('getRunningSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
-            ->will($this->returnValue(2));
+            ->will($this->returnValue(1));
+
+        $this->assertReloadEntityCall($integration);
+        $this->assertProcessCalls();
+        $this->assertExecuteJob(
+            [
+                'processorAlias' => false,
+                'entityName' => 'testEntity',
+                'channel' => 'testChannel',
+                'channelType' => 'testChannelType',
+                AbstractMagentoConnector::LAST_SYNC_KEY => $initialStartDate
+            ]
+        );
+
+        $this->processor->process($integration);
+    }
+
+    public function testProcessJobNotRunning()
+    {
+        $syncedTo = new \DateTime('2011-01-02 12:13:14', new \DateTimeZone('UTC'));
+        $initialStartDate = new \DateTime('2011-01-03 12:13:14', new \DateTimeZone('UTC'));
+        $syncStartDate = new \DateTime('2000-01-01 00:00:00', new \DateTimeZone('UTC'));
+
+        $connector = 'testConnector_initial';
+        $connectors = [$connector];
+        $integration = $this->getIntegration($connectors, $syncStartDate);
+        /** @var MagentoSoapTransport $transport */
+        $transport = $integration->getTransport();
+        $transport->setInitialSyncStartDate($initialStartDate);
+
+        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $status->expects($this->atLeastOnce())
+            ->method('getData')
+            ->will(
+                $this->returnValue(
+                    [
+                        AbstractInitialProcessor::INITIAL_SYNCED_TO => $syncedTo->format(\DateTime::ISO8601)
+                    ]
+                )
+            );
+
+        $this->assertConnectorStatusCall($integration, $connector, $status);
+
+        $this->em->expects($this->once())
+            ->method('persist')
+            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
+        $this->em->expects($this->once())
+            ->method('flush')
+            ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
+        $this->repository->expects($this->once())
+            ->method('getRunningSyncJobsCount')
+            ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
+            ->will($this->returnValue(0));
 
         $this->assertReloadEntityCall($integration);
         $this->assertProcessCalls();
