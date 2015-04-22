@@ -46,7 +46,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         /** @var MagentoSoapTransport $transport */
         $channel = $this->databaseHelper->findOneByIdentity($order->getChannel());
         $transport = $channel->getTransport();
-        if ($transport->isSupportedExtensionVersion()) {
+        if ($transport->getIsExtensionInstalled()) {
             $cart = $this->findExistingEntity($order->getCart());
             $cartOriginId = $order->getCart()->getOriginId();
             if (!$cart && $cartOriginId) {
