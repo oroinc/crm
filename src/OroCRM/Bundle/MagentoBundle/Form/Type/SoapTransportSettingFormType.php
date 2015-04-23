@@ -27,6 +27,11 @@ class SoapTransportSettingFormType extends AbstractType
     /** @var TypesRegistry */
     protected $registry;
 
+    /**
+     * @param TransportInterface $transport
+     * @param SoapSettingsFormSubscriber $subscriber
+     * @param TypesRegistry $registry
+     */
     public function __construct(
         TransportInterface $transport,
         SoapSettingsFormSubscriber $subscriber,

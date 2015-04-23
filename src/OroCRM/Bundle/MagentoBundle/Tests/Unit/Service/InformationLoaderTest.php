@@ -48,18 +48,17 @@ class InformationLoaderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoad()
     {
-        $config = ['test' => true];
-        $expectedConfig = array_merge(
-            [
-                ProcessorRegistry::TYPE_IMPORT => [
-                    'processorAlias' => $this->processorAlias,
-                    'entityName' => '\stdClass',
-                    'channel' => 1,
-                    'channelType' => 'mage'
-                ]
+        $config = ['test' => true, ProcessorRegistry::TYPE_IMPORT => ['additional_config' => true]];
+        $expectedConfig = [
+            ProcessorRegistry::TYPE_IMPORT => [
+                'processorAlias' => $this->processorAlias,
+                'entityName' => '\stdClass',
+                'channel' => 1,
+                'channelType' => 'mage',
+                'additional_config' => true,
             ],
-            $config
-        );
+            'test' => true,
+        ];
 
         $this->connector->expects($this->once())
             ->method('getImportEntityFQCN')

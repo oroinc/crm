@@ -93,6 +93,7 @@ parameters:
     orocrm_magento.form.autocomplete.store.search_handler.class:            OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
 
     orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
+    orocrm_magento.validator.start_sync_date.class:                         OroCRM\Bundle\MagentoBundle\Validator\StartSyncDateValidator
 
     orocrm_magento.security.acl.voter.two_way_sync.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter
     orocrm_magento.security.acl.voter.newletter_subscriber.class:           OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
@@ -464,6 +465,13 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
 
+    orocrm_magento.validator.start_sync_date:
+        class: %orocrm_magento.validator.start_sync_date.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_magento.validator.start_sync_date }
+
     orocrm_magento.security.acl.voter.two_way_sync:
         class: %orocrm_magento.security.acl.voter.two_way_sync.class%
         abstract: true
@@ -584,3 +592,10 @@ services:
             - @oro_importexport.job_executor
             - @orocrm_magento.mage.order_connector
             - "orocrm_magento.add_or_update_order"
+
+    orocrm_magento.service.cart.information_loader:
+        class: %orocrm_magento.service.information_loader.class%
+        arguments:
+            - @oro_importexport.job_executor
+            - @orocrm_magento.mage.cart_connector
+            - "orocrm_magento.add_or_update_cart"

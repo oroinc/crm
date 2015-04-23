@@ -53,7 +53,7 @@ class InformationLoader
                 'channelType' => $channel->getType()
             ]
         ];
-        $configuration = array_merge($defaultConfiguration, $configuration);
+        $configuration = array_merge_recursive($defaultConfiguration, $configuration);
         $jobResult = $this->jobExecutor->executeJob(
             ProcessorRegistry::TYPE_IMPORT,
             $this->connector->getImportJobName(),
