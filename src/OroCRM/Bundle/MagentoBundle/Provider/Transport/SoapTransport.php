@@ -68,6 +68,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_LIST = 'newsletterSubscriberList';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_CREATE = 'newsletterSubscriberCreate';
     const ACTION_ORO_NEWSLETTER_SUBSCRIBER_UPDATE = 'newsletterSubscriberUpdate';
+    const ACTION_ORO_WEBSITE_LIST = 'oroWebsiteList';
 
     const SOAP_FAULT_ADDRESS_DOES_NOT_EXIST = 102;
 
