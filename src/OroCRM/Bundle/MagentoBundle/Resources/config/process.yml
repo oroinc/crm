@@ -355,6 +355,7 @@ definitions:
                 conditions:
                     @and:
                         - @not_empty: $.integration
+                        - @equal: [$.integration.enabled, true]
                 actions:
                     - @assign_constant_value:
                         attribute: $.commandName
