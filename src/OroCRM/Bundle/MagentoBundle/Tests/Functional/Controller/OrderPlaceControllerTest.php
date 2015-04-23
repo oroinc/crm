@@ -82,8 +82,15 @@ class OrderPlaceControllerTest extends WebTestCase
         $jobManager->beginTransaction();
         $newCart = $this->getModifiedCartData($this->cart, $this->customer);
 
-        $cartIterator  = new StubIterator([$newCart]);
-        $orderIterator = new StubIterator([]);
+        $cartIterator = new StubIterator([$newCart]);
+        $orderIterator = new StubIterator(
+            [
+                [
+                    'increment_id' => $this->order->getIncrementId(),
+                    'quote_id' => $this->cart->getOriginId(),
+                ],
+            ]
+        );
         $customerIterator = new StubIterator([]);
 
         $this->soapTransport->expects($this->any())->method('call');
@@ -103,8 +110,8 @@ class OrderPlaceControllerTest extends WebTestCase
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
         $arrayJson = json_decode($result->getContent(), 1);
-        $this->assertEquals($arrayJson['statusType'], 'success');
-        $this->assertEquals($arrayJson['message'], 'Data successfully synchronized.');
+        $this->assertEquals('success', $arrayJson['statusType']);
+        $this->assertEquals('Data successfully synchronized.', $arrayJson['message']);
         $this->assertEquals(
             $arrayJson['url'],
             $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
