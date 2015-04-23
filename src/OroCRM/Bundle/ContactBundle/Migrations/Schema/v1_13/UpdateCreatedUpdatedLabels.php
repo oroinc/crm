@@ -19,22 +19,26 @@ class UpdateCreatedUpdatedLabels implements Migration
             [
                 'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
                 'field' => 'createdAt',
-                'value' => 'oro.ui.created_at'
+                'value' => 'oro.ui.created_at',
+                'replace' => 'orocrm.contact.created_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\Contact',
                 'field' => 'updatedAt',
-                'value' => 'oro.ui.updated_at'
+                'value' => 'oro.ui.updated_at',
+                'replace' => 'orocrm.contact.updated_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
                 'field' => 'created',
-                'value' => 'oro.ui.created_at'
+                'value' => 'oro.ui.created_at',
+                'replace' => 'orocrm.contact.contactaddress.created.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress',
                 'field' => 'updated',
-                'value' => 'oro.ui.updated_at'
+                'value' => 'oro.ui.updated_at',
+                'replace' => 'orocrm.contact.contactaddress.updated.label'
             ]
         ];
 
@@ -45,7 +49,8 @@ class UpdateCreatedUpdatedLabels implements Migration
                     $field['field'],
                     'entity',
                     'label',
-                    $field['value']
+                    $field['value'],
+                    $field['replace']
                 )
             );
             $queries->addQuery(
@@ -54,7 +59,8 @@ class UpdateCreatedUpdatedLabels implements Migration
                     $field['field'],
                     'entity',
                     'label',
-                    $field['value']
+                    $field['value'],
+                    $field['replace']
                 )
             );
         }
