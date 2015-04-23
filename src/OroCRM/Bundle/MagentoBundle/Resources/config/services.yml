@@ -584,3 +584,10 @@ services:
             - @oro_importexport.job_executor
             - @orocrm_magento.mage.order_connector
             - "orocrm_magento.add_or_update_order"
+
+    orocrm_magento.service.cart.information_loader:
+        class: %orocrm_magento.service.information_loader.class%
+        arguments:
+            - @oro_importexport.job_executor
+            - @orocrm_magento.mage.cart_connector
+            - "orocrm_magento.add_or_update_cart"

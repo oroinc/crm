@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Oro\Bundle\ImportExportBundle\Processor\ProcessorRegistry;
 use Oro\Bundle\ImportExportBundle\Writer\EntityWriter;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
@@ -68,11 +69,22 @@ class OrderPlaceController extends Controller
         try {
             $isOrderLoaded = $this->loadOrderInformation(
                 $cart->getChannel(),
-                ['filters' => ['quote_id' => $cart->getOriginId()], EntityWriter::SKIP_CLEAR => true]
+                [
+                    'filters' => ['quote_id' => $cart->getOriginId()],
+                    ProcessorRegistry::TYPE_IMPORT => [EntityWriter::SKIP_CLEAR => true]
+                ]
             );
 
-            if (!$isOrderLoaded) {
-                throw new \LogicException('Unable to load order.');
+            $isCartLoaded = $this->loadCartInformation(
+                $cart->getChannel(),
+                [
+                    'filters' => ['entity_id' => $cart->getOriginId()],
+                    ProcessorRegistry::TYPE_IMPORT => [EntityWriter::SKIP_CLEAR => true]
+                ]
+            );
+
+            if (!$isOrderLoaded || !$isCartLoaded) {
+                throw new \LogicException('Unable to load information.');
             }
 
             $order = $em->getRepository('OroCRMMagentoBundle:Order')->getLastPlacedOrderBy($cart, 'cart');
@@ -85,9 +97,7 @@ class OrderPlaceController extends Controller
             $status = self::SYNC_SUCCESS;
         } catch (\Exception $e) {
             $cart->setStatusMessage('orocrm.magento.controller.synchronization_failed_status');
-
-            // in import process we have EntityManager#clear()
-            $em->flush();
+            $em->flush($cart);
             $redirectUrl = $this->generateUrl('orocrm_magento_cart_view', ['id' => $cart->getId()]);
             $message = $this->get('translator')->trans('orocrm.magento.controller.sync_error_with_magento');
             $status = self::SYNC_ERROR;
@@ -214,5 +224,17 @@ class OrderPlaceController extends Controller
         $orderInformationLoader = $this->get('orocrm_magento.service.order.information_loader');
 
         return $orderInformationLoader->load($channel, $configuration);
+    }
+
+    /**
+     * @param Channel $channel
+     * @param array $configuration
+     * @return bool
+     */
+    protected function loadCartInformation(Channel $channel, array $configuration = [])
+    {
+        $cartInformationLoader = $this->get('orocrm_magento.service.cart.information_loader');
+
+        return $cartInformationLoader->load($channel, $configuration);
     }
 }
