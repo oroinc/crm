@@ -67,8 +67,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     [
                         ['[name]', null, ConfigurationProvider::GRID_PREFIX . '1'],
-                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
-                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, true]
+                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE]
                     ]
                 )
             );
@@ -108,26 +107,6 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($this->extension->isApplicable($config));
     }
 
-    public function testIsApplicableNoMixin()
-    {
-        $config = $this
-            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $config
-            ->expects($this->any())
-            ->method('offsetGetByPath')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
-                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, false]
-                    ]
-                )
-            );
-        $this->assertFalse($this->extension->isApplicable($config));
-    }
-
     /**
      * @dataProvider applicableDataProvider
      *
@@ -138,7 +117,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     public function testIsApplicable($marketingListId, $marketingList, $expected)
     {
         $gridName = 'test_grid';
-        $config   = $this->assertIsApplicable($marketingListId, $marketingList, $gridName, true);
+        $config   = $this->assertIsApplicable($marketingListId, $marketingList, $gridName);
 
         $this->assertEquals($expected, $this->extension->isApplicable($config));
     }
@@ -172,28 +151,24 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array $dqlParts
-     * @param bool  $isMixin
      * @param bool  $expected
      * @param       bool false
      *
      * @dataProvider dataSourceDataProvider
      */
-    public function testVisitDatasource($dqlParts, $isMixin, $expected, $isObject = false)
+    public function testVisitDatasource($dqlParts, $expected, $isObject = false)
     {
         $marketingListId        = 1;
         $nonManualMarketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
             ->disableOriginalConstructor()
             ->getMock();
-        if ($isMixin) {
-            $nonManualMarketingList->expects($this->once())
-                ->method('isManual')
-                ->will($this->returnValue(false));
-        } else {
-            $nonManualMarketingList->expects($this->never())
-                ->method('isManual');
-        }
+
+        $nonManualMarketingList->expects($this->once())
+            ->method('isManual')
+            ->will($this->returnValue(false));
+
         $gridName = 'test_grid';
-        $config   = $this->assertIsApplicable($marketingListId, $nonManualMarketingList, $gridName, $isMixin);
+        $config   = $this->assertIsApplicable($marketingListId, $nonManualMarketingList, $gridName);
 
         $dataSource = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
@@ -251,11 +226,10 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      * @param int|null    $marketingListId
      * @param object|null $marketingList
      * @param string      $gridName
-     * @param bool        $isMixin
      *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function assertIsApplicable($marketingListId, $marketingList, $gridName, $isMixin)
+    protected function assertIsApplicable($marketingListId, $marketingList, $gridName)
     {
         $config = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
@@ -268,8 +242,7 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->returnValueMap(
                     [
                         ['[name]', null, $gridName],
-                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE],
-                        [MarketingListExtension::OPTIONS_MIXIN_PATH, false, $isMixin]
+                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE]
                     ]
                 )
             );
@@ -354,16 +327,11 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
     public function dataSourceDataProvider()
     {
         return [
-            [['where' => []], false, false],
-            [['where' => []], true, true],
-            [['where' => new Andx()], false, false],
-            [['where' => new Andx()], true, true],
-            [['where' => new Andx(['test'])], false, false],
-            [['where' => new Andx(['test'])], true, true],
-            [['where' => new Andx([new Func('func condition', ['argument'])])], false, false],
-            [['where' => new Andx([new Func('func condition', ['argument'])])], true, true, true],
-            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], false, false],
-            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], true, true, true]
+            [['where' => []], true],
+            [['where' => new Andx()], true],
+            [['where' => new Andx(['test'])], true],
+            [['where' => new Andx([new Func('func condition', ['argument'])])], true, true],
+            [['where' => new Andx(['test', new Func('func condition', ['argument'])])], true, true]
         ];
     }
 
