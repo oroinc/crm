@@ -19,32 +19,38 @@ class UpdateCreatedUpdatedLabels implements Migration
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'field' => 'createdAt',
-                'value' => 'oro.ui.created_at'
+                'value' => 'oro.ui.created_at',
+                'replace' => 'orocrm.sales.lead.created_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'field' => 'updatedAt',
-                'value' => 'oro.ui.updated_at'
+                'value' => 'oro.ui.updated_at',
+                'replace' => 'orocrm.sales.lead.updated_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'createdAt',
-                'value' => 'oro.ui.created_at'
+                'value' => 'oro.ui.created_at',
+                'replace' => 'orocrm.sales.opportunity.created_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'field' => 'updatedAt',
-                'value' => 'oro.ui.updated_at'
+                'value' => 'oro.ui.updated_at',
+                'replace' => 'orocrm.sales.opportunity.updated_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
                 'field' => 'createdAt',
-                'value' => 'oro.ui.created_at'
+                'value' => 'oro.ui.created_at',
+                'replace' => 'orocrm.sales.salesfunnel.created_at.label'
             ],
             [
                 'entityName' => 'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel',
                 'field' => 'updatedAt',
-                'value' => 'oro.ui.updated_at'
+                'value' => 'oro.ui.updated_at',
+                'replace' => 'orocrm.sales.salesfunnel.updated_at.label'
             ]
         ];
 
@@ -55,7 +61,8 @@ class UpdateCreatedUpdatedLabels implements Migration
                     $field['field'],
                     'entity',
                     'label',
-                    $field['value']
+                    $field['value'],
+                    $field['replace']
                 )
             );
             $queries->addQuery(
@@ -64,7 +71,8 @@ class UpdateCreatedUpdatedLabels implements Migration
                     $field['field'],
                     'entity',
                     'label',
-                    $field['value']
+                    $field['value'],
+                    $field['replace']
                 )
             );
         }
