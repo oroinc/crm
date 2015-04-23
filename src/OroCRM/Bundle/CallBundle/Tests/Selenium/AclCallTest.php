@@ -21,7 +21,7 @@ class AclCallTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('All - Roles - User Management - System')
+            ->assertTitle('Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclCallTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('All - Users - User Management - System');
+            ->assertTitle('Users - User Management - System');
 
         return $username;
     }
@@ -79,7 +79,7 @@ class AclCallTest extends Selenium2TestCase
             ->setPhoneNumber($phoneNumber)
             ->save()
             ->assertMessage('Call saved')
-            ->assertTitle('All - Calls - Activities')
+            ->assertTitle('Calls - Activities')
             ->close();
 
         return $callSubject;

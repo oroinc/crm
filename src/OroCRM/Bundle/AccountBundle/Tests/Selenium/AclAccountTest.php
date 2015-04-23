@@ -21,7 +21,7 @@ class AclAccountTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('All - Roles - User Management - System')
+            ->assertTitle('Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclAccountTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('All - Users - User Management - System');
+            ->assertTitle('Users - User Management - System');
 
         return $username;
     }
@@ -80,7 +80,7 @@ class AclAccountTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
-            ->assertTitle('All - Accounts - Customers');
+            ->assertTitle('Accounts - Customers');
 
         return $accountName;
     }

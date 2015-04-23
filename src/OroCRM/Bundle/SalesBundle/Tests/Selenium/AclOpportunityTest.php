@@ -23,7 +23,7 @@ class AclOpportunityTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Channels $login */
         $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('All - Channels - System')
+            ->assertTitle('Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setType('Custom')
@@ -51,7 +51,7 @@ class AclOpportunityTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('All - Roles - User Management - System')
+            ->assertTitle('Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -87,7 +87,7 @@ class AclOpportunityTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('All - Users - User Management - System');
+            ->assertTitle('Users - User Management - System');
 
         return $username;
     }
@@ -117,7 +117,7 @@ class AclOpportunityTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Opportunity saved')
             ->toGrid()
-            ->assertTitle('All - Opportunities - Sales');
+            ->assertTitle('Opportunities - Sales');
 
         return $opportunityName;
     }

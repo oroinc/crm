@@ -36,7 +36,7 @@ class WorkflowTest extends Selenium2TestCase
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('All - Sales Processes - Sales')
+            ->assertTitle('Sales Processes - Sales')
             ->startFromLead()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Lead', $leadName)
@@ -79,7 +79,7 @@ class WorkflowTest extends Selenium2TestCase
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('All - Sales Processes - Sales')
+            ->assertTitle('Sales Processes - Sales')
             ->startFromLead()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Lead', $leadName)
@@ -152,7 +152,7 @@ class WorkflowTest extends Selenium2TestCase
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('All - Sales Processes - Sales')
+            ->assertTitle('Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Opportunity', $opportunityName)
@@ -185,7 +185,7 @@ class WorkflowTest extends Selenium2TestCase
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->assertTitle('All - Sales Processes - Sales')
+            ->assertTitle('Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
             ->selectEntity('Opportunity', $opportunityName)
@@ -282,7 +282,7 @@ class WorkflowTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Opportunity saved')
             ->toGrid()
-            ->assertTitle('All - Opportunities - Sales');
+            ->assertTitle('Opportunities - Sales');
 
         return $opportunityName;
     }

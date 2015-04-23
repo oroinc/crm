@@ -32,7 +32,7 @@ class TagsAssignTest extends Selenium2TestCase
             ->setOwner('admin')
             ->save()
             ->assertMessage('Tag saved')
-            ->assertTitle('All - Tags - System')
+            ->assertTitle('Tags - System')
             ->close();
 
         return $tagName;

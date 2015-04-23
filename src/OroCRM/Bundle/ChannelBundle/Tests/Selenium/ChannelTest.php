@@ -22,7 +22,7 @@ class ChannelTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Channels $login */
         $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('All - Channels - System')
+            ->assertTitle('Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setType('Custom')
