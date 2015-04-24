@@ -7,7 +7,7 @@
 {% oro_title_set({params : {"%entityName%": entity.name|default('N/A') }}) %}
 
 {% block navButtons %}
-    {% placeholder marketing_list_mailchimp_menu with {entity: entity} %}
+    {% placeholder marketing_list_nav_buttons with {entity: entity} %}
     {% if entity.type.name == constant('OroCRM\\Bundle\\MarketingListBundle\\Entity\\MarketingListType::TYPE_STATIC') and resource_granted('EDIT', entity) %}
         {{ UI.clientButton({
             'dataUrl': path('orocrm_api_post_marketinglist_segment_run', { 'id': entity.segment.id }) ,

@@ -1,8 +1,0 @@
-placeholders:
-    marketing_list_mailchimp_menu:
-        items:
-            orocrm_marketing_list_mailchimp_buttons: ~
-items:
-    orocrm_marketing_list_mailchimp_buttons:
-        action: OroCRMMailChimpBundle:MailChimp:connectionButtons
-        applicable: @orocrm_mailchimp.placeholder.filter.buttons_filder->isApplicable($entity$)
