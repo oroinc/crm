@@ -44,6 +44,7 @@ class OrderListener
             && $entity->getSubtotalAmount()
             && $entity->getStatus() !== Order::STATUS_CANCELED
         ) {
+            $this->channelDoctrineListener->initializeFromEventArgs($event);
             $this->updateCustomerLifetime($event->getEntityManager(), $entity);
         }
     }
@@ -76,6 +77,7 @@ class OrderListener
         foreach ($orders as $order) {
             // if order was scheduled for update
             if (!empty($this->ordersForUpdate[$order->getId()])) {
+                $this->channelDoctrineListener->initializeFromEventArgs($event);
                 $this->updateCustomerLifetime($event->getEntityManager(), $order);
                 unset($this->ordersForUpdate[$order->getId()]);
             }

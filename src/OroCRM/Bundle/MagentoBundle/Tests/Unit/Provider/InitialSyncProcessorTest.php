@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Collections\ArrayCollection;
+
 use OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor;
 use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
@@ -153,12 +154,11 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
     {
         $connector = 'testConnector_initial';
         $connectors = [$connector];
+
         $now = new \DateTime('now', new \DateTimeZone('UTC'));
         $interval = new \DateInterval('P2D');
-        $initialStartDate = clone $now;
-        $syncedTo = clone $initialStartDate;
-        $syncedTo->sub($interval);
-        $syncStartDate = clone $syncedTo;
+        $syncedTo = clone $now;
+        $syncStartDate = clone $now;
         $syncStartDate->sub($interval);
 
         $integration = $this->getIntegration($connectors, $syncStartDate);
@@ -173,7 +173,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
             ->method('setData')
             ->with(
                 $this->callback(
-                    function ($data) use ($now, $interval) {
+                    function ($data) use ($syncedTo, $interval) {
                         $this->assertArrayHasKey('initialSyncedTo', $data);
 
                         $date = \DateTime::createFromFormat(
@@ -182,7 +182,9 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                             new \DateTimeZone('UTC')
                         );
 
-                        $this->assertEquals($date, $now->sub($interval));
+                        $syncedTo = clone $syncedTo;
+                        $syncedTo = $syncedTo->sub($interval);
+                        $this->assertEquals($syncedTo->format('Y-m-d'), $date->format('Y-m-d'));
 
                         return true;
                     }
@@ -206,7 +208,7 @@ class InitialSyncProcessorTest extends AbstractSyncProcessorTest
                 'entityName' => 'testEntity',
                 'channel' => 'testChannel',
                 'channelType' => 'testChannelType',
-                'start_sync_date' => $syncStartDate,
+                'start_sync_date' => $now,
                 AbstractInitialProcessor::INTERVAL => $interval
             ]
         );

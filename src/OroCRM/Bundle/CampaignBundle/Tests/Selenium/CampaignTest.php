@@ -23,7 +23,7 @@ class CampaignTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Campaigns $login */
         $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
-            ->assertTitle('All - Campaigns - Marketing')
+            ->assertTitle('Campaigns - Marketing')
             ->add()
             ->assertTitle('Create Campaign - Campaigns - Marketing')
             ->setName($campaignCode)
@@ -73,7 +73,7 @@ class CampaignTest extends Selenium2TestCase
             ->filterBy('Code', $campaignCode)
             ->deleteEntity(array($campaignCode))
             ->assertMessage('Item deleted')
-            ->assertTitle('All - Campaigns - Marketing');
+            ->assertTitle('Campaigns - Marketing');
 
         /** @var Campaigns $login */
         $login = $login->openCampaigns('OroCRM\Bundle\CampaignBundle');

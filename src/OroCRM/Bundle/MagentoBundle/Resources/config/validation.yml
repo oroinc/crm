@@ -6,6 +6,7 @@ OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
           - NotBlank: ~
         syncStartDate:
           - NotBlank: ~
+          - OroCRM\Bundle\MagentoBundle\Validator\Constraints\StartSyncDateConstraint: ~
         websiteId:
           - NotBlank: ~
 

@@ -93,6 +93,7 @@ parameters:
     orocrm_magento.form.autocomplete.store.search_handler.class:            OroCRM\Bundle\MagentoBundle\Autocomplete\StoreSearchHandler
 
     orocrm_magento.validator.unique_customer_email.class:                   OroCRM\Bundle\MagentoBundle\Validator\UniqueCustomerEmailValidator
+    orocrm_magento.validator.start_sync_date.class:                         OroCRM\Bundle\MagentoBundle\Validator\StartSyncDateValidator
 
     orocrm_magento.security.acl.voter.two_way_sync.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter
     orocrm_magento.security.acl.voter.newletter_subscriber.class:           OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
@@ -116,6 +117,8 @@ parameters:
     orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
 
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
+
+    orocrm_magento.service.information_loader.class:                        OroCRM\Bundle\MagentoBundle\Service\InformationLoader
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -462,6 +465,13 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
 
+    orocrm_magento.validator.start_sync_date:
+        class: %orocrm_magento.validator.start_sync_date.class%
+        arguments:
+            - @doctrine
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_magento.validator.start_sync_date }
+
     orocrm_magento.security.acl.voter.two_way_sync:
         class: %orocrm_magento.security.acl.voter.two_way_sync.class%
         abstract: true
@@ -575,3 +585,17 @@ services:
             - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
             - @translator
+
+    orocrm_magento.service.order.information_loader:
+        class: %orocrm_magento.service.information_loader.class%
+        arguments:
+            - @oro_importexport.job_executor
+            - @orocrm_magento.mage.order_connector
+            - "orocrm_magento.add_or_update_order"
+
+    orocrm_magento.service.cart.information_loader:
+        class: %orocrm_magento.service.information_loader.class%
+        arguments:
+            - @oro_importexport.job_executor
+            - @orocrm_magento.mage.cart_connector
+            - "orocrm_magento.add_or_update_cart"

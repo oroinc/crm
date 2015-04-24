@@ -155,6 +155,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cart->setStoreCurrencyCode('code');
         $cart->setQuoteCurrencyCode('usd');
         $cart->setStoreToBaseRate(12);
+        $cart->setStoreToQuoteRate(12);
         $cart->setGrandTotal(2.54);
         $cart->setIsGuest(0);
         $cart->setStore($this->store);

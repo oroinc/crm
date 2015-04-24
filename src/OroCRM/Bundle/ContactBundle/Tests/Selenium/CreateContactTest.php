@@ -43,7 +43,7 @@ class CreateContactTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->add()
             ->assertTitle('Create Contact - Contacts - Customers')
             ->setFirstName($contactName . '_first')
@@ -55,7 +55,7 @@ class CreateContactTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->close()
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
@@ -86,7 +86,7 @@ class CreateContactTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->close()
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
@@ -124,7 +124,7 @@ class CreateContactTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->close();
     }
 
@@ -149,7 +149,7 @@ class CreateContactTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->close();
 
         return $newContactName;
@@ -167,7 +167,7 @@ class CreateContactTest extends Selenium2TestCase
             ->filterBy('Email', $contactName . '@mail.com')
             ->open(array($contactName))
             ->delete()
-            ->assertTitle('All - Contacts - Customers')
+            ->assertTitle('Contacts - Customers')
             ->assertMessage('Contact deleted');
 
         $login->openContacts('OroCRM\Bundle\ContactBundle')

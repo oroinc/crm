@@ -255,7 +255,7 @@ class ChannelDoctrineListener
     /**
      * @param PostFlushEventArgs|OnFlushEventArgs $args
      */
-    protected function initializeFromEventArgs($args)
+    public function initializeFromEventArgs($args)
     {
         $this->em = $args->getEntityManager();
         $this->uow = $this->em->getUnitOfWork();
