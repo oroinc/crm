@@ -43,3 +43,10 @@ services:
         class: %orocrm_case.provider.phone.case.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_case.entity.class% }
+
+    oro_email.listener.datagrid.context.case:
+        class: %oro_email.listener.datagrid.context.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.cases-for-context-grid, method: onBuildAfter }

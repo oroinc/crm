@@ -104,3 +104,12 @@ services:
         class: %orocrm_sales.provider.phone.b2bcustomer.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_sales.b2bcustomer.entity.class% }
+
+    oro_email.listener.datagrid.context.sales:
+        class: %oro_email.listener.datagrid.context.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.orocrm-sales-b2bcustomers-for-context-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-lead-for-context-grid, method: onBuildAfter }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-opportunity-for-context-grid, method: onBuildAfter }
