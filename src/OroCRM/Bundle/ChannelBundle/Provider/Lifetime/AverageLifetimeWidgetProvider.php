@@ -50,6 +50,14 @@ class AverageLifetimeWidgetProvider
             ];
         }
 
+        $endDateKey = $end->format('Y-m');
+        if (!in_array($endDateKey, array_keys($dates))) {
+            $dates[$endDateKey] = [
+                'month_year' => sprintf('%s-01', $endDateKey),
+                'amount'     => 0
+            ];
+        }
+
         $channelNames = $this->registry->getRepository('OroCRMChannelBundle:Channel')
             ->getAvailableChannelNames($this->aclHelper);
         $data = $this->registry->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')
