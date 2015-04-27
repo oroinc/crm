@@ -32,7 +32,7 @@ class TagsAssignTest extends Selenium2TestCase
             ->setOwner('admin')
             ->save()
             ->assertMessage('Tag saved')
-            ->assertTitle('All - Tags - System')
+            ->assertTitle('Tags - System')
             ->close();
 
         return $tagName;
@@ -104,7 +104,6 @@ class TagsAssignTest extends Selenium2TestCase
         $login->openUsers('Oro\Bundle\UserBundle')
             ->add()
             ->setUsername($userName)
-            ->setOwner('Main')
             ->enable()
             ->setFirstpassword('123123q')
             ->setSecondpassword('123123q')

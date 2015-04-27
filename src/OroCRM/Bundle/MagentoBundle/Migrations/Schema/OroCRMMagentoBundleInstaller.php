@@ -609,6 +609,9 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('website_code', 'string', ['length' => 32, 'precision' => 0]);
         $table->addColumn('website_name', 'string', ['length' => 255, 'precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
+        $table->addColumn('sort_order', 'integer', ['notnull' => false]);
+        $table->addColumn('is_default', 'boolean', ['notnull' => false]);
+        $table->addColumn('default_group_id', 'integer', ['notnull' => false]);
         $table->addIndex(['channel_id'], 'IDX_CE3270C872F5A1AA', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['website_name'], 'orocrm_magento_website_name_idx', []);

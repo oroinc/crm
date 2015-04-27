@@ -21,7 +21,7 @@ class CreateContactRequestTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Channels $login */
         $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('All - Channels - System')
+            ->assertTitle('Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setType('Custom')
@@ -45,7 +45,7 @@ class CreateContactRequestTest extends Selenium2TestCase
         $login = $this->login();
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
-            ->assertTitle('All - Contact Requests - Activities')
+            ->assertTitle('Contact Requests - Activities')
             ->add()
             ->assertTitle('Create contact request - Contact Requests - Activities')
             ->setFirstName($firstName)
@@ -97,7 +97,7 @@ class CreateContactRequestTest extends Selenium2TestCase
             ->filterBy('Email', $email)
             ->open([$email])
             ->delete()
-            ->assertTitle('All - Contact Requests - Activities')
+            ->assertTitle('Contact Requests - Activities')
             ->assertMessage('Contact Request deleted');
         /** @var ContactRequests $login */
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle');

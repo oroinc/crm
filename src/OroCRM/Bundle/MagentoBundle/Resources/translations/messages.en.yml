@@ -500,6 +500,9 @@ orocrm:
             code.label:          Code
             name.label:          Name
             channel.label:       Integration
+            default.label:       Is default
+            default_group_id.label: Default Group
+            sort_order.label:       Sort Order
 
         newslettersubscriber:
             label:               Newsletter Subscriber

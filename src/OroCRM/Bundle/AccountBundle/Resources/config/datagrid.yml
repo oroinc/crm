@@ -448,3 +448,4 @@ datagrid:
             toolbarOptions:
                 pageSize:
                     default_per_page: 10
+            routerEnabled: false

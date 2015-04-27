@@ -12,9 +12,12 @@ class WebsiteDataConverter extends IntegrationAwareDataConverter
     protected function getHeaderConversionRules()
     {
         return [
-            'id' => 'originId',
+            'website_id' => 'originId',
             'code' => 'code',
-            'name' => 'name'
+            'name' => 'name',
+            'sort_order' => 'sortOrder',
+            'default_group_id' => 'defaultGroupId',
+            'is_default' => 'default'
         ];
     }
 
