@@ -265,6 +265,7 @@ services:
 
     orocrm_magento.importexport.denormalizer.order_item:
         class: %orocrm_magento.importexport.denormalizer.order_item.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
         tags:
             - { name: oro_importexport.normalizer }
 

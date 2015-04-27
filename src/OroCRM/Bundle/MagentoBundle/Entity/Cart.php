@@ -81,6 +81,13 @@ class Cart extends ExtendCart implements
      *     mappedBy="cart", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"originId" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $cartItems;
 

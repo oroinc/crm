@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Serializer;
 
+use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\ConfigurableEntityNormalizer;
 use Oro\Bundle\ImportExportBundle\Serializer\Normalizer\DenormalizerInterface;
+
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
-class OrderItemDenormalizer implements DenormalizerInterface
+class OrderItemDenormalizer extends ConfigurableEntityNormalizer implements DenormalizerInterface
 {
     /**
      * {@inheritdoc}
@@ -14,9 +16,8 @@ class OrderItemDenormalizer implements DenormalizerInterface
     public function denormalize($data, $class, $format = null, array $context = [])
     {
         /** @var OrderItem $object */
-        $className = MagentoConnectorInterface::ORDER_ITEM_TYPE;
-        $object    = new $className();
-        $this->fillResultObject($object, $data);
+        $object = parent::denormalize($data, $class, $format, $context);
+
         if ($object->getDiscountPercent()) {
             $object->setDiscountPercent($object->getDiscountPercent() / 100);
         }
@@ -28,30 +29,18 @@ class OrderItemDenormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object $resultObject
-     * @param array  $data
-     */
-    protected function fillResultObject($resultObject, array $data)
-    {
-        $reflectionObject = new \ReflectionObject($resultObject);
-        $importedEntityProperties = $reflectionObject->getProperties();
-
-        /** @var \ReflectionProperty $reflectionProperty */
-        foreach ($importedEntityProperties as $reflectionProperty) {
-            $reflectionProperty->setAccessible(true);
-            $name = $reflectionProperty->getName();
-
-            if (array_key_exists($name, $data) && !is_null($data[$name])) {
-                $reflectionProperty->setValue($resultObject, $data[$name]);
-            }
-        }
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
         return $type === MagentoConnectorInterface::ORDER_ITEM_TYPE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsNormalization($data, $format = null, array $context = [])
+    {
+        return false;
     }
 }

@@ -2,14 +2,11 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Collections\Collection;
-
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 
 class CartStrategy extends AbstractImportStrategy
 {
@@ -40,29 +37,14 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $hasContactInfo = ($entity->getBillingAddress() && $entity->getBillingAddress()->getPhone())
-            || $entity->getEmail();
-
-        if (!$entity->getItemsCount()) {
-            $this->context->incrementErrorEntriesCount();
-            $this->logger->debug(
-                sprintf('Cart ID: %d was skipped because it does not have items', $entity->getOriginId())
-            );
-
-            return null;
-        } elseif (!$hasContactInfo) {
-            $this->context->incrementErrorEntriesCount();
-            $this->logger->debug(
-                sprintf('Cart ID: %d was skipped because lack of contact info', $entity->getOriginId())
-            );
-
+        if (!$this->hasContactInfo($entity)) {
             return null;
         }
 
         $this
             ->updateCustomer($entity)
             ->updateAddresses($entity)
-            ->updateCartItems($entity->getCartItems())
+            ->updateCartItems($entity)
             ->updateCartStatus($entity);
 
         $this->existingEntity = null;
@@ -88,51 +70,14 @@ class CartStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param Collection $cartItems imported items
+     * @param Cart $cart
      *
      * @return CartStrategy
      */
-    protected function updateCartItems(Collection $cartItems)
+    protected function updateCartItems(Cart $cart)
     {
-        $importedOriginIds = $cartItems->map(
-            function (CartItem $item) {
-                return $item->getOriginId();
-            }
-        )->toArray();
-
-        // insert new and update existing items
-        /** $item - imported cart item */
-        foreach ($cartItems as $item) {
-            $originId = $item->getOriginId();
-
-            $existingItem = $this->existingEntity->getCartItems()->filter(
-                function (CartItem $item) use ($originId) {
-                    return $item->getOriginId() === $originId;
-                }
-            )->first();
-
-            if ($existingItem) {
-                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'cart']);
-                $item = $existingItem;
-            }
-
-            if (!$item->getCart()) {
-                $item->setCart($this->existingEntity);
-            }
-
-            if (!$this->existingEntity->getCartItems()->contains($item)) {
-                $this->existingEntity->getCartItems()->add($item);
-            }
-        }
-
-        // delete cart items that not exists in remote cart
-        $deletedCartItems = $this->existingEntity->getCartItems()->filter(
-            function (CartItem $item) use ($importedOriginIds) {
-                return !in_array($item->getOriginId(), $importedOriginIds, true);
-            }
-        );
-        foreach ($deletedCartItems as $item) {
-            $this->existingEntity->getCartItems()->removeElement($item);
+        foreach ($cart->getCartItems() as $cartItem) {
+            $cartItem->setCart($cart);
         }
 
         return $this;
@@ -158,19 +103,6 @@ class CartStrategy extends AbstractImportStrategy
 
             // at this point imported address region have code equal to region_id in magento db field
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-            $originAddressId = $address->getOriginId();
-
-            /** @var CartAddress $existingAddress */
-            $existingAddress = $propertyAccessor->getValue($this->existingEntity, $addressName);
-            if ($existingAddress && $existingAddress->getOriginId() == $originAddressId) {
-                $this->strategyHelper->importEntity(
-                    $existingAddress,
-                    $address,
-                    ['id', 'region', 'country']
-                );
-                $address = $existingAddress;
-            }
-
             $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if ($address->getCountry()) {
                 $propertyAccessor->setValue($entity, $addressName, $address);
@@ -180,6 +112,34 @@ class CartStrategy extends AbstractImportStrategy
         }
 
         return $this;
+    }
+
+    /**
+     * @param Cart $entity
+     * @return null
+     */
+    protected function hasContactInfo(Cart $entity)
+    {
+        $hasContactInfo = ($entity->getBillingAddress() && $entity->getBillingAddress()->getPhone())
+            || $entity->getEmail();
+
+        if (!$entity->getItemsCount()) {
+            $this->context->incrementErrorEntriesCount();
+            $this->logger->debug(
+                sprintf('Cart ID: %d was skipped because it does not have items', $entity->getOriginId())
+            );
+
+            return false;
+        } elseif (!$hasContactInfo) {
+            $this->context->incrementErrorEntriesCount();
+            $this->logger->debug(
+                sprintf('Cart ID: %d was skipped because lack of contact info', $entity->getOriginId())
+            );
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
