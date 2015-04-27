@@ -73,7 +73,6 @@ class CustomerDataProvider
             $channelIds
         );
 
-
         foreach ($data as $row) {
             $key         = $this->dateHelper->getKey($past, $now, $row);
             $channelId   = (int)$row['channelId'];
@@ -82,7 +81,10 @@ class CustomerDataProvider
             if (!isset($items[$channelName])) {
                 $items[$channelName] = $dates;
             }
-            $items[$channelName][$key]['cnt'] = (int)$row['cnt'];
+
+            if (isset($items[$channelName][$key])) {
+                $items[$channelName][$key]['cnt'] = (int)$row['cnt'];
+            }
         }
 
         // restore default keys
