@@ -128,4 +128,9 @@ class CallActivityListProvider implements ActivityListProviderInterface, Comment
 
         return $config->is('enabled');
     }
+
+    public function getCommentCountProvider()
+    {
+        return false;
+    }
 }
