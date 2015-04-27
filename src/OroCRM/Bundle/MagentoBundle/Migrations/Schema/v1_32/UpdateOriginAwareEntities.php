@@ -31,9 +31,21 @@ class UpdateOriginAwareEntities implements Migration
 
         $table = $schema->getTable('orocrm_magento_cart_item');
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
 
         $table = $schema->getTable('orocrm_magento_order_items');
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
     }
 
     /**

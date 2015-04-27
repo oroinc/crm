@@ -1076,6 +1076,12 @@ class OroCRMMagentoBundleInstaller implements
             ['id'],
             ['onDelete' => 'CASCADE']
         );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
     }
 
     /**
@@ -1421,6 +1427,12 @@ class OroCRMMagentoBundleInstaller implements
             ['order_id'],
             ['id'],
             ['onDelete' => 'CASCADE']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_integration_channel'),
+            ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
         );
     }
 

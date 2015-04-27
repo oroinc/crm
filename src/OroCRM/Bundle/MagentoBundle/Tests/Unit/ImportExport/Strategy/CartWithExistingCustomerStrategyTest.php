@@ -30,14 +30,19 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
      */
     public function testProcessFailed()
     {
+        $strategy = $this->getStrategy();
+
         $customer = new Customer();
         $customer->setOriginId(1);
         $channel = new Channel();
         $cart = new Cart();
-        $cart->setCustomer($customer);
-        $cart->setChannel($channel);
+        $cart
+            ->setCustomer($customer)
+            ->setChannel($channel)
+            ->setItemsCount(2)
+            ->setEmail('email@example.com');
 
-        $this->assertNull($this->getStrategy()->process($cart));
+        $this->assertNull($strategy->process($cart));
     }
 
     public function testProcess()
@@ -46,8 +51,11 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $customer->setOriginId(1);
         $channel = new Channel();
         $cart = new Cart();
-        $cart->setCustomer($customer);
-        $cart->setChannel($channel);
+        $cart
+            ->setCustomer($customer)
+            ->setChannel($channel)
+            ->setItemsCount(2)
+            ->setEmail('email@example.com');
 
         $strategy = $this->getStrategy();
 
