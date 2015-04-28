@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content form-horizontal box-content row-fluid">
     <div class="responsive-block">
@@ -12,5 +13,8 @@
         {{ ui.renderProperty('orocrm.call.direction.label'|trans, entity.direction ? entity.direction.label : null) }}
         {# Don't use time formatting here because it's a time interval #}
         {{ ui.renderProperty('orocrm.call.duration.label'|trans, entity.duration|oro_format_duration) }}
+    </div>
+    <div class="responsive-block">
+        {{ entityConfig.renderDynamicFields(entity) }}
     </div>
 </div>

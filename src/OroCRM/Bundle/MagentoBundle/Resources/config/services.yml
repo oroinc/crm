@@ -31,6 +31,7 @@ parameters:
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
+    orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -319,3 +320,11 @@ services:
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
+
+    orocrm_magento.event_listener.channel_save_succeed:
+        class: %orocrm_magento.event_listener.channel_save_succeed.class%
+        parent: orocrm_channel.event_listener.channel_save_succeed
+        calls:
+            - [setConnectorsTypeRegistry, [@oro_integration.manager.types_registry]]
+        tags:
+            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave, priority: -10 }
