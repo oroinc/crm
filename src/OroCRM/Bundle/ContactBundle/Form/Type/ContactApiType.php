@@ -14,6 +14,12 @@ class ContactApiType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder->add(
+            'createdAt',
+            'oro_datetime',
+            ['required' => false]
+        );
+
         $builder->addEventSubscriber(new PatchSubscriber());
     }
 
@@ -23,9 +29,9 @@ class ContactApiType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(
-            array(
-                'csrf_protection' => false,
-            )
+            [
+                'csrf_protection' => false
+            ]
         );
     }
 

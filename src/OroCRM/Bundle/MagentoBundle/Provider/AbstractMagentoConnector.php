@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Psr\Log\LoggerAwareInterface;
+
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -81,11 +83,27 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     }
 
     /**
+     * @param ContextInterface $context
+     */
+    protected function initializeTransport(ContextInterface $context)
+    {
+        $this->channel   = $this->contextMediator->getChannel($context);
+        $this->transport = $this->contextMediator->getInitializedTransport($this->channel, true);
+
+        $this->validateConfiguration();
+        $this->setSourceIterator($this->getConnectorSource());
+
+        if ($this->getSourceIterator() instanceof LoggerAwareInterface) {
+            $this->getSourceIterator()->setLogger($this->logger);
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function initializeFromContext(ContextInterface $context)
     {
-        parent::initializeFromContext($context);
+        $this->initializeTransport($context);
 
         // set start date and mode depending on status
         $status      = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
@@ -130,7 +148,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
      *
      * @param Integration $integration
      * @param string $connector
+     *
      * @return Status|null
+     * @throws RuntimeException
      */
     protected function getLastCompletedIntegrationStatus(Integration $integration, $connector)
     {

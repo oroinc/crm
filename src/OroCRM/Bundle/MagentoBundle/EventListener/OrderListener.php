@@ -11,7 +11,7 @@ use Doctrine\ORM\UnitOfWork;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 
 class OrderListener
 {
@@ -44,7 +44,7 @@ class OrderListener
 
         // if subtotal or status has been changed
         if ($this->isOrderValid($entity)
-            && array_intersect(['subtotalAmount', 'status'], array_keys($event->getEntityChangeSet()))
+            && array_intersect(['subtotalAmount', 'discountAmount', 'status'], array_keys($event->getEntityChangeSet()))
         ) {
             $this->ordersForUpdate[$entity->getId()] = true;
         }
@@ -128,11 +128,15 @@ class OrderListener
         $customer = $order->getCustomer();
         $oldLifetime = (float)$customer->getLifetime();
 
-        /** @var OrderRepository $orderRepository */
-        $orderRepository = $entityManager->getRepository('OroCRMMagentoBundle:Order');
-        $newLifetime = $orderRepository->getCustomerOrdersSubtotalAmount($customer);
+        /** @var CustomerRepository $customerRepository */
+        $customerRepository = $entityManager->getRepository('OroCRMMagentoBundle:Customer');
+        $newLifetime = $customerRepository->calculateLifetimeValue($customer);
         if ($appendSubtotal) {
-            $newLifetime += $order->getSubtotalAmount();
+            $discountAmount = $order->getDiscountAmount();
+            $orderLifetimeValue  = $discountAmount
+                ? $order->getSubtotalAmount() - $discountAmount
+                : $order->getSubtotalAmount();
+            $newLifetime += $orderLifetimeValue;
         }
 
         if ($newLifetime !== $oldLifetime) {

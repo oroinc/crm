@@ -80,6 +80,27 @@ class ContactListenerTest extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testPrePersistWithAlreadySetCreatedAtAndCreatedBy()
+    {
+        $entity = new Contact();
+        $createdAt = new \DateTime();
+        $createdBy = new User();
+        $entity
+            ->setCreatedAt($createdAt)
+            ->setCreatedBy($createdBy);
+
+        $this->mockSecurityContext();
+
+        $em = $this->getEntityManagerMock();
+
+        $args = new LifecycleEventArgs($entity, $em);
+
+        $this->contactListener->prePersist($args);
+
+        $this->assertSame($createdAt, $entity->getCreatedAt());
+        $this->assertSame($createdBy, $entity->getCreatedBy());
+    }
+
     /**
      * @param object $entity
      * @param bool $mockToken
