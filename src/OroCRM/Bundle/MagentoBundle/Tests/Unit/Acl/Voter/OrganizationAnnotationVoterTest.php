@@ -40,7 +40,7 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
             'DELETE' => ['DELETE', false],
             'ASSIGN' => ['ASSIGN', false],
             'orocrm_magento_customer_create' => ['orocrm_magento_customer_create', true],
-            'orocrm_magento_customer_update' => ['orocrm_magento_customer_update', true],
+            'orocrm_magento_customer_update' => ['orocrm_magento_customer_update', false],
         ];
     }
 
@@ -105,7 +105,7 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
                 $className,
                 ['orocrm_magento_customer_update'],
                 true,
-                OrganizationAnnotationVoter::ACCESS_GRANTED,
+                OrganizationAnnotationVoter::ACCESS_ABSTAIN,
             ],
             // default permissions without matched channels
             [
@@ -120,7 +120,7 @@ class OrganizationAnnotationVoterTest extends AbstractTwoWaySyncVoterTest
                 $className,
                 ['orocrm_magento_customer_update'],
                 false,
-                OrganizationAnnotationVoter::ACCESS_DENIED,
+                OrganizationAnnotationVoter::ACCESS_ABSTAIN,
             ],
         ];
     }

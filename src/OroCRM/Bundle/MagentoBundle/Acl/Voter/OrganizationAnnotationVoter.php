@@ -7,12 +7,11 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 class OrganizationAnnotationVoter extends AbstractTwoWaySyncVoter
 {
     const RESOURCE_CREATE = 'orocrm_magento_customer_create';
-    const RESOURCE_EDIT = 'orocrm_magento_customer_update';
 
     /**
      * @var array
      */
-    protected $supportedAttributes = [self::RESOURCE_CREATE, self::RESOURCE_EDIT];
+    protected $supportedAttributes = [self::RESOURCE_CREATE];
 
     /**
      * @var Organization
