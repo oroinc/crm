@@ -229,7 +229,7 @@ services:
         class: %orocrm_magento.mage.region_connector.class%
         parent: orocrm_magento.connector.abstract
         tags:
-            - { name: oro_integration.connector, type: region, channel_type: magento }
+            - { name: oro_integration.connector, type: region_dictionary, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.newsletter_subscriber_connector:
