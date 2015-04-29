@@ -163,6 +163,25 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         /** @var string sessionId returned by Magento API login method */
         $this->sessionId = null;
         $this->sessionId = $this->call('login', ['username' => $apiUser, 'apiKey' => $apiKey]);
+
+        $this->checkExtensionFunctions();
+    }
+
+    protected function checkExtensionFunctions()
+    {
+        $functions = (array)$this->client->__getFunctions();
+
+        $isExtensionInstalled = (bool)array_filter(
+            $functions,
+            function ($definition) {
+                return false !== strpos($definition, self::ACTION_PING);
+            }
+        );
+
+        if (!$isExtensionInstalled) {
+            $this->isExtensionInstalled = false;
+            $this->adminUrl = false;
+        }
     }
 
     /**
