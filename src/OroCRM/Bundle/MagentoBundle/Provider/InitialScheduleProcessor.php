@@ -10,6 +10,7 @@ use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 /**
  * Schedule initial synchronization if it is required.
@@ -109,7 +110,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
         if (null === $callback) {
             $callback = function ($connector) {
                 return strpos($connector, InitialSyncProcessor::INITIAL_CONNECTOR_SUFFIX) === false
-                    && strpos($connector, self::DICTIONARY_CONNECTOR_SUFFIX) === false;
+                    && strpos($connector, DictionaryConnectorInterface::DICTIONARY_CONNECTOR_SUFFIX) === false;
             };
         }
 
