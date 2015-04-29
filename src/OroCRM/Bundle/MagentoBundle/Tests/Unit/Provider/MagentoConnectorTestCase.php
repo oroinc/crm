@@ -8,12 +8,12 @@ use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;

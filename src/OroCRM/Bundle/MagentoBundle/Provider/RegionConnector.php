@@ -48,12 +48,12 @@ class RegionConnector extends AbstractMagentoConnector implements DictionaryConn
                 $this->bundleConfiguration['sync_settings']['region_sync_interval']
             );
 
-            $now = new \DateTime('now', new \DateTimeZone('UTC'));
-            $now->sub($interval);
+            $dateToCheck = new \DateTime('now', new \DateTimeZone('UTC'));
+            $dateToCheck->sub($interval);
 
             $lastStatus = $this->getLastCompletedIntegrationStatus($this->channel, $this->getType());
 
-            if ($lastStatus && $lastStatus->getDate() > $now) {
+            if ($lastStatus && $lastStatus->getDate() > $dateToCheck) {
                 $this->logger->info(
                     sprintf(
                         'Regions are up to date, last sync date is %s, interval is %s',
