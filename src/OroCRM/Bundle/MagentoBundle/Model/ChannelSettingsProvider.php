@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Model;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -94,16 +95,41 @@ class ChannelSettingsProvider
      */
     public function hasApplicableChannels($checkExtension = true)
     {
-        $isApplicable = false;
-
-        /** @var Channel[] $channels */
         $channels = $this->doctrineHelper
             ->getEntityRepository($this->channelClassName)
             ->findBy(['type' => ChannelType::TYPE, 'enabled' => true]);
 
+        return $this->collectionHasApplicableChannel($channels, $checkExtension);
+    }
+
+    /**
+     * @param Organization $organization
+     *
+     * @param bool $checkExtension
+     *
+     * @return bool
+     */
+    public function hasOrganizationApplicableChannels(Organization $organization, $checkExtension = true)
+    {
+        $channels = $this->doctrineHelper
+            ->getEntityRepository($this->channelClassName)
+            ->findBy(['type' => ChannelType::TYPE, 'enabled' => true, 'organization' => $organization]);
+
+        return $this->collectionHasApplicableChannel($channels, $checkExtension);
+    }
+
+    /**
+     * @param Channel[] $channels
+     * @param bool $checkExtension
+     * @return bool
+     */
+    protected function collectionHasApplicableChannel(array $channels, $checkExtension = true)
+    {
         if (!$channels) {
             return false;
         }
+
+        $isApplicable = false;
 
         foreach ($channels as $channel) {
             $channelId = $channel->getId();
