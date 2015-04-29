@@ -9,14 +9,16 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     /**
      * {@inheritdoc}
      */
-    protected function afterProcessEntity($entity)
+    protected function updateContextCounters($entity)
     {
-        if ($this->databaseHelper->getIdentifier($entity)) {
+        // increment context counter
+        $identifier = $this->databaseHelper->getIdentifier($entity);
+        if ($identifier) {
             $this->context->incrementUpdateCount();
         } else {
             $this->context->incrementAddCount();
         }
 
-        return parent::afterProcessEntity($entity);
+        return $entity;
     }
 }
