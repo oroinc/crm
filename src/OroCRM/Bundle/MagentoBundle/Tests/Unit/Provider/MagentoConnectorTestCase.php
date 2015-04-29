@@ -13,6 +13,7 @@ use Symfony\Component\HttpKernel\Log\NullLogger;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Entity\Status;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\IntegrationBundle\Entity\Transport;
 use Oro\Bundle\IntegrationBundle\Logger\LoggerStrategy;
 use Oro\Bundle\ImportExportBundle\Context\Context;
 use Oro\Bundle\ImportExportBundle\Context\ContextRegistry;
@@ -104,6 +105,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $status = new Status();
         $status->setCode($status::STATUS_COMPLETED);
         $status->setConnector($connector->getType());
+        $status->setDate(new \DateTime('-10 days', new \DateTimeZone('UTC')));
 
         $this->expectLastCompletedStatusForConnector($status, $channel, $connector->getType());
 
@@ -169,7 +171,7 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
         $connector = $this->getConnector(null, $this->stepExecutionMock);
         $this->transportMock->expects($this->never())->method('init');
 
-        $connector->setStepExecution($this->stepExecutionMock, $this->stepExecutionMock);
+        $connector->setStepExecution($this->stepExecutionMock);
     }
 
     /**
@@ -293,11 +295,15 @@ abstract class MagentoConnectorTestCase extends \PHPUnit_Framework_TestCase
      */
     protected function getConnector($transport, $stepExecutionMock, $channel = null, $context = null)
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextRegistry $contextRegistryMock */
         $contextRegistryMock = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextRegistry');
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ConnectorContextMediator $contextMediatorMock */
         $contextMediatorMock = $this
             ->getMockBuilder('Oro\\Bundle\\IntegrationBundle\\Provider\\ConnectorContextMediator')
             ->disableOriginalConstructor()->getMock();
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|Transport $transportSettings */
         $transportSettings = $this->getMockForAbstractClass('Oro\\Bundle\\IntegrationBundle\\Entity\\Transport');
         $channel           = $channel ? : new Channel();
         $channel->setTransport($transportSettings);

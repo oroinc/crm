@@ -192,7 +192,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $integration = new Integration();
         $integration->setName('Demo Web store');
         $integration->setType('magento');
-        $integration->setConnectors(['customer', 'order', 'cart', 'region']);
+        $integration->setConnectors(['customer', 'order', 'cart']);
         $integration->setTransport($this->transport);
         $integration->setOrganization($this->organization);
 
