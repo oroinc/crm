@@ -52,7 +52,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
 
         $this->soapClientMock = $this->getMockBuilder('\SoapClient')
             ->disableOriginalConstructor()
-            ->setMethods(['__soapCall'])
             ->getMock();
 
         $this->settings        = new ParameterBag();
@@ -69,8 +68,9 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /**
      * Init settings bag
      * @param bool $wsiMode
+     * @param array $functions
      */
-    protected function initSettings($wsiMode = false)
+    protected function initSettings($wsiMode = false, array $functions = [])
     {
         $testUsername = 'apiUsername';
 
@@ -92,6 +92,8 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $this->soapClientMock->expects($this->at(0))->method('__soapCall')
             ->with('login', $params)
             ->will($this->returnValue($result));
+
+        $this->soapClientMock->expects($this->any())->method('__getFunctions')->willReturn($functions);
     }
 
     /**
@@ -160,7 +162,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             $this->setExpectedException($expectedException);
         }
 
-        $this->initSettings();
+        $this->initSettings(false, ['oroPing']);
         $this->transport->init($this->transportEntity);
 
         $this->soapClientMock->expects($this->any())
@@ -260,29 +262,24 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider isExtensionInstalledProvider
      *
+     * @param array $functions
      * @param mixed $isInstalledResult
      * @param mixed $soapResult
-     * @param bool $throwsException
      * @param mixed $adminUrlResult
      * @param bool|string $extensionVersion
      * @param bool|string $magentoVersion
      */
     public function testIsExtensionInstalled(
+        array $functions,
         $isInstalledResult,
         $soapResult,
-        $throwsException = false,
         $adminUrlResult = false,
         $extensionVersion = null,
         $magentoVersion = null
     ) {
-        $this->initSettings();
-        if ($throwsException) {
-            $this->soapClientMock->expects($this->at(1))
-                ->method('__soapCall')
-                ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
-                ->will($this->throwException(new \Exception()));
-        } else {
-            $this->soapClientMock->expects($this->at(1))
+        $this->initSettings(false, $functions);
+        if ($functions) {
+            $this->soapClientMock->expects($this->at(3))
                 ->method('__soapCall')
                 ->with(SoapTransport::ACTION_PING, ['sessionId' => $this->sessionId])
                 ->will($this->returnValue($soapResult));
@@ -316,30 +313,29 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
     public function isExtensionInstalledProvider()
     {
         return [
-            'exception result is perceived as not installed' => [
+            'bridge is not installed because there is no oro function definitions' => [
+                [],
                 false,
-                null,
-                true,
-                false,
+                (object)[null],
             ],
-            'good result with version'                       => [
+            'good result with version' => [
+                ['oroPing'],
                 true,
                 (object)[
-                    'version'     => '1.2.3',
+                    'version' => '1.2.3',
                     'mage_version' => '1.8.0.0',
-                    'admin_url'   => 'http://localhost/admin/'
+                    'admin_url' => 'http://localhost/admin/',
                 ],
-                false,
                 'http://localhost/admin/',
                 '1.2.3',
-                '1.8.0.0'
+                '1.8.0.0',
             ],
-            'good result with out version'                   => [
+            'good result with out version' => [
+                ['oroPing'],
                 false,
                 (object)[null],
                 false,
-                false
-            ]
+            ],
         ];
     }
 
@@ -357,7 +353,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $this->initSettings(true);
 
         $testActionName = 'testAction';
-        $this->soapClientMock->expects($this->at(1))->method('__soapCall')
+        $this->soapClientMock->expects($this->at(3))->method('__soapCall')
             ->with($this->equalTo($testActionName), $this->equalTo([(object)$expectedParams]))
             ->will($this->returnValue($remoteResponse));
 
@@ -482,7 +478,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
         $withPing = false,
         $extensionInstalled = true
     ) {
-        $this->initSettings();
+        $this->initSettings(false, ['oroPing']);
         $this->transport->init($this->transportEntity);
 
         $this->soapClientMock->expects($withPing ? $this->at(1) : $this->once())
@@ -490,6 +486,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
             ->with($endpoint, $expectedParameters)
             ->will($this->returnValue($result));
 
+        $pingResponse = null;
         if ($withPing) {
             if ($extensionInstalled) {
                 $pingResponse = (object)[
@@ -497,8 +494,6 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                     'mage_version' => '1.8.0.0',
                     'admin_url' => 'http://localhost/admin/'
                 ];
-            } else {
-                $pingResponse = null;
             }
 
             $this->soapClientMock->expects($this->at(0))
@@ -507,7 +502,7 @@ class SoapTransportTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($pingResponse));
         }
 
-        $this->assertEquals($result, call_user_func_array(array($this->transport, $method), $arguments));
+        $this->assertEquals($result, call_user_func_array([$this->transport, $method], $arguments));
     }
 
     /**
