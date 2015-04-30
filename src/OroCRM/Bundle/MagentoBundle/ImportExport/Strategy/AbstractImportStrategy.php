@@ -9,7 +9,6 @@ use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
@@ -17,7 +16,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface;
 
-abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy implements
+abstract class AbstractImportStrategy extends DefaultMagentoImportStrategy implements
     LoggerAwareInterface,
     StepExecutionAwareInterface
 {
