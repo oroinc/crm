@@ -14,6 +14,10 @@ class CartWithExistingCustomerStrategy extends CartStrategy
      */
     public function process($importingCart)
     {
+        if (!$this->hasContactInfo($importingCart)) {
+            return null;
+        }
+
         if (!$this->isProcessingAllowed($importingCart)) {
             $this->appendDataToContext(self::CONTEXT_CART_POST_PROCESS, $this->context->getValue('itemData'));
 

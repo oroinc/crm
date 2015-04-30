@@ -140,7 +140,8 @@ class MarketingListExtension extends AbstractExtension
         $itemsQb
             ->select('item.entityId')
             ->from('OroCRMMarketingListBundle:MarketingListItem', 'item')
-            ->andWhere('item.marketingList = :marketingListId');
+            ->andWhere('item.marketingList = :marketingListId')
+            ->andWhere('item.entityId = ' . $qb->getRootAliases()[0]);
 
         return new Func('EXISTS', $itemsQb->getDQL());
     }
