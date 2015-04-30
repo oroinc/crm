@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
 
 class OrderStrategy extends AbstractImportStrategy
@@ -46,8 +47,8 @@ class OrderStrategy extends AbstractImportStrategy
 
         /** @var Order $order */
         $this->processCart($entity);
-        $this->processAddresses($this->existingEntity, $entity);
-        $this->processItems($this->existingEntity, $entity);
+        $this->processItems($entity);
+        $this->processAddresses($entity);
         $this->processCustomer($entity, $entity->getCustomer());
 
         $this->existingEntity = null;
@@ -96,89 +97,69 @@ class OrderStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param Order $entityToUpdate
-     * @param Order $entityToImport
+     * @param Order $order
+     *
+     * @return OrderStrategy
      */
-    protected function processAddresses(Order $entityToUpdate, Order $entityToImport)
+    protected function processItems(Order $order)
     {
-        /** @var OrderAddress $address */
-        foreach ($entityToImport->getAddresses() as $k => $address) {
-            if (!$address->getCountry()) {
-                // skip addresses without country, we cant save it
-                $entityToUpdate->getAddresses()->offsetUnset($k);
-                continue;
-            }
-            // at this point imported address region have code equal to region_id in magento db field
-            $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
-
-            $existingAddress = $entityToUpdate->getAddresses()->get($k);
-            if ($existingAddress) {
-                $this->strategyHelper->importEntity(
-                    $existingAddress,
-                    $address,
-                    ['id', 'region', 'country', 'owner', 'types']
-                );
-                $address = $existingAddress;
-            }
-
-            $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
-            if (!$address->getCountry()) {
-                $entityToUpdate->getAddresses()->offsetUnset($k);
-                continue;
-            }
-
-            $this->addressHelper->updateAddressTypes($address);
-
-            $address->setOwner($entityToUpdate);
-            $entityToUpdate->getAddresses()->set($k, $address);
+        foreach ($order->getItems() as $item) {
+            $item->setOrder($order);
         }
+
+        return $this;
     }
 
     /**
-     * @param Order $entityToUpdate
-     * @param Order $entityToImport
+     * @param Order $order
+     *
+     * @return OrderStrategy
      */
-    protected function processItems(Order $entityToUpdate, Order $entityToImport)
+    protected function processAddresses(Order $order)
     {
-        $importedOriginIds = $entityToImport->getItems()->map(
-            function (OrderItem $item) {
-                return $item->getOriginId();
-            }
-        )->toArray();
+        /** @var OrderAddress $address */
+        foreach ($order->getAddresses() as $address) {
+            $address->setOwner($order);
+        }
 
-        // insert new and update existing items
-        /** @var OrderItem $item - imported order item */
-        foreach ($entityToImport->getItems() as $item) {
-            $originId = $item->getOriginId();
+        return $this;
+    }
 
-            $existingItem = $entityToUpdate->getItems()->filter(
-                function (OrderItem $item) use ($originId) {
-                    return $item->getOriginId() == $originId;
-                }
-            )->first();
+    /**
+     * BC layer to find existing collection items by old identity filed values
+     *
+     * {@inheritdoc}
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
-            if ($existingItem) {
-                $this->strategyHelper->importEntity($existingItem, $item, ['id', 'order']);
-                $item = $existingItem;
-            }
+        if (!$existingEntity && $entity instanceof OrderAddress) {
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
-            if (!$item->getOrder()) {
-                $item->setOrder($entityToUpdate);
-            }
+            /** @var OrderAddress $existingEntity */
+            $existingEntity = $this->existingEntity->getAddresses()
+                ->filter(
+                    function (OrderAddress $address) use ($entity, $propertyAccessor) {
+                        $isMatched = true;
+                        $fieldsToMatch = ['street', 'city', 'postalCode', 'country', 'region'];
 
-            if (!$entityToUpdate->getItems()->contains($item)) {
-                $entityToUpdate->getItems()->add($item);
+                        foreach ($fieldsToMatch as $fieldToMatch) {
+                            $addressValue = $propertyAccessor->getValue($address, $fieldToMatch);
+                            $entityValue = $propertyAccessor->getValue($entity, $fieldToMatch);
+                            $isMatched = $isMatched && ($addressValue === $entityValue);
+                        }
+
+                        return $isMatched;
+                    }
+                )
+                ->first();
+
+            if ($existingEntity && $entity->getOriginId()) {
+                $existingEntity->setOriginId($entity->getOriginId());
             }
         }
 
-        // delete order items that not exists in remote order
-        $deleted = $entityToUpdate->getItems()->filter(
-            function (OrderItem $item) use ($importedOriginIds) {
-                return !in_array($item->getOriginId(), $importedOriginIds, true);
-            }
-        );
-        foreach ($deleted as $item) {
-            $entityToUpdate->getItems()->removeElement($item);
-        }
+        return $existingEntity;
     }
 }

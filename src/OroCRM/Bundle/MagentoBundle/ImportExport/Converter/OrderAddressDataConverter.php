@@ -14,7 +14,8 @@ class OrderAddressDataConverter extends AbstractAddressDataConverter
             [
                 'fax'          => 'fax',
                 'customer_id'  => 'customerId',
-                'address_type' => 'types:0:name'
+                'address_type' => 'types:0:name',
+                'address_id'   => 'originId'
             ]
         );
     }

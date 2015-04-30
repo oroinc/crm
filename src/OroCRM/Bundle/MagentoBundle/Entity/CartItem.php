@@ -37,9 +37,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class CartItem extends ExtendCartItem implements OriginAwareInterface
+class CartItem extends ExtendCartItem implements OriginAwareInterface, IntegrationAwareInterface
 {
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @ORM\ManyToOne(targetEntity="Cart", inversedBy="cartItems",cascade={"persist"})

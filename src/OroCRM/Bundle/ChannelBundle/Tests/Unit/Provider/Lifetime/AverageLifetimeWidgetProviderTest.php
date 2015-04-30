@@ -105,6 +105,13 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
                 'amount'     => 0
             ];
         }
+        $endDateKey = $end->format('Y-m');
+        if (!in_array($endDateKey, array_keys($dates))) {
+            $dates[$endDateKey] = [
+                'month_year' => sprintf('%s-01', $endDateKey),
+                'amount'     => 0
+            ];
+        }
 
         $expected                        = [];
         $firstDates                      = $dates;
