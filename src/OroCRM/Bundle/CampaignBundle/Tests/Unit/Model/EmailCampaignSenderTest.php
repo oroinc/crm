@@ -58,6 +58,11 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $transportProvider;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $validator;
+
     protected function setUp()
     {
         $this->marketingListProvider = $this
@@ -97,6 +102,9 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             $this->transportProvider
         );
 
+        $this->validator = $this->getMock('Symfony\Component\Validator\ValidatorInterface');
+        $this->sender->setValidator($this->validator);
+
         $this->sender->setLogger($this->logger);
     }
 
@@ -112,6 +120,36 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
     public function testAssertTransport()
     {
         $campaign = new EmailCampaign();
+
+        $this->sender->send($campaign);
+    }
+
+    public function testAssertTransportInvalidSettings()
+    {
+        $this->transportProvider
+            ->expects($this->once())
+            ->method('getTransportByName')
+            ->will($this->returnValue($this->transport));
+
+        $transportSettings = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $campaign = new EmailCampaign();
+        $campaign->setTransportSettings($transportSettings);
+
+        $constraint = $this->getMockBuilder('Symfony\Component\Validator\ConstraintViolationList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $constraint->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(1));
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($transportSettings)
+            ->will($this->returnValue($constraint));
+
+        $this->sender->setEmailCampaign($campaign);
 
         $this->sender->send($campaign);
     }
@@ -162,11 +200,26 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
         $marketingList->setType($type);
         $marketingList->setEntity($entity);
 
+        $transportSettings = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\TransportSettings')
+            ->disableOriginalConstructor()
+            ->getMock();
         $campaign = new EmailCampaign();
         $campaign
             ->setMarketingList($marketingList)
             ->setSenderName(reset($to))
-            ->setSenderEmail(reset($to));
+            ->setSenderEmail(reset($to))
+            ->setTransportSettings($transportSettings);
+
+        $constraint = $this->getMockBuilder('Symfony\Component\Validator\ConstraintViolationList')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $constraint->expects($this->once())
+            ->method('count')
+            ->will($this->returnValue(0));
+        $this->validator->expects($this->once())
+            ->method('validate')
+            ->with($transportSettings)
+            ->will($this->returnValue($constraint));
 
         $itCount = count($iterable);
         $this->marketingListProvider

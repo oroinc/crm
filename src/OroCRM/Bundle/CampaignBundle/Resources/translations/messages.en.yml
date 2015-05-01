@@ -99,6 +99,7 @@ orocrm:
             controller:
                 saved.message: "Email campaign saved"
                 sent: "Email campaign was sent"
+                send_disallowed: "Email campaign could not be sent. Please, check that all settings are correct."
             datagrid:
                 actions:
                     view.label: View
