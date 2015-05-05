@@ -6,6 +6,7 @@ use Oro\Bundle\DataGridBundle\Common\Object;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider;
 
 class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
@@ -155,6 +156,34 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($repository));
 
         $this->assertEquals($expected, $this->provider->hasApplicableChannels($checkExtension));
+    }
+
+    /**
+     * @param bool $expected
+     * @param array $channels
+     * @param bool $checkExtension
+     *
+     * @dataProvider channelsDataProvider
+     */
+    public function testHasOrganizationApplicableChannels($expected, array $channels, $checkExtension = true)
+    {
+        $repository = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $repository
+            ->expects($this->any())
+            ->method('findBy')
+            ->with($this->arrayHasKey('organization'))
+            ->willReturn($channels);
+        $this->doctrineHelper
+            ->expects($this->any())
+            ->method('getEntityRepository')
+            ->will($this->returnValue($repository));
+
+        $this->assertEquals(
+            $expected,
+            $this->provider->hasOrganizationApplicableChannels(new Organization(), $checkExtension)
+        );
     }
 
     /**
