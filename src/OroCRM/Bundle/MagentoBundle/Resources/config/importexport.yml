@@ -54,6 +54,7 @@ parameters:
     orocrm_magento.import.strategy.cart_with_customer.add_or_update.class:      OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartWithExistingCustomerStrategy
     orocrm_magento.import.strategy.customer_address.add_or_update.class:        OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerAddressStrategy
     orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update.class: OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberWithExistingCustomerStrategy
+    orocrm_magento.import_strategy.default_magento_import.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\DefaultMagentoImportStrategy
 
     # processors
     orocrm_magento.provider.initial_processor.class:                            OroCRM\Bundle\MagentoBundle\Provider\AbstractInitialProcessor
@@ -229,7 +230,7 @@ services:
         class: %orocrm_magento.mage.region_connector.class%
         parent: orocrm_magento.connector.abstract
         tags:
-            - { name: oro_integration.connector, type: region, channel_type: magento }
+            - { name: oro_integration.connector, type: region_dictionary, channel_type: magento }
             - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.mage.newsletter_subscriber_connector:
@@ -265,13 +266,18 @@ services:
 
     orocrm_magento.importexport.denormalizer.order_item:
         class: %orocrm_magento.importexport.denormalizer.order_item.class%
+        parent: oro_importexport.serializer.configurable_entity_normalizer
         tags:
             - { name: oro_importexport.normalizer }
 
     # Strategies
+    orocrm_magento.import_strategy.default_magento_import:
+        class: %orocrm_magento.import_strategy.default_magento_import.class%
+        parent: oro_importexport.strategy.configurable_add_or_replace
+
     orocrm_magento.import.strategy.abstract:
         class: %orocrm_magento.import.strategy.abstract.class%
-        parent: oro_importexport.strategy.configurable_add_or_replace
+        parent: orocrm_magento.import_strategy.default_magento_import
         absract: true
         calls:
             - [setLogger, [@oro_integration.logger.strategy]]
@@ -297,13 +303,13 @@ services:
             - [setDoctrineHelper, [@orocrm_magento.importexport.doctrine_helper]]
 
     orocrm_magento.import.strategy.store:
-        parent: oro_importexport.strategy.configurable_add_or_replace
+        parent: orocrm_magento.import_strategy.default_magento_import
 
     orocrm_magento.import.strategy.website:
-        parent: oro_importexport.strategy.configurable_add_or_replace
+        parent: orocrm_magento.import_strategy.default_magento_import
 
     orocrm_magento.import.strategy.customer_group:
-        parent: oro_importexport.strategy.configurable_add_or_replace
+        parent: orocrm_magento.import_strategy.default_magento_import
 
     orocrm_magento.import.strategy.cart.add_or_update:
         class: %orocrm_magento.import_strategy.cart.add_or_update.class%

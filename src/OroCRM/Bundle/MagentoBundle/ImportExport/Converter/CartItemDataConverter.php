@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
-use Oro\Bundle\ImportExportBundle\Converter\AbstractTableDataConverter;
+use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\IntegrationAwareDataConverter;
 
-class CartItemDataConverter extends AbstractTableDataConverter
+class CartItemDataConverter extends IntegrationAwareDataConverter
 {
     /**
      * {@inheritdoc}

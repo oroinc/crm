@@ -15,7 +15,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
 
 abstract class AbstractInitialProcessor extends SyncProcessor
 {
-    const DICTIONARY_CONNECTOR_SUFFIX = '_dictionary';
     const INITIAL_SYNC_START_DATE = 'initialSyncStartDate';
     const INITIAL_SYNCED_TO = 'initialSyncedTo';
     const CONNECTORS_INITIAL_SYNCED_TO = 'connectorsInitialSyncedTo';

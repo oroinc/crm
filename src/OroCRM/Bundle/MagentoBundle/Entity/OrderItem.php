@@ -32,9 +32,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  *      }
  * )
  */
-class OrderItem extends ExtendOrderItem implements OriginAwareInterface
+class OrderItem extends ExtendOrderItem implements IntegrationAwareInterface, OriginAwareInterface
 {
-    use OriginTrait;
+    use IntegrationEntityTrait, OriginTrait;
 
     /**
      * @var Order

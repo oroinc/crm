@@ -79,11 +79,11 @@ class SoapController extends Controller
         $websites = array_map(
             function ($website) use ($translator) {
                 return [
-                    'id' => $website['id'],
+                    'id' => $website['website_id'],
                     'label' => $translator->trans(
                         'Website ID: %websiteId%, Stores: %storesList%',
                         [
-                            '%websiteId%' => $website['id'],
+                            '%websiteId%' => $website['website_id'],
                             '%storesList%' => $website['name']
                         ]
                     )

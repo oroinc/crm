@@ -107,7 +107,7 @@ class ChannelIntegrationHandlerTest extends \PHPUnit_Framework_TestCase
             'form is valid, but this is update request' => [
                 '$updateMarker'   => true,
                 '$isFormValid'    => true,
-                '$expectedResult' => false
+                '$expectedResult' => true
             ],
             'form is valid, no update request flag'     => [
                 '$updateMarker'   => false,

@@ -2,7 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Connector;
 
-use OroCRM\Bundle\MagentoBundle\Provider\Connector\AbstractInitialConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\AbstractMagentoConnector;
+use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialConnectorInterface;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\MagentoConnectorTestCase;
 
 abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
@@ -42,7 +43,7 @@ abstract class InitialConnectorTestCase extends MagentoConnectorTestCase
 
     public function testGetImportEntityFQCN()
     {
-        /** @var AbstractInitialConnector $connector */
+        /** @var InitialConnectorInterface|AbstractMagentoConnector $connector */
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
         $connector->setClassName('\stdClass');

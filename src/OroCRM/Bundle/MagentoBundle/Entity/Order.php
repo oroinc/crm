@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -193,9 +194,16 @@ class Order extends ExtendOrder implements
     protected $cart;
 
     /**
-     * @var OrderItem
+     * @var OrderItem[]|Collection
      *
      * @ORM\OneToMany(targetEntity="OrderItem", mappedBy="order",cascade={"all"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true
+     *          }
+     *      }
+     * )
      */
     protected $items;
 

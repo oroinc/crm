@@ -66,6 +66,29 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
     protected $name;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="sort_order", type="integer", nullable=true)
+     */
+    protected $sortOrder;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_default", type="boolean", nullable=true)
+     */
+    protected $default = false;
+
+    /**
+     * Default product group id.
+     *
+     * @var int
+     *
+     * @ORM\Column(name="default_group_id", type="integer", nullable=true)
+     */
+    protected $defaultGroupId;
+
+    /**
      * @return int
      */
     public function getId()
@@ -122,5 +145,62 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSortOrder()
+    {
+        return $this->sortOrder;
+    }
+
+    /**
+     * @param int $sortOrder
+     * @return Website
+     */
+    public function setSortOrder($sortOrder)
+    {
+        $this->sortOrder = $sortOrder;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDefault()
+    {
+        return $this->default;
+    }
+
+    /**
+     * @param mixed $default
+     * @return Website
+     */
+    public function setDefault($default)
+    {
+        $this->default = $default;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDefaultGroupId()
+    {
+        return $this->defaultGroupId;
+    }
+
+    /**
+     * @param int $defaultGroupId
+     * @return Website
+     */
+    public function setDefaultGroupId($defaultGroupId)
+    {
+        $this->defaultGroupId = $defaultGroupId;
+
+        return $this;
     }
 }
