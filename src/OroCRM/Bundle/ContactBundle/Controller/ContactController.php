@@ -37,7 +37,7 @@ class ContactController extends Controller
     }
 
     /**
-     * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"}, defaults={"id"=0})
+     * @Route("/info/{id}", name="orocrm_contact_info", requirements={"id"="\d+"})
      *
      * @Template
      * @AclAncestor("orocrm_contact_view")
