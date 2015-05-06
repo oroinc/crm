@@ -123,6 +123,7 @@ services:
             - @orocrm_campaign.email_transport.provider
         calls:
             - [setLogger, [@logger]]
+            - [setValidator, [@validator]]
 
     orocrm_campaign.email_transport.provider:
         class: %orocrm_campaign.email_transport.provider.class%
