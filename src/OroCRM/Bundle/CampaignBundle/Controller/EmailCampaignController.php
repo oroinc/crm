@@ -85,7 +85,13 @@ class EmailCampaignController extends Controller
         $stats = $this->getDoctrine()
             ->getRepository("OroCRMCampaignBundle:EmailCampaignStatistics")
             ->getEmailCampaignStats($entity);
-        return ['entity' => $entity, 'stats' => $stats, 'show_stats' => (bool) array_sum($stats)];
+
+        return [
+            'entity' => $entity,
+            'stats' => $stats,
+            'show_stats' => (bool) array_sum($stats),
+            'send_allowed' => $this->isManualSendAllowed($entity)
+        ];
     }
 
     /**
@@ -140,14 +146,21 @@ class EmailCampaignController extends Controller
      */
     public function sendAction(EmailCampaign $entity)
     {
-        $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.builder');
-        $sender = $senderFactory->getSender($entity);
-        $sender->send($entity);
+        if ($this->isManualSendAllowed($entity)) {
+            $senderFactory = $this->get('orocrm_campaign.email_campaign.sender.builder');
+            $sender = $senderFactory->getSender($entity);
+            $sender->send($entity);
 
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.sent')
-        );
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.sent')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.send_disallowed')
+            );
+        }
 
         return $this->redirect(
             $this->generateUrl(
@@ -155,5 +168,24 @@ class EmailCampaignController extends Controller
                 ['id' => $entity->getId()]
             )
         );
+    }
+
+    /**
+     * @param EmailCampaign $entity
+     * @return bool
+     */
+    protected function isManualSendAllowed(EmailCampaign $entity)
+    {
+        $sendAllowed = $entity->getSchedule() === EmailCampaign::SCHEDULE_MANUAL && !$entity->isSent();
+        if ($sendAllowed) {
+            $transportSettings = $entity->getTransportSettings();
+            if ($transportSettings) {
+                $validator = $this->get('validator');
+                $errors = $validator->validate($transportSettings);
+                $sendAllowed = count($errors) === 0;
+            }
+        }
+
+        return $sendAllowed;
     }
 }
