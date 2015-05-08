@@ -98,6 +98,7 @@ parameters:
     orocrm_magento.security.acl.voter.two_way_sync.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\AbstractTwoWaySyncVoter
     orocrm_magento.security.acl.voter.newletter_subscriber.class:           OroCRM\Bundle\MagentoBundle\Acl\Voter\NewsletterSubscriberVoter
     orocrm_magento.security.acl.voter.customer.class:                       OroCRM\Bundle\MagentoBundle\Acl\Voter\CustomerVoter
+    orocrm_magento.security.acl.voter.organization.class:                   OroCRM\Bundle\MagentoBundle\Acl\Voter\OrganizationAnnotationVoter
 
     orocrm_magento.datagrid.customer_actions_provider.class:                OroCRM\Bundle\MagentoBundle\Datagrid\CustomerActionPermissionProvider
     orocrm_magento.datagrid.newsletter_subscriber_provider.class:           OroCRM\Bundle\MagentoBundle\Datagrid\NewsletterSubscriberPermissionProvider
@@ -504,6 +505,14 @@ services:
             - [setClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
         tags:
             - { name: security.voter, priority: 500 }
+
+    orocrm_magento.security.acl.voter.organization:
+        class: %orocrm_magento.security.acl.voter.organization.class%
+        parent: orocrm_magento.security.acl.voter.two_way_sync
+        calls:
+            - [setClassName, [%oro_organization.organization.entity.class%]]
+        tags:
+            - { name: security.voter, priority: 600 }
 
     orocrm_magento.datagrid.customer_actions_provider:
         class: %orocrm_magento.datagrid.customer_actions_provider.class%
