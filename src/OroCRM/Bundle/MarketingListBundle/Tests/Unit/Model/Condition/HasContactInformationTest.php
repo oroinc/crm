@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model\Condition;
 
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
+use Oro\Component\ConfigExpression\ContextAccessor;
+use Oro\Component\PropertyAccess\PropertyPath;
+
 use OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation;
-use Symfony\Component\PropertyAccess\PropertyPath;
 
 class HasContactInformationTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,7 +31,8 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->condition = new HasContactInformation($this->contextAccessor, $this->fieldsProvider);
+        $this->condition = new HasContactInformation($this->fieldsProvider);
+        $this->condition->setContextAccessor($this->contextAccessor);
     }
 
     /**
@@ -96,13 +98,13 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException
      */
-    public function testIsAllowedException()
+    public function testEvaluateException()
     {
         $context = [];
-        $this->condition->isAllowed($context);
+        $this->condition->evaluate($context);
     }
 
-    public function testIsAllowed()
+    public function testEvaluate()
     {
         $type = 'test';
         $marketingList = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingList')
@@ -123,6 +125,6 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->condition->initialize($options);
-        $this->assertTrue($this->condition->isAllowed($context));
+        $this->assertTrue($this->condition->evaluate($context));
     }
 }

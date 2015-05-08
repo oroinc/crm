@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Model\Condition;
 
-use Symfony\Component\PropertyAccess\PropertyPath;
+use Oro\Component\PropertyAccess\PropertyPath;
+use Oro\Component\ConfigExpression\Condition\AbstractCondition;
+use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
+use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
 
 use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
 use Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException;
-use Oro\Bundle\WorkflowBundle\Model\Condition\AbstractCondition;
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
@@ -28,12 +29,9 @@ use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
  *  Or
  *      @has_contact_information: [$marketingList]
  */
-class HasContactInformation extends AbstractCondition
+class HasContactInformation extends AbstractCondition implements ContextAccessorAwareInterface
 {
-    /**
-     * @var ContextAccessor
-     */
-    protected $contextAccessor;
+    use ContextAccessorAwareTrait;
 
     /**
      * @var ContactInformationFieldsProvider
@@ -51,13 +49,19 @@ class HasContactInformation extends AbstractCondition
     protected $type;
 
     /**
-     * @param ContextAccessor $contextAccessor
      * @param ContactInformationFieldsProvider $fieldsProvider
      */
-    public function __construct(ContextAccessor $contextAccessor, ContactInformationFieldsProvider $fieldsProvider)
+    public function __construct(ContactInformationFieldsProvider $fieldsProvider)
     {
-        $this->contextAccessor = $contextAccessor;
         $this->fieldsProvider = $fieldsProvider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'has_contact_information';
     }
 
     /**
@@ -65,8 +69,8 @@ class HasContactInformation extends AbstractCondition
      */
     protected function isConditionAllowed($context)
     {
-        $marketingList = $this->contextAccessor->getValue($context, $this->marketingList);
-        $type = $this->contextAccessor->getValue($context, $this->type);
+        $marketingList = $this->resolveValue($context, $this->marketingList, false);
+        $type = $this->resolveValue($context, $this->type, false);
 
         if (!$marketingList instanceof MarketingList) {
             throw new InvalidParameterException(
@@ -97,5 +101,21 @@ class HasContactInformation extends AbstractCondition
         }
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        return $this->convertToArray([$this->marketingList, $this->type]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compile($factoryAccessor)
+    {
+        return $this->convertToPhpCode([$this->marketingList, $this->type], $factoryAccessor);
     }
 }

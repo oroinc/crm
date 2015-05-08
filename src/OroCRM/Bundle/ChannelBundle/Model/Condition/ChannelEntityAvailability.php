@@ -2,17 +2,19 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Model\Condition;
 
-use Doctrine\Common\Collections\Collection;
-
 use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
-use Oro\Bundle\WorkflowBundle\Model\Condition\ConditionInterface;
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
-class ChannelEntityAvailability implements ConditionInterface
+use Oro\Component\ConfigExpression\Condition\AbstractCondition;
+use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
+use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
+
+class ChannelEntityAvailability extends AbstractCondition implements ContextAccessorAwareInterface
 {
+    use ContextAccessorAwareTrait;
+
     /** @var  Channel */
     protected $channel;
 
@@ -22,16 +24,20 @@ class ChannelEntityAvailability implements ConditionInterface
     /** @var  string */
     protected $message;
 
-    /** @var  ContextAccessor */
-    protected $contextAccessor;
-
     /** @var StateProvider */
     protected $stateProvider;
 
-    public function __construct(ContextAccessor $contextAccessor, StateProvider $stateProvider)
+    public function __construct(StateProvider $stateProvider)
     {
-        $this->contextAccessor = $contextAccessor;
         $this->stateProvider   = $stateProvider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'channel_entity_availiable';
     }
 
     /**
@@ -59,11 +65,11 @@ class ChannelEntityAvailability implements ConditionInterface
     /**
      * {@inheritDoc}
      */
-    public function isAllowed($context, Collection $errors = null)
+    public function isConditionAllowed($context)
     {
         if (null !== $this->channel) {
             /** @var Channel $dataChannel */
-            $dataChannel = $this->contextAccessor->getValue($context, $this->channel);
+            $dataChannel = $this->resolveValue($context, $this->channel, false);
             $entities    = $dataChannel->getEntities();
 
             $allowed = count(array_intersect($this->entities, $entities)) === count($this->entities);
@@ -82,5 +88,21 @@ class ChannelEntityAvailability implements ConditionInterface
         $this->message = $message;
 
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function toArray()
+    {
+        return $this->convertToArray([$this->channel, $this->entities]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function compile($factoryAccessor)
+    {
+        return $this->convertToPhpCode([$this->channel, $this->entities], $factoryAccessor);
     }
 }
