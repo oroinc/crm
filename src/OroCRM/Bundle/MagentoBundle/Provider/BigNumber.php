@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityRepository;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
@@ -233,7 +235,7 @@ class BigNumber
 
         return $this->doctrine
             ->getRepository('OroCRMChannelBundle:Channel')
-            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, ChannelType::TYPE);
     }
 
     /**
@@ -251,7 +253,7 @@ class BigNumber
             ->getOrdersNumberValueByPeriod($start, $end, $this->aclHelper);
         $visits      = $this->doctrine
             ->getRepository('OroCRMChannelBundle:Channel')
-            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, ChannelType::TYPE);
         if ($visits != 0) {
             $result = $ordersCount / $visits;
         }
@@ -274,8 +276,8 @@ class BigNumber
             ->getNewCustomersNumberWhoMadeOrderByPeriod($start, $end, $this->aclHelper);
         $visits    = $this->doctrine
             ->getRepository('OroCRMChannelBundle:Channel')
-            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, 'magento');
-        if ($visits != 0) {
+            ->getVisitsCountByPeriodForChannelType($start, $end, $this->aclHelper, ChannelType::TYPE);
+        if ($visits !== 0) {
             $result = $customers / $visits;
         }
 
@@ -294,9 +296,9 @@ class BigNumber
         $end   = $dateRange['end'];
 
         if ($dateRange['type'] === AbstractDateFilterType::TYPE_LESS_THAN) {
-            $qb    = $this->doctrine
-                ->getRepository($entity)
-                ->createQueryBuilder('e')
+            /** @var EntityRepository $repository */
+            $repository = $this->doctrine->getRepository($entity);
+            $qb = $repository->createQueryBuilder('e')
                 ->select(sprintf('MIN(e.%s) as val', $field));
             $start = $this->aclHelper->apply($qb)->getSingleScalarResult();
             $start = new \DateTime($start, new \DateTimeZone('UTC'));

@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 class ChannelRepository extends EntityRepository
 {
     /**
@@ -20,10 +22,12 @@ class ChannelRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c.id', 'c.name');
-        $qb->from('OroCRMChannelBundle:Channel', 'c', 'c.id');
+        $qb->from('OroCRMChannelBundle:Channel', 'c', 'c.id')
+            ->where($qb->expr()->eq('c.status', ':status'))
+            ->setParameter('status', Channel::STATUS_ACTIVE);
 
         if (null !== $type) {
-            $qb->where('c.channelType = :type');
+            $qb->andWhere('c.channelType = :type');
             $qb->setParameter('type', $type);
         }
 
@@ -50,10 +54,12 @@ class ChannelRepository extends EntityRepository
             ->join('visit.trackingWebsite', 'site')
             ->join('site.channel', 'channel')
             ->where('channel.channelType = :type')
-            ->setParameter('type', $type)
+            ->andWhere($qb->expr()->eq('channel.status', ':status'))
             ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
+            ->setParameter('type', $type)
             ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('dateEnd', $end)
+            ->setParameter('status', Channel::STATUS_ACTIVE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }

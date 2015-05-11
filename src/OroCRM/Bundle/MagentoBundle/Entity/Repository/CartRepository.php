@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
-use DateTime;
-
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -15,14 +12,14 @@ use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
-class CartRepository extends EntityRepository
+class CartRepository extends ChannelAwareEntityRepository
 {
     /**
      * @var array
      */
     protected $excludedSteps = [
         'converted_to_opportunity',
-        'abandoned',
+        'abandoned'
     ];
 
     /**
@@ -125,6 +122,8 @@ class CartRepository extends EntityRepository
             $queryBuilder->andWhere($queryBuilder->expr()->notIn('status.name', $this->excludedStatuses));
         }
 
+        $this->applyActiveChannelLimitation($queryBuilder);
+
         if ($aclHelper) {
             $query = $aclHelper->apply($queryBuilder);
         } else {
@@ -192,6 +191,7 @@ class CartRepository extends EntityRepository
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('SUM(cart.grandTotal) as val');
+        $this->applyActiveChannelLimitation($qb);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['val'] ? : 0;
@@ -208,22 +208,7 @@ class CartRepository extends EntityRepository
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('COUNT(cart.grandTotal) as val');
-        $value = $aclHelper->apply($qb)->getOneOrNullResult();
-
-        return $value['val'] ? : 0;
-    }
-
-    /**
-     * @param \DateTime $start
-     * @param \DateTime $end
-     * @param AclHelper $aclHelper
-     * @return int
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function getAbandonedRateByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
-    {
-        $qb = $this->getAbandonedQB($start, $end);
-        $qb->select('COUNT(cart.grandTotal) as val');
+        $this->applyActiveChannelLimitation($qb);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['val'] ? : 0;
@@ -248,6 +233,7 @@ class CartRepository extends EntityRepository
             ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
         $allCards = $allCards['val'] ? : 0;
 
@@ -282,12 +268,12 @@ class CartRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return int
      */
-    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, \DateTime $from, \DateTime $to)
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -297,8 +283,9 @@ class CartRepository extends EntityRepository
                 ->andWhere($qb->expr()->between('c.createdAt', ':from', ':to'))
                 ->setParameters([
                     'from' => $from,
-                    'to'   => $to,
+                    'to'   => $to
                 ]);
+            $this->applyActiveChannelLimitation($qb);
 
             return (int) $aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
