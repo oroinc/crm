@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ValidatorInterface;
 
@@ -83,7 +84,7 @@ class MarketingListHandler
     {
         $this->form->setData($entity);
 
-        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
+        if (in_array($this->request->getMethod(), ['POST', 'PUT'], true)) {
             $this->form->submit($this->request);
             if (!$entity->isManual()) {
                 $this->processSegment($entity);
@@ -128,7 +129,8 @@ class MarketingListHandler
             ->setEntity($marketingList->getEntity())
             ->setType($this->getSegmentTypeByMarketingListType($marketingList->getType()))
             ->setDefinition($requestData['definition'])
-            ->setOwner($marketingList->getOwner()->getOwner());
+            ->setOwner($marketingList->getOwner()->getOwner())
+            ->setOrganization($marketingList->getOrganization());
 
         $marketingList->setSegment($segment);
     }
@@ -153,7 +155,10 @@ class MarketingListHandler
     protected function isValid(MarketingList $marketingList)
     {
         if (!$marketingList->isManual()) {
-            $errors = $this->validator->validate($marketingList->getSegment(), ['marketing_list']);
+            $errors = $this->validator->validate(
+                $marketingList->getSegment(),
+                [Constraint::DEFAULT_GROUP, 'marketing_list']
+            );
             if (count($errors) > 0) {
                 /** @var ConstraintViolationInterface $error */
                 foreach ($errors as $error) {
