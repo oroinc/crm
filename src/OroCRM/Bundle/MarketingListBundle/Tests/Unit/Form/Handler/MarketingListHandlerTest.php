@@ -2,11 +2,16 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Form\Handler;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Translation\TranslatorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Symfony\Component\Validator\ValidatorInterface;
 
 use Oro\Bundle\SegmentBundle\Entity\SegmentType;
+use Oro\Bundle\UserBundle\Entity\User;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Form\Handler\MarketingListHandler;
@@ -19,7 +24,7 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
     protected $handler;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Form
      */
     protected $form;
 
@@ -34,12 +39,12 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
     protected $manager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|ValidatorInterface
      */
     protected $validator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
      */
     protected $translator;
 
@@ -50,6 +55,7 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface $registry */
         $registry = $this->getMockForAbstractClass('Symfony\Bridge\Doctrine\RegistryInterface');
 
         $this->manager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
@@ -166,15 +172,15 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('message template'));
         $violation->expects($this->once())
             ->method('getMessageParameters')
-            ->will($this->returnValue(array('test')));
+            ->will($this->returnValue(['test']));
         $violation->expects($this->once())
             ->method('getMessagePluralization')
             ->will($this->returnValue('message pluralization'));
-        $errors = new ConstraintViolationList(array($violation));
+        $errors = new ConstraintViolationList([$violation]);
 
         $this->validator->expects($this->once())
             ->method('validate')
-            ->with($this->isInstanceOf('Oro\Bundle\SegmentBundle\Entity\Segment'), array('marketing_list'))
+            ->with($this->isInstanceOf('Oro\Bundle\SegmentBundle\Entity\Segment'), ['Default', 'marketing_list'])
             ->will($this->returnValue($errors));
 
         $this->translator
@@ -189,7 +195,7 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
                 new FormError(
                     'message',
                     'message template',
-                    array('test'),
+                    ['test'],
                     'message pluralization'
                 )
             );
@@ -206,9 +212,9 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
 
     protected function assertProcessSegment()
     {
-        $formData = array(
+        $formData = [
             'definition' => 'test'
-        );
+        ];
 
         $this->form->expects($this->once())
             ->method('getName')
@@ -219,6 +225,7 @@ class MarketingListHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|User $owner */
         $owner = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\User')
             ->disableOriginalConstructor()
             ->getMock();
