@@ -49,7 +49,10 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     public function cgetAction()
     {
-        return $this->handleGetListRequest();
+        $page = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
     }
 
     /**

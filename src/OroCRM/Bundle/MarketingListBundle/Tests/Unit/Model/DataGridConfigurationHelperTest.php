@@ -61,81 +61,45 @@ class DataGridConfigurationHelperTest extends \PHPUnit_Framework_TestCase
     {
         $emptyParameters = ['source' => [], 'sorters' => [], 'filters' => [], 'columns' => null];
         return [
-            'empty'          => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => [],
+            'empty' => [
+                'gridName' => 'gridName',
+                'existingParameters' => [],
                 'additionalParameters' => [],
-                'expectedParameters'   => $emptyParameters
+                'expectedParameters' => $emptyParameters
             ],
-            'leave_name'     => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => ['name' => 'existing'],
+            'leave_name' => [
+                'gridName' => 'gridName',
+                'existingParameters' => ['name' => 'existing'],
                 'additionalParameters' => ['name' => 'additional'],
-                'expectedParameters'   => array_merge($emptyParameters, ['name' => 'existing'])
+                'expectedParameters' => array_merge($emptyParameters, ['name' => 'existing'])
             ],
-            'not_array'      => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => ['scope' => 'existing'],
+            'not_array' => [
+                'gridName' => 'gridName',
+                'existingParameters' => ['scope' => 'existing'],
                 'additionalParameters' => ['scope' => 'additional'],
-                'expectedParameters'   => array_merge($emptyParameters, ['scope' => 'existing'])
+                'expectedParameters' => array_merge($emptyParameters, ['scope' => 'existing'])
             ],
-            'merge'          => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => ['scope' => ['existing']],
+            'merge' => [
+                'gridName' => 'gridName',
+                'existingParameters' => ['scope' => ['existing']],
                 'additionalParameters' => ['scope' => ['additional']],
-                'expectedParameters'   => array_merge($emptyParameters, ['scope' => ['existing', 'additional']])
+                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['existing', 'additional']])
             ],
-            'add_new'        => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => [],
+            'add_new' => [
+                'gridName' => 'gridName',
+                'existingParameters' => [],
                 'additionalParameters' => ['scope' => ['additional']],
-                'expectedParameters'   => array_merge($emptyParameters, ['scope' => ['additional']])
+                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['additional']])
             ],
             'without_update' => [
-                'gridName'             => 'gridName',
-                'existingParameters'   => ['scope' => ['existing']],
+                'gridName' => 'gridName',
+                'existingParameters' => ['scope' => ['existing']],
                 'additionalParameters' => [],
-                'expectedParameters'   => array_merge($emptyParameters, ['scope' => ['existing']])
+                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['existing']])
             ],
             'with alias update' => [
-            'gridName'             => 'gridName',
-            'existingParameters'   => [
-                'source' => [
-                    'query' => [
-                        'from' => [
-                            [
-                                'table' => 'table',
-                                'alias' => 'T1000'
-                            ]
-                        ]
-                    ]
-                ],
-                'columns' => ['T1000.name as name']
-            ],
-            'additionalParameters' => [
-                'columns' => ['__root_entity__.id', 'other.field'],
-                'sorters' => [
-                    'columns' => ['__root_entity__.id', 'other.field']
-                ],
-                'filters' => [
-                    'columns' => ['__root_entity__.id', 'other.field']
-                ],
-                'source' => [
-                    'query' => [
-                        'where' => 'other = some.type AND __root_entity__.id = some.id'
-                    ]
-                ]
-            ],
-            'expectedParameters'   => array_merge(
-                $emptyParameters,
-                [
-                    'columns' => ['T1000.name as name', 'T1000.id', 'other.field'],
-                    'sorters' => [
-                        'columns' => ['T1000.id', 'other.field']
-                    ],
-                    'filters' => [
-                        'columns' => ['T1000.id', 'other.field']
-                    ],
+                'gridName' => 'gridName',
+                'existingParameters' => [
                     'source' => [
                         'query' => [
                             'from' => [
@@ -143,13 +107,49 @@ class DataGridConfigurationHelperTest extends \PHPUnit_Framework_TestCase
                                     'table' => 'table',
                                     'alias' => 'T1000'
                                 ]
-                            ],
-                            'where' => 'other = some.type AND T1000.id = some.id'
+                            ]
+                        ]
+                    ],
+                    'columns' => ['T1000.name as name']
+                ],
+                'additionalParameters' => [
+                    'columns' => ['__root_entity__.id', 'other.field'],
+                    'sorters' => [
+                        'columns' => ['__root_entity__.id', 'other.field']
+                    ],
+                    'filters' => [
+                        'columns' => ['__root_entity__.id', 'other.field']
+                    ],
+                    'source' => [
+                        'query' => [
+                            'where' => 'other = some.type AND __root_entity__.id = some.id'
                         ]
                     ]
-                ]
-            )
-        ],
+                ],
+                'expectedParameters' => array_merge(
+                    $emptyParameters,
+                    [
+                        'columns' => ['T1000.name as name', 'T1000.id', 'other.field'],
+                        'sorters' => [
+                            'columns' => ['T1000.id', 'other.field']
+                        ],
+                        'filters' => [
+                            'columns' => ['T1000.id', 'other.field']
+                        ],
+                        'source' => [
+                            'query' => [
+                                'from' => [
+                                    [
+                                        'table' => 'table',
+                                        'alias' => 'T1000'
+                                    ]
+                                ],
+                                'where' => 'other = some.type AND T1000.id = some.id'
+                            ]
+                        ]
+                    ]
+                )
+            ],
         ];
     }
 }
