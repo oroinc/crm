@@ -36,7 +36,7 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Oro\Bundle\WorkflowBundle\Exception\ConditionException
+     * @expectedException \Oro\Component\ConfigExpression\Exception\InvalidArgumentException
      * @expectedExceptionMessage Option "marketing_list" is required
      * @dataProvider invalidOptionsDataProvider
      * @param array $options
@@ -96,7 +96,7 @@ class HasContactInformationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException
+     * @expectedException \Oro\Component\ConfigExpression\Exception\InvalidArgumentException
      */
     public function testEvaluateException()
     {

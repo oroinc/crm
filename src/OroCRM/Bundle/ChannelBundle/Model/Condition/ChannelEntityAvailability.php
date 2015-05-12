@@ -2,14 +2,13 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Model\Condition;
 
-use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
-
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 use Oro\Component\ConfigExpression\Condition\AbstractCondition;
 use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
+use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
 
 class ChannelEntityAvailability extends AbstractCondition implements ContextAccessorAwareInterface
 {
@@ -51,7 +50,7 @@ class ChannelEntityAvailability extends AbstractCondition implements ContextAcce
         } elseif (1 === count($options)) {
             $this->entities = $options[0];
         } else {
-            throw new ConditionException(
+            throw new InvalidArgumentException(
                 sprintf(
                     'Invalid options count: %d',
                     count($options)

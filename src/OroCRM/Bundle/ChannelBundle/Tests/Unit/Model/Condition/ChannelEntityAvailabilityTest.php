@@ -78,7 +78,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Oro\Bundle\WorkflowBundle\Exception\ConditionException
+     * @expectedException \Oro\Component\ConfigExpression\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid options count: 0
      */
     public function testInitializeFailsWhenOptionNotOneElement()

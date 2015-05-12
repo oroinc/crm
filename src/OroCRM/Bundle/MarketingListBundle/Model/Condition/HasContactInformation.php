@@ -6,9 +6,8 @@ use Oro\Component\PropertyAccess\PropertyPath;
 use Oro\Component\ConfigExpression\Condition\AbstractCondition;
 use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
+use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
 
-use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
-use Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
@@ -73,7 +72,7 @@ class HasContactInformation extends AbstractCondition implements ContextAccessor
         $type = $this->resolveValue($context, $this->type, false);
 
         if (!$marketingList instanceof MarketingList) {
-            throw new InvalidParameterException(
+            throw new InvalidArgumentException(
                 'Option "marketing_list" must be instance of "OroCRM\Bundle\MarketingListBundle\Entity\MarketingList"'
             );
         }
@@ -91,7 +90,7 @@ class HasContactInformation extends AbstractCondition implements ContextAccessor
         } elseif (isset($options[0])) {
             $this->marketingList = $options[0];
         } else {
-            throw new ConditionException('Option "marketing_list" is required');
+            throw new InvalidArgumentException('Option "marketing_list" is required');
         }
 
         if (isset($options['type'])) {
