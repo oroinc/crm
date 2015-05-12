@@ -68,7 +68,7 @@ class CartApiEntityManager extends ApiEntityManager implements EntitySerializerM
      */
     public function serialize(QueryBuilder $qb)
     {
-        return $this->entitySerializer->serialize($qb, []);
+        return $this->entitySerializer->serialize($qb, $this->getSerializationConfig());
     }
 
     /**

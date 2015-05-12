@@ -65,7 +65,7 @@ class OrderApiEntityManager extends ApiEntityManager implements EntitySerializer
      */
     public function serialize(QueryBuilder $qb)
     {
-        return $this->entitySerializer->serialize($qb, []);
+        return $this->entitySerializer->serialize($qb, $this->getSerializationConfig());
     }
 
     /**

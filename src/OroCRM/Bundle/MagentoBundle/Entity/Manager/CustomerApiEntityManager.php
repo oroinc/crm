@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
 use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
@@ -37,7 +38,6 @@ class CustomerApiEntityManager extends ApiEntityManager implements EntitySeriali
         foreach ($result as &$row) {
             $date             = new \DateTime($row['birthday']);
             $row['birthday']  = $date->format('Y-m-d');
-            $row['addresses'] = $this->getSerializeAddress($row['addresses']);
         }
 
         return $result;
@@ -128,7 +128,7 @@ class CustomerApiEntityManager extends ApiEntityManager implements EntitySeriali
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['addresses', 'carts', 'orders'],
+            'excluded_fields' => ['addresses', 'carts', 'orders', 'newsletterSubscriber'],
             'fields'          => [
                 'website'      => ['fields' => 'id'],
                 'store'        => ['fields' => 'id'],
@@ -163,7 +163,8 @@ class CustomerApiEntityManager extends ApiEntityManager implements EntitySeriali
     protected function getAddressSerializationConfig()
     {
         return [
-            'fields' => [
+            'excluded_fields' => ['newsletterSubscriber'],
+            'fields'          => [
                 'country' => ['fields' => 'iso2Code'],
                 'region'  => ['fields' => 'combinedCode'],
                 'owner'   => ['fields' => 'id'],
@@ -179,18 +180,18 @@ class CustomerApiEntityManager extends ApiEntityManager implements EntitySeriali
     protected function getSerializationAllItemsConfig()
     {
         return [
-            'excluded_fields' => ['carts', 'orders'],
+            'excluded_fields' => ['carts', 'orders', 'newsletterSubscriber'],
             'fields'          => [
-                'website'              => ['fields' => 'id'],
-                'store'                => ['fields' => 'id'],
-                'group'                => ['fields' => 'id'],
-                'contact'              => ['fields' => 'id'],
-                'account'              => ['fields' => 'id'],
-                'dataChannel'          => ['fields' => 'id'],
-                'channel'              => ['fields' => 'id'],
-                'owner'                => ['fields' => 'id'],
-                'organization'         => ['fields' => 'id'],
-                'newsletterSubscriber' => ['fields' => 'id']
+                'website'      => ['fields' => 'id'],
+                'store'        => ['fields' => 'id'],
+                'group'        => ['fields' => 'id'],
+                'contact'      => ['fields' => 'id'],
+                'account'      => ['fields' => 'id'],
+                'dataChannel'  => ['fields' => 'id'],
+                'channel'      => ['fields' => 'id'],
+                'owner'        => ['fields' => 'id'],
+                'organization' => ['fields' => 'id'],
+                'addresses'    => AddressApiUtils::getAddressConfig(true)
             ]
         ];
     }
