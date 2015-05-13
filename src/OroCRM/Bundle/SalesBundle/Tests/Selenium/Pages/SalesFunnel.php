@@ -27,7 +27,7 @@ class SalesFunnel extends AbstractPageEntity
 
     public function setStartDate($date)
     {
-        $this->startDate = $this->test->byId('oro_workflow_transition_sales_funnel_name');
+        $this->startDate = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_sales_funnel_name')]");
         $this->startDate->clear();
         $this->startDate->value($date);
 

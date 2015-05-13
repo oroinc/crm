@@ -19,7 +19,7 @@ class Integration extends ParentIntegration
      */
     public function setWsdlUrl($url)
     {
-        $field = $this->test->byId('oro_integration_channel_form_transport_wsdlUrl');
+        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_wsdlUrl')]");
         $field->clear();
         $field->value($url);
 
@@ -32,7 +32,7 @@ class Integration extends ParentIntegration
      */
     public function setApiUser($user)
     {
-        $field = $this->test->byId('oro_integration_channel_form_transport_apiUser');
+        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_apiUser')]");
         $field->clear();
         $field->value($user);
 
@@ -45,7 +45,7 @@ class Integration extends ParentIntegration
      */
     public function setApiKey($key)
     {
-        $field = $this->test->byId('oro_integration_channel_form_transport_apiKey');
+        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_apiKey')]");
         $field->clear();
         $field->value($key);
 
@@ -69,7 +69,8 @@ class Integration extends ParentIntegration
      */
     public function setSyncDate($date)
     {
-        $field = $this->test->byId('date_selector_oro_integration_channel_form_transport_syncStartDate');
+        $field = $this->test
+            ->byXpath("//*[starts-with(@id,'date_selector_oro_integration_channel_form_transport_syncStartDate')]");
         $field->clear();
         $field->value($date);
 
@@ -93,7 +94,8 @@ class Integration extends ParentIntegration
      */
     public function selectWebsite($website)
     {
-        $select = $this->test->select($this->test->byId('oro_integration_channel_form_transport_websiteId'));
+        $select = $this->test
+            ->select($this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_websiteId')]"));
         $select->selectOptionByLabel($website);
 
         return $this;
@@ -105,7 +107,7 @@ class Integration extends ParentIntegration
      */
     public function setAdminUrl($url)
     {
-        $field = $this->test->byId('oro_integration_channel_form_transport_adminUrl');
+        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_adminUrl')]");
         $field->clear();
         $field->value($url);
 
@@ -147,9 +149,9 @@ class Integration extends ParentIntegration
      */
     public function setSyncPriority($priority)
     {
-        $select = $this->test->select(
-            $this->test->byId('oro_integration_channel_form_synchronizationSettings_syncPriority')
-        );
+        $select = $this->test
+            ->byXpath("//*[starts-with(@id,'oro_integration_channel_form_synchronizationSettings_syncPriority')]");
+        $select = $this->test->select($select);
         $select->selectOptionByLabel($priority);
 
         return $this;

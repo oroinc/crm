@@ -13,7 +13,7 @@ class B2BCustomer extends AbstractPageEntity
 {
     public function setName($name)
     {
-        $element = $this->test->byId('orocrm_sales_b2bcustomer_form_name');
+        $element = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_b2bcustomer_form_name')]");
         $element->clear();
         $element->value($name);
         return $this;
@@ -21,7 +21,7 @@ class B2BCustomer extends AbstractPageEntity
 
     public function getName()
     {
-        return $this->test->byId('orocrm_sales_b2bcustomer_form_name')->value();
+        return $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_b2bcustomer_form_name')]")->value();
     }
 
     public function setOwner($owner)

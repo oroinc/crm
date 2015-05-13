@@ -40,7 +40,7 @@ class Task extends AbstractPageEntity
 
     public function setSubject($subject)
     {
-        $this->subject = $this->test->byId('orocrm_task_subject');
+        $this->subject = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_subject')]");
         $this->subject->clear();
         $this->subject->value($subject);
         return $this;
@@ -48,13 +48,13 @@ class Task extends AbstractPageEntity
 
     public function getSubject()
     {
-        $this->subject = $this->test->byId('orocrm_task_subject');
+        $this->subject = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_subject')]");
         return $this->subject->value();
     }
 
     public function setDescription($description)
     {
-        $this->description = $this->test->byId('orocrm_task_description');
+        $this->description = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_description')]");
         $this->description->clear();
         $this->description->value($description);
         return $this;
@@ -62,7 +62,7 @@ class Task extends AbstractPageEntity
 
     public function getDescription()
     {
-        $this->description = $this->test->byId('orocrm_task_description');
+        $this->description = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_description')]");
         return $this->description->value();
     }
 
@@ -73,8 +73,8 @@ class Task extends AbstractPageEntity
      */
     public function setDueDate($dueDate)
     {
-        $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
-        $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
+        $this->dueDate = $this->test->byXpath("//*[starts-with(@id,'date_selector_orocrm_task_dueDate')]");
+        $this->dueTime = $this->test->byXpath("//*[starts-with(@id,'time_selector_orocrm_task_dueDate')]");
         $this->dueDate->clear();
         $this->dueTime->clear();
         $dueDateParts = [];
@@ -93,8 +93,8 @@ class Task extends AbstractPageEntity
 
     public function getDueDate()
     {
-        $this->dueDate = $this->test->byId('date_selector_orocrm_task_dueDate');
-        $this->dueTime = $this->test->byId('time_selector_orocrm_task_dueDate');
+        $this->dueDate = $this->test->byXpath("//*[starts-with(@id,'date_selector_orocrm_task_dueDate')]");
+        $this->dueTime = $this->test->byXpath("//*[starts-with(@id,'time_selector_orocrm_task_dueDate')]");
         return $this->dueDate->value() . ' ' . $this->dueTime->value();
     }
 

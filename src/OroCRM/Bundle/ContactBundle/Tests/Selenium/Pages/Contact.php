@@ -36,14 +36,15 @@ class Contact extends AbstractPageEntity
 
     public function init()
     {
-        $this->namePrefix = $this->test->byId('orocrm_contact_form_namePrefix');
-        $this->firstName = $this->test->byId('orocrm_contact_form_firstName');
-        $this->lastName = $this->test->byId('orocrm_contact_form_lastName');
-        $this->nameSuffix = $this->test->byId('orocrm_contact_form_nameSuffix');
-        $this->email = $this->test->byId('orocrm_contact_form_emails_0_email');
+        $this->namePrefix = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_namePrefix')]");
+        $this->firstName = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_firstName')]");
+        $this->lastName = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_lastName')]");
+        $this->nameSuffix = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_nameSuffix')]");
+        $this->email = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_emails_0_email')]");
         $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_assignedTo')]/a");
         $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_reportsTo')]/a");
-        $this->addressCollection = $this->test->byId('orocrm_contact_form_addresses_collection');
+        $this->addressCollection = $this->test
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_collection')]");
         $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a");
 
         return $this;
@@ -152,7 +153,8 @@ class Contact extends AbstractPageEntity
 
     public function getAddressPrimary($addressId = 0)
     {
-        return $this->test->byId("orocrm_contact_form_addresses_{$addressId}_primary")->selected();
+        return $this->test
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_primary')]")->selected();
     }
 
     public function setAddressFirstName($value, $addressId = 0)
@@ -173,7 +175,8 @@ class Contact extends AbstractPageEntity
 
     public function getAddressFirstName($addressId = 0)
     {
-        $addressFirstName = $this->test->byId("orocrm_contact_form_addresses_{$addressId}_firstName");
+        $addressFirstName = $this->test
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_firstName')]");
         return $addressFirstName->attribute('value');
     }
 
@@ -195,7 +198,8 @@ class Contact extends AbstractPageEntity
 
     public function getAddressLastName($addressId = 0)
     {
-        $addressLastName = $this->test->byId("orocrm_contact_form_addresses_{$addressId}_lastName");
+        $addressLastName = $this->test
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_lastName')]");
         return $addressLastName->attribute('value');
     }
 
@@ -216,7 +220,7 @@ class Contact extends AbstractPageEntity
 
     public function getAddressStreet($addressId = 0)
     {
-        $street = $this->test->byId("orocrm_contact_form_addresses_{$addressId}_street");
+        $street = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_street')]");
         return $street->attribute('value');
     }
 
@@ -236,7 +240,7 @@ class Contact extends AbstractPageEntity
 
     public function getAddressCity($addressId = 0)
     {
-        $city = $this->test->byId("orocrm_contact_form_addresses_{$addressId}_city");
+        $city = $this->test->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_city')]");
         return $city->attribute('value');
     }
 
@@ -256,7 +260,8 @@ class Contact extends AbstractPageEntity
 
     public function getAddressPostalCode($addressId = 0)
     {
-        $zipcode = $this->test->byId("orocrm_contact_form_addresses_{$addressId}_postalCode");
+        $zipcode = $this->test
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_postalCode')]");
         return $zipcode->attribute('value');
     }
 

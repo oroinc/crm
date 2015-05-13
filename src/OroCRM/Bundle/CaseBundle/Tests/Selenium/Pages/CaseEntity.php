@@ -30,10 +30,11 @@ class CaseEntity extends AbstractPageEntity
 
     public function init()
     {
-        $this->subject = $this->test->byId('orocrm_case_entity_form_subject');
-        $this->description = $this->test->byId('orocrm_case_entity_form_description');
-        $this->resolution = $this->test->byId('orocrm_case_entity_form_resolution');
-        $this->status = $this->test->select($this->test->byId('orocrm_case_entity_form_status'));
+        $this->subject = $this->test->byXpath("//*[starts-with(@id,'orocrm_case_entity_form_subject')]");
+        $this->description = $this->test->byXpath("//*[starts-with(@id,'orocrm_case_entity_form_description')]");
+        $this->resolution = $this->test->byXpath("//*[starts-with(@id,'orocrm_case_entity_form_resolution')]");
+        $this->status = $this->test
+            ->select($this->test->byXpath("//*[starts-with(@id,'orocrm_case_entity_form_status')]"));
 
         return $this;
     }
