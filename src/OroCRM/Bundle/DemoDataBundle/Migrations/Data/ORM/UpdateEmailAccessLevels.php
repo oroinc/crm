@@ -48,12 +48,12 @@ class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareI
     {
         $this->objectManager = $manager;
 
-        /** @var AclManager $manager */
-        $manager = $this->container->get('oro_security.acl.manager');
+        /** @var AclManager $aclManager */
+        $aclManager = $this->container->get('oro_security.acl.manager');
 
-        if ($manager->isAclEnabled()) {
-            $this->updateUserRole($manager);
-            $manager->flush();
+        if ($aclManager->isAclEnabled()) {
+            $this->updateUserRole($aclManager);
+            $aclManager->flush();
         }
     }
 
