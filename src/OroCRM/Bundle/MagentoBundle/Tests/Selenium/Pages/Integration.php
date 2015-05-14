@@ -57,7 +57,7 @@ class Integration extends ParentIntegration
      */
     public function setWsiCompliance()
     {
-        $this->test->byXPath("//input[@id='oro_integration_channel_form_transport_isWsiMode']")->click();
+        $this->test->byXPath("//input[starts-with(@id,'oro_integration_channel_form_transport_isWsiMode')]")->click();
         $this->waitForAjax();
 
         return $this;
@@ -82,7 +82,7 @@ class Integration extends ParentIntegration
      */
     public function checkConnection()
     {
-        $this->test->byXPath("//button[@id='oro_integration_channel_form_transport_check']")->click();
+        $this->test->byXPath("//button[starts-with(@id,'oro_integration_channel_form_transport_check')]")->click();
         $this->waitForAjax();
 
         return $this;
@@ -122,7 +122,7 @@ class Integration extends ParentIntegration
     {
         foreach ($connectors as $connector) {
             $this->test->byXPath(
-                "//div[@id='oro_integration_channel_form_connectors']//label[contains(., '{$connector}')]"
+                "//div[starts-with(@id,'oro_integration_channel_form_connectors')]//label[contains(., '{$connector}')]"
             )->click();
             $this->waitForAjax();
         }
@@ -136,7 +136,7 @@ class Integration extends ParentIntegration
     public function setTwoWaySync()
     {
         $this->test->byXPath(
-            "//input[@id='oro_integration_channel_form_synchronizationSettings_isTwoWaySyncEnabled']"
+            "//input[starts-with(@id,'oro_integration_channel_form_synchronizationSettings_isTwoWaySyncEnabled')]"
         )->click();
         $this->waitForAjax();
 

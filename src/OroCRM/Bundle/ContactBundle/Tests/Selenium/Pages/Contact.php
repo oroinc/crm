@@ -123,9 +123,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressPrimary($value, $addressId = 0)
     {
-        $primary = "//input[@id='orocrm_contact_form_addresses_{$addressId}_primary']";
+        $primary = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_primary')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $primary = ("//input[@id='orocrm_contact_address_form_primary']");
+            $primary = ("//input[starts-with(@id,'orocrm_contact_address_form_primary')]");
         }
         if ($value) {
             $this->test->byXpath($primary)->click();
@@ -159,9 +159,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressFirstName($value, $addressId = 0)
     {
-        $addressFirstName = "//input[@id='orocrm_contact_form_addresses_{$addressId}_firstName']";
+        $addressFirstName = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_firstName')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $addressFirstName = "//input[@id='orocrm_contact_address_form_firstName']";
+            $addressFirstName = "//input[starts-with(@id,'orocrm_contact_address_form_firstName')]";
         }
         $addressFirstName = $this->test->byXpath($addressFirstName);
         $this->test->moveto($addressFirstName);
@@ -182,9 +182,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressLastName($value, $addressId = 0)
     {
-        $addressLastName = "//input[@id='orocrm_contact_form_addresses_{$addressId}_lastName']";
+        $addressLastName = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_lastName')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $addressLastName = "//input[@id='orocrm_contact_address_form_lastName']";
+            $addressLastName = "//input[starts-with(@id,'orocrm_contact_address_form_lastName')]";
         }
         $addressLastName = $this->test->byXpath($addressLastName);
         $this->test->moveto($addressLastName);
@@ -205,9 +205,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressStreet($value, $addressId = 0)
     {
-        $street = "//input[@id='orocrm_contact_form_addresses_{$addressId}_street']";
+        $street = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_street')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $street = "//input[@id='orocrm_contact_address_form_street']";
+            $street = "//input[starts-with(@id,'orocrm_contact_address_form_street')]";
         }
         $street = $this->test->byXpath($street);
         $this->test->moveto($street);
@@ -226,9 +226,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressCity($value, $addressId = 0)
     {
-        $xpathCity = "//input[@id='orocrm_contact_form_addresses_{$addressId}_city']";
+        $xpathCity = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_city')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpathCity = "//input[@id='orocrm_contact_address_form_city']";
+            $xpathCity = "//input[starts-with(@id,'orocrm_contact_address_form_city')]";
         }
         $city = $this->test->byXpath($xpathCity);
         $this->test->moveto($city);
@@ -246,9 +246,9 @@ class Contact extends AbstractPageEntity
 
     public function setAddressPostalCode($value, $addressId = 0)
     {
-        $xpathZipcode = "//input[@id='orocrm_contact_form_addresses_{$addressId}_postalCode']";
+        $xpathZipcode = "//input[starts-with(@id,'orocrm_contact_form_addresses_{$addressId}_postalCode')]";
         if ($this->isElementPresent("//div[@role='dialog']")) {
-            $xpathZipcode = "//input[@id='orocrm_contact_address_form_postalCode']";
+            $xpathZipcode = "//input[starts-with(@id,'orocrm_contact_address_form_postalCode')]";
         }
         $zipcode = $this->test->byXpath($xpathZipcode);
         $this->test->moveto($zipcode);
@@ -376,13 +376,13 @@ class Contact extends AbstractPageEntity
             $this->test->byXpath("//button[@data-action-name='add_address']")->click();
             $this->waitForAjax();
         } elseif (!$this->isElementPresent(
-            "//div[@id='orocrm_contact_form_addresses_collection']/div[@data-content='{$addressId}' or " .
+            "//div[starts-with(@id,'orocrm_contact_form_addresses_collection')]/div[@data-content='{$addressId}' or " .
             "@data-content='orocrm_contact_form[addresses][{$addressId}]']"
         )
         ) {
             //click Add
             $addButton = $this->test->byXpath(
-                "//div[@class='row-oro'][div[@id='orocrm_contact_form_addresses_collection']]" .
+                "//div[@class='row-oro'][div[starts-with(@id,'orocrm_contact_form_addresses_collection')]]" .
                 "//a[@class='btn add-list-item']"
             );
             $this->test->moveto($addButton);

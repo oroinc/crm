@@ -36,7 +36,7 @@ class SalesFunnel extends AbstractPageEntity
 
     public function setLead($lead)
     {
-        $this->lead = $this->test->byXpath("//div[@id='s2id_oro_workflow_transition_lead']/a");
+        $this->lead = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_lead')]/a");
         $this->lead->click();
         $this->waitForAjax();
         $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($lead);
@@ -81,7 +81,7 @@ class SalesFunnel extends AbstractPageEntity
 
     public function submit()
     {
-        $this->test->byXpath("//button[@id='save-and-transit']")->click();
+        $this->test->byXpath("//button[starts-with(@id,'save-and-transit')]")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
 
