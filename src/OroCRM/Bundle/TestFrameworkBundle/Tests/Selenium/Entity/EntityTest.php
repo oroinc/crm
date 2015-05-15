@@ -20,6 +20,7 @@ class EntityTest extends Selenium2TestCase
         /** @var  ConfigEntities $login*/
         $login->openConfigEntities('Oro\Bundle\EntityConfigBundle')
             ->assertTitle('Entity Management - Entities - System')
+            ->filterBy('Name', $entityName)
             ->open(array($entityName))
             ->assertTitle("{$entityName} - Entity Management - Entities - System")
             ->createField()

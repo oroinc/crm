@@ -5,7 +5,9 @@ namespace OroCRM\Bundle\CampaignBundle\Model;
 use Doctrine\ORM\EntityManager;
 
 use Psr\Log\LoggerInterface;
+
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\Validator\ValidatorInterface;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
@@ -62,6 +64,11 @@ class EmailCampaignSender
     protected $emailCampaign;
 
     /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
      * @param MarketingListProvider            $marketingListProvider
      * @param ConfigManager                    $configManager
      * @param EmailCampaignStatisticsConnector $statisticsConnector
@@ -106,7 +113,10 @@ class EmailCampaignSender
 
     public function send()
     {
-        $this->assertTransport();
+        if (!$this->assertTransport()) {
+            return;
+        }
+
         $marketingList = $this->emailCampaign->getMarketingList();
         if (is_null($marketingList)) {
             return;
@@ -164,6 +174,7 @@ class EmailCampaignSender
     /**
      * Assert that transport is present.
      *
+     * @return bool
      * @throws \RuntimeException
      */
     protected function assertTransport()
@@ -171,6 +182,19 @@ class EmailCampaignSender
         if (!$this->transport) {
             throw new \RuntimeException('Transport is required to perform send');
         }
+
+        $transportSettings = $this->emailCampaign->getTransportSettings();
+        if ($transportSettings) {
+            $errors = $this->validator->validate($transportSettings);
+
+            if (count($errors) > 0) {
+                $this->logger->error('Email sending failed. Transport settings are not valid.');
+
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -205,5 +229,16 @@ class EmailCampaignSender
         return $this->marketingListProvider->getMarketingListEntitiesIterator(
             $this->emailCampaign->getMarketingList()
         );
+    }
+
+    /**
+     * @param ValidatorInterface $validator
+     * @return EmailCampaignSender
+     */
+    public function setValidator(ValidatorInterface $validator)
+    {
+        $this->validator = $validator;
+
+        return $this;
     }
 }
