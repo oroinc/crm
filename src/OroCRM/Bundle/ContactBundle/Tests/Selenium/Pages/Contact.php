@@ -44,7 +44,8 @@ class Contact extends AbstractPageEntity
         $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_assignedTo')]/a");
         $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_reportsTo')]/a");
         $this->addressCollection = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses_collection')]");
+            ->byXpath("//*[starts-with(@id,'orocrm_contact_form_addresses') and ".
+                "substring(@id, string-length(@id) - string-length('_collection') +1) = '_collection']");
         $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a");
 
         return $this;
@@ -376,13 +377,14 @@ class Contact extends AbstractPageEntity
             $this->test->byXpath("//button[@data-action-name='add_address']")->click();
             $this->waitForAjax();
         } elseif (!$this->isElementPresent(
-            "//div[starts-with(@id,'orocrm_contact_form_addresses_collection')]/div[@data-content='{$addressId}' or " .
-            "@data-content='orocrm_contact_form[addresses][{$addressId}]']"
-        )
-        ) {
+            "//div[starts-with(@id,'orocrm_contact_form_addresses') and ".
+            "substring(@id, string-length(@id) - string-length('_collection') +1) = '_collection']" .
+            "/div[@data-content='{$addressId}' or @data-content='orocrm_contact_form[addresses][{$addressId}]']"
+        )) {
             //click Add
             $addButton = $this->test->byXpath(
-                "//div[@class='row-oro'][div[starts-with(@id,'orocrm_contact_form_addresses_collection')]]" .
+                "//div[@class='row-oro'][div[starts-with(@id,'orocrm_contact_form_addresses') and ".
+                "substring(@id, string-length(@id) - string-length('_collection') +1) = '_collection']]" .
                 "//a[@class='btn add-list-item']"
             );
             $this->test->moveto($addButton);
