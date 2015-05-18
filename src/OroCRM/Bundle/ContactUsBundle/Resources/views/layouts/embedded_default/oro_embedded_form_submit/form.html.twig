@@ -14,7 +14,7 @@
 
 {% block form_widget %}
     {% form_theme form with ['OroCRMContactUsBundle::fields.html.twig'] %}
-    {{ form_start(form, {'attr': {'id': form.vars.name, 'novalidate': 'novalidate' }}) }}
+    {{ form_start(form, {'attr': {'id': form.vars.id, 'name': form.vars.name, 'novalidate': 'novalidate' }}) }}
     <div class="wrapper">
         {{ block_widget(block) }}
     </div>
