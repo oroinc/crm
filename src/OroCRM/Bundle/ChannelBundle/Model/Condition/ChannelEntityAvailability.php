@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Model\Condition;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
-
-use Oro\Component\ConfigExpression\Condition\AbstractCondition;
 use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
 use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
 use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
+
+use Oro\Bundle\WorkflowBundle\Model\Condition\AbstractCondition;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Provider\StateProvider;
 
 class ChannelEntityAvailability extends AbstractCondition implements ContextAccessorAwareInterface
 {
@@ -20,15 +21,12 @@ class ChannelEntityAvailability extends AbstractCondition implements ContextAcce
     /** @var  Array */
     protected $entities;
 
-    /** @var  string */
-    protected $message;
-
     /** @var StateProvider */
     protected $stateProvider;
 
     public function __construct(StateProvider $stateProvider)
     {
-        $this->stateProvider   = $stateProvider;
+        $this->stateProvider = $stateProvider;
     }
 
     /**
@@ -77,31 +75,5 @@ class ChannelEntityAvailability extends AbstractCondition implements ContextAcce
         }
 
         return $allowed;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setMessage($message)
-    {
-        $this->message = $message;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function toArray()
-    {
-        return $this->convertToArray([$this->channel, $this->entities]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function compile($factoryAccessor)
-    {
-        return $this->convertToPhpCode([$this->channel, $this->entities], $factoryAccessor);
     }
 }
