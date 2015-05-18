@@ -160,7 +160,6 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         );
 
         $this->setSecurityContext($owner);
-        $email->addFolder($origin->getFolder(FolderType::SENT));
 
         $emailBody = $this->emailEntityBuilder->body(
             "Hi,\n" . $this->templates[$randomTemplate]['Text'],

@@ -46,6 +46,8 @@ class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareI
      */
     public function load(ObjectManager $manager)
     {
+        // todo CRM-2480 fix migration
+        return;
         $this->objectManager = $manager;
 
         /** @var AclManager $aclManager */
