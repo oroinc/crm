@@ -2,8 +2,9 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Model\Condition;
 
+use Symfony\Component\PropertyAccess\PropertyPath;
+
 use Oro\Component\ConfigExpression\ContextAccessor;
-use Oro\Component\PropertyAccess\PropertyPath;
 
 use OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation;
 
