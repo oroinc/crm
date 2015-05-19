@@ -20,8 +20,8 @@
                 });
 
                 widget.on('contentLoad', function(event) {
-                    var dataField = $('#orocrm_channel_form_dataSource_data');
-                    var apiKeyField = $('#oro_integration_channel_form_transport_apiKey');
+                    var dataField = $('[id^=orocrm_channel_form_dataSource_data]');
+                    var apiKeyField = $('[id^=oro_integration_channel_form_transport_apiKey]');
                     if (dataField.val() && !apiKeyField.val()) {
                         data = JSON.parse(dataField.val());
                         if (data.transport.apiKey) {
