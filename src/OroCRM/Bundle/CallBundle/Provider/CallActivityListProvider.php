@@ -51,7 +51,8 @@ class CallActivityListProvider implements ActivityListProviderInterface, Comment
      */
     public function getDescription($entity)
     {
-        return null;
+        /** @var $entity Call */
+        return $entity->getNotes();
     }
 
     /**
