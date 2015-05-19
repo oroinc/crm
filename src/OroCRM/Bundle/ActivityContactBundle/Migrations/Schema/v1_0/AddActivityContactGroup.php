@@ -33,22 +33,29 @@ class AddActivityContactGroup implements Migration, ContainerAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
+        self::addActivityContactGroup($this->container, $queries);
+    }
+
+    /**
+     * @param ContainerInterface $container
+     * @param QueryBag           $queries
+     */
+    public static function addActivityContactGroup(ContainerInterface $container, QueryBag $queries)
+    {
         /** @var Registry $entities */
-        $doctrineRegistry = $this->container->get('doctrine');
+        $doctrineRegistry = $container->get('doctrine');
 
         /** @var EntityConfigModel[] $entities */
         $entities = $doctrineRegistry->getManager()->getRepository('OroEntityConfigBundle:EntityConfigModel')
             ->findEntitiesByClassNames(ActivityScope::$contactingActivityClasses);
 
         foreach ($entities as $entity) {
-            if (!in_array(ActivityScope::GROUP_ACTIVITY_CONTACT, $entity->toArray('grouping')['groups'])) {
-                /*$value = $doctrineRegistry->getConnection()->convertToDatabaseValue(
-                    array_merge($entity->toArray('grouping')['groups'], [ActivityScope::GROUP_ACTIVITY_CONTACT]),
-                    Type::TARRAY
-                );*/
-
-                $value = array_merge($entity->toArray('grouping')['groups'], [ActivityScope::GROUP_ACTIVITY_CONTACT]);
-
+            $entityGrouping = $entity->toArray('grouping');
+            $entityGroups   = isset($entityGrouping['groups']) ? $entityGrouping['groups'] : [];
+            if ($entityGroups
+                && !in_array(ActivityScope::GROUP_ACTIVITY_CONTACT, $entityGroups)
+            ) {
+                $value = array_merge($entityGroups, [ActivityScope::GROUP_ACTIVITY_CONTACT]);
                 $queries->addQuery(
                     new UpdateEntityConfigEntityValueQuery(
                         $entity->getClassName(),
@@ -59,6 +66,5 @@ class AddActivityContactGroup implements Migration, ContainerAwareInterface
                 );
             }
         }
-
     }
 }

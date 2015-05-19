@@ -124,9 +124,6 @@ class ActivityScope
                 'view'      => ['is_displayable' => false],
                 'dataaudit' => ['auditable' => false]
             ]
-        ],
-
-
-
+        ]
     ];
 }
