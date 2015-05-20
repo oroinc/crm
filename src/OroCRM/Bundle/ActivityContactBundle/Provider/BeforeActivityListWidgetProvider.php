@@ -28,12 +28,15 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
+    /**
+     * @param ConfigManager $configManager
+     */
     public function __construct(ConfigManager $configManager)
     {
         $this->activityConfigProvider = $configManager->getProvider('activity');
-        $this->entityProvider   = $configManager->getProvider('entity');
-        $this->extendProvider = $configManager->getProvider('extend');
-        $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
+        $this->entityProvider         = $configManager->getProvider('entity');
+        $this->extendProvider         = $configManager->getProvider('extend');
+        $this->propertyAccessor       = PropertyAccess::createPropertyAccessor();
     }
 
     /**
@@ -52,9 +55,9 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
         $result = [];
         foreach ($this->getEntityActivityContactFields($object) as $field) {
             /** @var FieldConfigId $fieldConfigId */
-            $fieldConfigId = $field->getId();
-            $fieldConfig = $this->entityProvider->getConfigById($fieldConfigId);
-            $fieldName = $fieldConfigId->getFieldName();
+            $fieldConfigId      = $field->getId();
+            $fieldConfig        = $this->entityProvider->getConfigById($fieldConfigId);
+            $fieldName          = $fieldConfigId->getFieldName();
             $result[$fieldName] = [
                 'type'  => $fieldConfigId->getFieldType(),
                 'label' => $fieldConfig->get('label'),
@@ -72,11 +75,13 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
     protected function getEntityActivityContactFields($entity)
     {
         $fields = array_keys(ActivityScope::$fieldsConfiguration);
+
         return $this->extendProvider->filter(
             function (ConfigInterface $config) use ($fields) {
                 $extendConfig = $this->extendProvider->getConfigById($config->getId());
                 /** @var FieldConfigId $fieldConfigId */
                 $fieldConfigId = $extendConfig->getId();
+
                 return in_array($fieldConfigId->getFieldName(), $fields);
             },
             ClassUtils::getClass($entity)

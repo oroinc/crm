@@ -1,6 +1,6 @@
 parameters:
-    orocrm_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
-    orocrm_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activiy_contact.listener.activity_contact_migration.class:   OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
+    orocrm_activity_contact.entity_config_dumper.extension.class:       OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
     orocrm_activity_contact.widget_provider.before_activity_list.class: OroCRM\Bundle\ActivityContactBundle\Provider\BeforeActivityListWidgetProvider
 services:
     orocrm_activiy_contact.listener.activity_contact_migration:
