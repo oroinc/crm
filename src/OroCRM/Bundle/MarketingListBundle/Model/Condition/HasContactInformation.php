@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Model\Condition;
 
-use Symfony\Component\PropertyAccess\PropertyPath;
+use Symfony\Component\PropertyAccess\PropertyPathInterface;
 
-use Oro\Bundle\WorkflowBundle\Exception\ConditionException;
-use Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException;
+use Oro\Component\ConfigExpression\ContextAccessorAwareInterface;
+use Oro\Component\ConfigExpression\ContextAccessorAwareTrait;
+use Oro\Component\ConfigExpression\Exception\InvalidArgumentException;
+
 use Oro\Bundle\WorkflowBundle\Model\Condition\AbstractCondition;
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
+
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
@@ -28,12 +30,9 @@ use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
  *  Or
  *      @has_contact_information: [$marketingList]
  */
-class HasContactInformation extends AbstractCondition
+class HasContactInformation extends AbstractCondition implements ContextAccessorAwareInterface
 {
-    /**
-     * @var ContextAccessor
-     */
-    protected $contextAccessor;
+    use ContextAccessorAwareTrait;
 
     /**
      * @var ContactInformationFieldsProvider
@@ -41,23 +40,29 @@ class HasContactInformation extends AbstractCondition
     protected $fieldsProvider;
 
     /**
-     * @var PropertyPath|MarketingList
+     * @var PropertyPathInterface|MarketingList
      */
     protected $marketingList;
 
     /**
-     * @var PropertyPath|string
+     * @var PropertyPathInterface|string
      */
     protected $type;
 
     /**
-     * @param ContextAccessor $contextAccessor
      * @param ContactInformationFieldsProvider $fieldsProvider
      */
-    public function __construct(ContextAccessor $contextAccessor, ContactInformationFieldsProvider $fieldsProvider)
+    public function __construct(ContactInformationFieldsProvider $fieldsProvider)
     {
-        $this->contextAccessor = $contextAccessor;
         $this->fieldsProvider = $fieldsProvider;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return 'has_contact_information';
     }
 
     /**
@@ -65,11 +70,11 @@ class HasContactInformation extends AbstractCondition
      */
     protected function isConditionAllowed($context)
     {
-        $marketingList = $this->contextAccessor->getValue($context, $this->marketingList);
-        $type = $this->contextAccessor->getValue($context, $this->type);
+        $marketingList = $this->resolveValue($context, $this->marketingList, false);
+        $type = $this->resolveValue($context, $this->type, false);
 
         if (!$marketingList instanceof MarketingList) {
-            throw new InvalidParameterException(
+            throw new InvalidArgumentException(
                 'Option "marketing_list" must be instance of "OroCRM\Bundle\MarketingListBundle\Entity\MarketingList"'
             );
         }
@@ -87,7 +92,7 @@ class HasContactInformation extends AbstractCondition
         } elseif (isset($options[0])) {
             $this->marketingList = $options[0];
         } else {
-            throw new ConditionException('Option "marketing_list" is required');
+            throw new InvalidArgumentException('Option "marketing_list" is required');
         }
 
         if (isset($options['type'])) {
