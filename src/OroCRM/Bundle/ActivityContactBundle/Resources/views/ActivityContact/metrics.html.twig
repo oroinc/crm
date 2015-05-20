@@ -1,0 +1,26 @@
+{% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+<div class="widget-content">
+    <div class="filter-box responsive-cell">
+        <div class="title">
+            <span class="widget-title">{{ "orocrm.activity_contact.activity_contact_info"|trans }}</span>
+        </div>
+        <div class="row-fluid">
+            <div class="responsive-block">
+                {% if items is defined and items|length %}
+                    {% for fieldName, item in items %}
+                            {{ ui.renderHtmlProperty(
+                                item.label|trans,
+                                entityConfig.formatDynamicFieldValue(
+                                    entity,
+                                    null,
+                                    fieldName,
+                                    item
+                                )
+                            ) }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,6 +1,7 @@
 parameters:
 #    oro_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
     oro_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activity_contact.widget_provider.before_activity_list.class: OroCRM\Bundle\ActivityContactBundle\Provider\BeforeActivityListWidgetProvider
 
 services:
 #    oro_activiy_contact.listener.activity_contact_migration:
@@ -17,3 +18,12 @@ services:
             - @oro_entity_extend.extend.field_type_helper
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    orocrm_activity_contact.widget_provider.before_activity_list:
+        class: %orocrm_activity_contact.widget_provider.before_activity_list.class%
+        arguments:
+            - @oro_entity_config.config_manager
+        tags:
+            - { name: oro_activity_list.before_widget_provider}
+
+

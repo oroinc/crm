@@ -18,3 +18,5 @@ orocrm:
         ac_contact_count_out:
             label: Outgoing contacts count
             description: Represent total count of all outgoing contacting activities
+        activity_contact_info: Activities contact info
+
