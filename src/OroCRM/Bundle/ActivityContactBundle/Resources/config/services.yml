@@ -1,7 +1,11 @@
 parameters:
-    orocrm_activiy_contact.listener.activity_contact_migration.class:   OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
-    orocrm_activity_contact.entity_config_dumper.extension.class:       OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
+    orocrm_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activity_contact.provider.class:                        OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
+    orocrm_activity_contact.listener.activity_listener.class:      OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener
+    orocrm_activity_contact.entity_activity_direction.provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
     orocrm_activity_contact.widget_provider.before_activity_list.class: OroCRM\Bundle\ActivityContactBundle\Provider\BeforeActivityListWidgetProvider
+    
 services:
     orocrm_activiy_contact.listener.activity_contact_migration:
         class: %orocrm_activiy_contact.listener.activity_contact_migration.class%
@@ -17,6 +21,21 @@ services:
             - @oro_entity_extend.extend.field_type_helper
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    orocrm_activity_contact.provider:
+        class: %orocrm_activity_contact.provider.class%
+
+    orocrm_activity_contact.listener.activity_listener:
+        class: %orocrm_activity_contact.listener.activity_listener.class%
+        arguments:
+            - @orocrm_activity_contact.provider
+        tags:
+            - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
+
+    orocrm_activity_contact.entity_activity_direction.provider:
+        class: %orocrm_activity_contact.entity_activity_direction.provider.class%
+        tags:
+           - {name: orocrm_activity_direction.provider}
 
     orocrm_activity_contact.widget_provider.before_activity_list:
         class: %orocrm_activity_contact.widget_provider.before_activity_list.class%
