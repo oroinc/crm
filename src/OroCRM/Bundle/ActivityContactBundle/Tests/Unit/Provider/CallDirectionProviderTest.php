@@ -1,10 +1,10 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Tests\Unit\Provider;
+namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
+use OroCRM\Bundle\ActivityContactBundle\Provider\CallDirectionProvider;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\CallDirection;
-use OroCRM\Bundle\CallBundle\Provider\CallDirectionProvider;
 
 class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {

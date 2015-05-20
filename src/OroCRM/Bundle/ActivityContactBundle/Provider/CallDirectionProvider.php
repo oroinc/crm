@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CallBundle\Provider;
+namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\CallBundle\Entity\Call;
