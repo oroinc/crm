@@ -1,20 +1,20 @@
 parameters:
-#    oro_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
-    oro_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
+    orocrm_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
     orocrm_activity_contact.provider.class:                        OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
     orocrm_activity_contact.listener.activity_listener.class:      OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener
     orocrm_activity_contact.entity_activity_direction.provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
 
 services:
-#    oro_activiy_contact.listener.activity_contact_migration:
-#        class: %oro_activiy_contact.listener.activity_contact_migration.class%
-#        arguments:
-#            - @oro_entity_extend.migration.entity_metadata_helper
-#        tags:
-#            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: 0 }
+    orocrm_activiy_contact.listener.activity_contact_migration:
+        class: %orocrm_activiy_contact.listener.activity_contact_migration.class%
+        arguments:
+            - @oro_entity_extend.migration.entity_metadata_helper
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp }
 
-    oro_activity_contact.entity_config_dumper.extension:
-        class: %oro_activity_contact.entity_config_dumper.extension.class%
+    orocrm_activity_contact.entity_config_dumper.extension:
+        class: %orocrm_activity_contact.entity_config_dumper.extension.class%
         arguments:
             - @oro_entity_config.config_manager
             - @oro_entity_extend.extend.field_type_helper
