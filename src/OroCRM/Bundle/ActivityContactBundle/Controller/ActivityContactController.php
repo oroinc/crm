@@ -29,6 +29,8 @@ class ActivityContactController extends Controller
             ? $widgetProvider->getWidgets($entity)
             : [];
 
-        return ['entity' => $entity, 'items' => $items];
+        return $items
+            ? ['entity' => $entity, 'items' => $items]
+            : new Response();
     }
 }

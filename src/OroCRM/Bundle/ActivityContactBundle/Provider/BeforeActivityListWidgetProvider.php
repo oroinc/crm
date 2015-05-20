@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 
+use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -27,18 +28,6 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
-    protected static $contactFields = [
-        'ac_last_contact_date',
-        'ac_last_contact_date_out',
-        'ac_last_contact_date_in',
-        'ac_contact_count',
-        'ac_contact_count_out',
-        'ac_contact_count_in',
-        'last_in',
-        'count_in',
-        'contact_percenrt'
-    ];
-
     public function __construct(ConfigManager $configManager)
     {
         $this->activityConfigProvider = $configManager->getProvider('activity');
@@ -52,7 +41,6 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
      */
     public function supports($object)
     {
-        //return true;
         return (bool)$this->getEntityActivityContactFields($object);
     }
 
@@ -83,12 +71,13 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
      */
     protected function getEntityActivityContactFields($entity)
     {
+        $fields = array_keys(ActivityScope::$fieldsConfiguration);
         return $this->extendProvider->filter(
-            function (ConfigInterface $config) {
+            function (ConfigInterface $config) use ($fields) {
                 $extendConfig = $this->extendProvider->getConfigById($config->getId());
                 /** @var FieldConfigId $fieldConfigId */
                 $fieldConfigId = $extendConfig->getId();
-                return in_array($fieldConfigId->getFieldName(), self::$contactFields);
+                return in_array($fieldConfigId->getFieldName(), $fields);
             },
             ClassUtils::getClass($entity)
         );
