@@ -7,7 +7,6 @@ parameters:
     orocrm_call.call.activity.manager.class:        OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager
 
     orocrm_call.activity_list.provider.class:       OroCRM\Bundle\CallBundle\Provider\CallActivityListProvider
-    orocrm_call.activity_direction.provider.class:  OroCRM\Bundle\CallBundle\Provider\CallDirectionProvider
 
 services:
     orocrm_call.event_listener.datagrid.call:
@@ -44,8 +43,3 @@ services:
            - @oro_entity.doctrine_helper
         tags:
            - {name: oro_activity_list.provider, priority: 10 }
-
-    orocrm_call.activity_direction.provider:
-        class: %orocrm_call.activity_direction.provider.class%
-        tags:
-           - {name: orocrm_activity_direction.provider}

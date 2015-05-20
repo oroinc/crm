@@ -3,7 +3,8 @@ parameters:
     orocrm_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
     orocrm_activity_contact.provider.class:                        OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
     orocrm_activity_contact.listener.activity_listener.class:      OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener
-    orocrm_activity_contact.entity_activity_direction.provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
+    orocrm_activity_contact.email_activity_direction.provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
+    orocrm_activity_contact.call_activity_direction.provider.class:  OroCRM\Bundle\ActivityContactBundle\Provider\CallDirectionProvider
     orocrm_activity_contact.widget_provider.before_activity_list.class: OroCRM\Bundle\ActivityContactBundle\Provider\BeforeActivityListWidgetProvider
     
 services:
@@ -32,8 +33,13 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
 
-    orocrm_activity_contact.entity_activity_direction.provider:
-        class: %orocrm_activity_contact.entity_activity_direction.provider.class%
+    orocrm_activity_contact.email_activity_direction.provider:
+        class: %orocrm_activity_contact.email_activity_direction.provider.class%
+        tags:
+           - {name: orocrm_activity_direction.provider}
+
+    orocrm_activity_contact.call_activity_direction.provider:
+        class: %orocrm_activity_contact.call_activity_direction.provider.class%
         tags:
            - {name: orocrm_activity_direction.provider}
 
