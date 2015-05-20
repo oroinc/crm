@@ -49,6 +49,15 @@ class CallActivityListProvider implements ActivityListProviderInterface, Comment
     /**
      * {@inheritdoc}
      */
+    public function getDescription($entity)
+    {
+        /** @var $entity Call */
+        return $entity->getNotes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getData(ActivityList $activityListEntity)
     {
         return [];
