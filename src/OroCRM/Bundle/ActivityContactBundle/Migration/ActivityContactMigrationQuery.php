@@ -72,7 +72,10 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
                 )
                 && $config['extend']['is_extend'] == true
                 && $config['activity']['activities']
-                && array_intersect($config['activity']['activities'], ActivityScope::$contactingActivityClasses)
+                && array_intersect(
+                    ActivityScope::$contactingActivityClasses,
+                    $config['activity']['activities']
+                )
             ) {
                 if (isset($config['extend']['schema']['doctrine'][$entityClassName]['table'])) {
                     $tableName = $config['extend']['schema']['doctrine'][$entityClassName]['table'];

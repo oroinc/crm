@@ -12,7 +12,7 @@ services:
         arguments:
             - @oro_entity_extend.migration.entity_metadata_helper
         tags:
-            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp }
+            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: -100 }
 
     orocrm_activity_contact.entity_config_dumper.extension:
         class: %orocrm_activity_contact.entity_config_dumper.extension.class%

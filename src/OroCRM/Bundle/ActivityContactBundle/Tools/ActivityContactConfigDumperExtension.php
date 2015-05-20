@@ -51,8 +51,8 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
                  * Check if entity has any activity from contact activities group
                  */
                 $entityActivities = $activityConfigProvider->getConfig($entityClassName)->get('activities');
-                if ($entityActivities
-                    && !array_intersect(ActivityScope::$contactingActivityClasses, $entityActivities)
+                if (!$entityActivities
+                    || !array_intersect(ActivityScope::$contactingActivityClasses, $entityActivities)
                 ) {
                     continue;
                 }
