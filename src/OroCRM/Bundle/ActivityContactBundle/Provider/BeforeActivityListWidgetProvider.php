@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 
-use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -14,11 +13,10 @@ use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
 use Oro\Bundle\UIBundle\Provider\WidgetProviderInterface;
 
+use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+
 class BeforeActivityListWidgetProvider implements WidgetProviderInterface
 {
-    /** @var ConfigProviderInterface */
-    protected $activityConfigProvider;
-
     /** @var ConfigProviderInterface */
     protected $entityProvider;
 
@@ -33,7 +31,6 @@ class BeforeActivityListWidgetProvider implements WidgetProviderInterface
      */
     public function __construct(ConfigManager $configManager)
     {
-        $this->activityConfigProvider = $configManager->getProvider('activity');
         $this->entityProvider         = $configManager->getProvider('entity');
         $this->extendProvider         = $configManager->getProvider('extend');
         $this->propertyAccessor       = PropertyAccess::createPropertyAccessor();
