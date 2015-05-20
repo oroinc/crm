@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ActivityContactBundle\Tools;
 
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
@@ -36,7 +35,6 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
     /**
      * {@inheritdoc}
      */
-    //public function postUpdate()
     public function preUpdate()
     {
         /** @var ConfigProvider $extendConfigProvider */
@@ -67,22 +65,29 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
                     },
                     $entityFields
                 );
+
                 /**
-                 * Check if entity already has needed fields
+                 * Check if entity already has all needed fields.
+                 * If at least one is not present we should check and add it too.
                  */
-                if (array_intersect($entityFieldNames, array_keys(ActivityScope::$fieldsConfiguration))) {
+                if (false === (bool) array_diff(
+                    array_keys(ActivityScope::$fieldsConfiguration),
+                    array_intersect($entityFieldNames, array_keys(ActivityScope::$fieldsConfiguration))
+                )) {
                     continue;
                 }
 
                 foreach (ActivityScope::$fieldsConfiguration as $fieldName => $fieldConfig) {
-                    $this->configManager->createConfigFieldModel(
-                        $entityClassName,
-                        $fieldName,
-                        $fieldConfig['type'],
-                        ConfigModelManager::MODE_READONLY
-                    );
+                    if (!in_array($fieldName, $entityFieldNames)) {
+                        $this->configManager->createConfigFieldModel(
+                            $entityClassName,
+                            $fieldName,
+                            $fieldConfig['type'],
+                            $fieldConfig['mode']
+                        );
 
-                    $this->updateConfigs($entityClassName, $fieldName, $fieldConfig['options']);
+                        $this->updateConfigs($entityClassName, $fieldName, $fieldConfig['options']);
+                    }
                 }
             }
         }

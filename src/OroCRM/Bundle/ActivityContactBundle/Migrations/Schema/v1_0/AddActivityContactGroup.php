@@ -52,16 +52,13 @@ class AddActivityContactGroup implements Migration, ContainerAwareInterface
         foreach ($entities as $entity) {
             $entityGrouping = $entity->toArray('grouping');
             $entityGroups   = isset($entityGrouping['groups']) ? $entityGrouping['groups'] : [];
-            if ($entityGroups
-                && !in_array(ActivityScope::GROUP_ACTIVITY_CONTACT, $entityGroups)
-            ) {
-                $value = array_merge($entityGroups, [ActivityScope::GROUP_ACTIVITY_CONTACT]);
+            if ($entityGroups && !in_array(ActivityScope::GROUP_ACTIVITY_CONTACT, $entityGroups)) {
                 $queries->addQuery(
                     new UpdateEntityConfigEntityValueQuery(
                         $entity->getClassName(),
                         'grouping',
                         'groups',
-                        $value
+                        array_merge($entityGroups, [ActivityScope::GROUP_ACTIVITY_CONTACT])
                     )
                 );
             }
