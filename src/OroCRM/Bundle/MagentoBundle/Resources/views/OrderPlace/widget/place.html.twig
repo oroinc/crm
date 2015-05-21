@@ -55,7 +55,7 @@
 
                             widget.trigger('formSave');
                             {% if cartId is defined %}
-                            $('a[id^=transition-b2c_flow_abandoned_shopping_cart-place_order]').one('transitions_success', function() {
+                            $('#transition-b2c_flow_abandoned_shopping_cart-place_order').one('transitions_success', function() {
                                 {% set syncURL = path('orocrm_magento_orderplace_new_cart_order_sync', {id: cartId}) %}
                                 $.ajax({
                                     dataType: 'json',

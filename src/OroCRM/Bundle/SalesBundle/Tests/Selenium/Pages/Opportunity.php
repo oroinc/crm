@@ -42,26 +42,24 @@ class Opportunity extends AbstractPageEntity
 
     public function init()
     {
-        $this->name = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_name')]");
-        $this->contact = $this->test
-            ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a");
+        $this->name = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_name']");
+        $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_contact')]/a");
         $this->b2b_customer = $this->test
             ->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_customer')]/a");
         $this->probability = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_probability')]");
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_probability']");
         $this->budget = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_budgetAmount')]");
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_budgetAmount']");
         $this->customerNeed = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_customerNeed')]");
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_customerNeed']");
         $this->proposedSolution = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_proposedSolution')]");
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_proposedSolution']");
         $this->closeReason = $this->test->select($this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_closeReason')]"));
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']"));
         $this->closeRevenue = $this->test
-            ->byXpath("//*[starts-with(@id,'orocrm_sales_opportunity_form_closeRevenue')]");
+            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeRevenue']");
         $this->closeDate = $this->test
-            ->byXpath("//*[starts-with(@id,'date_selector_orocrm_sales_opportunity_form_closeDate')]");
+            ->byXpath("//*[@data-ftid='date_selector_orocrm_sales_opportunity_form_closeDate']");
 
         return $this;
     }

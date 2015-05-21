@@ -27,7 +27,8 @@ class SalesFunnel extends AbstractPageEntity
 
     public function setStartDate($date)
     {
-        $this->startDate = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_sales_funnel_name')]");
+        $this->startDate = $this->test
+            ->byXpath("//*[starts-with(@id,'oro_workflow_transition_sales_funnel_start_date')]");
         $this->startDate->clear();
         $this->startDate->value($date);
 
@@ -81,7 +82,7 @@ class SalesFunnel extends AbstractPageEntity
 
     public function submit()
     {
-        $this->test->byXpath("//button[starts-with(@id,'save-and-transit')]")->click();
+        $this->test->byXpath("//button[@id='save-and-transit']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
 

@@ -22,7 +22,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setFirstName($name)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'orocrm_magento_contactus_contact_request_firstName')]");
+        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_firstName']");
         $field->clear();
         $field->value($name);
 
@@ -35,7 +35,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setLastName($name)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'orocrm_magento_contactus_contact_request_lastName')]");
+        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_lastName']");
         $field->clear();
         $field->value($name);
 
@@ -48,7 +48,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setEmail($email)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'orocrm_magento_contactus_contact_request_emailAddress')]");
+        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_emailAddress']");
         $field->clear();
         $field->value($email);
 
@@ -61,7 +61,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setComment($comment)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'orocrm_magento_contactus_contact_request_comment')]");
+        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_comment']");
         $field->clear();
         $field->value($comment);
 
@@ -74,7 +74,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setPhone($phone)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'orocrm_magento_contactus_contact_request_phone')]");
+        $field = $this->test->byXpath("//*[@data-ftid='orocrm_magento_contactus_contact_request_phone']");
         $field->clear();
         $field->value($phone);
 
@@ -139,7 +139,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setFeedback($feedback)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_feedback')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_feedback']");
         $field->clear();
         $field->value($feedback);
 
@@ -183,7 +183,7 @@ class ContactRequest extends AbstractPageEntity
      */
     public function setCallSubject($callSubject)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_call_subject')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_call_subject']");
         $field->clear();
         $field->value($callSubject);
 

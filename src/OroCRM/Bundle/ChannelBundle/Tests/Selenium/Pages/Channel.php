@@ -23,7 +23,7 @@ class Channel extends AbstractPageEntity
     public function setStatus($status)
     {
         $element = $this->test
-            ->select($this->test->byXpath("//*[starts-with(@id,'orocrm_channel_form_status')]"));
+            ->select($this->test->byXpath("//*[@data-ftid='orocrm_channel_form_status']"));
         $element->selectOptionByLabel($status);
 
         return $this;
@@ -35,7 +35,7 @@ class Channel extends AbstractPageEntity
      */
     public function setName($name)
     {
-        $element = $this->test->byXpath("//*[starts-with(@id,'orocrm_channel_form_name')]");
+        $element = $this->test->byXpath("//*[@data-ftid='orocrm_channel_form_name']");
         $element->clear();
         $element->value($name);
 

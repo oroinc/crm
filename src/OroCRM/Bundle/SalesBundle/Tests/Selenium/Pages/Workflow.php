@@ -61,7 +61,7 @@ class Workflow extends AbstractPageEntity
 
     public function setBudget($budget)
     {
-        $this->budget = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_budget_amount')]");
+        $this->budget = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_budget_amount']");
         $this->budget->clear();
         $this->budget->value($budget);
 
@@ -70,12 +70,12 @@ class Workflow extends AbstractPageEntity
 
     public function getBudget()
     {
-        return $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_budget_amount')]")->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_budget_amount']")->value();
     }
 
     public function setProbability($probability)
     {
-        $this->probability = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_probability')]");
+        $this->probability = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_probability']");
         $this->probability->clear();
         $this->probability->value($probability);
 
@@ -84,12 +84,12 @@ class Workflow extends AbstractPageEntity
 
     public function getProbability()
     {
-        return $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_probability')]")->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_probability']")->value();
     }
 
     public function setCustomerNeed($customerNeed)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_customer_need')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_customer_need']");
         $field->clear();
         $field->value($customerNeed);
 
@@ -98,12 +98,12 @@ class Workflow extends AbstractPageEntity
 
     public function getCustomerNeed()
     {
-        return $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_customer_need')]")->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_customer_need']")->value();
     }
 
     public function setSolution($solution)
     {
-        $this->solution = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_proposed_solution')]");
+        $this->solution = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_proposed_solution']");
         $this->solution->clear();
         $this->solution->value($solution);
 
@@ -112,12 +112,12 @@ class Workflow extends AbstractPageEntity
 
     public function getSolution()
     {
-        return $$this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_proposed_solution')]")->value();
+        return $$this->test->byXpath("//*[@data-ftid='oro_workflow_transition_proposed_solution']")->value();
     }
 
     public function setCloseRevenue($closeRevenue)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_close_revenue')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_revenue']");
         $field->clear();
         $field->value($closeRevenue);
 
@@ -127,7 +127,7 @@ class Workflow extends AbstractPageEntity
     public function setCloseReason($closeReason)
     {
         $field = $this->test
-            ->select($this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_close_reason_name')]"));
+            ->select($this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_reason_name']"));
         $field->selectOptionByLabel($closeReason);
 
         return $this;
@@ -144,7 +144,7 @@ class Workflow extends AbstractPageEntity
 
     public function setCompanyName($company)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_workflow_transition_new_company_name')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_new_company_name']");
         $field->clear();
         $field->value($company);
 
@@ -153,7 +153,7 @@ class Workflow extends AbstractPageEntity
 
     public function qualify()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-qualify')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-qualify')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -166,7 +166,7 @@ class Workflow extends AbstractPageEntity
 
     public function disqualify()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-disqualify')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-disqualify')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -176,7 +176,7 @@ class Workflow extends AbstractPageEntity
 
     public function reactivate()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-reactivate')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-reactivate')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -186,7 +186,7 @@ class Workflow extends AbstractPageEntity
 
     public function reopen()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-reopen')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-reopen')->click();
         sleep(1);
         $this->waitForAjax();
         $this->test->byXpath("//div[div[contains(., 'Reopen')]]//a[text()='OK']")->click();
@@ -198,7 +198,7 @@ class Workflow extends AbstractPageEntity
 
     public function develop()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-develop')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-develop')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -211,7 +211,7 @@ class Workflow extends AbstractPageEntity
 
     public function closeAsWon()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-close_as_won')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-close_as_won')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();
@@ -221,7 +221,7 @@ class Workflow extends AbstractPageEntity
 
     public function closeAsLost()
     {
-        $this->test->byXpath("//*[starts-with(@id,'transition-b2b_flow_sales_funnel-close_as_lost')]")->click();
+        $this->test->byId('transition-b2b_flow_sales_funnel-close_as_lost')->click();
         sleep(1);
         $this->waitPageToLoad();
         $this->waitForAjax();

@@ -19,7 +19,7 @@ class Integration extends ParentIntegration
      */
     public function setWsdlUrl($url)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_wsdlUrl')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_wsdlUrl']");
         $field->clear();
         $field->value($url);
 
@@ -32,7 +32,7 @@ class Integration extends ParentIntegration
      */
     public function setApiUser($user)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_apiUser')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_apiUser']");
         $field->clear();
         $field->value($user);
 
@@ -45,7 +45,7 @@ class Integration extends ParentIntegration
      */
     public function setApiKey($key)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_apiKey')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_apiKey']");
         $field->clear();
         $field->value($key);
 
@@ -57,7 +57,7 @@ class Integration extends ParentIntegration
      */
     public function setWsiCompliance()
     {
-        $this->test->byXPath("//input[starts-with(@id,'oro_integration_channel_form_transport_isWsiMode')]")->click();
+        $this->test->byXPath("//input[@data-ftid='oro_integration_channel_form_transport_isWsiMode']")->click();
         $this->waitForAjax();
 
         return $this;
@@ -82,7 +82,7 @@ class Integration extends ParentIntegration
      */
     public function checkConnection()
     {
-        $this->test->byXPath("//button[starts-with(@id,'oro_integration_channel_form_transport_check')]")->click();
+        $this->test->byXPath("//button[@id='oro_integration_channel_form_transport_check']")->click();
         $this->waitForAjax();
 
         return $this;
@@ -95,7 +95,7 @@ class Integration extends ParentIntegration
     public function selectWebsite($website)
     {
         $select = $this->test
-            ->select($this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_websiteId')]"));
+            ->select($this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_websiteId']"));
         $select->selectOptionByLabel($website);
 
         return $this;
@@ -107,7 +107,7 @@ class Integration extends ParentIntegration
      */
     public function setAdminUrl($url)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'oro_integration_channel_form_transport_adminUrl')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_adminUrl']");
         $field->clear();
         $field->value($url);
 
@@ -122,7 +122,7 @@ class Integration extends ParentIntegration
     {
         foreach ($connectors as $connector) {
             $this->test->byXPath(
-                "//div[starts-with(@id,'oro_integration_channel_form_connectors')]//label[contains(., '{$connector}')]"
+                "//div[@data-ftid='oro_integration_channel_form_connectors']//label[contains(., '{$connector}')]"
             )->click();
             $this->waitForAjax();
         }
@@ -136,7 +136,7 @@ class Integration extends ParentIntegration
     public function setTwoWaySync()
     {
         $this->test->byXPath(
-            "//input[starts-with(@id,'oro_integration_channel_form_synchronizationSettings_isTwoWaySyncEnabled')]"
+            "//input[@data-ftid='oro_integration_channel_form_synchronizationSettings_isTwoWaySyncEnabled']"
         )->click();
         $this->waitForAjax();
 
@@ -150,7 +150,7 @@ class Integration extends ParentIntegration
     public function setSyncPriority($priority)
     {
         $select = $this->test
-            ->byXpath("//*[starts-with(@id,'oro_integration_channel_form_synchronizationSettings_syncPriority')]");
+            ->byXpath("//*[@data-ftid='oro_integration_channel_form_synchronizationSettings_syncPriority']");
         $select = $this->test->select($select);
         $select->selectOptionByLabel($priority);
 

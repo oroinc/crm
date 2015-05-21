@@ -40,7 +40,7 @@ class Task extends AbstractPageEntity
 
     public function setSubject($subject)
     {
-        $this->subject = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_subject')]");
+        $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_task_subject']");
         $this->subject->clear();
         $this->subject->value($subject);
         return $this;
@@ -48,13 +48,13 @@ class Task extends AbstractPageEntity
 
     public function getSubject()
     {
-        $this->subject = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_subject')]");
+        $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_task_subject']");
         return $this->subject->value();
     }
 
     public function setDescription($description)
     {
-        $this->description = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_description')]");
+        $this->description = $this->test->byXpath("//*[@data-ftid='orocrm_task_description']");
         $this->description->clear();
         $this->description->value($description);
         return $this;
@@ -62,7 +62,7 @@ class Task extends AbstractPageEntity
 
     public function getDescription()
     {
-        $this->description = $this->test->byXpath("//*[starts-with(@id,'orocrm_task_description')]");
+        $this->description = $this->test->byXpath("//*[@data-ftid='orocrm_task_description']");
         return $this->description->value();
     }
 

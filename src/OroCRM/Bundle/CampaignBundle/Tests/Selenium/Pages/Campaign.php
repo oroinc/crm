@@ -24,7 +24,7 @@ class Campaign extends AbstractPageEntity
      */
     public function setName($name)
     {
-        $object = $this->test->byXpath("//*[starts-with(@id,'orocrm_campaign_form_name')]");
+        $object = $this->test->byXpath("//*[@data-ftid='orocrm_campaign_form_name']");
         $object->clear();
         $object->value($name);
 
@@ -37,7 +37,7 @@ class Campaign extends AbstractPageEntity
      */
     public function setCode($code)
     {
-        $object = $this->test->byXpath("//*[starts-with(@id,'orocrm_campaign_form_code')]");
+        $object = $this->test->byXpath("//*[@data-ftid='orocrm_campaign_form_code']");
         $object->clear();
         $object->value($code);
 

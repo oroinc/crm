@@ -48,17 +48,17 @@ class Lead extends AbstractPageEntity
 
     public function init()
     {
-        $this->name = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_name')]");
-        $this->firstName = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_firstName')]");
-        $this->lastName = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_lastName')]");
+        $this->name = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_name']");
+        $this->firstName = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_firstName']");
+        $this->lastName = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_lastName']");
         $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_contact')]/a");
-        $this->jobTitle = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_jobTitle')]");
-        $this->phone = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_phoneNumber')]");
-        $this->email = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_email')]");
-        $this->companyName = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_companyName')]");
-        $this->website = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_website')]");
-        $this->employees = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_numberOfEmployees')]");
-        $this->industry = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_industry')]");
+        $this->jobTitle = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_jobTitle']");
+        $this->phone = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_phoneNumber']");
+        $this->email = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_email']");
+        $this->companyName = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_companyName']");
+        $this->website = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_website']");
+        $this->employees = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_numberOfEmployees']");
+        $this->industry = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_industry']");
         $this->campaign = $this->test->byXpath(
             "//div[starts-with(@id,'s2id_orocrm_sales_lead_form_campaign')]/a"
         );
@@ -219,7 +219,7 @@ class Lead extends AbstractPageEntity
 
     public function setAddressLabel($value)
     {
-        $addressLabel = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_label')]");
+        $addressLabel = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_label']");
         $addressLabel->clear();
         $addressLabel->value($value);
 
@@ -228,14 +228,14 @@ class Lead extends AbstractPageEntity
 
     public function getAddressLabel()
     {
-        $addressLabel = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_label')]");
+        $addressLabel = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_label']");
 
         return $addressLabel->attribute('value');
     }
 
     public function setAddressStreet($value)
     {
-        $addressStreet = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_street')]");
+        $addressStreet = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_street']");
         $addressStreet->clear();
         $addressStreet->value($value);
 
@@ -244,14 +244,14 @@ class Lead extends AbstractPageEntity
 
     public function getAddressStreet()
     {
-        $addressStreet = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_street')]");
+        $addressStreet = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_street']");
 
         return $addressStreet->attribute('value');
     }
 
     public function setAddressCity($value)
     {
-        $addressCity = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_city')]");
+        $addressCity = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_city']");
         $addressCity->clear();
         $addressCity->value($value);
 
@@ -260,14 +260,14 @@ class Lead extends AbstractPageEntity
 
     public function getAddressCity()
     {
-        $addressCity = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_city')]");
+        $addressCity = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_city']");
 
         return $addressCity->attribute('value');
     }
 
     public function setAddressZipCode($value)
     {
-        $addressCity = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_postalCode')]");
+        $addressCity = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_postalCode']");
         $addressCity->clear();
         $addressCity->value($value);
 
@@ -276,7 +276,7 @@ class Lead extends AbstractPageEntity
 
     public function getAddressZipCode()
     {
-        $addressCity = $this->test->byXpath("//*[starts-with(@id,'orocrm_sales_lead_form_address_postalCode')]");
+        $addressCity = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_address_postalCode']");
 
         return $addressCity->attribute('value');
     }
