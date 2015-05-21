@@ -93,6 +93,7 @@ services:
             - %orocrm_contact.entity.class%
             - @doctrine.orm.entity_manager
             - @oro_soap.entity_serializer
+            - @oro_attachment.manager
 
     orocrm_contact.contact_address.manager.api:
         class: %orocrm_contact.contact_address.manager.api.class%

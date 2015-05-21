@@ -6,6 +6,8 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
+use Oro\Bundle\AttachmentBundle\Entity\File;
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
 use Oro\Bundle\SoapBundle\Event\FindAfter;
@@ -16,15 +18,24 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
     /** @var EntitySerializer */
     protected $entitySerializer;
 
+    /** @var  AttachmentManager */
+    protected $attachmentManager;
+
     /**
-     * @param string           $class
-     * @param ObjectManager    $om
-     * @param EntitySerializer $entitySerializer
+     * @param string            $class
+     * @param ObjectManager     $om
+     * @param EntitySerializer  $entitySerializer
+     * @param AttachmentManager $attachmentManager
      */
-    public function __construct($class, ObjectManager $om, EntitySerializer $entitySerializer)
-    {
+    public function __construct(
+        $class,
+        ObjectManager $om,
+        EntitySerializer $entitySerializer,
+        AttachmentManager $attachmentManager
+    ) {
         parent::__construct($class, $om);
         $this->entitySerializer = $entitySerializer;
+        $this->attachmentManager = $attachmentManager;
     }
 
     /**
@@ -103,7 +114,14 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
                         'owner'        => ['fields' => 'username']
                     ]
                 ],
-                'accounts'     => ['fields' => 'id']
+                'accounts'     => ['fields' => 'id'],
+                'picture'      => [
+                    'exclusion_policy' => 'all',
+                    'fields'           => [
+                        'extension'        => null,
+                        'originalFilename' => null
+                    ]
+                ],
             ],
             'post_serialize'  => function (array &$result) {
                 $this->postSerializeContact($result);
@@ -129,5 +147,13 @@ class ContactApiEntityManager extends ApiEntityManager implements EntitySerializ
             }
         }
         $result['email'] = $email;
+
+        if (!empty($result['picture'])) {
+            $file = new File();
+            $file->setOriginalFilename($result['picture']['originalFilename'])
+                ->setExtension($result['picture']['extension']);
+            $url = $this->attachmentManager->getAttachment($this->class, $result['id'], 'picture', $file);
+            $result['picture'] = $url;
+        }
     }
 }
