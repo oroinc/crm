@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Model\Condition;
 
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
+use Symfony\Component\PropertyAccess\PropertyPath;
+
+use Oro\Component\ConfigExpression\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Model\Condition\ChannelEntityAvailability;
-
-use Symfony\Component\PropertyAccess\PropertyPath;
 
 class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,26 +17,27 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
     {
         $stateProvider   = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\StateProvider')
             ->disableOriginalConstructor()->getMock();
-        $this->condition = new ChannelEntityAvailability(new ContextAccessor(), $stateProvider);
+        $this->condition = new ChannelEntityAvailability($stateProvider);
+        $this->condition->setContextAccessor(new ContextAccessor());
     }
 
     /**
-     * @dataProvider isAllowedDataProvider
+     * @dataProvider evaluateProvider
      *
      * @param array  $options
      * @param string $context
      * @param string $expectedResult
      */
-    public function testIsAllowed(array $options, $context, $expectedResult)
+    public function testEvaluate(array $options, $context, $expectedResult)
     {
         $this->condition->initialize($options);
-        $this->assertEquals($expectedResult, $this->condition->isAllowed($context));
+        $this->assertEquals($expectedResult, $this->condition->evaluate($context));
     }
 
     /**
      * @return array
      */
-    public function isAllowedDataProvider()
+    public function evaluateProvider()
     {
         $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
         $channel
@@ -78,7 +79,7 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Oro\Bundle\WorkflowBundle\Exception\ConditionException
+     * @expectedException \Oro\Component\ConfigExpression\Exception\InvalidArgumentException
      * @expectedExceptionMessage Invalid options count: 0
      */
     public function testInitializeFailsWhenOptionNotOneElement()
