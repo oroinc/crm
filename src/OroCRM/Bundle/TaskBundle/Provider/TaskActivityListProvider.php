@@ -49,6 +49,15 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     /**
      * {@inheritdoc}
      */
+    public function getDescription($entity)
+    {
+        /** @var $entity Task */
+        return $entity->getDescription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getData(ActivityList $activityListEntity)
     {
         return [];
