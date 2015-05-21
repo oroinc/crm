@@ -73,8 +73,10 @@ class Task extends AbstractPageEntity
      */
     public function setDueDate($dueDate)
     {
-        $this->dueDate = $this->test->byXpath("//*[starts-with(@id,'date_selector_orocrm_task_dueDate')]");
-        $this->dueTime = $this->test->byXpath("//*[starts-with(@id,'time_selector_orocrm_task_dueDate')]");
+        $this->dueDate = $this->test->byXpath("//*[@data-ftid='orocrm_task_dueDate']/..".
+            "/following-sibling::*//input[contains(@class,'datepicker-input')]");
+        $this->dueTime = $this->test->byXpath("//*[@data-ftid='orocrm_task_dueDate']/..".
+            "/following-sibling::*//input[contains(@class,'timepicker-input')]");
         $this->dueDate->clear();
         $this->dueTime->clear();
         $dueDateParts = [];
@@ -93,8 +95,10 @@ class Task extends AbstractPageEntity
 
     public function getDueDate()
     {
-        $this->dueDate = $this->test->byXpath("//*[starts-with(@id,'date_selector_orocrm_task_dueDate')]");
-        $this->dueTime = $this->test->byXpath("//*[starts-with(@id,'time_selector_orocrm_task_dueDate')]");
+        $this->dueDate = $this->test->byXpath("//*[@data-ftid='orocrm_task_dueDate']/..".
+            "/following-sibling::*//input[contains(@class,'datepicker-input')]");
+        $this->dueTime = $this->test->byXpath("//*[@data-ftid='orocrm_task_dueDate']/..".
+            "/following-sibling::*//input[contains(@class,'timepicker-input')]");
         return $this->dueDate->value() . ' ' . $this->dueTime->value();
     }
 

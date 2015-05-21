@@ -58,8 +58,8 @@ class Opportunity extends AbstractPageEntity
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']"));
         $this->closeRevenue = $this->test
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeRevenue']");
-        $this->closeDate = $this->test
-            ->byXpath("//*[@data-ftid='date_selector_orocrm_sales_opportunity_form_closeDate']");
+        $this->closeDate = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeDate']/..".
+            "/following-sibling::input[contains(@class,'datepicker-input')]");
 
         return $this;
     }

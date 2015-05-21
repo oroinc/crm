@@ -69,8 +69,8 @@ class Integration extends ParentIntegration
      */
     public function setSyncDate($date)
     {
-        $field = $this->test
-            ->byXpath("//*[starts-with(@id,'date_selector_oro_integration_channel_form_transport_syncStartDate')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_integration_channel_form_transport_syncStartDate']/..".
+            "/following-sibling::input[contains(@class,'datepicker-input')]");
         $field->clear();
         $field->value($date);
 

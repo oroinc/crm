@@ -135,7 +135,8 @@ class Workflow extends AbstractPageEntity
 
     public function setCloseDate($closeDate)
     {
-        $field = $this->test->byXpath("//*[starts-with(@id,'date_selector_oro_workflow_transition_close_date')]");
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_date']/..".
+            "/following-sibling::input[contains(@class,'datepicker-input')]");
         $field->clear();
         $field->value($closeDate);
 
