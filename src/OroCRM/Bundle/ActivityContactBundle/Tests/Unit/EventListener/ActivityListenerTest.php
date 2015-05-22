@@ -28,13 +28,19 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \DateTime */
     protected $testDate;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $doctrineHelper;
+
     public function setUp()
     {
         $this->provider    = new ActivityContactProvider();
         $directionProvider = new TestDirectionProvider();
-
         $this->provider->addProvider($directionProvider);
-        $this->listener = new ActivityListener($this->provider);
+
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->listener = new ActivityListener($this->provider, $this->doctrineHelper);
     }
 
     /**
