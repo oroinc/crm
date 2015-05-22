@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Oro\Bundle\EmailBundle\Entity\EmailOrigin;
+use Oro\Bundle\UserBundle\Entity\User;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -13,6 +15,7 @@ use Oro\Bundle\EmailBundle\Model\FolderType;
 use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailThread;
+use Oro\Bundle\EmailBundle\Entity\EmailUser;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -142,15 +145,15 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param $randomTemplate
-     * @param $owner
-     * @param $contact
-     * @param $origin
+     * @param User $owner
+     * @param Contact $contact
+     * @param EmailOrigin $origin
      *
-     * @return \Oro\Bundle\EmailBundle\Entity\Email
+     * @return EmailUser
      */
     protected function addEmail($randomTemplate, $owner, $contact, $origin)
     {
-        $email = $this->emailEntityBuilder->email(
+        $email = $this->emailEntityBuilder->emailUser(
             $this->templates[$randomTemplate]['Subject'],
             $owner->getEmail(),
             $contact->getPrimaryEmail()->getEmail(),
@@ -160,6 +163,10 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         );
 
         $this->setSecurityContext($owner);
+
+        $email->setFolder($origin->getFolder(FolderType::SENT));
+        $email->setOwner($owner);
+        $email->setOrganization($owner->getOrganization());
 
         $emailBody = $this->emailEntityBuilder->body(
             "Hi,\n" . $this->templates[$randomTemplate]['Text'],
