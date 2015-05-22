@@ -10,6 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Oro\Bundle\UserBundle\Entity\Role;
 
 class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -67,7 +68,7 @@ class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareI
         foreach ($roles as $roleName) {
             $sid = $manager->getSid($this->getRole($roleName));
 
-            $oid = $manager->getOid('entity:Oro\Bundle\EmailBundle\Entity\Email');
+            $oid = $manager->getOid('entity:Oro\Bundle\EmailBundle\Entity\EmailUser');
             $maskBuilder = $manager->getMaskBuilder($oid)
                 ->add('VIEW_BASIC')
                 ->add('CREATE_BASIC')
