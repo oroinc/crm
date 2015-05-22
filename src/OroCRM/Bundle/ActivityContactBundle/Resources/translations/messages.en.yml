@@ -4,7 +4,7 @@ orocrm:
             label: Last contact datetime
             description: Represent last contacting activity datetime
         ac_last_contact_date_in:
-            label: Last incomint contact datetime
+            label: Last incoming contact datetime
             description: Represent last incoming contacting activity datetime
         ac_last_contact_date_out:
             label: Last outgoing contact datetime
@@ -19,4 +19,12 @@ orocrm:
             label: Outgoing contacts count
             description: Represent total count of all outgoing contacting activities
         activity_contact_info: Activities contact info
+        aci_last_contact_time: Last contact time
+        aci_last_contact_time_incoming: Last incoming contact time
+        aci_last_contact_time_outgoing: Last outgoing contact time
+        aci_incoming: Incoming
+        aci_outgoing: Outgoing
+        aci_total_count: Total times contacted
+        aci_total_count_in: Incoming contacts count
+        aci_total_count_out: Outgoing contacts count
 

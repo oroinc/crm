@@ -6,31 +6,31 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class ActivityContactController extends Controller
 {
     /**
-     * @param object $entity The entity object which contact metrics should be rendered
+     * @param string  $entityClass The entity class which metrics should be rendered
+     * @param integer $entityId    The entity object id which metrics should be rendered
      *
      * @return Response
      *
      * @Route(
-     *      "/metrics/{entity}",
+     *      "/metrics/{entityClass}/{entityId}",
      *      name="orocrm_activity_contact_metrics"
      * )
-     * @Template
+     * @Template("@OroCRMActivityContact/ActivityContact/widget/metrics.html.twig")
      */
-    public function metricsAction($entity)
+    public function metricsAction($entityClass, $entityId)
     {
-        $widgetProvider = $this->get('oro_activity_list.widget_provider.before');
+        $entity = $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId);
+        $dataProvider = $this->get('orocrm_activity_contact.entity_activity_contact_data_provider');
+        $data = $dataProvider->getEntityContactData($entity);
 
-        $items = $widgetProvider->supports($entity)
-            ? $widgetProvider->getWidgets($entity)
-            : [];
-
-        return $items
-            ? ['entity' => $entity, 'items' => $items]
+        return $data
+            ? ['entity' => $entity, 'data' => $data]
             : new Response();
     }
 }

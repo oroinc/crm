@@ -1,0 +1,70 @@
+<div class="widget-content">
+    <div class="contact-box-wrapper">
+        <div class="contact-box">
+            {{ _self.last_contacted_time(data) }}
+        </div>
+        <div class="contact-box">
+            {{ _self.contact_counts(data) }}
+        </div>
+    </div>
+</div>
+{% macro last_contacted_time(data) %}
+    {% set last_contact_date_in_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::LAST_CONTACT_DATE_IN') %}
+    {% set last_contact_date_out_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::LAST_CONTACT_DATE_OUT') %}
+    {% if data[last_contact_date_in_key] is defined and data[last_contact_date_out_key] is defined %}
+        {% import 'OroUIBundle::macros.html.twig' as ui %}
+        {% set trans_prefix = 'orocrm.activity_contact.aci_' %}
+        {% if data[last_contact_date_in_key] >= data[last_contact_date_out_key] %}
+            <div class="contact-box-row">
+                {{ ui.renderProperty(
+                    (trans_prefix ~ 'last_contact_time')|trans,
+                    data[last_contact_date_in_key]|oro_format_datetime ~ (' (' ~ (trans_prefix ~ 'incoming')|trans ~ ')')
+                ) }}
+            </div>
+            <div class="contact-box-row">
+                {{ ui.renderProperty(
+                    (trans_prefix ~ 'last_contact_time_outgoing')|trans,
+                    data[last_contact_date_out_key]|oro_format_datetime
+                ) }}
+            </div>
+        {% else %}
+            <div class="contact-box-row">
+                {{ ui.renderProperty(
+                    (trans_prefix~ 'last_contact_time')|trans,
+                    data[last_contact_date_out_key]|oro_format_datetime ~ (' (' ~ (trans_prefix ~ 'outgoing')|trans  ~ ')')
+                ) }}
+            </div>
+            <div class="contact-box-row">
+                {{ ui.renderProperty(
+                    (trans_prefix ~ 'last_contact_time_incoming')|trans,
+                    data[last_contact_date_in_key]|oro_format_datetime
+                ) }}
+            </div>
+        {% endif %}
+    {% endif %}
+{% endmacro %}
+{% macro contact_counts(data) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% set trans_prefix = 'orocrm.activity_contact.aci_' %}
+    {% set contact_count_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT') %}
+    {% set contact_count_out_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT_OUT') %}
+    {% set contact_count_in_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT_IN') %}
+    {% if data[contact_count_key] is defined %}
+        {{ ui.renderProperty(
+            (trans_prefix ~ 'total_count')|trans,
+            data[contact_count_key]|default(0)
+        ) }}
+    {% endif %}
+    {% if data[contact_count_out_key] is defined %}
+        {{ ui.renderProperty(
+            (trans_prefix ~ 'total_count_out')|trans,
+            data[contact_count_out_key]|default(0)
+        ) }}
+    {% endif %}
+    {% if data[contact_count_in_key] is defined %}
+        {{ ui.renderProperty(
+            (trans_prefix ~ 'total_count_in')|trans,
+            data[contact_count_in_key]|default(0)
+        ) }}
+    {% endif %}
+{% endmacro %}

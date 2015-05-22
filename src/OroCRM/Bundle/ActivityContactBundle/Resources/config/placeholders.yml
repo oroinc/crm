@@ -5,4 +5,4 @@ placeholders:
 
 items:
     orocrm_activity_contact:
-        action: OroCRMActivityContactBundle:ActivityContact:metrics
+        template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
