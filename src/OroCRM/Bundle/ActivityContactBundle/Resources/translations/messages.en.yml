@@ -18,13 +18,7 @@ orocrm:
         ac_contact_count_out:
             label: Outgoing contacts count
             description: Represent total count of all outgoing contacting activities
-        activity_contact_info: Activities contact info
-        aci_last_contact_time: Last contact time
-        aci_last_contact_time_incoming: Last incoming contact time
-        aci_last_contact_time_outgoing: Last outgoing contact time
-        aci_incoming: Incoming
-        aci_outgoing: Outgoing
-        aci_total_count: Total times contacted
-        aci_total_count_in: Incoming contacts count
-        aci_total_count_out: Outgoing contacts count
-
+        direction_incoming: Incoming
+        direction_outgoing: Outgoing
+        time_info: Last contacted datetime: {{ last_datetime }} ({{ last_direction }}) | {{ opposite_direction }}: {{ opposite_datetime }}
+        count_info: Total times contacted: {{ total_contacted }} (incoming: {{ count_in }}, outgoing: {{ count_out }})

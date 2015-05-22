@@ -11,11 +11,15 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
+use Oro\Bundle\UIBundle\Provider\WidgetProviderInterface;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 class EntityActivityContactDataProvider
 {
+    /** @var ConfigProviderInterface */
+    protected $entityProvider;
+
     /** @var ConfigProviderInterface */
     protected $extendProvider;
 
@@ -27,6 +31,7 @@ class EntityActivityContactDataProvider
      */
     public function __construct(ConfigManager $configManager)
     {
+        $this->entityProvider   = $configManager->getProvider('entity');
         $this->extendProvider   = $configManager->getProvider('extend');
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
@@ -44,7 +49,10 @@ class EntityActivityContactDataProvider
                 /** @var FieldConfigId $fieldConfigId */
                 $fieldConfigId     = $item->getId();
                 $fieldName         = $fieldConfigId->getFieldName();
-                $carry[$fieldName] = $this->propertyAccessor->getValue($object, $fieldName);
+                $carry[$fieldName] = [
+                    'label' => $this->entityProvider->getConfigById($fieldConfigId)->get('label'),
+                    'value' => $this->propertyAccessor->getValue($object, $fieldName)
+                ];
 
                 return $carry;
             },
