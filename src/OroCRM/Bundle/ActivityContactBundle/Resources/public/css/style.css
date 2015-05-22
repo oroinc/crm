@@ -1,0 +1,20 @@
+.activity-contact-box-wrapper {
+    position: relative;
+}
+.activity-contact-box-row {
+    padding: 5px 0;
+}
+.activity-contact-box:hover{
+    background-color: #EDF1FA;
+}
+.activity-contact-box {
+    background-color: #F6F6F6;
+    float: left;
+    margin: 3px;
+    padding: 10px 20px;
+    width: calc(50% - 6px);
+    cursor: pointer;
+}
+.activity-contact-widget-wrapper{
+    padding: 0 0 0 20px;
+}
