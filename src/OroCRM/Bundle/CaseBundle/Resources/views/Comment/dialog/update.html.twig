@@ -12,7 +12,7 @@
         </script>
     {% else %}
         <div class="form-container">
-            <form id="{{ form.vars.name }}" action="{{ formAction }}" method="post" class="note-form">
+            <form id="{{ form.vars.id }}" name="{{ form.vars.name }}" action="{{ formAction }}" method="post" class="note-form">
                 <fieldset class="form-horizontal">
                     {{ form_errors(form) }}
                     {{ form_row(form.message) }}
