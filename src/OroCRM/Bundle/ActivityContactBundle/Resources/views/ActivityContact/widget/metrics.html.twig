@@ -11,9 +11,10 @@
     </div>
 </div>
 {% macro last_contacted_time(data) %}
-    {% set last_contact_date_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::LAST_CONTACT_DATE') %}
-    {% set last_contact_date_in_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::LAST_CONTACT_DATE_IN') %}
-    {% set last_contact_date_out_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::LAST_CONTACT_DATE_OUT') %}
+    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+    {% set last_contact_date_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
+    {% set last_contact_date_in_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
+    {% set last_contact_date_out_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_OUT') %}
     {% if data[last_contact_date_in_key]['value'] is defined
         and data[last_contact_date_out_key]['value'] is defined
         and data[last_contact_date_key]['value'] is defined
@@ -38,9 +39,10 @@
     {% endif %}
 {% endmacro %}
 {% macro contact_counts(data) %}
-    {% set contact_count_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT') %}
-    {% set contact_count_in_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT_IN') %}
-    {% set contact_count_out_key = constant('OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope::CONTACT_COUNT_OUT') %}
+    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+    {% set contact_count_key = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
+    {% set contact_count_in_key = constant(activity_scope_class ~ '::CONTACT_COUNT_IN') %}
+    {% set contact_count_out_key = constant(activity_scope_class ~ '::CONTACT_COUNT_OUT') %}
     {% if data[contact_count_key]['value'] is defined
         and data[contact_count_in_key]['value'] is defined
         and data[contact_count_out_key]['value'] is defined
