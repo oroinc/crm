@@ -13,7 +13,7 @@ class Account extends AbstractPageEntity
 
     public function setAccountName($accountName)
     {
-        $this->accountName = $this->test->byId('orocrm_account_form_name');
+        $this->accountName = $this->test->byXpath("//*[@data-ftid='orocrm_account_form_name']");
         $this->accountName->clear();
         $this->accountName->value($accountName);
         return $this;

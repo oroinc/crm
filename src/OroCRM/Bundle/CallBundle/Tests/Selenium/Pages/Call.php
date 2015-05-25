@@ -31,7 +31,7 @@ class Call extends AbstractPageEntity
      */
     public function setCallSubject($call)
     {
-        $this->$call = $this->test->byId('orocrm_call_form_subject');
+        $this->$call = $this->test->byXpath("//*[@data-ftid='orocrm_call_form_subject']");
         $this->$call->clear();
         $this->$call->value($call);
 
