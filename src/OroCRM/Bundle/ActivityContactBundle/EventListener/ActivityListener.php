@@ -86,9 +86,8 @@ class ActivityListener
             foreach ($entities as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-                if ($this->activityContactProvider->isSupportedEntity($class)
-                    && empty($this->deletedEntities[md5($class . $id)])
-                ) {
+                $key   = $class . '_' .$id;
+                if ($this->activityContactProvider->isSupportedEntity($class) && !isset($this->deletedEntities[$key])) {
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
@@ -98,7 +97,7 @@ class ActivityListener
                             'direction' => $this->activityContactProvider->getActivityDirection($entity, $target)
                         ];
                     }
-                    $this->deletedEntities[md5($class . $id)] = [
+                    $this->deletedEntities[$key] = [
                         'class'       => $class,
                         'id'          => $id,
                         'contactDate' => $this->activityContactProvider->getActivityDate($entity),

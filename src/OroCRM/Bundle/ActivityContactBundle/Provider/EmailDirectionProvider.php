@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
-
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class EmailDirectionProvider implements DirectionProviderInterface
@@ -44,6 +45,9 @@ class EmailDirectionProvider implements DirectionProviderInterface
         return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
     {
         $result = [];
@@ -65,6 +69,14 @@ class EmailDirectionProvider implements DirectionProviderInterface
         return $result;
     }
 
+    /**
+     * @param EntityManager $em
+     * @param object        $target
+     * @param integer       $skipId
+     * @param string          $direction
+     *
+     * @return Email
+     */
     protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
     {
         $qb = $em->getRepository('Oro\Bundle\EmailBundle\Entity\Email')

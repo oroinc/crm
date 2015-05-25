@@ -124,10 +124,8 @@ class ActivityContactProvider
             usort(
                 $datesArray,
                 function ($a, $b) {
-                    $t1 = strtotime($a);
-                    $t2 = strtotime($b);
 
-                    return $t1 - $t2;
+                    return strtotime($a) - strtotime($b);
                 }
             );
         }
