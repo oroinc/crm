@@ -18,9 +18,6 @@ use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 class EntityActivityContactDataProvider
 {
     /** @var ConfigProviderInterface */
-    protected $entityProvider;
-
-    /** @var ConfigProviderInterface */
     protected $extendProvider;
 
     /** @var PropertyAccessor */
@@ -31,7 +28,6 @@ class EntityActivityContactDataProvider
      */
     public function __construct(ConfigManager $configManager)
     {
-        $this->entityProvider   = $configManager->getProvider('entity');
         $this->extendProvider   = $configManager->getProvider('extend');
         $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
     }
@@ -49,11 +45,7 @@ class EntityActivityContactDataProvider
                 /** @var FieldConfigId $fieldConfigId */
                 $fieldConfigId     = $item->getId();
                 $fieldName         = $fieldConfigId->getFieldName();
-                $carry[$fieldName] = [
-                    'label' => $this->entityProvider->getConfigById($fieldConfigId)->get('label'),
-                    'value' => $this->propertyAccessor->getValue($object, $fieldName)
-                ];
-
+                $carry[$fieldName] = $this->propertyAccessor->getValue($object, $fieldName);
                 return $carry;
             },
             []
