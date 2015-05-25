@@ -13,7 +13,7 @@ services:
         arguments:
             - @oro_entity_extend.migration.entity_metadata_helper
         tags:
-            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp }
+            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: -100 }
 
     orocrm_activity_contact.entity_config_dumper.extension:
         class: %orocrm_activity_contact.entity_config_dumper.extension.class%
@@ -30,8 +30,11 @@ services:
         class: %orocrm_activity_contact.listener.activity_listener.class%
         arguments:
             - @orocrm_activity_contact.provider
+            - @oro_entity.doctrine_helper
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
 
     orocrm_activity_contact.email_activity_direction.provider:
         class: %orocrm_activity_contact.email_activity_direction.provider.class%
