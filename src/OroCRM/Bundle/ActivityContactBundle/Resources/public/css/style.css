@@ -1,0 +1,14 @@
+.activity-contact-box-wrapper {
+    position: relative;
+}
+.activity-contact-box-row {
+    padding: 5px 0;
+}
+.activity-contact-box {
+    float: left;
+    padding: 0  0 20px 0;
+    width: calc(50% - 6px);
+}
+.activity-contact-widget-wrapper{
+    padding: 0 0 0 0;
+}

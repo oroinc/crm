@@ -4,7 +4,7 @@ orocrm:
             label: Last contact datetime
             description: Represent last contacting activity datetime
         ac_last_contact_date_in:
-            label: Last incomint contact datetime
+            label: Last incoming contact datetime
             description: Represent last incoming contacting activity datetime
         ac_last_contact_date_out:
             label: Last outgoing contact datetime
@@ -18,3 +18,7 @@ orocrm:
         ac_contact_count_out:
             label: Outgoing contacts count
             description: Represent total count of all outgoing contacting activities
+        direction_incoming: Incoming
+        direction_outgoing: Outgoing
+        time_info: Last contacted datetime: {{ last_datetime }} ({{ last_direction }}) | {{ opposite_direction }}: {{ opposite_datetime }}
+        count_info: Total times contacted: {{ total_contacted }} (incoming: {{ count_in }}, outgoing: {{ count_out }})

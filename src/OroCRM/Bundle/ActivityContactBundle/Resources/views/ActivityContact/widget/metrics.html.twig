@@ -1,0 +1,55 @@
+<div class="widget-content">
+    <div class="activity-contact-widget-wrapper">
+        <div class="activity-contact-box">
+            <div class="activity-contact-box-row">
+                {{ _self.last_contacted_time(data) }}
+            </div>
+            <div class="activity-contact-box-row">
+                {{ _self.contact_counts(data) }}
+            </div>
+        </div>
+    </div>
+</div>
+{% macro last_contacted_time(data) %}
+    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+    {% set last_contact_date_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
+    {% set last_contact_date_in_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
+    {% set last_contact_date_out_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_OUT') %}
+    {% if data[last_contact_date_in_key] is defined
+        and data[last_contact_date_out_key] is defined
+        and data[last_contact_date_key] is defined
+    %}
+        {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
+        {% if data[last_contact_date_in_key] >= data[last_contact_date_out_key] %}
+            {% set last_direction = 'orocrm.activity_contact.direction_incoming'|trans %}
+            {% set opposite_direction = 'orocrm.activity_contact.direction_outgoing'|trans %}
+            {% set opposite_datetime = data[last_contact_date_out_key]|oro_format_datetime|default('N/A') %}
+        {% else %}
+            {% set last_direction = 'orocrm.activity_contact.direction_outgoing'|trans %}
+            {% set opposite_direction = 'orocrm.activity_contact.direction_incoming'|trans %}
+            {% set opposite_datetime = data[last_contact_date_in_key]|oro_format_datetime|default('N/A') %}
+        {% endif %}
+        {{ 'orocrm.activity_contact.time_info'| trans({
+            '{{ last_datetime }}': last_datetime,
+            '{{ last_direction }}': last_direction,
+            '{{ opposite_direction }}': opposite_direction,
+            '{{ opposite_datetime }}': opposite_datetime
+        }) }}
+    {% endif %}
+{% endmacro %}
+{% macro contact_counts(data) %}
+    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+    {% set contact_count_key = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
+    {% set contact_count_in_key = constant(activity_scope_class ~ '::CONTACT_COUNT_IN') %}
+    {% set contact_count_out_key = constant(activity_scope_class ~ '::CONTACT_COUNT_OUT') %}
+    {% if data[contact_count_key] is defined
+        and data[contact_count_in_key] is defined
+        and data[contact_count_out_key] is defined
+    %}
+        {{ 'orocrm.activity_contact.count_info'| trans({
+            '{{ total_contacted }}': data[contact_count_key]|default(0),
+            '{{ count_in }}': data[contact_count_in_key]|default(0),
+            '{{ count_out }}': data[contact_count_out_key]|default(0)
+        }) }}
+    {% endif %}
+{% endmacro %}
