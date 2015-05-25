@@ -20,14 +20,13 @@
         and data[last_contact_date_key]['value'] is defined
     %}
         {% set last_datetime = data[last_contact_date_key]['value']|oro_format_datetime|default('N/A') %}
-        {% set trans_prefix = 'orocrm.activity_contact.' %}
         {% if data[last_contact_date_in_key]['value'] >= data[last_contact_date_out_key]['value'] %}
-            {% set last_direction = (trans_prefix ~ 'direction_incoming')|trans %}
-            {% set opposite_direction = (trans_prefix ~ 'direction_outgoing')|trans %}
+            {% set last_direction = ('orocrm.activity_contact.direction_incoming')|trans %}
+            {% set opposite_direction = ('orocrm.activity_contact.direction_outgoing')|trans %}
             {% set opposite_datetime = data[last_contact_date_out_key]['value']|oro_format_datetime|default('N/A') %}
         {% else %}
-            {% set last_direction = (trans_prefix ~ 'direction_outgoing')|trans %}
-            {% set opposite_direction = (trans_prefix ~ 'direction_incoming')|trans %}
+            {% set last_direction = ('orocrm.activity_contact.direction_outgoing')|trans %}
+            {% set opposite_direction = ('orocrm.activity_contact.direction_incoming')|trans %}
             {% set opposite_datetime = data[last_contact_date_in_key]['value']|oro_format_datetime|default('N/A') %}
         {% endif %}
         {{ 'orocrm.activity_contact.time_info'| trans({
