@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
 
+use Doctrine\ORM\EntityManager;
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class TestDirectionProvider implements DirectionProviderInterface
@@ -28,5 +29,16 @@ class TestDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         return $activity->getCreated();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
+    {
+        return [
+            'all'       => $target->getCreated(),
+            'direction' => $target->getCreated()
+        ];
     }
 }
