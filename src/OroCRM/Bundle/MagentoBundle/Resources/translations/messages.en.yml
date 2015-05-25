@@ -110,6 +110,9 @@ orocrm:
                     yes: Yes
                     no: No
                     unknown: Not defined
+                metricName: Metric name
+                show: Show
+                sort: Sort
         channel_type:
             label:  Magento
         transport:

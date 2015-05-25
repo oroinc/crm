@@ -123,27 +123,10 @@ oro_dashboard_config:
                         dateRangeField: dateRange
                         default_checked: true
                 subWidgets:
-                    type: oro_type_widget_items_choice
-                    converter_attributes:
-                        default_selected: all
+                    type: orocrm_magento_metrics
                     options:
-                       label: orocrm.magento.dashboard.e_commerce_statistic.sub_widgets.label
+                       label: false
                        required: false
-                       multiple: true
-                       expanded: true
-                       choices:
-                          - {revenue: orocrm.magento.dashboard.e_commerce_statistic.revenue.label}
-                          - {orders_number: orocrm.magento.dashboard.e_commerce_statistic.orders_number.label}
-                          - {discounted_orders_percent: orocrm.magento.dashboard.e_commerce_statistic.discounted_orders_percent.label}
-                          - {new_customers_count: orocrm.magento.dashboard.e_commerce_statistic.new_customers_count.label}
-                          - {returning_customers_count: orocrm.magento.dashboard.e_commerce_statistic.returning_customers_count.label}
-                          - {average_order_value: orocrm.magento.dashboard.e_commerce_statistic.average_order_value.label}
-                          - {abandoned_revenue: orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label}
-                          - {abandoned_count: orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label}
-                          - {abandon_rate: orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label}
-                          - {site_visits: orocrm.magento.dashboard.e_commerce_statistic.site_visits.label}
-                          - {order_conversion: orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label}
-                          - {customer_conversion: orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label}
         revenue_over_time_chart:
             label:       orocrm.magento.dashboard.revenue_over_time_chart.title
             route:       orocrm_magento_dashboard_revenue_over_time_chart

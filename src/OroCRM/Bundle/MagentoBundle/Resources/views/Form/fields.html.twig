@@ -102,3 +102,50 @@
         {{ form_widget(form) }}
     </div>
 {% endblock %}
+
+{% block orocrm_magento_metrics_row %}
+    <div class="grid-container">
+        <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
+            <thead>
+                <tr>
+                    <th><span>{{ 'orocrm.magento.datagrid.columns.show'|trans }}</span></th>
+                    <th><span>{{ 'orocrm.magento.datagrid.columns.metricName'|trans }}</span></th>
+                    <th><span>{{ 'orocrm.magento.datagrid.columns.sort'|trans }}</span></th>
+                </tr>
+            </thead>
+            <tbody class="item-container"></tbody>
+        </table>
+    </div>
+    <script>
+        require([
+            'backbone',
+            'oroui/js/items-manager/table'
+        ], function (Backbone) {
+            var ItemModel = Backbone.Model.extend({
+                defaults: {
+                    id: null,
+                    label: null,
+                    show: true,
+                }
+            });
+
+            var ItemCollection = Backbone.Collection.extend({
+                model: ItemModel
+            });
+
+            var items = new ItemCollection({{ form.vars.value|json_encode|raw }});
+
+            $('#' + {{ form.vars.id|json_encode|raw }} + ' .item-container').itemsManagerTable({
+                itemTemplate: $('#magento-big-numbers-metric-template').html(),
+                collection: items,
+            });
+        });
+    </script>
+    <script id="magento-big-numbers-metric-template" type="text/template">
+        <tr data-cid="<%= cid %>">
+            <td></td>
+            <td><%= label %></td>
+            <td></td>
+        </tr>
+    </script>
+{% endblock %}
