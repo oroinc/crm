@@ -61,6 +61,8 @@ orocrm:
             actions:
                 view:
                     label: View
+                move_column:
+                    label: Move column
             columns:
                 originId:         ID
                 first_name:       First Name

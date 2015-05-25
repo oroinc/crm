@@ -121,11 +121,17 @@
             'backbone',
             'oroui/js/items-manager/table'
         ], function (Backbone) {
+            var metricsData = {{ form.children.metrics.vars.value|json_encode|raw }};
+            var baseName = {{ form.children.metrics.vars.full_name|json_encode|raw }};
+            var itemContainerSelector = '#' + {{ form.vars.id|json_encode|raw }} + ' .item-container';
+
             var ItemModel = Backbone.Model.extend({
                 defaults: {
                     id: null,
                     label: null,
                     show: true,
+                    order: 1,
+                    namePrefix: '',
                 }
             });
 
@@ -133,9 +139,19 @@
                 model: ItemModel
             });
 
-            var items = new ItemCollection({{ form.vars.value|json_encode|raw }});
+            var items = new ItemCollection(metricsData);
+            items.each(function (item, index) {
+                item.set('namePrefix', baseName + '[' + index + ']');
+            });
 
-            $('#' + {{ form.vars.id|json_encode|raw }} + ' .item-container').itemsManagerTable({
+            var $itemContainer = $(itemContainerSelector);
+            items.on('sort', function () {
+                $itemContainer.find('input.order').each(function (index) {
+                    $(this).val(index);
+                });
+            });
+
+            $itemContainer.itemsManagerTable({
                 itemTemplate: $('#magento-big-numbers-metric-template').html(),
                 collection: items,
             });
@@ -145,7 +161,13 @@
         <tr data-cid="<%= cid %>">
             <td></td>
             <td><%= label %></td>
-            <td></td>
+            <td>
+                <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
+                <input type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
+                <span title="{{ 'orocrm.magento.datagrid.actions.move_column.label'|trans }}">
+                    <i class="icon-list handle"></i>
+                </span>
+            </td>
         </tr>
     </script>
 {% endblock %}

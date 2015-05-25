@@ -32,6 +32,7 @@ parameters:
 
     # forms
     orocrm_magento.form.type.metrics.class:                                 OroCRM\Bundle\MagentoBundle\Form\Type\MetricsType
+    orocrm_magento.form.type.metric.class:                                  OroCRM\Bundle\MagentoBundle\Form\Type\MetricType
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
     orocrm_magento.form.type.soap_transport_check.class:                    OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportCheckButtonType
@@ -124,6 +125,8 @@ parameters:
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 
     orocrm_magento.service.information_loader.class:                        OroCRM\Bundle\MagentoBundle\Service\InformationLoader
+
+    orocrm_magento.twig.metrics.class:                                      OroCRM\Bundle\MagentoBundle\Twig\MetricsExtension
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
@@ -192,6 +195,11 @@ services:
         class: %orocrm_magento.form.type.website_select.class%
         tags:
             - { name: form.type, alias: orocrm_magento_website_select }
+
+    orocrm_magento.form.type.metric:
+        class: %orocrm_magento.form.type.metric.class%
+        tags:
+            - { name: form.type, alias: orocrm_magento_metric }
 
     orocrm_magento.form.type.metrics:
         class: %orocrm_magento.form.type.metrics.class%
@@ -641,3 +649,8 @@ services:
             - @oro_importexport.job_executor
             - @orocrm_magento.mage.cart_connector
             - "orocrm_magento.add_or_update_cart"
+
+    orocrm_magento.twig.metrics:
+        class: %orocrm_magento.twig.metrics.class%
+        tags:
+            - { name: twig.extension }

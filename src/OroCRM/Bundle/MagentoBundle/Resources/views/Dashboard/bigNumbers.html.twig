@@ -3,6 +3,8 @@
 {% set widgetType = 'quick-launchpad' %}
 
 {% block content %}
+    {% set items = items|orocrm_magento_filter_metric_items(widgetConfiguration.subWidgets.value) %}
+
     {% if items|length %}
         <ul class="quick-launchpad-toolbar with-subwidgets">
         {% if (items|length > 3) %}

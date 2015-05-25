@@ -27,6 +27,10 @@ class MetricsType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->addEventSubscriber($this->metricsSubscriber);
+
+        $builder->add('metrics', 'collection', [
+            'type' => 'orocrm_magento_metric',
+        ]);
     }
 
     /**
