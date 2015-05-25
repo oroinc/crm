@@ -191,7 +191,6 @@ services:
     orocrm_marketing_list.workflow.condition.has_contact_information:
         class: %orocrm_marketing_list.workflow.condition.has_contact_information.class%
         arguments:
-            - @oro_workflow.context_accessor
             - @orocrm_marketing_list.provider.contact_information_fields
         tags:
             - { name: oro_workflow.condition, alias: has_contact_information }
