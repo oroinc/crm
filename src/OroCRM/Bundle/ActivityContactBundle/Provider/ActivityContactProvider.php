@@ -123,9 +123,9 @@ class ActivityContactProvider
         if (count($datesArray) > 1) {
             usort(
                 $datesArray,
-                function ($a, $b) {
+                function (\DateTime $a, \DateTime $b) {
 
-                    return strtotime($a) - strtotime($b);
+                    return $a->getTimestamp() - $b->getTimestamp();
                 }
             );
         }
