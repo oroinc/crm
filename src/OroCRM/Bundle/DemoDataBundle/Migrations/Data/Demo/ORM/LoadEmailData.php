@@ -110,17 +110,17 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             $origin = $this->mailerProcessor->getEmailOrigin($owner->getEmail());
             $randomTemplate = array_rand($this->templates);
 
-            $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
+            $emailUser = $this->addEmailUser($randomTemplate, $owner, $contact, $origin);
             if ($i % 7 == 0) {
                 $thread = new EmailThread();
                 $om->persist($thread);
-                $email->setThread($thread);
+                $emailUser->getEmail()->setThread($thread);
                 $randomNumber = rand(1, 7);
                 for ($j = 0; $j < $randomNumber; ++$j) {
-                    $email = $this->addEmail($randomTemplate, $owner, $contact, $origin);
-                    $email->setSubject('Re: ' . $email->getSubject());
-                    $email->setThread($thread);
-                    $email->setHead(false);
+                    $eu = $this->addEmailUser($randomTemplate, $owner, $contact, $origin);
+                    $eu->getEmail()->setSubject('Re: ' . $emailUser->getEmail()->getSubject());
+                    $eu->getEmail()->setThread($thread);
+                    $eu->getEmail()->setHead(false);
                 }
             }
 
@@ -151,9 +151,9 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      *
      * @return EmailUser
      */
-    protected function addEmail($randomTemplate, $owner, $contact, $origin)
+    protected function addEmailUser($randomTemplate, $owner, $contact, $origin)
     {
-        $email = $this->emailEntityBuilder->emailUser(
+        $emailUser = $this->emailEntityBuilder->emailUser(
             $this->templates[$randomTemplate]['Subject'],
             $owner->getEmail(),
             $contact->getPrimaryEmail()->getEmail(),
@@ -164,18 +164,18 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
         $this->setSecurityContext($owner);
 
-        $email->setFolder($origin->getFolder(FolderType::SENT));
-        $email->setOwner($owner);
-        $email->setOrganization($owner->getOrganization());
+        $emailUser->setFolder($origin->getFolder(FolderType::SENT));
+        $emailUser->setOwner($owner);
+        $emailUser->setOrganization($owner->getOrganization());
 
         $emailBody = $this->emailEntityBuilder->body(
             "Hi,\n" . $this->templates[$randomTemplate]['Text'],
             false,
             true
         );
-        $email->setEmailBody($emailBody);
-        $email->setMessageId(sprintf('<id.%s@%s', uniqid(), '@bap.migration.generated>'));
+        $emailUser->getEmail()->setEmailBody($emailBody);
+        $emailUser->getEmail()->setMessageId(sprintf('<id.%s@%s', uniqid(), '@bap.migration.generated>'));
 
-        return $email;
+        return $emailUser;
     }
 }
