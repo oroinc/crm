@@ -61,7 +61,7 @@ class Workflow extends AbstractPageEntity
 
     public function setBudget($budget)
     {
-        $this->budget = $this->test->byId('oro_workflow_transition_budget_amount');
+        $this->budget = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_budget_amount']");
         $this->budget->clear();
         $this->budget->value($budget);
 
@@ -70,12 +70,12 @@ class Workflow extends AbstractPageEntity
 
     public function getBudget()
     {
-        return $this->test->byId('oro_workflow_transition_budget_amount')->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_budget_amount']")->value();
     }
 
     public function setProbability($probability)
     {
-        $this->probability = $this->test->byId('oro_workflow_transition_probability');
+        $this->probability = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_probability']");
         $this->probability->clear();
         $this->probability->value($probability);
 
@@ -84,12 +84,12 @@ class Workflow extends AbstractPageEntity
 
     public function getProbability()
     {
-        return $this->test->byId('oro_workflow_transition_probability')->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_probability']")->value();
     }
 
     public function setCustomerNeed($customerNeed)
     {
-        $field = $this->test->byId('oro_workflow_transition_customer_need');
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_customer_need']");
         $field->clear();
         $field->value($customerNeed);
 
@@ -98,12 +98,12 @@ class Workflow extends AbstractPageEntity
 
     public function getCustomerNeed()
     {
-        return $this->test->byId('oro_workflow_transition_customer_need')->value();
+        return $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_customer_need']")->value();
     }
 
     public function setSolution($solution)
     {
-        $this->solution = $this->test->byId('oro_workflow_transition_proposed_solution');
+        $this->solution = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_proposed_solution']");
         $this->solution->clear();
         $this->solution->value($solution);
 
@@ -112,12 +112,12 @@ class Workflow extends AbstractPageEntity
 
     public function getSolution()
     {
-        return $$this->test->byId('oro_workflow_transition_proposed_solution')->value();
+        return $$this->test->byXpath("//*[@data-ftid='oro_workflow_transition_proposed_solution']")->value();
     }
 
     public function setCloseRevenue($closeRevenue)
     {
-        $field = $this->test->byId('oro_workflow_transition_close_revenue');
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_revenue']");
         $field->clear();
         $field->value($closeRevenue);
 
@@ -126,7 +126,8 @@ class Workflow extends AbstractPageEntity
 
     public function setCloseReason($closeReason)
     {
-        $field = $this->test->select($this->test->byId('oro_workflow_transition_close_reason_name'));
+        $field = $this->test
+            ->select($this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_reason_name']"));
         $field->selectOptionByLabel($closeReason);
 
         return $this;
@@ -134,7 +135,8 @@ class Workflow extends AbstractPageEntity
 
     public function setCloseDate($closeDate)
     {
-        $field = $this->test->byId($this->test->byId('date_selector_oro_workflow_transition_close_date'));
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_close_date']/..".
+            "/following-sibling::input[contains(@class,'datepicker-input')]");
         $field->clear();
         $field->value($closeDate);
 
@@ -143,7 +145,7 @@ class Workflow extends AbstractPageEntity
 
     public function setCompanyName($company)
     {
-        $field = $this->test->byId('oro_workflow_transition_new_company_name');
+        $field = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_new_company_name']");
         $field->clear();
         $field->value($company);
 
