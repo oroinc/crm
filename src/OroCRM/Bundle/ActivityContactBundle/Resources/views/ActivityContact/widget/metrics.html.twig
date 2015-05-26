@@ -1,4 +1,5 @@
-<div class="widget-content">
+{% set entityClassName = oro_class_name(entity, true) %}
+<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="widget-content">
     <div class="activity-contact-widget-wrapper">
         <div class="activity-contact-box">
             <div class="activity-contact-box-row">
@@ -10,6 +11,45 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    require(['jquery', 'routing', 'oroui/js/mediator'], function($, routing, mediator) {
+        $(function() {
+            var reloadStatistics = function() {
+                $.ajax({
+                    url: routing.generate('orocrm_activity_contact_metrics', {
+                        entityClass: '{{ entityClassName }}',
+                        entityId: '{{ entity.id }}'
+                    }),
+                    type: 'GET',
+                    success: function(response) {
+                        $('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html(
+                            $(response).filter('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html()
+                        );
+                    }
+                })
+            };
+
+            mediator.on(
+                'widget:doRefresh:activity-list-widget ' +
+                'widget_success:activity_list:refresh ' +
+                'widget_success:activity_list:item:delete ' +
+                'widget_success:activity_list:item:update',
+                reloadStatistics
+            );
+            mediator.once('page:beforeChange', function(){
+                mediator.off(
+                    'widget:doRefresh:activity-list-widget ' +
+                    'widget_success:activity_list:refresh ' +
+                    'widget_success:activity_list:item:delete ' +
+                    'widget_success:activity_list:item:update',
+                    reloadStatistics
+                );
+            });
+        });
+    });
+</script>
+
 {% macro last_contacted_time(data) %}
     {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
     {% set last_contact_date_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
