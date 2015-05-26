@@ -104,6 +104,10 @@
 {% endblock %}
 
 {% block orocrm_magento_metrics_row %}
+    <div id="{{ form.vars.id }}Filter" class="control-group">
+        <label class="control-label">{{ 'orocrm.magento.dashboard.e_commerce_statistic.choose_metrics'|trans }}</label>
+        <div class="controls"></div>
+    </div>
     <div class="grid-container">
         <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
             <thead>
@@ -119,11 +123,13 @@
     <script>
         require([
             'backbone',
-            'oroui/js/items-manager/table'
+            'oroui/js/items-manager/table',
+            'jquery.select2',
         ], function (Backbone) {
             var metricsData = {{ form.children.metrics.vars.value|json_encode|raw }};
             var baseName = {{ form.children.metrics.vars.full_name|json_encode|raw }};
             var itemContainerSelector = '#' + {{ form.vars.id|json_encode|raw }} + ' .item-container';
+            var filterSelector = '#' + {{ form.vars.id|json_encode|raw }} + 'Filter .controls';
 
             var ItemModel = Backbone.Model.extend({
                 defaults: {
@@ -151,16 +157,55 @@
                 });
             });
 
+            var selectTpl = _.template($('#magento-big-numbers-metric-select-template').html());
+            var select = selectTpl({
+                metrics: items,
+            });
+            var $filterContainer = $(filterSelector);
+            $filterContainer.html(select);
+            $filterContainer.find('select').select2({
+                allowClear: true,
+            });
+
+            var filteredItems = items.clone();
             $itemContainer.itemsManagerTable({
                 itemTemplate: $('#magento-big-numbers-metric-template').html(),
-                collection: items,
+                collection: filteredItems,
+            });
+
+            $itemContainer.on('change', function (e) {
+                var $target = $(e.target);
+                var item = items.get($target.closest('tr').data('cid'));
+                item.set($target.data('name'), $target.is(':checked'));
+            });
+
+            $filterContainer.on('change', function (e) {
+                if (e.val) {
+                    filteredItems.reset([items.get(e.val)]);
+                } else {
+                    filteredItems.reset(items.models);
+                }
+            });
+
+            $itemContainer.closest('form').on('submit', function () {
+                filteredItems.reset(items.models);
             });
         });
+    </script>
+    <script id="magento-big-numbers-metric-select-template" type="text/template">
+        <div>
+            <select class="filter-select-oro" data-placeholder="{{ 'orocrm.magento.dashboard.e_commerce_statistic.search'|trans }}">
+                <option></option>
+                <% metrics.each(function (metric) { %>
+                    <option value="<%= metric.get('id') %>"><%= metric.get('label') %></option>
+                <% }); %>
+            </select>
+        </div>
     </script>
     <script id="magento-big-numbers-metric-template" type="text/template">
         <tr data-cid="<%= cid %>">
             <td>
-                <input type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
+                <input data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
             </td>
             <td><%= label %></td>
             <td>
