@@ -159,7 +159,9 @@
     </script>
     <script id="magento-big-numbers-metric-template" type="text/template">
         <tr data-cid="<%= cid %>">
-            <td></td>
+            <td>
+                <input type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
+            </td>
             <td><%= label %></td>
             <td>
                 <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">

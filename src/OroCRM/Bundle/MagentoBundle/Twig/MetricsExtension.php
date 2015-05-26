@@ -44,6 +44,10 @@ class MetricsExtension extends Twig_Extension
     {
         $metrics = [];
         foreach ($configuration['metrics'] as $metric) {
+            if (!$metric['show']) {
+                continue;
+            }
+
             $metrics[$metric['id']] = $metric;
         }
         uasort($metrics, function ($a, $b) {
@@ -70,7 +74,7 @@ class MetricsExtension extends Twig_Extension
             return $keyOrder[$a] - $keyOrder[$b];
         });
 
-        return $items;
+        return array_intersect_key($items, $keyOrder);
     }
 
     /**
