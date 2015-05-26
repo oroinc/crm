@@ -104,120 +104,37 @@
 {% endblock %}
 
 {% block orocrm_magento_metrics_row %}
-    <div id="{{ form.vars.id }}Filter" class="control-group">
-        <label class="control-label">{{ 'orocrm.magento.dashboard.e_commerce_statistic.choose_metrics'|trans }}</label>
-        <div class="controls"></div>
-    </div>
-    <div class="grid-container">
-        <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
-            <thead>
-                <tr>
-                    <th><span>{{ 'orocrm.magento.datagrid.columns.show'|trans }}</span></th>
-                    <th><span>{{ 'orocrm.magento.datagrid.columns.metricName'|trans }}</span></th>
-                    <th><span>{{ 'orocrm.magento.datagrid.columns.sort'|trans }}</span></th>
-                </tr>
-            </thead>
-            <tbody class="item-container"></tbody>
-        </table>
+    {% set rowId = form.vars.id ~ 'Row' %}
+
+    <div id="{{ rowId }}">
+        <div class="control-group">
+            <label class="control-label">{{ 'orocrm.magento.dashboard.e_commerce_statistic.choose_metrics'|trans }}</label>
+            <div class="controls"></div>
+        </div>
+        <div class="grid-container">
+            <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
+                <thead>
+                    <tr>
+                        <th><span>{{ 'orocrm.magento.datagrid.columns.show'|trans }}</span></th>
+                        <th><span>{{ 'orocrm.magento.datagrid.columns.metricName'|trans }}</span></th>
+                        <th><span>{{ 'orocrm.magento.datagrid.columns.sort'|trans }}</span></th>
+                    </tr>
+                </thead>
+                <tbody class="item-container"></tbody>
+            </table>
+        </div>
     </div>
     <script>
         require([
-            'backbone',
-            'oroui/js/items-manager/table',
-            'jquery.select2',
-        ], function (Backbone) {
-            var metricsData = {{ form.children.metrics.vars.value|json_encode|raw }};
-            var baseName = {{ form.children.metrics.vars.full_name|json_encode|raw }};
-            var itemContainerSelector = '#' + {{ form.vars.id|json_encode|raw }} + ' .item-container';
-            var filterSelector = '#' + {{ form.vars.id|json_encode|raw }} + 'Filter .controls';
+            'orocrmmagento/js/metrics/view',
+        ], function (MetricsView) {
+            'use strict';
 
-            var ItemModel = Backbone.Model.extend({
-                defaults: {
-                    id: null,
-                    label: null,
-                    show: true,
-                    order: 1,
-                    namePrefix: '',
-                }
-            });
-
-            var ItemCollection = Backbone.Collection.extend({
-                model: ItemModel
-            });
-
-            var items = new ItemCollection(metricsData);
-            items.each(function (item, index) {
-                item.set('namePrefix', baseName + '[' + index + ']');
-            });
-
-            var $itemContainer = $(itemContainerSelector);
-
-            var selectTpl = _.template($('#magento-big-numbers-metric-select-template').html());
-            var select = selectTpl({
-                metrics: items,
-            });
-            var $filterContainer = $(filterSelector);
-            $filterContainer.html(select);
-            $filterContainer.find('select').select2({
-                allowClear: true,
-            });
-
-            var filteredItems = items.clone();
-            $itemContainer.itemsManagerTable({
-                itemTemplate: $('#magento-big-numbers-metric-template').html(),
-                collection: filteredItems,
-            });
-
-            filteredItems.on('sort', function () {
-                $itemContainer.find('input.order').each(function (index) {
-                    $(this).val(index).trigger('change');
-                });
-                items.reset(filteredItems.models);
-            });
-
-            $itemContainer.on('change', function (e) {
-                var $target = $(e.target);
-                var item = items.get($target.closest('tr').data('cid'));
-                var value = $target.is(':checkbox') ? $target.is(':checked') : $target.val();
-                item.set($target.data('name'), value);
-            });
-
-            $filterContainer.on('change', function (e) {
-                if (e.val) {
-                    filteredItems.reset([items.get(e.val)]);
-                } else {
-                    filteredItems.reset(items.models);
-                }
-            });
-
-            $itemContainer.closest('form').on('submit', function () {
-                filteredItems.reset(items.models);
+            new MetricsView({
+                metricsData: {{ form.children.metrics.vars.value|json_encode|raw }},
+                baseName: {{ form.children.metrics.vars.full_name|json_encode|raw }},
+                el: '#' + {{ rowId|json_encode|raw }},
             });
         });
-    </script>
-    <script id="magento-big-numbers-metric-select-template" type="text/template">
-        <div>
-            <select class="filter-select-oro" data-placeholder="{{ 'orocrm.magento.dashboard.e_commerce_statistic.search'|trans }}">
-                <option></option>
-                <% metrics.each(function (metric) { %>
-                    <option value="<%= metric.get('id') %>"><%= metric.get('label') %></option>
-                <% }); %>
-            </select>
-        </div>
-    </script>
-    <script id="magento-big-numbers-metric-template" type="text/template">
-        <tr data-cid="<%= cid %>">
-            <td>
-                <input data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
-            </td>
-            <td><%= label %></td>
-            <td>
-                <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
-                <input data-name="order" type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
-                <span title="{{ 'orocrm.magento.datagrid.actions.move_column.label'|trans }}">
-                    <i class="icon-list handle"></i>
-                </span>
-            </td>
-        </tr>
     </script>
 {% endblock %}
