@@ -151,11 +151,6 @@
             });
 
             var $itemContainer = $(itemContainerSelector);
-            items.on('sort', function () {
-                $itemContainer.find('input.order').each(function (index) {
-                    $(this).val(index);
-                });
-            });
 
             var selectTpl = _.template($('#magento-big-numbers-metric-select-template').html());
             var select = selectTpl({
@@ -173,10 +168,18 @@
                 collection: filteredItems,
             });
 
+            filteredItems.on('sort', function () {
+                $itemContainer.find('input.order').each(function (index) {
+                    $(this).val(index).trigger('change');
+                });
+                items.reset(filteredItems.models);
+            });
+
             $itemContainer.on('change', function (e) {
                 var $target = $(e.target);
                 var item = items.get($target.closest('tr').data('cid'));
-                item.set($target.data('name'), $target.is(':checked'));
+                var value = $target.is(':checkbox') ? $target.is(':checked') : $target.val();
+                item.set($target.data('name'), value);
             });
 
             $filterContainer.on('change', function (e) {
@@ -210,7 +213,7 @@
             <td><%= label %></td>
             <td>
                 <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
-                <input type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
+                <input data-name="order" type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
                 <span title="{{ 'orocrm.magento.datagrid.actions.move_column.label'|trans }}">
                     <i class="icon-list handle"></i>
                 </span>

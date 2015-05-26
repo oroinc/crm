@@ -77,8 +77,6 @@ parameters:
     orocrm_magento.customer_state_handler.class:                            OroCRM\Bundle\MagentoBundle\Service\CustomerStateHandler
 
     # dashboard
-    orocrm_magento.widget_config_value.metrics_converter.class:             OroCRM\Bundle\MagentoBundle\Provider\Converters\MetricsConverter
-
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
     orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
@@ -382,13 +380,6 @@ services:
         class: %orocrm_magento.importexport.doctrine_helper.class%
         arguments:
             - @oro_importexport.strategy.import.helper
-
-    orocrm_magento.widget_config_value.metrics_converter:
-        class: %orocrm_magento.widget_config_value.metrics_converter.class%
-        arguments:
-            - @translator
-        tags:
-            - { name: oro_dashboard.value.converter, alias: orocrm_magento_metrics }
 
     orocrm_magento.dashboard.data_provider.order:
         class: %orocrm_magento.dashboard.data_provider.order.class%

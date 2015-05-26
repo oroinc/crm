@@ -19,13 +19,12 @@ class MetricsExtension extends Twig_Extension
 
     /**
      * @param array $items
-     * @param string $configValue Json encoded configuration
+     * @param array|null $config Json encoded configuration
      *
      * @return array
      */
-    public function filterItems(array $items, $configValue)
+    public function filterItems(array $items, array $config = null)
     {
-        $config = json_decode($configValue, true);
         if (!isset($config['metrics'])) {
             return $items;
         }
