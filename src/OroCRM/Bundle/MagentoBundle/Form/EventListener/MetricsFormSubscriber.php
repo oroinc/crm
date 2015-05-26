@@ -46,13 +46,7 @@ class MetricsFormSubscriber implements EventSubscriberInterface
     {
         $attributes = $this->widgetConfigs->getWidgetAttributesForTwig(static::WIDGET_NAME);
         $dataItems = $attributes['widgetDataItems'];
-
-        $originalData = [];
-        if ($eventData = $event->getData()) {
-            foreach ($eventData['metrics'] as $item) {
-                $originalData[$item['id']] = $item;
-            }
-        }
+        $originalData = $this->getIndexedData($event->getData());
 
         $data = [];
         $order = 1;
@@ -74,5 +68,25 @@ class MetricsFormSubscriber implements EventSubscriberInterface
         });
 
         $event->setData(['metrics' => array_values($data)]);
+    }
+
+    /**
+     * @param array $data
+     *
+     * @return array
+     */
+    protected function getIndexedData(array $data = null)
+    {
+        $result = [];
+
+        if (!$data) {
+            return $result;
+        }
+
+        foreach ($data['metrics'] as $item) {
+            $result[$item['id']] = $item;
+        }
+
+        return $result;
     }
 }
