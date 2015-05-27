@@ -10,16 +10,6 @@ class ActivityScope
     /** Activity group name for activities that represent communications. */
     const GROUP_ACTIVITY_CONTACT = 'activity_contact';
 
-    /**
-     * Activity entity classes that should be added to Activity Contact group
-     *
-     * @var array
-     */
-    public static $contactingActivityClasses = [
-        'OroCRM\Bundle\CallBundle\Entity\Call',
-        'Oro\Bundle\EmailBundle\Entity\Email'
-    ];
-
     /** Last contact activity (datetime) */
     const LAST_CONTACT_DATE = 'ac_last_contact_date';
 
@@ -39,7 +29,7 @@ class ActivityScope
     const CONTACT_COUNT_IN = 'ac_contact_count_in';
 
     /**
-     * Fields configuration
+     * Contacting statistics storage custom fields default configuration
      *
      * @var array
      */

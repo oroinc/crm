@@ -10,18 +10,24 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AbstractEntityConfigDumperExtension;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExtension
 {
     /** @var ConfigManager */
     protected $configManager;
 
+    /** @var  ActivityContactProvider */
+    protected $activityContactProvider;
+
     /**
-     * @param ConfigManager $configManager
+     * @param ConfigManager           $configManager
+     * @param ActivityContactProvider $activityContactProvider
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, ActivityContactProvider $activityContactProvider)
     {
-        $this->configManager = $configManager;
+        $this->configManager           = $configManager;
+        $this->activityContactProvider = $activityContactProvider;
     }
 
     /**
@@ -42,6 +48,8 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
         /** @var ConfigProvider $activityConfigProvider */
         $activityConfigProvider = $this->configManager->getProvider('activity');
 
+        $contactingActivityClasses = $this->activityContactProvider->getSupportedActivityClasses();
+
         $entityConfigs = $extendConfigProvider->getConfigs();
         foreach ($entityConfigs as $entityConfig) {
             if ($entityConfig->is('is_extend')) {
@@ -52,7 +60,7 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
                  */
                 $entityActivities = $activityConfigProvider->getConfig($entityClassName)->get('activities');
                 if (!$entityActivities
-                    || !array_intersect(ActivityScope::$contactingActivityClasses, $entityActivities)
+                    || !array_intersect($contactingActivityClasses, $entityActivities)
                 ) {
                     continue;
                 }
