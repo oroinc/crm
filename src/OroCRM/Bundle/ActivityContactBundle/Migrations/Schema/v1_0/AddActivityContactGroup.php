@@ -14,6 +14,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class AddActivityContactGroup implements Migration, ContainerAwareInterface
 {
@@ -45,9 +46,13 @@ class AddActivityContactGroup implements Migration, ContainerAwareInterface
         /** @var Registry $entities */
         $doctrineRegistry = $container->get('doctrine');
 
+        /** @var ActivityContactProvider $activityContactProvider */
+        $activityContactProvider = $container->get('orocrm_activity_contact.provider');
+        $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
+
         /** @var EntityConfigModel[] $entities */
         $entities = $doctrineRegistry->getManager()->getRepository('OroEntityConfigBundle:EntityConfigModel')
-            ->findEntitiesByClassNames(ActivityScope::$contactingActivityClasses);
+            ->findEntitiesByClassNames($contactingActivityClasses);
 
         foreach ($entities as $entity) {
             $entityGrouping = $entity->toArray('grouping');

@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ActivityContactBundle\Command;
 
 use Doctrine\ORM\QueryBuilder;
 
+use Psr\Log\AbstractLogger;
+
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,6 +24,7 @@ use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener;
+use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {
@@ -45,17 +48,31 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
     {
         $logger = new OutputLogger($output);
 
+        $this->recalculate($logger);
+    }
+
+    /**
+     * @param AbstractLogger $logger
+     *
+     * @return int
+     */
+    public function recalculate(AbstractLogger $logger)
+    {
         $logger->notice('Recalculating contacting activities...');
         $logger->info(sprintf('<info>Processing started at %s</info>', date('Y-m-d H:i:s')));
 
         /** @var ConfigProvider $activityConfigProvider */
         $activityConfigProvider = $this->getContainer()->get('oro_entity_config.provider.activity');
 
+        /** @var ActivityContactProvider $activityContactProvider */
+        $activityContactProvider   = $this->getContainer()->get('orocrm_activity_contact.provider');
+        $contactingActivityClasses = $activityContactProvider->getSupportedActivityClasses();
+
         $entityConfigsWithApplicableActivities = $activityConfigProvider->filter(
-            function (ConfigInterface $entity) {
+            function (ConfigInterface $entity) use ($contactingActivityClasses) {
                 return
                     $entity->get('activities')
-                    && array_intersect(ActivityScope::$contactingActivityClasses, $entity->get('activities'));
+                    && array_intersect($contactingActivityClasses, $entity->get('activities'));
             }
         );
 
@@ -88,9 +105,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                 $allRecords       = $entityRepository->findAll();
                 $startTimestamp   = time();
                 foreach ($allRecords as $record) {
-                    /**
-                     * Reset record statistics.
-                     */
+                    /** Reset record statistics. */
                     $accessor->setValue($record, ActivityScope::CONTACT_COUNT, 0);
                     $accessor->setValue($record, ActivityScope::CONTACT_COUNT_IN, 0);
                     $accessor->setValue($record, ActivityScope::CONTACT_COUNT_OUT, 0);
@@ -104,7 +119,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                         $qb,
                         [
                             'activityType' => [
-                                'value' => ActivityScope::$contactingActivityClasses
+                                'value' => $contactingActivityClasses
                             ]
                         ]
                     );

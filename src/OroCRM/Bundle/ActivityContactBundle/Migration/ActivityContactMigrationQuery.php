@@ -16,6 +16,7 @@ use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 {
@@ -25,14 +26,22 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
     /** @var EntityMetadataHelper */
     protected $metadataHelper;
 
+    /** @var ActivityContactProvider */
+    protected $activityContactProvider;
+
     /**
-     * @param Schema               $schema
-     * @param EntityMetadataHelper $metadataHelper
+     * @param Schema                  $schema
+     * @param EntityMetadataHelper    $metadataHelper
+     * @param ActivityContactProvider $activityContactProvider
      */
-    public function __construct(Schema $schema, EntityMetadataHelper $metadataHelper)
-    {
-        $this->schema         = $schema;
-        $this->metadataHelper = $metadataHelper;
+    public function __construct(
+        Schema $schema,
+        EntityMetadataHelper $metadataHelper,
+        ActivityContactProvider $activityContactProvider
+    ) {
+        $this->schema                  = $schema;
+        $this->metadataHelper          = $metadataHelper;
+        $this->activityContactProvider = $activityContactProvider;
     }
 
     /**
@@ -60,9 +69,11 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
      */
     protected function addActivityContactColumns(LoggerInterface $logger, $dryRun = false)
     {
-        $entities         = $this->getConfigurableEntitiesData($logger);
-        $hasSchemaChanges = false;
-        $toSchema         = clone $this->schema;
+        $hasSchemaChanges          = false;
+        $toSchema                  = clone $this->schema;
+        $contactingActivityClasses = $this->activityContactProvider->getSupportedActivityClasses();
+
+        $entities = $this->getConfigurableEntitiesData($logger);
         foreach ($entities as $entityClassName => $config) {
             if (isset(
                     $config['extend'],
@@ -72,10 +83,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
                 )
                 && $config['extend']['is_extend'] == true
                 && $config['activity']['activities']
-                && array_intersect(
-                    ActivityScope::$contactingActivityClasses,
-                    $config['activity']['activities']
-                )
+                && array_intersect($contactingActivityClasses, $config['activity']['activities'])
             ) {
                 if (isset($config['extend']['schema']['doctrine'][$entityClassName]['table'])) {
                     $tableName = $config['extend']['schema']['doctrine'][$entityClassName]['table'];
