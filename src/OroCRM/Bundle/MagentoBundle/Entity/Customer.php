@@ -240,6 +240,12 @@ class Customer extends ExtendCustomer implements
     protected $confirmed = true;
 
     /**
+     * @var bool
+     * @ORM\Column(name="is_guest", type="boolean", nullable=false)
+     */
+    protected $guest = false;
+
+    /**
      * @var CustomerGroup
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup")
@@ -522,6 +528,25 @@ class Customer extends ExtendCustomer implements
     public function setConfirmed($confirmed)
     {
         $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGuest()
+    {
+        return $this->guest;
+    }
+
+    /**
+     * @param bool $guest
+     * @return Customer
+     */
+    public function setGuest($guest)
+    {
+        $this->guest = $guest;
 
         return $this;
     }

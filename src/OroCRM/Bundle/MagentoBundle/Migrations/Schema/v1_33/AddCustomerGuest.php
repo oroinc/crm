@@ -1,13 +1,13 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_31;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_33;
 
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddCustomerAttributes implements Migration
+class AddCustomerGuest implements Migration
 {
     /**
      * {@inheritdoc}
@@ -15,7 +15,6 @@ class AddCustomerAttributes implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->addColumn('created_in', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('is_confirmed', 'boolean', ['notnull' => false]);
+        $table->addColumn('is_guest', 'boolean', ['notnull' => true]);
     }
 }
