@@ -122,7 +122,7 @@ workflows:
                 step_to: emailed
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: oro_email_create
+                acl_resource: oro_email_email_user_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:

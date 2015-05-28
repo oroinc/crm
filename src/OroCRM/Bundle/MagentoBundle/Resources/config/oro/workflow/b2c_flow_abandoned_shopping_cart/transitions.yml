@@ -174,7 +174,7 @@ workflows:
                 step_to: contacted
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: oro_email_create
+                acl_resource: oro_email_email_user_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:
@@ -242,7 +242,7 @@ workflows:
                 label: 'Send email'
                 step_to: converted
                 is_unavailable_hidden: true
-                acl_resource: oro_email_create
+                acl_resource: oro_email_email_user_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:
