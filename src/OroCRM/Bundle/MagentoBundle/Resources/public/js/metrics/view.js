@@ -14,6 +14,10 @@ define([
      * @extends Backbone.Model
      */
     return Backbone.View.extend({
+        events: {
+            'change .select-all': '_onSelectAll',
+        },
+
         requiredOptions: [
             'metricsData',
             'baseName',
@@ -88,6 +92,11 @@ define([
             $itemContainer.closest('form').on('submit', function () {
                 filteredItems.reset(items.models);
             });
+        },
+
+        _onSelectAll: function (e) {
+            var $target = $(e.target);
+            this.$('input[data-name=show]').prop('checked', $target.is(':checked')).change();
         }
     });
 });

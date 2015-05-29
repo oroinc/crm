@@ -115,7 +115,9 @@
             <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th><span>{{ 'orocrm.magento.datagrid.columns.show'|trans }}</span></th>
+                        <th>
+                            <span><input class="select-all" type="checkbox"> {{ 'orocrm.magento.datagrid.columns.show'|trans }}</span>
+                        </th>
                         <th><span>{{ 'orocrm.magento.datagrid.columns.metricName'|trans }}</span></th>
                         <th><span></span></th>
                     </tr>
