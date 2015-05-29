@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -81,6 +82,25 @@ class CustomerController extends Controller
     public function createAction()
     {
         return $this->update(new Customer());
+    }
+
+    /**
+     * @param Customer $customer
+     * @return JsonResponse
+     *
+     * @Route("/register/{id}", name="orocrm_magento_customer_register", requirements={"id"="\d+"}))
+     * @Acl(
+     *      id="orocrm_magento_customer_update",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMMagentoBundle:Customer"
+     * )
+     */
+    public function registerAction(Customer $customer)
+    {
+        return new JsonResponse([
+            'successful' => $this->get('orocrm_magento.form.handler.customer')->handleRegister($customer),
+        ]);
     }
 
     /**
