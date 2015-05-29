@@ -35,6 +35,7 @@ define([
             var filteredItems = items.clone();
             this._initializeFilter(items, filteredItems);
             this._initializeItemGrid(items, filteredItems);
+            this._fixConfigurationWindow();
         },
 
         _initializeItems: function (metricsData, baseName) {
@@ -92,6 +93,23 @@ define([
             $itemContainer.closest('form').on('submit', function () {
                 filteredItems.reset(items.models);
             });
+        },
+
+        _fixConfigurationWindow: function () {
+            var $scrollable = this.$('.scrollable-container');
+            var $widgetContent = this.$el.closest('.widget-content');
+            var $widget = this.$el.closest('.ui-widget');
+
+            var optimumEnlargement = $scrollable.prop('scrollHeight') - $scrollable.height();
+            var allowedEnlargement = $(window).outerHeight() - $widget.outerHeight();
+
+            var enlargement = Math.min(optimumEnlargement, allowedEnlargement);
+            if (!enlargement) {
+                return;
+            }
+
+            $widgetContent.height($widgetContent.height() + enlargement);
+            this.$el.closest('div.widget-configuration').trigger('dialogresize');
         },
 
         _onSelectAll: function (e) {
