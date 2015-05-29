@@ -2,11 +2,32 @@
 
 namespace OroCRM\Bundle\ContactBundle\Entity\Manager;
 
+use Doctrine\Common\Persistence\ObjectManager;
+
 use Oro\Bundle\AddressBundle\Utils\AddressApiUtils;
+use Oro\Bundle\AttachmentBundle\Entity\File;
+use Oro\Bundle\AttachmentBundle\Manager\AttachmentManager;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class ContactApiEntityManager extends ApiEntityManager
 {
+    /** @var  AttachmentManager */
+    protected $attachmentManager;
+
+    /**
+     * @param string            $class
+     * @param ObjectManager     $om
+     * @param AttachmentManager $attachmentManager
+     */
+    public function __construct(
+        $class,
+        ObjectManager $om,
+        AttachmentManager $attachmentManager
+    ) {
+        parent::__construct($class, $om);
+        $this->attachmentManager = $attachmentManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -50,7 +71,14 @@ class ContactApiEntityManager extends ApiEntityManager
                         'owner'        => ['fields' => 'username']
                     ]
                 ],
-                'accounts'     => ['fields' => 'id']
+                'accounts'     => ['fields' => 'id'],
+                'picture'      => [
+                    'exclusion_policy' => 'all',
+                    'fields'           => [
+                        'extension'        => null,
+                        'originalFilename' => null
+                    ]
+                ],
             ],
             'post_serialize'  => function (array &$result) {
                 $this->postSerializeContact($result);
@@ -76,5 +104,13 @@ class ContactApiEntityManager extends ApiEntityManager
             }
         }
         $result['email'] = $email;
+
+        if (!empty($result['picture'])) {
+            $file = new File();
+            $file->setOriginalFilename($result['picture']['originalFilename'])
+                ->setExtension($result['picture']['extension']);
+            $url = $this->attachmentManager->getAttachment($this->class, $result['id'], 'picture', $file);
+            $result['picture'] = $url;
+        }
     }
 }

@@ -92,6 +92,7 @@ services:
         arguments:
             - %orocrm_contact.entity.class%
             - @doctrine.orm.entity_manager
+            - @oro_attachment.manager
 
     orocrm_contact.contact_address.manager.api:
         class: %orocrm_contact.contact_address.manager.api.class%
