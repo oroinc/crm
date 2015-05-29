@@ -143,6 +143,7 @@ orocrm:
             entity_plural_label: Magento Customers
             entity_description:  Represent Magento customer
             create_order:        Create Order
+            register.label:      Register
             sales.label:         Sales
             id.label:            Id
             owner.label:         Owner
