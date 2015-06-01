@@ -16,6 +16,11 @@
             <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
             <input data-name="order" type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
             <input class="hide" data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
+            <a href="javascript: void(0);" class="action no-hash delete-button"
+                    title="{{ 'orocrm.magento.datagrid.actions.delete.label'|trans }}"
+                    data-collection-action="delete">
+                <i class="icon-trash hide-text"></i>\n\
+            </a>
             <span title="{{ 'orocrm.magento.datagrid.actions.move_column.label'|trans }}">
                 <i class="icon-list handle"></i>
             </span>

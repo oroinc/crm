@@ -68,6 +68,8 @@ orocrm:
                     label: Add
                 add_all:
                     label: Add all
+                delete:
+                    label: Delete column
             columns:
                 originId:         ID
                 first_name:       First Name
@@ -118,6 +120,7 @@ orocrm:
                     no: No
                     unknown: Not defined
                 metricName: Metric name
+                actions: Actions
         channel_type:
             label:  Magento
         transport:

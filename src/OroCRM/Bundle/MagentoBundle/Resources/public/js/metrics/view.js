@@ -82,6 +82,10 @@ define([
                 });
             });
 
+            filteredItems.on('action:delete', function (model) {
+                filteredItems.remove(model);
+            });
+
             items.on('change:show', function (model) {
                 model.get('show') ? filteredItems.add(model) : filteredItems.remove('items');
             });
