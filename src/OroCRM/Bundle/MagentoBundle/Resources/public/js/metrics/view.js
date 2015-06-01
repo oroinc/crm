@@ -123,6 +123,12 @@ define([
             }
 
             $widgetContent.height($widgetContent.height() + enlargement);
+            $widget.on('dialogresize dialogmaximize dialogrestore', _.bind(function () {
+                var borderHeight = parseInt(this.$('table.scrollable').css('border-bottom-width'));
+                var $scrollableChild = this.$('table.scrollable .scrollable-container');
+                $scrollableChild.height($scrollableChild.height() - borderHeight);
+            }, this));
+
             this.$el.closest('div.widget-configuration').trigger('dialogresize');
         },
 
