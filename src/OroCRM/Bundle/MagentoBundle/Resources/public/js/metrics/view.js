@@ -64,6 +64,17 @@ define([
             this.metricSelect.select2({
                 allowClear: true,
             });
+
+            items.on('change:show', function (model) {
+                var $option = this.metricSelect.find('option[value=' + model.id + ']');
+                model.get('show') ? $option.addClass('hide') : $option.removeClass('hide');
+            }, this);
+
+            var showedItems = items.where({show: true});
+            _.each(showedItems, function (item) {
+                var $option = this.metricSelect.find('option[value=' + item.id + ']');
+                $option.addClass('hide');
+            }, this);
         },
 
         _initializeItemGrid: function (items) {
@@ -76,18 +87,18 @@ define([
                 collection: filteredItems,
             });
 
-            filteredItems.on('sort, add', function () {
+            filteredItems.on('sort add', function () {
                 $itemContainer.find('input.order').each(function (index) {
                     $(this).val(index).trigger('change');
                 });
             });
 
             filteredItems.on('action:delete', function (model) {
-                filteredItems.remove(model);
+                model.set('show', false);
             });
 
             items.on('change:show', function (model) {
-                model.get('show') ? filteredItems.add(model) : filteredItems.remove('items');
+                model.get('show') ? filteredItems.add(model) : filteredItems.remove(model);
             });
 
             $itemContainer.on('change', function (e) {
