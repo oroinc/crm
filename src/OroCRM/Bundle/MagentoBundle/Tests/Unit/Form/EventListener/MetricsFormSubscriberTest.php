@@ -47,13 +47,13 @@ class MetricsFormSubscriberTest extends \PHPUnit_Framework_TestCase
                 [
                     'id'    => 'revenue',
                     'label' => 'Revenue',
-                    'show'  => true,
+                    'show'  => false,
                     'order' => 1,
                 ],
                 [
                     'id'    => 'orders_number',
                     'label' => 'Orders number',
-                    'show'  => true,
+                    'show'  => false,
                     'order' => 2,
                 ],
             ],
