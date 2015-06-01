@@ -1,6 +1,6 @@
 <script id="magento-big-numbers-metric-select-template" type="text/template">
-    <div>
-        <select class="filter-select-oro">
+    <div class="pull-left metric-selector-widget">
+        <select class="metric-select" filter-select-oro">
             <option></option>
             <% metrics.each(function (metric) { %>
                 <option value="<%= metric.get('id') %>"><%= metric.get('label') %></option>
@@ -11,13 +11,11 @@
 
 <script id="magento-big-numbers-metric-template" type="text/template">
     <tr data-cid="<%= cid %>">
-        <td>
-            <input data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
-        </td>
         <td><%= label %></td>
         <td>
             <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
             <input data-name="order" type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
+            <input class="hide" data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
             <span title="{{ 'orocrm.magento.datagrid.actions.move_column.label'|trans }}">
                 <i class="icon-list handle"></i>
             </span>

@@ -26,7 +26,7 @@ class MetricsExtension extends Twig_Extension
     public function filterItems(array $items, array $config = null)
     {
         if (!isset($config['metrics'])) {
-            return $items;
+            return [];
         }
 
         $metrics = $this->getSortedMetrics($config);
@@ -64,16 +64,14 @@ class MetricsExtension extends Twig_Extension
      */
     protected function sortItemsByMetrics(array $items, array $sortedMetrics)
     {
-        $keyOrder = array_flip(array_keys($sortedMetrics));
-        uksort($items, function ($a, $b) use ($keyOrder) {
-            if (!isset($keyOrder[$a], $keyOrder[$b])) {
-                return 0;
-            }
+        $result = array_intersect_key($items, $sortedMetrics);
 
-            return $keyOrder[$a] - $keyOrder[$b];
+        $sortedKeys = array_flip(array_keys($sortedMetrics));
+        uksort($result, function ($a, $b) use ($sortedKeys) {
+            return $sortedKeys[$a] - $sortedKeys[$b];
         });
 
-        return array_intersect_key($items, $keyOrder);
+        return $result;
     }
 
     /**

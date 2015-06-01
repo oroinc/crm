@@ -18,7 +18,7 @@ class MetricType extends AbstractType
             ->add('id', 'hidden')
             ->add('order', 'hidden')
             ->add('show', 'checkbox', [
-                'data' => true,
+                'data' => false,
             ]);
     }
 

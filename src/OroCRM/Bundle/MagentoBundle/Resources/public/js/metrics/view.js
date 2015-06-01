@@ -15,13 +15,18 @@ define([
      */
     return Backbone.View.extend({
         events: {
-            'change .select-all': '_onSelectAll',
+            'change .metric-select': '_toggleButtons',
+            'click .add-button:not(.disabled)': '_onAddClick',
+            'click .add-all-button:not(.disabled)': '_onAddAllClick',
         },
 
         requiredOptions: [
             'metricsData',
             'baseName',
         ],
+
+        items: null,
+        metricSelect: null,
 
         initialize: function (options) {
             _.each(this.requiredOptions, function (optionName) {
@@ -30,12 +35,12 @@ define([
                 }
             });
 
-            var items = this._initializeItems(options.metricsData, options.baseName);
+            this.items = this._initializeItems(options.metricsData, options.baseName);
 
-            var filteredItems = items.clone();
-            this._initializeFilter(items, filteredItems);
-            this._initializeItemGrid(items, filteredItems);
+            this._initializeFilter(this.items);
+            this._initializeItemGrid(this.items);
             this._fixConfigurationWindow();
+            this._toggleButtons();
         },
 
         _initializeItems: function (metricsData, baseName) {
@@ -47,40 +52,38 @@ define([
             return items;
         },
 
-        _initializeFilter: function (items, filteredItems) {
+        _initializeFilter: function (items) {
             var selectTpl = _.template($('#magento-big-numbers-metric-select-template').html());
             var select = selectTpl({
                 metrics: items,
             });
 
             var $filterContainer = this.$('.controls');
-            $filterContainer.html(select);
-            $filterContainer.find('select').select2({
+            $filterContainer.prepend(select);
+            this.metricSelect = $filterContainer.find('select');
+            this.metricSelect.select2({
                 allowClear: true,
-            });
-
-            $filterContainer.on('change', function (e) {
-                if (e.val) {
-                    filteredItems.reset([items.get(e.val)]);
-                } else {
-                    filteredItems.reset(items.models);
-                }
             });
         },
 
-        _initializeItemGrid: function (items, filteredItems) {
+        _initializeItemGrid: function (items) {
             var $itemContainer = this.$('.item-container');
+            var showedItems = items.where({show: true});
+            var filteredItems = new ItemCollection(showedItems);
 
             $itemContainer.itemsManagerTable({
                 itemTemplate: $('#magento-big-numbers-metric-template').html(),
                 collection: filteredItems,
             });
 
-            filteredItems.on('sort', function () {
+            filteredItems.on('sort, add', function () {
                 $itemContainer.find('input.order').each(function (index) {
                     $(this).val(index).trigger('change');
                 });
-                items.reset(filteredItems.models);
+            });
+
+            items.on('change:show', function (model) {
+                model.get('show') ? filteredItems.add(model) : filteredItems.remove('items');
             });
 
             $itemContainer.on('change', function (e) {
@@ -88,10 +91,6 @@ define([
                 var item = items.get($target.closest('tr').data('cid'));
                 var value = $target.is(':checkbox') ? $target.is(':checked') : $target.val();
                 item.set($target.data('name'), value);
-            });
-
-            $itemContainer.closest('form').on('submit', function () {
-                filteredItems.reset(items.models);
             });
         },
 
@@ -112,9 +111,26 @@ define([
             this.$el.closest('div.widget-configuration').trigger('dialogresize');
         },
 
-        _onSelectAll: function (e) {
-            var $target = $(e.target);
-            this.$('input[data-name=show]').prop('checked', $target.is(':checked')).change();
+        _onAddClick: function () {
+            var metric = this.metricSelect.select2('val');
+            var model = this.items.get(metric);
+            model.set('show', true);
+            this.metricSelect.select2('val', '').change();
+        },
+
+        _onAddAllClick: function () {
+            this.items.each(function (item) {
+                item.set('show', true);
+            });
+            this.metricSelect.select2('val', '').change();
+        },
+
+        _toggleButtons: function () {
+            if (this.metricSelect.select2('val')) {
+                this.$('.add-button').removeClass('disabled');
+            } else {
+                this.$('.add-button').addClass('disabled');
+            }
         }
     });
 });

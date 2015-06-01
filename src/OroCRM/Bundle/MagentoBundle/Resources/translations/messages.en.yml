@@ -64,6 +64,10 @@ orocrm:
                     label: View
                 move_column:
                     label: Move column
+                add:
+                    label: Add
+                add_all:
+                    label: Add all
             columns:
                 originId:         ID
                 first_name:       First Name
@@ -114,7 +118,6 @@ orocrm:
                     no: No
                     unknown: Not defined
                 metricName: Metric name
-                show: Show
         channel_type:
             label:  Magento
         transport:

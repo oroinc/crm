@@ -56,7 +56,7 @@ class MetricsFormSubscriber implements EventSubscriberInterface
             $data[$id] = [
                 'id'    => $id,
                 'label' => $this->translator->trans($item['label']),
-                'show'  => $oldItem ? $oldItem['show'] : true,
+                'show'  => $oldItem ? $oldItem['show'] : false,
                 'order' => $oldItem ? $oldItem['order'] : $order,
             ];
 

@@ -104,20 +104,29 @@
 {% endblock %}
 
 {% block orocrm_magento_metrics_row %}
+    {% import 'OroUIBundle::macros.html.twig' as UI %}
     {% set rowId = form.vars.id ~ 'Row' %}
 
     <div id="{{ rowId }}">
         <div class="control-group">
             <label class="control-label">{{ 'orocrm.magento.dashboard.e_commerce_statistic.choose_metrics'|trans }}</label>
-            <div class="controls"></div>
+            <div class="controls">
+                <div class="">
+                    {{ UI.clientButton({
+                        'aCss': 'no-hash add-button',
+                        'label': 'orocrm.magento.datagrid.actions.add.label'|trans
+                    }) }}
+                    {{ UI.clientButton({
+                        'aCss': 'no-hash btn-primary add-all-button',
+                        'label': 'orocrm.magento.datagrid.actions.add_all.label'|trans
+                    }) }}
+                </div>
+            </div>
         </div>
-        <div class="grid-container scrollable-container">
+        <div class="grid-container">
             <table id="{{ form.vars.id }}" class="grid table table-bordered table-condensed">
                 <thead>
                     <tr>
-                        <th>
-                            <span><input class="select-all" type="checkbox"> {{ 'orocrm.magento.datagrid.columns.show'|trans }}</span>
-                        </th>
                         <th><span>{{ 'orocrm.magento.datagrid.columns.metricName'|trans }}</span></th>
                         <th><span></span></th>
                     </tr>
