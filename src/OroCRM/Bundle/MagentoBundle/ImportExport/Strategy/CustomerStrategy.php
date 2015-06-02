@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
@@ -80,5 +82,29 @@ class CustomerStrategy extends AbstractImportStrategy
                 }
             }
         }
+    }
+
+    /**
+     * {inheritdoc}
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        $existingEntity = parent::findExistingEntity($entity, $searchContext);
+
+        if (!$existingEntity && $entity instanceof Customer) {
+            $entityName = ClassUtils::getClass($entity);
+            $existingEntity = $this->databaseHelper->findOneBy(
+                $entityName,
+                [
+                    'email' => $entity->getEmail(),
+                    'guest' => true
+                ]
+            );
+            if ($existingEntity && $existingEntity->getId() && $existingEntity->isGuest()) {
+                $existingEntity->setGuest(false);
+            }
+        }
+
+        return $existingEntity;
     }
 }
