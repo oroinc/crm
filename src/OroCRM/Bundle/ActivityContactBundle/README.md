@@ -24,7 +24,7 @@ In the simplest way:
 - You will need provider which should implement [DirectionProviderInterface](Direction/DirectionProviderInterface.php)
 - This provider should be a tagged service, e.g.
 
-
+```
     tags:
         - {name: orocrm_activity_direction.provider}
 ```
