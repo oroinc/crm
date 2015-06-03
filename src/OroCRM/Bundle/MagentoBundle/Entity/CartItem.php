@@ -157,7 +157,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $customPrice
      *
-     * @return CartItem
+     * @return $this
      */
     public function setCustomPrice($customPrice)
     {
@@ -177,7 +177,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $description
      *
-     * @return CartItem
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -197,7 +197,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $freeShipping
      *
-     * @return CartItem
+     * @return $this
      */
     public function setFreeShipping($freeShipping)
     {
@@ -217,7 +217,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $giftMessage
      *
-     * @return CartItem
+     * @return $this
      */
     public function setGiftMessage($giftMessage)
     {
@@ -237,7 +237,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $isVirtual
      *
-     * @return CartItem
+     * @return $this
      */
     public function setIsVirtual($isVirtual)
     {
@@ -257,7 +257,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param int $parentItemId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setParentItemId($parentItemId)
     {
@@ -277,7 +277,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $priceInclTax
      *
-     * @return CartItem
+     * @return $this
      */
     public function setPriceInclTax($priceInclTax)
     {
@@ -297,7 +297,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param int $productId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setProductId($productId)
     {
@@ -317,7 +317,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $productType
      *
-     * @return CartItem
+     * @return $this
      */
     public function setProductType($productType)
     {
@@ -337,7 +337,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $rowTotal
      *
-     * @return CartItem
+     * @return $this
      */
     public function setRowTotal($rowTotal)
     {
@@ -357,7 +357,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $taxAmount
      *
-     * @return CartItem
+     * @return $this
      */
     public function setTaxAmount($taxAmount)
     {
@@ -377,7 +377,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $taxClassId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setTaxClassId($taxClassId)
     {
@@ -404,7 +404,8 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
 
     /**
      * @param string $productImageUrl
-     * @return CartItem
+     *
+     * @return $this
      */
     public function setProductImageUrl($productImageUrl)
     {
@@ -423,7 +424,8 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
 
     /**
      * @param string $productUrl
-     * @return CartItem
+     *
+     * @return $this
      */
     public function setProductUrl($productUrl)
     {
@@ -442,6 +444,8 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
 
     /**
      * @param boolean $removed
+     *
+     * @return $this
      */
     public function setRemoved($removed)
     {
