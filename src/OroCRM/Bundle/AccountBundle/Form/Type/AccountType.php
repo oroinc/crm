@@ -126,6 +126,9 @@ class AccountType extends AbstractType
         if ($this->canViewContact) {
             /** @var Contact $contact */
             foreach ($contacts as $contact) {
+                if (!$contact->getId()) {
+                    continue;
+                }
                 $primaryPhone = $contact->getPrimaryPhone();
                 $primaryEmail = $contact->getPrimaryEmail();
                 $result[] = array(
