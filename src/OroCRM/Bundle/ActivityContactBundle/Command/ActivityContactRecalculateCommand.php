@@ -201,7 +201,8 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
      * Returns entity ids of records that have associated contacting activities
      *
      * @param string $className Target entity class name
-     * @return array|int
+     *
+     * @return array
      */
     protected function getTargetIds($className)
     {

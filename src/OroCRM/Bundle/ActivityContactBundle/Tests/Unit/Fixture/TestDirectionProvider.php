@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture;
 
 use Doctrine\ORM\EntityManager;
+
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 
 class TestDirectionProvider implements DirectionProviderInterface
@@ -21,6 +22,14 @@ class TestDirectionProvider implements DirectionProviderInterface
     public function getDirection($activity, $target)
     {
         return $activity->getDirection();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isDirectionChanged($changeSet = [])
+    {
+        return false;
     }
 
     /**

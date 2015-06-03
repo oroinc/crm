@@ -34,13 +34,12 @@ Install and update features
 
 On application install or during update from previous version:
 
- - via schema migration - "Call" & "Email" entities will be added into "activity_contact" group
- - next [ActivityContactMigrationQuery](Migration/ActivityContactMigrationQuery.php) will add required fields(for statistics storage) for entities with enabled "Call" & "Email" activities 
- - job will be added to execute [oro:activity-contact:recalculate](Command/ActivityContactRecalculateCommand.php) command.
+ - via [ActivityContactMigrationQuery](Migration/ActivityContactMigrationQuery.php) required fields(for statistics storage) will be added for entities with enabled "Call" & "Email" activities 
+ - job will be added to execute [oro:activity-contact:recalculate](Command/ActivityContactRecalculateCommand.php) command. Recalculation of existing activities.
 
 Please note:
 
- - if cron is not configured you will have to manually run job daemon or execute command from console.
+ - if cron is not configured you will have to manually run job daemon via UI or execute command from console.
  - the responsibility of command is to check entities for which contacting activities (Call & Email) is enabled, and recalculate contacting activities per each record of entities.
 
 EntityManagement
