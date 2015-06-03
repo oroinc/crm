@@ -65,8 +65,6 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
      * @param AbstractLogger $logger
      *
      * @return int
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function recalculate(AbstractLogger $logger)
     {
@@ -105,31 +103,15 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
             /** @var ActivityListFilterHelper $activityListHelper */
             $activityListHelper = $this->getContainer()->get('oro_activity_list.filter.helper');
 
-            /** @var PropertyAccessor $accessor */
-            $accessor = PropertyAccess::createPropertyAccessor();
-
             foreach ($entityConfigsWithApplicableActivities as $activityScopeConfig) {
-                $entityClassName  = $activityScopeConfig->getId()->getClassName();
-                $entityRepository = $this->em->getRepository($entityClassName);
-                $offset           = 0;
-                $startTimestamp   = time();
-                $allRecordIds     = $this->getTargetIds($entityClassName);
-
-                while ($allRecords = $entityRepository->findBy(
-                    ['id' => $allRecordIds],
-                    ['id' => 'ASC'],
-                    self::BATCH_SIZE,
-                    $offset
-                )) {
+                $entityClassName = $activityScopeConfig->getId()->getClassName();
+                $offset          = 0;
+                $startTimestamp  = time();
+                $allRecordIds    = $this->getTargetIds($entityClassName);
+                while ($allRecords = $this->getRecordsToRecalculate($entityClassName, $allRecordIds, $offset)) {
                     $needsFlush = false;
                     foreach ($allRecords as $record) {
-                        /** Reset record statistics. */
-                        $accessor->setValue($record, ActivityScope::CONTACT_COUNT, 0);
-                        $accessor->setValue($record, ActivityScope::CONTACT_COUNT_IN, 0);
-                        $accessor->setValue($record, ActivityScope::CONTACT_COUNT_OUT, 0);
-                        $accessor->setValue($record, ActivityScope::LAST_CONTACT_DATE, null);
-                        $accessor->setValue($record, ActivityScope::LAST_CONTACT_DATE_IN, null);
-                        $accessor->setValue($record, ActivityScope::LAST_CONTACT_DATE_OUT, null);
+                        $this->resetRecordStatistic($record);
 
                         /** @var QueryBuilder $qb */
                         $qb = $this->activityListRepository->getBaseActivityListQueryBuilder(
@@ -138,11 +120,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                         );
                         $activityListHelper->addFiltersToQuery(
                             $qb,
-                            [
-                                'activityType' => [
-                                    'value' => $contactingActivityClasses
-                                ]
-                            ]
+                            ['activityType' => ['value' => $contactingActivityClasses]]
                         );
 
                         /** @var ActivityList[] $activities */
@@ -153,9 +131,9 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                                 $activity = $this->em->getRepository($activityListItem->getRelatedActivityClass())
                                     ->find($activityListItem->getRelatedActivityId());
 
-                                $event = new ActivityEvent($activity, $record);
-                                $activityListener->onAddActivity($event);
+                                $activityListener->onAddActivity(new ActivityEvent($activity, $record));
                             }
+
                             $this->em->persist($record);
                             $needsFlush = true;
                         }
@@ -185,6 +163,38 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
         $logger->info(sprintf('<info>Processing finished at %s</info>', date('Y-m-d H:i:s')));
 
         return self::STATUS_SUCCESS;
+    }
+
+    /**
+     * Resets entity statistics.
+     *
+     * @param object $entity
+     */
+    protected function resetRecordStatistic($entity)
+    {
+        /** @var PropertyAccessor $accessor */
+        $accessor = PropertyAccess::createPropertyAccessor();
+
+        $accessor->setValue($entity, ActivityScope::CONTACT_COUNT, 0);
+        $accessor->setValue($entity, ActivityScope::CONTACT_COUNT_IN, 0);
+        $accessor->setValue($entity, ActivityScope::CONTACT_COUNT_OUT, 0);
+        $accessor->setValue($entity, ActivityScope::LAST_CONTACT_DATE, null);
+        $accessor->setValue($entity, ActivityScope::LAST_CONTACT_DATE_IN, null);
+        $accessor->setValue($entity, ActivityScope::LAST_CONTACT_DATE_OUT, null);
+    }
+
+    /**
+     * @param string  $entityClassName
+     * @param array   $ids
+     * @param integer $offset
+     *
+     * @return array
+     */
+    protected function getRecordsToRecalculate($entityClassName, $ids, $offset)
+    {
+        $entityRepository = $this->em->getRepository($entityClassName);
+
+        return $entityRepository->findBy(['id' => $ids], ['id' => 'ASC'], self::BATCH_SIZE, $offset);
     }
 
     /**
