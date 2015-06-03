@@ -17,7 +17,7 @@ class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = new ActivityContactProvider();
+        $this->provider          = new ActivityContactProvider();
         $this->directionProvider = new TestDirectionProvider();
 
         $this->provider->addProvider($this->directionProvider);
@@ -45,7 +45,7 @@ class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetActivityDate()
     {
-        $date = new \DateTime('2015-01-01');
+        $date     = new \DateTime('2015-01-01');
         $activity = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $date);
         $this->assertEquals($date, $this->provider->getActivityDate($activity));
 

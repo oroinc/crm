@@ -40,7 +40,7 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->listener = new ActivityListener($this->provider, $this->doctrineHelper);
+        $this->listener       = new ActivityListener($this->provider, $this->doctrineHelper);
     }
 
     /**
@@ -51,7 +51,7 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
     public function testOnAddActivity($object, $expectedDirection)
     {
         $this->testTarget = new TestTarget();
-        $event = new ActivityEvent($object, $this->testTarget);
+        $event            = new ActivityEvent($object, $this->testTarget);
         $this->listener->onAddActivity($event);
 
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -99,11 +99,11 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
         $this->testDate = new \DateTime();
 
         return [
-            'incoming' => [
+            'incoming'    => [
                 new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $this->testDate),
                 DirectionProviderInterface::DIRECTION_INCOMING
             ],
-            'outgoing' => [
+            'outgoing'    => [
                 new TestActivity(DirectionProviderInterface::DIRECTION_OUTGOING, $this->testDate),
                 DirectionProviderInterface::DIRECTION_OUTGOING
             ],

@@ -88,9 +88,9 @@ class ActivityContactProvider
      */
     public function getLastContactActivityDate(EntityManager $em, $targetEntity, $skippedId, $direction)
     {
-        $allDate = null;
-        $directionDate = null;
-        $allDates = [];
+        $allDate        = null;
+        $directionDate  = null;
+        $allDates       = [];
         $directionDates = [];
         foreach ($this->providers as $provider) {
             $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $skippedId, $direction);

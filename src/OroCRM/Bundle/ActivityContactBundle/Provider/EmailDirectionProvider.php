@@ -54,7 +54,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         /** @var $activity Email */
-        return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getSentAt() ? : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -62,7 +62,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
      */
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
     {
-        $result = [];
+        $result         = [];
         $resultActivity = $this->getLastActivity($em, $target, $skipId);
         if ($resultActivity) {
             $result['all'] = $this->getDate($resultActivity);
@@ -85,7 +85,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
      * @param EntityManager $em
      * @param object        $target
      * @param integer       $skipId
-     * @param string          $direction
+     * @param string        $direction
      *
      * @return Email
      */
