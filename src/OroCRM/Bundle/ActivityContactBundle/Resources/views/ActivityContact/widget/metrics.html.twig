@@ -1,28 +1,20 @@
 {% set entityClassName = oro_class_name(entity, true) %}
-<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="widget-content">
-    <div class="activity-contact-widget-wrapper">
-        <div class="activity-contact-box">
-            <div class="activity-contact-box-row">
-                {{ _self.last_contacted_time(data) }}
-            </div>
-            <div class="activity-contact-box-row">
-                {{ _self.contact_counts(data) }}
-            </div>
-        </div>
-    </div>
+
+<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="widget-content title activity-contact-info-title">
+    {{ _self.last_contacted_time(data) }}
 </div>
 
 <script type="text/javascript">
-    require(['jquery', 'routing', 'oroui/js/mediator'], function($, routing, mediator) {
-        $(function() {
-            var reloadStatistics = function() {
+    require(['jquery', 'routing', 'oroui/js/mediator'], function ($, routing, mediator) {
+        $(function () {
+            var reloadStatistics = function () {
                 $.ajax({
                     url: routing.generate('orocrm_activity_contact_metrics', {
                         entityClass: '{{ entityClassName }}',
                         entityId: '{{ entity.id }}'
                     }),
                     type: 'GET',
-                    success: function(response) {
+                    success: function (response) {
                         $('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html(
                             $(response).filter('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html()
                         );
@@ -37,7 +29,7 @@
                 'widget_success:activity_list:item:update',
                 reloadStatistics
             );
-            mediator.once('page:beforeChange', function(){
+            mediator.once('page:beforeChange', function () {
                 mediator.off(
                     'widget:doRefresh:activity-list-widget ' +
                     'widget_success:activity_list:refresh ' +
@@ -52,44 +44,24 @@
 
 {% macro last_contacted_time(data) %}
     {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
-    {% set last_contact_date_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
-    {% set last_contact_date_in_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
+
+    {% set last_contact_date_key     = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
+    {% set last_contact_date_in_key  = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
     {% set last_contact_date_out_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_OUT') %}
-    {% if data[last_contact_date_in_key] is defined
-        and data[last_contact_date_out_key] is defined
-        and data[last_contact_date_key] is defined
-    %}
+    {% set contact_count_key         = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
+
+    {% if data[contact_count_key] is defined and data[contact_count_key] > 0 %}
         {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
-        {% if data[last_contact_date_in_key] >= data[last_contact_date_out_key] %}
-            {% set last_direction = 'orocrm.activity_contact.direction_incoming'|trans %}
-            {% set opposite_direction = 'orocrm.activity_contact.direction_outgoing'|trans %}
-            {% set opposite_datetime = data[last_contact_date_out_key]|oro_format_datetime|default('N/A') %}
-        {% else %}
-            {% set last_direction = 'orocrm.activity_contact.direction_outgoing'|trans %}
-            {% set opposite_direction = 'orocrm.activity_contact.direction_incoming'|trans %}
-            {% set opposite_datetime = data[last_contact_date_in_key]|oro_format_datetime|default('N/A') %}
-        {% endif %}
-        {{ 'orocrm.activity_contact.time_info'| trans({
-            '{{ last_datetime }}': last_datetime,
-            '{{ last_direction }}': last_direction,
-            '{{ opposite_direction }}': opposite_direction,
-            '{{ opposite_datetime }}': opposite_datetime
-        }) }}
-    {% endif %}
-{% endmacro %}
-{% macro contact_counts(data) %}
-    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
-    {% set contact_count_key = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
-    {% set contact_count_in_key = constant(activity_scope_class ~ '::CONTACT_COUNT_IN') %}
-    {% set contact_count_out_key = constant(activity_scope_class ~ '::CONTACT_COUNT_OUT') %}
-    {% if data[contact_count_key] is defined
-        and data[contact_count_in_key] is defined
-        and data[contact_count_out_key] is defined
-    %}
-        {{ 'orocrm.activity_contact.count_info'| trans({
+        {% set direction     = '<i class="icon-sign'
+            ~ ( data[last_contact_date_in_key] >= data[last_contact_date_out_key] ? 'in' : 'out' )
+            ~ '"></i>'
+        %}
+        {{ 'orocrm.activity_contact.info_title'|trans({
             '{{ total_contacted }}': data[contact_count_key]|default(0),
-            '{{ count_in }}': data[contact_count_in_key]|default(0),
-            '{{ count_out }}': data[contact_count_out_key]|default(0)
-        }) }}
+            '{{ direction }}': direction,
+            '{{ last_datetime }}': last_datetime
+        })|raw }}
+    {% else %}
+        {{ 'orocrm.activity_contact.info_no_data_title'|trans }}
     {% endif %}
 {% endmacro %}

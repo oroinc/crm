@@ -18,7 +18,6 @@ orocrm:
         ac_contact_count_out:
             label: Outgoing contacts count
             description: Represent total count of all outgoing contacting activities
-        direction_incoming: Incoming
-        direction_outgoing: Outgoing
-        time_info: Last contacted datetime: {{ last_datetime }} ({{ last_direction }}) | {{ opposite_direction }}: {{ opposite_datetime }}
-        count_info: Total times contacted: {{ total_contacted }} (incoming: {{ count_in }}, outgoing: {{ count_out }})
+
+        info_title: Times Contacted: {{ total_contacted }} | Last: {{ direction }} {{ last_datetime }}
+        info_no_data_title: Not contacted yet

@@ -27,6 +27,14 @@ interface DirectionProviderInterface
     public function getDirection($activity, $target);
 
     /**
+     * Checks if direction was changed
+     *
+     * @param array  $changeSet
+     * @return bool
+     */
+    public function isDirectionChanged($changeSet = []);
+
+    /**
      * Return activity datetime
      *
      * @param $activity

@@ -25,6 +25,9 @@ class ActivityListener
     /** @var array */
     protected $deletedEntities = [];
 
+    /** @var array */
+    protected $updatedEntities = [];
+
     /**
      * @param ActivityContactProvider $activityContactProvider
      * @param DoctrineHelper          $doctrineHelper
@@ -55,7 +58,11 @@ class ActivityListener
                 ActivityScope::CONTACT_COUNT,
                 ((int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) + 1)
             );
-            $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $contactDate);
+
+            $lastContactDate = $accessor->getValue($target, ActivityScope::LAST_CONTACT_DATE);
+            if ($lastContactDate < $contactDate) {
+                $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $contactDate);
+            }
 
             if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
                 $directionCountPath = ActivityScope::CONTACT_COUNT_IN;
@@ -70,7 +77,11 @@ class ActivityListener
                 $directionCountPath,
                 ((int)$accessor->getValue($target, $directionCountPath) + 1)
             );
-            $accessor->setValue($target, $contactDatePath, $contactDate);
+
+            $lastContactDate = $accessor->getValue($target, $contactDatePath);
+            if ($lastContactDate < $contactDate) {
+                $accessor->setValue($target, $contactDatePath, $contactDate);
+            }
         }
     }
 
@@ -81,12 +92,13 @@ class ActivityListener
      */
     public function onFlush(OnFlushEventArgs $args)
     {
-        $entities = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityDeletions();
-        if (!empty($entities)) {
-            foreach ($entities as $entity) {
+        $entitiesToDelete = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityDeletions();
+        $entitiesToUpdate = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates();
+        if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
+            foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-                $key   = $class . '_' .$id;
+                $key   = $class . '_' . $id;
                 if ($this->activityContactProvider->isSupportedEntity($class) && !isset($this->deletedEntities[$key])) {
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
@@ -105,6 +117,37 @@ class ActivityListener
                     ];
                 }
             }
+
+            foreach ($entitiesToUpdate as $entity) {
+                $class = $this->doctrineHelper->getEntityClass($entity);
+                $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
+                $key   = $class . '_' . $id;
+                if ($this->activityContactProvider->isSupportedEntity($class)
+                    && !isset($this->updatedEntities[$key])
+                ) {
+                    $changes            = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
+                    $isDirectionChanged = $this->activityContactProvider
+                        ->getActivityDirectionProvider($entity)
+                        ->isDirectionChanged($changes);
+
+                    $targets     = $entity->getActivityTargetEntities();
+                    $targetsInfo = [];
+                    foreach ($targets as $target) {
+                        $targetsInfo[] = [
+                            'class'     => $this->doctrineHelper->getEntityClass($target),
+                            'id'        => $this->doctrineHelper->getSingleEntityIdentifier($target),
+                            'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
+                            'is_direction_changed' => $isDirectionChanged
+                        ];
+                    }
+                    $this->updatedEntities[$key] = [
+                        'class'       => $class,
+                        'id'          => $id,
+                        'contactDate' => $this->activityContactProvider->getActivityDate($entity),
+                        'targets'     => $targetsInfo
+                    ];
+                }
+            }
         }
     }
 
@@ -116,12 +159,13 @@ class ActivityListener
     public function postFlush(PostFlushEventArgs $args)
     {
         $em = $args->getEntityManager();
-        if (!empty($this->deletedEntities)) {
+        if (!empty($this->deletedEntities) || !empty($this->updatedEntities)) {
             $accessor = PropertyAccess::createPropertyAccessor();
+            /** process deleted entities */
             foreach ($this->deletedEntities as $activityData) {
                 foreach ($activityData['targets'] as $targetInfo) {
                     $direction = $targetInfo['direction'];
-                    $target = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
+                    $target    = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
                     $accessor->setValue(
                         $target,
                         ActivityScope::CONTACT_COUNT,
@@ -142,12 +186,8 @@ class ActivityListener
                         ((int)$accessor->getValue($target, $directionCountPath) - 1)
                     );
 
-                    $activityDate = $this->activityContactProvider->getLastContactActivityDate(
-                        $em,
-                        $target,
-                        $activityData['id'],
-                        $direction
-                    );
+                    $activityDate = $this->activityContactProvider
+                        ->getLastContactActivityDate($em, $target, $activityData['id'], $direction);
                     if ($activityDate) {
                         $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $activityDate['all']);
                         $accessor->setValue($target, $contactDatePath, $activityDate['direction']);
@@ -157,7 +197,61 @@ class ActivityListener
                 }
             }
 
+            /** process updated entities */
+            foreach ($this->updatedEntities as $activityData) {
+                foreach ($activityData['targets'] as $targetInfo) {
+                    $direction          = $targetInfo['direction'];
+                    $isDirectionChanged = $targetInfo['is_direction_changed'];
+                    $target             = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
+
+                    /** process dates */
+                    if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
+                        $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_IN;
+                        $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_OUT;
+                        $oppositeDirection       = DirectionProviderInterface::DIRECTION_OUTGOING;
+                    } else {
+                        $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_OUT;
+                        $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_IN;
+                        $oppositeDirection       = DirectionProviderInterface::DIRECTION_INCOMING;
+                    }
+
+                    $lastActivityDate = $this->activityContactProvider
+                        ->getLastContactActivityDate($em, $target, 0, $direction);
+                    if ($lastActivityDate) {
+                        $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $lastActivityDate['all']);
+                        $accessor->setValue($target, $contactDatePath, $lastActivityDate['direction']);
+                        $accessor->setValue(
+                            $target,
+                            $oppositeContactDatePath,
+                            $this->activityContactProvider->getLastContactActivityDate(
+                                $em,
+                                $target,
+                                0,
+                                $oppositeDirection
+                            )['direction']
+                        );
+                    }
+
+                    /** process counts (in case direction was changed) */
+                    if ($isDirectionChanged) {
+                        if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
+                            $increment = ActivityScope::CONTACT_COUNT_IN;
+                            $decrement = ActivityScope::CONTACT_COUNT_OUT;
+                        } else {
+                            $increment = ActivityScope::CONTACT_COUNT_OUT;
+                            $decrement = ActivityScope::CONTACT_COUNT_IN;
+                        }
+                        $accessor->setValue($target, $increment, ((int)$accessor->getValue($target, $increment) + 1));
+                        $accessor->setValue($target, $decrement, ((int)$accessor->getValue($target, $decrement) - 1));
+                    }
+
+                    $em->persist($target);
+                }
+            }
+
             $this->deletedEntities = [];
+            $this->updatedEntities = [];
+
             $em->flush();
         }
     }

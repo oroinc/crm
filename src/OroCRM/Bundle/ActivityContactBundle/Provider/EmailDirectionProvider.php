@@ -39,6 +39,18 @@ class EmailDirectionProvider implements DirectionProviderInterface
     /**
      * {@inheritdoc}
      */
+    public function isDirectionChanged($changeSet = [])
+    {
+        /**
+         * For emails direction never can be changed at all.
+         */
+        return false;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDate($activity)
     {
         /** @var $activity Email */

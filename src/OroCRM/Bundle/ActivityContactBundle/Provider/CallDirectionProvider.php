@@ -32,6 +32,18 @@ class CallDirectionProvider implements DirectionProviderInterface
     /**
      * {@inheritdoc}
      */
+    public function isDirectionChanged($changeSet = [])
+    {
+        if (!empty($changeSet)) {
+            return in_array('direction', array_keys($changeSet));
+        }
+
+        return false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getDate($activity)
     {
         /** @var $activity Call */

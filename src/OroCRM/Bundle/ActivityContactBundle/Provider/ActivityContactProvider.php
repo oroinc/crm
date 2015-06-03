@@ -80,7 +80,7 @@ class ActivityContactProvider
      *
      * @param EntityManager $em
      * @param object        $targetEntity
-     * @param int           $skippedId
+     * @param integer       $skippedId
      * @param string        $direction
      * @return array of all and direction dates
      *   - all: Last activity date without regard to the direction
@@ -139,7 +139,7 @@ class ActivityContactProvider
      * @param $activity
      * @return bool|DirectionProviderInterface
      */
-    protected function getActivityDirectionProvider($activity)
+    public function getActivityDirectionProvider($activity)
     {
         $activityClass = ClassUtils::getClass($activity);
         if (in_array($activityClass, array_keys($this->providers))) {
