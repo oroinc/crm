@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class DirectionProviderPass implements CompilerPassInterface
 {
-    const TAG = 'orocrm_activity_direction.provider';
+    const TAG                 = 'orocrm_activity_direction.provider';
     const PROVIDER_SERVICE_ID = 'orocrm_activity_contact.provider';
 
     /**

@@ -7,9 +7,6 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
 class ActivityScope
 {
-    /** Activity group name for activities that represent communications. */
-    const GROUP_ACTIVITY_CONTACT = 'activity_contact';
-
     /** Last contact activity (datetime) */
     const LAST_CONTACT_DATE = 'ac_last_contact_date';
 

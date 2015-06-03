@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
@@ -47,7 +48,7 @@ class CallDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         /** @var $activity Call */
-        return $activity->getCallDateTime() ?: new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getCallDateTime() ? : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -55,7 +56,7 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
     {
-        $result = [];
+        $result         = [];
         $resultActivity = $this->getLastActivity($em, $target, $skipId);
         if ($resultActivity) {
             $result['all'] = $this->getDate($resultActivity);
