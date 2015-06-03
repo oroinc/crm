@@ -28,6 +28,26 @@ class CustomerHandler extends UpdateHandler
     }
 
     /**
+     * @param Customer $entity
+     * @return bool
+     */
+    public function handleRegister(Customer $entity)
+    {
+        if ($this->request->getMethod() === 'POST') {
+            $manager = $this->doctrineHelper->getEntityManager($entity);
+            $entity->setGuest(false);
+            $entity->setSyncState(Customer::SYNC_TO_MAGENTO);
+
+            $manager->persist($entity);
+            $manager->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function saveForm(FormInterface $form, $entity)
