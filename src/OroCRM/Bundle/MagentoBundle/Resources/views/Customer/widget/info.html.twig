@@ -16,6 +16,11 @@
 
             {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
             {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
+
+            {%- if entity.guest -%}
+                {{ ui.renderProperty('orocrm.magento.customer.guest.label'|trans, 'orocrm.magento.customer.guest.yes'|trans) }}
+            {%- endif -%}
+
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">

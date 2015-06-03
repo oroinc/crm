@@ -89,12 +89,7 @@ class CustomerController extends Controller
      * @return JsonResponse
      *
      * @Route("/register/{id}", name="orocrm_magento_customer_register", requirements={"id"="\d+"}))
-     * @Acl(
-     *      id="orocrm_magento_customer_update",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="OroCRMMagentoBundle:Customer"
-     * )
+     * @AclAncestor("orocrm_magento_customer_update")
      */
     public function registerAction(Customer $customer)
     {
