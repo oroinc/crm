@@ -12,7 +12,7 @@
 <script id="magento-big-numbers-metric-template" type="text/template">
     <tr data-cid="<%= cid %>">
         <td><%= label %></td>
-        <td>
+        <td class="action-cell">
             <input type="hidden" name="<%= namePrefix %>[id]" value="<%= id %>">
             <input data-name="order" type="hidden" class="order" name="<%= namePrefix %>[order]" value="<%= order %>">
             <input class="hide" data-name="show" type="checkbox" name="<%= namePrefix %>[show]" <%= show ? 'checked' : '' %>>
