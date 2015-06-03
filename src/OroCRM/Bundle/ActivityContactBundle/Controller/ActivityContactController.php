@@ -14,7 +14,7 @@ class ActivityContactController extends Controller
      * @param string  $entityClass The entity class which metrics should be rendered
      * @param integer $entityId    The entity object id which metrics should be rendered
      *
-     * @return Response
+     * @return array|Response
      *
      * @Route(
      *      "/metrics/{entityClass}/{entityId}",

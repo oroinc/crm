@@ -32,7 +32,9 @@ class EntityActivityContactDataProvider
     }
 
     /**
-     * {@inheritdoc}
+     * @param object $object
+     *
+     * @return array
      */
     public function getEntityContactData($object)
     {
@@ -53,8 +55,9 @@ class EntityActivityContactDataProvider
     }
 
     /**
-     * @param $entity
-     * @return array|ConfigInterface[]
+     * @param object $entity
+     *
+     * @return ConfigInterface[]
      */
     protected function getEntityActivityContactFields($entity)
     {
