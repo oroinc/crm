@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Util\ClassUtils;
+
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
@@ -54,6 +56,25 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
                 $isProcessingAllowed = false;
             }
+        }
+
+        if ($isProcessingAllowed && $order->getIsGuest()) {
+            $entityName = ClassUtils::getClass($order->getCustomer());
+            $customer = $this->databaseHelper->findOneBy(
+                $entityName,
+                [
+                    'email' => $order->getCustomerEmail(),
+                    'guest' => true
+                ]
+            );
+            if (!$customer) {
+                $customer = $order->getCustomer();
+                $customer->setEmail($order->getCustomerEmail())
+                    ->setGuest(true)
+                    ->setChannel(null);
+                $this->databaseHelper->persist($customer);
+            }
+            $order->setCustomer($customer);
         }
 
         return $isProcessingAllowed;
