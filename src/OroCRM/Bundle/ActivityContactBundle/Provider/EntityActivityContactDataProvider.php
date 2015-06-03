@@ -11,7 +11,6 @@ use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
-use Oro\Bundle\UIBundle\Provider\WidgetProviderInterface;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
@@ -46,6 +45,7 @@ class EntityActivityContactDataProvider
                 $fieldConfigId     = $item->getId();
                 $fieldName         = $fieldConfigId->getFieldName();
                 $carry[$fieldName] = $this->propertyAccessor->getValue($object, $fieldName);
+
                 return $carry;
             },
             []

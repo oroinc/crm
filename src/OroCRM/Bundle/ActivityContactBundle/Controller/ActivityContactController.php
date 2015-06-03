@@ -24,9 +24,9 @@ class ActivityContactController extends Controller
      */
     public function metricsAction($entityClass, $entityId)
     {
-        $entity = $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId);
+        $entity       = $this->get('oro_entity.routing_helper')->getEntity($entityClass, $entityId);
         $dataProvider = $this->get('orocrm_activity_contact.entity_activity_contact_data_provider');
-        $data = $dataProvider->getEntityContactData($entity);
+        $data         = $dataProvider->getEntityContactData($entity);
 
         return $data
             ? ['entity' => $entity, 'data' => $data]
