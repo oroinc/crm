@@ -152,7 +152,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
      *
      * @ORM\Column(name="is_removed", type="boolean")
      */
-    protected $removed;
+    protected $removed = false;
 
     /**
      * @param float $customPrice
