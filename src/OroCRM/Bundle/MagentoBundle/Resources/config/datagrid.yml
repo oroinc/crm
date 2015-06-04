@@ -24,6 +24,7 @@ datagrid:
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
+                    - c.guest
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -158,6 +159,10 @@ datagrid:
                                 no: orocrm.magento.datagrid.columns.is_subscriber.no
                                 yes: orocrm.magento.datagrid.columns.is_subscriber.yes
                     data_name: isSubscriber
+                guest:
+                    label: orocrm.magento.datagrid.columns.is_guest
+                    type: boolean
+                    data_name: c.guest
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
