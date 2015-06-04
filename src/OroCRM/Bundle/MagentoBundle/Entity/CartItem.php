@@ -439,7 +439,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
      */
     public function isRemoved()
     {
-        return $this->removed;
+        return (bool)$this->removed;
     }
 
     /**
@@ -449,7 +449,7 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
      */
     public function setRemoved($removed)
     {
-        $this->removed = $removed;
+        $this->removed = (bool)$removed;
 
         return $this;
     }
