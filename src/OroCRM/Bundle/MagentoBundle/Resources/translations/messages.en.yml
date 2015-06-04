@@ -322,6 +322,7 @@ orocrm:
             id.label:                     Id
             is_extension_installed.label: Is extension installed
             is_wsi_mode.label:            WS-I Compliance
+            guest_customer_sync.label:    Guest Customer Sync
             sync_start_date.label:        Sync start date
             sync_range.label:             Sync range
             website_id.label:             Website
@@ -369,7 +370,9 @@ orocrm:
             cart.label:             Cart
             items.label:            Order items
             is_virtual.label:       Is virtual
-            is_guest.label:         Is guest
+            is_guest:
+                label: Is guest
+                yes: Yes
             channel.label:          Integration
             data_channel.label:     Channel
             notes.label:            Additional comments

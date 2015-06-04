@@ -28,6 +28,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
         $syncStartDate = new \DateTime('now', new \DateTimeZone('UTC'));
         $syncRange = \DateInterval::createFromDateString('p1d');
         $websiteId = 123;
+        $guestCustomerSync = true;
         $websites = [];
         $isExtensionInstalled = true;
         $adminUrl = 'http://localhost/admin';
@@ -41,9 +42,10 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'syncStartDate'          => ['syncStartDate',        $syncStartDate, $syncStartDate],
             'syncRange'              => ['syncRange',            $syncRange, $syncRange],
             'is_extension_installed' => ['isExtensionInstalled', $isExtensionInstalled, $isExtensionInstalled],
+            'guest_customer_sync'    => ['guestCustomerSync',    $guestCustomerSync, $guestCustomerSync],
             'admin_url'              => ['adminUrl',             $adminUrl, $adminUrl],
-            'extension_version'      => ['extensionVersion', '1.0.0', '1.0.0'],
-            'magento_version'      => ['magentoVersion', '1.0.0', '1.0.0']
+            'extension_version'      => ['extensionVersion',     '1.0.0', '1.0.0'],
+            'magento_version'        => ['magentoVersion',       '1.0.0', '1.0.0']
         ];
     }
 
@@ -55,6 +57,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'wsdl_url' => 'http://test.url/',
             'sync_range' => new \DateInterval('P1D'),
             'wsi_mode' => true,
+            'guest_customer_sync' => true,
             'website_id' => 1,
             'start_sync_date' => new \DateTime('now'),
             'initial_sync_start_date' => new \DateTime('now'),
@@ -68,6 +71,7 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             ->setWsdlUrl($data['wsdl_url'])
             ->setSyncRange($data['sync_range'])
             ->setIsWsiMode($data['wsi_mode'])
+            ->setGuestCustomerSync($data['guest_customer_sync'])
             ->setWebsiteId($data['website_id'])
             ->setSyncStartDate($data['start_sync_date'])
             ->setInitialSyncStartDate($data['initial_sync_start_date'])

@@ -153,6 +153,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
     }
 
     /**
