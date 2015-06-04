@@ -1,0 +1,8 @@
+placeholders:
+    oro_activity_list_before:
+        items:
+            orocrm_activity_contact: ~
+
+items:
+    orocrm_activity_contact:
+        template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
