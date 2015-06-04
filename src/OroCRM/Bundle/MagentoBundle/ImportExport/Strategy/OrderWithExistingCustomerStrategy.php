@@ -69,11 +69,12 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             );
             if (!$customer) {
                 $customer = $order->getCustomer();
-                $customer->setEmail($order->getCustomerEmail())
-                    ->setGuest(true)
-                    ->setChannel(null);
-                $this->databaseHelper->persist($customer);
             }
+            $customer->setEmail($order->getCustomerEmail())
+                ->setGuest(true)
+                ->setChannel($channel)
+                ->setOrganization($channel->getOrganization());
+            $this->databaseHelper->persist($customer);
             $order->setCustomer($customer);
         }
 
