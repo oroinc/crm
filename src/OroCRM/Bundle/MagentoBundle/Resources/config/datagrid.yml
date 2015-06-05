@@ -421,7 +421,8 @@ datagrid:
                         - { join: c.cart, alias: co }
                 where:
                     and:
-                        - c.cart = :id AND c.removed = :is_removed
+                        - c.cart = :id
+                        - c.removed = :is_removed
             bind_parameters:
                 - id
                 - is_removed
