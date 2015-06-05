@@ -474,9 +474,6 @@ datagrid:
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
-            removed:
-                label:            orocrm.magento.datagrid.columns.removed
-                frontend_type:    boolean
         properties:
             id: ~
         sorters:
