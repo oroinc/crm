@@ -14,6 +14,7 @@ parameters:
     orocrm_magento.importexport.data_converter.cart_address.class:              OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CartAddressDataConverter
     orocrm_magento.importexport.data_converter.customer_address.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerAddressDataConverter
     orocrm_magento.importexport.data_converter.customer.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerDataConverter
+    orocrm_magento.importexport.data_converter.guest_customer.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter
     orocrm_magento.importexport.data_converter.website.class:                   OroCRM\Bundle\MagentoBundle\ImportExport\Converter\WebsiteDataConverter
     orocrm_magento.importexport.data_converter.store.class:                     OroCRM\Bundle\MagentoBundle\ImportExport\Converter\StoreDataConverter
     orocrm_magento.importexport.data_converter.customer_group.class:            OroCRM\Bundle\MagentoBundle\ImportExport\Converter\CustomerGroupDataConverter
@@ -46,6 +47,7 @@ parameters:
     # strategies
     orocrm_magento.import.strategy.abstract.class:                              OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy
     orocrm_magento.import_strategy.customer.add_or_update.class:                OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CustomerStrategy
+    orocrm_magento.import_strategy.guest_customer.add_or_update.class:          OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy
     orocrm_magento.import_strategy.newsletter_subscriber.add_or_update.class:   OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\NewsletterSubscriberStrategy
     orocrm_magento.import_strategy.region.add_or_update.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\RegionStrategy
     orocrm_magento.import_strategy.cart.add_or_update.class:                    OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\CartStrategy
@@ -130,6 +132,9 @@ services:
         class: %orocrm_magento.importexport.data_converter.newsletter_subscriber.class%
         calls:
             - [addNodeDataConverter, ['store', @orocrm_magento.importexport.data_converter.store]]
+
+    orocrm_magento.importexport.data_converter.guest_customer:
+        class: %orocrm_magento.importexport.data_converter.guest_customer.class%
 
     # Connectors
     orocrm_magento.connector.abstract:
@@ -291,6 +296,10 @@ services:
         parent: orocrm_magento.import.strategy.abstract
         class: %orocrm_magento.import_strategy.newsletter_subscriber.add_or_update.class%
 
+    orocrm_magento.import.strategy.guest_customer.add_or_update:
+        parent: orocrm_magento.import.strategy.abstract
+        class: %orocrm_magento.import_strategy.guest_customer.add_or_update.class%
+
     orocrm_magento.import.strategy.region.add_or_update:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
         parent: orocrm_magento.import.strategy.abstract
@@ -331,6 +340,15 @@ services:
         parent: orocrm_magento.import.strategy.abstract
 
     # Processors
+    orocrm_magento.importexport.processor.import_guest_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, [@oro_importexport.data_converter.default]]
+            - [setStrategy, [@orocrm_magento.import.strategy.guest_customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.customer.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.import_guest_customer }
+
     orocrm_magento.importexport.processor.import_newsletter_subscriber:
         parent: oro_integration.importexport.processor.import
         calls:
@@ -579,6 +597,11 @@ services:
         abstract: true
         arguments:
             - @oro_importexport.context_registry
+
+    orocrm_magento.reader.context_guest_customer:
+        parent: orocrm_magento.reader.context
+        calls:
+            - [setContextKey, ['postProcessGuestCustomers']]
 
     orocrm_magento.reader.context_order:
         parent: orocrm_magento.reader.context

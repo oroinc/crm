@@ -38,9 +38,15 @@
         {{ UI.renderHtmlProperty('orocrm.magento.customer.name.label'|trans, customer_name_link) }}
 
         {{ UI.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, EmailActions.sendEmailLink(customer.email, customer)) }}
-        {{ UI.renderProperty('orocrm.magento.customer.group.label'|trans, customer.group.name) }}
-        {{ UI.renderProperty('orocrm.magento.customer.website.label'|trans, customer.website.name) }}
-        {{ UI.renderProperty('orocrm.magento.customer.store.label'|trans, customer.store.name) }}
+        {% if customer.group %}
+            {{ UI.renderProperty('orocrm.magento.customer.group.label'|trans, customer.group.name) }}
+        {% endif %}
+        {% if customer.website %}
+            {{ UI.renderProperty('orocrm.magento.customer.website.label'|trans, customer.website.name) }}
+        {% endif %}
+        {% if customer.store %}
+            {{ UI.renderProperty('orocrm.magento.customer.store.label'|trans, customer.store.name) }}
+        {% endif %}
         {%- set birthdayData -%}
             {{ customer.birthday is not empty ? customer.birthday|oro_format_date : null }}
             {% if customer.birthday is not empty %} ({{ customer.birthday|age_string({'default': 'N/A'}) }}){% endif %}
