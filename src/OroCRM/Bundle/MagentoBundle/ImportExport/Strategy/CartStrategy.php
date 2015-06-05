@@ -46,9 +46,7 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        if ($this->existingCartItems) {
-            $this->updateRemovedCartItems($entity);
-        }
+        $this->updateRemovedCartItems($entity);
 
         if (!$this->hasContactInfo($entity)) {
             return null;
@@ -72,12 +70,18 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function updateRemovedCartItems(Cart $entity)
     {
-        $existingCartItems = new ArrayCollection($this->existingCartItems);
-        $newCartItems = $entity->getCartItems();
+        if ((int)$entity->getItemsQty() === 0) {
+            foreach ($entity->getCartItems() as $cartItem) {
+                $cartItem->setRemoved(true);
+            }
+        } elseif ($this->existingCartItems) {
+            $existingCartItems = new ArrayCollection($this->existingCartItems);
+            $newCartItems = $entity->getCartItems();
 
-        foreach ($existingCartItems as $existingCartItem) {
-            if (!$newCartItems->contains($existingCartItem)) {
-                $existingCartItem->setRemoved(true);
+            foreach ($existingCartItems as $existingCartItem) {
+                if (!$newCartItems->contains($existingCartItem)) {
+                    $existingCartItem->setRemoved(true);
+                }
             }
         }
     }
@@ -153,14 +157,7 @@ class CartStrategy extends AbstractImportStrategy
         $hasContactInfo = ($entity->getBillingAddress() && $entity->getBillingAddress()->getPhone())
             || $entity->getEmail();
 
-        if (!$entity->getItemsCount()) {
-            $this->context->incrementErrorEntriesCount();
-            $this->logger->debug(
-                sprintf('Cart ID: %d was skipped because it does not have items', $entity->getOriginId())
-            );
-
-            return false;
-        } elseif (!$hasContactInfo) {
+       if (!$hasContactInfo) {
             $this->context->incrementErrorEntriesCount();
             $this->logger->debug(
                 sprintf('Cart ID: %d was skipped because lack of contact info', $entity->getOriginId())
