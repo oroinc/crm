@@ -2,11 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Doctrine\Common\Collections\ArrayCollection;
+
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
+use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class CartStrategy extends AbstractImportStrategy
 {
@@ -16,6 +18,11 @@ class CartStrategy extends AbstractImportStrategy
     protected $existingEntity;
 
     /**
+     * @var array
+     */
+    protected $existingCartItems;
+
+    /**
      * @param Cart $entity
      *
      * {@inheritdoc}
@@ -23,7 +30,9 @@ class CartStrategy extends AbstractImportStrategy
     protected function beforeProcessEntity($entity)
     {
         $this->existingEntity = $this->databaseHelper->findOneByIdentity($entity);
-        if (!$this->existingEntity) {
+        if ($this->existingEntity) {
+            $this->existingCartItems = $this->existingEntity->getCartItems()->toArray();
+        } else {
             $this->existingEntity = $entity;
         }
 
@@ -37,6 +46,10 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
+        if ($this->existingCartItems) {
+            $this->updateRemovedCartItems($entity);
+        }
+
         if (!$this->hasContactInfo($entity)) {
             return null;
         }
@@ -50,6 +63,23 @@ class CartStrategy extends AbstractImportStrategy
         $this->existingEntity = null;
 
         return parent::afterProcessEntity($entity);
+    }
+
+    /**
+     * Update removed cart items - set `removed` field to true if cart item was removed from a cart
+     *
+     * @param Cart $entity
+     */
+    protected function updateRemovedCartItems(Cart $entity)
+    {
+        $existingCartItems = new ArrayCollection($this->existingCartItems);
+        $newCartItems = $entity->getCartItems();
+
+        foreach ($existingCartItems as $existingCartItem) {
+            if (!$newCartItems->contains($existingCartItem)) {
+                $existingCartItem->setRemoved(true);
+            }
+        }
     }
 
     /**

@@ -414,6 +414,7 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - co.quoteCurrencyCode as currency
+                    - c.removed
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\CartItem , alias: c }
                 join:
@@ -473,6 +474,9 @@ datagrid:
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
+            removed:
+                label:            orocrm.magento.datagrid.columns.removed
+                frontend_type:    boolean
         properties:
             id: ~
         sorters:
