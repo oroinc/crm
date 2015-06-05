@@ -54,7 +54,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         /** @var $activity Email */
-        return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getSentAt() ? : new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

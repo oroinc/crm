@@ -103,11 +103,8 @@ class ActivityContactProvider
         $allDates       = [];
         $directionDates = [];
         foreach ($this->providers as $supportedClass => $provider) {
-            if ($skippedId && $class && $supportedClass !== $class) {
-                $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
-            } else {
-                $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction);
-            }
+            $skippedId = ($skippedId && $supportedClass === $class) ? $skippedId : null;
+            $result    = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
             if (!empty($result)) {
                 $allDates[] = $result['all'];
                 if ($result['direction']) {
@@ -119,6 +116,7 @@ class ActivityContactProvider
         if ($allDates) {
             $allDate = $this->getMaxDate($allDates);
         }
+
         if ($directionDates) {
             $directionDate = $this->getMaxDate($directionDates);
         }
