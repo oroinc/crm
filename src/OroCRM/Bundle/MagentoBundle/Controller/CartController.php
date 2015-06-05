@@ -64,7 +64,17 @@ class CartController extends Controller
      */
     public function itemsAction(Cart $cart)
     {
-        return ['entity' => $cart];
+        return ['entity' => $cart, 'is_removed' => 0];
+    }
+
+    /**
+     * @Route("/widget/deleted_grid/{id}", name="orocrm_magento_cart_widget_deleted_items", requirements={"id"="\d+"}))
+     * @AclAncestor("orocrm_magento_cart_view")
+     * @Template("OroCRMMagentoBundle:Cart:items.html.twig")
+     */
+    public function deletedItemsAction(Cart $cart)
+    {
+        return ['entity' => $cart, 'is_removed' => 1];
     }
 
     /**

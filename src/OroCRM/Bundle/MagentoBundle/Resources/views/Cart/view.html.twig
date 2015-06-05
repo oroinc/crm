@@ -64,11 +64,30 @@
         {% set generalSubblocks = generalSubblocks|merge([{'data' : [opportunityInfoWidget] }]) %}
     {% endif %}
 
-    {% set cartItemsWidget %}
-        {{ oro_widget_render({
-            'widgetType': 'block',
-            'url': path('orocrm_magento_cart_widget_items', {id: entity.id})
-        }) }}
+    {% set itemsTabsWidget %}
+        <div class="responsive-cell" id="magento-without-border-tabs">
+            {% set tabs = [
+                {
+                    'alias': 'orocrm_magento_cart_items_active',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.cart.active_cart_items.label"|trans,
+                    'url': path(
+                            'orocrm_magento_cart_widget_items',
+                            { id: entity.id }
+                    )
+                },
+                {
+                    'alias': 'orocrm_magento_cart_items_deleted',
+                    'widgetType': 'block',
+                    'label': "orocrm.magento.cart.deleted_cart_items.label"|trans,
+                    'url': path(
+                        'orocrm_magento_cart_widget_deleted_items',
+                        { id: entity.id }
+                    )
+                }
+            ] %}
+            {{ tabPanel(tabs) }}
+        </div>
     {% endset %}
 
     {% set dataBlocks = [
@@ -80,9 +99,9 @@
         {
             'title': 'orocrm.magento.cart.cart_items.label'|trans,
             'subblocks': [
-                {'data' : [cartItemsWidget] }
+                {'data' : [itemsTabsWidget] }
             ]
-        },
+        }
     ] %}
 
     {% set relatedInformation = [] %}

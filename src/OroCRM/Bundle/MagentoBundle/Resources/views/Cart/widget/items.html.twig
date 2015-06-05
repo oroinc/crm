@@ -1,5 +1,5 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 <div class="widget-content">
-    {{ dataGrid.renderGrid('magento-cartitem-grid', {id: entity.id}) }}
+    {{ dataGrid.renderGrid('magento-cartitem-grid', {id: entity.id, 'is_removed': is_removed }) }}
 </div>
