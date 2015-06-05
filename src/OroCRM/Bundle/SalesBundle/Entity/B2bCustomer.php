@@ -181,14 +181,18 @@ class B2bCustomer extends ExtendB2bCustomer implements
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", mappedBy="customer", cascade={"remove"})
      */
     protected $leads;
 
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity", mappedBy="customer")
+     * @ORM\OneToMany(
+     *     targetEntity="OroCRM\Bundle\SalesBundle\Entity\Opportunity",
+     *     mappedBy="customer",
+     *     cascade={"remove"}
+     * )
      */
     protected $opportunities;
 
