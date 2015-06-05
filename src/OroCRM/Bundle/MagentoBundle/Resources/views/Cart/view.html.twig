@@ -73,7 +73,7 @@
                     'label': "orocrm.magento.cart.active_cart_items.label"|trans,
                     'url': path(
                             'orocrm_magento_cart_widget_items',
-                            { id: entity.id }
+                            { id: entity.id, isRemoved: 0 }
                     )
                 },
                 {
@@ -81,8 +81,8 @@
                     'widgetType': 'block',
                     'label': "orocrm.magento.cart.deleted_cart_items.label"|trans,
                     'url': path(
-                        'orocrm_magento_cart_widget_deleted_items',
-                        { id: entity.id }
+                        'orocrm_magento_cart_widget_items',
+                        { id: entity.id, isRemoved: 1 }
                     )
                 }
             ] %}
