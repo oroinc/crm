@@ -54,13 +54,13 @@ class EmailDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         /** @var $activity Email */
-        return $activity->getSentAt() ? : new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getSentAt() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
+    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
         $result         = [];
         $resultActivity = $this->getLastActivity($em, $target, $skipId);
@@ -89,7 +89,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
      *
      * @return Email
      */
-    protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
+    protected function getLastActivity(EntityManager $em, $target, $skipId = null, $direction = null)
     {
         $qb = $em->getRepository('Oro\Bundle\EmailBundle\Entity\Email')
             ->createQueryBuilder('email')
@@ -102,11 +102,14 @@ class EmailDirectionProvider implements DirectionProviderInterface
                 'target'
             )
             ->andWhere('target = :target')
-            ->andWhere('email.id <> :skipId')
             ->orderBy('email.sentAt', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('target', $target)
-            ->setParameter('skipId', $skipId);
+            ->setParameter('target', $target);
+
+        if ($skipId) {
+            $qb->andWhere('email.id <> :skipId')
+                ->setParameter('skipId', $skipId);
+        }
 
         if ($direction) {
             $operator = '!=';

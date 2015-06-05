@@ -22,6 +22,7 @@ interface DirectionProviderInterface
      *
      * @param object $activity
      * @param object $target
+     *
      * @return string
      */
     public function getDirection($activity, $target);
@@ -29,7 +30,8 @@ interface DirectionProviderInterface
     /**
      * Checks if direction was changed
      *
-     * @param array  $changeSet
+     * @param array $changeSet
+     *
      * @return bool
      */
     public function isDirectionChanged($changeSet = []);
@@ -38,6 +40,7 @@ interface DirectionProviderInterface
      * Return activity datetime
      *
      * @param $activity
+     *
      * @return \DateTime
      */
     public function getDate($activity);
@@ -47,11 +50,12 @@ interface DirectionProviderInterface
      *
      * @param EntityManager $em
      * @param object        $target
-     * @param integer       $skipId
      * @param string        $direction
+     * @param integer       $skipId
+     *
      * @return array of dates
      *   - all: Last activity date without regard to the direction
      *   - direction:   Last activity date for given direction
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction);
+    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null);
 }

@@ -25,6 +25,7 @@ class ActivityContactProvider
      *
      * @param object $activity
      * @param object $target
+     *
      * @return string
      */
     public function getActivityDirection($activity, $target)
@@ -41,6 +42,7 @@ class ActivityContactProvider
      * Get contact date
      *
      * @param $activity
+     *
      * @return bool
      */
     public function getActivityDate($activity)
@@ -68,6 +70,7 @@ class ActivityContactProvider
      * Check if given entity class is supports
      *
      * @param $activityClass
+     *
      * @return bool
      */
     public function isSupportedEntity($activityClass)
@@ -80,20 +83,31 @@ class ActivityContactProvider
      *
      * @param EntityManager $em
      * @param object        $targetEntity
-     * @param integer       $skippedId
      * @param string        $direction
+     * @param integer       $skippedId
+     * @param string        $class
+     *
      * @return array of all and direction dates
      *   - all: Last activity date without regard to the direction
      *   - direction: Last activity date for given direction
      */
-    public function getLastContactActivityDate(EntityManager $em, $targetEntity, $skippedId, $direction)
-    {
+    public function getLastContactActivityDate(
+        EntityManager $em,
+        $targetEntity,
+        $direction,
+        $skippedId = null,
+        $class = null
+    ) {
         $allDate        = null;
         $directionDate  = null;
         $allDates       = [];
         $directionDates = [];
-        foreach ($this->providers as $provider) {
-            $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $skippedId, $direction);
+        foreach ($this->providers as $supportedClass => $provider) {
+            if ($skippedId && $class && $supportedClass !== $class) {
+                $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
+            } else {
+                $result = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction);
+            }
             if (!empty($result)) {
                 $allDates[] = $result['all'];
                 if ($result['direction']) {
@@ -116,6 +130,7 @@ class ActivityContactProvider
      * Get max date from the array of dates
      *
      * @param \DateTime[] $datesArray
+     *
      * @return \DateTime
      */
     protected function getMaxDate($datesArray)
@@ -124,8 +139,13 @@ class ActivityContactProvider
             usort(
                 $datesArray,
                 function (\DateTime $a, \DateTime $b) {
+                    $firstStamp  = $a->getTimestamp();
+                    $secondStamp = $b->getTimestamp();
+                    if ($firstStamp === $secondStamp) {
+                        return 0;
+                    }
 
-                    return $a->getTimestamp() - $b->getTimestamp();
+                    return ($firstStamp > $secondStamp) ? -1 : 1;
                 }
             );
         }
@@ -137,6 +157,7 @@ class ActivityContactProvider
      * Get contact activity direction provider
      *
      * @param $activity
+     *
      * @return bool|DirectionProviderInterface
      */
     public function getActivityDirectionProvider($activity)

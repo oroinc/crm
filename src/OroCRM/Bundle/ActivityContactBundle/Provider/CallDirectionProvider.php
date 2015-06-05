@@ -48,13 +48,13 @@ class CallDirectionProvider implements DirectionProviderInterface
     public function getDate($activity)
     {
         /** @var $activity Call */
-        return $activity->getCallDateTime() ? : new \DateTime('now', new \DateTimeZone('UTC'));
+        return $activity->getCallDateTime() ?: new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $skipId, $direction)
+    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
         $result         = [];
         $resultActivity = $this->getLastActivity($em, $target, $skipId);
@@ -96,11 +96,13 @@ class CallDirectionProvider implements DirectionProviderInterface
                 'target'
             )
             ->andWhere('target = :target')
-            ->andWhere('call.id <> :skipId')
             ->orderBy('call.callDateTime', 'DESC')
             ->setMaxResults(1)
-            ->setParameter('target', $target->getId())
-            ->setParameter('skipId', $skipId);
+            ->setParameter('target', $target->getId());
+        if ($skipId) {
+            $qb->andWhere('call.id <> :skipId')
+                ->setParameter('skipId', $skipId);
+        }
 
         if ($direction) {
             $qb->join('call.direction', 'direction')
