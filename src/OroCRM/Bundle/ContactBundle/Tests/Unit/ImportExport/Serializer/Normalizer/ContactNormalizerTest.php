@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\ImportExport\Serializer\Normalizer;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use Oro\Bundle\ImportExportBundle\Tests\Unit\Strategy\Stub\ImportEntity;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -61,6 +63,16 @@ class ContactNormalizerTest extends \PHPUnit_Framework_TestCase
                     [
                         ['name' => 'twitter']
                     ]
+                )
+            );
+        $this->fieldHelper->expects($this->any())
+            ->method('getObjectValue')
+            ->will(
+                $this->returnCallback(
+                    function ($object, $field) {
+                        $propertyAccessor = PropertyAccess::createPropertyAccessor();
+                        return $propertyAccessor->getValue($object, $field);
+                    }
                 )
             );
 
