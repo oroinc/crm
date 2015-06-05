@@ -421,9 +421,10 @@ datagrid:
                         - { join: c.cart, alias: co }
                 where:
                     and:
-                        - c.cart = :id
+                        - c.cart = :id AND c.removed = :is_removed
             bind_parameters:
                 - id
+                - is_removed
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
