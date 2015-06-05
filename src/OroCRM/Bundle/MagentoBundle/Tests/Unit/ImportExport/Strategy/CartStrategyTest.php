@@ -131,21 +131,24 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)]),
+                        'itemsQty' => 1,
                     ]
                 ),
                 'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)]),
+                        'itemsQty' => 1,
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)]),
+                        'itemsQty' => 1,
                     ]
                 )
             ],
@@ -154,21 +157,24 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)]),
+                        'itemsQty' => 2,
                     ]
                 ),
                 'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)]),
+                        'itemsQty' => 2,
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)]),
+                        'itemsQty' => 1,
                     ]
                 )
             ],
@@ -237,6 +243,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $existingCart = new Cart();
         $existingCart->setCartItems($existingCartItems);
         $existingCart->setChannel($channel);
+        $existingCart->setItemsQty(2);
 
         $newCartItems = new ArrayCollection();
         $newCartItems->add($cartItem2);
@@ -245,6 +252,7 @@ class CartStrategyTest extends AbstractStrategyTest
         $newCart = new Cart();
         $newCart->setCartItems($newCartItems);
         $newCart->setChannel($channel);
+        $newCart->setItemsQty(2);
 
         $this->databaseHelper->expects($this->once())
             ->method('findOneByIdentity')
