@@ -44,6 +44,12 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             $isProcessingAllowed = false;
         }
 
+        if (!$customer && $order->getIsGuest()) {
+            $this->appendDataToContext('postProcessGuestCustomers', $this->context->getValue('itemData'));
+
+            $isProcessingAllowed = false;
+        }
+
         // Do not try to load cart if bridge does not installed
         /** @var MagentoSoapTransport $transport */
         $channel = $this->databaseHelper->findOneByIdentity($order->getChannel());
@@ -56,26 +62,6 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
                 $isProcessingAllowed = false;
             }
-        }
-
-        if ($isProcessingAllowed && $order->getIsGuest()) {
-            $entityName = ClassUtils::getClass($order->getCustomer());
-            $customer = $this->databaseHelper->findOneBy(
-                $entityName,
-                [
-                    'email' => $order->getCustomerEmail(),
-                    'guest' => true
-                ]
-            );
-            if (!$customer) {
-                $customer = $order->getCustomer();
-            }
-            $customer->setEmail($order->getCustomerEmail())
-                ->setGuest(true)
-                ->setChannel($channel)
-                ->setOrganization($channel->getOrganization());
-            $this->databaseHelper->persist($customer);
-            $order->setCustomer($customer);
         }
 
         return $isProcessingAllowed;
