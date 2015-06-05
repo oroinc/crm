@@ -110,6 +110,7 @@ orocrm:
                     yes: Yes
                     no: No
                     unknown: Not defined
+                removed:          Removed
         channel_type:
             label:  Magento
         transport:
