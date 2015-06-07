@@ -1,0 +1,4 @@
+oro_entity:
+    entity_alias_exclusions:
+        - OroCRM\Bundle\CallBundle\Entity\CallDirection
+        - OroCRM\Bundle\CallBundle\Entity\CallStatus

@@ -1,0 +1,3 @@
+oro_entity:
+    entity_alias_exclusions:
+        - OroCRM\Bundle\TaskBundle\Entity\TaskPriority

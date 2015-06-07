@@ -1,0 +1,5 @@
+oro_entity:
+    entity_alias_exclusions:
+        - OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+        - OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+        - OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus

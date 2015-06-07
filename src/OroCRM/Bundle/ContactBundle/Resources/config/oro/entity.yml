@@ -17,3 +17,12 @@ oro_entity:
                     join:
                         left:
                             - { join: entity.phones, alias: phones, conditionType: 'WITH', condition: 'phones.primary = true' }
+
+    entity_aliases:
+        OroCRM\Bundle\ContactBundle\Entity\Group:
+            alias:        contactgroup
+            plural_alias: contactgroups
+
+    entity_alias_exclusions:
+        - OroCRM\Bundle\ContactBundle\Entity\Method
+        - OroCRM\Bundle\ContactBundle\Entity\Source
