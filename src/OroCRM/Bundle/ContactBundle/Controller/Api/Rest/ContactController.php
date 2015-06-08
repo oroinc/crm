@@ -221,21 +221,11 @@ class ContactController extends RestController implements ClassResourceInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function processForm($entity)
-    {
-        $this->fixRequest($entity);
-        return parent::processForm($entity);
-    }
-
-    /**
-     * @param Contact $contact
+     * @param Contact $entity
      *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    protected function fixRequest($contact)
+    protected function fixRequestAttributes($entity)
     {
         $formAlias = $this->getFormAlias();
         $contactData = $this->getRequest()->request->get($formAlias);
@@ -249,8 +239,8 @@ class ContactController extends RestController implements ClassResourceInterface
                 ? $contactData['removeAccounts']
                 : array();
 
-            if ($contact->getId()) {
-                foreach ($contact->getAccounts() as $account) {
+            if ($entity->getId()) {
+                foreach ($entity->getAccounts() as $account) {
                     if (!in_array($account->getId(), $accounts)) {
                         $removeAccounts[] = $account->getId();
                     }
@@ -275,6 +265,8 @@ class ContactController extends RestController implements ClassResourceInterface
             }
             $this->getRequest()->request->set($formAlias, $contactData);
         }
+
+        parent::fixRequestAttributes($entity);
     }
 
     /**
