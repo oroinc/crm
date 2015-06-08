@@ -66,69 +66,86 @@ class CartControllerTest extends AbstractController
     public function gridProvider()
     {
         return [
-            'Magento cart grid'                             => [
+            'Magento cart grid' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [
+                    'gridFilters' => [],
+                    'assert' => [
                         'channelName' => 'Magento channel',
-                        'firstName'   => 'John',
-                        'lastName'    => 'Doe',
-                        'email'       => 'email@email.com',
-                        'regionName'  => 'Arizona'
+                        'firstName' => 'John',
+                        'lastName' => 'Doe',
+                        'email' => 'email@email.com',
+                        'regionName' => 'Arizona'
                     ],
                     'expectedResultCount' => 1
                 ],
             ],
-            'Magento cart grid with filters'                => [
+            'Magento cart grid with filters' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'         => [
-                        'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
-                        'magento-cart-grid[_filter][firstName][value]' => 'John',
+                    'gridFilters' => [
+                        'magento-cart-grid[_filter][lastName][value]' => 'Doe',
+                        'magento-cart-grid[_filter][firstName][value]' => 'John'
                     ],
-                    'assert'              => [
+                    'assert' => [
                         'channelName' => 'Magento channel',
-                        'firstName'   => 'John',
-                        'lastName'    => 'Doe',
-                        'email'       => 'email@email.com',
-                        'regionName'  => 'Arizona'
+                        'firstName' => 'John',
+                        'lastName' => 'Doe',
+                        'email' => 'email@email.com',
+                        'regionName' => 'Arizona'
                     ],
                     'expectedResultCount' => 1
                 ],
             ],
             'Magento cart grid with filters without result' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'magento-cart-grid'
                     ],
-                    'gridFilters'         => [
-                        'magento-cart-grid[_filter][lastName][value]'  => 'Doe',
-                        'magento-cart-grid[_filter][firstName][value]' => 'Doe',
+                    'gridFilters' => [
+                        'magento-cart-grid[_filter][lastName][value]' => 'Doe',
+                        'magento-cart-grid[_filter][firstName][value]' => 'Doe'
                     ],
-                    'assert'              => [],
+                    'assert' => [],
                     'expectedResultCount' => 0
                 ]
             ],
-            'Cart item grid'                                => [
+            'Cart item grid' => [
                 [
-                    'gridParameters'      => [
+                    'gridParameters' => [
                         'gridName' => 'magento-cartitem-grid',
-                        'id'       => 'id',
+                        'id' => 'id',
+                        'is_removed' => 'is_removed'
                     ],
-                    'gridFilters'         => [],
-                    'assert'              => [
-                        'sku'            => 'sku',
-                        'qty'            => 0,
-                        'rowTotal'       => '$100.00',
-                        'taxAmount'      => '$10.00',
+                    'gridFilters' => [
+                        'magento-cart-grid[_filter][is_removed][value]' => false
+                    ],
+                    'assert' => [
+                        'sku' => 'sku',
+                        'qty' => 0,
+                        'rowTotal' => '$100.00',
+                        'taxAmount' => '$10.00',
                         'discountAmount' => '$0.00'
                     ],
                     'expectedResultCount' => 1
+                ],
+            ],
+            'Cart item grid removed' => [
+                [
+                    'gridParameters' => [
+                        'gridName' => 'magento-cartitem-grid',
+                        'id' => 'id',
+                        'is_removed' => 'is_removed'
+                    ],
+                    'gridFilters' => [
+                        'magento-cart-grid[_filter][is_removed][value]' => true
+                    ],
+                    'assert' => [],
+                    'expectedResultCount' => 0
                 ],
             ],
         ];
