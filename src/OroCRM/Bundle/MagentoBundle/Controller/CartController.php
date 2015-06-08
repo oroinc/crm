@@ -64,12 +64,11 @@ class CartController extends Controller
      *      requirements={"id"="\d+", "isRemoved"="\d+"}
      * )
      * @AclAncestor("orocrm_magento_cart_view")
-     * @ParamConverter("cart", class="OroCRMMagentoBundle:Cart", options={"id" = "id"})
      * @Template
      */
     public function itemsAction(Cart $cart, $isRemoved = 0)
     {
-        return ['entity' => $cart, 'is_removed' => $isRemoved];
+        return ['entity' => $cart, 'is_removed' => (int)$isRemoved];
     }
 
     /**

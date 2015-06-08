@@ -117,13 +117,10 @@ class CartControllerTest extends AbstractController
             'Cart item grid' => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-cartitem-grid',
+                        'gridName' => 'magento-cartitem-active-grid',
                         'id' => 'id',
-                        'is_removed' => 'is_removed'
                     ],
-                    'gridFilters' => [
-                        'magento-cart-grid[_filter][is_removed][value]' => false
-                    ],
+                    'gridFilters' => [],
                     'assert' => [
                         'sku' => 'sku',
                         'qty' => 0,
@@ -137,13 +134,10 @@ class CartControllerTest extends AbstractController
             'Cart item grid removed' => [
                 [
                     'gridParameters' => [
-                        'gridName' => 'magento-cartitem-grid',
+                        'gridName' => 'magento-cartitem-removed-grid',
                         'id' => 'id',
-                        'is_removed' => 'is_removed'
                     ],
-                    'gridFilters' => [
-                        'magento-cart-grid[_filter][is_removed][value]' => true
-                    ],
+                    'gridFilters' => [],
                     'assert' => [],
                     'expectedResultCount' => 0
                 ],
