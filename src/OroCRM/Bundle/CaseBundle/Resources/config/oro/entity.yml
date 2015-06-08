@@ -3,11 +3,3 @@ oro_entity:
         OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
             alias:        case
             plural_alias: cases
-
-    entity_alias_exclusions:
-        - OroCRM\Bundle\CaseBundle\Entity\CasePriority
-        - OroCRM\Bundle\CaseBundle\Entity\CasePriorityTranslation
-        - OroCRM\Bundle\CaseBundle\Entity\CaseSource
-        - OroCRM\Bundle\CaseBundle\Entity\CaseSourceTranslation
-        - OroCRM\Bundle\CaseBundle\Entity\CaseStatus
-        - OroCRM\Bundle\CaseBundle\Entity\CaseStatusTranslation

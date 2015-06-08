@@ -22,7 +22,3 @@ oro_entity:
         OroCRM\Bundle\ContactBundle\Entity\Group:
             alias:        contactgroup
             plural_alias: contactgroups
-
-    entity_alias_exclusions:
-        - OroCRM\Bundle\ContactBundle\Entity\Method
-        - OroCRM\Bundle\ContactBundle\Entity\Source
