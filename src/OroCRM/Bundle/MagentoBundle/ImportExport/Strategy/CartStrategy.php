@@ -157,7 +157,7 @@ class CartStrategy extends AbstractImportStrategy
         $hasContactInfo = ($entity->getBillingAddress() && $entity->getBillingAddress()->getPhone())
             || $entity->getEmail();
 
-       if (!$hasContactInfo) {
+        if (!$hasContactInfo) {
             $this->context->incrementErrorEntriesCount();
             $this->logger->debug(
                 sprintf('Cart ID: %d was skipped because lack of contact info', $entity->getOriginId())
