@@ -95,6 +95,43 @@ class Account extends AbstractPageEntity
         return $this->accountName->value();
     }
 
+    /**
+     * @param $contactName
+     * @return $this
+     */
+    public function addContact($contactName)
+    {
+        $this->test->byXpath("//button[@class='btn btn-medium add-btn'][text()='Add']")->click();
+        $this->waitForAjax();
+        $this->assertElementPresent(
+            "//div[@class='ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix ui-draggable-handle']".
+            "/span[text()='Select contacts']",
+            "Select contact widget-window is not opened"
+        );
+        $this->filterBy('Email', $contactName);
+        $this->assignEntityFromEmbeddedGrid('Email', $contactName);
+        $this->test->byXPath("//button[@class='btn btn-primary'][text()='Select']")->click();
+        $this->waitForAjax();
+        $this->assertElementPresent(
+            "//div[@class='entities clearfix row-fluid list-group pull-left']//a[contains(., '{$contactName}')]",
+            "Selected Contact is not added on create new Account page"
+        );
+        return $this;
+    }
+
+    /**
+     * @param $contactName
+     * @return $this
+     */
+    public function assertContactAdded($contactName)
+    {
+        $this->assertElementPresent(
+            "//div[@class='contact-widget-wrapper']//div[@class='contact-box']//a[contains(., '{$contactName}')]",
+            "Contact is not added or not visible on Account view page"
+        );
+        return $this;
+    }
+
     public function edit()
     {
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Account']")->click();
