@@ -13,7 +13,7 @@ class Account extends AbstractPageEntity
 
     public function setAccountName($accountName)
     {
-        $this->accountName = $this->test->byXpath("//*[@data-ftid='orocrm_account_form_name']");
+        $this->accountName = $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']");
         $this->accountName->clear();
         $this->accountName->value($accountName);
         return $this;
@@ -21,10 +21,10 @@ class Account extends AbstractPageEntity
 
     public function setOwner($owner)
     {
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
+        $this->owner = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
         $this->owner->click();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
+        $this->test->byXPath("//div[@id='select2-drop']/div/input")->value($owner);
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
@@ -44,7 +44,7 @@ class Account extends AbstractPageEntity
     public function verifyTag($tag)
     {
         if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
-            $tags = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
+            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value(substr($tag, 0, (strlen($tag)-1)));
             $this->waitForAjax();
@@ -74,7 +74,7 @@ class Account extends AbstractPageEntity
     public function setTag($tag)
     {
         if ($this->isElementPresent("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]")) {
-            $tags = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
+            $tags = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_tags_autocomplete')]//input");
             $tags->click();
             $tags->value($tag);
             $this->waitForAjax();
@@ -101,7 +101,7 @@ class Account extends AbstractPageEntity
      */
     public function addContact($contactName)
     {
-        $this->test->byXpath("//button[@class='btn btn-medium add-btn'][text()='Add']")->click();
+        $this->test->byXPath("//button[@class='btn btn-medium add-btn'][text()='Add']")->click();
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@class='ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix ui-draggable-handle']".
@@ -134,7 +134,7 @@ class Account extends AbstractPageEntity
 
     public function edit()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Account']")->click();
+        $this->test->byXPath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Account']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         $this->init();
@@ -143,8 +143,8 @@ class Account extends AbstractPageEntity
 
     public function delete()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[contains(., 'Delete')]")->click();
-        $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
+        $this->test->byXPath("//div[@class='pull-left btn-group icons-holder']/a[contains(., 'Delete')]")->click();
+        $this->test->byXPath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
         return new Accounts($this->test, false);
