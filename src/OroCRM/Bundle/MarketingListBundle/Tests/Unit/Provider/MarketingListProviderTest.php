@@ -21,6 +21,9 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $provider;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $em;
+
     protected function setUp()
     {
         $this->dataGridManager = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Manager')
@@ -28,12 +31,27 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->provider = new MarketingListProvider($this->dataGridManager);
+
+        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function tearDown()
     {
-        unset($this->provider);
-        unset($this->dataGridManager);
+        unset($this->provider, $this->dataGridManager, $this->em);
+    }
+
+    /**
+     * Gets mock object for query builder
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getQueryBuilder()
+    {
+        return $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->setConstructorArgs([$this->em])
+            ->getMock();
     }
 
     /**
@@ -43,9 +61,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetMarketingListQueryBuilder($type)
     {
         $marketingList = $this->getMarketingList($type);
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queryBuilder = $this->getQueryBuilder();
         $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
             ->getMockForAbstractClass();
         $this->assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid);
@@ -75,9 +91,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         }
 
         $marketingList = $this->getMarketingList($type);
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queryBuilder = $this->getQueryBuilder();
         $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
             ->getMockForAbstractClass();
         $config = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
@@ -163,9 +177,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             $mixin = MarketingListProvider::RESULT_ENTITIES_MIXIN;
         }
 
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $queryBuilder = $this->getQueryBuilder();
         $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
             ->getMockForAbstractClass();
 
