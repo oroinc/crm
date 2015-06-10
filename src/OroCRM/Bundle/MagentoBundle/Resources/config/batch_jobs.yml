@@ -134,21 +134,21 @@ connector:
             title: "Import customers and postponded orders"
             type:  import
             steps:
-                import_guest_customers:
-                    title:     import
-                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
-                    services:
-                        reader:    orocrm_magento.reader.context_guest_customer
-                        processor: orocrm_magento.importexport.processor.import_guest_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
-                    parameters:
-                        batch_size: 25
                 import_customers:
                     title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.reader.context_customer.order
                         processor: orocrm_magento.importexport.processor.import_customer
+                        writer:    orocrm_magento.writer.proxy_entity_writer
+                    parameters:
+                        batch_size: 25
+                import_guest_customers:
+                    title:     import
+                    class:     Oro\Bundle\BatchBundle\Step\ItemStep
+                    services:
+                        reader:    orocrm_magento.reader.context_guest_customer
+                        processor: orocrm_magento.importexport.processor.import_guest_customer
                         writer:    orocrm_magento.writer.proxy_entity_writer
                     parameters:
                         batch_size: 25
