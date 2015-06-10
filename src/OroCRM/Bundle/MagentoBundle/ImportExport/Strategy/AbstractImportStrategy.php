@@ -119,6 +119,12 @@ abstract class AbstractImportStrategy extends ConfigurableAddOrReplaceStrategy i
      */
     protected function afterProcessEntity($entity)
     {
+        // todo CRM-3211 this code should not be here
+        if ($entity instanceof IntegrationAwareInterface) {
+            $entity->setChannel(
+                $this->databaseHelper->getReference('Oro\Bundle\IntegrationBundle\Entity\Channel', 1)
+            );
+        }
         if ($entity instanceof ChannelAwareInterface
             && $entity instanceof IntegrationAwareInterface
             && $entity->getChannel()

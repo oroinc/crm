@@ -83,7 +83,7 @@ class CustomerStrategy extends AbstractImportStrategy
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {
@@ -106,7 +106,6 @@ class CustomerStrategy extends AbstractImportStrategy
                     if ($entity->getOriginId()) {
                         $existingEntity->setOriginId($entity->getOriginId());
                     }
-
                 }
             }
         }
