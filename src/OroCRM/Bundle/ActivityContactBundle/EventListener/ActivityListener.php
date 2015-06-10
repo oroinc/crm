@@ -172,12 +172,11 @@ class ActivityListener
                         ((int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1)
                     );
 
+                    $directionCountPath = ActivityScope::CONTACT_COUNT_OUT;
+                    $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_OUT;
                     if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
                         $directionCountPath = ActivityScope::CONTACT_COUNT_IN;
                         $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_IN;
-                    } else {
-                        $directionCountPath = ActivityScope::CONTACT_COUNT_OUT;
-                        $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_OUT;
                     }
 
                     $accessor->setValue(
@@ -186,8 +185,13 @@ class ActivityListener
                         ((int)$accessor->getValue($target, $directionCountPath) - 1)
                     );
 
-                    $activityDate = $this->activityContactProvider
-                        ->getLastContactActivityDate($em, $target, $activityData['id'], $direction);
+                    $activityDate = $this->activityContactProvider->getLastContactActivityDate(
+                        $em,
+                        $target,
+                        $direction,
+                        $activityData['id'],
+                        $activityData['class']
+                    );
                     if ($activityDate) {
                         $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $activityDate['all']);
                         $accessor->setValue($target, $contactDatePath, $activityDate['direction']);
@@ -203,7 +207,6 @@ class ActivityListener
                     $direction          = $targetInfo['direction'];
                     $isDirectionChanged = $targetInfo['is_direction_changed'];
                     $target             = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
-
                     /** process dates */
                     if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
                         $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_IN;
@@ -216,7 +219,7 @@ class ActivityListener
                     }
 
                     $lastActivityDate = $this->activityContactProvider
-                        ->getLastContactActivityDate($em, $target, 0, $direction);
+                        ->getLastContactActivityDate($em, $target, $direction);
                     if ($lastActivityDate) {
                         $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $lastActivityDate['all']);
                         $accessor->setValue($target, $contactDatePath, $lastActivityDate['direction']);
@@ -226,20 +229,17 @@ class ActivityListener
                             $this->activityContactProvider->getLastContactActivityDate(
                                 $em,
                                 $target,
-                                0,
                                 $oppositeDirection
                             )['direction']
                         );
                     }
-
                     /** process counts (in case direction was changed) */
                     if ($isDirectionChanged) {
+                        $increment = ActivityScope::CONTACT_COUNT_OUT;
+                        $decrement = ActivityScope::CONTACT_COUNT_IN;
                         if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
                             $increment = ActivityScope::CONTACT_COUNT_IN;
                             $decrement = ActivityScope::CONTACT_COUNT_OUT;
-                        } else {
-                            $increment = ActivityScope::CONTACT_COUNT_OUT;
-                            $decrement = ActivityScope::CONTACT_COUNT_IN;
                         }
                         $accessor->setValue($target, $increment, ((int)$accessor->getValue($target, $increment) + 1));
                         $accessor->setValue($target, $decrement, ((int)$accessor->getValue($target, $decrement) - 1));
