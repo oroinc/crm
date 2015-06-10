@@ -27,12 +27,18 @@ class CartControllerTest extends AbstractController
     {
         $this->assertNotEmpty(self::$cart);
 
-        return self::$cart->getid();
+        return self::$cart->getId();
     }
 
     public function testView()
     {
-        $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->getMainEntityId()]));
+        $this->client->request(
+            'GET',
+            $this->getUrl(
+                'orocrm_magento_cart_view',
+                ['id' => $this->getMainEntityId(), 'isRemoved' => 0]
+            )
+        );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains('Cart Information', $result->getContent());
