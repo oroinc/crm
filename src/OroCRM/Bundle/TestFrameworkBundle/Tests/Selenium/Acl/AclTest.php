@@ -4,12 +4,16 @@ namespace OroCRM\Bundle\TestFrameworkBundle\Tests\Selenium\Acl;
 
 use Oro\Bundle\DataAuditBundle\Tests\Selenium\Pages\DataAudit;
 use Oro\Bundle\NavigationBundle\Tests\Selenium\Pages\Navigation;
+use Oro\Bundle\SecurityBundle\Tests\Selenium\Pages\AclCheck;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Groups;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\User;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
+use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\ContactGroups;
+use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 /**
  * Class AclTest
@@ -68,7 +72,7 @@ class AclTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -144,17 +148,21 @@ class AclTest extends Selenium2TestCase
 
         $login->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openAccounts('OroCRM\Bundle\AccountBundle')
-            ->assertTitle('Accounts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Account']")
-            ->openContacts('OroCRM\Bundle\ContactBundle')
-            ->assertTitle('Contacts - Customers')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact']")
-            ->openContactGroups('OroCRM\Bundle\ContactBundle')
-            ->assertTitle('Contact Groups - System')
-            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact Group']")
-            ->openAclCheck('Oro\Bundle\SecurityBundle')
+            ->submit();
+        /** @var Accounts $login */
+        $login->openAccounts('OroCRM\Bundle\AccountBundle')
+            ->assertTitle('All - Accounts - Customers')
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Account']");
+        /** @var Contacts $login */
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
+            ->assertTitle('All - Contacts - Customers')
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact']");
+        /** @var ContactGroups $login */
+        $login->openContactGroups('OroCRM\Bundle\ContactBundle')
+            ->assertTitle('All - Contact Groups - System')
+            ->assertElementNotPresent("//div[@class='container-fluid']//a[@title='Create Contact Group']");
+        /** @var AclCheck $login */
+        $login->openAclCheck('Oro\Bundle\SecurityBundle')
             ->assertAcl('account/create')
             ->assertAcl('contact/create')
             ->assertAcl('contact/group/create')

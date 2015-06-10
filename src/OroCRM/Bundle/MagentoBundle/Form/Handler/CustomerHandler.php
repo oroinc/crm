@@ -36,7 +36,7 @@ class CustomerHandler extends UpdateHandler
         if ($this->request->getMethod() === 'POST') {
             $manager = $this->doctrineHelper->getEntityManager($entity);
             $entity->setGuest(false);
-            $entity->setSyncState(Customer::SYNC_TO_MAGENTO);
+            $this->stateHandler->markCustomerForSync($entity);
 
             $manager->persist($entity);
             $manager->flush();

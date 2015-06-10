@@ -28,7 +28,7 @@ class TasksTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
-            ->assertTitle('Tasks - Activities')
+            ->assertTitle('All - Tasks - Activities')
             ->add()
             ->assertTitle('Create Task - Tasks - Activities')
             ->setSubject($subject)
@@ -38,7 +38,7 @@ class TasksTest extends Selenium2TestCase
             // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
             ->assertTitle("{$subject} - Tasks - Activities")
             ->toGrid()
-            ->assertTitle('Tasks - Activities');
+            ->assertTitle('All - Tasks - Activities');
 
         return $subject;
     }
@@ -65,7 +65,7 @@ class TasksTest extends Selenium2TestCase
             // ->assertMessage('Task saved') // comment component using ajax and message could disappear already
             ->assertTitle("{$newSubject} - Tasks - Activities")
             ->toGrid()
-            ->assertTitle('Tasks - Activities')
+            ->assertTitle('All - Tasks - Activities')
             ->close();
 
         return $newSubject;
@@ -99,8 +99,8 @@ class TasksTest extends Selenium2TestCase
             ->open(array($subject))
             ->assertTitle("{$subject} - Tasks - Activities")
             ->delete()
-            ->assertTitle('Tasks - Activities')
             ->assertMessage('Task deleted')
+            ->assertTitle('All - Tasks - Activities')
             ->assertNoDataMessage('No records found');
     }
 }
