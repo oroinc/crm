@@ -80,7 +80,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_33';
+        return 'v1_34';
     }
 
     /**
@@ -390,7 +390,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('created_in', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('is_confirmed', 'boolean', ['notnull' => false]);
-        $table->addColumn('is_guest', 'boolean', ['notnull' => true]);
+        $table->addColumn('is_guest', 'boolean', ['notnull' => true, 'default' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);

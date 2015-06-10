@@ -242,7 +242,7 @@ class Customer extends ExtendCustomer implements
 
     /**
      * @var bool
-     * @ORM\Column(name="is_guest", type="boolean", nullable=false)
+     * @ORM\Column(name="is_guest", type="boolean", nullable=false, options={"default"=false})
      */
     protected $guest = false;
 
