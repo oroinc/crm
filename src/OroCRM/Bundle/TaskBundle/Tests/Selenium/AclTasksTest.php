@@ -140,7 +140,7 @@ class AclTasksTest extends Selenium2TestCase
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $taskSubject)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($taskSubject))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Task']");
     }
@@ -160,7 +160,7 @@ class AclTasksTest extends Selenium2TestCase
         /** @var Tasks $login */
         $login->openTasks('OroCRM\Bundle\TaskBundle')
             ->filterBy('Subject', $taskSubject)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($taskSubject))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Task']");
     }
