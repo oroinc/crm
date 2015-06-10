@@ -449,6 +449,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('updatedAt', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('is_removed', 'boolean', ['notnull' => true, 'default' => false]);
         $table->addIndex(['cart_id'], 'IDX_A73DC8621AD5CDBF', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecartitem_origin_idx', []);

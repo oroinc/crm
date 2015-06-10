@@ -41,8 +41,9 @@ abstract class AbstractController extends WebTestCase
         $gridName = $requestData['gridParameters']['gridName'];
 
         $expectedResultCount   = (int)$requestData['expectedResultCount'];
-        $shouldPassIdentifier  = isset($requestData['gridParameters']['id']);
-        $shouldPassIntegration = isset($requestData['gridParameters']['channel']);
+        $shouldPassIdentifier  = array_key_exists('id', $requestData['gridParameters']);
+        $shouldPassIntegration = array_key_exists('channel', $requestData['gridParameters']);
+        $shouldPassRemoved     = array_key_exists('is_removed', $requestData['gridParameters']);
         $shouldAssertData      = $expectedResultCount === 1;
 
         if ($shouldPassIdentifier) {
@@ -53,6 +54,12 @@ abstract class AbstractController extends WebTestCase
         if ($shouldPassIntegration) {
             $paramName = $gridName . '[' . $requestData['gridParameters']['channel'] . ']';
             $requestData['gridParameters'][$paramName] = self::$integration->getId();
+        }
+
+        if ($shouldPassRemoved) {
+            $paramName = $gridName . '[' . $requestData['gridParameters']['is_removed'] . ']';
+            $requestData['gridParameters'][$paramName] =
+                $requestData['gridFilters']['magento-cart-grid[_filter][is_removed][value]'];
         }
 
         $this->client->requestGrid($requestData['gridParameters'], $requestData['gridFilters']);

@@ -234,6 +234,8 @@ orocrm:
             grand_total.label:         Grand total
             tax_amount.label:          Tax
             cart_items.label:          Cart Items
+            active_cart_items.label:   Active Items
+            deleted_cart_items.label:  Deleted Items
             customer.label:            Customer
             store.label:               Store
             shipping_address.label:    Shipping address
@@ -278,6 +280,7 @@ orocrm:
             product_image_url.label:   Product Image URL
             product_url.label:         Product URL
             channel.label:             Channel
+            removed.label:             Removed
 
         cartstatus:
             entity_label:        Magento Shopping Cart Status
