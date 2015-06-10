@@ -454,7 +454,7 @@ datagrid:
             query:
                 where:
                     and:
-                        - c.removed = 0
+                        - c.removed = false
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
@@ -514,7 +514,7 @@ datagrid:
             query:
                 where:
                     and:
-                        - c.removed = 1
+                        - c.removed = true
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
