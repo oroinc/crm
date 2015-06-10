@@ -8,6 +8,8 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
 {
+    const INITIAL_LIST_PAGE_SIZE = 1;
+
     /**
      * @var int
      */
@@ -98,11 +100,16 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $filter = new BatchFilterBag();
             $this->applyStoreFilter($filter);
             $filters = $filter->getAppliedFilters();
-            $filters['pager'] = ['page' => 1, 'pageSize' => 1];
+            $filters['pager'] = ['page' => 1, 'pageSize' => self::INITIAL_LIST_PAGE_SIZE];
             $subscribers = $this->getNewsletterSubscribers($filters);
 
-            if (count($subscribers) > 0) {
+            if (self::INITIAL_LIST_PAGE_SIZE > 1) {
                 $subscriber = reset($subscribers);
+            } else {
+                $subscriber = $subscribers;
+            }
+
+            if (isset($subscriber[$this->getIdFieldName()])) {
                 $this->initialId = (int)$subscriber[$this->getIdFieldName()] + 1;
             }
         }
