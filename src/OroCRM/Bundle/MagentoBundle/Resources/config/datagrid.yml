@@ -424,6 +424,37 @@ datagrid:
                         - c.cart = :id
             bind_parameters:
                 - id
+        properties:
+            id: ~
+        sorters:
+            columns:
+                sku:            { data_name: c.sku }
+                name:           { data_name: c.name }
+                giftMessage:    { data_name: c.giftMessage }
+                price:          { data_name: c.price }
+                priceInclTax:   { data_name: c.priceInclTax }
+                rowTotal:       { data_name: c.rowTotal }
+                taxAmount:      { data_name: c.taxAmount }
+                discountAmount: { data_name: c.discountAmount }
+                weight:         { data_name: c.weight }
+                createdAt:      { data_name: c.createdAt }
+                updatedAt:      { data_name: c.updatedAt }
+            default:
+                createdAt:  DESC
+        options:
+            entityHint: cart item
+            toolbarOptions:
+                hide: true
+                pagination:
+                    hide: true
+
+    magento-cartitem-active-grid:
+        extends: magento-cartitem-grid
+        source:
+            query:
+                where:
+                    and:
+                        - c.removed = false
         columns:
             sku:
                 label:            orocrm.magento.datagrid.columns.sku
@@ -473,30 +504,63 @@ datagrid:
             updatedAt:
                 label:            oro.ui.updated_at
                 frontend_type:    datetime
-        properties:
-            id: ~
         sorters:
             columns:
-                sku:            { data_name: c.sku }
-                name:           { data_name: c.name }
                 qty:            { data_name: c.qty }
-                giftMessage:    { data_name: c.giftMessage }
-                price:          { data_name: c.price }
-                priceInclTax:   { data_name: c.priceInclTax }
-                rowTotal:       { data_name: c.rowTotal }
-                taxAmount:      { data_name: c.taxAmount }
-                discountAmount: { data_name: c.discountAmount }
-                weight:         { data_name: c.weight }
-                createdAt:      { data_name: c.createdAt }
-                updatedAt:      { data_name: c.updatedAt }
-            default:
-                createdAt:  DESC
-        options:
-            entityHint: cart item
-            toolbarOptions:
-                hide: true
-                pagination:
-                    hide: true
+
+    magento-cartitem-removed-grid:
+        extends: magento-cartitem-grid
+        source:
+            query:
+                where:
+                    and:
+                        - c.removed = true
+        columns:
+            sku:
+                label:            orocrm.magento.datagrid.columns.sku
+            name:
+                label:            orocrm.magento.datagrid.columns.name
+            giftMessage:
+                label:            orocrm.magento.datagrid.columns.gift_message
+            price:
+                label:            orocrm.magento.datagrid.columns.price
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+            priceInclTax:
+                label:            orocrm.magento.datagrid.columns.price_incl_tax
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+            rowTotal:
+                label:            orocrm.magento.datagrid.columns.row_total
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+            taxAmount:
+                label:            orocrm.magento.datagrid.columns.tax_amount
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+            discountAmount:
+                label:            orocrm.magento.datagrid.columns.discount_amount
+                type:             localized_number
+                method:           formatCurrency
+                context_resolver: OroCRM\Bundle\MagentoBundle\Grid\FormatterContextResolver::getResolverCurrencyClosure
+                align:            right
+            weight:
+                label:            orocrm.magento.datagrid.columns.weight
+                frontend_type:    decimal
+            createdAt:
+                label:            orocrm.magento.datagrid.columns.added_on
+                frontend_type:    datetime
+            updatedAt:
+                label:            oro.ui.updated_at
+                frontend_type:    datetime
 
     magento-products-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
