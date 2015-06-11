@@ -403,6 +403,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['first_name', 'last_name'], 'magecustomer_name_idx', []);
         $table->addIndex(['last_name', 'first_name'], 'magecustomer_rev_name_idx', []);
+        $table->addIndex(['email'], 'magecustomer_email_guest_idx', []);
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
     }
 
