@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
@@ -38,7 +36,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         $isProcessingAllowed = true;
         $customer = $this->findExistingEntity($order->getCustomer());
         $customerOriginId = $order->getCustomer()->getOriginId();
-        if ((!$customer || $customer->isGuest()) && $customerOriginId) {
+        if ($customerOriginId && (!$customer || $customer->isGuest())) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
             $isProcessingAllowed = false;
