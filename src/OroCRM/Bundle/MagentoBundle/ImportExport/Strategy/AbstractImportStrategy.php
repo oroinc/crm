@@ -6,6 +6,7 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
@@ -118,12 +119,6 @@ abstract class AbstractImportStrategy extends DefaultMagentoImportStrategy imple
      */
     protected function afterProcessEntity($entity)
     {
-        // todo CRM-3211 this code should not be here
-        if ($entity instanceof IntegrationAwareInterface) {
-            $entity->setChannel(
-                $this->databaseHelper->getReference('Oro\Bundle\IntegrationBundle\Entity\Channel', 1)
-            );
-        }
         if ($entity instanceof ChannelAwareInterface
             && $entity instanceof IntegrationAwareInterface
             && $entity->getChannel()
