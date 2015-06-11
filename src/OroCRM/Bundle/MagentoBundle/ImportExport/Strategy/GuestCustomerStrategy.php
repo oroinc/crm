@@ -39,7 +39,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
 
         $itemData = $this->context->getValue('itemData');
         if (!array_key_exists('customerEmail', $itemData)) {
-            return;
+            return null;
         }
 
         $email = $itemData['customerEmail'];
