@@ -101,8 +101,13 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $filters['pager'] = ['page' => 1, 'pageSize' => 1];
             $subscribers = $this->getNewsletterSubscribers($filters);
 
-            if (count($subscribers) > 0) {
-                $this->initialId = (int)$subscribers[0][$this->getIdFieldName()] + 1;
+            $subscriber = $subscribers;
+            if (array_key_exists(0, $subscribers)
+            ) {
+                $subscriber = reset($subscribers);
+            }
+            if (array_key_exists($this->getIdFieldName(), $subscriber)) {
+                $this->initialId = (int)$subscriber[$this->getIdFieldName()] + 1;
             }
         }
 
