@@ -15,6 +15,6 @@ class AddGuestCustomerSync implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $table = $schema->getTable('orocrm_magento_customer');
-        $table->addIndex(['email'], 'magecustomer_email_idx');
+        $table->addIndex(['email'], 'magecustomer_email_guest_idx');
     }
 }
