@@ -38,8 +38,11 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         $this->assertEnvironment($entity);
 
         $itemData = $this->context->getValue('itemData');
-        $email = $itemData['customerEmail'];
+        if (!array_key_exists('customerEmail', $itemData)) {
+            return;
+        }
 
+        $email = $itemData['customerEmail'];
         $existingCustomer = $this->databaseHelper->findOneBy(
             'OroCRM\Bundle\MagentoBundle\Entity\Customer',
             ['email' => $email]
