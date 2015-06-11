@@ -20,7 +20,7 @@ class AclLeadTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Channels $login */
         $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('Channels - System')
+            ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
             ->setType('Custom')
@@ -48,7 +48,7 @@ class AclLeadTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('Roles - User Management - System')
+            ->assertTitle('All - Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -84,7 +84,7 @@ class AclLeadTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -107,7 +107,7 @@ class AclLeadTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Lead saved')
             ->toGrid()
-            ->assertTitle('Leads - Sales');
+            ->assertTitle('All - Leads - Sales');
 
         return $name;
     }
@@ -159,7 +159,7 @@ class AclLeadTest extends Selenium2TestCase
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($leadName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Lead']");
     }
@@ -179,7 +179,7 @@ class AclLeadTest extends Selenium2TestCase
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($leadName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Lead']");
     }

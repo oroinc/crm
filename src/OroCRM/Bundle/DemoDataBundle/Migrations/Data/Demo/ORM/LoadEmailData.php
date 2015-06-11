@@ -168,7 +168,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             true
         );
         $email->setEmailBody($emailBody);
-        $email->setMessageId(sprintf('id.%s@%s', uniqid(), '@bap.migration.generated'));
+        $email->setMessageId(sprintf('<id.%s@%s', uniqid(), '@bap.migration.generated>'));
 
         return $email;
     }

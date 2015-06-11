@@ -82,7 +82,6 @@ services:
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_sales.event_listener.b2bcustomer_lifetime:
         class: %orocrm_sales.event_listener.b2bcustomer_lifetime.class%
