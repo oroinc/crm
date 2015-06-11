@@ -65,7 +65,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
     public function setContainer(ContainerInterface $container = null)
     {
         $this->factory = $container->get('orocrm_channel.builder.factory');
-        $this->organizationManager = $container->get('doctrine')->getManager();
     }
 
     /**
@@ -73,11 +72,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
      */
     public function load(ObjectManager $om)
     {
-        $this->organizationRepository = $this->organizationManager->getRepository('OroOrganizationBundle:Organization');
-        $organization = $this->organizationRepository->getFirst();
-        $this->organization = $organization;
-
-        //$this->organization = $this->getReference('default_organization');
+        $this->organization = $this->getReference('default_organization');
         $this->users = $om->getRepository('OroUserBundle:User')->findAll();
 
         $website = new Website();
