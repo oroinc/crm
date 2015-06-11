@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Doctrine\Common\Util\ClassUtils;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
@@ -85,24 +83,35 @@ class CustomerStrategy extends AbstractImportStrategy
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     protected function findExistingEntity($entity, array $searchContext = [])
     {
-        $existingEntity = parent::findExistingEntity($entity, $searchContext);
+        if ($entity instanceof Customer) {
+            $existingEntity = null;
 
-        if (!$existingEntity && $entity instanceof Customer) {
-            $entityName = ClassUtils::getClass($entity);
-            $existingEntity = $this->databaseHelper->findOneBy(
-                $entityName,
-                [
-                    'email' => $entity->getEmail(),
-                    'guest' => true
-                ]
-            );
-            if ($existingEntity && $existingEntity->getId() && $existingEntity->isGuest()) {
-                $existingEntity->setGuest(false);
+            if (!$existingEntity) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    [
+                        'email' => $entity->getEmail()
+                    ]
+                );
+                if ($existingEntity && $existingEntity->getId()) {
+                    if ($existingEntity->isGuest()) {
+                        $existingEntity->setGuest(false);
+                    }
+                    if ($entity->getOriginId()) {
+                        $existingEntity->setOriginId($entity->getOriginId());
+                    }
+                }
             }
+
+            /** @var Customer $existingEntity */
+            $existingEntity = parent::findExistingEntity($existingEntity, $searchContext);
+        } else {
+            /** @var Customer $existingEntity */
+            $existingEntity = parent::findExistingEntity($entity, $searchContext);
         }
 
         return $existingEntity;

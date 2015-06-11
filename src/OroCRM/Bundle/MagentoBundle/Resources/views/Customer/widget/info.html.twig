@@ -14,8 +14,12 @@
             {{ channel.renderChannelProperty(entity, 'orocrm.magento.customer.data_channel.label') }}
             {{ ui.renderProperty('orocrm.magento.customer.channel.label'|trans, entity.channel.name) }}
 
-            {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
-            {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {% if entity.website %}
+                {{ ui.renderProperty('orocrm.magento.customer.website.label'|trans, entity.website.name) }}
+            {% endif %}
+            {% if entity.store %}
+                {{ ui.renderHtmlProperty('orocrm.magento.customer.store.label'|trans, entity.store.name|escape|nl2br) }}
+            {% endif %}
 
             {%- if entity.guest -%}
                 {{ ui.renderProperty('orocrm.magento.customer.guest.label'|trans, 'orocrm.magento.customer.guest.yes'|trans) }}
@@ -24,35 +28,38 @@
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
-            {%- set accountData -%}
-                {% if entity.account %}
-                    {% set accountViewGranted = resource_granted('orocrm_account_view') %}
-                    {%- if accountViewGranted -%}
-                        <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account|escape }}</a>
-                    {%- else -%}
-                        {{ entity.account|escape }}
-                    {%- endif -%}
-                {% endif %}
-            {%- endset -%}
+            {% if entity.account %}
+                {%- set accountData -%}
+                    {% if entity.account %}
+                        {% set accountViewGranted = resource_granted('orocrm_account_view') %}
+                        {%- if accountViewGranted -%}
+                            <a href="{{ path('orocrm_account_view', {'id': entity.account.id}) }}">{{ entity.account|escape }}</a>
+                        {%- else -%}
+                            {{ entity.account|escape }}
+                        {%- endif -%}
+                    {% endif %}
+                {%- endset -%}
+                {{ ui.renderHtmlProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
+            {% endif %}
 
-            {%- set contactData -%}
-                {% if entity.contact %}
-                    {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
-                    {%- if contactViewGranted -%}
-                        <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact|oro_format_name|escape }}</a>
-                    {%- else -%}
-                        {{ entity.contact|oro_format_name|escape }}
+            {% if entity.contact %}
+                {%- set contactData -%}
+                    {% if entity.contact %}
+                        {% set contactViewGranted = resource_granted('orocrm_contact_view') %}
+                        {%- if contactViewGranted -%}
+                            <a href="{{ path('orocrm_contact_view', {'id': entity.contact.id}) }}">{{ entity.contact|oro_format_name|escape }}</a>
+                        {%- else -%}
+                            {{ entity.contact|oro_format_name|escape }}
+                        {%- endif -%}
                     {%- endif -%}
-                {%- endif -%}
-            {%- endset -%}
+                {%- endset -%}
+                {{ ui.renderHtmlProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
+            {% endif %}
 
             {%- set birthdayData -%}
                 {{ entity.birthday is not empty ? entity.birthday|oro_format_date : null }}
                 {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
-
-            {{ ui.renderHtmlProperty('orocrm.magento.customer.account.label'|trans, accountData) }}
-            {{ ui.renderHtmlProperty('orocrm.magento.customer.contact.label'|trans, contactData) }}
 
             {{ ui.renderProperty('orocrm.magento.customer.birthday.label'|trans, entity.birthday ? birthdayData : null) }}
             {{ ui.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(entity.gender)) }}
