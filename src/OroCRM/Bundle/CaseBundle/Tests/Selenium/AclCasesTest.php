@@ -129,7 +129,7 @@ class AclCasesTest extends Selenium2TestCase
             ->submit()
             ->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $caseSubject)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($caseSubject))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Case']");
     }
@@ -147,7 +147,7 @@ class AclCasesTest extends Selenium2TestCase
             ->submit()
             ->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $caseSubject)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($caseSubject))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Case']");
     }
