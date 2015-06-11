@@ -205,7 +205,7 @@ class AclOpportunityTest extends Selenium2TestCase
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($opportunityName))
             ->assertElementNotPresent(
                 "//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Opportunity']"
@@ -227,7 +227,7 @@ class AclOpportunityTest extends Selenium2TestCase
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->filterBy('Opportunity name', $opportunityName)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($opportunityName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Opportunity']");
     }

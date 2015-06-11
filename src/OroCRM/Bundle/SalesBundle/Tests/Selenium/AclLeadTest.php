@@ -159,7 +159,7 @@ class AclLeadTest extends Selenium2TestCase
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($leadName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Lead']");
     }
@@ -179,7 +179,7 @@ class AclLeadTest extends Selenium2TestCase
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->filterBy('Lead name', $leadName)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($leadName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Lead']");
     }
