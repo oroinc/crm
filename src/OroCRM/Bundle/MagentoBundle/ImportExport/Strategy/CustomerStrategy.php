@@ -88,7 +88,8 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function findExistingEntity($entity, array $searchContext = [])
     {
         if ($entity instanceof Customer) {
-            $existingEntity = null;
+            /** @var Customer $existingEntity */
+            $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
             if (!$existingEntity) {
                 $existingEntity = $this->databaseHelper->findOneBy(
@@ -100,15 +101,13 @@ class CustomerStrategy extends AbstractImportStrategy
                 if ($existingEntity && $existingEntity->getId()) {
                     if ($existingEntity->isGuest()) {
                         $existingEntity->setGuest(false);
+                        $existingEntity->setIsActive(true);
                     }
                     if ($entity->getOriginId()) {
                         $existingEntity->setOriginId($entity->getOriginId());
                     }
                 }
             }
-
-            /** @var Customer $existingEntity */
-            $existingEntity = parent::findExistingEntity($existingEntity, $searchContext);
         } else {
             /** @var Customer $existingEntity */
             $existingEntity = parent::findExistingEntity($entity, $searchContext);

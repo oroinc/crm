@@ -66,9 +66,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function processChangeAttributes(Customer $entity)
     {
-        // todo CRM-3211
         $itemData = $this->context->getValue('itemData');
-
         $entity->setGuest(true);
         !empty($itemData['customerEmail']) && $entity->setEmail($itemData['customerEmail']);
         if (!empty($itemData['addresses'])) {
