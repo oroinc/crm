@@ -107,7 +107,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
                 $subscriber = reset($subscribers);
             }
             if (array_key_exists($this->getIdFieldName(), $subscriber)) {
-                $this->initialId = (int)$subscribers[$this->getIdFieldName()] + 1;
+                $this->initialId = (int)$subscriber[$this->getIdFieldName()] + 1;
             }
         }
 
