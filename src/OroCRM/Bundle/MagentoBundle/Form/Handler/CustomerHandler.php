@@ -36,6 +36,7 @@ class CustomerHandler extends UpdateHandler
         if ($this->request->getMethod() === 'POST') {
             $manager = $this->doctrineHelper->getEntityManager($entity);
             $entity->setGuest(false);
+            $entity->setActive(true);
             $this->stateHandler->markCustomerForSync($entity);
 
             $manager->persist($entity);
