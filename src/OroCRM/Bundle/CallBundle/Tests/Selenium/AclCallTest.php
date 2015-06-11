@@ -130,7 +130,7 @@ class AclCallTest extends Selenium2TestCase
             ->submit()
             ->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
-            ->checkActionMenu('Delete');
+            ->assertNoActionMenu('Delete');
     }
 
     public function updateAcl($login, $roleName, $username, $callSubject)
@@ -146,7 +146,7 @@ class AclCallTest extends Selenium2TestCase
             ->submit()
             ->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
-            ->checkActionMenu('Update');
+            ->assertNoActionMenu('Update');
     }
 
     public function createAcl($login, $roleName, $username)

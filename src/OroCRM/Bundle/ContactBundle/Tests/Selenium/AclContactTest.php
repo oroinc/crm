@@ -131,7 +131,7 @@ class AclContactTest extends Selenium2TestCase
             ->submit()
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($contactEmail))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Contact']");
     }
@@ -149,7 +149,7 @@ class AclContactTest extends Selenium2TestCase
             ->submit()
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($contactEmail))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Contact']");
     }
