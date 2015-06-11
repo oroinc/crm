@@ -12,5 +12,8 @@ before_script:
   - composer self-update
   - phpenv config-add travis.php.ini
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist --update-no-dev
+  - composer require squizlabs/php_codesniffer:~2 --prefer-dist --update-no-dev
 
-script: phpunit
+script: 
+  - phpunit
+  - ./vendor/bin/phpcs ./src -p --encoding=utf-8 --extensions=php --standard=psr2
