@@ -38,14 +38,8 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         $isProcessingAllowed = true;
         $customer = $this->findExistingEntity($order->getCustomer());
         $customerOriginId = $order->getCustomer()->getOriginId();
-        if (!$customer && $customerOriginId) {
+        if ((!$customer || $customer->isGuest()) && $customerOriginId) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
-
-            $isProcessingAllowed = false;
-        }
-
-        if (!$customer && $order->getIsGuest()) {
-            $this->appendDataToContext('postProcessGuestCustomers', $this->context->getValue('itemData'));
 
             $isProcessingAllowed = false;
         }
@@ -62,6 +56,12 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
 
                 $isProcessingAllowed = false;
             }
+        }
+
+        if (!$customer && $order->getIsGuest() && $transport->getGuestCustomerSync()) {
+            $this->appendDataToContext('postProcessGuestCustomers', $this->context->getValue('itemData'));
+
+            $isProcessingAllowed = false;
         }
 
         return $isProcessingAllowed;
