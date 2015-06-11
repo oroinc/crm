@@ -365,7 +365,7 @@ services:
             - @oro_security.acl_helper
             - @oro_chart.config_provider
             - @oro_locale.formatter.date_time
-            - @oro_dashboard.datetime.hepler
+            - @oro_dashboard.datetime.helper
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
@@ -373,7 +373,7 @@ services:
             - @doctrine
             - @oro_security.acl_helper
             - @oro_chart.config_provider
-            - @oro_dashboard.datetime.hepler
+            - @oro_dashboard.datetime.helper
 
     orocrm_magento.dashboard.data_provider.purchase:
         class: %orocrm_magento.dashboard.data_provider.purchase.class%
