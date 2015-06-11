@@ -160,8 +160,14 @@ datagrid:
                                 yes: orocrm.magento.datagrid.columns.is_subscriber.yes
                     data_name: isSubscriber
                 guest:
-                    label: orocrm.magento.datagrid.columns.is_guest
-                    type: boolean
+                    label: orocrm.magento.datagrid.columns.is_guest.label
+                    type: single_choice
+                    options:
+                        field_options:
+                            choices:
+                                all: orocrm.magento.datagrid.columns.is_guest.all
+                                no: orocrm.magento.datagrid.columns.is_guest.no
+                                yes: orocrm.magento.datagrid.columns.is_guest.yes
                     data_name: c.guest
                 createdAt:
                     type:      datetime
