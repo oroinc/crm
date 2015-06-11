@@ -128,6 +128,9 @@ class Opportunity extends ExtendOpportunity implements
      *      "importexport"={
      *          "order"=120,
      *          "short"=true
+     *      },
+     *      "form"={
+     *          "form_type"="orocrm_contact_select"
      *      }
      *  }
      * )
