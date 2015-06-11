@@ -68,6 +68,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     {
         $itemData = $this->context->getValue('itemData');
         $entity->setGuest(true);
+        $entity->setConfirmed(false);
         !empty($itemData['customerEmail']) && $entity->setEmail($itemData['customerEmail']);
         if (!empty($itemData['addresses'])) {
             $address = array_pop($itemData['addresses']);
