@@ -105,7 +105,11 @@ orocrm:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
-                is_guest:         Is a Guest
+                is_guest:
+                    label: Magento customer type
+                    yes: Guest
+                    no: Registered
+                    all: All
                 is_subscriber:
                     label: Is a Subsciber
                     yes: Yes
