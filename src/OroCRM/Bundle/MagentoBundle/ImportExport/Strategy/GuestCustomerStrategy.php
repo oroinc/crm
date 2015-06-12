@@ -13,7 +13,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     {
         $this->assertEnvironment($entity);
 
-        if ($customer = $this->checkExistingCustomer($entity)) {
+        if ($this->checkExistingCustomer()) {
             return null;
         }
 
@@ -29,14 +29,10 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     }
 
     /**
-     * @param $entity
-     *
      * @return Customer
      */
-    protected function checkExistingCustomer($entity)
+    protected function checkExistingCustomer()
     {
-        $this->assertEnvironment($entity);
-
         $itemData = $this->context->getValue('itemData');
         if (!array_key_exists('customerEmail', $itemData)) {
             return null;
@@ -69,6 +65,9 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         $itemData = $this->context->getValue('itemData');
         $entity->setGuest(true);
         $entity->setConfirmed(false);
+        foreach ($entity->getAddresses() as $address) {
+            $address->setOriginId(null);
+        }
         !empty($itemData['customerEmail']) && $entity->setEmail($itemData['customerEmail']);
         if (!empty($itemData['addresses'])) {
             $address = array_pop($itemData['addresses']);
