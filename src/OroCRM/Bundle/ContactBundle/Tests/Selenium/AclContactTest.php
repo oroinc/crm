@@ -21,7 +21,7 @@ class AclContactTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('Roles - User Management - System')
+            ->assertTitle('All - Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclContactTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -131,7 +131,7 @@ class AclContactTest extends Selenium2TestCase
             ->submit()
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($contactEmail))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Contact']");
     }
@@ -149,7 +149,7 @@ class AclContactTest extends Selenium2TestCase
             ->submit()
             ->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactEmail)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($contactEmail))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Contact']");
     }

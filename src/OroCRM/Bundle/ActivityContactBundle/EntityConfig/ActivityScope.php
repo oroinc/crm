@@ -31,118 +31,124 @@ class ActivityScope
      * @var array
      */
     public static $fieldsConfiguration = [
-        self::LAST_CONTACT_DATE => [
+        self::LAST_CONTACT_DATE     => [
             'type'    => 'datetime',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity'    => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date.label',
                     'description' => 'orocrm.activity_contact.ac_last_contact_date.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ],
-        self::LAST_CONTACT_DATE_IN => [
+        self::LAST_CONTACT_DATE_IN  => [
             'type'    => 'datetime',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity'    => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date_in.label',
                     'description' => 'orocrm.activity_contact.ac_last_contact_date_in.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ],
         self::LAST_CONTACT_DATE_OUT => [
             'type'    => 'datetime',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity'    => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date_out.label',
                     'description' => 'orocrm.activity_contact.ac_last_contact_date_out.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ],
-        self::CONTACT_COUNT     => [
+        self::CONTACT_COUNT         => [
             'type'    => 'integer',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity' => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count.label',
                     'description' => 'orocrm.activity_contact.ac_contact_count.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ],
-        self::CONTACT_COUNT_IN  => [
+        self::CONTACT_COUNT_IN      => [
             'type'    => 'integer',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity' => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count_in.label',
                     'description' => 'orocrm.activity_contact.ac_contact_count_in.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ],
-        self::CONTACT_COUNT_OUT => [
+        self::CONTACT_COUNT_OUT     => [
             'type'    => 'integer',
             'mode'    => ConfigModelManager::MODE_READONLY,
             'options' => [
-                'entity' => [
+                'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count_out.label',
                     'description' => 'orocrm.activity_contact.ac_contact_count_out.description',
                 ],
-                'extend'    => [
-                    'owner' => ExtendScope::OWNER_CUSTOM,
-                    'state' => ExtendScope::STATE_ACTIVE,
+                'extend'       => [
+                    'owner'     => ExtendScope::OWNER_CUSTOM,
+                    'state'     => ExtendScope::STATE_ACTIVE,
                     'is_extend' => true
                 ],
-                'form'      => ['is_enabled' => false],
-                'datagrid'  => ['is_visible' => false],
-                'view'      => ['is_displayable' => false],
-                'dataaudit' => ['auditable' => false]
+                'form'         => ['is_enabled' => false],
+                'datagrid'     => ['is_visible' => false],
+                'view'         => ['is_displayable' => false],
+                'dataaudit'    => ['auditable' => false],
+                'importexport' => ['excluded' => true]
             ]
         ]
     ];

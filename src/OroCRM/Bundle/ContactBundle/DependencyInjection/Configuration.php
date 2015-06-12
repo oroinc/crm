@@ -15,7 +15,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('orocrm_contact')
+        $treeBuilder->root('oro_crm_contact')
             ->children()
                 ->arrayNode('social_url_format')
                     ->addDefaultsIfNotSet()
