@@ -4,12 +4,12 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AddressBundle\Entity\Country;
 use Symfony\Component\PropertyAccess\Exception\NoSuchPropertyException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
+use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
+use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
@@ -131,21 +131,24 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)]),
+                        'itemsQty' => 1,
                     ]
                 ),
                 'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1)]),
+                        'itemsQty' => 1,
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)]),
+                        'itemsQty' => 1,
                     ]
                 )
             ],
@@ -154,21 +157,24 @@ class CartStrategyTest extends AbstractStrategyTest
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)]),
+                        'itemsQty' => 2,
                     ]
                 ),
                 'entity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(1), $this->getCartItem(2)]),
+                        'itemsQty' => 2,
                     ]
                 ),
                 'databaseEntity' => $this->getEntity(
                     [
                         'itemsCount' => 1,
                         'email' => 'user@example.com',
-                        'cartItems' => new ArrayCollection([$this->getCartItem(2)])
+                        'cartItems' => new ArrayCollection([$this->getCartItem(2)]),
+                        'itemsQty' => 1,
                     ]
                 )
             ],
@@ -212,6 +218,74 @@ class CartStrategyTest extends AbstractStrategyTest
                 )
             ]
         ];
+    }
+
+    /**
+     * Test setting removed field on removed cart items
+     */
+    public function testUpdateRemovedCartItems()
+    {
+        $channel = new Channel();
+
+        $cartItem1 = new CartItem();
+        $cartItem1->setName('Cart Item 1');
+
+        $cartItem2 = new CartItem();
+        $cartItem2->setName('Cart Item 2');
+
+        $cartItem3 = new CartItem();
+        $cartItem3->setName('Cart Item 3');
+
+        $existingCartItems = new ArrayCollection();
+        $existingCartItems->add($cartItem1);
+        $existingCartItems->add($cartItem2);
+
+        $existingCart = new Cart();
+        $existingCart->setCartItems($existingCartItems);
+        $existingCart->setChannel($channel);
+        $existingCart->setItemsQty(2);
+
+        $newCartItems = new ArrayCollection();
+        $newCartItems->add($cartItem2);
+        $newCartItems->add($cartItem3);
+
+        $newCart = new Cart();
+        $newCart->setCartItems($newCartItems);
+        $newCart->setChannel($channel);
+        $newCart->setItemsQty(2);
+
+        $this->databaseHelper->expects($this->once())
+            ->method('findOneByIdentity')
+            ->will($this->returnValue($existingCart));
+
+        $this->databaseHelper->expects($this->once())
+            ->method('getEntityReference')
+            ->will($this->returnValue($channel));
+
+        $this->databaseHelper->expects($this->once())
+            ->method('getIdentifier')
+            ->will($this->returnValue('identifier'));
+
+        $this->databaseHelper->expects($this->once())
+            ->method('find')
+            ->with('OroCRM\Bundle\MagentoBundle\Entity\Cart', 'identifier')
+            ->will($this->returnValue($newCart));
+
+        $strategy = $this->getStrategy();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $strategy->setImportExportContext($context);
+        $strategy->setEntityName('OroCRM\Bundle\MagentoBundle\Entity\Cart');
+        $execution = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ExecutionContext');
+        $this->jobExecution->expects($this->any())->method('getExecutionContext')
+            ->will($this->returnValue($execution));
+        $strategy->setStepExecution($this->stepExecution);
+
+        $strategy->process($existingCart);
+
+        $this->assertTrue($cartItem1->isRemoved());
+        $this->assertFalse($cartItem2->isRemoved());
+        $this->assertFalse($cartItem3->isRemoved());
     }
 
     /**

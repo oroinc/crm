@@ -53,6 +53,7 @@ class CustomerTest extends AbstractEntityTestCase
             'monetary'     => ['monetary', 3, 3],
             'syncState'    => ['syncState', 1, 1],
             'confirmed'    => ['confirmed', false, false],
+            'guest'        => ['guest', true, true],
             'createdIn'    => ['createdIn', 'Admin', 'Admin']
         ];
     }
