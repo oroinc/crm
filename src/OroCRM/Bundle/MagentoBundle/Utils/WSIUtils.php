@@ -39,7 +39,7 @@ class WSIUtils
      */
     public static function convertResponseToMultiArray($response)
     {
-        if (is_array($response) && array_key_exists(0, $response) === false) {
+        if (is_array($response) && array_key_exists(0, $response) === false && count($response) > 0) {
             return [$response];
         }
 
