@@ -36,7 +36,7 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         $isProcessingAllowed = true;
         $customer = $this->findExistingEntity($order->getCustomer());
         $customerOriginId = $order->getCustomer()->getOriginId();
-        if ($customerOriginId && (!$customer || $customer->isGuest())) {
+        if (!$customer && $customerOriginId) {
             $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $customerOriginId);
 
             $isProcessingAllowed = false;
