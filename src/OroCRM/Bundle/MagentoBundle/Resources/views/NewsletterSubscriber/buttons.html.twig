@@ -18,7 +18,7 @@
                 data-page-component-module="orocrmmagento/js/app/components/subscription-manager"
                 data-page-component-options="{{ {currentState: entity.status.id|default(false), subscribedId: constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber::STATUS_SUBSCRIBED')}|json_encode }}"></div>
     {% endif %}
-{% elseif customer is defined %}
+{% elseif customer is defined and customer.originId %}
     {% if resource_granted('EDIT', customer) %}
         {{ UI.clientButton({
             'dataUrl' : path('orocrm_magento_newsletter_subscriber_unsubscribe_customer', { 'id': customer.id }),
