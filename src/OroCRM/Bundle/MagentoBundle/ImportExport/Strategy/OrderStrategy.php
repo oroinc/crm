@@ -80,6 +80,10 @@ class OrderStrategy extends AbstractImportStrategy
             $customer->setCurrency($order->getCurrency());
         }
         $order->setCustomer($customer);
+
+        if ($order->getCart()) {
+            $order->getCart()->setCustomer($customer);
+        }
     }
 
     /**

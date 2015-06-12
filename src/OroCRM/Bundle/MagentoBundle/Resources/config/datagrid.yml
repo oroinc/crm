@@ -569,7 +569,7 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.added_on
                 frontend_type:    datetime
             updatedAt:
-                label:            oro.ui.updated_at
+                label:            orocrm.magento.datagrid.columns.removed_at
                 frontend_type:    datetime
 
     magento-products-grid:
