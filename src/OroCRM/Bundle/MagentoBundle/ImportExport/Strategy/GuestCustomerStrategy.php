@@ -70,21 +70,9 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         }
 
         $em = $this->databaseHelper->getRegistry()->getManager();
-        if (array_key_exists('customer_group_id', $itemData) && !$entity->getGroup()) {
-            $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
-                ->findOneBy(['originId' => $itemData['customer_group_id']]);
-            $entity->setGroup($group);
-        }
-        if (!empty($itemData['channelId']) && !empty($itemData['store']['originId'])) {
-            $store = $em->getRepository('OroCRMMagentoBundle:Store')
-                ->findOneBy(
-                    [
-                        'originId' => $itemData['store']['originId'],
-                        'channelId' => $itemData['channelId']
-                    ]
-                );
-            $entity->setWebsite($store->getWebsite());
-            $entity->setCreatedIn($store->getName());
+        if (!empty($itemData['store']['channel']['id'])) {
+            $this->setGroup($entity, $itemData, $em);
+            $this->setWebsite($entity, $itemData, $em);
         }
 
         !empty($itemData['customerEmail']) && $entity->setEmail($itemData['customerEmail']);
@@ -92,6 +80,45 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             $address = array_pop($itemData['addresses']);
             !empty($address['firstName']) && !$entity->getFirstName() && $entity->setFirstName($address['firstName']);
             !empty($address['lastName']) && !$entity->getLastName() && $entity->setLastName($address['lastName']);
+        }
+    }
+
+    /**
+     * @param Customer $entity
+     * @param $itemData
+     * @param $em
+     */
+    protected function setGroup(Customer $entity, $itemData, $em)
+    {
+        if (array_key_exists('customer_group_id', $itemData) && !$entity->getGroup()) {
+            $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
+                ->findOneBy(
+                    [
+                        'originId' => $itemData['customer_group_id'],
+                        'channel' => $itemData['store']['channel']['id']
+                    ]
+                );
+            $entity->setGroup($group);
+        }
+    }
+
+    /**
+     * @param Customer $entity
+     * @param $itemData
+     * @param $em
+     */
+    protected function setWebsite(Customer $entity, $itemData, $em)
+    {
+        if (!empty($itemData['store']['originId'])) {
+            $store = $em->getRepository('OroCRMMagentoBundle:Store')
+                ->findOneBy(
+                    [
+                        'originId' => $itemData['store']['originId'],
+                        'channel' => $itemData['store']['channel']['id']
+                    ]
+                );
+            $entity->setWebsite($store->getWebsite());
+            $entity->setCreatedIn($store->getName());
         }
     }
 }
