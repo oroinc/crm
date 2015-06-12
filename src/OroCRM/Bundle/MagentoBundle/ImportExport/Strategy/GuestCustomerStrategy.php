@@ -63,7 +63,6 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     protected function processChangeAttributes(Customer $entity)
     {
         $itemData = $this->context->getValue('itemData');
-        var_dump($itemData);
         $entity->setGuest(true);
         $entity->setConfirmed(false);
         foreach ($entity->getAddresses() as $address) {
