@@ -70,7 +70,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         }
 
         $em = $this->databaseHelper->getRegistry()->getManager();
-        if (!empty($itemData['customer_group_id']) && !$entity->getGroup()) {
+        if (array_key_exists('customer_group_id', $itemData) && !$entity->getGroup()) {
             $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
                 ->findOneBy(['originId' => $itemData['customer_group_id']]);
             $entity->setGroup($group);
