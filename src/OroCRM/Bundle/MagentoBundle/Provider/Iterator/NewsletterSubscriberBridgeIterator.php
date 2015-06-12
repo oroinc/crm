@@ -70,18 +70,15 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         $result = $this->getNewsletterSubscribers($filters);
         $result = $this->processCollectionResponse($result);
         $result = $this->convertResponseToMultiArray($result);
-        $resultIds = [];
 
-        if (is_array($result) && count($result) > 0) {
-            $resultIds = array_map(
-                function ($item) {
-                    return $item[$this->getIdFieldName()];
-                },
-                $result
-            );
+        $resultIds = array_map(
+            function ($item) {
+                return $item[$this->getIdFieldName()];
+            },
+            $result
+        );
 
-            $this->entityBuffer = array_combine($resultIds, $result);
-        }
+        $this->entityBuffer = array_combine($resultIds, $result);
 
         return $resultIds;
     }

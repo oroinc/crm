@@ -359,8 +359,12 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $cart->setStoreToQuoteRate($rate);
         $cart->setIsGuest(0);
         $cart->setEmail($customer->getEmail());
-        $cart->setCreatedAt(new \DateTime('now'));
-        $cart->setUpdatedAt(new \DateTime('now'));
+
+        $datetime = new \DateTime('now');
+        $datetime->modify(sprintf('-%s day', rand(1, 5)));
+
+        $cart->setCreatedAt($datetime);
+        $cart->setUpdatedAt($datetime);
         $cart->setOriginId($origin);
         $cart->setDataChannel($this->dataChannel);
         $om->persist($cart);
