@@ -66,6 +66,8 @@ class NewsletterSubscriberControllerTest extends AbstractController
 
         $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
         unset($this->transport, $this->baseJobExecutor);
+
+        parent::tearDown();
     }
 
     /**

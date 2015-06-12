@@ -72,7 +72,7 @@ class ChannelHelperTest extends OrmTestCase
                 $this->returnCallback(
                     function () use ($integrationId, $expected, $existingIntegrationId, $existingChannelId) {
                         return $this->createFetchStatementMock(
-                            [['id0' => $existingChannelId, 'id1' => $existingIntegrationId]]
+                            [['id_0' => $existingChannelId, 'id_1' => $existingIntegrationId]]
                         );
                     }
                 )

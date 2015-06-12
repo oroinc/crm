@@ -268,9 +268,13 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getQbMock()
     {
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $qb = $this
             ->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
+            ->setConstructorArgs([$em])
             ->getMock();
 
         $qb

@@ -30,6 +30,8 @@ abstract class AbstractExportWriterTest extends WebTestCase
     protected function tearDown()
     {
         $this->dropBatchJobs();
+
+        parent::tearDown();
     }
 
     protected function dropBatchJobs()
