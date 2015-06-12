@@ -38,6 +38,7 @@ class CustomerHandler extends UpdateHandler
             $entity->setGuest(false);
             $entity->setIsActive(true);
             $this->stateHandler->markCustomerForSync($entity);
+            $this->stateHandler->markAddressesForSync($entity);
 
             $manager->persist($entity);
             $manager->flush();
