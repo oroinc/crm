@@ -74,6 +74,15 @@ class SoapTransportSettingFormType extends AbstractType
             ['label' => 'orocrm.magento.magentosoaptransport.is_wsi_mode.label', 'required' => false]
         );
         $builder->add(
+            'guestCustomerSync',
+            'checkbox',
+            [
+                'label' => 'orocrm.magento.magentosoaptransport.guest_customer_sync.label',
+                'tooltip' => 'orocrm.magento.magentosoaptransport.guest_customer_sync.tooltip',
+                'required' => false
+            ]
+        );
+        $builder->add(
             'syncStartDate',
             'oro_date',
             [

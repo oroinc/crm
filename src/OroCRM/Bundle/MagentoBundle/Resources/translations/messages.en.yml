@@ -105,6 +105,16 @@ orocrm:
                 rowTotal:         Row total
                 billing_country:  Billing country
                 billing_region:   Billing state
+                customer_is_guest:
+                    label: Magento customer type
+                    yes: Guest
+                    no: Registered
+                    all: All
+                order_is_guest:
+                    label: Magento order type
+                    yes: Guest
+                    no: Registered
+                    all: All
                 is_subscriber:
                     label: Is a Subsciber
                     yes: Yes
@@ -143,6 +153,7 @@ orocrm:
             entity_plural_label: Magento Customers
             entity_description:  Represent Magento customer
             create_order:        Create Order
+            register.label:      Register
             sales.label:         Sales
             id.label:            Id
             owner.label:         Owner
@@ -159,6 +170,10 @@ orocrm:
             vat.label:           Tax/Vat
             website.label:       Website
             store.label:         Store
+            guest:
+                label:             Magento Customer Type
+                yes:               Guest
+                no:                Registered
             group.label:         Customer Group
             contact.label:       Contact
             account.label:       Account
@@ -316,6 +331,7 @@ orocrm:
             id.label:                     Id
             is_extension_installed.label: Is extension installed
             is_wsi_mode.label:            WS-I Compliance
+            guest_customer_sync.label:    Guest Customer Sync
             sync_start_date.label:        Sync start date
             sync_range.label:             Sync range
             website_id.label:             Website
@@ -363,7 +379,10 @@ orocrm:
             cart.label:             Cart
             items.label:            Order items
             is_virtual.label:       Is virtual
-            is_guest.label:         Is guest
+            is_guest:
+                label:              Magento order type
+                yes:                Guest
+                no:                 Registered
             channel.label:          Integration
             data_channel.label:     Channel
             notes.label:            Additional comments

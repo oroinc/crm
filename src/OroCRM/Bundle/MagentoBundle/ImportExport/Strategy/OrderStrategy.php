@@ -64,6 +64,15 @@ class OrderStrategy extends AbstractImportStrategy
      */
     protected function processCustomer(Order $order, Customer $customer = null)
     {
+        if (!$customer || !$customer->getId()) {
+            $customer = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                [
+                    'email' => $order->getCustomerEmail()
+                ]
+            );
+        }
+
         if ($customer instanceof Customer) {
             // now customer orders subtotal calculation support only one currency.
             // also we do not take into account order refunds due to magento does not bring subtotal data
