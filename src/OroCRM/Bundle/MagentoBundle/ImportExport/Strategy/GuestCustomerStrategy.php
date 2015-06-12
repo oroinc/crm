@@ -63,11 +63,26 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     protected function processChangeAttributes(Customer $entity)
     {
         $itemData = $this->context->getValue('itemData');
+        var_dump($itemData);
         $entity->setGuest(true);
         $entity->setConfirmed(false);
         foreach ($entity->getAddresses() as $address) {
             $address->setOriginId(null);
         }
+
+        $em = $this->databaseHelper->getRegistry()->getManager();
+        if (!empty($itemData['customer_group_id']) && !$entity->getGroup()) {
+            $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
+                ->findOneBy(['originId' => $itemData['customer_group_id']]);
+            $entity->setGroup($group);
+        }
+        if (!empty($itemData['store']['originId'])) {
+            $store = $em->getRepository('OroCRMMagentoBundle:Store')
+                ->findOneBy(['originId' => $itemData['store']['originId']]);
+            $entity->setWebsite($store->getWebsite());
+            $entity->setCreatedIn($store->getName());
+        }
+
         !empty($itemData['customerEmail']) && $entity->setEmail($itemData['customerEmail']);
         if (!empty($itemData['addresses'])) {
             $address = array_pop($itemData['addresses']);
