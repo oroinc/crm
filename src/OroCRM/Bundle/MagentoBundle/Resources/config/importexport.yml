@@ -340,15 +340,6 @@ services:
         parent: orocrm_magento.import.strategy.abstract
 
     # Processors
-    orocrm_magento.importexport.processor.import_guest_customer:
-        parent: oro_integration.importexport.processor.import
-        calls:
-            - [setDataConverter, [@oro_importexport.data_converter.default]]
-            - [setStrategy, [@orocrm_magento.import.strategy.guest_customer.add_or_update]]
-            - [setEntityName, [%orocrm_magento.entity.customer.class%]]
-        tags:
-            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.import_guest_customer }
-
     orocrm_magento.importexport.processor.import_newsletter_subscriber:
         parent: oro_integration.importexport.processor.import
         calls:
@@ -366,6 +357,15 @@ services:
             - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
+
+    orocrm_magento.importexport.processor.import_guest_customer:
+        parent: oro_integration.importexport.processor.import
+        calls:
+            - [setDataConverter, [@oro_importexport.data_converter.default]]
+            - [setStrategy, [@orocrm_magento.import.strategy.guest_customer.add_or_update]]
+            - [setEntityName, [%orocrm_magento.entity.customer.class%]]
+        tags:
+            - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.import_guest_customer }
 
     orocrm_magento.importexport.processor.import_customer_address:
         parent: oro_integration.importexport.processor.import

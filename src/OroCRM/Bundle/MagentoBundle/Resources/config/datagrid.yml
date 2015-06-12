@@ -161,13 +161,12 @@ datagrid:
                     data_name: isSubscriber
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
-                    type: single_choice
+                    type: choice
                     options:
                         field_options:
                             choices:
-                                all: orocrm.magento.datagrid.columns.customer_is_guest.all
-                                no: orocrm.magento.datagrid.columns.customer_is_guest.no
-                                yes: orocrm.magento.datagrid.columns.customer_is_guest.yes
+                                false: orocrm.magento.datagrid.columns.customer_is_guest.no
+                                true: orocrm.magento.datagrid.columns.customer_is_guest.yes
                     data_name: c.guest
                 createdAt:
                     type:      datetime
@@ -857,13 +856,12 @@ datagrid:
                             workflow_entity_class: %orocrm_magento.order.entity.class%
                 guest:
                     label: orocrm.magento.datagrid.columns.order_is_guest.label
-                    type: single_choice
+                    type: choice
                     options:
                         field_options:
                             choices:
-                                all: orocrm.magento.datagrid.columns.order_is_guest.all
-                                no: orocrm.magento.datagrid.columns.order_is_guest.no
-                                yes: orocrm.magento.datagrid.columns.order_is_guest.yes
+                                false: orocrm.magento.datagrid.columns.order_is_guest.no
+                                true: orocrm.magento.datagrid.columns.order_is_guest.yes
                     data_name: o.isGuest
                 createdAt:
                     type:             datetime
