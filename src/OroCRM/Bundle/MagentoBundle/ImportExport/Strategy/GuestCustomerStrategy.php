@@ -75,9 +75,14 @@ class GuestCustomerStrategy extends AbstractImportStrategy
                 ->findOneBy(['originId' => $itemData['customer_group_id']]);
             $entity->setGroup($group);
         }
-        if (!empty($itemData['store']['originId'])) {
+        if (!empty($itemData['channelId']) && !empty($itemData['store']['originId'])) {
             $store = $em->getRepository('OroCRMMagentoBundle:Store')
-                ->findOneBy(['originId' => $itemData['store']['originId']]);
+                ->findOneBy(
+                    [
+                        'originId' => $itemData['store']['originId'],
+                        'channelId' => $itemData['channelId']
+                    ]
+                );
             $entity->setWebsite($store->getWebsite());
             $entity->setCreatedIn($store->getName());
         }
