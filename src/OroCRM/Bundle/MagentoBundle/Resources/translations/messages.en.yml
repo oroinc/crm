@@ -89,6 +89,7 @@ orocrm:
                 discount_amount:  Discount Amount
                 weight:           Weight
                 added_on:         Placed On
+                removed_at:       Removed At
                 updated_on:       Updated On
                 increment_id:     "Order #"
                 total_paid:       Total Paid
