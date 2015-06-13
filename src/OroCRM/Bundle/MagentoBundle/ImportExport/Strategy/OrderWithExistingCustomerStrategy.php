@@ -56,6 +56,12 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
             }
         }
 
+        if (!$customer && $order->getIsGuest() && $transport->getGuestCustomerSync()) {
+            $this->appendDataToContext('postProcessGuestCustomers', $this->context->getValue('itemData'));
+
+            $isProcessingAllowed = false;
+        }
+
         return $isProcessingAllowed;
     }
 }

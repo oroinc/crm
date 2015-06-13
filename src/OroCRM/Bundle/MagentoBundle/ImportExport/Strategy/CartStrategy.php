@@ -72,7 +72,10 @@ class CartStrategy extends AbstractImportStrategy
     {
         if ((int)$entity->getItemsQty() === 0) {
             foreach ($entity->getCartItems() as $cartItem) {
-                $cartItem->setRemoved(true);
+                if (!$cartItem->isRemoved()) {
+                    $cartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                    $cartItem->setRemoved(true);
+                }
             }
         } elseif ($this->existingCartItems) {
             $existingCartItems = new ArrayCollection($this->existingCartItems);
@@ -80,7 +83,10 @@ class CartStrategy extends AbstractImportStrategy
 
             foreach ($existingCartItems as $existingCartItem) {
                 if (!$newCartItems->contains($existingCartItem)) {
-                    $existingCartItem->setRemoved(true);
+                    if (!$existingCartItem->isRemoved()) {
+                        $existingCartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                        $existingCartItem->setRemoved(true);
+                    }
                 }
             }
         }
