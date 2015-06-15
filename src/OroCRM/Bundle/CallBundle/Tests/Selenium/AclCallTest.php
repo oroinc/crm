@@ -21,7 +21,7 @@ class AclCallTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('Roles - User Management - System')
+            ->assertTitle('All - Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclCallTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -79,7 +79,7 @@ class AclCallTest extends Selenium2TestCase
             ->setPhoneNumber($phoneNumber)
             ->save()
             ->assertMessage('Call saved')
-            ->assertTitle('Calls - Activities')
+            ->assertTitle('All - Calls - Activities')
             ->close();
 
         return $callSubject;
@@ -130,7 +130,7 @@ class AclCallTest extends Selenium2TestCase
             ->submit()
             ->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
-            ->checkActionMenu('Delete');
+            ->assertNoActionMenu('Delete');
     }
 
     public function updateAcl($login, $roleName, $username, $callSubject)
@@ -146,7 +146,7 @@ class AclCallTest extends Selenium2TestCase
             ->submit()
             ->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
-            ->checkActionMenu('Update');
+            ->assertNoActionMenu('Update');
     }
 
     public function createAcl($login, $roleName, $username)

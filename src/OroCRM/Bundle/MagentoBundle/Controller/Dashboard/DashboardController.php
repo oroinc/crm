@@ -88,7 +88,7 @@ class DashboardController extends Controller
             $this->get('oro_dashboard.widget_configs')
                 ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                 ->get('dateRange'),
-            $this->get('oro_dashboard.datetime.hepler')
+            $this->get('oro_dashboard.datetime.helper')
         );
 
         return $data;

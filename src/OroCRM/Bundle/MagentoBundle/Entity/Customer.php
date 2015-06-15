@@ -25,6 +25,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * Class Customer
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
@@ -34,7 +36,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
  *      indexes={
  *          @ORM\Index(name="magecustomer_name_idx",columns={"first_name", "last_name"}),
- *          @ORM\Index(name="magecustomer_rev_name_idx",columns={"last_name", "first_name"})
+ *          @ORM\Index(name="magecustomer_rev_name_idx",columns={"last_name", "first_name"}),
+ *          @ORM\Index(name="magecustomer_email_guest_idx",columns={"email"})
  *      }
  * )
  * @Config(
@@ -238,6 +241,12 @@ class Customer extends ExtendCustomer implements
      * @ORM\Column(name="is_confirmed", type="boolean", nullable=true)
      */
     protected $confirmed = true;
+
+    /**
+     * @var bool
+     * @ORM\Column(name="is_guest", type="boolean", nullable=false, options={"default"=false})
+     */
+    protected $guest = false;
 
     /**
      * @var CustomerGroup
@@ -522,6 +531,25 @@ class Customer extends ExtendCustomer implements
     public function setConfirmed($confirmed)
     {
         $this->confirmed = $confirmed;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isGuest()
+    {
+        return $this->guest;
+    }
+
+    /**
+     * @param bool $guest
+     * @return Customer
+     */
+    public function setGuest($guest)
+    {
+        $this->guest = $guest;
 
         return $this;
     }
