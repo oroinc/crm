@@ -22,7 +22,7 @@ class CreateAccountTest extends Selenium2TestCase
         $login = $this->login();
         /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
-            ->assertTitle('Accounts - Customers')
+            ->assertTitle('All - Accounts - Customers')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')
             ->setAccountName($accountName)
@@ -30,7 +30,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
-            ->assertTitle('Accounts - Customers');
+            ->assertTitle('All - Accounts - Customers');
 
         return $accountName;
     }
@@ -50,7 +50,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
-            ->assertTitle('Accounts - Customers');
+            ->assertTitle('All - Accounts - Customers');
     }
 
     /**
@@ -74,7 +74,7 @@ class CreateAccountTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
-            ->assertTitle('Accounts - Customers')
+            ->assertTitle('All - Accounts - Customers')
             ->close();
          return $newAccountName;
     }
@@ -91,8 +91,9 @@ class CreateAccountTest extends Selenium2TestCase
             ->filterBy('Account name', $accountName)
             ->open(array($accountName))
             ->delete()
-            ->assertTitle('Accounts - Customers')
-            ->assertMessage('Account deleted');
+            ->assertMessage('Account deleted')
+            ->assertTitle('All - Accounts - Customers');
+
 
         $login->openAccounts('OroCRM\Bundle\AccountBundle');
         if ($login->getRowsCount() > 0) {

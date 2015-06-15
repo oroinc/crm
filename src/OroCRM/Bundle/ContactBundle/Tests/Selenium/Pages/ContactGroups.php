@@ -8,6 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageGrid;
  * Class ContactGroups
  *
  * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
+ * @method ContactGroups openContactGroups openContactGroups(string)
+ * {@inheritdoc}
  */
 class ContactGroups extends AbstractPageGrid
 {

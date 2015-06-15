@@ -1,0 +1,24 @@
+{
+    "name": "orocrm/activity-contact-bundle",
+    "type": "symfony-bundle",
+    "description": "OroCRM ActivityContactBundle",
+    "keywords": ["OroCRM"],
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4.9",
+        "symfony/symfony": "2.3.*",
+        "oro/entity-extend-bundle": "dev-master",
+        "oro/activity-bundle": "dev-master",
+        "oro/activity-list-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": { "OroCRM\\Bundle\\ActivityContactBundle": "" }
+    },
+    "target-dir": "OroCRM/Bundle/ActivityContactBundle",
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
