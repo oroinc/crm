@@ -13,7 +13,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     {
         $this->assertEnvironment($entity);
 
-        if ($this->checkExistingCustomer()) {
+        if ($this->checkExistingCustomer($entity)) {
             return null;
         }
 
@@ -29,20 +29,21 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     }
 
     /**
+     * @param Customer $entity
+     *
      * @return Customer
      */
-    protected function checkExistingCustomer()
+    protected function checkExistingCustomer(Customer $entity)
     {
-        $itemData = $this->context->getValue('itemData');
-        if (!array_key_exists('email', $itemData)) {
+        if (!$entity->getEmail()) {
             return null;
         }
 
         $existingCustomer = $this->databaseHelper->findOneBy(
             'OroCRM\Bundle\MagentoBundle\Entity\Customer',
             [
-                'email' => $itemData['email'],
-                'channel' => $itemData['channel']
+                'email' => $entity->getEmail(),
+                'channel' => $entity->getChannel()
             ]
         );
 
@@ -68,12 +69,8 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             $address->setOriginId(null);
         }
 
-        $originId = $entity->getStore()->getOriginId();
-        if ($originId) {
-            $entity->setWebsite($entity->getStore()->getWebsite());
-            $entity->setCreatedIn($entity->getStore()->getName());
-        }
-
+        $entity->setWebsite($entity->getStore()->getWebsite());
+        $entity->setCreatedIn($entity->getStore()->getName());
         $this->setDefaultGroup($entity);
     }
 
