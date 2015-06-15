@@ -68,7 +68,8 @@ class OrderStrategy extends AbstractImportStrategy
             $customer = $this->databaseHelper->findOneBy(
                 'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                 [
-                    'email' => $order->getCustomerEmail()
+                    'email' => $order->getCustomerEmail(),
+                    'channel' => $order->getChannel()
                 ]
             );
         }
