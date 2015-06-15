@@ -46,7 +46,9 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $this->updateRemovedCartItems($entity);
+        if ($entity->getStatus()->getName() === CartStatus::STATUS_OPEN) {
+            $this->updateRemovedCartItems($entity);
+        }
 
         if (!$this->hasContactInfo($entity)) {
             return null;
