@@ -26,7 +26,7 @@ trait IntegrationEntityTrait
      * @param Integration $integration
      * @return $this
      */
-    public function setChannel(Integration $integration = null)
+    public function setChannel(Integration $integration)
     {
         $this->channel = $integration;
 

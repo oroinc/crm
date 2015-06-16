@@ -95,7 +95,8 @@ class CustomerStrategy extends AbstractImportStrategy
                 $existingEntity = $this->databaseHelper->findOneBy(
                     'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                     [
-                        'email' => $entity->getEmail()
+                        'email' => $entity->getEmail(),
+                        'channel' => $entity->getChannel()
                     ]
                 );
                 if ($existingEntity && $existingEntity->getId()) {
