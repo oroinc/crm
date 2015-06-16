@@ -69,6 +69,8 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
 
         $result = $this->getNewsletterSubscribers($filters);
         $result = $this->processCollectionResponse($result);
+        $result = $this->convertResponseToMultiArray($result);
+
         $resultIds = array_map(
             function ($item) {
                 return $item[$this->getIdFieldName()];
@@ -100,9 +102,15 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $filters = $filter->getAppliedFilters();
             $filters['pager'] = ['page' => 1, 'pageSize' => 1];
             $subscribers = $this->getNewsletterSubscribers($filters);
+            $subscribers = $this->convertResponseToMultiArray($subscribers);
 
-            if (count($subscribers) > 0) {
-                $this->initialId = (int)$subscribers[0][$this->getIdFieldName()] + 1;
+            $subscriber = [];
+            if (array_key_exists(0, $subscribers)) {
+                $subscriber = reset($subscribers);
+            }
+
+            if (array_key_exists($this->getIdFieldName(), $subscriber)) {
+                $this->initialId = (int)$subscriber[$this->getIdFieldName()] + 1;
             }
         }
 

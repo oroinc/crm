@@ -13,6 +13,9 @@ orocrm:
         subscription:
             success: Subscription updated
             error: Subscription was not updated
+        customer_registration:
+            success: Customer registered
+            error: Customer was not registered
         newslettersubscriber:
             action:
                 confirm_title:
