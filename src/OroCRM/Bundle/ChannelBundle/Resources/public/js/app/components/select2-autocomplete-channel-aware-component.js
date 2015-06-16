@@ -2,8 +2,6 @@ define(function (require) {
     'use strict';
     var Select2AutocompleteChannelAwareComponent,
         $ = require('jquery'),
-        _ = require('underscore'),
-        __ = require('orotranslation/js/translator'),
         Select2AutocompleteComponent = require('oroform/js/app/components/select2-autocomplete-component');
     Select2AutocompleteChannelAwareComponent = Select2AutocompleteComponent.extend({
         processExtraConfig: function (select2Config, params) {
@@ -18,7 +16,6 @@ define(function (require) {
                     query: queryString
                 };
             };
-
             return select2Config;
         }
     });
