@@ -215,6 +215,9 @@ workflows:
                                 required: false
                     init_actions:
                         - @assign_active_user: $.result.user
+                        - @assign_value: [$email_subject, ""]
+                        - @assign_value: [$email_body, ""]
+                        - @assign_value: [$notes, ""]
                         - @assign_value: [$email_from, $.result.user.email]
                         - @assign_value: #Assign email to as shopping cart email
                             conditions:
