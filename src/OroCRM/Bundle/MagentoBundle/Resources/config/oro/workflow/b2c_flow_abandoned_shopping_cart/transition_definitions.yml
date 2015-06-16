@@ -77,6 +77,7 @@ workflows:
                          to: $email_to
                          subject: $email_subject
                          body: $email_body
+                         type: 'html'
                      - @call_method:
                          method: 'addRelatedEmail'
                          object: $cart
