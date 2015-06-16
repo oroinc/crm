@@ -42,9 +42,13 @@ class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
     {
         parent::buildView($view, $form, $options);
 
-        $extraConfig = $options['configs']['extra_config'];
-        if ($extraConfig != 'channel_aware') {
-            $options['configs']['extra_config'] .= '_channel_aware';
+        if (isset($options['configs']['component'])) {
+            $component = end(explode('/', $options['configs']['component']));
+            if (strcmp($component, 'select2-grid-component') == 0) {
+                $options['configs']['component'] = 'orocrmchannel/js/app/components/select2-grid-channel-aware-component';
+            } elseif (strcmp($component, 'select2-autocomplete-component') == 0) {
+                $options['configs']['component'] = 'orocrmchannel/js/app/components/select2-autocomplete-channel-aware-component';
+            }
         }
 
         $view->vars['channel_required'] = $options['channel_required'];
