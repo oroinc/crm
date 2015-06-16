@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 
+use Doctrine\ORM\EntityManager;
+
 use Oro\Bundle\ImportExportBundle\Job\JobExecutor;
 use Oro\Bundle\ImportExportBundle\Job\JobResult;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
@@ -66,6 +68,19 @@ class NewsletterSubscriberControllerTest extends AbstractController
 
         $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
         unset($this->transport, $this->baseJobExecutor);
+
+        $jobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
+
+        $reflection = new \ReflectionObject($jobRepository);
+        $property = $reflection->getProperty('jobManager');
+        $property->setAccessible(true);
+        /** @var EntityManager $entityManager */
+        $entityManager = $property->getValue($jobRepository);
+        $entityManager
+            ->getConnection()
+            ->close();
+
+        parent::tearDown();
     }
 
     /**
