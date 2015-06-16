@@ -13,11 +13,8 @@ class GuestCustomerDataConverter extends AbstractTreeDataConverter
     {
         return [
             'customerEmail' => 'email',
-            'firstname' => 'firstName',
-            'lastname' => 'lastName',
-            'prefix' => 'namePrefix',
-            'suffix' => 'nameSuffix',
-            'middlename' => 'middleName',
+            'customer_firstname' => 'firstName',
+            'customer_lastname' => 'lastName',
             'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
             'store_id' => 'store:originId',
