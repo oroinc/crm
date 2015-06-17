@@ -49,13 +49,7 @@ abstract class AbstractExportWriterTest extends WebTestCase
 
     protected function closeConnections()
     {
-        $jobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
-
-        $reflection = new \ReflectionObject($jobRepository);
-        $property = $reflection->getProperty('jobManager');
-        $property->setAccessible(true);
-        /** @var EntityManager $entityManager */
-        $entityManager = $property->getValue($jobRepository);
+        $entityManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
         $entityManager
             ->getConnection()
             ->close();
