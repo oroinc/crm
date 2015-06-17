@@ -58,13 +58,18 @@ class CartController extends Controller
     }
 
     /**
-     * @Route("/widget/grid/{id}", name="orocrm_magento_cart_widget_items", requirements={"id"="\d+"}))
+     * @Route(
+     *      "/widget/grid/{id}/{isRemoved}",
+     *      name="orocrm_magento_cart_widget_items",
+     *      requirements={"id"="\d+", "isRemoved"="\d+"}
+     * )
      * @AclAncestor("orocrm_magento_cart_view")
+     * @ParamConverter("cart", class="OroCRMMagentoBundle:Cart", options={"id" = "id"})
      * @Template
      */
-    public function itemsAction(Cart $cart)
+    public function itemsAction(Cart $cart, $isRemoved = false)
     {
-        return ['entity' => $cart];
+        return ['entity' => $cart, 'is_removed' => (bool)$isRemoved];
     }
 
     /**
