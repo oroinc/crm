@@ -34,6 +34,8 @@ class ImportExportTest extends WebTestCase
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
+
+        parent::tearDown();
     }
 
     /**
