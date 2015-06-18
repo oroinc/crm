@@ -4,23 +4,29 @@ define(function (require) {
         $ = require('jquery'),
         Select2GridComponent = require('oroform/js/app/components/select2-grid-component');
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
-        processExtraConfig: function (select2Config, params) {
-            Select2GridChannelAwareComponent.__super__.processExtraConfig(select2Config, params);
-            var parentDataFunction = select2Config.ajax.data,
-                $channel = $('select[name="' + params.channelFieldName + '"]');
+        channelId: '',
+        channelFieldName: '',
+        initialize: function (options) {
+            this.channelId = _.result(options, 'channel_id', this.channelId);
+            this.channelFieldName = _.result(options, 'channel_field_name', this.channelFieldName);
+            Select2GridChannelAwareComponent.__super__.initialize.call(this, options);
+        },
+        preConfig: function (config) {
+            Select2GridChannelAwareComponent.__super__.preConfig.call(this, config);
+            var that = this,
+                $channel = $('select[name="' + this.channelFieldName + '"]');
 
-            select2Config.ajax.data = function (query, page, searchById) {
-                var result = parentDataFunction.apply(this, arguments),
+            config.ajax.data = _.wrap(config.ajax.data, function (parentDataFunction, query, page) {
+                var result = parentDataFunction.call(this, query, page),
                     channelIds = [$channel.val()];
-                if (params.channelId) {
-                    channelIds.push(params.channelId);
+                if (that.channelId) {
+                    channelIds.push(that.channelId);
                 }
-                result[select2Config.grid.name + '[channelIds]'] = channelIds.join(',');
+                result[config.grid.name + '[channelIds]'] = channelIds.join(',');
                 return result;
-            };
+            });
 
-
-            return select2Config;
+            return config;
         }
     });
     return Select2GridChannelAwareComponent;
