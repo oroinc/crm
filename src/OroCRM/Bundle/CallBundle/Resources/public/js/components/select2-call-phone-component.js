@@ -5,19 +5,27 @@ define(function (require) {
         _ = require('underscore'),
         Select2Component = require('oroform/js/app/components/select2-component');
     Select2CallPhoneComponent = Select2Component.extend({
-        processExtraConfig: function (select2Config, params) {
-            Select2CallPhoneComponent.__super__.processExtraConfig(select2Config, params);
-            select2Config.minimumResultsForSearch = 0;
-            if (params.value !== false) {
-                select2Config.initSelection = function (element, callback) {
-                    var val = params.$el.val();
+        suggestions: [],
+        value: '',
+        initialize: function (options) {
+            this.suggestions = _.result(options, 'suggestions', this.suggestions);
+            this.value = _.result(options, 'value', this.value);
+            Select2CallPhoneComponent.__super__.initialize.call(this, options);
+        },
+        preConfig: function (config) {
+            var that = this;
+            Select2CallPhoneComponent.__super__.preConfig.call(this, config);
+            config.minimumResultsForSearch = 0;
+            if (this.value !== false) {
+                config.initSelection = function (element, callback) {
+                    var val = that.$el.val();
                     callback({id: val, text: val});
                 };
             }
-            select2Config.query = function (options) {
+            config.query = function (options) {
                 var data = {results: []},
-                    items = params.suggestions,
-                    initialVal = $.trim(params.value),
+                    items = that.suggestions,
+                    initialVal = $.trim(that.value),
                     currentVal = $.trim(options.element.val()),
                     term = $.trim(options.term);
                 if (initialVal && _.indexOf(items, initialVal) === -1) {
@@ -35,7 +43,7 @@ define(function (require) {
                 options.callback(data);
             };
 
-            return select2Config;
+            return config;
         }
     });
     return Select2CallPhoneComponent;
