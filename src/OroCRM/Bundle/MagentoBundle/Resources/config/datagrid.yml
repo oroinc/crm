@@ -24,6 +24,7 @@ datagrid:
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
+                    - c.guest
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -158,6 +159,15 @@ datagrid:
                                 no: orocrm.magento.datagrid.columns.is_subscriber.no
                                 yes: orocrm.magento.datagrid.columns.is_subscriber.yes
                     data_name: isSubscriber
+                guest:
+                    label: orocrm.magento.datagrid.columns.customer_is_guest.label
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                false: orocrm.magento.datagrid.columns.customer_is_guest.no
+                                true: orocrm.magento.datagrid.columns.customer_is_guest.yes
+                    data_name: c.guest
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -559,7 +569,7 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.added_on
                 frontend_type:    datetime
             updatedAt:
-                label:            oro.ui.updated_at
+                label:            orocrm.magento.datagrid.columns.removed_at
                 frontend_type:    datetime
 
     magento-products-grid:
@@ -844,6 +854,15 @@ datagrid:
                         field_type: oro_workflow_step_select
                         field_options:
                             workflow_entity_class: %orocrm_magento.order.entity.class%
+                guest:
+                    label: orocrm.magento.datagrid.columns.order_is_guest.label
+                    type: choice
+                    options:
+                        field_options:
+                            choices:
+                                false: orocrm.magento.datagrid.columns.order_is_guest.no
+                                true: orocrm.magento.datagrid.columns.order_is_guest.yes
+                    data_name: o.isGuest
                 createdAt:
                     type:             datetime
                     data_name:        o.createdAt

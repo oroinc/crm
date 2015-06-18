@@ -69,14 +69,19 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
 
         $result = $this->getNewsletterSubscribers($filters);
         $result = $this->processCollectionResponse($result);
-        $resultIds = array_map(
-            function ($item) {
-                return $item[$this->getIdFieldName()];
-            },
-            $result
-        );
+        $result = $this->convertResponseToMultiArray($result);
+        $resultIds = [];
 
-        $this->entityBuffer = array_combine($resultIds, $result);
+        if (is_array($result) && count($result) > 0) {
+            $resultIds = array_map(
+                function ($item) {
+                    return $item[$this->getIdFieldName()];
+                },
+                $result
+            );
+
+            $this->entityBuffer = array_combine($resultIds, $result);
+        }
 
         return $resultIds;
     }
@@ -100,12 +105,13 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
             $filters = $filter->getAppliedFilters();
             $filters['pager'] = ['page' => 1, 'pageSize' => 1];
             $subscribers = $this->getNewsletterSubscribers($filters);
+            $subscribers = $this->convertResponseToMultiArray($subscribers);
 
-            $subscriber = $subscribers;
-            if (array_key_exists(0, $subscribers)
-            ) {
+            $subscriber = [];
+            if (array_key_exists(0, $subscribers)) {
                 $subscriber = reset($subscribers);
             }
+
             if (array_key_exists($this->getIdFieldName(), $subscriber)) {
                 $this->initialId = (int)$subscriber[$this->getIdFieldName()] + 1;
             }

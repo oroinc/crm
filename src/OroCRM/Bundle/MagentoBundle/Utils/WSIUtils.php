@@ -34,6 +34,19 @@ class WSIUtils
     }
 
     /**
+     * @param array $response
+     * @return array
+     */
+    public static function convertResponseToMultiArray($response)
+    {
+        if (is_array($response) && array_key_exists(0, $response) === false && count($response) > 0) {
+            return [$response];
+        }
+
+        return $response;
+    }
+
+    /**
      * Parse WSI response and nested data
      *
      * @param mixed $result

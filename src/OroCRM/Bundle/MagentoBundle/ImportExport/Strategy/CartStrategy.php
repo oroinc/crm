@@ -46,7 +46,9 @@ class CartStrategy extends AbstractImportStrategy
      */
     protected function afterProcessEntity($entity)
     {
-        $this->updateRemovedCartItems($entity);
+        if ($this->existingEntity->getStatus()->getName() === CartStatus::STATUS_OPEN) {
+            $this->updateRemovedCartItems($entity);
+        }
 
         if (!$this->hasContactInfo($entity)) {
             return null;
@@ -59,6 +61,7 @@ class CartStrategy extends AbstractImportStrategy
             ->updateCartStatus($entity);
 
         $this->existingEntity = null;
+        $this->existingCartItems = null;
 
         return parent::afterProcessEntity($entity);
     }
@@ -72,7 +75,10 @@ class CartStrategy extends AbstractImportStrategy
     {
         if ((int)$entity->getItemsQty() === 0) {
             foreach ($entity->getCartItems() as $cartItem) {
-                $cartItem->setRemoved(true);
+                if (!$cartItem->isRemoved()) {
+                    $cartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                    $cartItem->setRemoved(true);
+                }
             }
         } elseif ($this->existingCartItems) {
             $existingCartItems = new ArrayCollection($this->existingCartItems);
@@ -80,7 +86,10 @@ class CartStrategy extends AbstractImportStrategy
 
             foreach ($existingCartItems as $existingCartItem) {
                 if (!$newCartItems->contains($existingCartItem)) {
-                    $existingCartItem->setRemoved(true);
+                    if (!$existingCartItem->isRemoved()) {
+                        $existingCartItem->setUpdatedAt(new \DateTime('now'), new \DateTimeZone('UTC'));
+                        $existingCartItem->setRemoved(true);
+                    }
                 }
             }
         }

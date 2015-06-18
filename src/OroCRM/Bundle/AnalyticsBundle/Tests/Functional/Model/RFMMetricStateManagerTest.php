@@ -39,6 +39,8 @@ class RFMMetricStateManagerTest extends WebTestCase
         }
 
         $em->flush($entities);
+
+        parent::tearDown();
     }
 
     public function testResetChannelMetrics()
