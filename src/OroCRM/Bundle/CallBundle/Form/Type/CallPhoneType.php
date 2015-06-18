@@ -18,7 +18,7 @@ class CallPhoneType extends AbstractType
         $defaultConfigs = [
             'allowClear'   => true,
             'placeholder'  => 'orocrm.call.form.choose_or_enter_phone',
-            'extra_config' => 'call_phone'
+            'component'    => 'orocrmcall/js/components/select2-call-phone-component'
         ];
 
         $resolver->setDefaults(

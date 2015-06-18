@@ -13,7 +13,7 @@ define(function (require) {
         formTemplate = require('text!./templates/form.html'),
         entitySelectResultTemplate = require('text!./templates/select2/result.html'),
         entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
-        select2Config = require('oroform/js/select2-config');
+        Select2Component = require('oroform/js/app/components/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
@@ -123,7 +123,7 @@ define(function (require) {
          * @private
          */
         _initializeForm: function () {
-            var configurator = new select2Config({
+            var configs = {
                 placeholder:        __('orocrm.channel.form.entity'),
                 result_template:    entitySelectResultTemplate,
                 selection_template: entitySelectSelectionTemplate,
@@ -152,16 +152,14 @@ define(function (require) {
 
                     return {results: results};
                 }, this)
+            }, select2Component = new Select2Component({
+                configs: configs,
+                _sourceElement: this.$formContainer.find('[data-purpose="entity-selector"]')
             });
 
-            this.$formContainer
-                .find('[data-purpose="entity-selector"]')
-                    .select2(configurator.getConfig())
-                    .trigger('select2-init')
-                .end()
-                .itemsManagerEditor({
-                    collection: this.collection
-                });
+            this.$formContainer.itemsManagerEditor({
+                collection: this.collection
+            });
         },
 
         /**
