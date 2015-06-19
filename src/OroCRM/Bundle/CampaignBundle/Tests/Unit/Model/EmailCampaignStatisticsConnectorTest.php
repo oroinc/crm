@@ -67,6 +67,9 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
         $marketingListItem = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem')
             ->disableOriginalConstructor()
             ->getMock();
+        $marketingListItem->expects($this->any())
+            ->method('getId')
+            ->willReturn(42);
 
         $this->marketingListItemConnector->expects($this->once())
             ->method('getMarketingListItem')
