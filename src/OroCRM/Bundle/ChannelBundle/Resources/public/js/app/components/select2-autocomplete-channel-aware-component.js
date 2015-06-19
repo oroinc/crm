@@ -2,6 +2,7 @@ define(function (require) {
     'use strict';
     var Select2AutocompleteChannelAwareComponent,
         $ = require('jquery'),
+        _ = require('underscore'),
         Select2AutocompleteComponent = require('oro/select2-autocomplete-component');
     Select2AutocompleteChannelAwareComponent = Select2AutocompleteComponent.extend({
         channelId: '',

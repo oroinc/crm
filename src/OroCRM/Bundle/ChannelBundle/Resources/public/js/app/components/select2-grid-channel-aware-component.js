@@ -2,6 +2,7 @@ define(function (require) {
     'use strict';
     var Select2GridChannelAwareComponent,
         $ = require('jquery'),
+        _ = require('underscore'),
         Select2GridComponent = require('oro/select2-grid-component');
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
         channelId: '',
