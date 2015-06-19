@@ -124,39 +124,41 @@ define(function (require) {
          */
         _initializeForm: function () {
             var configs = {
-                placeholder:        __('orocrm.channel.form.entity'),
-                result_template:    entitySelectResultTemplate,
-                selection_template: entitySelectSelectionTemplate,
-                data: _.bind(function () {
-                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
-                        options = _.map(notSelected, function(entityMetadata) {
-                            return {
-                                id: entityMetadata.name,
-                                text: entityMetadata.label,
-                                icon: entityMetadata.icon,
-                                type: entityMetadata.type
-                            };
-                        }),
-                        optionGroups = _.groupBy(options, function(entityMetadata) {
-                            return entityMetadata.type;
-                        }),
-                        results = [];
+                    placeholder:        __('orocrm.channel.form.entity'),
+                    result_template:    entitySelectResultTemplate,
+                    selection_template: entitySelectSelectionTemplate,
+                    data: _.bind(function () {
+                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
+                            options = _.map(notSelected, function(entityMetadata) {
+                                return {
+                                    id: entityMetadata.name,
+                                    text: entityMetadata.label,
+                                    icon: entityMetadata.icon,
+                                    type: entityMetadata.type
+                                };
+                            }),
+                            optionGroups = _.groupBy(options, function(entityMetadata) {
+                                return entityMetadata.type;
+                            }),
+                            results = [];
 
-                    _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
-                        results.push({
-                            text: __('orocrm.channel.entity_owner.' + groupName),
-                            icon: null,
-                            children: optionGroups[groupName]
+                        _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
+                            results.push({
+                                text: __('orocrm.channel.entity_owner.' + groupName),
+                                icon: null,
+                                children: optionGroups[groupName]
+                            });
                         });
-                    });
 
-                    return {results: results};
-                }, this)
-            }, select2Component = new Select2Component({
-                configs: configs,
-                _sourceElement: this.$formContainer.find('[data-purpose="entity-selector"]')
-            });
-
+                        return {results: results};
+                    }, this)
+                },
+                $el = this.$formContainer.find('[data-purpose="entity-selector"]'),
+                select2Component = new Select2Component({
+                    configs: configs,
+                    _sourceElement: $el
+                });
+            this.pageComponent('entity-selector', select2Component, $el);
             this.$formContainer.itemsManagerEditor({
                 collection: this.collection
             });
