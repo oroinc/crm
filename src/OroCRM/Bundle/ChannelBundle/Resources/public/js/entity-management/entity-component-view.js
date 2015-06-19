@@ -13,7 +13,7 @@ define(function (require) {
         formTemplate = require('text!./templates/form.html'),
         entitySelectResultTemplate = require('text!./templates/select2/result.html'),
         entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
-        Select2Component = require('oroform/js/app/components/select2-component');
+        Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');

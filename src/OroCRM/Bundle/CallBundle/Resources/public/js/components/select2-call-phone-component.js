@@ -3,13 +3,13 @@ define(function (require) {
     var Select2CallPhoneComponent,
         $ = require('jquery'),
         _ = require('underscore'),
-        Select2Component = require('oroform/js/app/components/select2-component');
+        Select2Component = require('oro/select2-component');
     Select2CallPhoneComponent = Select2Component.extend({
         suggestions: [],
         value: '',
         initialize: function (options) {
-            this.suggestions = _.result(options, 'suggestions', this.suggestions);
-            this.value = _.result(options, 'value', this.value);
+            this.suggestions = _.result(options, 'suggestions') || this.suggestions;
+            this.value = _.result(options, 'value') || this.value;
             Select2CallPhoneComponent.__super__.initialize.call(this, options);
         },
         preConfig: function (config) {
@@ -18,7 +18,7 @@ define(function (require) {
             config.minimumResultsForSearch = 0;
             if (this.value !== false) {
                 config.initSelection = function (element, callback) {
-                    var val = that.$el.val();
+                    var val = element.val();
                     callback({id: val, text: val});
                 };
             }

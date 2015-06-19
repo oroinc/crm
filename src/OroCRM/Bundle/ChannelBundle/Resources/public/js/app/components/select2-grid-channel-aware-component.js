@@ -2,13 +2,13 @@ define(function (require) {
     'use strict';
     var Select2GridChannelAwareComponent,
         $ = require('jquery'),
-        Select2GridComponent = require('oroform/js/app/components/select2-grid-component');
+        Select2GridComponent = require('oro/select2-grid-component');
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
         channelId: '',
         channelFieldName: '',
         initialize: function (options) {
-            this.channelId = _.result(options, 'channel_id', this.channelId);
-            this.channelFieldName = _.result(options, 'channel_field_name', this.channelFieldName);
+            this.channelId = _.result(options, 'channel_id') || this.channelId;
+            this.channelFieldName = _.result(options, 'channel_field_name') || this.channelFieldName;
             Select2GridChannelAwareComponent.__super__.initialize.call(this, options);
         },
         preConfig: function (config) {
