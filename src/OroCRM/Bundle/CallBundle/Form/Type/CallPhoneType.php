@@ -18,7 +18,7 @@ class CallPhoneType extends AbstractType
         $defaultConfigs = [
             'allowClear'   => true,
             'placeholder'  => 'orocrm.call.form.choose_or_enter_phone',
-            'extra_config' => 'call_phone'
+            'component'    => 'call-phone'
         ];
 
         $resolver->setDefaults(
@@ -48,6 +48,8 @@ class CallPhoneType extends AbstractType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['suggestions'] = $options['suggestions'];
+        $view->vars['component_options']['suggestions'] = $options['suggestions'];
+        $view->vars['component_options']['value'] = $view->vars['value'];
     }
 
     /**
