@@ -43,7 +43,7 @@ workflows:
                             options:
                                 grid_name: 'sales-funnel-lead-grid'
                                 configs:
-                                    extra_config: 'grid'
+                                    component: 'grid'
                                     grid:
                                         name: 'sales-funnel-lead-grid'
                                 required: true
@@ -98,7 +98,7 @@ workflows:
                             options:
                                 grid_name: 'sales-funnel-opportunity-grid'
                                 configs:
-                                    extra_config: 'grid'
+                                    component: 'grid'
                                     grid:
                                         name: 'sales-funnel-opportunity-grid'
                                 required: true
