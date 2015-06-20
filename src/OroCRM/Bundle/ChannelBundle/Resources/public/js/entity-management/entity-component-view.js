@@ -13,7 +13,7 @@ define(function (require) {
         formTemplate = require('text!./templates/form.html'),
         entitySelectResultTemplate = require('text!./templates/select2/result.html'),
         entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
-        select2Config = require('oroform/js/select2-config');
+        Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
@@ -123,45 +123,45 @@ define(function (require) {
          * @private
          */
         _initializeForm: function () {
-            var configurator = new select2Config({
-                placeholder:        __('orocrm.channel.form.entity'),
-                result_template:    entitySelectResultTemplate,
-                selection_template: entitySelectSelectionTemplate,
-                data: _.bind(function () {
-                    var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
-                        options = _.map(notSelected, function(entityMetadata) {
-                            return {
-                                id: entityMetadata.name,
-                                text: entityMetadata.label,
-                                icon: entityMetadata.icon,
-                                type: entityMetadata.type
-                            };
-                        }),
-                        optionGroups = _.groupBy(options, function(entityMetadata) {
-                            return entityMetadata.type;
-                        }),
-                        results = [];
+            var configs = {
+                    placeholder:        __('orocrm.channel.form.entity'),
+                    result_template:    entitySelectResultTemplate,
+                    selection_template: entitySelectSelectionTemplate,
+                    data: _.bind(function () {
+                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
+                            options = _.map(notSelected, function(entityMetadata) {
+                                return {
+                                    id: entityMetadata.name,
+                                    text: entityMetadata.label,
+                                    icon: entityMetadata.icon,
+                                    type: entityMetadata.type
+                                };
+                            }),
+                            optionGroups = _.groupBy(options, function(entityMetadata) {
+                                return entityMetadata.type;
+                            }),
+                            results = [];
 
-                    _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
-                        results.push({
-                            text: __('orocrm.channel.entity_owner.' + groupName),
-                            icon: null,
-                            children: optionGroups[groupName]
+                        _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
+                            results.push({
+                                text: __('orocrm.channel.entity_owner.' + groupName),
+                                icon: null,
+                                children: optionGroups[groupName]
+                            });
                         });
-                    });
 
-                    return {results: results};
-                }, this)
-            });
-
-            this.$formContainer
-                .find('[data-purpose="entity-selector"]')
-                    .select2(configurator.getConfig())
-                    .trigger('select2-init')
-                .end()
-                .itemsManagerEditor({
-                    collection: this.collection
+                        return {results: results};
+                    }, this)
+                },
+                $el = this.$formContainer.find('[data-purpose="entity-selector"]'),
+                select2Component = new Select2Component({
+                    configs: configs,
+                    _sourceElement: $el
                 });
+            this.pageComponent('entity-selector', select2Component, $el);
+            this.$formContainer.itemsManagerEditor({
+                collection: this.collection
+            });
         },
 
         /**
