@@ -22,7 +22,7 @@ services:
         class:                                      %orocrm_account.type.account.class%
         arguments:
             - @router
-            - @oro_locale.formatter.name
+            - @oro_entity.entity_name_resolver
             - @oro_security.security_facade
         tags:
             - { name: form.type, alias: orocrm_account }
