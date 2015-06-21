@@ -12,7 +12,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -26,9 +26,9 @@ class AccountType extends AbstractType
     protected $router;
 
     /**
-     * @var NameFormatter
+     * @var EntityNameResolver
      */
-    protected $nameFormatter;
+    protected $entityNameResolver;
 
     /**
      * @var SecurityFacade
@@ -42,15 +42,15 @@ class AccountType extends AbstractType
 
     /**
      * @param Router $router
-     * @param NameFormatter $nameFormatter
+     * @param EntityNameResolver $entityNameResolver
      * @param SecurityFacade $securityFacade
      */
-    public function __construct(Router $router, NameFormatter $nameFormatter, SecurityFacade $securityFacade)
+    public function __construct(Router $router, EntityNameResolver $entityNameResolver, SecurityFacade $securityFacade)
     {
-        $this->nameFormatter  = $nameFormatter;
-        $this->router         = $router;
-        $this->securityFacade = $securityFacade;
-        $this->canViewContact = $this->securityFacade->isGranted('orocrm_contact_view');
+        $this->entityNameResolver = $entityNameResolver;
+        $this->router             = $router;
+        $this->securityFacade     = $securityFacade;
+        $this->canViewContact     = $this->securityFacade->isGranted('orocrm_contact_view');
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
@@ -133,7 +133,7 @@ class AccountType extends AbstractType
                 $primaryEmail = $contact->getPrimaryEmail();
                 $result[] = array(
                     'id' => $contact->getId(),
-                    'label' => $this->nameFormatter->format($contact),
+                    'label' => $this->entityNameResolver->getName($contact),
                     'link' => $this->router->generate('orocrm_contact_info', array('id' => $contact->getId())),
                     'extraData' => array(
                         array('label' => 'Phone', 'value' => $primaryPhone ? $primaryPhone->getPhone() : null),

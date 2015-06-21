@@ -18,7 +18,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
      */
     public function init($havePrivilege = true)
     {
-        $nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
+        $entityNameResolver = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -35,7 +35,7 @@ class AccountApiTypeTest extends \PHPUnit_Framework_TestCase
             ->with('orocrm_contact_view')
             ->will($this->returnValue($havePrivilege));
 
-        $this->type = new AccountApiType($router, $nameFormatter, $securityFacade);
+        $this->type = new AccountApiType($router, $entityNameResolver, $securityFacade);
     }
 
     public function testSetDefaultOptions()
