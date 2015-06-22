@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\ChannelBundle\Migrations\Data\ORM\AbstractDefaultChannelDataFixture;
 
 /**
@@ -59,14 +60,13 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
             if ($row['lifetime'] == $row['oldLifetime']) {
                 continue;
             }
-            $customerId = $row['customerId'];
-            $lifetime = $row['lifetime'] ?: 0;
-            $this->updateCustomerLifetimeValue($customerId, $lifetime);
+            $this->updateCustomerLifetimeValue($row['customerId'], $row['lifetime']);
             if (!isset($channels[$row['dataChannelId']])) {
                 $channels[$row['dataChannelId']] = $row['dataChannelId'];
             }
         }
         foreach ($channels as $channelId) {
+            /** @var Channel $channel */
             $channel = $manager->getReference('OroCRMChannelBundle:Channel', $channelId);
             $this->updateLifetimeForAccounts($channel);
         }
@@ -88,7 +88,7 @@ class UpdateCustomerLifetimeForCanceledOrders extends AbstractDefaultChannelData
         $qb->getQuery()->execute();
     }
 
-    /*
+    /**
      * @param QueryBuilder $qb
      * @param string       $orderStatus
      */
