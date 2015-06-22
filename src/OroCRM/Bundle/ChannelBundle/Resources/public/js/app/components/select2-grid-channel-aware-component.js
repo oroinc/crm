@@ -17,8 +17,8 @@ define(function (require) {
             var that = this,
                 $channel = $('select[name="' + this.channelFieldName + '"]');
 
-            config.ajax.data = _.wrap(config.ajax.data, function (parentDataFunction, query, page) {
-                var result = parentDataFunction.call(this, query, page),
+            config.ajax.data = _.wrap(config.ajax.data, function (parentDataFunction) {
+                var result = parentDataFunction.apply(this, _.rest(arguments)),
                     channelIds = [$channel.val()];
                 if (that.channelId) {
                     channelIds.push(that.channelId);
