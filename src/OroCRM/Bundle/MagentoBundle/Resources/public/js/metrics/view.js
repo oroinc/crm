@@ -40,6 +40,7 @@ define([
             this._initializeFilter(this.items);
             this._initializeItemGrid(this.items);
             this._toggleButtons();
+            this._fixScrollableContent();
         },
 
         _initializeItems: function (metricsData, baseName) {
@@ -106,6 +107,10 @@ define([
                 var value = $target.is(':checkbox') ? $target.is(':checked') : $target.val();
                 item.set($target.data('name'), value);
             });
+        },
+
+        _fixScrollableContent: function () {
+            this.$('.scrollable-container').css('overflow-y', 'scroll');
         },
 
         _onAddClick: function () {
