@@ -39,7 +39,6 @@ define([
 
             this._initializeFilter(this.items);
             this._initializeItemGrid(this.items);
-            this._fixConfigurationWindow();
             this._toggleButtons();
         },
 
@@ -107,29 +106,6 @@ define([
                 var value = $target.is(':checkbox') ? $target.is(':checked') : $target.val();
                 item.set($target.data('name'), value);
             });
-        },
-
-        _fixConfigurationWindow: function () {
-            var $scrollable = this.$('.scrollable-container');
-            var $widgetContent = this.$el.closest('.widget-content');
-            var $widget = this.$el.closest('.ui-widget');
-
-            var optimumEnlargement = $scrollable.prop('scrollHeight') - $scrollable.height();
-            var allowedEnlargement = $(window).outerHeight() - $widget.outerHeight();
-
-            var enlargement = Math.min(optimumEnlargement, allowedEnlargement);
-            if (!enlargement) {
-                return;
-            }
-
-            $widgetContent.height($widgetContent.height() + enlargement);
-            $widget.on('dialogresize dialogmaximize dialogrestore', _.bind(function () {
-                var borderHeight = parseInt(this.$('table.scrollable').css('border-bottom-width'));
-                var $scrollableChild = this.$('table.scrollable .scrollable-container');
-                $scrollableChild.height($scrollableChild.height() - borderHeight);
-            }, this));
-
-            this.$el.closest('div.widget-configuration').trigger('dialogresize');
         },
 
         _onAddClick: function () {
