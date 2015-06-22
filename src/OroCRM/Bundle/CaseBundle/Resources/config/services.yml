@@ -35,7 +35,7 @@ services:
         arguments:
             - @oro_security.security_facade
             - @router
-            - @oro_locale.formatter.name
+            - @oro_entity.entity_name_resolver
             - @oro_locale.formatter.date_time
             - @oro_attachment.manager
 
