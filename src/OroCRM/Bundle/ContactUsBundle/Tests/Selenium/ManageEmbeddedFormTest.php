@@ -38,7 +38,7 @@ class ManageEmbeddedFormTest extends Selenium2TestCase
             ->assertTitle($title . ' - Embedded Forms - Integrations - System')
             ->checkPreview()
             ->toGrid()
-            ->assertTitle('Embedded Forms - Integrations - System');
+            ->assertTitle('All - Embedded Forms - Integrations - System');
 
         return $title;
     }

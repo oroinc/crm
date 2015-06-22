@@ -81,4 +81,39 @@ class CustomerStrategy extends AbstractImportStrategy
             }
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function findExistingEntity($entity, array $searchContext = [])
+    {
+        if ($entity instanceof Customer) {
+            /** @var Customer $existingEntity */
+            $existingEntity = parent::findExistingEntity($entity, $searchContext);
+
+            if (!$existingEntity) {
+                $existingEntity = $this->databaseHelper->findOneBy(
+                    'OroCRM\Bundle\MagentoBundle\Entity\Customer',
+                    [
+                        'email' => $entity->getEmail(),
+                        'channel' => $entity->getChannel()
+                    ]
+                );
+                if ($existingEntity && $existingEntity->getId()) {
+                    if ($existingEntity->isGuest()) {
+                        $existingEntity->setGuest(false);
+                        $existingEntity->setIsActive(true);
+                    }
+                    if ($entity->getOriginId()) {
+                        $existingEntity->setOriginId($entity->getOriginId());
+                    }
+                }
+            }
+        } else {
+            /** @var Customer $existingEntity */
+            $existingEntity = parent::findExistingEntity($entity, $searchContext);
+        }
+
+        return $existingEntity;
+    }
 }

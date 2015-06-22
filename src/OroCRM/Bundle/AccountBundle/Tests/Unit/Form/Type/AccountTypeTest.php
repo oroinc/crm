@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Unit\Form\Type;
 
 use Doctrine\Common\Collections\ArrayCollection;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -19,7 +18,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $nameFormatter;
+    protected $entityNameResolver;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -31,7 +30,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\Router')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Formatter\NameFormatter')
+        $this->entityNameResolver = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityNameResolver')
             ->disableOriginalConstructor()
             ->getMock();
         $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
@@ -67,7 +66,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
 
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $type->buildForm($builder, []);
     }
 
@@ -91,7 +90,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
 
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $type->buildForm($builder, []);
     }
 
@@ -103,13 +102,13 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setDefaults')
             ->with($this->isType('array'));
 
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $type->setDefaultOptions($resolver);
     }
 
     public function testGetName()
     {
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $this->assertEquals('orocrm_account', $type->getName());
     }
 
@@ -155,8 +154,8 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($email));
         $contacts = new ArrayCollection(array($contact));
 
-        $this->nameFormatter->expects($this->once())
-            ->method('format')
+        $this->entityNameResolver->expects($this->once())
+            ->method('getName')
             ->with($contact)
             ->will($this->returnValue('John Doe'));
 
@@ -183,7 +182,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $contactsFormView = new FormView($formView);
         $formView->children['contacts'] = $contactsFormView;
 
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $type->finishView($formView, $form, array());
 
         $this->assertEquals($contactsFormView->vars['grid_url'], '/test-path/100');
@@ -214,7 +213,7 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $formView = new FormView();
-        $type = new AccountType($this->router, $this->nameFormatter, $this->securityFacade);
+        $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
         $type->finishView($formView, $form, array());
 
         $this->assertTrue(empty($formView->children['contacts']));

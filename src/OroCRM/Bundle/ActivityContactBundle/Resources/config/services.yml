@@ -1,0 +1,53 @@
+parameters:
+    orocrm_activiy_contact.listener.activity_contact_migration.class: OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityContactMigrationListener
+    orocrm_activity_contact.entity_config_dumper.extension.class:     OroCRM\Bundle\ActivityContactBundle\Tools\ActivityContactConfigDumperExtension
+    orocrm_activity_contact.provider.class:                           OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
+    orocrm_activity_contact.listener.activity_listener.class:         OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener
+    orocrm_activity_contact.email_activity_direction.provider.class:  OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
+    orocrm_activity_contact.call_activity_direction.provider.class:   OroCRM\Bundle\ActivityContactBundle\Provider\CallDirectionProvider
+    orocrm_activity_contact.entity_activity_contact_data_provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider
+
+services:
+    orocrm_activiy_contact.listener.activity_contact_migration:
+        class: %orocrm_activiy_contact.listener.activity_contact_migration.class%
+        arguments:
+            - @oro_entity_extend.migration.entity_metadata_helper
+            - @orocrm_activity_contact.provider
+        tags:
+            - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: -100 }
+
+    orocrm_activity_contact.entity_config_dumper.extension:
+        class: %orocrm_activity_contact.entity_config_dumper.extension.class%
+        arguments:
+            - @oro_entity_config.config_manager
+            - @orocrm_activity_contact.provider
+        tags:
+            - { name: oro_entity_extend.entity_config_dumper_extension }
+
+    orocrm_activity_contact.provider:
+        class: %orocrm_activity_contact.provider.class%
+
+    orocrm_activity_contact.listener.activity_listener:
+        class: %orocrm_activity_contact.listener.activity_listener.class%
+        arguments:
+            - @orocrm_activity_contact.provider
+            - @oro_entity.doctrine_helper
+        tags:
+            - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
+            - { name: doctrine.event_listener, event: onFlush }
+            - { name: doctrine.event_listener, event: postFlush }
+
+    orocrm_activity_contact.email_activity_direction.provider:
+        class: %orocrm_activity_contact.email_activity_direction.provider.class%
+        tags:
+           - {name: orocrm_activity_direction.provider}
+
+    orocrm_activity_contact.call_activity_direction.provider:
+        class: %orocrm_activity_contact.call_activity_direction.provider.class%
+        tags:
+           - {name: orocrm_activity_direction.provider}
+
+    orocrm_activity_contact.entity_activity_contact_data_provider:
+        class: %orocrm_activity_contact.entity_activity_contact_data_provider.class%
+        arguments:
+            - @oro_entity_config.config_manager

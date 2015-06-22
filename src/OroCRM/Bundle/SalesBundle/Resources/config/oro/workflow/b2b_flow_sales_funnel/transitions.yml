@@ -18,7 +18,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
-                            form_type: oro_user_select
+                            form_type: oro_user_organization_acl_select
                             options:
                                 required: true
                                 constraints:
@@ -43,7 +43,7 @@ workflows:
                             options:
                                 grid_name: 'sales-funnel-lead-grid'
                                 configs:
-                                    extra_config: 'grid'
+                                    component: 'grid'
                                     grid:
                                         name: 'sales-funnel-lead-grid'
                                 required: true
@@ -73,7 +73,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         sales_funnel_owner:
-                            form_type: oro_user_select
+                            form_type: oro_user_organization_acl_select
                             options:
                                 required: true
                                 constraints:
@@ -98,7 +98,7 @@ workflows:
                             options:
                                 grid_name: 'sales-funnel-opportunity-grid'
                                 configs:
-                                    extra_config: 'grid'
+                                    component: 'grid'
                                     grid:
                                         name: 'sales-funnel-opportunity-grid'
                                 required: true

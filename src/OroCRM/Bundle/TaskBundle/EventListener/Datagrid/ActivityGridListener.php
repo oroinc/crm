@@ -34,7 +34,7 @@ class ActivityGridListener
         $datasource = $datagrid->getDatasource();
         if ($datasource instanceof OrmDatasource) {
             $parameters = $datagrid->getParameters();
-            $entityClass = $this->entityRoutingHelper->decodeClassName($parameters->get('entityClass'));
+            $entityClass = $this->entityRoutingHelper->resolveEntityClass($parameters->get('entityClass'));
             $entityId = $parameters->get('entityId');
 
             // apply activity filter

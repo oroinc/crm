@@ -331,6 +331,15 @@ abstract class AbstractPageableSoapIterator implements \Iterator, UpdatedLoaderI
     }
 
     /**
+     * @param array $response
+     * @return array
+     */
+    protected function convertResponseToMultiArray($response)
+    {
+        return WSIUtils::convertResponseToMultiArray($response);
+    }
+
+    /**
      * Add debug records about applied filters to logger
      *
      * @param BatchFilterBag $filterBag

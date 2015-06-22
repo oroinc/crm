@@ -151,15 +151,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
     /**
      * {@inheritdoc}
      */
-    protected function processForm($entity)
-    {
-        $this->fixRequest();
-        return parent::processForm($entity);
-    }
-
-    /**
-     */
-    protected function fixRequest()
+    protected function fixRequestAttributes($entity)
     {
         $formAlias = 'b2bcustomer';
         $customerData = $this->getRequest()->request->get($formAlias);
@@ -177,5 +169,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
             AddressApiUtils::fixAddress($customerData['billingAddress'], $this->get('doctrine.orm.entity_manager'));
             $this->getRequest()->request->set($formAlias, $customerData);
         }
+
+        parent::fixRequestAttributes($entity);
     }
 }

@@ -55,60 +55,6 @@
         changeHandler($channelSelector);
 {% endblock %}
 
-{% block oro_combobox_dataconfig_autocomplete_channel_aware %}
-    {{ block('oro_combobox_dataconfig_autocomplete') }}
-
-    var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
-        presetChannelId = {{ channel_id|json_encode|raw }},
-        getQueryString = function (searchString) {
-            return [searchString, presetChannelId || $channelSelector.val()].join(';');
-        }
-
-    select2Config.ajax.data = function (query, page) {
-        return {
-            page: page,
-            per_page: {{ configs.per_page|default(10)|json_encode|raw }},
-            name: {{ configs.autocomplete_alias|json_encode|raw }},
-            query: getQueryString(query)
-        };
-    };
-{% endblock %}
-
-{% block oro_combobox_dataconfig_grid_channel_aware %}
-    {{ block('oro_combobox_dataconfig_grid') }}
-
-    {% set perPage = configs.per_page|default(10) %}
-
-    var $channelSelector = $('select[name="' + {{ channel_field_name|json_encode|raw }} + '"]'),
-        presetChannelId = {{ channel_id|json_encode|raw }};
-
-    select2Config.ajax.data = function (query, page, searchById) {
-        var channelIds = [$channelSelector.val()];
-        if (presetChannelId) {
-            channelIds.push(presetChannelId);
-        }
-
-        if (searchById) {
-            return {
-                '{{ configs.grid.name }}[_pager][_page]': 1,
-                '{{ configs.grid.name }}[_pager][_per_page]': 1,
-                '{{ configs.grid.name }}[_filter][id][type]': 3,
-                '{{ configs.grid.name }}[_filter][id][value]': query,
-                '{{ configs.grid.name }}[channelIds]': channelIds.join(',')
-            };
-        } else {
-            return {
-                '{{ configs.grid.name }}[_pager][_page]': page,
-                '{{ configs.grid.name }}[_pager][_per_page]': {{ perPage }},
-                '{{ configs.grid.name }}[_sort_by][{{ configs.grid.sort_by|default(configs.properties[0]) }}]': "{{ configs.grid.sort_order|default('ASC') }}",
-                '{{ configs.grid.name }}[_filter][{{ configs.properties[0] }}][type]': 1,
-                '{{ configs.grid.name }}[_filter][{{ configs.properties[0] }}][value]': query,
-                '{{ configs.grid.name }}[channelIds]': channelIds.join(',')
-            };
-        }
-    };
-{% endblock %}
-
 {% block oro_entity_create_or_select_inline_js_autocomplete_channel_aware %}
     {{ block('oro_entity_create_or_select_inline_js_channel_aware') }}
 {% endblock %}

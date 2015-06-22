@@ -1,0 +1,4 @@
+orocrm_activity_contact:
+    resource: "@OroCRMActivityContactBundle/Controller"
+    type:     annotation
+    prefix:   /activity-contact
