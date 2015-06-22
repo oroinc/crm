@@ -26,7 +26,7 @@ class MetricsExtension extends Twig_Extension
     public function filterItems(array $items, array $config = null)
     {
         if (!isset($config['metrics'])) {
-            return [];
+            return $items;
         }
 
         $metrics = $this->getSortedMetrics($config);
