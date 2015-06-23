@@ -29,7 +29,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository")
  * @ORM\Table(
  *      name="orocrm_contact",
  *      indexes={
