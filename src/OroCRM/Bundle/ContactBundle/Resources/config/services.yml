@@ -28,6 +28,8 @@ parameters:
 
     orocrm_contact.provider.phone.contact.class:      OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider
 
+    orocrm_contact.listener.email_recipient_load.listener.class: OroCRM\Bundle\ContactBundle\EventListener\EmailRecipientsLoadListener
+
 services:
     orocrm_contact.form.contact:
         class: Symfony\Component\Form\Form
@@ -228,3 +230,11 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }
+
+    orocrm_contact.listener.email_recipient_load.listener:
+        class: %orocrm_contact.listener.email_recipient_load.listener.class%
+        arguments:
+            - @doctrine
+            - @translator
+        tags:
+            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad }
