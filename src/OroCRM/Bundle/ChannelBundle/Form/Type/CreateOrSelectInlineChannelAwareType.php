@@ -42,10 +42,11 @@ class CreateOrSelectInlineChannelAwareType extends AbstractChannelAwareType
     {
         parent::buildView($view, $form, $options);
 
-        $extraConfig = $options['configs']['extra_config'];
-        if ($extraConfig != 'channel_aware') {
-            $options['configs']['extra_config'] .= '_channel_aware';
+        if ($options['configs']['component'] != 'channel-aware') {
+            $options['configs']['component'] .= '-channel-aware';
         }
+        $view->vars['component_options']['channel_id'] = $view->vars['channel_id'];
+        $view->vars['component_options']['channel_field_name'] = $view->vars['channel_field_name'];
 
         $view->vars['channel_required'] = $options['channel_required'];
         $view->vars = array_replace_recursive($view->vars, ['configs' => $options['configs']]);
