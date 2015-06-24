@@ -237,4 +237,4 @@ services:
             - @doctrine
             - @translator
         tags:
-            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad }
+            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -30 }

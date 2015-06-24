@@ -54,6 +54,7 @@ parameters:
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
     orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_magento.event_listener.event_recipients_load.class:              OroCRM\Bundle\MagentoBundle\EventListener\EmailRecipientsLoadListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -260,6 +261,15 @@ services:
         lazy: true
 
     # event listeners
+    orocrm_magento.event_listener.event_recipients_load:
+        class: %orocrm_magento.event_listener.event_recipients_load.class%
+        arguments:
+            - @doctrine
+            - @oro_email.related_emails.provider
+            - @translator
+        tags:
+            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -10 }
+
     orocrm_magento.event_listener.customer_currency:
         class: %orocrm_magento.event_listener.customer_currency.class%
         calls:
