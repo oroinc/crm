@@ -7,6 +7,8 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
+use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 
 class EmailRecipientsLoadListener
@@ -14,16 +16,21 @@ class EmailRecipientsLoadListener
     /** @var Registry */
     protected $registry;
 
+    /** @var AclHelper */
+    protected $aclHelper;
+
     /** @var TranslatorInterface */
     protected $translator;
 
     /**
      * @param Registry $registry
+     * @param AclHelper $aclHelper
      * @param TranslatorInterface $translator
      */
-    public function __construct(Registry $registry, TranslatorInterface $translator)
+    public function __construct(Registry $registry, AclHelper $aclHelper, TranslatorInterface $translator)
     {
         $this->registry = $registry;
+        $this->aclHelper = $aclHelper;
         $this->translator = $translator;
     }
 
@@ -39,7 +46,9 @@ class EmailRecipientsLoadListener
             return;
         }
 
-        $contactEmails = $this->getContactRepository()->getEmails($event->getEmails(), $query, $limit);
+        $contactEmails = $this->getContactRepository()
+            ->getEmails($this->aclHelper, $event->getEmails(), $query, $limit);
+
         if (!$contactEmails) {
             return;
         }
