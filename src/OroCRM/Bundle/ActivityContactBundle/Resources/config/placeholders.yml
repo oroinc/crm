@@ -1,7 +1,8 @@
 placeholders:
-    oro_activity_list_before:
+    page_header_stats_after:
         items:
-            orocrm_activity_contact: ~
+            orocrm_activity_contact:
+                order: 10
 
 items:
     orocrm_activity_contact:
