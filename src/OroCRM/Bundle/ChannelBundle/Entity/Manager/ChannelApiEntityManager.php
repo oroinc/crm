@@ -16,7 +16,7 @@ class ChannelApiEntityManager extends ApiEntityManager
                 'dataSource' => ['fields' => 'id'],
                 'entities'   => ['fields' => 'name'],
                 'status'     => [
-                    'data_transformer' => 'orocrm_channel.channel_status_transformer'
+                    'result_name' => 'active'
                 ],
             ]
         ];

@@ -147,10 +147,6 @@ services:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager
 
-    # Channel status transformer
-    orocrm_channel.channel_status_transformer:
-        class: OroCRM\Bundle\ChannelBundle\Form\DataTransformer\ChannelStatusApiTransformer
-
     # Providers
     orocrm_channel.provider.settings_provider:
         class: %orocrm_channel.provider.settings_provider.class%
