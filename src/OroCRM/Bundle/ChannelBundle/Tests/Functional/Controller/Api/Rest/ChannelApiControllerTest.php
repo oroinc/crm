@@ -13,7 +13,7 @@ class ChannelApiControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
-        $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller\DataFixtures\LoadChannelData']);
+        $this->loadFixtures(['OroCRM\Bundle\ChannelBundle\Tests\Functional\Fixture\LoadChannel']);
     }
 
     public function testCget()
@@ -24,6 +24,6 @@ class ChannelApiControllerTest extends WebTestCase
         $channels = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertNotEmpty($channels);
-        $this->assertCount(3, $channels);
+        $this->assertCount(1, $channels);
     }
 }
