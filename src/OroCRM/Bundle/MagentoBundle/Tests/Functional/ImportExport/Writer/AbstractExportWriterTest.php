@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Writer;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 
+use Doctrine\ORM\EntityManager;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface;
 
@@ -30,6 +31,9 @@ abstract class AbstractExportWriterTest extends WebTestCase
     protected function tearDown()
     {
         $this->dropBatchJobs();
+        $this->closeConnections();
+
+        parent::tearDown();
     }
 
     protected function dropBatchJobs()
@@ -41,6 +45,14 @@ abstract class AbstractExportWriterTest extends WebTestCase
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
 
         unset($this->transport);
+    }
+
+    protected function closeConnections()
+    {
+        $entityManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
+        $entityManager
+            ->getConnection()
+            ->close();
     }
 
     /**
