@@ -39,7 +39,10 @@ class EmailRecipientsLoadListener
             return;
         }
 
-        $contactEmails = $this->getContactRepository()->getEmails($query, $limit);
+        $contactEmails = $this->getContactRepository()->getEmails($event->getEmails(), $query, $limit);
+        if (!$contactEmails) {
+            return;
+        }
 
         $event->setResults(array_merge(
             $event->getResults(),

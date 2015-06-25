@@ -55,19 +55,23 @@ class EmailRecipientsLoadListener
             $emails = array_merge($emails, $this->relatedEmailsProvider->getEmails($customer, 2));
         }
 
-        $filteredEmails = array_filter($emails, function ($email) use ($query) {
-            return stripos($email, $query) !== false;
+        $excludedEmails = $event->getEmails();
+        $filteredEmails = array_filter($emails, function ($email) use ($query, $excludedEmails) {
+            return !in_array($email, $excludedEmails) && stripos($email, $query) !== false;
         });
+        if (!$filteredEmails) {
+            return;
+        }
 
         $id = $this->translator->trans('oro.email.autocomplete.contexts');
         $resultsId = null;
         $results = $event->getResults();
         foreach ($results as $recordId => $record) {
-             if ($record['text'] === $id) {
-                 $resultsId = $recordId;
+            if ($record['text'] === $id) {
+                $resultsId = $recordId;
 
-                 break;
-             }
+                break;
+            }
         }
 
         $children = $this->createResultFromEmails(array_splice($filteredEmails, 0, $limit));

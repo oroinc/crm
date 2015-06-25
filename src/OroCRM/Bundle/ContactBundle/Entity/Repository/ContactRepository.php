@@ -7,15 +7,16 @@ use Doctrine\ORM\EntityRepository;
 class ContactRepository extends EntityRepository
 {
     /**
+     * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
      *
      * @return array
      */
-    public function getEmails($query = null, $limit = 100)
+    public function getEmails(array $excludedEmails = [], $query = null, $limit = 100)
     {
-        $primaryEmails = $this->getPrimaryEmails($query, $limit);
-        $secondaryEmails = $this->getSecondaryEmails($query, $limit - count($primaryEmails));
+        $primaryEmails = $this->getPrimaryEmails($excludedEmails, $query, $limit);
+        $secondaryEmails = $this->getSecondaryEmails($excludedEmails, $query, $limit - count($primaryEmails));
 
         $emailResults = array_merge($primaryEmails, $secondaryEmails);
 
@@ -28,12 +29,13 @@ class ContactRepository extends EntityRepository
     }
 
     /**
+     * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
      *
      * @return array
      */
-    protected function getPrimaryEmails($query = null, $limit = 100)
+    protected function getPrimaryEmails(array $excludedEmails = [], $query = null, $limit = 100)
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -54,16 +56,23 @@ class ContactRepository extends EntityRepository
                 ->setParameter('query', sprintf('%%%s%%', $query));
         }
 
+        if ($excludedEmails) {
+            $qb
+                ->andWhere($qb->expr()->notIn('c.email', ':excluded_emails'))
+                ->setParameter('excluded_emails', $excludedEmails);
+        }
+
         return $qb->getQuery()->getResult();
     }
 
     /**
+     * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
      *
      * @return array
      */
-    protected function getSecondaryEmails($query = null, $limit = 100)
+    protected function getSecondaryEmails(array $excludedEmails = [], $query = null, $limit = 100)
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -81,6 +90,12 @@ class ContactRepository extends EntityRepository
                     $qb->expr()->like('e.email', ':query')
                 ))
                 ->setParameter('query', sprintf('%%%s%%', $query));
+        }
+
+        if ($excludedEmails) {
+            $qb
+                ->andWhere($qb->expr()->notIn('e.email', ':excluded_emails'))
+                ->setParameter('excluded_emails', $excludedEmails);
         }
 
         return $qb->getQuery()->getResult();
