@@ -1,6 +1,6 @@
 {% set entityClassName = oro_class_name(entity, true) %}
 
-<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="widget-content title activity-contact-info-title">
+<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="activity-contact-info-title">
     {{ _self.last_contacted_time(data) }}
 </div>
 
@@ -56,12 +56,20 @@
             ~ ( data[last_contact_date_in_key] >= data[last_contact_date_out_key] ? 'in' : 'out' )
             ~ '"></i>'
         %}
-        {{ 'orocrm.activity_contact.info_title'|trans({
-            '{{ total_contacted }}': data[contact_count_key]|default(0),
+    <ul class="inline">
+        <li>
+        {{ 'orocrm.activity_contact.info_title_times'|trans({
+            '{{ total_contacted }}': data[contact_count_key]|default(0)
+        })|raw }}
+        </li>
+        <li style="padding-right:0">
+        {{ 'orocrm.activity_contact.info_title_last'|trans({
             '{{ direction }}': direction,
             '{{ last_datetime }}': last_datetime
         })|raw }}
+        </li>
+    </ul>
     {% else %}
-        {{ 'orocrm.activity_contact.info_no_data_title'|trans }}
+        {{ 'orocrm.activity_contact.info_title_no_data'|trans }}
     {% endif %}
 {% endmacro %}
