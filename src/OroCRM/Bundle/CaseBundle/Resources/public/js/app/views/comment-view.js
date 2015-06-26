@@ -2,7 +2,7 @@
 define([
     'oronote/js/app/views/note-view',
     'autolinker'
-], function (NoteView, autolinker) {
+], function(NoteView, autolinker) {
     'use strict';
 
     var CommentView;
@@ -12,14 +12,14 @@ define([
          * Returns class name for root element
          * @returns {string}
          */
-        className: function () {
+        className: function() {
             return 'list-item' + (this.model.get('public') ? '' : ' private');
         },
 
         /**
          * @return {Object}
          */
-        getTemplateData: function () {
+        getTemplateData: function() {
             var data = this.model.toJSON();
 
             data.collapsed = this.collapsed;

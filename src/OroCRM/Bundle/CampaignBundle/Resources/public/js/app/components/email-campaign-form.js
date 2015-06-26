@@ -1,13 +1,13 @@
 /*jslint nomen: true*/
 /*global define*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var _ = require('underscore'),
         $ = require('jquery'),
         mediator = require('oroui/js/mediator');
 
-    return function (options) {
+    return function(options) {
         var $schedule = options._sourceElement.find(options.scheduleEl),
             $scheduledFor = options._sourceElement.find(options.scheduledForEl),
             $transportEl = options._sourceElement.find(options.transportEl),
@@ -31,7 +31,7 @@ define(function (require) {
             }
         });
 
-        $schedule.on('change', function () {
+        $schedule.on('change', function() {
             if (_.contains(hideOn, $(this).val())) {
                 $scheduledFor.addClass('hide');
                 $scheduledFor.find('input').each(function() {

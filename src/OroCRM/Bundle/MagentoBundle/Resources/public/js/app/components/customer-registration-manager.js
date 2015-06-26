@@ -1,15 +1,15 @@
 /*jslint nomen: true*/
 /*global define*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
-    return function (options) {
+    return function(options) {
         var $ = require('jquery'),
             __ = require('orotranslation/js/translator'),
             mediator = require('oroui/js/mediator'),
             messenger = require('oroui/js/messenger');
 
-        $('.customer-registration').click(function (e) {
+        $('.customer-registration').click(function(e) {
             e.preventDefault();
 
             var url = $(this).data('url');
@@ -18,7 +18,7 @@ define(function (require) {
 
             $.ajax(url, {
                 method: 'POST',
-                success: function (response) {
+                success: function(response) {
                     if (response.successful) {
                         messenger.notificationMessage('success', __('orocrm.magento.customer_registration.success'));
                         mediator.execute('refreshPage');
@@ -27,11 +27,11 @@ define(function (require) {
                         console.warn(response.error);
                     }
                 },
-                error: function () {
+                error: function() {
                     messenger.notificationMessage('error', __('oro.integration.error'));
                 },
                 dataType: 'json'
-            }).always(function () {
+            }).always(function() {
                 mediator.execute('hideLoading');
             });
         });

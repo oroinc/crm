@@ -7,7 +7,7 @@ define([
     'orotranslation/js/translator',
     'oroui/js/mediator',
     'oroui/js/messenger'
-], function ($, _, routing, Backbone, __, mediator, messenger) {
+], function($, _, routing, Backbone, __, mediator, messenger) {
     "use strict";
 
     return Backbone.View.extend({
@@ -44,12 +44,12 @@ define([
             '</div>'
         ),
 
-        initialize: function  (options) {
+        initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             this.id = options.transportEntityId || null;
             this.url = this.getUrl();
 
-            var requiredMissed = this.requiredOptions.filter(function (option) {
+            var requiredMissed = this.requiredOptions.filter(function(option) {
                 return _.isUndefined(options[option]);
             });
             if (requiredMissed.length) {
@@ -57,7 +57,7 @@ define([
             }
         },
 
-        getUrl: function (type) {
+        getUrl: function(type) {
             var params = {id: this.id};
             if (type !== undefined) {
                 params.type = type;
@@ -69,25 +69,25 @@ define([
         /**
          * Click handler
          */
-        processClick: function () {
+        processClick: function() {
             var data = this.$el.parents('form').serializeArray();
-            var typeData = _.filter(data, function (field) {
+            var typeData = _.filter(data, function(field) {
                 return field.name.indexOf('[type]') !== -1;
             });
             if (typeData.length) {
                 typeData = typeData[0].value;
             }
 
-            data = _.filter(data, function (field) {
+            data = _.filter(data, function(field) {
                 return field.name.indexOf('[transport]') !== -1;
             });
-            data = _.map(data, function (field) {
+            data = _.map(data, function(field) {
                 field.name = field.name.replace(/.+\[(.+)\]$/, 'soap-check[$1]');
                 return field;
             });
             mediator.execute('showLoading');
             $.post(this.getUrl(typeData), data, _.bind(this.responseHandler, this), 'json')
-                .always(_.bind(function (response, status) {
+                .always(_.bind(function(response, status) {
                     mediator.execute('hideLoading');
                     if (status !== 'success') {
                         this.renderResult('error', __('orocrm.magento.error'));
@@ -100,7 +100,7 @@ define([
          *
          * @param res {object}
          */
-        responseHandler: function (res) {
+        responseHandler: function(res) {
             if (res.success || false) {
                 this.handleWebsites(res);
                 this.handleIsExtensionInstalled(res);
@@ -118,12 +118,12 @@ define([
         /**
          * @param {Object} res
          */
-        renderSuccessMessage: function (res) {
+        renderSuccessMessage: function(res) {
             if (res.isExtensionInstalled || false) {
                 if (res.isSupportedVersion || false) {
                     this.renderResult('success', __(
                         'orocrm.magento.success_bridge',
-                        { extension_version: res.extensionVersion }
+                        {extension_version: res.extensionVersion}
                     ));
                 } else {
                     this.renderResult(
@@ -142,7 +142,7 @@ define([
             }
         },
 
-        renderErrorMessage: function () {
+        renderErrorMessage: function() {
             this.renderResult('error', __('orocrm.magento.not_valid_parameters'));
         },
 
@@ -152,14 +152,14 @@ define([
          *
          * @param {Object} res
          */
-        handleWebsites: function (res) {
+        handleWebsites: function(res) {
             if (this.options.websitesModificationAllowed !== false && res.websites) {
                 var $listEl = $(this.options.websitesListEl),
                     $websiteSelectEl = $(this.options.websiteSelectEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
-                _.each(res.websites, function (website) {
+                _.each(res.websites, function(website) {
                     $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
@@ -228,7 +228,7 @@ define([
          * @param type string
          * @param message string
          */
-        renderResult: function (type, message) {
+        renderResult: function(type, message) {
             var container = this.$el.parent();
             container.find('.alert').remove();
             messenger.notificationMessage(type, message, {container: container, template: this.resultTemplate});

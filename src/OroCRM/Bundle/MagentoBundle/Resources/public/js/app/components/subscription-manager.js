@@ -1,9 +1,9 @@
 /*jslint nomen: true*/
 /*global define*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
-    return function (options) {
+    return function(options) {
         var $ = require('jquery'),
             __ = require('orotranslation/js/translator'),
             mediator = require('oroui/js/mediator'),
@@ -11,7 +11,7 @@ define(function (require) {
             currentState = options.currentState,
             subscribedId = options.subscribedId;
 
-        var handleButtonsState = function (state) {
+        var handleButtonsState = function(state) {
             $('.subscription').css('display', 'none');
 
             if (state == subscribedId) {
@@ -23,7 +23,7 @@ define(function (require) {
 
         handleButtonsState(currentState);
 
-        $('.subscription').click(function (e) {
+        $('.subscription').click(function(e) {
             e.preventDefault();
 
             var url = $(this).data('url');
@@ -31,7 +31,7 @@ define(function (require) {
             mediator.execute('showLoading');
 
             $.ajax(url, {
-                success: function (response) {
+                success: function(response) {
                     handleButtonsState(response.state);
 
                     if (response.successful) {
@@ -42,11 +42,11 @@ define(function (require) {
                         console.warn(response.error);
                     }
                 },
-                error: function () {
+                error: function() {
                     messenger.notificationMessage('error', __('oro.integration.error'));
                 },
                 dataType: 'json'
-            }).always(function () {
+            }).always(function() {
                 mediator.execute('hideLoading');
             });
         });

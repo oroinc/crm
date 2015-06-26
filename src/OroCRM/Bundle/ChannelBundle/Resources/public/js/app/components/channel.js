@@ -6,7 +6,7 @@ define([
     'oroui/js/delete-confirmation',
     '../../entity-management/entity-component-view',
     'jquery.select2'
-], function (_, __, $, mediator, DeleteConfirmation, EntityComponentView) {
+], function(_, __, $, mediator, DeleteConfirmation, EntityComponentView) {
     'use strict';
 
     /** @type {Object.<Backbone.Collection>} **/
@@ -27,7 +27,7 @@ define([
         var value = $storageEl.val();
         var entities = value ? JSON.parse(value) : [];
 
-        if(entities.length == 0) {
+        if (entities.length == 0) {
             return;
         }
 
@@ -79,16 +79,16 @@ define([
             var data,
                 event,
                 $form = $el.parents('form'),
-                elementNames = _.map(fields, function (elementIdentifier) {
+                elementNames = _.map(fields, function(elementIdentifier) {
                     return $(elementIdentifier).attr('name');
                 });
 
-            data = _.filter($form.serializeArray(), function (field) {
+            data = _.filter($form.serializeArray(), function(field) {
                 return _.indexOf(elementNames, field.name) !== -1;
             });
             data.push({name: UPDATE_MARKER, value: 1});
 
-            event = { formEl: $form, data: data, reloadManually: true };
+            event = {formEl: $form, data: data, reloadManually: true};
             mediator.trigger('channelFormReload:before', event);
 
             if (event.reloadManually) {
@@ -126,7 +126,7 @@ define([
      *
      * @param {Object} options
      */
-    return function (options) {
+    return function(options) {
 
         var lockedEntities = [];
 

@@ -1,6 +1,6 @@
 /*jslint nomen: true*/
 /*global define*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
     var $ = require('jquery'),
@@ -18,7 +18,7 @@ define(function (require) {
             '</tr>'
         );
 
-    return function (options) {
+    return function(options) {
         var $el = options._sourceElement,
             $enableEl = $el.find('#' + options.rfm_enable_id),
             $table = $el.find('.grid tbody'),
@@ -35,11 +35,11 @@ define(function (require) {
             };
         }
 
-        var getIndexInput = function ($row) {
+        var getIndexInput = function($row) {
             return $row.find('[name$="[category_index]"]');
         };
 
-        var getInputBy = function ($cell, isIncreasing) {
+        var getInputBy = function($cell, isIncreasing) {
             if (isIncreasing) {
                 return $cell.find('[name$="[max_value]"]');
             } else {
@@ -47,19 +47,19 @@ define(function (require) {
             }
         };
 
-        var getRfmCell = function ($row, type) {
+        var getRfmCell = function($row, type) {
             return $row.find('.rfm-cell-' + type);
         };
 
-        var getInvisibleInput = function ($row, type) {
+        var getInvisibleInput = function($row, type) {
             return getInputBy(getRfmCell($row, type), !rfmElements[type].isIncreasing);
         };
 
-        var getVisibleInput = function ($row, type) {
+        var getVisibleInput = function($row, type) {
             return getInputBy(getRfmCell($row, type), rfmElements[type].isIncreasing);
         };
 
-        var recalculateIdx = function () {
+        var recalculateIdx = function() {
             var rows = $table.find('tr'),
                 rowsNum = rows.length;
             for (var i = 0; i < rowsNum; i++) {
@@ -78,8 +78,8 @@ define(function (require) {
             }
         };
 
-        var setupChangeVal = function ($row, type) {
-            getVisibleInput($row, type).keyup(function () {
+        var setupChangeVal = function($row, type) {
+            getVisibleInput($row, type).keyup(function() {
                 var nextRow = $row.next(),
                     nextInput = getInvisibleInput(nextRow, type),
                     val = $(this).val();
@@ -90,7 +90,7 @@ define(function (require) {
             });
         };
 
-        var createSettingsRow = function (recency, frequency, monetary, append) {
+        var createSettingsRow = function(recency, frequency, monetary, append) {
             var $row = $(rowTemplate());
             $(recency).appendTo($row.find('.rfm-cell-recency'));
             $(frequency).appendTo($row.find('.rfm-cell-frequency'));
@@ -103,11 +103,11 @@ define(function (require) {
             return $row;
         };
 
-        var getPreparedTemplate = function (type) {
+        var getPreparedTemplate = function(type) {
             return rfmElements[type].template.replace(/__name__/g, rows);
         };
 
-        var addRow = function () {
+        var addRow = function() {
             var $newRow = createSettingsRow(
                 getPreparedTemplate('recency'),
                 getPreparedTemplate('frequency'),
@@ -126,7 +126,7 @@ define(function (require) {
             return $newRow;
         };
 
-        var decorateFirstRow = function (row) {
+        var decorateFirstRow = function(row) {
             var $row = $(row);
             $row.find('.action-delete').hide();
 
@@ -147,7 +147,7 @@ define(function (require) {
             rows++;
         };
 
-        var decorateRow = function (row) {
+        var decorateRow = function(row) {
             var $row = $(row);
 
             for (var i = 0; i < types.length; i++) {
@@ -156,8 +156,8 @@ define(function (require) {
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
-                    $('<span>' + __('orocrm.analytics.from') + '</span> <strong></strong>'
-                    + '<br><span>' + __('orocrm.analytics.to') + ' </span>').insertBefore($input);
+                    $('<span>' + __('orocrm.analytics.from') + '</span> <strong></strong>' +
+                    '<br><span>' + __('orocrm.analytics.to') + ' </span>').insertBefore($input);
                 } else {
                     $('<span>' + __('orocrm.analytics.from') + ' </span>').insertBefore($input);
                     $('<br><span> ' + __('orocrm.analytics.to') + '</span> <strong></strong>').insertAfter($input);
@@ -169,7 +169,7 @@ define(function (require) {
             rows++;
         };
 
-        var decorateLastRow = function (row) {
+        var decorateLastRow = function(row) {
             var $row = $(row);
             $row.find('.action-delete').hide();
 
@@ -187,7 +187,7 @@ define(function (require) {
             rows++;
         };
 
-        var adoptExistingRecords = function () {
+        var adoptExistingRecords = function() {
             var existingRRows = rfmElements['recency'].el.find('.rfm-settings-row'),
                 existingFRows = rfmElements['frequency'].el.find('.rfm-settings-row'),
                 existingMRows = rfmElements['monetary'].el.find('.rfm-settings-row'),
@@ -219,26 +219,26 @@ define(function (require) {
             refresh();
         };
 
-        var refresh = function () {
+        var refresh = function() {
             $el.find('input').trigger('keyup');
             recalculateIdx();
         };
 
-        $el.on('click', '.action-add', function () {
+        $el.on('click', '.action-add', function() {
             if ($enableEl.is(':checked')) {
                 decorateRow(addRow());
                 refresh();
             }
         });
 
-        $el.on('click', '.action-delete', function () {
+        $el.on('click', '.action-delete', function() {
             if ($enableEl.is(':checked')) {
                 $(this).closest('tr').remove();
                 refresh();
             }
         });
 
-        var enableHandler = function () {
+        var enableHandler = function() {
             if ($enableEl.is(':checked')) {
                 $el.addClass('rfm-enabled');
             } else {
@@ -251,7 +251,7 @@ define(function (require) {
         adoptExistingRecords();
         enableHandler();
 
-        var removeValidateInfo = function () {
+        var removeValidateInfo = function() {
             $el.find('.alert-error').hide();
             $el.find('.rfm-settings-data').find('.validation-error').removeClass('validation-error');
         };
