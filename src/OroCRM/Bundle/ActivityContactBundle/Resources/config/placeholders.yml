@@ -7,3 +7,4 @@ placeholders:
 items:
     orocrm_activity_contact:
         template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
+        applicable: @oro_activity_list.placeholder.filter->isApplicable($entity$)
