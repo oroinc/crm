@@ -71,7 +71,7 @@ class CampaignTest extends Selenium2TestCase
         /** @var Campaigns $login */
         $login->openCampaigns('OroCRM\Bundle\CampaignBundle')
             ->filterBy('Code', $campaignCode)
-            ->deleteEntity(array($campaignCode))
+            ->delete(array($campaignCode))
             ->assertMessage('Item deleted')
             ->assertTitle('All - Campaigns - Marketing');
 

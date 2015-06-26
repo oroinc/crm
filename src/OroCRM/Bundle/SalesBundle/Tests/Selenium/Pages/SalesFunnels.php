@@ -9,6 +9,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method SalesFunnels openSalesFunnels openSalesFunnels(string)
+ * @method Workflow open open()
  * {@inheritdoc}
  */
 class SalesFunnels extends AbstractPageFilteredGrid
@@ -17,10 +18,14 @@ class SalesFunnels extends AbstractPageFilteredGrid
 
     protected $gridPath = "//div[contains(@class,'grid-container')]";
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
+        return $this;
+    }
+
+    public function entityView()
+    {
+        return new Workflow($this->test);
     }
 
     public function startFromLead()
@@ -39,16 +44,5 @@ class SalesFunnels extends AbstractPageFilteredGrid
         $this->waitForAjax();
 
         return new SalesFunnel($this->test);
-    }
-
-    public function open($entityData = array())
-    {
-        $workflow = $this->getEntity($entityData);
-        $workflow->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
-        return new Workflow($this->test);
     }
 }

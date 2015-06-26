@@ -298,7 +298,7 @@ class WorkflowTest extends Selenium2TestCase
         /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
-            ->setAccountName($accountName)
+            ->setName($accountName)
             ->setOwner('admin')
             ->save();
 
