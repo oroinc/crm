@@ -6,7 +6,7 @@ use Symfony\Component\Routing\RouterInterface;
 
 use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 
-use Oro\Bundle\LocaleBundle\Formatter\NameFormatter;
+use Oro\Bundle\EntityBundle\Provider\EntityNameResolver;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -28,9 +28,9 @@ class ViewFactory
     protected $router;
 
     /**
-     * @var NameFormatter
+     * @var EntityNameResolver
      */
-    protected $nameFormatter;
+    protected $entityNameResolver;
 
     /**
      * @var DateTimeFormatter
@@ -50,20 +50,20 @@ class ViewFactory
     /**
      * @param SecurityFacade $securityFacade
      * @param RouterInterface $router
-     * @param NameFormatter $nameFormatter
+     * @param EntityNameResolver $entityNameResolver
      * @param DateTimeFormatter $dateTimeFormatter
      * @param AttachmentManager $attachmentManager
      */
     public function __construct(
         SecurityFacade $securityFacade,
         RouterInterface $router,
-        NameFormatter $nameFormatter,
+        EntityNameResolver $entityNameResolver,
         DateTimeFormatter $dateTimeFormatter,
         AttachmentManager $attachmentManager
     ) {
         $this->securityFacade = $securityFacade;
         $this->router = $router;
-        $this->nameFormatter = $nameFormatter;
+        $this->entityNameResolver = $entityNameResolver;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->attachmentManager = $attachmentManager;
     }
@@ -144,7 +144,7 @@ class ViewFactory
         return [
             'id' => $contact->getId(),
             'url' => $this->router->generate('orocrm_contact_view', array('id' => $contact->getId())),
-            'fullName' => $this->nameFormatter->format($contact),
+            'fullName' => $this->entityNameResolver->getName($contact),
             'avatar' => null,
             'permissions' => array(
                 'view' => $this->securityFacade->isGranted('VIEW', $contact)
@@ -161,7 +161,7 @@ class ViewFactory
         return [
             'id' => $user->getId(),
             'url' => $this->router->generate('oro_user_view', array('id' => $user->getId())),
-            'fullName' => $this->nameFormatter->format($user),
+            'fullName' => $this->entityNameResolver->getName($user),
             'avatar' => $user->getAvatar()
                 ? $this->attachmentManager->getFilteredImageUrl($user->getAvatar(), 'avatar_xsmall')
                 : null,
