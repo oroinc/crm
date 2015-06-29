@@ -46,7 +46,7 @@ class EmailRecipientsLoadListener
             return;
         }
 
-        $customers = $this->getCustomerRepository()->findByAccount($event->getRelatedEntity());
+        $customers = $this->getCustomerRepository()->findBy(['account' => $event->getRelatedEntity()]);
         $emails = [];
         foreach ($customers as $customer) {
             $emails = array_merge($emails, $this->relatedEmailsProvider->getEmails($customer, 2));
