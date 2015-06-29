@@ -237,5 +237,6 @@ services:
             - @doctrine
             - @oro_security.acl_helper
             - @translator
+            - @oro_email.provider.email_recipients.helper
         tags:
             - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -30 }
