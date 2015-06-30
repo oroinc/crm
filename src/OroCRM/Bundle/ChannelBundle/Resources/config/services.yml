@@ -22,7 +22,7 @@ parameters:
 
 
     # manager
-    orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_channel.manager.api.class:                                  OroCRM\Bundle\ChannelBundle\Entity\Manager\ChannelApiEntityManager
 
     # providers
     orocrm_channel.provider.settings_provider.class:                   OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
