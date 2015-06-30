@@ -8,6 +8,7 @@ use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
+use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 
@@ -25,22 +26,28 @@ class EmailRecipientsLoadListener
     /** @var EmailRecipientsHelper */
     protected $emailRecipientsHelper;
 
+    /** @var DQLNameFormatter */
+    protected $nameFormatter;
+
     /**
      * @param Registry $registry
      * @param AclHelper $aclHelper
      * @param TranslatorInterface $translator
      * @param EmailRecipientsHelper $emailRecipientsHelper
+     * @param DQLNameFormatter $nameFormatter
      */
     public function __construct(
         Registry $registry,
         AclHelper $aclHelper,
         TranslatorInterface $translator,
-        EmailRecipientsHelper $emailRecipientsHelper
+        EmailRecipientsHelper $emailRecipientsHelper,
+        DQLNameFormatter $nameFormatter
     ) {
         $this->registry = $registry;
         $this->aclHelper = $aclHelper;
         $this->translator = $translator;
         $this->emailRecipientsHelper = $emailRecipientsHelper;
+        $this->nameFormatter = $nameFormatter;
     }
 
     /**
@@ -55,8 +62,13 @@ class EmailRecipientsLoadListener
             return;
         }
 
+        $fullNameQueryPart = $this->nameFormatter->getFormattedNameDQL(
+            'c',
+            'OroCRM\Bundle\ContactBundle\Entity\Contact'
+        );
+
         $contactEmails = $this->getContactRepository()
-            ->getEmails($this->aclHelper, $event->getEmails(), $query, $limit);
+            ->getEmails($this->aclHelper, $fullNameQueryPart, $event->getEmails(), $query, $limit);
 
         if (!$contactEmails) {
             return;

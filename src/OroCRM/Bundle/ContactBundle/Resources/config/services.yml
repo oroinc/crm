@@ -238,5 +238,6 @@ services:
             - @oro_security.acl_helper
             - @translator
             - @oro_email.provider.email_recipients.helper
+            - @oro_locale.dql.formatter.name
         tags:
             - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -30 }

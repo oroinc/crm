@@ -10,20 +10,26 @@ class ContactRepository extends EntityRepository
 {
     /**
      * @param AclHelper $aclHelper
+     * @param string $fullNameQueryPart
      * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
      *
      * @return array
      */
-    public function getEmails(AclHelper $aclHelper, array $excludedEmails = [], $query = null, $limit = 100)
-    {
-        $primaryEmails = $this->getPrimaryEmails($aclHelper, $excludedEmails, $query, $limit);
+    public function getEmails(
+        AclHelper $aclHelper,
+        $fullNameQueryPart,
+        array $excludedEmails = [],
+        $query = null,
+        $limit = 100
+    ) {
+        $primaryEmails = $this->getPrimaryEmails($aclHelper, $fullNameQueryPart, $excludedEmails, $query, $limit);
 
         $excludedEmails = array_merge($excludedEmails, $primaryEmails);
         $limit -= count($primaryEmails);
 
-        $secondaryEmails = $this->getSecondaryEmails($aclHelper, $excludedEmails, $query, $limit);
+        $secondaryEmails = $this->getSecondaryEmails($aclHelper, $fullNameQueryPart, $excludedEmails, $query, $limit);
 
         $emailResults = array_merge($primaryEmails, $secondaryEmails);
 
@@ -37,20 +43,24 @@ class ContactRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
+     * @param string $fullNameQueryPart
      * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
      *
      * @return array
      */
-    protected function getPrimaryEmails(AclHelper $aclHelper, array $excludedEmails = [], $query = null, $limit = 100)
-    {
+    protected function getPrimaryEmails(
+        AclHelper $aclHelper,
+        $fullNameQueryPart,
+        array $excludedEmails = [],
+        $query = null,
+        $limit = 100
+    ) {
         $qb = $this->createQueryBuilder('c');
 
-        $fullName = $this->getFullNameQueryPart();
-
         $qb
-            ->select(sprintf('%s AS name', $fullName))
+            ->select(sprintf('%s AS name', $fullNameQueryPart))
             ->addSelect('c.email')
             ->andWhere('c.email IS NOT NULL')
             ->setMaxResults($limit);
@@ -58,7 +68,7 @@ class ContactRepository extends EntityRepository
         if ($query) {
             $qb
                 ->andWhere($qb->expr()->orX(
-                    $qb->expr()->like($fullName, ':query'),
+                    $qb->expr()->like($fullNameQueryPart, ':query'),
                     $qb->expr()->like('c.email', ':query')
                 ))
                 ->setParameter('query', sprintf('%%%s%%', $query));
@@ -75,6 +85,7 @@ class ContactRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
+     * @param string $fullNameQueryPart
      * @param array $excludedEmails
      * @param string|null $query
      * @param int $limit
@@ -83,15 +94,14 @@ class ContactRepository extends EntityRepository
      */
     protected function getSecondaryEmails(
         AclHelper $aclHelper,
+        $fullNameQueryPart,
         array $excludedEmails = [],
         $query = null,
         $limit = 100
     ) {
         $qb = $this->createQueryBuilder('c');
 
-        $fullName = $this->getFullNameQueryPart();
-
-        $qb->select(sprintf('%s AS name', $fullName))
+        $qb->select(sprintf('%s AS name', $fullNameQueryPart))
             ->addSelect('e.email')
             ->join('c.emails', 'e')
             ->setMaxResults($limit);
@@ -99,7 +109,7 @@ class ContactRepository extends EntityRepository
         if ($query) {
             $qb
                 ->andWhere($qb->expr()->orX(
-                    $qb->expr()->like($fullName, ':query'),
+                    $qb->expr()->like($fullNameQueryPart, ':query'),
                     $qb->expr()->like('e.email', ':query')
                 ))
                 ->setParameter('query', sprintf('%%%s%%', $query));
@@ -112,26 +122,5 @@ class ContactRepository extends EntityRepository
         }
 
         return $aclHelper->apply($qb)->getResult();
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFullNameQueryPart()
-    {
-        $fields = [
-            'namePrefix',
-            'nameSuffix',
-            'firstName',
-            'middleName',
-            'lastName',
-        ];
-
-        $alias = 'c';
-        $queryParts = array_map(function ($part) use ($alias) {
-            return sprintf('COALESCE(%s.%s, \' \')', $alias, $part);
-        }, $fields);
-
-        return sprintf('CONCAT(%s)', implode(', ', $queryParts));
     }
 }
