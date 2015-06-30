@@ -10,6 +10,7 @@ use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 
 class EmailRecipientsLoadListener

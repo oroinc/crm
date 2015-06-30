@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityRepository;
 use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 use Oro\Bundle\EmailBundle\Provider\RelatedEmailsProvider;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 class EmailRecipientsLoadListener

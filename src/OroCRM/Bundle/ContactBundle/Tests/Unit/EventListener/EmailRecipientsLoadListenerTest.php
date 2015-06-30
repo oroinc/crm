@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\EventListener;
 
 use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
+
 use OroCRM\Bundle\ContactBundle\EventListener\EmailRecipientsLoadListener;
 
 class EmailRecipientsLoadListenerTest extends \PHPUnit_Framework_TestCase
