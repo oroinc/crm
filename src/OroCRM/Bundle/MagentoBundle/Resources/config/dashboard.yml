@@ -127,6 +127,7 @@ oro_dashboard_config:
                     options:
                        label: false
                        required: false
+                       widget_name: big_numbers_widget
         revenue_over_time_chart:
             label:       orocrm.magento.dashboard.revenue_over_time_chart.title
             route:       orocrm_magento_dashboard_revenue_over_time_chart

@@ -11,8 +11,6 @@ use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 
 class MetricsFormSubscriber implements EventSubscriberInterface
 {
-    const WIDGET_NAME = 'big_numbers_widget';
-
     /** @var WidgetConfigs $manager */
     protected $widgetConfigs;
 
@@ -44,7 +42,8 @@ class MetricsFormSubscriber implements EventSubscriberInterface
      */
     public function preSet(FormEvent $event)
     {
-        $attributes = $this->widgetConfigs->getWidgetAttributesForTwig(static::WIDGET_NAME);
+        $widgetname = $event->getForm()->getConfig()->getOption('widget_name');
+        $attributes = $this->widgetConfigs->getWidgetAttributesForTwig($widgetname);
         $dataItems = $attributes['widgetDataItems'];
         $originalData = $this->getIndexedData($event->getData());
 
@@ -67,7 +66,7 @@ class MetricsFormSubscriber implements EventSubscriberInterface
             return $a['order'] - $b['order'];
         });
 
-        $event->setData(['metrics' => array_values($data)]);
+        $event->setData(['items' => array_values($data)]);
     }
 
     /**
@@ -83,7 +82,7 @@ class MetricsFormSubscriber implements EventSubscriberInterface
             return $result;
         }
 
-        foreach ($data['metrics'] as $item) {
+        foreach ($data['items'] as $item) {
             $result[$item['id']] = $item;
         }
 

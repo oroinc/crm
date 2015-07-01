@@ -25,13 +25,13 @@ class MetricsExtension extends Twig_Extension
      */
     public function filterItems(array $items, array $config = null)
     {
-        if (!isset($config['metrics'])) {
+        if (!isset($config['items'])) {
             return $items;
         }
 
-        $metrics = $this->getSortedMetrics($config);
+        $configItems = $this->getSortedConfigItems($config);
 
-        return $this->sortItemsByMetrics($items, $metrics);
+        return $this->sortItemsByConfigItems($items, $configItems);
     }
 
     /**
@@ -39,34 +39,34 @@ class MetricsExtension extends Twig_Extension
      *
      * @return array
      */
-    protected function getSortedMetrics(array $configuration)
+    protected function getSortedConfigItems(array $configuration)
     {
-        $metrics = [];
-        foreach ($configuration['metrics'] as $metric) {
-            if (!$metric['show']) {
+        $items = [];
+        foreach ($configuration['items'] as $item) {
+            if (!$item['show']) {
                 continue;
             }
 
-            $metrics[$metric['id']] = $metric;
+            $items[$item['id']] = $item;
         }
-        uasort($metrics, function ($a, $b) {
+        uasort($items, function ($a, $b) {
             return $a['order'] - $b['order'];
         });
         
-        return $metrics;
+        return $items;
     }
 
     /**
      * @param array $items
-     * @param array $sortedMetrics
+     * @param array $sortedConfigItems
      *
      * @return array
      */
-    protected function sortItemsByMetrics(array $items, array $sortedMetrics)
+    protected function sortItemsByConfigItems(array $items, array $sortedConfigItems)
     {
-        $result = array_intersect_key($items, $sortedMetrics);
+        $result = array_intersect_key($items, $sortedConfigItems);
 
-        $sortedKeys = array_flip(array_keys($sortedMetrics));
+        $sortedKeys = array_flip(array_keys($sortedConfigItems));
         uksort($result, function ($a, $b) use ($sortedKeys) {
             return $sortedKeys[$a] - $sortedKeys[$b];
         });
