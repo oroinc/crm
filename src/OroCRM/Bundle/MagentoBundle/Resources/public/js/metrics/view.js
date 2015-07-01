@@ -15,18 +15,21 @@ define([
      */
     return Backbone.View.extend({
         events: {
-            'change .metric-select': '_toggleButtons',
+            'change .item-select': '_toggleButtons',
             'click .add-button:not(.disabled)': '_onAddClick',
             'click .add-all-button:not(.disabled)': '_onAddAllClick',
         },
 
+        selectTplSelector: '#magento-big-numbers-metric-select-template',
+        itemTplSelector: '#magento-big-numbers-metric-template',
+
         requiredOptions: [
-            'metricsData',
+            'itemsData',
             'baseName',
         ],
 
         items: null,
-        metricSelect: null,
+        itemSelect: null,
 
         initialize: function (options) {
             _.each(this.requiredOptions, function (optionName) {
@@ -35,7 +38,7 @@ define([
                 }
             });
 
-            this.items = this._initializeItems(options.metricsData, options.baseName);
+            this.items = this._initializeItems(options.itemsData, options.baseName);
 
             this._initializeFilter(this.items);
             this._initializeItemGrid(this.items);
@@ -43,8 +46,8 @@ define([
             this._fixScrollableContent();
         },
 
-        _initializeItems: function (metricsData, baseName) {
-            var items = new ItemCollection(metricsData);
+        _initializeItems: function (itemsData, baseName) {
+            var items = new ItemCollection(itemsData);
             items.each(function (item, index) {
                 item.set('namePrefix', baseName + '[' + index + ']');
             });
@@ -53,26 +56,26 @@ define([
         },
 
         _initializeFilter: function (items) {
-            var selectTpl = _.template($('#magento-big-numbers-metric-select-template').html());
+            var selectTpl = _.template($(this.selectTplSelector).html());
             var select = selectTpl({
-                metrics: items,
+                items: items,
             });
 
             var $filterContainer = this.$('.controls');
             $filterContainer.prepend(select);
-            this.metricSelect = $filterContainer.find('select');
-            this.metricSelect.select2({
+            this.itemSelect = $filterContainer.find('select');
+            this.itemSelect.select2({
                 allowClear: true,
             });
 
             items.on('change:show', function (model) {
-                var $option = this.metricSelect.find('option[value=' + model.id + ']');
+                var $option = this.itemSelect.find('option[value=' + model.id + ']');
                 model.get('show') ? $option.addClass('hide') : $option.removeClass('hide');
             }, this);
 
             var showedItems = items.where({show: true});
             _.each(showedItems, function (item) {
-                var $option = this.metricSelect.find('option[value=' + item.id + ']');
+                var $option = this.itemSelect.find('option[value=' + item.id + ']');
                 $option.addClass('hide');
             }, this);
         },
@@ -83,7 +86,7 @@ define([
             var filteredItems = new ItemCollection(showedItems);
 
             $itemContainer.itemsManagerTable({
-                itemTemplate: $('#magento-big-numbers-metric-template').html(),
+                itemTemplate: $(this.itemTplSelector).html(),
                 collection: filteredItems,
             });
 
@@ -114,21 +117,21 @@ define([
         },
 
         _onAddClick: function () {
-            var metric = this.metricSelect.select2('val');
-            var model = this.items.get(metric);
+            var item = this.itemSelect.select2('val');
+            var model = this.items.get(item);
             model.set('show', true);
-            this.metricSelect.select2('val', '').change();
+            this.itemSelect.select2('val', '').change();
         },
 
         _onAddAllClick: function () {
             this.items.each(function (item) {
                 item.set('show', true);
             });
-            this.metricSelect.select2('val', '').change();
+            this.itemSelect.select2('val', '').change();
         },
 
         _toggleButtons: function () {
-            if (this.metricSelect.select2('val')) {
+            if (this.itemSelect.select2('val')) {
                 this.$('.add-button').removeClass('disabled');
             } else {
                 this.$('.add-button').addClass('disabled');

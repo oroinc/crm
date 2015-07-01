@@ -135,17 +135,18 @@
             </table>
         </div>
     </div>
+    {% set options = {
+        itemsData: form.children.metrics.vars.value,
+        baseName: form.children.metrics.vars.full_name,
+        el: '#' ~ rowId
+    } %}
     <script>
         require([
             'orocrmmagento/js/metrics/view',
-        ], function (MetricsView) {
+        ], function (ItemsView) {
             'use strict';
 
-            new MetricsView({
-                metricsData: {{ form.children.metrics.vars.value|json_encode|raw }},
-                baseName: {{ form.children.metrics.vars.full_name|json_encode|raw }},
-                el: '#' + {{ rowId|json_encode|raw }},
-            });
+            new ItemsView({{ options|json_encode|raw }});
         });
     </script>
 {% endblock %}

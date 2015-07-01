@@ -1,9 +1,9 @@
 <script id="magento-big-numbers-metric-select-template" type="text/template">
     <div class="pull-left metric-selector-widget">
-        <select class="metric-select" filter-select-oro">
+        <select class="item-select" filter-select-oro">
             <option></option>
-            <% metrics.each(function (metric) { %>
-                <option value="<%= metric.get('id') %>"><%= metric.get('label') %></option>
+            <% items.each(function (item) { %>
+                <option value="<%= item.get('id') %>"><%= item.get('label') %></option>
             <% }); %>
         </select>
     </div>
