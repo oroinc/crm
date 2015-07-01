@@ -23,6 +23,7 @@ parameters:
 
     # manager
     orocrm_channel.manager.api.class:                                  Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_channel.channel_customer_search_manager.api.class:          OroCRM\Bundle\ChannelBundle\Entity\Manager\ChannelCustomerSearchApiEntityManager
 
     # providers
     orocrm_channel.provider.settings_provider.class:                   OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider
@@ -146,6 +147,14 @@ services:
         arguments:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_channel.channel_customer_search_manager:
+        class: %orocrm_channel.channel_customer_search_manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_channel.entity.class%
+            - @doctrine.orm.entity_manager
+            - @oro_search.index
 
     # Providers
     orocrm_channel.provider.settings_provider:
