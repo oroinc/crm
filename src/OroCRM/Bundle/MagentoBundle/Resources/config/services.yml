@@ -31,7 +31,6 @@ parameters:
     orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
 
     # forms
-    orocrm_magento.form.type.metrics.class:                                 OroCRM\Bundle\MagentoBundle\Form\Type\MetricsType
     orocrm_magento.form.type.metric.class:                                  OroCRM\Bundle\MagentoBundle\Form\Type\MetricType
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
     orocrm_magento.form.type.soap_transport_setting.class:                  OroCRM\Bundle\MagentoBundle\Form\Type\SoapTransportSettingFormType
@@ -49,7 +48,6 @@ parameters:
     orocrm_magento.form.type.customer_channel_selector.class:               OroCRM\Bundle\MagentoBundle\Form\Type\CustomerChannelSelectType
 
     # event listeners
-    orocrm.magento.event_listener.metrics_form_subscriber.class:            OroCRM\Bundle\MagentoBundle\Form\EventListener\MetricsFormSubscriber
     orocrm.magento.event_listener.account_widgets_data_grid_listener.class: OroCRM\Bundle\MagentoBundle\EventListener\AccountWidgetsDataGridListener
     orocrm_magento.event_listener.customer_currency.class:                  OroCRM\Bundle\MagentoBundle\EventListener\CustomerCurrencyListener
     orocrm_magento.event_listener.order.class:                              OroCRM\Bundle\MagentoBundle\EventListener\OrderListener
@@ -199,13 +197,6 @@ services:
         tags:
             - { name: form.type, alias: orocrm_magento_metric }
 
-    orocrm_magento.form.type.metrics:
-        class: %orocrm_magento.form.type.metrics.class%
-        arguments:
-            - @orocrm.magento.event_listener.metrics_form_subscriber
-        tags:
-            - { name: form.type, alias: orocrm_magento_metrics }
-
     orocrm_magento.form.type.order_place:
         class: %orocrm_magento.form.type.order_place.class%
         tags:
@@ -292,12 +283,6 @@ services:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
             - { name: doctrine.event_listener, event: postFlush, priority: 5 }
-
-    orocrm.magento.event_listener.metrics_form_subscriber:
-        class: %orocrm.magento.event_listener.metrics_form_subscriber.class%
-        arguments:
-            - @oro_dashboard.widget_configs
-            - @translator
 
     orocrm_magento.event_listener.customer_order_grid_listener:
         class: %orocrm.magento.event_listener.account_widgets_data_grid_listener.class%

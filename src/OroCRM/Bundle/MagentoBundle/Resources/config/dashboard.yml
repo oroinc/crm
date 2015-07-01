@@ -123,9 +123,10 @@ oro_dashboard_config:
                         dateRangeField: dateRange
                         default_checked: true
                 subWidgets:
-                    type: orocrm_magento_metrics
+                    type: oro_type_widget_items
                     options:
-                       label: false
+                       label: orocrm.magento.dashboard.e_commerce_statistic.choose_metrics
+                       item_label: orocrm.magento.datagrid.columns.metricName
                        required: false
                        widget_name: big_numbers_widget
         revenue_over_time_chart:

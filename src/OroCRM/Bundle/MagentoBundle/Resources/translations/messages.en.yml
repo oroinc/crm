@@ -62,14 +62,6 @@ orocrm:
             actions:
                 view:
                     label: View
-                move_column:
-                    label: Move column
-                add:
-                    label: Add
-                add_all:
-                    label: Add all
-                delete:
-                    label: Delete column
             columns:
                 originId:         ID
                 first_name:       First Name
