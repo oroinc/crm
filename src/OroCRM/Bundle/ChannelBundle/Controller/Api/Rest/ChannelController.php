@@ -10,9 +10,11 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
 use FOS\RestBundle\Util\Codes;
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Controller\Annotations\RouteResource;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
@@ -25,6 +27,37 @@ use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
  */
 class ChannelController extends RestController
 {
+
+    /**
+     * Get channels.
+     *
+     * @QueryParam(
+     *      name="page",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Page number, starting from 1. Defaults to 1."
+     * )
+     * @QueryParam(
+     *      name="limit",
+     *      requirements="\d+",
+     *      nullable=true,
+     *      description="Number of items per page. Defaults to 10."
+     * )
+     * @ApiDoc(
+     *      description="Get all channels",
+     *      resource=true
+     * )
+     * @AclAncestor("orocrm_channel_view")
+     * @return Response
+     */
+    public function cgetAction()
+    {
+        $page  = (int)$this->getRequest()->get('page', 1);
+        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+
+        return $this->handleGetListRequest($page, $limit);
+    }
+
     /**
      * REST DELETE
      *
