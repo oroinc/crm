@@ -111,7 +111,7 @@ class ChannelController extends RestController
      */
     public function getManager()
     {
-        return $this->get('orocrm_channel.channel.manager');
+        return $this->get('orocrm_channel.manager.channel.api');
     }
 
     /**

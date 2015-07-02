@@ -13,7 +13,7 @@ use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
 use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
-class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
+class CustomerSearchApiEntityManager extends ApiEntityManager
 {
     const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
 

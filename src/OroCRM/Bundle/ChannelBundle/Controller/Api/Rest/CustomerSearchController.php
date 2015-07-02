@@ -11,9 +11,8 @@ use FOS\RestBundle\Controller\Annotations\RouteResource;
 use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
-use OroCRM\Bundle\ChannelBundle\Entity\Manager\ChannelCustomerSearchApiEntityManager;
-
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
+use OroCRM\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
 
 /**
  * @RouteResource("search_customer")
@@ -67,10 +66,10 @@ class CustomerSearchController extends RestGetController
     /**
      * Gets the API entity manager
      *
-     * @return ChannelCustomerSearchApiEntityManager
+     * @return CustomerSearchApiEntityManager
      */
     public function getManager()
     {
-        return $this->container->get('orocrm_channel.channel_customer_search_manager');
+        return $this->container->get('orocrm_channel.manager.customer_search.api');
     }
 }
