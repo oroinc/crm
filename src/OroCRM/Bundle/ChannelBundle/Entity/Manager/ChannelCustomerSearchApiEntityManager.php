@@ -65,11 +65,11 @@ class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
             'result'     => [],
             'totalCount' =>
                 function () use ($searchResult) {
-                    return $searchResult->count();
+                    return $searchResult->getRecordsCount();
                 }
         ];
 
-        if ($searchResult->getRecordsCount() > 0) {
+        if ($searchResult->count() > 0) {
             /** @var  Item[] $result */
             $searchResultArray = $searchResult->toArray();
 
