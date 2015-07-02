@@ -16,7 +16,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Manager\ChannelCustomerSearchApiEntityMan
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
 
 /**
- * @RouteResource("channels_customers_search")
+ * @RouteResource("search_customer")
  * @NamePrefix("oro_api_")
  */
 class CustomerSearchController extends RestGetController
@@ -24,7 +24,8 @@ class CustomerSearchController extends RestGetController
     /**
      * Search customers.
      *
-     * @Get("/channels/customers/search", name="")
+     *
+     * @Get("/customers/search", name="")
      *
      * @QueryParam(
      *      name="page",

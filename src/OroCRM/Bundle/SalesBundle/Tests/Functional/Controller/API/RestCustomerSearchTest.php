@@ -21,7 +21,7 @@ class RestCustomerSearchTest extends WebTestCase
         );
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
 
-        $this->baseUrl = $this->getUrl('oro_api_get_channels_customers_searches');
+        $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
     }
 
     public function testSearch()

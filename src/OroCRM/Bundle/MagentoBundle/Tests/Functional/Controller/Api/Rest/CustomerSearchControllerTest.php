@@ -21,7 +21,7 @@ class CustomerSearchControllerTest extends WebTestCase
         );
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadCustomerData']);
 
-        $this->baseUrl = $this->getUrl('oro_api_get_channels_customers_searches');
+        $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
     }
 
     public function testSearch()

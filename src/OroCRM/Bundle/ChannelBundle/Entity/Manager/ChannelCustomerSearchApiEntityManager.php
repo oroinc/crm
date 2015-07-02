@@ -1,28 +1,23 @@
 <?php
 namespace OroCRM\Bundle\ChannelBundle\Entity\Manager;
 
-use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-
-use Oro\Bundle\EntityBundle\ORM\QueryBuilderHelper;
 use Oro\Bundle\EntityBundle\ORM\QueryUtils;
 use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
-use Oro\Bundle\EntityBundle\Exception\EntityAliasNotFoundException;
-
-use Oro\Bundle\SearchBundle\Query\Result;
-use Oro\Bundle\SearchBundle\Query\Result\Item;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
+use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
+use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
 {
-    const DATA_CHANNEL_FIELD_NAME = 'dataChannel';
+    const DEFAULT_CHANNEL_FIELD_NAME = 'dataChannel';
 
-    const DATA_CHANNEL_ENTITY_CLASS = 'OroCRM\Bundle\ChannelBundle\Entity\Channel';
+    const CHANNEL_ENTITY_CLASS = 'OroCRM\Bundle\ChannelBundle\Entity\Channel';
 
     const CUSTOMER_IDENTITY_INTERFACE = 'OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface';
 
@@ -53,15 +48,15 @@ class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
      */
     public function getSearchResult($page = 1, $limit = 10, $search = '')
     {
-        $qb           = $this->searchIndexer->getSimpleSearchQuery(
+        $searchQuery  = $this->searchIndexer->getSimpleSearchQuery(
             $search,
             $this->getOffset($page, $limit),
             $limit,
-            $this->getCustomersSearchAliases()
+            $this->getCustomerSearchAliases()
         );
-        $searchResult = $this->searchIndexer->query($qb);
+        $searchResult = $this->searchIndexer->query($searchQuery);
 
-        $data = [
+        $result = [
             'result'     => [],
             'totalCount' =>
                 function () use ($searchResult) {
@@ -70,170 +65,97 @@ class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
         ];
 
         if ($searchResult->count() > 0) {
-            /** @var  Item[] $result */
-            $searchResultArray = $searchResult->toArray();
+            $customers = $this->getCustomerListQueryBuilder($searchResult)->getQuery()->getResult();
 
-            $associationQueryBuilder = $this->getSearchQueryBuilderWithChannels($searchResultArray);
-            $associationResult       = $associationQueryBuilder->getQuery()->getResult();
-
-            $data['result'] = $this->mergeResults(
-                $searchResultArray,
-                $associationResult
-            );
+            $result['result'] = $this->mergeResults($searchResult, $customers);
         }
 
-        return $data;
+        return $result;
     }
 
     /**
-     * Merge $resultWithoutCustomers and $resultWithCustomers results into one array and returns result of merge
+     * Merges the search result and customers
      *
-     * @param Item[] $resultWithoutCustomers
-     * @param array $resultWithCustomers
+     * @param SearchResult $searchResult
+     * @param array        $customers
+     *
      * @return array
      */
-    protected function mergeResults(array $resultWithoutCustomers, array $resultWithCustomers)
+    protected function mergeResults(SearchResult $searchResult, array $customers)
     {
-        $data = [];
-        foreach ($resultWithoutCustomers as $entity) {
-            $id        = $entity->getRecordId();
-            $className = $entity->getEntityName();
-            $customer  = [
+        $result = [];
+
+        /** @var SearchResultItem $item */
+        foreach ($searchResult as $item) {
+            $id        = $item->getRecordId();
+            $className = $item->getEntityName();
+
+            $resultItem = [
                 'id'      => $id,
                 'entity'  => $className,
-                'title'   => $entity->getRecordTitle(),
-                'channel' => null,
+                'title'   => $item->getRecordTitle(),
+                'channel' => null
             ];
-            foreach ($resultWithCustomers as $result) {
-                if ($result['entity'] === $className && $result['id'] === $id) {
-                    $customer['channel'] = $result['targetId'];
+
+            foreach ($customers as $customer) {
+                if ($customer['entity'] === $className && $customer['id'] === $id) {
+                    $resultItem['channel'] = $customer['channelId'];
                     break;
                 }
             }
-            $data[] = $customer;
+
+            $result[] = $resultItem;
         }
 
-        return $data;
+        return $result;
     }
 
     /**
-     * Prepares filters and owner classes depends on $searchResultArray for @see getMultiAssociationOwnersQueryBuilder()
-     * and return this query builder.
+     * Returns a query builder that could be used for fetching the list of the Customer entities
+     * filtered by ids.
      *
-     * @param Item[] $searchResultArray
+     * @param SearchResult $searchResult
      *
      * @return SqlQueryBuilder
      */
-    protected function getSearchQueryBuilderWithChannels(array $searchResultArray)
+    protected function getCustomerListQueryBuilder(SearchResult $searchResult)
     {
-        // Get all association entities classes and prepare filters for each entity class.
-        $filters           = [];
-        $associationOwners = [];
-        foreach ($searchResultArray as $entity) {
-            $entityClass = $entity->getEntityName();
-            if (!isset($associationOwners[$entity->getEntityName()])) {
-                $filters[$entityClass]           = [];
-                $associationOwners[$entityClass] = self::DATA_CHANNEL_FIELD_NAME;
-            }
-            // Collect all ids for the $entityClass
-            $filters[$entityClass][] = $entity->getRecordId();
-        }
+        /** @var EntityManager $em */
+        $em = $this->getObjectManager();
 
-        return $this->getMultiAssociationOwnersQueryBuilder(
-            self::DATA_CHANNEL_ENTITY_CLASS,
-            $associationOwners,
-            $filters
-        );
-    }
-
-    /**
-     * Returns a query builder that could be used for fetching the list of owner side entities
-     * the specified $associationTargetClass associated with.
-     * The $filters could be used to filter entities
-     *
-     * The resulting query would be something like this:
-     * <code>
-     * SELECT
-     *       entity.entityId AS id,
-     *       entity.targetId as targetId,
-     *       entity.entityClass AS entity,
-     * FROM (
-     *      SELECT [DISTINCT]
-     *          target.id AS id,
-     *          e.id AS entityId,
-     *          {first_owner_entity_class} AS entityClass,
-     *      FROM {first_owner_entity_class} AS e
-     *          INNER JOIN e.{target_field_name_for_first_owner} AS target
-     *          {joins}
-     *      WHERE entityId IN(...)
-     *      UNION ALL
-     *      SELECT [DISTINCT]
-     *          target.id AS id,
-     *          e.id AS entityId,
-     *          {second_owner_entity_class} AS entityClass,
-     *      FROM {second_owner_entity_class} AS e
-     *          INNER JOIN e.{target_field_name_for_second_owner} AS target
-     *          {joins}
-     *      WHERE entityId IN(...)
-     *      UNION ALL
-     *      ... select statements for other owners
-     * ) entity
-     * </code>
-     *
-     * @param string $associationTargetClass      The FQCN of the entity that is the target side of the association
-     * @param array  $associationOwners           The list of fields responsible to store associations between
-     *                                            the given target and association owners
-     *                                            Array format: [owner_entity_class => field_name]
-     * @param array  $filters                     Filters(ids) for entities which are association owners
-     *                                            e.g. ['\Owner\Class\Name1' => [1,2,3], ...]
-     *
-     * @return SqlQueryBuilder
-     */
-    public function getMultiAssociationOwnersQueryBuilder(
-        $associationTargetClass,
-        $associationOwners,
-        $filters
-    ) {
-        $em                = $this->doctrineHelper->getEntityManager($associationTargetClass);
-        $selectStmt        = null;
-        $subQueries        = [];
-        $targetIdFieldName = $this->doctrineHelper->getSingleEntityIdentifierFieldName($associationTargetClass);
-        foreach ($associationOwners as $ownerClass => $fieldName) {
-            $subCriteria = new Criteria();
-            $subCriteria->andWhere(
-                $subCriteria->expr()->in('id', $filters[$ownerClass])
-            );
-            $subQb = $em->getRepository($ownerClass)->createQueryBuilder('e')
+        $selectStmt = null;
+        $subQueries = [];
+        foreach ($this->getCustomerListFilters($searchResult) as $customerClass => $customerIds) {
+            $subQb = $em->getRepository($customerClass)->createQueryBuilder('e')
                 ->select(
                     sprintf(
-                        'target.%s AS id, e.id AS entityId, \'%s\' AS entityClass',
-                        $targetIdFieldName,
-                        str_replace('\'', '\'\'', $ownerClass)
+                        'channel.id AS channelId, e.id AS entityId, \'%s\' AS entityClass',
+                        str_replace('\'', '\'\'', $customerClass)
                     )
                 )
-                ->innerJoin('e.' . $fieldName, 'target');
-            // fix of doctrine error with Same Field, Multiple Values, Criteria and QueryBuilder
-            // http://www.doctrine-project.org/jira/browse/DDC-2798
-            // TODO revert changes when doctrine version >= 2.5 in scope of BAP-5577
-            QueryBuilderHelper::addCriteria($subQb, $subCriteria);
-            // $subQb->addCriteria($criteria);
-            $subQuery     = $subQb->getQuery();
+                ->innerJoin('e.' . $this->getChannelFieldName($customerClass), 'channel');
+            $subQb->where($subQb->expr()->in('e.id', $customerIds));
+
+            $subQuery = $subQb->getQuery();
+
             $subQueries[] = QueryUtils::getExecutableSql($subQuery);
+
             if (empty($selectStmt)) {
                 $mapping    = QueryUtils::parseQuery($subQuery)->getResultSetMapping();
                 $selectStmt = sprintf(
-                    'entity.%s AS id, entity.%s as targetId, entity.%s AS entity',
+                    'entity.%s AS channelId, entity.%s as entityId, entity.%s AS entityClass',
+                    QueryUtils::getColumnNameByAlias($mapping, 'channelId'),
                     QueryUtils::getColumnNameByAlias($mapping, 'entityId'),
-                    QueryUtils::getColumnNameByAlias($mapping, 'id'),
                     QueryUtils::getColumnNameByAlias($mapping, 'entityClass')
                 );
             }
         }
+
         $rsm = new ResultSetMapping();
         $rsm
-            ->addScalarResult('id', 'id', Type::INTEGER)
-            ->addScalarResult('targetId', 'targetId', Type::INTEGER)
-            ->addScalarResult('entity', 'entity');
+            ->addScalarResult('channelId', 'channelId', 'integer')
+            ->addScalarResult('entityId', 'id', 'integer')
+            ->addScalarResult('entityClass', 'entity');
         $qb = new SqlQueryBuilder($em, $rsm);
         $qb
             ->select($selectStmt)
@@ -243,54 +165,98 @@ class ChannelCustomerSearchApiEntityManager extends ApiEntityManager
     }
 
     /**
-     * Get all customers metadata
+     * Extracts ids of the Customer entities from a given search result
      *
-     * @return ClassMetadata[]|array
+     * @param SearchResult $searchResult
+     *
+     * @return array example: ['Acme\Entity\Customer' => [1, 2, 3], ...]
      */
-    protected function getCustomersMetadata()
+    protected function getCustomerListFilters(SearchResult $searchResult)
     {
-        /** @var ClassMetadata[] $allMetadata */
-        $allMetadata = $this->om->getMetadataFactory()->getAllMetadata();
-
-        /** @var ClassMetadata[] $customersMetadata */
-        $customersMetadata = array_filter(
-            $allMetadata,
-            function (ClassMetadata $metadata) {
-                return
-                    $metadata->getReflectionClass()->isSubclassOf(
-                        self::CUSTOMER_IDENTITY_INTERFACE
-                    );
+        $filters = [];
+        /** @var SearchResultItem $item */
+        foreach ($searchResult as $item) {
+            $entityClass = $item->getEntityName();
+            if (!isset($filters[$entityClass])) {
+                $filters[$entityClass] = [];
             }
-        );
+            $filters[$entityClass][] = $item->getRecordId();
+        }
 
-        return $customersMetadata;
+        return $filters;
     }
 
     /**
-     * Returns aliases for all customers entities
+     * Gets the field name for many-to-one relation between the Customer the Channel entities
      *
-     * @return array
+     * @param string $customerClass The FQCN of the Customer entity
+     *
+     * @return string
+     *
+     * @throws \RuntimeException if the relation not found
      */
-    protected function getCustomersSearchAliases()
+    protected function getChannelFieldName($customerClass)
     {
-        $customersSearchAliases = [];
-        $customersMetadata      = $this->getCustomersMetadata();
-        $aliases                = $this->searchIndexer->getEntitiesListAliases();
-        foreach ($customersMetadata as $metadata) {
-            $entityClass = $metadata->getName();
-            // @todo: case below should be removed in CRM-3263
-            if ($entityClass == 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity') {
-                continue;
-            }
-            if (isset($aliases[$entityClass])) {
-                $customersSearchAliases[] = $aliases[$entityClass];
-            } else {
-                throw new EntityAliasNotFoundException(
-                    sprintf('The search alias for "%s" entity not found.', $entityClass)
-                );
+        /** @var ClassMetadata $metadata */
+        $metadata = $this->getObjectManager()->getClassMetadata($customerClass);
+        if ($metadata->hasAssociation(self::DEFAULT_CHANNEL_FIELD_NAME)
+            && $metadata->getAssociationTargetClass(self::DEFAULT_CHANNEL_FIELD_NAME) === self::CHANNEL_ENTITY_CLASS
+        ) {
+            return self::DEFAULT_CHANNEL_FIELD_NAME;
+        }
+
+        $channelAssociations = $metadata->getAssociationsByTargetClass(self::CHANNEL_ENTITY_CLASS);
+        foreach ($channelAssociations as $fieldName => $mapping) {
+            if ($mapping['type'] === ClassMetadata::MANY_TO_ONE && $mapping['isOwningSide']) {
+                return $fieldName;
             }
         }
 
-        return $customersSearchAliases;
+        throw new \RuntimeException(
+            sprintf(
+                'The entity "%s" must have many-to-one relation to "%s".',
+                $customerClass,
+                self::CHANNEL_ENTITY_CLASS
+            )
+        );
+    }
+
+    /**
+     * Gets all class names for all the Customer entities
+     *
+     * @return string[]
+     */
+    protected function getCustomerEntities()
+    {
+        return array_map(
+            function (ClassMetadata $metadata) {
+                return $metadata->name;
+            },
+            array_filter(
+                $this->getObjectManager()->getMetadataFactory()->getAllMetadata(),
+                function (ClassMetadata $metadata) {
+                    // @todo: should be removed in CRM-3263
+                    if ($metadata->name === 'OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity') {
+                        return false;
+                    }
+
+                    return
+                        !$metadata->isMappedSuperclass
+                        && $metadata->getReflectionClass()->isSubclassOf(self::CUSTOMER_IDENTITY_INTERFACE);
+                }
+            )
+        );
+    }
+
+    /**
+     * Returns search aliases for all the Customer entities
+     *
+     * @return string[]
+     */
+    protected function getCustomerSearchAliases()
+    {
+        return array_values(
+            $this->searchIndexer->getEntityAliases($this->getCustomerEntities())
+        );
     }
 }
