@@ -4,7 +4,7 @@ orocrm_channel_bundle:
     prefix:   /channel
 
 orocrm_channel_bundle_api:
-    resource: "@OroCRMChannelBundle/Controller/Api/Rest/ChannelController.php"
+    resource: "@OroCRMChannelBundle/Resources/config/oro/routing_api.yml"
     type:     rest
     prefix:   api/rest/{version}/
     requirements:

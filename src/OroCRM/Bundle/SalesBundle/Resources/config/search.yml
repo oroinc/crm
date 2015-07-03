@@ -1,5 +1,5 @@
 OroCRM\Bundle\SalesBundle\Entity\Lead:
-    alias:                          oro_crm_lead
+    alias:                          orocrm_sales_lead
     title_fields:                   [name]
     route:
         name:                       orocrm_sales_lead_view
@@ -49,7 +49,7 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
                     target_fields: [dataChannelId]
 
 OroCRM\Bundle\SalesBundle\Entity\Opportunity:
-    alias:                          oro_crm_opportunity
+    alias:                          orocrm_sales_opportunity
     title_fields:                   [name]
     route:
         name:                       orocrm_sales_opportunity_view
@@ -112,7 +112,7 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
 
 
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
-    alias:                          oro_crm_sales_funnel
+    alias:                          orocrm_sales_funnel
     title_fields:                   [lead, opportunity]
     route:
         name:                       orocrm_sales_salesfunnel_view
@@ -166,7 +166,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
                     target_fields: [dataChannelId]
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
-    alias:                          oro_crm_b2bcustomer
+    alias:                          orocrm_sales_b2bcustomer
     title_fields:                   [name]
     route:
         name:                       orocrm_sales_b2bcustomer_view
