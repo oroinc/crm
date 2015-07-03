@@ -19,6 +19,8 @@ parameters:
     orocrm_sales.b2bcustomer.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
     orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
+    orocrm_sales.mailbox_processor.lead.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessorType
+
 services:
     orocrm_sales.opportunity.form.type:
         class: %orocrm_sales.opportunity.form.type.class%
@@ -174,6 +176,11 @@ services:
         class: %orocrm_sales.b2bcustomer.form.type.api.class%
         tags:
             - { name: form.type, alias: orocrm_sales_b2bcustomer_api }
+
+    orocrm_sales.mailbox_processor.lead.type:
+        class: %orocrm_sales.mailbox_processor.lead.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_sales_mailbox_processor_lead }
 
     orocrm_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
