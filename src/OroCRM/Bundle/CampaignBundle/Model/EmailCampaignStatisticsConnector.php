@@ -59,8 +59,12 @@ class EmailCampaignStatisticsConnector
             ->getMarketingListItem($marketingList, $entityId);
 
         $manager = $this->doctrineHelper->getEntityManager($this->entityName);
-        $statisticsRecord = $manager->getRepository($this->entityName)
-            ->findOneBy(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem]);
+
+        $statisticsRecord = null;
+        if ($marketingListItem->getId() !== null) {
+            $statisticsRecord = $manager->getRepository($this->entityName)
+                ->findOneBy(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem]);
+        }
 
         if (!$statisticsRecord) {
             $statisticsRecord = new EmailCampaignStatistics();
