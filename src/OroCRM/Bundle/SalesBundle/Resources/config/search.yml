@@ -36,6 +36,10 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             target_type:            text
             target_fields:          [companyName]
         -
+            name:                   email
+            target_type:            text
+            target_fields:          [email]
+        -
             name:                  dataChannel
             relation_type:         many-to-one
             relation_fields:
@@ -89,6 +93,14 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
                     name: nameSuffix
                     target_type: text
                     target_fields: [nameSuffix]
+                -
+                    name: emails
+                    relation_type: one-to-many
+                    relation_fields:
+                        -
+                            name: email
+                            target_type: text
+                            target_fields: [email]
         -
             name:                  dataChannel
             relation_type:         many-to-one
@@ -174,6 +186,18 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
                     name: name
                     target_type: text
                     target_fields: [accountName]
+                -
+                    name: defaultContact
+                    relation_type: one-to-one
+                    relation_fields:
+                        -
+                            name: emails
+                            relation_type: one-to-many
+                            relation_fields:
+                                -
+                                    name: email
+                                    target_type: text
+                                    target_fields: [email]
         -
             name:                  dataChannel
             relation_type:         many-to-one
@@ -182,3 +206,15 @@ OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
                     name:          id
                     target_type:   integer
                     target_fields: [dataChannelId]
+        -
+            name:                  contact
+            relation_type:         many-to-one
+            relation_fields:
+                -
+                    name: emails
+                    relation_type: one-to-many
+                    relation_fields:
+                        -
+                            name: email
+                            target_type: text
+                            target_fields: [email]
