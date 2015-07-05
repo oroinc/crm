@@ -15,10 +15,9 @@ class RestCustomerSearchTest extends WebTestCase
 
     protected function setUp()
     {
-        $this->initClient(
-            [],
-            $this->generateWsseAuthHeader()
-        );
+        $this->markTestSkipped('Due to BAP-8365');
+
+        $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
 
         $this->baseUrl = $this->getUrl('oro_api_get_search_customers');
