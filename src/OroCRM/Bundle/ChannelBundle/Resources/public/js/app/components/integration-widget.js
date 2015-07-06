@@ -79,9 +79,9 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
             e.preventDefault();
 
             var url = this._getUrl();
-            var route_additional_params = $(e.target).data('route_additional_params');
-            if (route_additional_params) {
-                url = url + (url.indexOf('?') == -1 ? '?' : '&') + $.param(route_additional_params);
+            var routeAdditionalParams = $(e.target).data('route_additional_params');
+            if (routeAdditionalParams) {
+                url = url + (url.indexOf('?') === -1 ? '?' : '&') + $.param(routeAdditionalParams);
             }
 
             var formDialog = new DialogWidget({
@@ -134,8 +134,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * {@inheritDoc}
          */
         render: function() {
-            var name = this._getValue('name'),
-                templateContext = {
+            var name = this._getValue('name');
+            var templateContext = {
                 name: name ,
                 title: name ? __('edit') : __('Configure integration')
             };
@@ -154,11 +154,11 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          * @private
          */
         _getUrl: function() {
-            var entityId = this._getValue('id'),
-                data = this._getValue('data'),
-                route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create',
-                type = this._getValue('type'),
-                params = {};
+            var entityId = this._getValue('id');
+            var data = this._getValue('data');
+            var route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create';
+            var type = this._getValue('type');
+            var params = {};
 
             params.channelName = encodeURIComponent(this._getValue('channelName'));
 
@@ -197,8 +197,8 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         _getValue: function(key) {
             this._assertAllowedValueKey(key);
 
-            var preparedData,
-                data = this[['$', key, 'El'].join('')].val();
+            var preparedData;
+            var data = this[['$', key, 'El'].join('')].val();
 
             switch (key) {
                 case 'data':
@@ -258,5 +258,5 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
         options._sourceElement.remove();
 
         return view;
-    }
+    };
 });

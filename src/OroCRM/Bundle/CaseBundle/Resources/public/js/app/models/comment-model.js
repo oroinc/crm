@@ -1,4 +1,3 @@
-/*global define*/
 define([
     'oroui/js/app/models/base/model'
 ], function(BaseModel) {

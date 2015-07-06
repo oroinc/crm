@@ -1,15 +1,13 @@
-/*jslint nomen: true*/
-/*global define*/
 define(function(require) {
     'use strict';
 
-    var $ = require('jquery'),
-        _ = require('underscore'),
-        mediator = require('oroui/js/mediator'),
-        routing = require('routing');
-
-    var contactInformationFieldsCache, $entityEl, $fieldsListEl;
-    contactInformationFieldsCache = {};
+    var $ = require('jquery');
+    var _ = require('underscore');
+    var mediator = require('oroui/js/mediator');
+    var routing = require('routing');
+    var contactInformationFieldsCache = {};
+    var $entityEl;
+    var $fieldsListEl;
 
     var fillContactInformationFieldsCache = function(contactInformationFields) {
         _.each(contactInformationFields, function(field) {
@@ -43,9 +41,9 @@ define(function(require) {
     var contactInformationRender = function(model, element, type) {
         var icon;
         if (type) {
-            if (type == 'phone') {
+            if (type === 'phone') {
                 icon = 'icon-phone';
-            } else if (type == 'email') {
+            } else if (type === 'email') {
                 icon = 'icon-envelope';
             }
 

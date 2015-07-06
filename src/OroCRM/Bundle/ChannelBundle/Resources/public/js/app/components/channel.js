@@ -27,16 +27,16 @@ define([
         var value = $storageEl.val();
         var entities = value ? JSON.parse(value) : [];
 
-        if (entities.length == 0) {
+        if (entities.length === 0) {
             return;
         }
 
         var entityComponentView = new EntityComponentView({
-                data: entities,
-                mode: EntityComponentView.prototype.MODES.EDIT_MODE,
-                metadata: metadata,
-                lockedEntities: lockedEntities
-            });
+            data: entities,
+            mode: EntityComponentView.prototype.MODES.EDIT_MODE,
+            metadata: metadata,
+            lockedEntities: lockedEntities
+        });
 
         entityComponentView.render();
         $storageEl.after(entityComponentView.$el);
@@ -53,8 +53,8 @@ define([
      * @param {Object.<string, *>} fields
      */
     function initializeChannelTypeComponent(selector, fields) {
-        var $el = $(selector),
-            $form = $el.parents('form');
+        var $el = $(selector);
+        var $form = $el.parents('form');
 
         /**
          * Get serialized form string with current element value excluded.
@@ -72,16 +72,16 @@ define([
         var startChannelType = $el.val();
 
         var isAllowOpenConfirmDialog = function() {
-            return startChannelType != '' && getFormState() != formStartState;
+            return startChannelType !== '' && getFormState() !== formStartState;
         };
 
         var processChangeType = function() {
-            var data,
-                event,
-                $form = $el.parents('form'),
-                elementNames = _.map(fields, function(elementIdentifier) {
-                    return $(elementIdentifier).attr('name');
-                });
+            var data;
+            var event;
+            var $form = $el.parents('form');
+            var elementNames = _.map(fields, function(elementIdentifier) {
+                return $(elementIdentifier).attr('name');
+            });
 
             data = _.filter($form.serializeArray(), function(field) {
                 return _.indexOf(elementNames, field.name) !== -1;
@@ -101,16 +101,16 @@ define([
         };
 
         $el.on('change', function changeTypeHandler(e) {
-            var prevEl  = e.removed,
-                confirm = new DeleteConfirmation({
-                    title:   __('orocrm.channel.confirmation.title'),
-                    okText:  __('orocrm.channel.confirmation.agree'),
-                    content: __('orocrm.channel.confirmation.text')
-                });
+            var prevEl  = e.removed;
+            var confirm = new DeleteConfirmation({
+                title:   __('orocrm.channel.confirmation.title'),
+                okText:  __('orocrm.channel.confirmation.agree'),
+                content: __('orocrm.channel.confirmation.text')
+            });
 
             confirm.on('ok', processChangeType);
             confirm.on('cancel', function revertChanges() {
-                $el.select2('val', prevEl.id)
+                $el.select2('val', prevEl.id);
             });
 
             if (isAllowOpenConfirmDialog()) {
@@ -140,5 +140,5 @@ define([
         initializeChannelTypeComponent(options.channelTypeEl, options.fields);
 
         options._sourceElement.remove();
-    }
+    };
 });

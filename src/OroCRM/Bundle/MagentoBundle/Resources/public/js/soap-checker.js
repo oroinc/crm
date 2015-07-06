@@ -1,4 +1,3 @@
-/*global define*/
 define([
     'jquery',
     'underscore',
@@ -8,7 +7,7 @@ define([
     'oroui/js/mediator',
     'oroui/js/messenger'
 ], function($, _, routing, Backbone, __, mediator, messenger) {
-    "use strict";
+    'use strict';
 
     return Backbone.View.extend({
         events: {
@@ -154,13 +153,13 @@ define([
          */
         handleWebsites: function(res) {
             if (this.options.websitesModificationAllowed !== false && res.websites) {
-                var $listEl = $(this.options.websitesListEl),
-                    $websiteSelectEl = $(this.options.websiteSelectEl);
+                var $listEl = $(this.options.websitesListEl);
+                var $websiteSelectEl = $(this.options.websiteSelectEl);
 
                 $listEl.val(JSON.stringify(res.websites));
                 $websiteSelectEl.empty();
                 _.each(res.websites, function(website) {
-                    $websiteSelectEl.append($("<option />").val(website.id).text(website.label));
+                    $websiteSelectEl.append($('<option />').val(website.id).text(website.label));
                 });
                 $websiteSelectEl.trigger('change');
             }
@@ -186,12 +185,12 @@ define([
          */
         handleConnectors: function(res) {
             if (res.connectors) {
-                var connectors = res.connectors,
-                    $form = this.$el.parents('form'),
-                    $connectorsEl = $form.find(this.options.connectorsEl),
-                    i = 0,
-                    checkedBoxes = $connectorsEl.find(':checked'),
-                    checked = {};
+                var connectors = res.connectors;
+                var $form = this.$el.parents('form');
+                var $connectorsEl = $form.find(this.options.connectorsEl);
+                var i = 0;
+                var checkedBoxes = $connectorsEl.find(':checked');
+                var checked = {};
 
                 _.each(checkedBoxes, function(el) {
                     checked[$(el).val()] = 'checked';

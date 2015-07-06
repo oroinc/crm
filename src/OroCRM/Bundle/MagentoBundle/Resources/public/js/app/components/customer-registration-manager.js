@@ -1,13 +1,12 @@
-/*jslint nomen: true*/
-/*global define*/
+/*jshint devel: true*/
 define(function(require) {
     'use strict';
 
     return function(options) {
-        var $ = require('jquery'),
-            __ = require('orotranslation/js/translator'),
-            mediator = require('oroui/js/mediator'),
-            messenger = require('oroui/js/messenger');
+        var $ = require('jquery');
+        var __ = require('orotranslation/js/translator');
+        var mediator = require('oroui/js/mediator');
+        var messenger = require('oroui/js/messenger');
 
         $('.customer-registration').click(function(e) {
             e.preventDefault();

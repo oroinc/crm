@@ -1,32 +1,34 @@
-/*jslint nomen: true*/
-/*global define*/
 define(function(require) {
     'use strict';
 
-    var $ = require('jquery'),
-        _ = require('underscore'),
-        __ = require('orotranslation/js/translator'),
-        types = ['recency', 'frequency', 'monetary'],
-        rows = 0,
-        rowTemplate = _.template(
+    var $ = require('jquery');
+    var _ = require('underscore');
+    var __ = require('orotranslation/js/translator');
+    var types = ['recency', 'frequency', 'monetary'];
+    var rows = 0;
+    var rowTemplate = _.template(
             '<tr>' +
-            '<td class="rfm-cell-index"></td>' +
-            '<td class="rfm-cell-recency"></td>' +
-            '<td class="rfm-cell-frequency"></td>' +
-            '<td class="rfm-cell-monetary"></td>' +
-            '<td class="action-cell"><a href="#" class="action-delete" title="<%= _.__("orocrm.analytics.delete_row") %>"><i class="icon-remove hide-text"></i></a></td>' +
+                '<td class="rfm-cell-index"></td>' +
+                '<td class="rfm-cell-recency"></td>' +
+                '<td class="rfm-cell-frequency"></td>' +
+                '<td class="rfm-cell-monetary"></td>' +
+                '<td class="action-cell">' +
+                    '<a href="#" class="action-delete" title="<%= _.__("orocrm.analytics.delete_row") %>">' +
+                        '<i class="icon-remove hide-text"></i>' +
+                    '</a>' +
+                '</td>' +
             '</tr>'
         );
 
     return function(options) {
-        var $el = options._sourceElement,
-            $enableEl = $el.find('#' + options.rfm_enable_id),
-            $table = $el.find('.grid tbody'),
-            rfmElements = {};
+        var $el = options._sourceElement;
+        var $enableEl = $el.find('#' + options.rfm_enable_id);
+        var $table = $el.find('.grid tbody');
+        var rfmElements = {};
 
         for (var i = 0; i < types.length; i++) {
-            var type = types[i],
-                typeEl = $el.find('.rfm-' + type);
+            var type = types[i];
+            var typeEl = $el.find('.rfm-' + type);
 
             rfmElements[type] = {
                 'el': typeEl,
@@ -60,12 +62,12 @@ define(function(require) {
         };
 
         var recalculateIdx = function() {
-            var rows = $table.find('tr'),
-                rowsNum = rows.length;
+            var rows = $table.find('tr');
+            var rowsNum = rows.length;
             for (var i = 0; i < rowsNum; i++) {
-                var $row = $(rows[i]),
-                    idx = i + 1,
-                    postfix = '';
+                var $row = $(rows[i]);
+                var idx = i + 1;
+                var postfix = '';
                 getIndexInput($row).val(idx);
 
                 if (i === 0) {
@@ -80,9 +82,9 @@ define(function(require) {
 
         var setupChangeVal = function($row, type) {
             getVisibleInput($row, type).keyup(function() {
-                var nextRow = $row.next(),
-                    nextInput = getInvisibleInput(nextRow, type),
-                    val = $(this).val();
+                var nextRow = $row.next();
+                var nextInput = getInvisibleInput(nextRow, type);
+                var val = $(this).val();
 
                 nextInput.val(val);
 
@@ -131,8 +133,8 @@ define(function(require) {
             $row.find('.action-delete').hide();
 
             for (var i = 0; i < types.length; i++) {
-                var type = types[i],
-                    $input = getVisibleInput($row, type);
+                var type = types[i];
+                var $input = getVisibleInput($row, type);
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
@@ -151,8 +153,8 @@ define(function(require) {
             var $row = $(row);
 
             for (var i = 0; i < types.length; i++) {
-                var type = types[i],
-                    $input = getVisibleInput($row, type);
+                var type = types[i];
+                var $input = getVisibleInput($row, type);
 
                 $input.prop('type', 'text');
                 if (rfmElements[type].isIncreasing) {
@@ -174,8 +176,8 @@ define(function(require) {
             $row.find('.action-delete').hide();
 
             for (var i = 0; i < types.length; i++) {
-                var type = types[i],
-                    $input = getVisibleInput($row, type);
+                var type = types[i];
+                var $input = getVisibleInput($row, type);
 
                 if (rfmElements[type].isIncreasing) {
                     $('<span>' + __('orocrm.analytics.more') + '</span> <strong></strong>').insertBefore($input);
@@ -188,11 +190,11 @@ define(function(require) {
         };
 
         var adoptExistingRecords = function() {
-            var existingRRows = rfmElements['recency'].el.find('.rfm-settings-row'),
-                existingFRows = rfmElements['frequency'].el.find('.rfm-settings-row'),
-                existingMRows = rfmElements['monetary'].el.find('.rfm-settings-row'),
-                totalRows = existingRRows.length,
-                lastRowIdx = totalRows - 1;
+            var existingRRows = rfmElements.recency.el.find('.rfm-settings-row');
+            var existingFRows = rfmElements.frequency.el.find('.rfm-settings-row');
+            var existingMRows = rfmElements.monetary.el.find('.rfm-settings-row');
+            var totalRows = existingRRows.length;
+            var lastRowIdx = totalRows - 1;
 
             if (totalRows < 2) {
                 $table.empty();

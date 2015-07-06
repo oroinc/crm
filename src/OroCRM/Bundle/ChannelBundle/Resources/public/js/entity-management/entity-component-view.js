@@ -1,19 +1,16 @@
-/*jslint vars: true, nomen: true, browser: true*/
-/*jshint browser: true*/
-/*global define, require*/
 define(function(require) {
     'use strict';
 
-    var Backbone = require('backbone'),
-        _ = require('underscore'),
-        __ = require('orotranslation/js/translator'),
-        EntityModel = require('./model'),
-        componentTemplate = require('text!./templates/component.html'),
-        entityTemplate = require('text!./templates/entity-item.html'),
-        formTemplate = require('text!./templates/form.html'),
-        entitySelectResultTemplate = require('text!./templates/select2/result.html'),
-        entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
-        Select2Component = require('oro/select2-component');
+    var Backbone = require('backbone');
+    var _ = require('underscore');
+    var __ = require('orotranslation/js/translator');
+    var EntityModel = require('./model');
+    var componentTemplate = require('text!./templates/component.html');
+    var entityTemplate = require('text!./templates/entity-item.html');
+    var formTemplate = require('text!./templates/form.html');
+    var entitySelectResultTemplate = require('text!./templates/select2/result.html');
+    var entitySelectSelectionTemplate = require('text!./templates/select2/selection.html');
+    var Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
@@ -128,19 +125,19 @@ define(function(require) {
                     result_template:    entitySelectResultTemplate,
                     selection_template: entitySelectSelectionTemplate,
                     data: _.bind(function() {
-                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
-                            options = _.map(notSelected, function(entityMetadata) {
-                                return {
-                                    id: entityMetadata.name,
-                                    text: entityMetadata.label,
-                                    icon: entityMetadata.icon,
-                                    type: entityMetadata.type
-                                };
-                            }),
-                            optionGroups = _.groupBy(options, function(entityMetadata) {
-                                return entityMetadata.type;
-                            }),
-                            results = [];
+                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
+                        var options = _.map(notSelected, function(entityMetadata) {
+                            return {
+                                id: entityMetadata.name,
+                                text: entityMetadata.label,
+                                icon: entityMetadata.icon,
+                                type: entityMetadata.type
+                            };
+                        });
+                        var optionGroups = _.groupBy(options, function(entityMetadata) {
+                            return entityMetadata.type;
+                        });
+                        var results = [];
 
                         _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
                             results.push({
@@ -152,12 +149,12 @@ define(function(require) {
 
                         return {results: results};
                     }, this)
-                },
-                $el = this.$formContainer.find('[data-purpose="entity-selector"]'),
-                select2Component = new Select2Component({
-                    configs: configs,
-                    _sourceElement: $el
-                });
+                };
+            var $el = this.$formContainer.find('[data-purpose="entity-selector"]');
+            var select2Component = new Select2Component({
+                configs: configs,
+                _sourceElement: $el
+            });
             this.pageComponent('entity-selector', select2Component, $el);
             this.$formContainer.itemsManagerEditor({
                 collection: this.collection
@@ -220,10 +217,10 @@ define(function(require) {
          * @private
          */
         _prepareModelAttributes: function(model) {
-            var entityName = model.get('name'),
-                entityMetadata = this.options.metadata[entityName] || {},
-                actions = [],
-                lockedEntities = this.options.lockedEntities;
+            var entityName = model.get('name');
+            var entityMetadata = this.options.metadata[entityName] || {};
+            var actions = [];
+            var lockedEntities = this.options.lockedEntities;
 
             if ((entityName.indexOf(lockedEntities) === -1) && this.options.mode === modes.EDIT_MODE) {
                 actions.push({

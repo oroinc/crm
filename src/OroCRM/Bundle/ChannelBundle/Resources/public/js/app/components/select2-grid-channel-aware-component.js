@@ -1,9 +1,11 @@
 define(function(require) {
     'use strict';
-    var Select2GridChannelAwareComponent,
-        $ = require('jquery'),
-        _ = require('underscore'),
-        Select2GridComponent = require('oro/select2-grid-component');
+
+    var Select2GridChannelAwareComponent;
+    var $ = require('jquery');
+    var _ = require('underscore');
+    var Select2GridComponent = require('oro/select2-grid-component');
+
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
         channelId: '',
         channelFieldName: '',
@@ -14,12 +16,12 @@ define(function(require) {
         },
         preConfig: function(config) {
             Select2GridChannelAwareComponent.__super__.preConfig.call(this, config);
-            var that = this,
-                $channel = $('select[name="' + this.channelFieldName + '"]');
+            var that = this;
+            var $channel = $('select[name="' + this.channelFieldName + '"]');
 
             config.ajax.data = _.wrap(config.ajax.data, function(parentDataFunction) {
-                var result = parentDataFunction.apply(this, _.rest(arguments)),
-                    channelIds = [$channel.val()];
+                var result = parentDataFunction.apply(this, _.rest(arguments));
+                var channelIds = [$channel.val()];
                 if (that.channelId) {
                     channelIds.push(that.channelId);
                 }

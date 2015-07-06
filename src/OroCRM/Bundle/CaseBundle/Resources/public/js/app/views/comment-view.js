@@ -1,4 +1,3 @@
-/*global define, alert*/
 define([
     'oronote/js/app/views/note-view',
     'autolinker'

@@ -1,10 +1,8 @@
-/*jslint nomen: true*/
-/*global define*/
 define(function(require) {
     'use strict';
 
-    var _ = require('underscore'),
-        mediator = require('oroui/js/mediator');
+    var _ = require('underscore');
+    var mediator = require('oroui/js/mediator');
 
     return function(options) {
         _.each(options, function(grids) {
