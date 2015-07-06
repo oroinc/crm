@@ -101,6 +101,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
 
         $magentoAddress = $this->createMagentoAddress($this->regions['US-AZ'], $this->countries['US']);
         $account        = $this->createAccount();
+        $this->setReference('account', $account);
+
         $customer       = $this->createCustomer(1, $account, $magentoAddress);
         $cartAddress1   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 1);
         $cartAddress2   = $this->createCartAddress($this->regions['US-AZ'], $this->countries['US'], 2);
@@ -348,6 +350,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $website->setCode('web site code');
         $website->setChannel($this->integration);
 
+        $this->setReference('website', $website);
         $this->em->persist($website);
         $this->website = $website;
 
