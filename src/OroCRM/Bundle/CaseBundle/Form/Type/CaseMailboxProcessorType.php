@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class CaseMailboxProcessorType extends AbstractType
 {
@@ -34,8 +35,11 @@ class CaseMailboxProcessorType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add('owner', 'oro_user_select', [
-            'required' => true,
-            'label'    => 'orocrm.sales.lead.label',
+            'required'    => true,
+            'label'       => 'orocrm.case.caseentity.owner.label',
+            'constraints' => [
+                new NotNull(),
+            ],
         ])->add(
             'status',
             'entity',
@@ -45,7 +49,10 @@ class CaseMailboxProcessorType extends AbstractType
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('status')
                         ->orderBy('status.order', 'ASC');
-                }
+                },
+                'constraints'   => [
+                    new NotNull(),
+                ],
             ]
         )->add(
             'assignTo',
@@ -63,7 +70,10 @@ class CaseMailboxProcessorType extends AbstractType
                 'query_builder' => function (EntityRepository $entityRepository) {
                     return $entityRepository->createQueryBuilder('priority')
                         ->orderBy('priority.order', 'ASC');
-                }
+                },
+                'constraints'   => [
+                    new NotNull(),
+                ],
             ]
         )->add(
             'tags',
