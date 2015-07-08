@@ -1,4 +1,6 @@
 define(['jquery'], function($) {
+    'use strict';
+
     /**
      * @export  orocrm/contact/widgets/account-contacts-widget
      * @class   oro.AccountContactWidgetHandler
