@@ -34,13 +34,24 @@ class CaseMailboxProcessorType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('owner', 'oro_user_select', [
-            'required'    => true,
-            'label'       => 'orocrm.case.caseentity.owner.label',
-            'constraints' => [
-                new NotNull(),
-            ],
-        ])->add(
+        $builder->add(
+            'owner',
+            'oro_user_select',
+            [
+                'required'    => true,
+                'label'       => 'orocrm.case.caseentity.owner.label',
+                'constraints' => [
+                    new NotNull(),
+                ],
+            ]
+        )->add(
+            'assignTo',
+            'oro_user_organization_acl_select',
+            [
+                'required' => false,
+                'label'    => 'orocrm.case.caseentity.assigned_to.label',
+            ]
+        )->add(
             'status',
             'entity',
             [
@@ -53,13 +64,6 @@ class CaseMailboxProcessorType extends AbstractType
                 'constraints'   => [
                     new NotNull(),
                 ],
-            ]
-        )->add(
-            'assignTo',
-            'oro_user_organization_acl_select',
-            [
-                'required' => false,
-                'label'    => 'orocrm.case.caseentity.assigned_to.label',
             ]
         )->add(
             'priority',

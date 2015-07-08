@@ -39,8 +39,7 @@ class LeadMailboxProcessor extends MailboxProcessor
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Extend\Entity\EV_Lead_Source")
-     * @ORM\JoinColumn(name="lead_source_id", referencedColumnName="id", onDelete="SET NULL")
+     * @ORM\Column(name="lead_source_id", type="string")
      */
     protected $source;
 
