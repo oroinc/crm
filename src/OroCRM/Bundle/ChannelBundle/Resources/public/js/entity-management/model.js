@@ -7,9 +7,9 @@ define(['backbone'], function(Backbone) {
      */
     return Backbone.Model.extend({
         defaults: {
-            icon:    null,
-            name :   null,
-            label:   null,
+            icon: null,
+            name: null,
+            label: null,
             actions: []
         }
     });

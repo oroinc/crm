@@ -52,7 +52,7 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
          */
         events: {
             'click [data-purpose="open-form-widget"]':          'openDialog',
-            'click [data-purpose="remove-integration-data"]' :  'onRemoveIntegrationData'
+            'click [data-purpose="remove-integration-data"]':  'onRemoveIntegrationData'
         },
 
         /**
