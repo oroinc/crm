@@ -399,6 +399,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "importexport"={
      *              "order"=210
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
