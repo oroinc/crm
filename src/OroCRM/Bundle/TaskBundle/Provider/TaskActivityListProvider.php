@@ -137,4 +137,29 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
 
         return $config->is('enabled');
     }
+
+    /**
+     * @param $entity
+     * @param ActivityList $activity
+     * @return array
+     */
+    public function getActivityOwners($entity, ActivityList $activity)
+    {
+        $activityArray = [];
+//        $owners = $this->doctrineRegistryLink->getService()
+//            ->getRepository('OroEmailBundle:EmailUser')
+//            ->findBy(['email' => $entity]);
+//
+//        if ($owners) {
+//            foreach ($owners as $owner) {
+//                $activityOwner = new ActivityOwner();
+//                $activityOwner->setActivity($activity);
+//                $activityOwner->setOrganization($owner->getOrganization());
+//                $activityOwner->setUser($owner->getOwner());
+//                $activityArray[] = $activityOwner;
+//            }
+//        }
+
+        return $activityArray;
+    }
 }
