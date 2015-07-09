@@ -417,6 +417,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "importexport"={
      *              "order"=220
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
