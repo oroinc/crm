@@ -1,12 +1,13 @@
-/*jshint devel:true*/
 define(function(require) {
     'use strict';
 
+    var $ = require('jquery');
+    var __ = require('orotranslation/js/translator');
+    var mediator = require('oroui/js/mediator');
+    var messenger = require('oroui/js/messenger');
+    var console = window.console;
+
     return function(options) {
-        var $ = require('jquery');
-        var __ = require('orotranslation/js/translator');
-        var mediator = require('oroui/js/mediator');
-        var messenger = require('oroui/js/messenger');
         var currentState = options.currentState;
         var subscribedId = options.subscribedId;
 
@@ -38,7 +39,9 @@ define(function(require) {
                         mediator.execute('refreshPage');
                     } else {
                         messenger.notificationMessage('error', __('orocrm.magento.subscription.error'));
-                        console.warn(response.error);
+                        if (console) {
+                            console.warn(response.error);
+                        }
                     }
                 },
                 error: function() {
