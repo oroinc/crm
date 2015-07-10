@@ -7,7 +7,7 @@ define([
     'oroui/js/delete-confirmation',
     'text!./template/integration-widget-link.html'
 ],
-function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplate) {
+function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplate) {
     'use strict';
 
     var $ = Backbone.$;
@@ -52,7 +52,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          */
         events: {
             'click [data-purpose="open-form-widget"]':          'openDialog',
-            'click [data-purpose="remove-integration-data"]' :  'onRemoveIntegrationData'
+            'click [data-purpose="remove-integration-data"]':  'onRemoveIntegrationData'
         },
 
         /**
@@ -60,28 +60,28 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          *
          * @param {Object} options
          */
-        initialize: function (options) {
+        initialize: function(options) {
             if (!(options.dataEl && options.idEl && options.typeEl && options.nameEl)) {
                 throw new TypeError('Missing required options for IntegrationWidgetHandlerView');
             }
 
-            this.$dataEl        = $(options.dataEl);
-            this.$idEl          = $(options.idEl);
-            this.$typeEl        = $(options.typeEl);
-            this.$nameEl        = $(options.nameEl);
+            this.$dataEl = $(options.dataEl);
+            this.$idEl = $(options.idEl);
+            this.$typeEl = $(options.typeEl);
+            this.$nameEl = $(options.nameEl);
             this.$channelNameEl = $(options.channelNameEl);
         },
 
         /**
          * @param {jQuery.Event} e
          */
-        openDialog: function (e) {
+        openDialog: function(e) {
             e.preventDefault();
 
             var url = this._getUrl();
-            var route_additional_params = $(e.target).data('route_additional_params');
-            if (route_additional_params) {
-                url = url + (url.indexOf('?') == -1 ? '?' : '&') + $.param(route_additional_params);
+            var routeAdditionalParams = $(e.target).data('route_additional_params');
+            if (routeAdditionalParams) {
+                url = url + (url.indexOf('?') === -1 ? '?' : '&') + $.param(routeAdditionalParams);
             }
 
             var formDialog = new DialogWidget({
@@ -98,7 +98,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
                 }
             });
 
-            var processFormSave = function (data) {
+            var processFormSave = function(data) {
                 data = _.omit(data, ['_token']);
 
                 this._setValue('name', data.name || '');
@@ -111,7 +111,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
             formDialog.render();
         },
 
-        onRemoveIntegrationData: function () {
+        onRemoveIntegrationData: function() {
             var confirm = new DeleteConfirmation({
                 content: __('orocrm.channel.confirmation.delete_confirmation')
             });
@@ -122,7 +122,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
         /**
          * Clears storage elements and re-render widget link
          */
-        removeIntegrationData: function () {
+        removeIntegrationData: function() {
             this.$dataEl.val(null);
             this.$idEl.val(null);
             this.$nameEl.val(null);
@@ -133,9 +133,9 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
         /**
          * {@inheritDoc}
          */
-        render: function () {
-            var name = this._getValue('name'),
-                templateContext = {
+        render: function() {
+            var name = this._getValue('name');
+            var templateContext = {
                 name: name ,
                 title: name ? __('edit') : __('Configure integration')
             };
@@ -153,12 +153,12 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          * @returns {string}
          * @private
          */
-        _getUrl: function () {
-            var entityId = this._getValue('id'),
-                data = this._getValue('data'),
-                route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create',
-                type = this._getValue('type'),
-                params = {};
+        _getUrl: function() {
+            var entityId = this._getValue('id');
+            var data = this._getValue('data');
+            var route = entityId ? 'orocrm_channel_integration_update' : 'orocrm_channel_integration_create';
+            var type = this._getValue('type');
+            var params = {};
 
             params.channelName = encodeURIComponent(this._getValue('channelName'));
 
@@ -181,7 +181,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          * @returns {string}
          * @private
          */
-        _getTitle: function () {
+        _getTitle: function() {
             var name = this._getValue('name');
 
             return name ? name : __('Configure integration');
@@ -194,11 +194,11 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          * @returns {*}
          * @private
          */
-        _getValue: function (key) {
+        _getValue: function(key) {
             this._assertAllowedValueKey(key);
 
-            var preparedData,
-                data =this[['$', key, 'El'].join('')].val();
+            var preparedData;
+            var data = this[['$', key, 'El'].join('')].val();
 
             switch (key) {
                 case 'data':
@@ -218,7 +218,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          * @param {*} data
          * @private
          */
-        _setValue: function (key, data) {
+        _setValue: function(key, data) {
             var preparedData;
 
             this._assertAllowedValueKey(key);
@@ -239,7 +239,7 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
          * @param {string}key
          * @private
          */
-        _assertAllowedValueKey: function (key) {
+        _assertAllowedValueKey: function(key) {
             if (['id', 'data', 'type', 'name', 'channelName'].indexOf(key) === -1) {
                 throw new TypeError('Unknown option: ' + key);
             }
@@ -258,5 +258,5 @@ function (_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTempla
         options._sourceElement.remove();
 
         return view;
-    }
+    };
 });
