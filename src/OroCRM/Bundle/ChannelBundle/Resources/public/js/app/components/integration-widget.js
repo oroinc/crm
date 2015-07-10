@@ -65,10 +65,10 @@ function(_, Backbone, __, routing, DialogWidget, DeleteConfirmation, linkTemplat
                 throw new TypeError('Missing required options for IntegrationWidgetHandlerView');
             }
 
-            this.$dataEl        = $(options.dataEl);
-            this.$idEl          = $(options.idEl);
-            this.$typeEl        = $(options.typeEl);
-            this.$nameEl        = $(options.nameEl);
+            this.$dataEl = $(options.dataEl);
+            this.$idEl = $(options.idEl);
+            this.$typeEl = $(options.typeEl);
+            this.$nameEl = $(options.nameEl);
             this.$channelNameEl = $(options.channelNameEl);
         },
 

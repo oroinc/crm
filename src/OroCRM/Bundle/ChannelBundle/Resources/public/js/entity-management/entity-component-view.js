@@ -102,8 +102,8 @@ define(function(require) {
             var templateContext = {__: __};
 
             this.$el.html(this.template(_.extend({}, templateContext)));
-            this.$formContainer   = this.$el.find('.form-container');
-            this.$listContainer   = this.$el.find('.grid-container');
+            this.$formContainer = this.$el.find('.form-container');
+            this.$listContainer = this.$el.find('.grid-container');
             this.$noDataContainer = this.$el.find('.no-data');
 
             if (this.options.mode === modes.EDIT_MODE) {

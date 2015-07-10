@@ -101,7 +101,7 @@ define([
         };
 
         $el.on('change', function changeTypeHandler(e) {
-            var prevEl  = e.removed;
+            var prevEl = e.removed;
             var confirm = new DeleteConfirmation({
                 title:   __('orocrm.channel.confirmation.title'),
                 okText:  __('orocrm.channel.confirmation.agree'),
