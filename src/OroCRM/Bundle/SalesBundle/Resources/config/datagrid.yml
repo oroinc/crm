@@ -197,7 +197,7 @@ datagrid:
                         - { join: l.dataChannel, alias: channel }
                         - { join: l.owner, alias: owner }
             hints:
-                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+                - HINT_TRANSLATABLE
         columns:
             channelName:
                 label:         orocrm.sales.lead.data_channel.label
@@ -1046,7 +1046,7 @@ datagrid:
                         - { join: l.status, alias: status }
                         - { join: l.dataChannel, alias: channel }
             hints:
-                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+                - HINT_TRANSLATABLE
         columns:
             id:
                 label:         orocrm.sales.lead.id.label
