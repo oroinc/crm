@@ -18,7 +18,7 @@ parameters:
     orocrm_contact.contact_address.entity.class:      OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.subscriber.contact_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactListener
 
-    orocrm_contact.email.address_owner.provider.class: OroCRM\Bundle\ContactBundle\Entity\Provider\EmailAddressOwnerProvider
+    orocrm_contact.email.owner.provider.class:        OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
     orocrm_contact.social_url_formatter.class:        OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
 
@@ -178,8 +178,8 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: contacts, acl_resource: orocrm_contact_view }
 
-    orocrm_contact.email.address_owner.provider:
-        class: %orocrm_contact.email.address_owner.provider.class%
+    orocrm_contact.email.owner.provider:
+        class: %orocrm_contact.email.owner.provider.class%
         tags:
             - { name: oro_email.owner.provider, order: 2 }
 

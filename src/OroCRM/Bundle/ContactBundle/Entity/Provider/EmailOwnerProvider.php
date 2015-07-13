@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Provider;
 use Doctrine\ORM\EntityManager;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
-use Oro\Bundle\EmailBundle\Entity\Provider\EmailAddressOwnerProviderInterface;
+use Oro\Bundle\EmailBundle\Entity\Provider\EmailOwnerProviderInterface;
 
-class EmailAddressOwnerProvider implements EmailAddressOwnerProviderInterface
+class EmailOwnerProvider implements EmailOwnerProviderInterface
 {
     /**
      * {@inheritdoc}

@@ -14,7 +14,7 @@ use Oro\Bundle\EmailBundle\Mailer\Processor;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailOrigin;
 use Oro\Bundle\EmailBundle\Entity\EmailThread;
-use Oro\Bundle\EmailBundle\Entity\UserEmailOwner;
+use Oro\Bundle\EmailBundle\Entity\EmailUser;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -149,7 +149,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      * @param Contact $contact
      * @param EmailOrigin $origin
      *
-     * @return UserEmailOwner
+     * @return EmailUser
      */
     protected function addEmailUser($randomTemplate, $owner, $contact, $origin)
     {

@@ -12,7 +12,7 @@ use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
-use Oro\Bundle\EmailBundle\Entity\EmailAddressOwnerInterface;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
@@ -78,7 +78,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailAddressOwnerInterface, FirstNameInterface, LastNameInterface
+class Contact extends ExtendContact implements Taggable, EmailOwnerInterface, FirstNameInterface, LastNameInterface
 {
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
