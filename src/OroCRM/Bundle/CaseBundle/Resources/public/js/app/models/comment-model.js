@@ -1,7 +1,6 @@
-/*global define*/
 define([
     'oroui/js/app/models/base/model'
-], function (BaseModel) {
+], function(BaseModel) {
     'use strict';
 
     var CommentModel;
