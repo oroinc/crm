@@ -1,5 +1,6 @@
-/* global define */
-define(['jquery'], function ($) {
+define(['jquery'], function($) {
+    'use strict';
+
     /**
      * @export  orocrm/contact/widgets/account-contacts-widget
      * @class   oro.AccountContactWidgetHandler
@@ -9,7 +10,7 @@ define(['jquery'], function ($) {
          * @desc Fire name link click
          * @callback
          */
-        boxClickHandler: function (even) {
+        boxClickHandler: function(even) {
             /**
              * @desc if target item has class contact-box-link
              * we does not click redirection link(name link)
@@ -23,7 +24,7 @@ define(['jquery'], function ($) {
         /**
          * @constructs
          */
-        init: function () {
+        init: function() {
             $('.contact-box').click(this.boxClickHandler);
         }
     };
