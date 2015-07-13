@@ -149,11 +149,9 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     }
 
     /**
-     * @param $entity
-     * @param ActivityList $activity
-     * @return array
+     * {@inheritdoc}
      */
-    public function getActivityOwners($entity, ActivityList $activity)
+    public function getActivityOwners($entity, ActivityList $activityList)
     {
         $organization = $this->getOrganization($entity);
         $owner = $entity->getOwner();
@@ -163,7 +161,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
         }
 
         $activityOwner = new ActivityOwner();
-        $activityOwner->setActivity($activity);
+        $activityOwner->setActivity($activityList);
         $activityOwner->setOrganization($organization);
         $activityOwner->setUser($owner);
         return [$activityOwner];
