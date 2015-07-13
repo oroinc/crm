@@ -560,6 +560,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *          "importexport"={
      *              "full"=true,
      *              "order"=250
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
