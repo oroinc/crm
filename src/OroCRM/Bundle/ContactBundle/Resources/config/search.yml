@@ -75,3 +75,11 @@ OroCRM\Bundle\ContactBundle\Entity\Contact:
                     name: phone
                     target_type: text
                     target_fields: [contactPhones]
+        -
+            name: emails
+            relation_type: one-to-many
+            relation_fields:
+                -
+                    name: email
+                    target_type: text
+                    target_fields: [email]
