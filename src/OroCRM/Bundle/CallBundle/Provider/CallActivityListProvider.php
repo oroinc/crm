@@ -14,6 +14,7 @@ use OroCRM\Bundle\CallBundle\Entity\Call;
 class CallActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
+    const ACL_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
@@ -98,6 +99,14 @@ class CallActivityListProvider implements ActivityListProviderInterface, Comment
     public function getActivityClass()
     {
         return self::ACTIVITY_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAclClass()
+    {
+        return self::ACL_CLASS;
     }
 
     /**

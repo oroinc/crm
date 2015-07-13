@@ -14,6 +14,7 @@ use OroCRM\Bundle\TaskBundle\Entity\Task;
 class TaskActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
+    const ACL_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
@@ -98,6 +99,14 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     public function getActivityClass()
     {
         return self::ACTIVITY_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAclClass()
+    {
+        return self::ACL_CLASS;
     }
 
     /**
