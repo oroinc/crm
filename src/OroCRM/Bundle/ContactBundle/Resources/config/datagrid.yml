@@ -191,7 +191,7 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
             hints:
-                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+                - HINT_TRANSLATABLE
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label
@@ -474,7 +474,7 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
             hints:
-                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+                - HINT_TRANSLATABLE
         columns:
             firstName:
                 label: orocrm.contact.first_name.label
@@ -588,7 +588,7 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
             hints:
-                - { name: HINT_CUSTOM_OUTPUT_WALKER, value: %oro_translation.translation_walker.class%}
+                - HINT_TRANSLATABLE
         columns:
             id:
                 label:        orocrm.contact.id.label
