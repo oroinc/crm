@@ -18,18 +18,22 @@
 
 {% block activityActions %}
     {% set action %}
-    <a href="#" class="action item-edit-button"
-       title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
-        <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
-    </a>
+        <% if (editable) { %>
+        <a href="#" class="action item-edit-button"
+           title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
+            <i class="icon-edit hide-text">{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+        </a>
+        <% } %>
     {% endset %}
     {% set actions = [action] %}
 
     {% set action %}
-    <a href="#" class="action item-remove-button"
-       title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
-        <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
-    </a>
+        <% if (removable) { %>
+        <a href="#" class="action item-remove-button"
+           title="{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}">
+            <i class="icon-trash hide-text">{{ 'orocrm.task.delete_task'|trans({'{{ entity }}': entityName})|raw }}</i>
+        </a>
+        <% } %>
     {% endset %}
     {% set actions = actions|merge([action]) %}
 
