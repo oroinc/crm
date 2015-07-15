@@ -366,7 +366,7 @@ services:
     orocrm_magento.importexport.processor.import_guest_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter, [@oro_importexport.data_converter.default]]
+            - [setDataConverter, [@orocrm_magento.importexport.data_converter.guest_customer]]
             - [setStrategy, [@orocrm_magento.import.strategy.guest_customer.add_or_update]]
             - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
