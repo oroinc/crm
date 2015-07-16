@@ -22,3 +22,9 @@ oro_entity:
         OroCRM\Bundle\ContactBundle\Entity\Group:
             alias:        contactgroup
             plural_alias: contactgroups
+        OroCRM\Bundle\ContactBundle\Entity\Method:
+            alias:        contactmethod
+            plural_alias: contactmethods
+        OroCRM\Bundle\ContactBundle\Entity\Source:
+            alias:        contactsource
+            plural_alias: contactsources
