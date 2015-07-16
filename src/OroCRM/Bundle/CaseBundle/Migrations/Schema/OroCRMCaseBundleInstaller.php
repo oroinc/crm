@@ -53,6 +53,7 @@ class OroCRMCaseBundleInstaller implements
         OroCRMCaseBundle12::addOrganization($schema);
 
         $migration13 = new OroCRMCaseBundle13();
+        $migration13->setAttachmentExtension($this->attachmentExtension);
         $migration13->up($schema, $queries);
 
         $migration14 = new OroCRMCaseBundle14();
