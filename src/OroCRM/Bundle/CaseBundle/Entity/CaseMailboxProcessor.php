@@ -10,11 +10,9 @@ use Symfony\Component\HttpFoundation\ParameterBag;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessor;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 /**
  * @ORM\Entity
- * @Config
  */
 class CaseMailboxProcessor extends MailboxProcessor implements Taggable
 {
@@ -52,9 +50,7 @@ class CaseMailboxProcessor extends MailboxProcessor implements Taggable
      */
     protected $status;
 
-    /**
-     * @var ArrayCollection $tags
-     */
+    /** @var ArrayCollection $tags */
     protected $tags;
 
     /** @var ParameterBag */
