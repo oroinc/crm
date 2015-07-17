@@ -56,3 +56,4 @@ services:
         class: %orocrm_case.provider.mailbox_processor.class%
         tags:
             - { name: oro_email.mailbox_processor, type: case }
+        arguments: [@doctrine]
