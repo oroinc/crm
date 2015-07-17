@@ -302,6 +302,8 @@ class CaseEntity extends ExtendCaseEntity implements Taggable, EmailHolderInterf
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        
+        parent::__construct();
     }
 
     /**
