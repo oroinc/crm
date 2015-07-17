@@ -3,17 +3,17 @@
 namespace OroCRM\Bundle\CaseBundle\Provider;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessor;
+use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
 use Oro\Bundle\EmailBundle\Provider\MailboxProcessorInterface;
 
-use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessor as ProcessorEntity;
+use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessorSettings as ProcessorEntity;
 
 class CaseMailboxProcessor implements MailboxProcessorInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function configureFromEntity(MailboxProcessor $processor)
+    public function configureFromEntity(MailboxProcessorSettings $processor)
     {
         //
     }
@@ -53,7 +53,7 @@ class CaseMailboxProcessor implements MailboxProcessorInterface
      */
     public function getEntityFQCN()
     {
-        return 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessor';
+        return 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessorSettings';
     }
 
     /**
