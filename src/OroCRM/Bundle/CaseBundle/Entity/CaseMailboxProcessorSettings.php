@@ -7,14 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessor;
+use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 
 /**
  * @ORM\Entity
  */
-class CaseMailboxProcessor extends MailboxProcessor implements Taggable
+class CaseMailboxProcessorSettings extends MailboxProcessorSettings implements Taggable
 {
     const TYPE = 'case';
 

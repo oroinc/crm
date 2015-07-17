@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessor;
+use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 
@@ -16,7 +16,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  * @ORM\Entity
  * @Config
  */
-class LeadMailboxProcessor extends MailboxProcessor
+class LeadMailboxProcessorSettings extends MailboxProcessorSettings
 {
     const TYPE = 'lead';
 
