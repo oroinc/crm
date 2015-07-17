@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CaseBundle\Provider;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
+use Oro\Bundle\EmailBundle\Entity\EmailUser;
 use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
 use Oro\Bundle\EmailBundle\Provider\MailboxProcessorInterface;
 
@@ -21,7 +22,7 @@ class CaseMailboxProcessor implements MailboxProcessorInterface
     /**
      * {@inheritdoc}
      */
-    public function process(Email $email)
+    public function process(EmailUser $emailUser)
     {
         //
     }
