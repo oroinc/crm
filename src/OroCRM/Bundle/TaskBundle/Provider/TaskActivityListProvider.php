@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
+use Oro\Bundle\ActivityListBundle\Entity\ActivityOwner;
 use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -14,6 +15,7 @@ use OroCRM\Bundle\TaskBundle\Entity\Task;
 class TaskActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
+    const ACL_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
 
     /** @var DoctrineHelper */
     protected $doctrineHelper;
@@ -103,6 +105,14 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     /**
      * {@inheritdoc}
      */
+    public function getAclClass()
+    {
+        return self::ACL_CLASS;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getActivityId($entity)
     {
         return $this->doctrineHelper->getSingleEntityIdentifier($entity);
@@ -136,5 +146,24 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
         $config = $configManager->getProvider('comment')->getConfig($entity);
 
         return $config->is('enabled');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getActivityOwners($entity, ActivityList $activityList)
+    {
+        $organization = $this->getOrganization($entity);
+        $owner = $entity->getOwner();
+
+        if (!$organization || !$owner) {
+            return [];
+        }
+
+        $activityOwner = new ActivityOwner();
+        $activityOwner->setActivity($activityList);
+        $activityOwner->setOrganization($organization);
+        $activityOwner->setUser($owner);
+        return [$activityOwner];
     }
 }
