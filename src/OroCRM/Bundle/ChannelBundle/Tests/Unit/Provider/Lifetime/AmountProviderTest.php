@@ -54,7 +54,7 @@ class AmountProviderTest extends OrmTestCase
      */
     public function testGetAccountLifetime($expectedSQL, $result, $channel = null)
     {
-        $smt = $this->createFetchStatementMock([['sclr0' => $result]]);
+        $smt = $this->createFetchStatementMock([['sclr_0' => $result]]);
         $this->getDriverConnectionMock($this->em)
             ->expects($this->once())
             ->method('prepare')
@@ -74,13 +74,13 @@ class AmountProviderTest extends OrmTestCase
 
         return [
             'get account summary lifetime'    => [
-                'SELECT SUM(l0_.amount) AS sclr0 FROM LifetimeValueHistory l0_ ' .
+                'SELECT SUM(l0_.amount) AS sclr_0 FROM LifetimeValueHistory l0_ ' .
                 'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
                 'WHERE l0_.account_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
                 100.00
             ],
             'get account lifetime in channel' => [
-                'SELECT SUM(l0_.amount) AS sclr0 FROM LifetimeValueHistory l0_ ' .
+                'SELECT SUM(l0_.amount) AS sclr_0 FROM LifetimeValueHistory l0_ ' .
                 'LEFT JOIN Channel c1_ ON l0_.data_channel_id = c1_.id ' .
                 'WHERE l0_.account_id = ? AND l0_.data_channel_id = ? AND c1_.status = ? AND l0_.status = ? LIMIT 1',
                 100.00,
