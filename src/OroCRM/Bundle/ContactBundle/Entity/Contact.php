@@ -1560,17 +1560,25 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getEmailOwnerName()
     {
-        return implode(
-            ' ',
-            [
-                $this->getNamePrefix(),
-                $this->getFirstName(),
-                $this->getMiddleName(),
-                $this->getLastName(),
-                $this->getNameSuffix(),
-            ]
-        );
+        $names = [];
+        if ($this->getNamePrefix()) {
+            $names[] = $this->getNamePrefix();
+        }
+        if ($this->getFirstName()) {
+            $names[] = $this->getFirstName();
+        }
+        if ($this->getMiddleName()) {
+            $names[] = $this->getMiddleName();
+        }
+        if ($this->getLastName()) {
+            $names[] = $this->getLastName();
+        }
+        if ($this->getNameSuffix()) {
+            $names[] = $this->getNameSuffix();
+        }
+
+        return implode(' ', $names);
     }
 }
