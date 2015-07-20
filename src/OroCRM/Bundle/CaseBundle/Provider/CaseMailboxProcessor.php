@@ -69,6 +69,9 @@ class CaseMailboxProcessor implements MailboxProcessorInterface
 
         // Set email as seen
         $emailUser->setSeen(true);
+
+        $this->doctrine->getManager()->persist($case);
+        $this->doctrine->getManager()->persist($emailUser);
     }
 
     /**
