@@ -38,7 +38,6 @@ class LeadMailboxProcessor implements MailboxProcessorInterface
         $this->doctrine = $doctrine;
     }
 
-
     /**
      * {@inheritdoc}
      */

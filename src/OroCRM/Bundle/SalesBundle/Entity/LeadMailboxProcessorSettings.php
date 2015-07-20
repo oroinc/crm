@@ -14,7 +14,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @ORM\Entity
- * @Config
  */
 class LeadMailboxProcessorSettings extends MailboxProcessorSettings
 {
