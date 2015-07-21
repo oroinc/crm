@@ -31,6 +31,9 @@ class RestContactApiTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient([], $this->generateWsseAuthHeader());
+        $this->loadFixtures([
+            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadAccountData'
+        ]);
     }
 
     /**
@@ -38,7 +41,8 @@ class RestContactApiTest extends WebTestCase
      */
     public function testCreateContact()
     {
-        $account         = $this->createAccount('first test account');
+        /** @var Account $account */
+        $account         = $this->getReference('Account_first');
         $contactGroup    = $this->getContactGroup();
         $contactGroupIds = $contactGroup ? [$contactGroup->getId()] : [];
         $user            = $this->getUser();
@@ -187,7 +191,8 @@ class RestContactApiTest extends WebTestCase
      */
     public function testUpdateContact($contact, $request)
     {
-        $account                    = $this->createAccount('second test account');
+        /** @var Account $account */
+        $account         = $this->getReference('Account_second');
         $this->testAddress['types'] = ['billing'];
 
         $request['contact']['firstName'] .= "_Updated";
@@ -251,23 +256,6 @@ class RestContactApiTest extends WebTestCase
     protected function getEntityManager()
     {
         return $this->getContainer()->get('doctrine')->getManager();
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Account
-     */
-    protected function createAccount($name)
-    {
-        $account = new Account();
-        $account->setName($name);
-
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($account);
-        $entityManager->flush($account);
-
-        return $account;
     }
 
     /**

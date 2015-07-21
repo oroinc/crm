@@ -21,7 +21,7 @@ class AclAccountTest extends Selenium2TestCase
             ->assertTitle('Create Role - Roles - User Management - System')
             ->save()
             ->assertMessage('Role saved')
-            ->assertTitle('Roles - User Management - System')
+            ->assertTitle('All - Roles - User Management - System')
             ->close();
 
         return ($randomPrefix);
@@ -57,7 +57,7 @@ class AclAccountTest extends Selenium2TestCase
             ->assertMessage('User saved')
             ->toGrid()
             ->close()
-            ->assertTitle('Users - User Management - System');
+            ->assertTitle('All - Users - User Management - System');
 
         return $username;
     }
@@ -80,7 +80,7 @@ class AclAccountTest extends Selenium2TestCase
             ->save()
             ->assertMessage('Account saved')
             ->toGrid()
-            ->assertTitle('Accounts - Customers');
+            ->assertTitle('All - Accounts - Customers');
 
         return $accountName;
     }
@@ -133,7 +133,7 @@ class AclAccountTest extends Selenium2TestCase
         /* @var Accounts $login  */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
-            ->checkActionMenu('Delete')
+            ->assertNoActionMenu('Delete')
             ->open(array($accountName))
             ->assertTitle($accountName . " - Accounts - Customers")
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Delete Account']");
@@ -154,7 +154,7 @@ class AclAccountTest extends Selenium2TestCase
         /* @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->filterBy('Account name', $accountName)
-            ->checkActionMenu('Update')
+            ->assertNoActionMenu('Update')
             ->open(array($accountName))
             ->assertElementNotPresent("//div[@class='pull-left btn-group icons-holder']/a[@title='Edit Account']");
     }

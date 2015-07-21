@@ -39,8 +39,7 @@ class OrderListener
         $entity = $event->getEntity();
 
         // if new order has valuable subtotal and status
-        if (
-            $this->isOrderValid($entity)
+        if ($this->isOrderValid($entity)
             && $entity->getSubtotalAmount()
             && $entity->getStatus() !== Order::STATUS_CANCELED
         ) {

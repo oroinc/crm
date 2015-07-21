@@ -1,0 +1,75 @@
+{% set entityClassName = oro_class_name(entity, true) %}
+
+<div id="activity-count-{{ entityClassName ~ '-' ~ entity.id }}" class="activity-contact-info-title">
+    {{ _self.last_contacted_time(data) }}
+</div>
+
+<script type="text/javascript">
+    require(['jquery', 'routing', 'oroui/js/mediator'], function ($, routing, mediator) {
+        $(function () {
+            var reloadStatistics = function () {
+                $.ajax({
+                    url: routing.generate('orocrm_activity_contact_metrics', {
+                        entityClass: '{{ entityClassName }}',
+                        entityId: '{{ entity.id }}'
+                    }),
+                    type: 'GET',
+                    success: function (response) {
+                        $('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html(
+                            $(response).filter('#activity-count-' + '{{ entityClassName ~ '-' ~ entity.id }}').html()
+                        );
+                    }
+                })
+            };
+
+            mediator.on(
+                'widget:doRefresh:activity-list-widget ' +
+                'widget_success:activity_list:refresh ' +
+                'widget_success:activity_list:item:delete ' +
+                'widget_success:activity_list:item:update',
+                reloadStatistics
+            );
+            mediator.once('page:beforeChange', function () {
+                mediator.off(
+                    'widget:doRefresh:activity-list-widget ' +
+                    'widget_success:activity_list:refresh ' +
+                    'widget_success:activity_list:item:delete ' +
+                    'widget_success:activity_list:item:update',
+                    reloadStatistics
+                );
+            });
+        });
+    });
+</script>
+
+{% macro last_contacted_time(data) %}
+    {% set activity_scope_class = 'OroCRM\\Bundle\\ActivityContactBundle\\EntityConfig\\ActivityScope' %}
+
+    {% set last_contact_date_key     = constant(activity_scope_class ~ '::LAST_CONTACT_DATE') %}
+    {% set last_contact_date_in_key  = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_IN') %}
+    {% set last_contact_date_out_key = constant(activity_scope_class ~ '::LAST_CONTACT_DATE_OUT') %}
+    {% set contact_count_key         = constant(activity_scope_class ~ '::CONTACT_COUNT') %}
+
+    {% if data[contact_count_key] is defined and data[contact_count_key] > 0 %}
+        {% set last_datetime = data[last_contact_date_key]|oro_format_datetime|default('N/A') %}
+        {% set direction     = '<i class="icon-sign'
+            ~ ( data[last_contact_date_in_key] >= data[last_contact_date_out_key] ? 'in' : 'out' )
+            ~ '"></i>'
+        %}
+    <ul class="inline">
+        <li>
+        {{ 'orocrm.activity_contact.info_title_times'|trans({
+            '{{ total_contacted }}': data[contact_count_key]|default(0)
+        })|raw }}
+        </li>
+        <li style="padding-right:0">
+        {{ 'orocrm.activity_contact.info_title_last'|trans({
+            '{{ direction }}': direction,
+            '{{ last_datetime }}': last_datetime
+        })|raw }}
+        </li>
+    </ul>
+    {% else %}
+        {{ 'orocrm.activity_contact.info_title_no_data'|trans }}
+    {% endif %}
+{% endmacro %}

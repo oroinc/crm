@@ -53,7 +53,7 @@ class CustomerStateHandler
      */
     public function markCustomerForSync(Customer $entity)
     {
-        if (!$this->isCustomerRemoved($entity)) {
+        if (!$this->isCustomerRemoved($entity) && !$entity->isGuest()) {
             $this->stateManager->addState($entity, 'syncState', Customer::SYNC_TO_MAGENTO);
         }
     }

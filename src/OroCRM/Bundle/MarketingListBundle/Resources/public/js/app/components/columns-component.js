@@ -1,36 +1,34 @@
-/*jslint nomen: true*/
-/*global define*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
-    var $ = require('jquery'),
-        _ = require('underscore'),
-        mediator = require('oroui/js/mediator'),
-        routing = require('routing');
+    var $ = require('jquery');
+    var _ = require('underscore');
+    var mediator = require('oroui/js/mediator');
+    var routing = require('routing');
+    var contactInformationFieldsCache = {};
+    var $entityEl;
+    var $fieldsListEl;
 
-    var contactInformationFieldsCache, $entityEl, $fieldsListEl;
-    contactInformationFieldsCache = {};
-
-    var fillContactInformationFieldsCache = function (contactInformationFields) {
-        _.each(contactInformationFields, function (field) {
+    var fillContactInformationFieldsCache = function(contactInformationFields) {
+        _.each(contactInformationFields, function(field) {
             contactInformationFieldsCache[field.name] = field.contact_information_type;
         });
     };
 
-    var updateContactInformationFieldsInfo = function (contactInformationFields) {
+    var updateContactInformationFieldsInfo = function(contactInformationFields) {
         var list = $('<ul/>');
-        _.each(contactInformationFields, function (field) {
+        _.each(contactInformationFields, function(field) {
             list.append($('<li/>').html(field.label));
         });
         $fieldsListEl.html(list);
     };
 
-    var updateContactInformationFields = function (contactInformationFields) {
+    var updateContactInformationFields = function(contactInformationFields) {
         updateContactInformationFieldsInfo(contactInformationFields);
         fillContactInformationFieldsCache(contactInformationFields);
     };
 
-    var loadEntityContactInformationFields = function (entity) {
+    var loadEntityContactInformationFields = function(entity) {
         if (entity) {
             $.ajax({
                 url: routing.generate('orocrm_api_entity_marketinglist_contact_information_fields'),
@@ -40,12 +38,12 @@ define(function (require) {
         }
     };
 
-    var contactInformationRender = function (model, element, type) {
+    var contactInformationRender = function(model, element, type) {
         var icon;
         if (type) {
-            if (type == 'phone') {
+            if (type === 'phone') {
                 icon = 'icon-phone';
-            } else if (type == 'email') {
+            } else if (type === 'email') {
                 icon = 'icon-envelope';
             }
 
@@ -59,7 +57,7 @@ define(function (require) {
         }
     };
 
-    var getFieldContactInformationType = function (model, element) {
+    var getFieldContactInformationType = function(model, element) {
         var fieldName = model.get('name');
         if (contactInformationFieldsCache.hasOwnProperty(fieldName)) {
             contactInformationRender(model, element, contactInformationFieldsCache[fieldName]);
@@ -78,7 +76,7 @@ define(function (require) {
         }
     };
 
-    return function (options) {
+    return function(options) {
         $entityEl = $(options.entityChoiceSelector);
         $fieldsListEl = $(options.fieldsChoiceSelector);
 

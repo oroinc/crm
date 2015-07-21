@@ -180,9 +180,11 @@ abstract class AbstractDefaultChannelDataFixture extends AbstractFixture impleme
                 'channel_id' => $channel->getId(),
                 'account_ids' => $accountIds
             ],
-            ['created_at' => Type::DATETIME, 'channel_id' => Type::INTEGER,'account_ids' => Connection::PARAM_INT_ARRAY]
-            // dirty workaround due to http://www.doctrine-project.org/jira/browse/DBAL-630
-            // TODO revert changes when doctrine version >= 2.5 in scope of BAP-5577
+            [
+                'created_at' => Type::DATETIME,
+                'channel_id' => Type::INTEGER,
+                'account_ids' => Connection::PARAM_INT_ARRAY
+            ]
         );
     }
 }
