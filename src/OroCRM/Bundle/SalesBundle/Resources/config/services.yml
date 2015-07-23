@@ -19,7 +19,7 @@ parameters:
     orocrm_sales.provider.phone.opportunity.class:           OroCRM\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
     orocrm_sales.provider.phone.b2bcustomer.class:           OroCRM\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
 
-    orocrm_sales.mailbox_processor.lead.class:               OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessor
+    orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -106,11 +106,10 @@ services:
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_sales.b2bcustomer.entity.class% }
 
-    orocrm_sales.mailbox_processor.lead:
-        class: %orocrm_sales.mailbox_processor.lead.class%
+    orocrm_sales.provider.mailbox_process.lead:
+        class: %orocrm_sales.provider.mailbox_process.lead.class%
         tags:
-            - { name: oro_email.mailbox_processor, type: lead }
-        arguments: [@translator, @doctrine]
+            - { name: oro_email.mailbox_process, type: lead }
 
     oro_email.listener.datagrid.context.sales:
         class: %oro_email.listener.datagrid.context.class%

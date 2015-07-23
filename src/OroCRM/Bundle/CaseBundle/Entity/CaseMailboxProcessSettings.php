@@ -5,16 +5,14 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
+use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 
 /**
  * @ORM\Entity
  */
-class CaseMailboxProcessorSettings extends MailboxProcessorSettings implements Taggable
+class CaseMailboxProcessSettings extends MailboxProcessSettings implements Taggable
 {
     const TYPE = 'case';
 
@@ -52,27 +50,6 @@ class CaseMailboxProcessorSettings extends MailboxProcessorSettings implements T
 
     /** @var ArrayCollection $tags */
     protected $tags;
-
-    /** @var ParameterBag */
-    private $settings;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSettings()
-    {
-        if ($this->settings === null) {
-            return $this->settings = new ParameterBag([
-                'owner'    => $this->getOwner(),
-                'assignTo' => $this->getAssignTo(),
-                'priority' => $this->getPriority(),
-                'status'   => $this->getStatus(),
-                'tags'     => $this->getTags(),
-            ]);
-        }
-
-        return $this->settings;
-    }
 
     /**
      * @return mixed

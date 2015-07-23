@@ -9,14 +9,14 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-class CaseMailboxProcessorType extends AbstractType
+class CaseMailboxProcessSettingsType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function getName()
     {
-        return 'orocrm_case_mailbox_processor';
+        return 'orocrm_case_mailbox_process_settings';
     }
 
     /**

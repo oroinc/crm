@@ -244,5 +244,5 @@ orocrm:
             opportunities:           Opportunities
         channel_type:
             b2b.label: B2B
-        mailbox_processor:
-            label:                      Convert To Lead
+        mailbox.process:
+            lead.label:              Convert To Lead

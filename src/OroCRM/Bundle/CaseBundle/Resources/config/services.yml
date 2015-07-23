@@ -6,7 +6,7 @@ parameters:
     orocrm_case.manager.comment.api.class: OroCRM\Bundle\CaseBundle\Model\CommentApiEntityManager
     orocrm_case.view_factory.class:        OroCRM\Bundle\CaseBundle\Model\ViewFactory
     orocrm_case.provider.phone.case.class: OroCRM\Bundle\CaseBundle\Provider\CasePhoneProvider
-    orocrm_case.provider.mailbox_processor.class: OroCRM\Bundle\CaseBundle\Provider\CaseMailboxProcessor
+    orocrm_case.provider.mailbox_process.case.class: OroCRM\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
 
 services:
     orocrm_case.manager:
@@ -52,8 +52,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.cases-for-context-grid, method: onBuildAfter }
 
-    orocrm_case.provider.mailbox_processor:
-        class: %orocrm_case.provider.mailbox_processor.class%
+    orocrm_case.provider.mailbox_process.case:
+        class: %orocrm_case.provider.mailbox_process.case.class%
         tags:
-            - { name: oro_email.mailbox_processor, type: case }
-        arguments: [@doctrine]
+            - { name: oro_email.mailbox_process, type: case }

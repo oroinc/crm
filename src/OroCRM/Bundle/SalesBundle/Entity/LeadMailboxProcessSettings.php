@@ -4,10 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Symfony\Component\HttpFoundation\ParameterBag;
-
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessorSettings;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -15,7 +12,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 /**
  * @ORM\Entity
  */
-class LeadMailboxProcessorSettings extends MailboxProcessorSettings
+class LeadMailboxProcessSettings extends MailboxProcessSettings
 {
     const TYPE = 'lead';
 
@@ -41,25 +38,6 @@ class LeadMailboxProcessorSettings extends MailboxProcessorSettings
      * @ORM\Column(name="lead_source_id", type="string")
      */
     protected $source;
-
-    /** @var ParameterBag */
-    private $settings;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSettings()
-    {
-        if ($this->settings === null) {
-            return $this->settings = new ParameterBag([
-                'owner'   => $this->getOwner(),
-                'channel' => $this->getChannel(),
-                'source'  => $this->getSource(), // This field is added through entity extension.
-            ]);
-        }
-
-        return $this->settings;
-    }
 
     /**
      * @return User

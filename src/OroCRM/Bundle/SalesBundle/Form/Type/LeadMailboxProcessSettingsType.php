@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class LeadMailboxProcessorType extends AbstractType
+class LeadMailboxProcessSettingsType extends AbstractType
 {
     /**
      * {@inheritdoc}
@@ -53,6 +53,6 @@ class LeadMailboxProcessorType extends AbstractType
      */
     public function getName()
     {
-        return 'orocrm_sales_mailbox_processor_lead';
+        return 'orocrm_sales_lead_mailbox_process_settings';
     }
 }

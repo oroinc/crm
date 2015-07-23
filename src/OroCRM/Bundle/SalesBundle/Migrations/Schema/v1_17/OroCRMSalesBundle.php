@@ -25,7 +25,7 @@ class OroCRMSalesBundle implements Migration
      */
     public static function addOroEmailMailboxProcessorColumns(Schema $schema)
     {
-        $table = $schema->getTable('oro_email_mailbox_processor');
+        $table = $schema->getTable('oro_email_mailbox_process');
 
         $table->addColumn('lead_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_owner_id', 'integer', ['notnull' => false]);
@@ -42,7 +42,7 @@ class OroCRMSalesBundle implements Migration
      */
     public static function addOroEmailMailboxProcessorForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('oro_email_mailbox_processor');
+        $table = $schema->getTable('oro_email_mailbox_process');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_channel'),
             ['lead_channel_id'],

@@ -108,5 +108,5 @@ orocrm:
         message:
             saved: Case saved
 
-        mailbox_processor:
-            label: Convert To Case
+        mailbox.process:
+            case.label: Convert To Case
