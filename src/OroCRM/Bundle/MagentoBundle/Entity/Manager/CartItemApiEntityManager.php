@@ -2,31 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
-use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartItem;
 
-class CartItemApiEntityManager extends ApiEntityManager implements EntitySerializerManagerInterface
+class CartItemApiEntityManager extends ApiEntityManager
 {
-    /** @var EntitySerializer */
-    protected $entitySerializer;
-
-    /**
-     * @param string           $class
-     * @param ObjectManager    $om
-     * @param EntitySerializer $entitySerializer
-     */
-    public function __construct($class, ObjectManager $om, EntitySerializer $entitySerializer)
-    {
-        parent::__construct($class, $om);
-        $this->entitySerializer = $entitySerializer;
-    }
-
     /**
      * @param int $cartId
      *
@@ -72,7 +55,7 @@ class CartItemApiEntityManager extends ApiEntityManager implements EntitySeriali
      */
     public function serialize(QueryBuilder $qb)
     {
-        return $this->entitySerializer->serialize($qb, ['fields' => ['cart' => ['fields' => 'id']]]);
+        return $this->entitySerializer->serialize($qb, $this->getSerializationConfig());
     }
 
     /**
@@ -95,5 +78,18 @@ class CartItemApiEntityManager extends ApiEntityManager implements EntitySeriali
         return $this->getRepository()->createQueryBuilder('e')
             ->andWhere('e.cart = :cartId')
             ->setParameter('cartId', $cartId);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSerializationConfig()
+    {
+        return [
+            'fields' => [
+                'cart'    => ['fields' => 'id'],
+                'channel' => ['fields' => 'id']
+            ]
+        ];
     }
 }

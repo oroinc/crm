@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-class OrderItemsApiType extends AbstractType
+use Symfony\Component\Validator\Constraints as Assert;
+
+class OrderItemsApiType extends OrderItemType
 {
     const NAME = 'order_item_api_type';
 
@@ -17,22 +18,16 @@ class OrderItemsApiType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('name', 'text', ['required' => false]);
-        $builder->add('sku', 'text', ['required' => false]);
-        $builder->add('qty', 'number', ['required' => false]);
-        $builder->add('cost', 'oro_money', ['required' => false]);
-        $builder->add('price', 'oro_money', ['required' => false]);
-        $builder->add('weight', 'number', ['required' => false]);
-        $builder->add('taxPercent', 'oro_percent', ['required' => false]);
-        $builder->add('taxAmount', 'oro_money', ['required' => false]);
-        $builder->add('discountPercent', 'oro_percent', ['required' => false]);
-        $builder->add('discountAmount', 'oro_money', ['required' => false]);
-        $builder->add('rowTotal', 'oro_money', ['required' => false]);
+        parent::buildForm($builder, $options);
+
+        $builder->remove('qty');
+        $builder->remove('name');
+        $builder->add('qty', 'number', ['required' => true]);
+        $builder->add('name', 'text', [
+             'required' => true,
+             'constraints' => new Assert\NotBlank()
+        ]);
         $builder->add('order', 'orocrm_order_select');
-        $builder->add('productType', 'text', ['required' => false]);
-        $builder->add('productOptions', 'text', ['required' => false]);
-        $builder->add('isVirtual', 'checkbox', ['required' => false]);
-        $builder->add('originalPrice', 'oro_money', ['required' => false]);
 
         $builder->addEventSubscriber(new PatchSubscriber());
     }

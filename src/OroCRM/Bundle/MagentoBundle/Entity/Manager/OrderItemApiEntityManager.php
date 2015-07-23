@@ -2,31 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
-use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
-class OrderItemApiEntityManager extends ApiEntityManager implements EntitySerializerManagerInterface
+class OrderItemApiEntityManager extends ApiEntityManager
 {
-    /** @var EntitySerializer */
-    protected $entitySerializer;
-
-    /**
-     * @param string           $class
-     * @param ObjectManager    $om
-     * @param EntitySerializer $entitySerializer
-     */
-    public function __construct($class, ObjectManager $om, EntitySerializer $entitySerializer)
-    {
-        parent::__construct($class, $om);
-        $this->entitySerializer = $entitySerializer;
-    }
-
     /**
      * @param int $orderId
      *
@@ -71,7 +54,7 @@ class OrderItemApiEntityManager extends ApiEntityManager implements EntitySerial
      */
     public function serialize(QueryBuilder $qb)
     {
-        return $this->entitySerializer->serialize($qb, ['fields' => ['order' => ['fields' => 'id']]]);
+        return $this->entitySerializer->serialize($qb, $this->getSerializationConfig());
     }
 
     /**
@@ -94,5 +77,18 @@ class OrderItemApiEntityManager extends ApiEntityManager implements EntitySerial
         return $this->getRepository()->createQueryBuilder('e')
             ->andWhere('e.order = :orderId')
             ->setParameter('orderId', $orderId);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getSerializationConfig()
+    {
+        return [
+            'fields' => [
+                'order'   => ['fields' => 'id'],
+                'channel' => ['fields' => 'id'],
+            ]
+        ];
     }
 }

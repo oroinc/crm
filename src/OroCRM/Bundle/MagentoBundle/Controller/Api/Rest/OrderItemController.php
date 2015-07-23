@@ -52,10 +52,10 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     }
 
     /**
-     * REST Add item to the order
+     * Add item to the order.
      *
      * @ApiDoc(
-     *      description="Add item to order",
+     *      description="Add item to order.",
      *      resource=true
      * )
      * @Acl(
@@ -66,7 +66,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * )
      * @param int $orderId
      *
-     * @return JsonResponse
+     * @return Response
      */
     public function postAction($orderId)
     {
@@ -76,10 +76,11 @@ class OrderItemController extends RestController implements ClassResourceInterfa
         $entity      = new OrderItem();
 
         if (!empty($order)) {
-            $isProcessed = $this->processForm($entity);
+            $entity = $this->processForm($entity);
 
-            if (true === $isProcessed) {
+            if ($entity) {
                 $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $isProcessed = true;
             } else {
                 $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
             }
@@ -91,13 +92,13 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     }
 
     /**
-     * REST GET order item
+     * Get order item.
      *
      * @param int $orderId
      * @param int $itemId
      *
      * @ApiDoc(
-     *      description="Get order item",
+     *      description="Get order item.",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -115,10 +116,10 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     }
 
     /**
-     * REST GET list
+     * Get all order items.
      *
      * @ApiDoc(
-     *      description="Get all order items",
+     *      description="Get all order items.",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -138,13 +139,13 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     }
 
     /**
-     * REST PUT
+     * Update order item.
      *
      * @param int $itemId  order item id
      * @param int $orderId order id
      *
      * @ApiDoc(
-     *      description="Update order item",
+     *      description="Update order item.",
      *      resource=true
      * )
      * @Acl(
@@ -173,13 +174,13 @@ class OrderItemController extends RestController implements ClassResourceInterfa
     }
 
     /**
-     * REST DELETE
+     * Delete order item.
      *
      * @param int $itemId  item id
      * @param int $orderId order id
      *
      * @ApiDoc(
-     *      description="Delete Order item",
+     *      description="Delete order item.",
      *      resource=true
      * )
      * @Acl(

@@ -147,7 +147,7 @@ parameters:
     orocrm_magento.form.handler.cart_address.class:                         OroCRM\Bundle\MagentoBundle\Form\Handler\CartAddressHandler
     orocrm_magento.form.handler.cart_item.class:                            OroCRM\Bundle\MagentoBundle\Form\Handler\CartItemHandler
     orocrm_magento.form.handler.order.class:                                OroCRM\Bundle\MagentoBundle\Form\Handler\OrderHandler
-    orocrm_magento.form.handler.order_address.class:                        OroCRM\Bundle\MagentoBundle\Form\Handler\OrderAddressHandler
+    orocrm_magento.form.handler.order_address.api.class:                        OroCRM\Bundle\MagentoBundle\Form\Handler\OrderAddressApiHandler
     orocrm_magento.form.handler.order_item.class:                           OroCRM\Bundle\MagentoBundle\Form\Handler\OrderItemHandler
     orocrm_magento.form.api.handler.customer.class:                         OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerApiHandler
     orocrm_magento.form.handler.customer_address.class:                     OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler
@@ -491,7 +491,6 @@ services:
         arguments:
             - %orocrm_magento.entity.address.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
@@ -499,8 +498,9 @@ services:
         arguments:
             - %orocrm_magento.entity.customer.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
+    orocrm_magento.customer_birthday_type_transformer:
+        class: OroCRM\Bundle\MagentoBundle\Form\DataTransformer\BirthdayTypeApiTransformer
 
     orocrm_magento.datagrid_helper:
         class: %orocrm_magento.datagrid_helper.class%
@@ -792,7 +792,6 @@ services:
         arguments:
             - %orocrm_magento.entity.cart.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.cart_address.manager.api:
         class: %orocrm_magento.cart_address.manager.api.class%
@@ -800,7 +799,6 @@ services:
         arguments:
             - %orocrm_magento.entity.cart_address.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.cart_item.manager.api:
         class: %orocrm_magento.cart_item.manager.api.class%
@@ -808,7 +806,6 @@ services:
         arguments:
             - %orocrm_magento.entity.cart_item.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.order.manager.api:
         class: %orocrm_magento.order.manager.api.class%
@@ -816,7 +813,6 @@ services:
         arguments:
             - %orocrm_magento.entity.order.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.order_item.manager.api:
         class: %orocrm_magento.order_item.manager.api.class%
@@ -824,7 +820,6 @@ services:
         arguments:
             - %orocrm_magento.entity.order_item.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     orocrm_magento.order_address.manager.api:
         class: %orocrm_magento.order_address.manager.api.class%
@@ -832,7 +827,6 @@ services:
         arguments:
             - %orocrm_magento.entity.order_address.class%
             - @doctrine.orm.entity_manager
-            - @oro_soap.entity_serializer
 
     # handler
     orocrm_magento.form.handler.cart.api:
@@ -878,13 +872,13 @@ services:
             - @request
             - @doctrine
 
-    orocrm_magento.form.handler.order_address:
-        class: %orocrm_magento.form.handler.order_address.class%
+    orocrm_magento.form.handler.order_address.api:
+        class: %orocrm_magento.form.handler.order_address.api.class%
         scope: request
         arguments:
             - @orocrm_magento.form.order_address.api
             - @request
-            - @doctrine
+            - @doctrine.orm.entity_manager
             - @security.context
 
     orocrm_magento.form.handler.customer.api:

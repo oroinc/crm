@@ -80,10 +80,10 @@ class CustomerAddressController extends RestController implements ClassResourceI
         $entity      = new Address();
 
         if ($customer instanceof Customer) {
-            $isProcessed = $this->processForm($entity, $customer);
-
-            if (true === $isProcessed) {
+            $entity = $this->processForm($entity, $customer);
+            if ($entity) {
                 $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $isProcessed = true;
             } else {
                 $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
             }
@@ -120,13 +120,13 @@ class CustomerAddressController extends RestController implements ClassResourceI
     }
 
     /**
-     * REST PUT
+     * Update customer address.
      *
      * @param int $addressId  address item id
      * @param int $customerId customer item id
      *
      * @ApiDoc(
-     *      description="Update customer address",
+     *      description="Update customer address.",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_update")
@@ -150,13 +150,13 @@ class CustomerAddressController extends RestController implements ClassResourceI
     }
 
     /**
-     * REST DELETE
+     * Delete customer address.
      *
      * @param int $addressId  address item id
      * @param int $customerId customer item id
      *
      * @ApiDoc(
-     *      description="Delete Customer",
+     *      description="Delete customer address.",
      *      resource=true
      * )
      * @Acl(
@@ -196,7 +196,6 @@ class CustomerAddressController extends RestController implements ClassResourceI
     public function getManager()
     {
         return $this->get('orocrm_magento.customer_address.manager.api');
-        #return $this->get('orocrm_magento.customer_address.manager.api');
     }
 
     /**
@@ -204,7 +203,6 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     public function getForm()
     {
-        #throw new \BadMethodCallException('Form is not available.');
         return $this->get('orocrm_magento.form.customer_address.api');
     }
 
@@ -213,7 +211,6 @@ class CustomerAddressController extends RestController implements ClassResourceI
      */
     public function getFormHandler()
     {
-        #throw new \BadMethodCallException('FormHandler is not available.');
         return $this->get('orocrm_magento.form.api.handler.customer_address');
     }
 

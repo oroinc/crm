@@ -7,6 +7,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
+use Symfony\Component\Validator\Constraints as Assert;
+
 class OrderAddressApiType extends AbstractApiAddressType
 {
     const NAME = 'order_address_api_type';
