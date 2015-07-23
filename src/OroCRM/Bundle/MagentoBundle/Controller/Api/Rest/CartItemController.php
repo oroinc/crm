@@ -55,7 +55,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * Add item to the the cart.
      *
      * @ApiDoc(
-     *      description="Add item to the cart.",
+     *      description="Add item to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -98,7 +98,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $itemId
      *
      * @ApiDoc(
-     *      description="Get cart item.",
+     *      description="Get cart item",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_view")
@@ -119,7 +119,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * Get all cart items.
      *
      * @ApiDoc(
-     *      description="Get all cart items.",
+     *      description="Get all cart items",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_view")
@@ -180,7 +180,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      * @param int $cartId cart id
      *
      * @ApiDoc(
-     *      description="Delete cart item.",
+     *      description="Delete cart item",
      *      resource=true
      * )
      * @Acl(

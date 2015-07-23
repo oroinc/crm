@@ -88,7 +88,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get all magento customers.",
+     *      description="Get all magento customers",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_view")
@@ -140,7 +140,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * Deprecated since 1.8. Use /api/rest/{version}/magentocustomers.{_format} instead.
      *
      * @ApiDoc(
-     *      description="Create new magento customer.",
+     *      description="Create new magento customer",
      *      resource=true
      * )
      *
@@ -161,7 +161,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * @param int $id Customer item id
      *
      * @ApiDoc(
-     *      description="Update magento customer.",
+     *      description="Update magento customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_update")
@@ -182,7 +182,7 @@ class CustomerController extends RestController implements ClassResourceInterfac
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete magento customer.",
+     *      description="Delete magento customer",
      *      resource=true
      * )
      * @Acl(

@@ -55,7 +55,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * Get all addresses items.
      *
      * @ApiDoc(
-     *      description="Get all addresses items.",
+     *      description="Get all addresses items",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -77,7 +77,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * Add address to the order.
      *
      * @ApiDoc(
-     *      description="Add address item to the order.",
+     *      description="Add address to the order",
      *      resource=true
      * )
      * @Acl(
@@ -114,13 +114,13 @@ class OrderAddressController extends RestController implements ClassResourceInte
     }
 
     /**
-     * Get address item.
+     * Get order address.
      *
      * @param int $addressId
      * @param int $orderId
      *
      * @ApiDoc(
-     *      description="Get address item.",
+     *      description="Get order address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -144,7 +144,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $orderId   order id
      *
      * @ApiDoc(
-     *      description="Update order address.",
+     *      description="Update order address",
      *      resource=true
      * )
      * @Acl(
@@ -180,7 +180,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
      * @param int $orderId   order id
      *
      * @ApiDoc(
-     *      description="Delete order address.",
+     *      description="Delete order address",
      *      resource=true
      * )
      * @Acl(

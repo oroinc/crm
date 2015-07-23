@@ -55,7 +55,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * Add item to the order.
      *
      * @ApiDoc(
-     *      description="Add item to order.",
+     *      description="Add item to the order",
      *      resource=true
      * )
      * @Acl(
@@ -98,7 +98,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $itemId
      *
      * @ApiDoc(
-     *      description="Get order item.",
+     *      description="Get order item",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -119,7 +119,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * Get all order items.
      *
      * @ApiDoc(
-     *      description="Get all order items.",
+     *      description="Get all order items",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -145,7 +145,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $orderId order id
      *
      * @ApiDoc(
-     *      description="Update order item.",
+     *      description="Update order item",
      *      resource=true
      * )
      * @Acl(
@@ -180,7 +180,7 @@ class OrderItemController extends RestController implements ClassResourceInterfa
      * @param int $orderId order id
      *
      * @ApiDoc(
-     *      description="Delete order item.",
+     *      description="Delete order item",
      *      resource=true
      * )
      * @Acl(

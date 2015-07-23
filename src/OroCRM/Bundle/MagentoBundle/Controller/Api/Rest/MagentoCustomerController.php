@@ -87,7 +87,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get all magento customers.",
+     *      description="Get all magento customers",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_view")
@@ -117,7 +117,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * @param string $id
      *
      * @ApiDoc(
-     *      description="Get magento customer.",
+     *      description="Get magento customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_view")
@@ -133,7 +133,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * Create new magento customer.
      *
      * @ApiDoc(
-     *      description="Create new magento customer.",
+     *      description="Create new magento customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_create")
@@ -150,7 +150,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * @param int $id Customer item id
      *
      * @ApiDoc(
-     *      description="Update magento customer.",
+     *      description="Update magento customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_update")
@@ -168,7 +168,7 @@ class MagentoCustomerController extends RestController implements ClassResourceI
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete magento customer.",
+     *      description="Delete magento customer",
      *      resource=true
      * )
      * @Acl(

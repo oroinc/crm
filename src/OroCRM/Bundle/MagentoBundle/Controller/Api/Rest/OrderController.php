@@ -54,7 +54,7 @@ class OrderController extends RestController
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get all order items.",
+     *      description="Get all orders",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -73,7 +73,7 @@ class OrderController extends RestController
      * Create new order.
      *
      * @ApiDoc(
-     *      description="Create new order.",
+     *      description="Create new order",
      *      resource=true
      * )
      * @Acl(
@@ -94,7 +94,7 @@ class OrderController extends RestController
      * @param string $id
      *
      * @ApiDoc(
-     *      description="Get order.",
+     *      description="Get order",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -112,7 +112,7 @@ class OrderController extends RestController
      * @param int $id Order id
      *
      * @ApiDoc(
-     *      description="Update order.",
+     *      description="Update order",
      *      resource=true
      * )
      * @Acl(
@@ -134,7 +134,7 @@ class OrderController extends RestController
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete order.",
+     *      description="Delete order",
      *      resource=true
      * )
      * @Acl(

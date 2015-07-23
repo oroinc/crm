@@ -29,7 +29,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Manager\CustomerApiEntityManager;
 class CustomerAddressController extends RestController implements ClassResourceInterface
 {
     /**
-     * REST GET list
+     * Get all addresses items.
      *
      * @ApiDoc(
      *      description="Get all addresses items",
@@ -61,10 +61,10 @@ class CustomerAddressController extends RestController implements ClassResourceI
     }
 
     /**
-     * REST Add address to the customer
+     * Add address to the customer.
      *
      * @ApiDoc(
-     *      description="Add address item to customer",
+     *      description="Add address to the customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_create")
@@ -96,13 +96,13 @@ class CustomerAddressController extends RestController implements ClassResourceI
     }
 
     /**
-     * REST GET item
+     * Get customer address.
      *
      * @param int $addressId
      * @param int $customerId
      *
      * @ApiDoc(
-     *      description="Get address item",
+     *      description="Get customer address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_view")
@@ -126,7 +126,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $customerId customer item id
      *
      * @ApiDoc(
-     *      description="Update customer address.",
+     *      description="Update customer address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_customer_update")
@@ -156,7 +156,7 @@ class CustomerAddressController extends RestController implements ClassResourceI
      * @param int $customerId customer item id
      *
      * @ApiDoc(
-     *      description="Delete customer address.",
+     *      description="Delete customer address",
      *      resource=true
      * )
      * @Acl(

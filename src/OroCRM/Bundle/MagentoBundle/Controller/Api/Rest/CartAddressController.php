@@ -55,7 +55,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Add shipping address to the cart.
      *
      * @ApiDoc(
-     *      description="Add shipping address item to cart",
+     *      description="Add shipping address to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -77,7 +77,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * Add billing address to the cart.
      *
      * @ApiDoc(
-     *      description="Add billing address item to cart.",
+     *      description="Add billing address to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -101,7 +101,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId
      *
      * @ApiDoc(
-     *      description="Get address by type.",
+     *      description="Get address by type",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_view")
@@ -119,7 +119,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId
      *
      * @ApiDoc(
-     *      description="Get address item by type.",
+     *      description="Get address item by type",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_view")
@@ -137,7 +137,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId cart id
      *
      * @ApiDoc(
-     *      description="Update cart shipping address.",
+     *      description="Update cart shipping address",
      *      resource=true
      * )
      * @Acl(
@@ -159,7 +159,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId cart id
      *
      * @ApiDoc(
-     *      description="Update cart billing address.",
+     *      description="Update cart billing address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_address_update")
@@ -177,7 +177,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId
      *
      * @ApiDoc(
-     *      description="Delete cart shipping address.",
+     *      description="Delete cart shipping address",
      *      resource=true
      * )
      * @Acl(
@@ -199,7 +199,7 @@ class CartAddressController extends RestController implements ClassResourceInter
      * @param int $cartId
      *
      * @ApiDoc(
-     *      description="Delete cart billing address.",
+     *      description="Delete cart billing address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_address_delete")
