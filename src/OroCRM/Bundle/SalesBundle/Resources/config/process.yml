@@ -1,0 +1,61 @@
+definitions:
+    convert_mailbox_email_to_lead:
+        label: 'Convert Mailbox E-mail to Lead'
+        enabled: true
+        entity: Oro\Bundle\EmailBundle\Entity\EmailUser
+        order: 20
+        actions_configuration:
+            conditions:
+                - @and:
+                    - @not_empty: [$mailboxOwner] # only process meail users who have mailbox owner
+                    - @not_empty: [$mailboxOwner.processSettings] # and that owner has configured processing
+                    - @equal: [$mailboxOwner.processSettings.type, 'lead'] # and processing is of type lead
+            actions:
+                # Assign notes
+                - @tree:
+                    conditions:
+                        - @equal: [$email.body.isText, true]
+                    actions:
+                        - @assign_value:
+                            attribute: $.leadNotes
+                            value: $email.body.body
+                # Assign related contact
+                - @tree:
+                    conditions:
+                        - @and:
+                            - @equal: [$email.fromEmailAddress.hasOwner, true]
+                            - @not_empty: [$email.fromEmailAddress.contactOwner]
+                    actions:
+                        - @assign_value:
+                            attribute: $.leadContact
+                            value: $email.fromEmailAddress.contactOwner
+                # Assign names
+                - @tree:
+                    conditions:
+                        - @not_empty: [$.leadContact]
+                    actions:
+                        - @assign_value:
+                            attribute: $.leadFirstName
+                            value: $.leadContact.firstName
+                        - @assign_value:
+                            attribute: $.leadLastName
+                            value: $.leadContact.lastName
+                #assign B2B Customer
+                - @create_entity:
+                    class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                    attribute: $.leadEntity
+                    flush: false
+                    data:
+                        owner: $mailboxOwner.processSettings.owner
+                        channel: $mailboxOwner.processSettings.channe;
+                        source: $mailboxOwner.processSettings.source
+                        name: $email.subject
+                        notes: $.leadNotes
+                        contact: $.leadContact
+                        firstName: $.leadFirstName
+                        lastName: $.leadLastName
+                        email: $email.fromEmailAddress.email
+triggers:
+    convert_mailbox_email_to_lead:
+        -
+            event: create

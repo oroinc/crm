@@ -25,7 +25,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessorSettings',
+            'data_class' => 'OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings',
         ]);
     }
 

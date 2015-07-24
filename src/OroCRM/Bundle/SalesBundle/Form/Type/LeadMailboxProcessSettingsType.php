@@ -14,7 +14,7 @@ class LeadMailboxProcessSettingsType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults([
-            'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\LeadMailboxProcessorSettings',
+            'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\LeadMailboxProcessSettings',
             'cascade_validation' => true,
         ]);
     }
