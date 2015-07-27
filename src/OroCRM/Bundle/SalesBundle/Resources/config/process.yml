@@ -5,74 +5,73 @@ definitions:
         entity: Oro\Bundle\EmailBundle\Entity\EmailBody
         order: 150
         actions_configuration:
-            conditions:
-            actions:
-                - @find_entity:
-                    class: Oro\Bundle\EmailBundle\Entity\Email
-                    attribute: $.email
-                    where:
-                        emailBody: $id
-                - @find_entity:
-                    class: Oro\Bundle\EmailBundle\Entity\EmailUser
-                    attribute: $.emailUser
-                    where:
-                        email: $.email.id
-                        mailboxOwner: ['IS NOT NULL']
-                - @tree:
-                    conditions:
-                        - @not_empty: $.emailUser
-                        - @not_empty: $.emailUser.mailboxOwner.processSettings
-                        - @equal: [$.emailUser.mailboxOwner.processSettings.type, 'lead']
-                    actions:
-                        # Assign notes
-                        - @tree:
-                            conditions:
-                                @equal: [$bodyIsText, true]
-                            actions:
-                                - @assign_value:
-                                    attribute: $.leadNotes
-                                    value: $body
-                        # Assign related contact
-                        - @assign_value:
-                            attribute: $.leadContact
-                            value: $.email.fromEmailAddress.owner
-                        # Assign names
-                        - @tree:
-                            conditions:
-                                @not_empty: [$.leadContact]
-                            actions:
-                                - @assign_value:
-                                    attribute: $.leadFirstName
-                                    value: $.leadContact.firstName
-                                - @assign_value:
-                                    attribute: $.leadLastName
-                                    value: $.leadContact.lastName
-                        #assign names if no contact is related
-                        - @tree:
-                            conditions:
-                                @empty: $.leadContact
-                            actions:
-                                - @assign_value:
-                                    attribute: $.leadFirstName
-                                    value: $.email.fromEmailAddress.email
-                                - @assign_value:
-                                    attribute: $.leadLastName
-                                    value: $.email.fromEmailAddress.email
-                        - @create_entity:
-                            class: OroCRM\Bundle\SalesBundle\Entity\Lead
-                            attribute: $.leadEntity
-                            flush: false
-                            data:
-                                owner:          $.emailUser.mailboxOwner.processSettings.owner
-                                dataChannel:    $.emailUser.mailboxOwner.processSettings.channel
-                                source:         $.emailUser.mailboxOwner.processSettings.source
-                                organization:   $.emailUser.mailboxOwner.organization
-                                name:           $.email.subject
-                                notes:          $.leadNotes
-                                contact:        $.leadContact
-                                firstName:      $.leadFirstName
-                                lastName:       $.leadLastName
-                                email:          $.email.fromEmailAddress.email
+            - @find_entity:
+                class: Oro\Bundle\EmailBundle\Entity\Email
+                attribute: $.email
+                where:
+                    emailBody: $id
+            - @find_entity:
+                class: Oro\Bundle\EmailBundle\Entity\EmailUser
+                attribute: $.emailUser
+                where:
+                    email: $.email.id
+                    mailboxOwner: ['IS NOT NULL']
+            - @tree:
+                conditions:
+                    @and:
+                        - @not_empty: [$.emailUser]
+                        - @not_empty: [$.emailUser.mailboxOwner.processSettings]
+                        - @equal:     [$.emailUser.mailboxOwner.processSettings.type, 'lead']
+                actions:
+                    # Assign notes
+                    - @tree:
+                        conditions:
+                            @equal: [$bodyIsText, true]
+                        actions:
+                            - @assign_value:
+                                attribute: $.leadNotes
+                                value: $body
+                    # Assign related contact
+                    - @assign_value:
+                        attribute: $.leadContact
+                        value: $.email.fromEmailAddress.owner
+                    # Assign names
+                    - @tree:
+                        conditions:
+                            @not_empty: [$.leadContact]
+                        actions:
+                            - @assign_value:
+                                attribute: $.leadFirstName
+                                value: $.leadContact.firstName
+                            - @assign_value:
+                                attribute: $.leadLastName
+                                value: $.leadContact.lastName
+                    #assign names if no contact is related
+                    - @tree:
+                        conditions:
+                            @empty: [$.leadContact]
+                        actions:
+                            - @assign_value:
+                                attribute: $.leadFirstName
+                                value: $.email.fromEmailAddress.email
+                            - @assign_value:
+                                attribute: $.leadLastName
+                                value: $.email.fromEmailAddress.email
+                    - @create_entity:
+                        class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                        attribute: $.leadEntity
+                        flush: false
+                        data:
+                            owner:          $.emailUser.mailboxOwner.processSettings.owner
+                            dataChannel:    $.emailUser.mailboxOwner.processSettings.channel
+                            source:         $.emailUser.mailboxOwner.processSettings.source
+                            organization:   $.emailUser.mailboxOwner.organization
+                            name:           $.email.subject
+                            notes:          $.leadNotes
+                            contact:        $.leadContact
+                            firstName:      $.leadFirstName
+                            lastName:       $.leadLastName
+                            email:          $.email.fromEmailAddress.email
 triggers:
     convert_mailbox_email_to_lead:
         -
