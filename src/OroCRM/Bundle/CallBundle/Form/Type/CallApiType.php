@@ -65,6 +65,10 @@ class CallApiType extends AbstractType
      */
     public function validateAssociations($associations, ExecutionContextInterface $context)
     {
+        if (empty($associations)) {
+            return;
+        }
+
         foreach ($associations as $index => $association) {
             if (empty($association['entityName']) || empty($association['entityId'])) {
                 $context->addViolation(
