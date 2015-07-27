@@ -167,14 +167,14 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
         $eventValue = $trackingVisitEvent->getWebEvent()->getValue();
 
         switch ($eventName) {
-            case self::EVENT_CART_ITEM_ADDED: // process 'cart item added' event
+            case self::EVENT_CART_ITEM_ADDED:
                 $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Product')->findOneBy(
                     [
                         'originId' => (int)$eventValue
                     ]
                 );
                 break;
-            case self::EVENT_ORDER_PLACE_SUCCESS: // process 'order successfully placed' event
+            case self::EVENT_ORDER_PLACE_SUCCESS:
                 $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
                     [
                         'subtotalAmount' => $eventValue,
@@ -182,7 +182,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                     ]
                 );
                 break;
-            case self::EVENT_ORDER_PLACED: // process 'order placed' event
+            case self::EVENT_ORDER_PLACED:
                 $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Order')->findOneBy(
                     [
                         'incrementId' => $eventValue,
@@ -190,7 +190,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                     ]
                 );
                 break;
-            case self::EVENT_CHECKOUT_STARTED: // process 'user entered checkout' event
+            case self::EVENT_CHECKOUT_STARTED:
                 $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Cart')->findOneBy(
                     [
                         'subTotal'    => $eventValue,
@@ -198,7 +198,7 @@ class TrackingCustomerIdentification implements TrackingEventIdentifierInterface
                     ]
                 );
                 break;
-            case self::EVENT_CUSTOMER_LOGOUT: // process 'user logged out' event
+            case self::EVENT_CUSTOMER_LOGOUT:
                 $targets[] = $this->em->getRepository('OroCRMMagentoBundle:Customer')->findOneBy(
                     [
                         'originId'    => (int)$eventValue,
