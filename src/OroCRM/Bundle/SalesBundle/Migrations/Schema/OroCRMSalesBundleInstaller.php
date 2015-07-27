@@ -105,7 +105,7 @@ class OroCRMSalesBundleInstaller implements
         $this->createOrocrmSalesOpportCloseRsnTable($schema);
         $this->createOrocrmSalesLeadTable($schema);
         $this->createOrocrmSalesB2bCustomerTable($schema);
-        OroCRMSalesBundle_v1_17::addOroEmailMailboxProcessorColumns($schema, $this->extendExtension);
+        OroCRMSalesBundle_v1_17::addOroEmailMailboxProcessorColumns($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmSalesOpportunityForeignKeys($schema);

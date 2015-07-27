@@ -35,7 +35,8 @@ class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
     /**
      * @var string
      *
-     * @ORM\Column(name="lead_source_id", type="string")
+     * @ORM\ManyToOne(targetEntity="Extend\Entity\EV_Lead_Source")
+     * @ORM\JoinColumn(name="lead_source_id", referencedColumnName="id")
      */
     protected $source;
 
