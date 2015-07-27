@@ -2,32 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
-use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
-class CartApiEntityManager extends ApiEntityManager implements EntitySerializerManagerInterface
+class CartApiEntityManager extends ApiEntityManager
 {
-    /** @var EntitySerializer */
-    protected $entitySerializer;
-
-    /**
-     * @param string           $class
-     * @param ObjectManager    $om
-     * @param EntitySerializer $entitySerializer
-     */
-    public function __construct($class, ObjectManager $om, EntitySerializer $entitySerializer)
-    {
-        parent::__construct($class, $om);
-        $this->entitySerializer = $entitySerializer;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -56,10 +39,6 @@ class CartApiEntityManager extends ApiEntityManager implements EntitySerializerM
 
         $cart = $serialized[0];
 
-        $cart['cartItems']       = $this->getSerializedItems($entity);
-        $cart['shippingAddress'] = $this->getSerializedAddresses($entity->getShippingAddress());
-        $cart['billingAddress']  = $this->getSerializedAddresses($entity->getBillingAddress());
-
         return $cart;
     }
 
@@ -79,32 +58,6 @@ class CartApiEntityManager extends ApiEntityManager implements EntitySerializerM
     public function findOneBy(array $criteria = [])
     {
         return $this->om->getRepository($this->class)->findOneBy($criteria);
-    }
-
-    /**
-     * @param Cart $entity
-     *
-     * @return array
-     */
-    protected function getSerializedItems(Cart $entity)
-    {
-        return $this->entitySerializer->serializeEntities(
-            $entity->getCartItems()->toArray(),
-            'OroCRM\Bundle\MagentoBundle\Entity\CartItem',
-            $this->getItemSerializationConfig()
-        );
-    }
-
-    /**
-     * @return array
-     */
-    protected function getItemSerializationConfig()
-    {
-        return [
-            'fields' => [
-                'cart' => ['fields' => 'id']
-            ]
-        ];
     }
 
     /**
@@ -131,7 +84,8 @@ class CartApiEntityManager extends ApiEntityManager implements EntitySerializerM
         return [
             'fields' => [
                 'country' => ['fields' => 'iso2Code'],
-                'region'  => ['fields' => 'combinedCode']
+                'region'  => ['fields' => 'combinedCode'],
+                'channel' => ['fields' => 'id']
             ]
         ];
     }
@@ -142,15 +96,18 @@ class CartApiEntityManager extends ApiEntityManager implements EntitySerializerM
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['workflowItem', 'workflowStep'],
+            'excluded_fields' => ['workflowItem', 'workflowStep', 'relatedEmails'],
             'fields'          => [
-                'store'        => ['fields' => 'id'],
-                'dataChannel'  => ['fields' => 'id'],
-                'channel'      => ['fields' => 'id'],
-                'status'       => ['fields' => 'name'],
-                'customer'     => ['fields' => 'id'],
-                'owner'        => ['fields' => 'id'],
-                'organization' => ['fields' => 'id']
+                'store'           => ['fields' => 'id'],
+                'dataChannel'     => ['fields' => 'id'],
+                'channel'         => ['fields' => 'id'],
+                'status'          => ['fields' => 'name'],
+                'customer'        => ['fields' => 'id'],
+                'owner'           => ['fields' => 'id'],
+                'organization'    => ['fields' => 'id'],
+                'shippingAddress' => $this->getAddressSerializationConfig(),
+                'billingAddress'  => $this->getAddressSerializationConfig(),
+                'cartItems'       => ['fields' => 'id']
             ]
         ];
     }

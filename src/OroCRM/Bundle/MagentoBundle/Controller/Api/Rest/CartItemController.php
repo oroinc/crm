@@ -52,10 +52,10 @@ class CartItemController extends RestController implements ClassResourceInterfac
     }
 
     /**
-     * REST Add item to the cart
+     * Add item to the the cart.
      *
      * @ApiDoc(
-     *      description="Add item to cart",
+     *      description="Add item to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -76,10 +76,11 @@ class CartItemController extends RestController implements ClassResourceInterfac
         $entity      = new CartItem();
 
         if (!empty($cart)) {
-            $isProcessed = $this->processForm($entity);
+            $entity = $this->processForm($entity);
 
-            if (true === $isProcessed) {
+            if ($entity) {
                 $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $isProcessed = true;
             } else {
                 $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
             }
@@ -91,7 +92,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
     }
 
     /**
-     * REST GET cart item
+     * Get cart item.
      *
      * @param int $cartId
      * @param int $itemId
@@ -115,7 +116,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
     }
 
     /**
-     * REST GET list
+     * Get all cart items.
      *
      * @ApiDoc(
      *      description="Get all cart items",
@@ -138,7 +139,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
     }
 
     /**
-     * REST PUT
+     * Update cart item.
      *
      * @param int $itemId cart item id
      * @param int $cartId cart id
@@ -173,7 +174,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
     }
 
     /**
-     * REST DELETE
+     * Delete cart item.
      *
      * @param int $itemId item id
      * @param int $cartId cart id

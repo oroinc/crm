@@ -45,7 +45,7 @@ class CartController extends RestController
     }
 
     /**
-     * REST GET list
+     * Get all carts.
      *
      * @QueryParam(
      *     name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1."
@@ -70,7 +70,7 @@ class CartController extends RestController
     }
 
     /**
-     * Create new cart
+     * Create new cart.
      *
      * @ApiDoc(
      *      description="Create new cart",
@@ -89,7 +89,7 @@ class CartController extends RestController
     }
 
     /**
-     * REST GET cart
+     * Get cart.
      *
      * @param string $id
      *
@@ -107,7 +107,7 @@ class CartController extends RestController
     }
 
     /**
-     * REST PUT
+     * Update cart.
      *
      * @param int $id Cart id
      *
@@ -129,7 +129,7 @@ class CartController extends RestController
     }
 
     /**
-     * REST DELETE
+     * Delete cart.
      *
      * @param int $id
      *

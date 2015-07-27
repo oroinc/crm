@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Manager;
 
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -10,17 +9,12 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use Oro\Bundle\SoapBundle\Entity\Manager\EntitySerializerManagerInterface;
-use Oro\Bundle\SoapBundle\Serializer\EntitySerializer;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 
-class CartAddressApiEntityManager extends ApiEntityManager implements EntitySerializerManagerInterface
+class CartAddressApiEntityManager extends ApiEntityManager
 {
-    /** @var EntitySerializer */
-    protected $entitySerializer;
-
     /** @var PropertyAccessor */
     protected $propertyAccessor;
 
@@ -29,17 +23,6 @@ class CartAddressApiEntityManager extends ApiEntityManager implements EntitySeri
         AddressType::TYPE_BILLING  => 'billingAddress',
         AddressType::TYPE_SHIPPING => 'shippingAddress'
     ];
-
-    /**
-     * @param string           $class
-     * @param ObjectManager    $om
-     * @param EntitySerializer $entitySerializer
-     */
-    public function __construct($class, ObjectManager $om, EntitySerializer $entitySerializer)
-    {
-        parent::__construct($class, $om);
-        $this->entitySerializer = $entitySerializer;
-    }
 
     /**
      * @param Cart   $cart
@@ -62,7 +45,8 @@ class CartAddressApiEntityManager extends ApiEntityManager implements EntitySeri
                 'fields' => [
                     'country'      => ['fields' => 'iso2Code'],
                     'region'       => ['fields' => 'combinedCode'],
-                    'organization' => ['fields' => 'id']
+                    'organization' => ['fields' => 'id'],
+                    'channel'      => ['fields' => 'id']
                 ]
             ]
         );

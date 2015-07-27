@@ -17,7 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class CustomerControllerTest extends WebTestCase
+class MagentoCustomerControllerTest extends WebTestCase
 {
     const CHANNEL_NAME = 'Demo Web store';
     const WEBSITE_CODE = 'web site code';
@@ -138,7 +138,7 @@ class CustomerControllerTest extends WebTestCase
             ]
         ];
 
-        $this->client->request('POST', $this->getUrl('oro_api_post_customer'), $request);
+        $this->client->request('POST', $this->getUrl('oro_api_post_magentocustomer'), $request);
 
         $customer = $this->getJsonResponseContent($this->client->getResponse(), 201);
 
@@ -158,7 +158,7 @@ class CustomerControllerTest extends WebTestCase
 
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_customers', ['startUpdatedAt' => $date->format('Y-m-d')])
+            $this->getUrl('oro_api_get_magentocustomers', ['startUpdatedAt' => $date->format('Y-m-d')])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
@@ -183,7 +183,7 @@ class CustomerControllerTest extends WebTestCase
      */
     public function testGetCustomer($request)
     {
-        $this->client->request('GET', $this->getUrl('oro_api_get_customer', ['id' => $request['id']]));
+        $this->client->request('GET', $this->getUrl('oro_api_get_magentocustomer', ['id' => $request['id']]));
 
         $selectedCustomer = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
@@ -214,14 +214,14 @@ class CustomerControllerTest extends WebTestCase
 
         $this->client->request(
             'PUT',
-            $this->getUrl('oro_api_put_customer', ['id' => $id]),
+            $this->getUrl('oro_api_put_magentocustomer', ['id' => $id]),
             $request
         );
 
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
 
-        $this->client->request('GET', $this->getUrl('oro_api_get_customer', ['id' => $id]));
+        $this->client->request('GET', $this->getUrl('oro_api_get_magentocustomer', ['id' => $id]));
         $customer = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['firstName'], $customer['firstName'], 'Customer was not updated');
@@ -243,12 +243,12 @@ class CustomerControllerTest extends WebTestCase
     {
         $this->client->request(
             'DELETE',
-            $this->getUrl('oro_api_delete_customer', ['id' => $id])
+            $this->getUrl('oro_api_delete_magentocustomer', ['id' => $id])
         );
 
         $result = $this->client->getResponse();
         $this->assertEmptyResponseStatusCodeEquals($result, 204);
-        $this->client->request('GET', $this->getUrl('oro_api_get_customer', ['id' => $id]));
+        $this->client->request('GET', $this->getUrl('oro_api_get_magentocustomer', ['id' => $id]));
         $this->getJsonResponseContent($this->client->getResponse(), 404);
     }
 

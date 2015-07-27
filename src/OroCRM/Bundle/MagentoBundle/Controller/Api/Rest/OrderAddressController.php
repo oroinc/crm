@@ -48,11 +48,11 @@ class OrderAddressController extends RestController implements ClassResourceInte
      */
     public function getFormHandler()
     {
-        return $this->get('orocrm_magento.form.handler.order_address');
+        return $this->get('orocrm_magento.form.handler.order_address.api');
     }
 
     /**
-     * REST GET list
+     * Get all addresses items.
      *
      * @ApiDoc(
      *      description="Get all addresses items",
@@ -74,10 +74,10 @@ class OrderAddressController extends RestController implements ClassResourceInte
     }
 
     /**
-     * REST Add address to the order
+     * Add address to the order.
      *
      * @ApiDoc(
-     *      description="Add address item to order",
+     *      description="Add address to the order",
      *      resource=true
      * )
      * @Acl(
@@ -98,10 +98,11 @@ class OrderAddressController extends RestController implements ClassResourceInte
         $entity      = new OrderAddress();
 
         if (!empty($order)) {
-            $isProcessed = $this->processForm($entity);
+            $entity = $this->processForm($entity);
 
-            if (true === $isProcessed) {
+            if ($entity) {
                 $view = $this->view($this->createResponseData($entity), Codes::HTTP_CREATED);
+                $isProcessed = true;
             } else {
                 $view = $this->view($this->getForm(), Codes::HTTP_BAD_REQUEST);
             }
@@ -113,13 +114,13 @@ class OrderAddressController extends RestController implements ClassResourceInte
     }
 
     /**
-     * REST GET item
+     * Get order address.
      *
      * @param int $addressId
      * @param int $orderId
      *
      * @ApiDoc(
-     *      description="Get address item",
+     *      description="Get order address",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -137,7 +138,7 @@ class OrderAddressController extends RestController implements ClassResourceInte
     }
 
     /**
-     * REST PUT
+     * Update order address.
      *
      * @param int $addressId order address item id
      * @param int $orderId   order id
@@ -173,13 +174,13 @@ class OrderAddressController extends RestController implements ClassResourceInte
     }
 
     /**
-     * REST DELETE
+     * Delete order address.
      *
      * @param int $addressId order address item id
      * @param int $orderId   order id
      *
      * @ApiDoc(
-     *      description="Delete order",
+     *      description="Delete order address",
      *      resource=true
      * )
      * @Acl(

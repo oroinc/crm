@@ -45,7 +45,7 @@ class OrderController extends RestController
     }
 
     /**
-     * REST GET list
+     * Get all orders.
      *
      * @QueryParam(
      *     name="page", requirements="\d+", nullable=true, description="Page number, starting from 1. Defaults to 1."
@@ -54,7 +54,7 @@ class OrderController extends RestController
      *     name="limit", requirements="\d+", nullable=true, description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get all order items",
+     *      description="Get all orders",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_order_view")
@@ -70,7 +70,7 @@ class OrderController extends RestController
     }
 
     /**
-     * Create new order
+     * Create new order.
      *
      * @ApiDoc(
      *      description="Create new order",
@@ -89,7 +89,7 @@ class OrderController extends RestController
     }
 
     /**
-     * REST GET order
+     * Get order.
      *
      * @param string $id
      *
@@ -107,7 +107,7 @@ class OrderController extends RestController
     }
 
     /**
-     * REST PUT
+     * Update order.
      *
      * @param int $id Order id
      *
@@ -129,7 +129,7 @@ class OrderController extends RestController
     }
 
     /**
-     * REST DELETE
+     * Delete order.
      *
      * @param int $id
      *

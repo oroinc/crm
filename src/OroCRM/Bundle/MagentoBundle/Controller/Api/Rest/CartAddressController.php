@@ -52,10 +52,10 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST Add shipping address to the cart
+     * Add shipping address to the cart.
      *
      * @ApiDoc(
-     *      description="Add shipping address item to cart",
+     *      description="Add shipping address to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -74,10 +74,10 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST Add billing address to the cart
+     * Add billing address to the cart.
      *
      * @ApiDoc(
-     *      description="Add billing address item to cart",
+     *      description="Add billing address to the cart",
      *      resource=true
      * )
      * @Acl(
@@ -96,12 +96,12 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST GET item
+     * Get address by type.
      *
      * @param int $cartId
      *
      * @ApiDoc(
-     *      description="Get address item by type",
+     *      description="Get address by type",
      *      resource=true
      * )
      * @AclAncestor("orocrm_magento_cart_view")
@@ -114,7 +114,7 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST GET item
+     * Get address item by type.
      *
      * @param int $cartId
      *
@@ -132,7 +132,7 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST PUT
+     * Update cart shipping address.
      *
      * @param int $cartId cart id
      *
@@ -154,7 +154,7 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST PUT
+     * Update cart billing address.
      *
      * @param int $cartId cart id
      *
@@ -172,7 +172,7 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST DELETE
+     * Delete cart shipping address.
      *
      * @param int $cartId
      *
@@ -194,7 +194,7 @@ class CartAddressController extends RestController implements ClassResourceInter
     }
 
     /**
-     * REST DELETE
+     * Delete cart billing address.
      *
      * @param int $cartId
      *

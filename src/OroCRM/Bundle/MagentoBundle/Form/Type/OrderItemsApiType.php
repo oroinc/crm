@@ -2,13 +2,14 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
-class OrderItemsApiType extends AbstractType
+use Symfony\Component\Validator\Constraints as Assert;
+
+class OrderItemsApiType extends OrderItemType
 {
     const NAME = 'order_item_api_type';
 
