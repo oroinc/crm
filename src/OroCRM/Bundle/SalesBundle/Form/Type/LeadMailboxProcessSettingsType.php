@@ -43,7 +43,9 @@ class LeadMailboxProcessSettingsType extends AbstractType
             [
                 'required'  => false,
                 'label'     => 'orocrm.sales.lead.source.label',
-                'enum_code' => 'lead_source'
+                'enum_code' => 'lead_source',
+                'multiple'  => false,
+                'expanded'  => false
             ]
         );
     }

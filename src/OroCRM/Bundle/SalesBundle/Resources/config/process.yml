@@ -3,36 +3,34 @@ definitions:
         label: 'Convert Mailbox E-mail to Lead'
         enabled: true
         entity: Oro\Bundle\EmailBundle\Entity\EmailUser
-        order: 20
+        order: 150
         actions_configuration:
             conditions:
-                - @and:
+                @and:
                     - @not_empty: [$mailboxOwner] # only process meail users who have mailbox owner
                     - @not_empty: [$mailboxOwner.processSettings] # and that owner has configured processing
                     - @equal: [$mailboxOwner.processSettings.type, 'lead'] # and processing is of type lead
             actions:
                 # Assign notes
-                - @tree:
-                    conditions:
-                        - @equal: [$email.body.isText, true]
-                    actions:
-                        - @assign_value:
-                            attribute: $.leadNotes
-                            value: $email.body.body
+#                - @tree:
+#                    conditions:
+#                        @equal: [$email.emailBody.bodyIsText, true]
+#                    actions:
+#                        - @assign_value:
+#                            attribute: $.leadNotes
+#                            value: $email.emailBody.body
                 # Assign related contact
                 - @tree:
                     conditions:
-                        - @and:
-                            - @equal: [$email.fromEmailAddress.hasOwner, true]
-                            - @not_empty: [$email.fromEmailAddress.contactOwner]
+                        @not_empty: [$email.fromEmailAddress.owner]
                     actions:
                         - @assign_value:
                             attribute: $.leadContact
-                            value: $email.fromEmailAddress.contactOwner
+                            value: $email.fromEmailAddress.owner
                 # Assign names
                 - @tree:
                     conditions:
-                        - @not_empty: [$.leadContact]
+                        @not_empty: [$.leadContact]
                     actions:
                         - @assign_value:
                             attribute: $.leadFirstName
@@ -40,21 +38,33 @@ definitions:
                         - @assign_value:
                             attribute: $.leadLastName
                             value: $.leadContact.lastName
+                #assign names if no contact is related
+                - @tree:
+                    conditions:
+                        @empty: $.leadContact
+                    actions:
+                        - @assign_value:
+                            attribute: $.leadFirstName
+                            value: $email.fromEmailAddress.email
+                        - @assign_value:
+                            attribute: $.leadLastName
+                            value: $email.fromEmailAddress.email
                 #assign B2B Customer
                 - @create_entity:
                     class: OroCRM\Bundle\SalesBundle\Entity\Lead
                     attribute: $.leadEntity
                     flush: false
                     data:
-                        owner: $mailboxOwner.processSettings.owner
-                        channel: $mailboxOwner.processSettings.channe;
-                        source: $mailboxOwner.processSettings.source
-                        name: $email.subject
-                        notes: $.leadNotes
-                        contact: $.leadContact
-                        firstName: $.leadFirstName
-                        lastName: $.leadLastName
-                        email: $email.fromEmailAddress.email
+                        owner:          $mailboxOwner.processSettings.owner
+                        dataChannel:    $mailboxOwner.processSettings.channel
+                        source:         $mailboxOwner.processSettings.leadSource
+                        organization:   $mailboxOwner.organization
+                        name:           $email.subject
+                        notes:          $.leadNotes
+                        contact:        $.leadContact
+                        firstName:      $.leadFirstName
+                        lastName:       $.leadLastName
+                        email:          $email.fromEmailAddress.email
 triggers:
     convert_mailbox_email_to_lead:
         -

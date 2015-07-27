@@ -3,10 +3,10 @@ definitions:
         label: 'Convert Mailbox E-mail to Case'
         enabled: true
         entity: Oro\Bundle\EmailBundle\Entity\EmailUser
-        order: 20
+        order: 150
         actions_configuration:
             conditions:
-                - @and:
+                @and:
                     - @not_empty: [$.mailboxOwner] # only process meail users who have mailbox owner
                     - @not_empty: [$.mailboxOwner.processSettings] # and that owner has configured processing
                     - @equal: [$.mailboxOwner.processSettings.type, 'case'] # and processing is of type case
@@ -35,21 +35,21 @@ definitions:
                 - @assign_value:
                     attribute: $.caseEntity.subject
                     value: $email.subject
-                - @tree:
-                    conditions:
-                        - @equal: [$email.body.isText, true]
-                    actions:
-                        - @assign_value:
-                            attribute: $.caseEntity.description
-                            value: $email.body.body
+#                - @tree:
+#                    conditions:
+#                        - @equal: [$email.emailBody.bodyIsText, true]
+#                    actions:
+#                        - @assign_value:
+#                            attribute: $.caseEntity.description
+#                            value: $email.emailBody.body
                 - @assign_value:
                     attribute: $.caseEntity.source
                     value: 'email'
                 # Assign related contact
                 - @tree:
                     conditions:
-                        - @and:
-                            - @equal: [$email.fromEmailAddress.hasOwner, true]
+                        @and:
+                            - @equal: [$email.fromEmailAddress.owner, true]
                             - @not_empty: [$email.fromEmailAddress.contactOwner]
                     actions:
                         - @assign_value:

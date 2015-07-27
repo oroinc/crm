@@ -5,17 +5,18 @@ namespace OroCRM\Bundle\CaseBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\TagBundle\Entity\Taggable;
 
+use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
+
 /**
  * @ORM\Entity
+ * @Config
  */
-class CaseMailboxProcessSettings extends MailboxProcessSettings implements Taggable
+class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
 {
-    const TYPE = 'case';
-
     /**
      * @var User
      *
@@ -154,14 +155,6 @@ class CaseMailboxProcessSettings extends MailboxProcessSettings implements Tagga
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getType()
-    {
-        return self::TYPE;
-    }
-
-    /**
      * Returns the unique taggable resource identifier
      *
      * @return string
@@ -169,5 +162,15 @@ class CaseMailboxProcessSettings extends MailboxProcessSettings implements Tagga
     public function getTaggableId()
     {
         return $this->getId();
+    }
+
+    /**
+     * Returns type of process.
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return 'case';
     }
 }

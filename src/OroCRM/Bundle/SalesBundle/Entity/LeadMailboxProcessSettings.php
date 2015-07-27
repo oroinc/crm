@@ -4,18 +4,18 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EmailBundle\Entity\MailboxProcessSettings;
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
 
 /**
  * @ORM\Entity
+ * @Config
  */
-class LeadMailboxProcessSettings extends MailboxProcessSettings
+class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
 {
-    const TYPE = 'lead';
-
     /**
      * @var User
      *
@@ -80,7 +80,7 @@ class LeadMailboxProcessSettings extends MailboxProcessSettings
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getSource()
     {
@@ -104,6 +104,6 @@ class LeadMailboxProcessSettings extends MailboxProcessSettings
      */
     public function getType()
     {
-        return self::TYPE;
+        return 'lead';
     }
 }
