@@ -88,19 +88,11 @@ class ChannelLimitationHandlerTest extends \PHPUnit_Framework_TestCase
                     function (Query $query) use ($self, $entityAlias, $channelField, $channelId) {
                         $self->assertSame([$entityAlias], $query->getFrom());
                         if ($channelId) {
-                            $options = $query->getOptions();
-                            $options = array_filter(
-                                $options,
-                                function ($item) use ($channelField) {
-                                    return $channelField === $item['fieldName'];
-                                }
+                            $this->assertEquals(
+                                ' from orocrm_channel_stub where (integer some_fieldDataChannel = 1 '
+                                . 'and text all_text ~ "someQuery") limit 11',
+                                $query->getStringQuery()
                             );
-
-                            $this->assertNotEmpty($options);
-                            $this->assertCount(1, $options);
-                            $channelFilter = reset($options);
-                            $this->assertEquals('integer', $channelFilter['fieldType']);
-                            $this->assertEquals($channelId, $channelFilter['fieldValue']);
                         }
 
                         return new Result($query);
