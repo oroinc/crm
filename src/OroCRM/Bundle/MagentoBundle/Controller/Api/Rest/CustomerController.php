@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Controller\Api\Rest;
 
 use Symfony\Component\HttpFoundation\Response;
 
-use Doctrine\Common\Collections\Criteria;
-
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 use FOS\RestBundle\Routing\ClassResourceInterface;
@@ -17,7 +15,6 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 use Oro\Bundle\SoapBundle\Request\Parameters\Filter\HttpDateTimeParameterFilter;
-use Oro\Bundle\SoapBundle\Request\Parameters\Filter\ParameterFilterInterface;
 
 /**
  * @RouteResource("customer")
@@ -109,7 +106,10 @@ class CustomerController extends RestController implements ClassResourceInterfac
             'updatedAt' => $dateParamFilter
         ];
 
-        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters);
+        $criteria = $this->getFilterCriteria(
+            $this->getSupportedQueryParameters(__FUNCTION__),
+            $filterParameters
+        );
 
         return $this->handleGetListRequest($page, $limit, $criteria);
     }
@@ -204,12 +204,12 @@ class CustomerController extends RestController implements ClassResourceInterfac
     /**
      * {@inheritdoc}
      */
-    protected function getFilterCriteria($supportedApiParams, $filterParameters = [], $filterMap = [])
+    protected function filterQueryParameters(array $supportedParameters)
     {
-        $allowedFilters = $this->filterQueryParameters($supportedApiParams);
-        $result         = [];
+        $filteredParameters = parent::filterQueryParameters($supportedParameters);
+        $result             = [];
 
-        foreach ($allowedFilters as $key => $value) {
+        foreach ($filteredParameters as $key => $value) {
             $startPosition = strpos($key, 'start');
             $endPosition   = strpos($key, 'end');
 
@@ -223,30 +223,6 @@ class CustomerController extends RestController implements ClassResourceInterfac
                 $result[$key] = $value;
             }
         }
-
-        $allowedFilters = $result;
-
-        $criteria = Criteria::create();
-
-        foreach ($allowedFilters as $filterName => $filterData) {
-            list ($operator, $value) = $filterData;
-
-            $filter = isset($filterParameters[$filterName]) ? $filterParameters[$filterName] : false;
-            if ($filter) {
-                switch (true) {
-                    case $filter instanceof ParameterFilterInterface:
-                        $value = $filter->filter($value, $operator);
-                        break;
-                    case is_array($filter) && isset($filter['closure']) && is_callable($filter['closure']):
-                        $value = call_user_func($filter['closure'], $value, $operator);
-                        break;
-                }
-            }
-
-            $filterName = isset($filterMap[$filterName]) ? $filterMap[$filterName] : $filterName;
-            $this->addCriteria($criteria, $filterName, $operator, $value);
-        }
-
-        return $criteria;
+        return $result;
     }
 }
