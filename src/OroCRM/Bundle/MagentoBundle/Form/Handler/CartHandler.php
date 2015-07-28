@@ -24,12 +24,17 @@ class CartHandler
     protected $manager;
 
     /**
-     * @param FormInterface     $form
-     * @param Request           $request
-     * @param RegistryInterface $registry
+     * @param FormInterface            $form
+     * @param Request                  $request
+     * @param RegistryInterface        $registry
+     * @param SecurityContextInterface $security
      */
-    public function __construct(FormInterface $form, Request $request, RegistryInterface $registry, SecurityContextInterface $security)
-    {
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        RegistryInterface $registry,
+        SecurityContextInterface $security
+    ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $registry->getManager();
