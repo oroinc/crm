@@ -10,27 +10,18 @@ definitions:
                 attribute: $.email
                 where:
                     emailBody: $id
-            - @find_entity:
-                class: Oro\Bundle\EmailBundle\Entity\EmailUser
-                attribute: $.emailUser
-                where:
-                    email: $.email.id
-                    mailboxOwner: ['IS NOT NULL']
+            - @find_mailboxes:
+                attribute: $.mailboxes
+                process_type: 'OroCRMSalesBundle:LeadMailboxProcessSettings'
+                email: $.email
             - @tree:
                 conditions:
-                    @and:
-                        - @not_empty: [$.emailUser]
-                        - @not_empty: [$.emailUser.mailboxOwner.processSettings]
-                        - @equal:     [$.emailUser.mailboxOwner.processSettings.type, 'lead']
+                    @not_empty: [$.mailboxes]
                 actions:
                     # Assign notes
-                    - @tree:
-                        conditions:
-                            @equal: [$bodyIsText, true]
-                        actions:
-                            - @assign_value:
-                                attribute: $.leadNotes
-                                value: $body
+                    - @strip_html_tags:
+                        attribute: $.leadNotes
+                        html: $bodyContent
                     # Assign related contact
                     - @tree:
                         conditions:
@@ -75,15 +66,19 @@ definitions:
                             - @parse_last_name_from_email_address:
                                 attribute: $.leadLastName
                                 email_address: $.email.fromName
+            - @traverse:
+                array: $.mailboxes
+                value: $.mailbox
+                actions:
                     - @create_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\Lead
                         attribute: $.leadEntity
                         flush: false
                         data:
-                            owner:          $.emailUser.mailboxOwner.processSettings.owner
-                            dataChannel:    $.emailUser.mailboxOwner.processSettings.channel
-                            source:         $.emailUser.mailboxOwner.processSettings.source
-                            organization:   $.emailUser.mailboxOwner.organization
+                            owner:          $.mailbox.processSettings.owner
+                            dataChannel:    $.mailbox.processSettings.channel
+                            source:         $.mailbox.processSettings.source
+                            organization:   $.mailbox.organization
                             name:           $.email.subject
                             notes:          $.leadNotes
                             contact:        $.leadContact

@@ -2,68 +2,72 @@ definitions:
     convert_mailbox_email_to_case:
         label: 'Convert Mailbox E-mail to Case'
         enabled: true
-        entity: Oro\Bundle\EmailBundle\Entity\EmailUser
+        entity: Oro\Bundle\EmailBundle\Entity\EmailBody
         order: 150
         actions_configuration:
-            conditions:
-                @and:
-                    - @not_empty: [$.mailboxOwner] # only process meail users who have mailbox owner
-                    - @not_empty: [$.mailboxOwner.processSettings] # and that owner has configured processing
-                    - @equal: [$.mailboxOwner.processSettings.type, 'case'] # and processing is of type case
-            actions:
-                - @create_entity:
-                    class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
-                    attribute: $.caseEntity
-                    flush: false
-                # Assign configured values in mailbox settings
-                - @assign_value:
-                    attribute: $.caseEntity.owner
-                    value: $.mailboxOwner.processSettings.owner
-                - @assign_value:
-                    attribute: $.caseEntity.assignedTo
-                    value: $.mailboxOwner.processSettings.assignTo
-                - @assign_value:
-                    attribute: $.caseEntity.status
-                    value: $.mailboxOwner.processSettings.status
-                - @assign_value:
-                    attribute: $.caseEntity.priority
-                    value: $.mailboxOwner.processSettings.priority
-                - @assign_value:
-                    attribute: $.caseEntity.tags
-                    value: $.mailboxOwner.processSettings.tags
-                # Assign attributes from emails
-                - @assign_value:
-                    attribute: $.caseEntity.subject
-                    value: $email.subject
-#                - @tree:
-#                    conditions:
-#                        - @equal: [$email.emailBody.bodyIsText, true]
-#                    actions:
-#                        - @assign_value:
-#                            attribute: $.caseEntity.description
-#                            value: $email.emailBody.body
-                - @assign_value:
-                    attribute: $.caseEntity.source
-                    value: 'email'
-                # Assign related contact
-                - @tree:
-                    conditions:
-                        @and:
-                            - @equal: [$email.fromEmailAddress.owner, true]
-                            - @not_empty: [$email.fromEmailAddress.contactOwner]
-                    actions:
-                        - @assign_value:
-                            attribute: $.caseEntity.relatedContact
-                            value: $email.fromEmailAddress.contactOwner
-                # Assign related account
-                - @tree:
-                    conditions:
-                        - @not_empty: [$.caseEntity.relatedContact.account]
-                    actions:
-                        - @assign_value:
-                            attribute: $.caseEntity.relatedAccount
-                            value: $email.fromEmailAddress.contactOwner
-
+            - @find_entity:
+                class: Oro\Bundle\EmailBundle\Entity\Email
+                attribute: $.email
+                where:
+                    emailBody: $id
+            - @find_mailboxes:
+                attribute: $.mailboxes
+                process_type: 'OroCRMCaseBundle:CaseMailboxProcessSettings'
+                email: $.email
+            - @tree:
+                conditions:
+                    @not_empty: [$.mailboxes]
+                actions:
+                    - @strip_html_tags:
+                        attribute: $.caseDescription
+                        html: $bodyContent
+                    - @find_entity:
+                        attribute: $.caseSource
+                        class: OroCRMCaseBundle:CaseSource
+                        identifier: 'email'
+                    # Assign related contact
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @equal:      [$.email.fromEmailAddress.hasOwner, true]
+                                - @instanceof: [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
+                        actions:
+                            - @assign_value:
+                                attribute: $.caseRelatedContact
+                                value: $.email.fromEmailAddress.owner
+                    # Assign related account
+                    - @tree:
+                        conditions:
+                            @and:
+                                - @not_empty: [$.caseRelatedContact]
+                                - @not_empty: [$.caseRelatedContact.accounts]
+                                - @has_count:
+                                    countable: $.caseRelatedContact.accounts
+                                    equal_to: 1
+                        actions:
+                            - @assign_value:
+                                attribute: $.caseRelatedAccount
+                                value: $.caseRelatedContact.accounts[0]
+            - @traverse:
+                array: $.mailboxes
+                value: $.mailbox
+                actions:
+                    - @create_entity:
+                        class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+                        attribute: $.leadEntity
+                        flush: false
+                        data:
+                            owner:          $.mailbox.processSettings.owner
+                            assignedTo:     $.mailbox.processSettings.assignTo
+                            status:         $.mailbox.processSettings.status
+                            priority:       $.mailbox.processSettings.priority
+                            tags:           $.mailbox.processSettings.tags
+                            organization:   $.mailbox.organization
+                            subject:        $.email.subject
+                            description:    $.caseDescription
+                            source:         $.caseSource
+                            relatedContact: $.caseRelatedContact
+                            relatedAccount: $.caseRelatedAccount
 triggers:
     convert_mailbox_email_to_case:
         -

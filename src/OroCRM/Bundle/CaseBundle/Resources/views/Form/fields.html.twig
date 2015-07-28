@@ -1,5 +1,5 @@
 {% block orocrm_case_mailbox_process_settings_widget %}
-    {% set tags = form_widget(form.tags) %}
+    {% set tags = form_row(form.tags) %}
     {{ form_rest(form) }}
     {{ tags|raw }}
 {% endblock %}
