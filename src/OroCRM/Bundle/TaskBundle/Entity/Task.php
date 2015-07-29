@@ -44,7 +44,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
- *              "type"="ACL"
+ *              "type"="ACL",
+ *              "share_scopes"={
+ *                  "user"
+ *              }
  *          },
  *          "dataaudit"={
  *              "auditable"=true

@@ -64,7 +64,10 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "share_scopes"={
+ *                  "user"
+ *              }
  *          },
  *          "form"={
  *              "form_type"="orocrm_contact_select",
