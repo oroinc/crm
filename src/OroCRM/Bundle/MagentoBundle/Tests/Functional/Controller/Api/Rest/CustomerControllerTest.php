@@ -162,12 +162,12 @@ class CustomerControllerTest extends WebTestCase
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertGreaterThan(1, ($result));
+        $this->assertGreaterThan(1, count($result));
 
         $date = new \DateTime('now + 1 day');
         $this->client->request(
             'GET',
-            $this->getUrl('oro_api_get_magentocustomers', ['endCreatedAt' => $date->format('Y-m-d')])
+            $this->getUrl('oro_api_get_customers', ['endCreatedAt' => $date->format('Y-m-d')])
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);

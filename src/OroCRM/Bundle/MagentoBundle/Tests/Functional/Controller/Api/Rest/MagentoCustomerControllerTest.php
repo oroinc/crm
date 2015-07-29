@@ -162,7 +162,7 @@ class MagentoCustomerControllerTest extends WebTestCase
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertGreaterThan(1, ($result));
+        $this->assertGreaterThan(1, count($result));
 
         $date = new \DateTime('now + 1 day');
         $this->client->request(
