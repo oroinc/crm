@@ -12,7 +12,7 @@ definitions:
                     emailBody: $id
             - @find_mailboxes:
                 attribute: $.mailboxes
-                process_type: 'OroCRMCaseBundle:CaseMailboxProcessSettings'
+                process_type: 'case'
                 email: $.email
             - @tree:
                 conditions:

@@ -81,7 +81,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'tags',
-            'oro_tag_select',
+            'oro_tag_autocomplete',
             [
                 'label' => 'oro.tag.entity_plural_label'
             ]
