@@ -1,5 +1,3 @@
-/*jslint nomen: true, vars: true*/
-/*global define*/
 define(['jquery', 'underscore', 'backbone', 'routing', 'oroui/js/mediator', 'oroui/js/app/views/loading-mask-view'],
     function ($, _, Backbone, routing, mediator, LoadingMask) {
         /**
