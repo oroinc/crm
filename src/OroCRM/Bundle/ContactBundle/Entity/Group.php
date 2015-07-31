@@ -87,6 +87,8 @@ class Group extends ExtendGroup
      */
     public function __construct($label = null)
     {
+        parent::__construct();
+
         $this->label = $label;
     }
 

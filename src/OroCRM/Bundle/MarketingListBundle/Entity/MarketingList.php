@@ -171,6 +171,8 @@ class MarketingList extends ExtendMarketingList
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->marketingListItems = new ArrayCollection();
         $this->marketingListRemovedItems = new ArrayCollection();
         $this->marketingListUnsubscribedItems = new ArrayCollection();
