@@ -19,7 +19,6 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_17\OroCRMSalesBundle as OroCRMSalesBundle_v1_17;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -105,14 +104,12 @@ class OroCRMSalesBundleInstaller implements
         $this->createOrocrmSalesOpportCloseRsnTable($schema);
         $this->createOrocrmSalesLeadTable($schema);
         $this->createOrocrmSalesB2bCustomerTable($schema);
-        OroCRMSalesBundle_v1_17::addOroEmailMailboxProcessorColumns($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmSalesOpportunityForeignKeys($schema);
         $this->addOrocrmSalesFunnelForeignKeys($schema);
         $this->addOrocrmSalesLeadForeignKeys($schema);
         $this->addOrocrmSalesB2bCustomerForeignKeys($schema);
-        OroCRMSalesBundle_v1_17::addOroEmailMailboxProcessorForeignKeys($schema);
 
         /** Apply extensions */
         SalesNoteMigration::addNoteAssociations($schema, $this->noteExtension);
