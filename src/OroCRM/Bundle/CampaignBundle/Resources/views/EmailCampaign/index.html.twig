@@ -5,10 +5,12 @@
 {% set gridName = 'orocrm-email-campaign-grid' %}
 
 {% block navButtons %}
-    {% if resource_granted('orocrm_email_campaign_create') %}
-        {{ UI.addButton({
-            'path': path('orocrm_email_campaign_create'),
-            'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
-        }) }}
-    {% endif %}
+    <div class="btn-group">
+        {% if resource_granted('orocrm_email_campaign_create') %}
+            {{ UI.addButton({
+                'path': path('orocrm_email_campaign_create'),
+                'entity_label': 'orocrm.campaign.emailcampaign.entity_label'|trans
+            }) }}
+        {% endif %}
+    </div>
 {% endblock %}

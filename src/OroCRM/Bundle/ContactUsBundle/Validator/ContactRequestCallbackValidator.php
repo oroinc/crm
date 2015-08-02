@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Validator;
 
-use Symfony\Component\Validator\ExecutionContext;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 use OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest;
 
@@ -11,10 +11,10 @@ class ContactRequestCallbackValidator
     /**
      * Validates contact method
      *
-     * @param ContactRequest   $object
-     * @param ExecutionContext $context
+     * @param ContactRequest            $object
+     * @param ExecutionContextInterface $context
      */
-    public static function validate(ContactRequest $object, ExecutionContext $context)
+    public static function validate(ContactRequest $object, ExecutionContextInterface $context)
     {
         $emailError = $phoneError = false;
 
