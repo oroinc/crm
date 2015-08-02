@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -52,11 +53,10 @@ class LeadMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'source',
-            'oro_enum_select',
+            'orocrm_sales_lead_mailbox_process_source',
             [
                 'required'    => true,
                 'label'       => 'orocrm.sales.lead.source.label',
-                'enum_code'   => 'lead_source',
                 'multiple'    => false,
                 'expanded'    => false,
                 'constraints' => [

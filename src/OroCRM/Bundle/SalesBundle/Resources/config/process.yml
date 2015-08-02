@@ -70,14 +70,17 @@ definitions:
                 array: $.mailboxes
                 value: $.mailbox
                 actions:
+                    - @find_entity:
+                        attribute: $.leadSource
+                        class: Extend\Entity\EV_Lead_Source
+                        identifier: $.mailbox.processSettings.source
                     - @create_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\Lead
                         attribute: $.leadEntity
-                        flush: false
                         data:
                             owner:          $.mailbox.processSettings.owner
                             dataChannel:    $.mailbox.processSettings.channel
-                            source:         $.mailbox.processSettings.source
+                            source:         $.leadSource
                             organization:   $.mailbox.organization
                             name:           $.email.subject
                             notes:          $.leadNotes
@@ -85,6 +88,12 @@ definitions:
                             firstName:      $.leadFirstName
                             lastName:       $.leadLastName
                             email:          $.email.fromEmailAddress.email
+                    - @add_activity_target:
+                        activity_entity:    $.email
+                        target_entity:      $.leadEntity
+                        attribute:          $.added
+                    - @add_email_to_activity_update_queue:
+                        email:              $.email
 triggers:
     convert_mailbox_email_to_lead:
         -

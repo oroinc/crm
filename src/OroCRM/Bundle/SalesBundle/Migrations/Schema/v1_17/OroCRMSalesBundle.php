@@ -58,11 +58,5 @@ class OroCRMSalesBundle implements Migration
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_enum_lead_source'),
-            ['lead_source_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL', 'onUpdate' => null]
-        );
     }
 }

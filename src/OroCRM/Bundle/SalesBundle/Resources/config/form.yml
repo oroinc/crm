@@ -20,6 +20,7 @@ parameters:
     orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
     orocrm_sales.mailbox_process.lead.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
+    orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
 services:
     orocrm_sales.opportunity.form.type:
@@ -181,6 +182,12 @@ services:
         class: %orocrm_sales.mailbox_process.lead.type.class%
         tags:
             - { name: form.type, alias: orocrm_sales_lead_mailbox_process_settings }
+
+    orocrm_sales.lead_mailbox_process_source.type:
+        class: %orocrm_sales.lead_mailbox_process_source.type.class%
+        arguments: [@oro_entity_extend.enum_value_provider]
+        tags:
+            - { name: form.type, alias: orocrm_sales_lead_mailbox_process_source }
 
     orocrm_sales.b2bcustomer.form:
         class: Symfony\Component\Form\Form
