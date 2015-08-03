@@ -29,6 +29,7 @@ parameters:
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
     orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
+    orocrm_magento.provider.email_recipients.class:                         OroCRM\Bundle\MagentoBundle\Provider\EmailRecipientsProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -65,7 +66,6 @@ parameters:
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
     orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
-    orocrm_magento.event_listener.event_recipients_load.class:              OroCRM\Bundle\MagentoBundle\EventListener\EmailRecipientsLoadListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -181,6 +181,15 @@ services:
         arguments:
             - @doctrine
             - @oro_security.acl_helper
+
+    orocrm_magento.provider.email_recipients:
+        class: %orocrm_magento.provider.email_recipients.class%
+        arguments:
+            - @doctrine
+            - @oro_email.related_emails.provider
+            - @oro_email.provider.email_recipients.helper
+        tags:
+            - { name: oro_email.recipients_provider }
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -418,15 +427,6 @@ services:
         lazy: true
 
     # event listeners
-    orocrm_magento.event_listener.event_recipients_load:
-        class: %orocrm_magento.event_listener.event_recipients_load.class%
-        arguments:
-            - @doctrine
-            - @oro_email.related_emails.provider
-            - @oro_email.provider.email_recipients.helper
-        tags:
-            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -10 }
-
     orocrm_magento.event_listener.customer_currency:
         class: %orocrm_magento.event_listener.customer_currency.class%
         calls:

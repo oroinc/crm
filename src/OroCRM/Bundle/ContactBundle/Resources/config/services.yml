@@ -27,8 +27,7 @@ parameters:
     orocrm_contact.activity_widget_provider.class:    %oro_activity.widget_provider.activities.menu.class%
 
     orocrm_contact.provider.phone.contact.class:      OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider
-
-    orocrm_contact.listener.email_recipient_load.listener.class: OroCRM\Bundle\ContactBundle\EventListener\EmailRecipientsLoadListener
+    orocrm_contact.provider.email_recipients.class:   OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider
 
 services:
     orocrm_contact.form.contact:
@@ -216,6 +215,16 @@ services:
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_contact.entity.class% }
 
+    orocrm_contact.provider.email_recipients:
+        class: %orocrm_contact.provider.email_recipients.class%
+        arguments:
+            - @doctrine
+            - @oro_security.acl_helper
+            - @oro_email.provider.email_recipients.helper
+            - @oro_locale.dql.formatter.name
+        tags:
+            - { name: oro_email.recipients_provider, priority: -30 }
+
     orocrm_contact.widget_provider.actions.add_contact:
         parent: oro_ui.widget_provider.action_button.abstract
         arguments:
@@ -230,14 +239,3 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }
-
-    orocrm_contact.listener.email_recipient_load.listener:
-        class: %orocrm_contact.listener.email_recipient_load.listener.class%
-        arguments:
-            - @doctrine
-            - @oro_security.acl_helper
-            - @translator
-            - @oro_email.provider.email_recipients.helper
-            - @oro_locale.dql.formatter.name
-        tags:
-            - { name: kernel.event_listener, event: oro_email.email_recipients_load, method: onLoad, priority: -30 }

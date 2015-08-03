@@ -1,17 +1,19 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\EventListener;
+namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\EmailBundle\Event\EmailRecipientsLoadEvent;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 use Oro\Bundle\EmailBundle\Provider\RelatedEmailsProvider;
 
+use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
+use Oro\Bundle\EmailBundle\Provider\EmailRecipientsProviderInterface;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 
-class EmailRecipientsLoadListener
+class EmailRecipientsProvider implements EmailRecipientsProviderInterface
 {
     /** @var Registry */
     protected $registry;
@@ -38,22 +40,29 @@ class EmailRecipientsLoadListener
     }
 
     /**
-     * @param EmailRecipientsLoadEvent $event
+     * {@inheritdoc}
      */
-    public function onLoad(EmailRecipientsLoadEvent $event)
+    public function getRecipients(EmailRecipientsProviderArgs $args)
     {
-        $limit = $event->getRemainingLimit();
-        if (!$limit || !$event->getRelatedEntity() instanceof Account) {
-            return;
+        if (!$args->getRelatedEntity() instanceof Account) {
+            return [];
         }
 
-        $customers = $this->getCustomerRepository()->findBy(['account' => $event->getRelatedEntity()]);
+        $customers = $this->getCustomerRepository()->findBy(['account' => $args->getRelatedEntity()]);
         $emails = [];
         foreach ($customers as $customer) {
             $emails = array_merge($emails, $this->relatedEmailsProvider->getEmails($customer, 2));
         }
 
-        $this->emailRecipientsHelper->addEmailsToContext($event, $emails);
+        return $emails;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSection()
+    {
+        return 'oro.email.autocomplete.contexts';
     }
 
     /**
