@@ -139,7 +139,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     {
         $this->tags = $this->tags ?: new ArrayCollection();
 
-        return $this->tags->toArray();
+        return $this->tags;
     }
 
     /**
