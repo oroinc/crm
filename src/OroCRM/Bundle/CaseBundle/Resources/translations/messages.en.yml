@@ -110,3 +110,12 @@ orocrm:
 
         mailbox.process:
             case.label: Convert To Case
+
+        casemailboxprocesssettings:
+            entity_label:                   Case Mailbox Process Settings
+            entity_plural_label:            Case Mailbox Process Settings
+            id.label:                       Id
+            assign_to.label:                Assign To
+            owner.label:                    Owner
+            priority.label:                 Priority
+            status.label:                   Status
