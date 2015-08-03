@@ -2,12 +2,9 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\FormBundle\Form\DataTransformer\EntityToIdTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 class LeadMailboxProcessSettingsType extends AbstractType
@@ -15,12 +12,14 @@ class LeadMailboxProcessSettingsType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\LeadMailboxProcessSettings',
-            'cascade_validation' => true,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\LeadMailboxProcessSettings',
+                'cascade_validation' => true,
+            ]
+        );
     }
 
     /**

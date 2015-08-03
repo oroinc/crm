@@ -2,14 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-
-use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 
 class LeadMailboxProcessSourceType extends AbstractType
 {
@@ -29,7 +26,7 @@ class LeadMailboxProcessSourceType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         parent::setDefaultOptions($resolver);
         $resolver->setDefaults(
@@ -39,6 +36,11 @@ class LeadMailboxProcessSourceType extends AbstractType
         );
     }
 
+    /**
+     * Returns array of choices for this field.
+     *
+     * @return array['value' => 'label (translatable id)']
+     */
     protected function getChoices()
     {
         return $this->enumValueProvider->getEnumChoicesByCode('lead_source');

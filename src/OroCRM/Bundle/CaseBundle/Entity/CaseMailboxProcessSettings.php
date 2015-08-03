@@ -53,7 +53,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     protected $tags;
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getOwner()
     {
@@ -61,7 +61,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @param mixed $owner
+     * @param User $owner
      *
      * @return $this
      */
@@ -73,7 +73,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @return mixed
+     * @return User
      */
     public function getAssignTo()
     {
@@ -81,7 +81,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @param mixed $assignTo
+     * @param User $assignTo
      *
      * @return $this
      */
@@ -93,7 +93,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @return mixed
+     * @return CasePriority
      */
     public function getPriority()
     {
@@ -101,7 +101,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @param mixed $priority
+     * @param CasePriority $priority
      *
      * @return $this
      */
@@ -113,7 +113,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @return mixed
+     * @return CaseStatus
      */
     public function getStatus()
     {
@@ -121,7 +121,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * @param mixed $status
+     * @param CaseStatus $status
      *
      * @return $this
      */
@@ -139,7 +139,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     {
         $this->tags = $this->tags ?: new ArrayCollection();
 
-        return $this->tags;
+        return $this->tags->toArray();
     }
 
     /**
@@ -165,9 +165,7 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
-     * Returns type of process.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getType()
     {

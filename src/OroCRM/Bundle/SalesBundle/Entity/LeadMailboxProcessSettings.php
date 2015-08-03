@@ -4,17 +4,14 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Model\ExtendLeadMailboxProcessSettings;
 
 /**
  * @ORM\Entity
- * @Config
  */
-class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
+class LeadMailboxProcessSettings
 {
     /**
      * @var User
@@ -60,7 +57,7 @@ class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
     }
 
     /**
-     * @return mixed
+     * @return Channel
      */
     public function getChannel()
     {
@@ -68,7 +65,7 @@ class LeadMailboxProcessSettings extends ExtendLeadMailboxProcessSettings
     }
 
     /**
-     * @param mixed $channel
+     * @param Channel $channel
      *
      * @return $this
      */

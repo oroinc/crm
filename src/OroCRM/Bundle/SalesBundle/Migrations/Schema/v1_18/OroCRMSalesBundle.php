@@ -21,7 +21,7 @@ class OroCRMSalesBundle implements Migration
     /**
      * Create oro_email_mailbox_processor table
      *
-     * @param Schema          $schema
+     * @param Schema $schema
      */
     public static function addOroEmailMailboxProcessorColumns(Schema $schema)
     {

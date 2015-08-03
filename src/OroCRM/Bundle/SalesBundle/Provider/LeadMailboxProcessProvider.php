@@ -15,9 +15,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     }
 
     /**
-     * Returns form type used for settings entity used by this process.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getSettingsFormType()
     {
@@ -25,9 +23,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     }
 
     /**
-     * Returns id for translation which is used as label for this process type.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getLabel()
     {
