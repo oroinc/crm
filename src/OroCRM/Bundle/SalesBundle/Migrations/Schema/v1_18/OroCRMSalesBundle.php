@@ -29,8 +29,7 @@ class OroCRMSalesBundle implements Migration
 
         $table->addColumn('lead_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('lead_source_id', 'string', ['notnull' => false]);
-
+        $table->addColumn('lead_source_id', 'string', ['notnull' => false, 'length' => 32]);
         $table->addIndex(['lead_owner_id'], 'IDX_CE8602A3D46FE3FA', []);
         $table->addIndex(['lead_channel_id'], 'IDX_CE8602A35A6EBA36', []);
     }
