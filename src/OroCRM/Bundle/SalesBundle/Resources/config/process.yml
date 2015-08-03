@@ -92,7 +92,7 @@ definitions:
                     - @add_email_activity_target:
                         email:              $.email
                         target_entity:      $.leadEntity
-                        attribute:          $.added
+
 triggers:
     convert_mailbox_email_to_lead:
         -
