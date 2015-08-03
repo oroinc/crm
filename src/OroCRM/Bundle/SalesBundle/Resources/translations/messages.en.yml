@@ -247,7 +247,7 @@ orocrm:
         mailbox.process:
             lead.label:              Convert To Lead
         leadmailboxprocesssettings:
-            entity_label.label:      Lead Mailbox Process Settings
+            entity_label:            Lead Mailbox Process Settings
             entity_plural_label:     Lead Mailbox Process Settings
             id.label:                Id
             serialized_data.label:   Serialized Data

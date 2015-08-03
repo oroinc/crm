@@ -77,6 +77,7 @@ definitions:
                     - @create_entity:
                         class: OroCRM\Bundle\SalesBundle\Entity\Lead
                         attribute: $.leadEntity
+                        flush: false
                         data:
                             owner:          $.mailbox.processSettings.owner
                             dataChannel:    $.mailbox.processSettings.channel
@@ -88,12 +89,10 @@ definitions:
                             firstName:      $.leadFirstName
                             lastName:       $.leadLastName
                             email:          $.email.fromEmailAddress.email
-                    - @add_activity_target:
-                        activity_entity:    $.email
+                    - @add_email_activity_target:
+                        email:              $.email
                         target_entity:      $.leadEntity
                         attribute:          $.added
-                    - @add_email_to_activity_update_queue:
-                        email:              $.email
 triggers:
     convert_mailbox_email_to_lead:
         -

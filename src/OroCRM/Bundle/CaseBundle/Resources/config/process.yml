@@ -55,6 +55,7 @@ definitions:
                     - @create_entity:
                         class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
                         attribute: $.caseEntity
+                        flush: false
                         data:
                             owner:          $.mailbox.processSettings.owner
                             assignedTo:     $.mailbox.processSettings.assignTo
@@ -67,8 +68,8 @@ definitions:
                             source:         $.caseSource
                             relatedContact: $.caseRelatedContact
                             relatedAccount: $.caseRelatedAccount
-                    - @add_activity_target:
-                        activity_entity:    $.email
+                    - @add_email_activity_target:
+                        email:              $.email
                         target_entity:      $.caseEntity
 
 triggers:
