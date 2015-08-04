@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 use Oro\Bundle\EmailBundle\Provider\RelatedEmailsProvider;
-
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsProviderInterface;
 
@@ -21,22 +20,16 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
     /** @var RelatedEmailsProvider */
     protected $relatedEmailsProvider;
 
-    /** @var EmailRecipientsHelper */
-    protected $emailRecipientsHelper;
-
     /**
      * @param Registry $registry
      * @param RelatedEmailsProvider $relatedEmailsProvider
-     * @param EmailRecipientsHelper $emailRecipientsHelper
      */
     public function __construct(
         Registry $registry,
-        RelatedEmailsProvider $relatedEmailsProvider,
-        EmailRecipientsHelper $emailRecipientsHelper
+        RelatedEmailsProvider $relatedEmailsProvider
     ) {
         $this->registry = $registry;
         $this->relatedEmailsProvider = $relatedEmailsProvider;
-        $this->emailRecipientsHelper = $emailRecipientsHelper;
     }
 
     /**
