@@ -9,8 +9,7 @@ use OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider;
 class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected $registry;
-    protected $aclHelper;
-    protected $nameFormatter;
+    protected $emailRecipientsHelper;
 
     protected $emailRecipientsProvider;
 
@@ -20,63 +19,36 @@ class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->aclHelper = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->nameFormatter = $this->getMockBuilder('Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter')
+        $this->emailRecipientsHelper = $this->getMockBuilder('Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->emailRecipientsProvider = new EmailRecipientsProvider(
             $this->registry,
-            $this->aclHelper,
-            $this->nameFormatter
+            $this->emailRecipientsHelper
         );
     }
 
     /**
      * @dataProvider dataProvider
      */
-    public function testGetRecipients(EmailRecipientsProviderArgs $args, array $resultEmails)
+    public function testGetRecipients(EmailRecipientsProviderArgs $args, array $recipients)
     {
-        $this->nameFormatter->expects($this->once())
-            ->method('getFormattedNameDQL')
-            ->with('c', 'OroCRM\Bundle\ContactBundle\Entity\Contact')
-            ->will($this->returnValue('u.name'));
-
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+        $contactRepository = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository')
             ->disableOriginalConstructor()
             ->getMock();
-        $qb->expects($this->once())
-            ->method('setMaxResults')
-            ->will($this->returnSelf());
-
-        $userRepository = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $userRepository->expects($this->once())
-            ->method('getPrimaryEmailsQb')
-            ->will($this->returnValue($qb));
 
         $this->registry->expects($this->once())
             ->method('getRepository')
             ->with('OroCRMContactBundle:Contact')
-            ->will($this->returnValue($userRepository));
+            ->will($this->returnValue($contactRepository));
 
-        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-            ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
-            ->getMockForAbstractclass();
-        $query->expects($this->once())
-            ->method('getResult')
-            ->will($this->returnValue($resultEmails));
+        $this->emailRecipientsHelper->expects($this->once())
+            ->method('getRecipients')
+            ->with($args, $contactRepository, 'c', 'OroCRM\Bundle\ContactBundle\Entity\Contact')
+            ->will($this->returnValue($recipients));
 
-        $this->aclHelper->expects($this->once())
-            ->method('apply')
-            ->will($this->returnValue($query));
-
-        $this->emailRecipientsProvider->getRecipients($args);
+        $this->assertEquals($recipients, $this->emailRecipientsProvider->getRecipients($args));
     }
 
     public function dataProvider()
@@ -85,10 +57,7 @@ class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
             [
                 new EmailRecipientsProviderArgs(null, null, 1),
                 [
-                    [
-                        'name'  => 'Recipient <recipient@example.com>',
-                        'email' => 'recipient@example.com',
-                    ],
+                    'recipient@example.com'  => 'Recipient <recipient@example.com>',
                 ],
             ],
         ];
