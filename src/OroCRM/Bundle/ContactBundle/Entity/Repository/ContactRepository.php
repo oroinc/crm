@@ -24,6 +24,7 @@ class ContactRepository extends EntityRepository
         $qb
             ->select(sprintf('%s AS name', $fullNameQueryPart))
             ->addSelect('c.email')
+            ->orderBy('name')
             ->andWhere('c.email IS NOT NULL');
 
         if ($query) {
@@ -60,6 +61,7 @@ class ContactRepository extends EntityRepository
 
         $qb->select(sprintf('%s AS name', $fullNameQueryPart))
             ->addSelect('e.email')
+            ->orderBy('name')
             ->join('c.emails', 'e');
 
         if ($query) {

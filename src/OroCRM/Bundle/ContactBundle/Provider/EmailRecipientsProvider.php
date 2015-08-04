@@ -77,6 +77,14 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getSection()
+    {
+        return 'orocrm.contact.entity_plural_label';
+    }
+
+    /**
      * @param array $result
      *
      * @return array
@@ -89,14 +97,6 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
         }
 
         return $emails;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSection()
-    {
-        return 'orocrm.contact.entity_plural_label';
     }
 
     /**
