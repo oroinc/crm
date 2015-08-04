@@ -54,13 +54,41 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
             'OroCRM\Bundle\ContactBundle\Entity\Contact'
         );
 
-        return $this->getContactRepository()->getEmails(
-            $this->aclHelper,
-            $fullNameQueryPart,
-            $args->getExcludedEmails(),
-            $args->getQuery(),
-            $args->getLimit()
-        );
+        $primaryEmailsQb = $this->getContactRepository()
+            ->getPrimaryEmailsQb($fullNameQueryPart, $args->getExcludedEmails(), $args->getQuery())
+            ->setMaxResults($args->getLimit());
+
+        $primaryEmailsResult = $this->aclHelper->apply($primaryEmailsQb)->getResult();
+        $emails = $this->emailsFromResult($primaryEmailsResult);
+
+        $limit = $args->getLimit() - count($emails);
+
+        if ($limit > 0) {
+            $excludedEmails = array_merge($args->getExcludedEmails(), array_keys($emails));
+            $secondaryEmailsQb = $this->getContactRepository()
+                ->getSecondaryEmailsQb($fullNameQueryPart, $excludedEmails, $args->getQuery())
+                ->setMaxResults($limit);
+
+            $secondaryEmailsResult = $this->aclHelper->apply($secondaryEmailsQb)->getResult();
+            $emails = array_merge($emails, $this->emailsFromResult($secondaryEmailsResult));
+        }
+
+        return $emails;
+    }
+
+    /**
+     * @param array $result
+     *
+     * @return array
+     */
+    protected function emailsFromResult(array $result)
+    {
+        $emails = [];
+        foreach ($result as $row) {
+            $emails[$row['email']] = sprintf('%s <%s>', $row['name'], $row['email']);
+        }
+
+        return $emails;
     }
 
     /**
