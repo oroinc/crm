@@ -156,9 +156,12 @@ class CustomerController extends Controller
         $customers = $this->getDoctrine()
             ->getRepository('OroCRM\\Bundle\\MagentoBundle\\Entity\\Customer')
             ->findBy(['account' => $account, 'dataChannel' => $channel]);
-        $customers = array_filter($customers, function($item){
-            return $this->get('oro_security.security_facade')->isGranted('VIEW', $item);
-        });
+        $customers = array_filter(
+            $customers,
+            function ($item) {
+                return $this->get('oro_security.security_facade')->isGranted('VIEW', $item);
+            }
+        );
 
         return ['customers' => $customers, 'channel' => $channel, 'account' => $account];
     }
