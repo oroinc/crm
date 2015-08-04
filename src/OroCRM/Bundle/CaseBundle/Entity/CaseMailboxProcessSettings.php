@@ -2,12 +2,10 @@
 
 namespace OroCRM\Bundle\CaseBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
 
@@ -15,7 +13,7 @@ use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
  * @ORM\Entity
  * @Config
  */
-class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
+class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings
 {
     /**
      * @var User
@@ -48,9 +46,6 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
      * @ORM\JoinColumn(name="case_status_name", referencedColumnName="name", onDelete="SET NULL")
      */
     protected $status;
-
-    /** @var ArrayCollection $tags */
-    protected $tags;
 
     /**
      * @return User
@@ -130,38 +125,6 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
         $this->status = $status;
 
         return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getTags()
-    {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
-        return $this->tags;
-    }
-
-    /**
-     * @param array $tags
-     *
-     * @return $this
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * Returns the unique taggable resource identifier
-     *
-     * @return string
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
     }
 
     /**

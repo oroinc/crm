@@ -79,12 +79,6 @@ class CaseMailboxProcessSettingsType extends AbstractType
                     new NotNull(),
                 ],
             ]
-        )->add(
-            'tags',
-            'oro_tag_select',
-            [
-                'label' => 'oro.tag.entity_plural_label'
-            ]
         );
     }
 }

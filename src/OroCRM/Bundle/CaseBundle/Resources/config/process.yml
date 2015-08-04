@@ -61,7 +61,6 @@ definitions:
                             assignedTo:     $.mailbox.processSettings.assignTo
                             status:         $.mailbox.processSettings.status
                             priority:       $.mailbox.processSettings.priority
-                            tags:           $.mailbox.processSettings.tags
                             organization:   $.mailbox.organization
                             subject:        $.email.subject
                             description:    $.caseDescription
