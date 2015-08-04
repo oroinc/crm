@@ -10,6 +10,11 @@ class MagentoSoapTransportRepository extends EntityRepository
     /**
      * @param array $criteria
      * @return array
+     *
+     * This method is used by UniqueEntityValidator for MagentoSoapTransport entity.
+     * Entity is not unique if there is already at least one entity
+     * with such wsdl_url and such websiteId or websiteId that represent all web sites for
+     * corresponding wsdl_url(-1)
      */
     public function getUniqueByWsdlUrlAndWebsiteIds(array $criteria)
     {
