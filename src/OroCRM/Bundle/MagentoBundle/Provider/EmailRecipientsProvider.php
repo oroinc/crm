@@ -53,9 +53,9 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
         foreach ($customers as $customer) {
             $emails = array_merge(
                 $emails,
-                array_filter(
-                    $this->relatedEmailsProvider->getEmails($customer, 2),
-                    EmailRecipientsHelper::createRecipientsFilter($args)
+                EmailRecipientsHelper::filterRecipients(
+                    $args,
+                    $this->relatedEmailsProvider->getEmails($customer, 2)
                 )
             );
         }

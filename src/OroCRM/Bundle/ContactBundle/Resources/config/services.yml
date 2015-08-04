@@ -220,7 +220,6 @@ services:
         arguments:
             - @doctrine
             - @oro_security.acl_helper
-            - @oro_email.provider.email_recipients.helper
             - @oro_locale.dql.formatter.name
         tags:
             - { name: oro_email.recipients_provider, priority: -30 }
