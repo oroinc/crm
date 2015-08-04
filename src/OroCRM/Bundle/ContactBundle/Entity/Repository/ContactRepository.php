@@ -5,7 +5,9 @@ namespace OroCRM\Bundle\ContactBundle\Entity\Repository;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
-class ContactRepository extends EntityRepository
+use Oro\Bundle\EmailBundle\Entity\Repository\EmailAwareRepository;
+
+class ContactRepository extends EntityRepository implements EmailAwareRepository
 {
     /**
      * @param string $fullNameQueryPart
@@ -14,11 +16,8 @@ class ContactRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getPrimaryEmailsQb(
-        $fullNameQueryPart,
-        array $excludedEmails = [],
-        $query = null
-    ) {
+    public function getPrimaryEmailsQb($fullNameQueryPart, array $excludedEmails = [], $query = null)
+    {
         $qb = $this->createQueryBuilder('c');
 
         $qb
@@ -52,11 +51,8 @@ class ContactRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getSecondaryEmailsQb(
-        $fullNameQueryPart,
-        array $excludedEmails = [],
-        $query = null
-    ) {
+    public function getSecondaryEmailsQb($fullNameQueryPart, array $excludedEmails = [], $query = null)
+    {
         $qb = $this->createQueryBuilder('c');
 
         $qb->select(sprintf('%s AS name', $fullNameQueryPart))

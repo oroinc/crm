@@ -4,10 +4,9 @@ namespace OroCRM\Bundle\ContactBundle\Provider;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
-use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
-use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsProviderInterface;
+use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 
 use OroCRM\Bundle\ContactBundle\Entity\Repository\ContactRepository;
 
@@ -16,25 +15,19 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
     /** @var Registry */
     protected $registry;
 
-    /** @var AclHelper */
-    protected $aclHelper;
-
-    /** @var DQLNameFormatter */
-    protected $nameFormatter;
+    /** @var EmailRecipientsHelper */
+    protected $emailRecipientsHelper;
 
     /**
      * @param Registry $registry
-     * @param AclHelper $aclHelper
-     * @param DQLNameFormatter $nameFormatter
+     * @param EmailRecipientsHelper $emailRecipientsHelper
      */
     public function __construct(
         Registry $registry,
-        AclHelper $aclHelper,
-        DQLNameFormatter $nameFormatter
+        EmailRecipientsHelper $emailRecipientsHelper
     ) {
         $this->registry = $registry;
-        $this->aclHelper = $aclHelper;
-        $this->nameFormatter = $nameFormatter;
+        $this->emailRecipientsHelper = $emailRecipientsHelper;
     }
 
     /**
@@ -42,31 +35,12 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
      */
     public function getRecipients(EmailRecipientsProviderArgs $args)
     {
-        $fullNameQueryPart = $this->nameFormatter->getFormattedNameDQL(
+        return $this->emailRecipientsHelper->getRecipients(
+            $args,
+            $this->getContactRepository(),
             'c',
             'OroCRM\Bundle\ContactBundle\Entity\Contact'
         );
-
-        $primaryEmailsQb = $this->getContactRepository()
-            ->getPrimaryEmailsQb($fullNameQueryPart, $args->getExcludedEmails(), $args->getQuery())
-            ->setMaxResults($args->getLimit());
-
-        $primaryEmailsResult = $this->aclHelper->apply($primaryEmailsQb)->getResult();
-        $emails = $this->emailsFromResult($primaryEmailsResult);
-
-        $limit = $args->getLimit() - count($emails);
-
-        if ($limit > 0) {
-            $excludedEmails = array_merge($args->getExcludedEmails(), array_keys($emails));
-            $secondaryEmailsQb = $this->getContactRepository()
-                ->getSecondaryEmailsQb($fullNameQueryPart, $excludedEmails, $args->getQuery())
-                ->setMaxResults($limit);
-
-            $secondaryEmailsResult = $this->aclHelper->apply($secondaryEmailsQb)->getResult();
-            $emails = array_merge($emails, $this->emailsFromResult($secondaryEmailsResult));
-        }
-
-        return $emails;
     }
 
     /**
@@ -75,21 +49,6 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
     public function getSection()
     {
         return 'orocrm.contact.entity_plural_label';
-    }
-
-    /**
-     * @param array $result
-     *
-     * @return array
-     */
-    protected function emailsFromResult(array $result)
-    {
-        $emails = [];
-        foreach ($result as $row) {
-            $emails[$row['email']] = sprintf('%s <%s>', $row['name'], $row['email']);
-        }
-
-        return $emails;
     }
 
     /**
