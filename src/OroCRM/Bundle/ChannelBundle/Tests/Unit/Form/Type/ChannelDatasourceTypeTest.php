@@ -59,7 +59,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
 
     protected function getExtensions()
     {
-        $assetsHelper    = $this->getMockBuilder('Symfony\Component\Templating\Helper\CoreAssetsHelper')
+        $assetsHelper    = $this->getMockBuilder('Symfony\Component\Asset\Packages')
             ->disableOriginalConstructor()->getMock();
         $integrationType = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\ChannelInterface');
         $transportType   = $this->getMock('Oro\Bundle\IntegrationBundle\Provider\TransportInterface');

@@ -10,6 +10,12 @@ use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
  */
 class CalculateAnalyticsCommandTest extends WebTestCase
 {
+    protected function setUp()
+    {
+        $this->initClient([], [], true);
+        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
+    }
+
     /**
      * @param array $parameters
      * @param array $expects
@@ -19,11 +25,6 @@ class CalculateAnalyticsCommandTest extends WebTestCase
      */
     public function testCommand(array $parameters, array $expects = [], array $notContains = [])
     {
-        $this->resetClient();
-        $this->initClient();
-
-        $this->loadFixtures(['OroCRM\Bundle\AnalyticsBundle\Tests\Functional\DataFixtures\LoadEntitiesData'], true);
-
         $options = ['--ids', '--channel'];
         foreach ($options as $option) {
             if (!empty($parameters[$option])) {

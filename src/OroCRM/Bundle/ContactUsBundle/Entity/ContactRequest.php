@@ -145,6 +145,8 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
 
     public function __construct()
     {
+        parent::__construct();
+
         $this->calls  = new ArrayCollection();
         $this->emails = new ArrayCollection();
     }
