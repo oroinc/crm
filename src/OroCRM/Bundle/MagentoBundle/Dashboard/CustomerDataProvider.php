@@ -12,6 +12,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository;
 use OroCRM\Bundle\ChannelBundle\Entity\Repository\ChannelRepository;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class CustomerDataProvider
 {
@@ -62,7 +63,7 @@ class CustomerDataProvider
         $items             = [];
 
         // get all integration channels
-        $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, 'magento');
+        $channels   = $channelRepository->getAvailableChannelNames($this->aclHelper, ChannelType::TYPE);
         $channelIds = array_keys($channels);
         $dates = $this->dateHelper->getDatePeriod($past, $now);
         $data  = $customerRepository->getGroupedByChannelArray(
