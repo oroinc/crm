@@ -120,6 +120,7 @@ class CartStrategy extends AbstractImportStrategy
     protected function updateCartItems(Cart $cart)
     {
         foreach ($cart->getCartItems() as $cartItem) {
+            $cartItem->setOwner($cart->getOrganization());
             $cartItem->setCart($cart);
         }
 
