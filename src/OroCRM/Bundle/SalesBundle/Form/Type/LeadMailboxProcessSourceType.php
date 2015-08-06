@@ -28,7 +28,7 @@ class LeadMailboxProcessSourceType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
         $resolver->setDefaults(
             [
                 'choices' => $this->getChoices(),
