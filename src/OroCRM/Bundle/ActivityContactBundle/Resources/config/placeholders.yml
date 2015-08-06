@@ -1,0 +1,10 @@
+placeholders:
+    page_header_stats_after:
+        items:
+            orocrm_activity_contact:
+                order: 10
+
+items:
+    orocrm_activity_contact:
+        template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
+        applicable: @oro_activity_list.placeholder.filter->isApplicable($entity$)

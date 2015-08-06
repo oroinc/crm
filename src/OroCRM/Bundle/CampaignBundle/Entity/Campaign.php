@@ -172,6 +172,8 @@ class Campaign extends ExtendCampaign
      */
     public function __construct()
     {
+        parent::__construct();
+
         $this->reportPeriod = self::PERIOD_DAILY;
     }
 

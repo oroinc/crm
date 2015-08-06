@@ -15,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
  * Class MagentoSoapTransport
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport
@@ -109,6 +109,13 @@ class MagentoSoapTransport extends Transport
      * @ORM\Column(name="is_wsi_mode", type="boolean")
      */
     protected $isWsiMode = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="guest_customer_sync", type="boolean")
+     */
+    protected $guestCustomerSync = true;
 
     /**
      * @var string
@@ -361,6 +368,26 @@ class MagentoSoapTransport extends Transport
     }
 
     /**
+     * @param boolean $guestCustomerSync
+     *
+     * @return MagentoSoapTransport
+     */
+    public function setGuestCustomerSync($guestCustomerSync)
+    {
+        $this->guestCustomerSync = $guestCustomerSync;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getGuestCustomerSync()
+    {
+        return $this->guestCustomerSync;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getSettingsBag()
@@ -373,6 +400,7 @@ class MagentoSoapTransport extends Transport
                     'wsdl_url' => $this->getWsdlPath(),
                     'sync_range' => $this->getSyncRange(),
                     'wsi_mode' => $this->getIsWsiMode(),
+                    'guest_customer_sync' => $this->getGuestCustomerSync(),
                     'website_id' => $this->getWebsiteId(),
                     'start_sync_date' => $this->getSyncStartDate(),
                     'initial_sync_start_date' => $this->getInitialSyncStartDate(),

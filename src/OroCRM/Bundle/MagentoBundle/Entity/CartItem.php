@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCartItem;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
@@ -20,6 +21,11 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-shopping-cart"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="ORGANIZATION",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -148,13 +154,29 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     protected $productUrl;
 
     /**
+     * @var bool
+     *
+     * @ORM\Column(name="is_removed", type="boolean", options={"default"=false})
+     */
+    protected $removed = false;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
+
+    /**
      * @param float $customPrice
      *
-     * @return CartItem
+     * @return $this
      */
     public function setCustomPrice($customPrice)
     {
         $this->customPrice = $customPrice;
+
         return $this;
     }
 
@@ -169,11 +191,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $description
      *
-     * @return CartItem
+     * @return $this
      */
     public function setDescription($description)
     {
         $this->description = $description;
+
         return $this;
     }
 
@@ -188,11 +211,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $freeShipping
      *
-     * @return CartItem
+     * @return $this
      */
     public function setFreeShipping($freeShipping)
     {
         $this->freeShipping = $freeShipping;
+
         return $this;
     }
 
@@ -207,11 +231,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $giftMessage
      *
-     * @return CartItem
+     * @return $this
      */
     public function setGiftMessage($giftMessage)
     {
         $this->giftMessage = $giftMessage;
+
         return $this;
     }
 
@@ -226,11 +251,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $isVirtual
      *
-     * @return CartItem
+     * @return $this
      */
     public function setIsVirtual($isVirtual)
     {
         $this->isVirtual = $isVirtual;
+
         return $this;
     }
 
@@ -245,11 +271,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param int $parentItemId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setParentItemId($parentItemId)
     {
         $this->parentItemId = $parentItemId;
+
         return $this;
     }
 
@@ -264,11 +291,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $priceInclTax
      *
-     * @return CartItem
+     * @return $this
      */
     public function setPriceInclTax($priceInclTax)
     {
         $this->priceInclTax = $priceInclTax;
+
         return $this;
     }
 
@@ -283,11 +311,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param int $productId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setProductId($productId)
     {
         $this->productId = $productId;
+
         return $this;
     }
 
@@ -302,11 +331,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $productType
      *
-     * @return CartItem
+     * @return $this
      */
     public function setProductType($productType)
     {
         $this->productType = $productType;
+
         return $this;
     }
 
@@ -321,11 +351,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $rowTotal
      *
-     * @return CartItem
+     * @return $this
      */
     public function setRowTotal($rowTotal)
     {
         $this->rowTotal = $rowTotal;
+
         return $this;
     }
 
@@ -340,11 +371,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param float $taxAmount
      *
-     * @return CartItem
+     * @return $this
      */
     public function setTaxAmount($taxAmount)
     {
         $this->taxAmount = $taxAmount;
+
         return $this;
     }
 
@@ -359,11 +391,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     /**
      * @param string $taxClassId
      *
-     * @return CartItem
+     * @return $this
      */
     public function setTaxClassId($taxClassId)
     {
         $this->taxClassId = $taxClassId;
+
         return $this;
     }
 
@@ -385,7 +418,8 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
 
     /**
      * @param string $productImageUrl
-     * @return CartItem
+     *
+     * @return $this
      */
     public function setProductImageUrl($productImageUrl)
     {
@@ -404,12 +438,57 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
 
     /**
      * @param string $productUrl
-     * @return CartItem
+     *
+     * @return $this
      */
     public function setProductUrl($productUrl)
     {
         $this->productUrl = $productUrl;
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isRemoved()
+    {
+        return (bool)$this->removed;
+    }
+
+    /**
+     * @param boolean $removed
+     *
+     * @return $this
+     */
+    public function setRemoved($removed)
+    {
+        $this->removed = (bool)$removed;
+
+        return $this;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param Organization $owner
+     *
+     * @return $this
+     */
+    public function setOwner(Organization $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return Organization
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }

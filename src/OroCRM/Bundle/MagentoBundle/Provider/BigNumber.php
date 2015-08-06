@@ -5,13 +5,13 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 use Doctrine\ORM\EntityRepository;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\TranslationBundle\Translation\Translator;
 
 class BigNumber
 {
@@ -27,22 +27,22 @@ class BigNumber
     /** @var AclHelper */
     protected $aclHelper;
 
-    /** @var Translator */
+    /** @var TranslatorInterface */
     protected $translator;
 
     /**
-     * @param RegistryInterface $doctrine
-     * @param NumberFormatter   $numberFormatter
-     * @param DateTimeFormatter $dateTimeFormatter
-     * @param AclHelper         $aclHelper
-     * @param Translator        $translator
+     * @param RegistryInterface   $doctrine
+     * @param NumberFormatter     $numberFormatter
+     * @param DateTimeFormatter   $dateTimeFormatter
+     * @param AclHelper           $aclHelper
+     * @param TranslatorInterface $translator
      */
     public function __construct(
         RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
         AclHelper $aclHelper,
-        Translator $translator
+        TranslatorInterface $translator
     ) {
         $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;

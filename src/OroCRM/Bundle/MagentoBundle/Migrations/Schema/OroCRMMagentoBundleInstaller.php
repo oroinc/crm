@@ -80,7 +80,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_32';
+        return 'v1_34';
     }
 
     /**
@@ -153,6 +153,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('initial_sync_start_date', 'datetime', ['notnull' => false]);
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
+        $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
     }
 
     /**
@@ -389,6 +390,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('password', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('created_in', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('is_confirmed', 'boolean', ['notnull' => false]);
+        $table->addColumn('is_guest', 'boolean', ['notnull' => true, 'default' => false]);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -401,6 +403,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['first_name', 'last_name'], 'magecustomer_name_idx', []);
         $table->addIndex(['last_name', 'first_name'], 'magecustomer_rev_name_idx', []);
+        $table->addIndex(['email'], 'magecustomer_email_guest_idx', []);
         $table->addUniqueIndex(['origin_id', 'channel_id'], 'magecustomer_oid_cid_unq');
     }
 
@@ -447,7 +450,10 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('updatedAt', 'datetime', ['precision' => 0]);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('is_removed', 'boolean', ['notnull' => true, 'default' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['cart_id'], 'IDX_A73DC8621AD5CDBF', []);
+        $table->addIndex(['owner_id'], 'IDX_A73DC8627E3C61F9', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecartitem_origin_idx', []);
         $table->addIndex(['sku'], 'magecartitem_sku_idx', []);
@@ -796,7 +802,9 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('row_total', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['order_id'], 'IDX_3135EFF68D9F6D38', []);
+        $table->addIndex(['owner_id'], 'IDX_3135EFF67E3C61F9', []);
         $table->setPrimaryKey(['id']);
     }
 
@@ -1079,6 +1087,12 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );
@@ -1431,6 +1445,12 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );

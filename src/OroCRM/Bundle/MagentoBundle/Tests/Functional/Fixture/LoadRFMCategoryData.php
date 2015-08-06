@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
@@ -13,7 +14,7 @@ use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInterface
+class LoadRFMCategoryData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /**
      * @var array
@@ -144,5 +145,15 @@ class LoadRFMCategoryData extends AbstractFixture implements ContainerAwareInter
             $manager->persist($entity);
         }
         $manager->flush();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDependencies()
+    {
+        return [
+            'OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'
+        ];
     }
 }

@@ -38,6 +38,16 @@
     {% endif %}
     {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity.newsletterSubscriber, customer: entity } %}
     {% if resource_granted('EDIT', entity) %}
+        {% if entity.guest %}
+            {{ UI.clientButton({
+                'dataUrl': path('orocrm_magento_customer_register', { 'id': entity.id }),
+                'aCss': 'no-hash customer-registration customer-register-action',
+                'label': 'orocrm.magento.customer.register.label'|trans,
+            }) }}
+            <div class="pull-left"
+                 data-page-component-module="orocrmmagento/js/app/components/customer-registration-manager"
+                 data-page-component-options="{{ {entityId: entity.id}|json_encode }}"></div>
+        {% endif %}
         {{ UI.editButton({
             'path' : path('orocrm_magento_customer_update', { 'id': entity.id }),
             'entity_label': 'orocrm.magento.customer.entity_label'|trans

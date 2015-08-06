@@ -1,0 +1,7 @@
+<li>
+{{ oro_widget_render({
+    'widgetType': 'block',
+    'url': path('orocrm_activity_contact_metrics', {entityClass: oro_class_name(entity, true), entityId: entity.id}),
+    'alias': 'activity-contact-widget',
+}) }}
+</li>

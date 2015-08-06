@@ -174,7 +174,7 @@ workflows:
                 step_to: contacted
                 is_start: true
                 is_unavailable_hidden: true
-                acl_resource: oro_email_create
+                acl_resource: oro_email_email_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:
@@ -215,6 +215,9 @@ workflows:
                                 required: false
                     init_actions:
                         - @assign_active_user: $.result.user
+                        - @assign_value: [$email_subject, ""]
+                        - @assign_value: [$email_body, ""]
+                        - @assign_value: [$notes, ""]
                         - @assign_value: [$email_from, $.result.user.email]
                         - @assign_value: #Assign email to as shopping cart email
                             conditions:
@@ -242,7 +245,7 @@ workflows:
                 label: 'Send email'
                 step_to: converted
                 is_unavailable_hidden: true
-                acl_resource: oro_email_create
+                acl_resource: oro_email_email_create
                 frontend_options:
                     icon: 'icon-envelope-alt'
                     dialog:
