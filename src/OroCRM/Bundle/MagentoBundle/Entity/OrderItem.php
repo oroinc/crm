@@ -6,6 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
 
 /**
@@ -15,6 +16,11 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt"
+ *          },
+ *          "ownership"={
+ *              "owner_type"="ORGANIZATION",
+ *              "owner_field_name"="owner",
+ *              "owner_column_name"="owner_id"
  *          },
  *          "security"={
  *              "type"="ACL",
@@ -78,6 +84,14 @@ class OrderItem extends ExtendOrderItem implements IntegrationAwareInterface, Or
      * @ORM\Column(name="discount_percent", type="percent", nullable=true)
      */
     protected $discountPercent;
+
+    /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $owner;
 
     /** Do not needed in magento order item, because magento api does not bring it up */
     protected $cost;
@@ -180,5 +194,29 @@ class OrderItem extends ExtendOrderItem implements IntegrationAwareInterface, Or
     public function getDiscountPercent()
     {
         return $this->discountPercent;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param Organization $owner
+     *
+     * @return OrderItem
+     */
+    public function setOwner(Organization $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return Organization
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 }
