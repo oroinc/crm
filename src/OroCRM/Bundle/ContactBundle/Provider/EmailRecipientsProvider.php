@@ -36,19 +36,12 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
      */
     public function getRecipients(EmailRecipientsProviderArgs $args)
     {
-        $recipients = $this->emailRecipientsHelper->getRecipients(
+        return $this->emailRecipientsHelper->getRecipients(
             $args,
             $this->getContactRepository(),
             'c',
             'OroCRM\Bundle\ContactBundle\Entity\Contact'
         );
-
-        $result = [];
-        foreach ($recipients as $email => $name) {
-            $result[] = new Recipient($email, $name);
-        }
-
-        return $result;
     }
 
     /**
