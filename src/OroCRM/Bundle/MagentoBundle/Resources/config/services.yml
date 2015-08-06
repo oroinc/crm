@@ -188,7 +188,7 @@ services:
             - @doctrine
             - @oro_email.related_emails.provider
         tags:
-            - { name: oro_email.recipients_provider }
+            - { name: oro_email.recipients_provider, priority: 10 }
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
