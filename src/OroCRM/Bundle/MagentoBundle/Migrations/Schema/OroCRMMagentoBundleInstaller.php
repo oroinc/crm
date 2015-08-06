@@ -451,7 +451,9 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('is_removed', 'boolean', ['notnull' => true, 'default' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['cart_id'], 'IDX_A73DC8621AD5CDBF', []);
+        $table->addIndex(['owner_id'], 'IDX_A73DC8627E3C61F9', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['origin_id'], 'magecartitem_origin_idx', []);
         $table->addIndex(['sku'], 'magecartitem_sku_idx', []);
@@ -800,7 +802,9 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('row_total', 'money', ['notnull' => false, 'precision' => 0, 'comment' => '(DC2Type:money)']);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
+        $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addIndex(['order_id'], 'IDX_3135EFF68D9F6D38', []);
+        $table->addIndex(['owner_id'], 'IDX_3135EFF67E3C61F9', []);
         $table->setPrimaryKey(['id']);
     }
 
@@ -1083,6 +1087,12 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );
@@ -1435,6 +1445,12 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_integration_channel'),
             ['channel_id'],
+            ['id'],
+            ['onDelete' => 'SET NULL']
+        );
+        $table->addForeignKeyConstraint(
+            $schema->getTable('oro_organization'),
+            ['owner_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );
