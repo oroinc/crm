@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Provider;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
+use Oro\Bundle\EmailBundle\Model\Recipient;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsProviderInterface;
 use Oro\Bundle\EmailBundle\Provider\EmailRecipientsHelper;
 
@@ -35,12 +36,19 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
      */
     public function getRecipients(EmailRecipientsProviderArgs $args)
     {
-        return $this->emailRecipientsHelper->getRecipients(
+        $recipients = $this->emailRecipientsHelper->getRecipients(
             $args,
             $this->getContactRepository(),
             'c',
             'OroCRM\Bundle\ContactBundle\Entity\Contact'
         );
+
+        $result = [];
+        foreach ($recipients as $email => $name) {
+            $result[] = new Recipient($email, $name);
+        }
+
+        return $result;
     }
 
     /**

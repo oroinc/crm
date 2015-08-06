@@ -42,18 +42,18 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
         }
 
         $customers = $this->getCustomerRepository()->findBy(['account' => $args->getRelatedEntity()]);
-        $emails = [];
+        $recipients = [];
         foreach ($customers as $customer) {
-            $emails = array_merge(
-                $emails,
+            $recipients = array_merge(
+                $recipients,
                 EmailRecipientsHelper::filterRecipients(
                     $args,
-                    $this->relatedEmailsProvider->getEmails($customer, 2)
+                    $this->relatedEmailsProvider->getRecipients($customer, 2)
                 )
             );
         }
 
-        return $emails;
+        return $recipients;
     }
 
     /**
