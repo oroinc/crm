@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EmailBundle\Model\EmailRecipientsProviderArgs;
+use Oro\Bundle\EmailBundle\Model\Recipient;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -60,7 +61,7 @@ class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($customerRepository));
 
         $this->relatedEmailsProvider->expects($this->once())
-            ->method('getEmails')
+            ->method('getRecipients')
             ->with($customer, 2)
             ->will($this->returnValue($expectedEmails));
 
@@ -73,8 +74,8 @@ class EmailRecipientsProviderTest extends \PHPUnit_Framework_TestCase
             [
                 new EmailRecipientsProviderArgs(new Account(), 're', 100),
                 [
-                    'recipient@example.com' => 'Recipient <recipient@example.com>',
-                    'recipient2@example.com' => 'Recipient2 <recipient2@example.com>',
+                    new Recipient('recipient@example.com', 'Recipient <recipient@example.com>'),
+                    new Recipient('recipient2@example.com', 'Recipient2 <recipient2@example.com>'),
                 ]
             ],
         ];
