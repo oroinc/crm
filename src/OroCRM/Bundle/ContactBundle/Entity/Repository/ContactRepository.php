@@ -22,8 +22,9 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
 
         $qb
             ->select(sprintf('%s AS name', $fullNameQueryPart))
-            ->addSelect('c.id AS entityId, c.email')
+            ->addSelect('c.id AS entityId, c.email, o.name AS organization')
             ->orderBy('name')
+            ->leftJoin('c.organization', 'o')
             ->andWhere('c.email IS NOT NULL');
 
         if ($query) {
@@ -56,9 +57,10 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
         $qb = $this->createQueryBuilder('c');
 
         $qb->select(sprintf('%s AS name', $fullNameQueryPart))
-            ->addSelect('c.id AS entityId, e.email')
+            ->addSelect('c.id AS entityId, e.email, o.name AS organization')
             ->orderBy('name')
-            ->join('c.emails', 'e');
+            ->join('c.emails', 'e')
+            ->leftJoin('c.organization', 'o');
 
         if ($query) {
             $qb
