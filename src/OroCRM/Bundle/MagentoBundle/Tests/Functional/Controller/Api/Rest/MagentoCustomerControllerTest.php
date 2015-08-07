@@ -150,6 +150,7 @@ class MagentoCustomerControllerTest extends WebTestCase
     }
 
     /**
+     * TODO: DateTimeZone should be removed in BAP-8710. Test should be passed.
      * @depends testCreateCustomer
      */
     public function testCget()
