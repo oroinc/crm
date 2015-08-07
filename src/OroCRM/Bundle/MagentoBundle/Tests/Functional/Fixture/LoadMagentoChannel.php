@@ -429,6 +429,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cartItem->setTaxPercent(0);
         $cartItem->setCreatedAt(new \DateTime('now'));
         $cartItem->setUpdatedAt(new \DateTime('now'));
+        $cartItem->setOwner($this->organization);
 
         $this->em->persist($cartItem);
 
@@ -516,6 +517,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $orderItem->setDiscountPercent(4);
         $orderItem->setDiscountAmount(0);
         $orderItem->setRowTotal(234);
+        $orderItem->setOwner($this->organization);
 
         $this->em->persist($orderItem);
 
