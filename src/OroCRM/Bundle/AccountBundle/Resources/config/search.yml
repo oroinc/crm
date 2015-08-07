@@ -12,3 +12,15 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
             name: name
             target_type: text
             target_fields: [name]
+        -
+            name: defaultContact
+            relation_type: one-to-one
+            relation_fields:
+                -
+                    name: emails
+                    relation_type: one-to-many
+                    relation_fields:
+                        -
+                            name: email
+                            target_type: text
+                            target_fields: [email]

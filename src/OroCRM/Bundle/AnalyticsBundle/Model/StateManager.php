@@ -50,11 +50,11 @@ class StateManager
 
         if ($args) {
             $qb
-                ->andWhere($qb->expr()->like('j.args', ':args'))
+                ->andWhere($qb->expr()->like('cast(j.args as text)', ':args'))
                 ->setParameter('args', '%' . $args . '%');
         } else {
             $qb
-                ->andWhere($qb->expr()->notLike('j.args', ':args'))
+                ->andWhere($qb->expr()->notLike('cast(j.args as text)', ':args'))
                 ->setParameter('args', '%--channel%');
         }
 

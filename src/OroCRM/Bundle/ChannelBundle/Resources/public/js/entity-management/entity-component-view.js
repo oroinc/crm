@@ -1,19 +1,16 @@
-/*jslint vars: true, nomen: true, browser: true*/
-/*jshint browser: true*/
-/*global define, require*/
-define(function (require) {
+define(function(require) {
     'use strict';
 
-    var Backbone = require('backbone'),
-        _ = require('underscore'),
-        __ = require('orotranslation/js/translator'),
-        EntityModel = require('./model'),
-        componentTemplate = require('text!./templates/component.html'),
-        entityTemplate = require('text!./templates/entity-item.html'),
-        formTemplate = require('text!./templates/form.html'),
-        entitySelectResultTemplate = require('text!./templates/select2/result.html'),
-        entitySelectSelectionTemplate = require('text!./templates/select2/selection.html'),
-        Select2Component = require('oro/select2-component');
+    var Backbone = require('backbone');
+    var _ = require('underscore');
+    var __ = require('orotranslation/js/translator');
+    var EntityModel = require('./model');
+    var componentTemplate = require('text!./templates/component.html');
+    var entityTemplate = require('text!./templates/entity-item.html');
+    var formTemplate = require('text!./templates/form.html');
+    var entitySelectResultTemplate = require('text!./templates/select2/result.html');
+    var entitySelectSelectionTemplate = require('text!./templates/select2/selection.html');
+    var Select2Component = require('oro/select2-component');
 
     require('oroui/js/items-manager/editor');
     require('oroui/js/items-manager/table');
@@ -86,7 +83,7 @@ define(function (require) {
          *
          * @param {object} options
          */
-        initialize: function (options) {
+        initialize: function(options) {
             this.options = _.defaults(options || {}, this.options);
             if (!this.options.metadata) {
                 throw new Error('Missing "metadata" options for entity selection compoment');
@@ -101,12 +98,12 @@ define(function (require) {
         /**
          * Renders component
          */
-        render: function () {
+        render: function() {
             var templateContext = {__: __};
 
             this.$el.html(this.template(_.extend({}, templateContext)));
-            this.$formContainer   = this.$el.find('.form-container');
-            this.$listContainer   = this.$el.find('.grid-container');
+            this.$formContainer = this.$el.find('.form-container');
+            this.$listContainer = this.$el.find('.grid-container');
             this.$noDataContainer = this.$el.find('.no-data');
 
             if (this.options.mode === modes.EDIT_MODE) {
@@ -122,25 +119,25 @@ define(function (require) {
          *
          * @private
          */
-        _initializeForm: function () {
+        _initializeForm: function() {
             var configs = {
                     placeholder:        __('orocrm.channel.form.entity'),
                     result_template:    entitySelectResultTemplate,
                     selection_template: entitySelectSelectionTemplate,
-                    data: _.bind(function () {
-                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name')),
-                            options = _.map(notSelected, function(entityMetadata) {
-                                return {
-                                    id: entityMetadata.name,
-                                    text: entityMetadata.label,
-                                    icon: entityMetadata.icon,
-                                    type: entityMetadata.type
-                                };
-                            }),
-                            optionGroups = _.groupBy(options, function(entityMetadata) {
-                                return entityMetadata.type;
-                            }),
-                            results = [];
+                    data: _.bind(function() {
+                        var notSelected = _.omit(this.options.metadata, this.collection.pluck('name'));
+                        var options = _.map(notSelected, function(entityMetadata) {
+                            return {
+                                id: entityMetadata.name,
+                                text: entityMetadata.label,
+                                icon: entityMetadata.icon,
+                                type: entityMetadata.type
+                            };
+                        });
+                        var optionGroups = _.groupBy(options, function(entityMetadata) {
+                            return entityMetadata.type;
+                        });
+                        var results = [];
 
                         _.each(_.keys(optionGroups).sort().reverse(), function(groupName) {
                             results.push({
@@ -152,12 +149,12 @@ define(function (require) {
 
                         return {results: results};
                     }, this)
-                },
-                $el = this.$formContainer.find('[data-purpose="entity-selector"]'),
-                select2Component = new Select2Component({
-                    configs: configs,
-                    _sourceElement: $el
-                });
+                };
+            var $el = this.$formContainer.find('[data-purpose="entity-selector"]');
+            var select2Component = new Select2Component({
+                configs: configs,
+                _sourceElement: $el
+            });
             this.pageComponent('entity-selector', select2Component, $el);
             this.$formContainer.itemsManagerEditor({
                 collection: this.collection
@@ -169,7 +166,7 @@ define(function (require) {
          *
          * @private
          */
-        _initializeList: function () {
+        _initializeList: function() {
             this.$listContainer.find('tbody').itemsManagerTable({
                 collection:   this.collection,
                 itemTemplate: this.itemTemplate,
@@ -178,7 +175,7 @@ define(function (require) {
 
                     return template(context);
                 },
-                deleteHandler: _.partial(function (collection, model, data) {
+                deleteHandler: _.partial(function(collection, model, data) {
                     collection.remove(model);
                 }, this.collection),
                 sorting: false
@@ -208,7 +205,7 @@ define(function (require) {
          * @param {Object.<orocrmchannel.entityManagement.Model>} model
          * @private
          */
-        _onItemAdded: function (model) {
+        _onItemAdded: function(model) {
             model.set(this._prepareModelAttributes(model));
         },
 
@@ -219,11 +216,11 @@ define(function (require) {
          * @returns {object}
          * @private
          */
-        _prepareModelAttributes: function (model) {
-            var entityName = model.get('name'),
-                entityMetadata = this.options.metadata[entityName] || {},
-                actions = [],
-                lockedEntities = this.options.lockedEntities;
+        _prepareModelAttributes: function(model) {
+            var entityName = model.get('name');
+            var entityMetadata = this.options.metadata[entityName] || {};
+            var actions = [];
+            var lockedEntities = this.options.lockedEntities;
 
             if ((entityName.indexOf(lockedEntities) === -1) && this.options.mode === modes.EDIT_MODE) {
                 actions.push({
@@ -254,7 +251,7 @@ define(function (require) {
          * @returns {Object.<orocrmchannel.entityManagement.Model>}
          * @private
          */
-        _createModel: function (entityName) {
+        _createModel: function(entityName) {
             var model = new EntityModel({name: entityName});
             model.set(this._prepareModelAttributes(model));
 

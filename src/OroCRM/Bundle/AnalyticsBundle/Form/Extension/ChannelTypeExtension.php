@@ -68,7 +68,7 @@ class ChannelTypeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->replaceDefaults(['validation_groups' => $this->getValidationGroups()]);
+        $resolver->setDefaults(['validation_groups' => $this->getValidationGroups()]);
     }
 
     /**

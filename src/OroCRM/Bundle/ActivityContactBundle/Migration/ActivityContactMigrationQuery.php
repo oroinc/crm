@@ -75,12 +75,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
 
         $entities = $this->getConfigurableEntitiesData($logger);
         foreach ($entities as $entityClassName => $config) {
-            if (isset(
-                    $config['extend'],
-                    $config['extend']['is_extend'],
-                    $config['activity'],
-                    $config['activity']['activities']
-                )
+            if (isset($config['extend']['is_extend'], $config['activity']['activities'])
                 && $config['extend']['is_extend'] == true
                 && $config['activity']['activities']
                 && array_intersect($contactingActivityClasses, $config['activity']['activities'])

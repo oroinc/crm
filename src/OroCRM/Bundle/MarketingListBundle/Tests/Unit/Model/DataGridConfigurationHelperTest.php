@@ -59,43 +59,42 @@ class DataGridConfigurationHelperTest extends \PHPUnit_Framework_TestCase
      */
     public function extendConfigurationDataProvider()
     {
-        $emptyParameters = ['source' => [], 'sorters' => [], 'filters' => [], 'columns' => null];
         return [
             'empty' => [
                 'gridName' => 'gridName',
                 'existingParameters' => [],
                 'additionalParameters' => [],
-                'expectedParameters' => $emptyParameters
+                'expectedParameters' => []
             ],
             'leave_name' => [
                 'gridName' => 'gridName',
                 'existingParameters' => ['name' => 'existing'],
                 'additionalParameters' => ['name' => 'additional'],
-                'expectedParameters' => array_merge($emptyParameters, ['name' => 'existing'])
+                'expectedParameters' => ['name' => 'existing']
             ],
             'not_array' => [
                 'gridName' => 'gridName',
                 'existingParameters' => ['scope' => 'existing'],
                 'additionalParameters' => ['scope' => 'additional'],
-                'expectedParameters' => array_merge($emptyParameters, ['scope' => 'existing'])
+                'expectedParameters' => ['scope' => 'existing']
             ],
             'merge' => [
                 'gridName' => 'gridName',
                 'existingParameters' => ['scope' => ['existing']],
                 'additionalParameters' => ['scope' => ['additional']],
-                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['existing', 'additional']])
+                'expectedParameters' => ['scope' => ['existing', 'additional']]
             ],
             'add_new' => [
                 'gridName' => 'gridName',
                 'existingParameters' => [],
                 'additionalParameters' => ['scope' => ['additional']],
-                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['additional']])
+                'expectedParameters' => ['scope' => ['additional']]
             ],
             'without_update' => [
                 'gridName' => 'gridName',
                 'existingParameters' => ['scope' => ['existing']],
                 'additionalParameters' => [],
-                'expectedParameters' => array_merge($emptyParameters, ['scope' => ['existing']])
+                'expectedParameters' => ['scope' => ['existing']]
             ],
             'with alias update' => [
                 'gridName' => 'gridName',
@@ -126,29 +125,26 @@ class DataGridConfigurationHelperTest extends \PHPUnit_Framework_TestCase
                         ]
                     ]
                 ],
-                'expectedParameters' => array_merge(
-                    $emptyParameters,
-                    [
-                        'columns' => ['T1000.name as name', 'T1000.id', 'other.field'],
-                        'sorters' => [
-                            'columns' => ['T1000.id', 'other.field']
-                        ],
-                        'filters' => [
-                            'columns' => ['T1000.id', 'other.field']
-                        ],
-                        'source' => [
-                            'query' => [
-                                'from' => [
-                                    [
-                                        'table' => 'table',
-                                        'alias' => 'T1000'
-                                    ]
-                                ],
-                                'where' => 'other = some.type AND T1000.id = some.id'
-                            ]
+                'expectedParameters' => [
+                    'columns' => ['T1000.name as name', 'T1000.id', 'other.field'],
+                    'sorters' => [
+                        'columns' => ['T1000.id', 'other.field']
+                    ],
+                    'filters' => [
+                        'columns' => ['T1000.id', 'other.field']
+                    ],
+                    'source' => [
+                        'query' => [
+                            'from' => [
+                                [
+                                    'table' => 'table',
+                                    'alias' => 'T1000'
+                                ]
+                            ],
+                            'where' => 'other = some.type AND T1000.id = some.id'
                         ]
                     ]
-                )
+                ]
             ],
         ];
     }

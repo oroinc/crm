@@ -44,7 +44,7 @@ class LifetimeAverageAggregateCommandTest extends WebTestCase
     {
         return [
             'should show help'                                    => [
-                '$expectedContent' => "Usage:\n oro:cron:lifetime-average:aggregate [-f|--force]",
+                '$expectedContent' => "Usage:\n  oro:cron:lifetime-average:aggregate [options]",
                 '$params'          => ['--help']
             ],
             'should show success output'                          => [
