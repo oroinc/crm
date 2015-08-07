@@ -154,7 +154,7 @@ class CustomerControllerTest extends WebTestCase
      */
     public function testCget()
     {
-        $date = new \DateTime('now');
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
 
         $this->client->request(
             'GET',
@@ -164,7 +164,7 @@ class CustomerControllerTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
         $this->assertGreaterThan(1, count($result));
 
-        $date = new \DateTime('now + 1 day');
+        $date->modify('+ 1 day');
         $this->client->request(
             'GET',
             $this->getUrl('oro_api_get_customers', ['endCreatedAt' => $date->format('Y-m-d')])

@@ -328,8 +328,8 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setAccount($account);
         $customer->setGender(Gender::MALE);
         $customer->setGroup($this->customerGroup);
-        $customer->setCreatedAt(new \DateTime('now'));
-        $customer->setUpdatedAt(new \DateTime('now'));
+        $customer->setCreatedAt(new \DateTime('now', new \DateTimezone('UTC')));
+        $customer->setUpdatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->addAddress($address);
         $customer->setOwner($this->getUser());
         $customer->setOrganization($this->organization);
