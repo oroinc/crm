@@ -48,7 +48,7 @@ class EmailRecipientsProvider implements EmailRecipientsProviderInterface
                 $recipients,
                 EmailRecipientsHelper::filterRecipients(
                     $args,
-                    $this->relatedEmailsProvider->getRecipients($customer, 2)
+                    $this->relatedEmailsProvider->getRecipients($customer, 2, false, $args->getOrganization())
                 )
             );
         }
