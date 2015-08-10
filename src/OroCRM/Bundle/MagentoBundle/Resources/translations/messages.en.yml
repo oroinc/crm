@@ -291,6 +291,7 @@ orocrm:
             product_url.label:         Product URL
             channel.label:             Channel
             removed.label:             Removed
+            owner.label:               Owner
 
         cartstatus:
             entity_label:        Magento Shopping Cart Status
@@ -319,6 +320,7 @@ orocrm:
             tax_percent.label:      Tax percent
             weight.label:           Weight
             channel.label:          Channel
+            owner.label:            Owner
 
         magentosoaptransport:
             entity_label:                 Magento Integration Channel Transport
