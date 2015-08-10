@@ -9,6 +9,7 @@ use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+use Oro\Bundle\SecurityBundle\Owner\EntityOwnerAccessor;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
@@ -20,12 +21,17 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var EntityOwnerAccessor */
+    protected $entityOwnerAccessor;
+
     /**
-     * @param DoctrineHelper $doctrineHelper
+     * @param DoctrineHelper      $doctrineHelper
+     * @param EntityOwnerAccessor $entityOwnerAccessor
      */
-    public function __construct(DoctrineHelper $doctrineHelper)
+    public function __construct(DoctrineHelper $doctrineHelper, EntityOwnerAccessor $entityOwnerAccessor)
     {
         $this->doctrineHelper = $doctrineHelper;
+        $this->entityOwnerAccessor = $entityOwnerAccessor;
     }
 
     /**
@@ -154,7 +160,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     public function getActivityOwners($entity, ActivityList $activityList)
     {
         $organization = $this->getOrganization($entity);
-        $owner = $entity->getOwner();
+        $owner = $this->entityOwnerAccessor->getOwner($entity);
 
         if (!$organization || !$owner) {
             return [];
