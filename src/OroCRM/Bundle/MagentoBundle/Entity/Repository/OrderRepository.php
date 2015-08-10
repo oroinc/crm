@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use DateTime;
 
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
@@ -15,8 +14,9 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
-class OrderRepository extends EntityRepository
+class OrderRepository extends ChannelAwareEntityRepository
 {
     /**
      * @param \DateTime $start
@@ -35,6 +35,7 @@ class OrderRepository extends EntityRepository
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
@@ -54,6 +55,7 @@ class OrderRepository extends EntityRepository
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
@@ -80,6 +82,7 @@ class OrderRepository extends EntityRepository
             ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
@@ -106,6 +109,7 @@ class OrderRepository extends EntityRepository
         $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
         $qb->setParameter('dateStart', $start);
         $qb->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
         return $value['allOrders'] ? $value['discounted'] / $value['allOrders'] : 0;
@@ -128,34 +132,9 @@ class OrderRepository extends EntityRepository
         $qb->setParameter('item', $item);
         $qb->orderBy('o.updatedAt', 'DESC');
         $qb->setMaxResults(1);
+        $this->applyActiveChannelLimitation($qb);
 
         return $qb->getQuery()->getOneOrNullResult();
-    }
-
-    /**
-     * Get customer orders subtotal amount
-     *
-     * @param Customer $customer
-     * @return float
-     *
-     * @deprecated Use CustomerRepository::calculateLifetimeValue to get lifetime value for customer
-     */
-    public function getCustomerOrdersSubtotalAmount(Customer $customer)
-    {
-        $qb = $this->createQueryBuilder('o');
-
-        $qb
-            ->select('sum(o.subtotalAmount) as subtotal')
-            ->where(
-                $qb->expr()->andX(
-                    $qb->expr()->eq('o.customer', ':customer'),
-                    $qb->expr()->neq($qb->expr()->lower('o.status'), ':status')
-                )
-            )
-            ->setParameter('customer', $customer)
-            ->setParameter('status', Order::STATUS_CANCELED);
-
-        return (float)$qb->getQuery()->getSingleScalarResult();
     }
 
     /**
@@ -174,7 +153,7 @@ class OrderRepository extends EntityRepository
         /** @var EntityManager $entityManager */
         $entityManager = $this->getEntityManager();
         $channels      = $entityManager->getRepository('OroCRMChannelBundle:Channel')
-            ->getAvailableChannelNames($aclHelper, 'magento');
+            ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
 
         // execute data query
         $queryBuilder = $this->createQueryBuilder('o');
@@ -192,6 +171,8 @@ class OrderRepository extends EntityRepository
             ->setParameter('dateStart', $dateFrom)
             ->setParameter('dateEnd', $dateTo)
             ->groupBy('dataChannelId');
+
+        $this->applyActiveChannelLimitation($queryBuilder);
         $dateHelper->addDatePartsSelect($dateFrom, $dateTo, $queryBuilder, 'o.createdAt');
         $amountStatistics = $aclHelper->apply($queryBuilder)->getArrayResult();
 
@@ -243,6 +224,7 @@ class OrderRepository extends EntityRepository
             $qb->andWhere('o.createdAt > :from');
         }
         $qb->setParameter('from', $from);
+        $this->applyActiveChannelLimitation($qb);
 
         return $aclHelper->apply($qb)->getResult();
     }
@@ -279,38 +261,9 @@ class OrderRepository extends EntityRepository
             $qb->andWhere('o.createdAt > :from');
         }
         $qb->setParameter('from', $from);
+        $this->applyActiveChannelLimitation($qb);
 
         return $aclHelper->apply($qb)->getResult();
-    }
-
-    /**
-     * @return array
-     */
-    protected function getOrderSliceDateAndTemplates()
-    {
-        // calculate slice date
-        $currentYear  = (int)date('Y');
-        $currentMonth = (int)date('m');
-
-        $sliceYear  = $currentMonth === 12 ? $currentYear : $currentYear - 1;
-        $sliceMonth = $currentMonth === 12 ? 1 : $currentMonth + 1;
-        $sliceDate  = new \DateTime(sprintf('%s-%s-01', $sliceYear, $sliceMonth), new \DateTimeZone('UTC'));
-
-        // calculate match for month and default channel template
-        $monthMatch      = [];
-        $channelTemplate = [];
-        if ($sliceYear !== $currentYear) {
-            for ($i = $sliceMonth; $i <= 12; $i++) {
-                $monthMatch[$i]                  = ['year' => $sliceYear, 'month' => $i];
-                $channelTemplate[$sliceYear][$i] = 0;
-            }
-        }
-        for ($i = 1; $i <= $currentMonth; $i++) {
-            $monthMatch[$i]                    = ['year' => $currentYear, 'month' => $i];
-            $channelTemplate[$currentYear][$i] = 0;
-        }
-
-        return [$sliceDate, $monthMatch, $channelTemplate];
     }
 
     /**
@@ -330,8 +283,9 @@ class OrderRepository extends EntityRepository
                 ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
                 ->setParameters([
                     'from' => $from,
-                    'to'   => $to,
+                    'to'   => $to
                 ]);
+            $this->applyActiveChannelLimitation($qb);
 
             return (int) $aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {

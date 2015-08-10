@@ -9,6 +9,7 @@ use Oro\Bundle\DashboardBundle\Entity\Dashboard;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 /**
  * Class DashboardControllerTest
@@ -92,7 +93,7 @@ class DashboardControllerTest extends WebTestCase
 
         /** @var array $channels */
         $channels = $this->doctrine->getRepository('OroCRMChannelBundle:Channel')
-            ->getAvailableChannelNames($aclHelper, 'magento');
+            ->getAvailableChannelNames($aclHelper, ChannelType::TYPE);
         foreach ($channels as $channel) {
             $this->assertContains($channel['name'], $result->getContent());
         }
