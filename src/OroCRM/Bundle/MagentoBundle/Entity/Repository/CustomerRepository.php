@@ -2,15 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
-use Doctrine\ORM\EntityRepository;
-
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
-class CustomerRepository extends EntityRepository
+class CustomerRepository extends ChannelAwareEntityRepository
 {
     /**
      * Calculates the lifetime value for the given customer
@@ -59,6 +57,7 @@ class CustomerRepository extends EntityRepository
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
@@ -83,6 +82,7 @@ class CustomerRepository extends EntityRepository
             ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
             ->setParameter('dateStart', $start)
             ->setParameter('dateEnd', $end);
+        $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 

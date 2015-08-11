@@ -399,6 +399,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "importexport"={
      *              "order"=210
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
@@ -417,6 +420,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *      defaultValues={
      *          "importexport"={
      *              "order"=220
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
@@ -554,6 +560,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
      *          "importexport"={
      *              "full"=true,
      *              "order"=250
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )

@@ -328,8 +328,11 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $customer->setAccount($account);
         $customer->setGender(Gender::MALE);
         $customer->setGroup($this->customerGroup);
-        $customer->setCreatedAt(new \DateTime('now'));
-        $customer->setUpdatedAt(new \DateTime('now'));
+        // TODO: DateTimeZones should be removed in BAP-8710. Tests should be passed for:
+        //  - OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\CustomerControllerTest
+        //  - OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller\Api\Rest\MagentoCustomerControllerTest
+        $customer->setCreatedAt(new \DateTime('now', new \DateTimezone('UTC')));
+        $customer->setUpdatedAt(new \DateTime('now', new \DateTimezone('UTC')));
         $customer->addAddress($address);
         $customer->setOwner($this->getUser());
         $customer->setOrganization($this->organization);
@@ -429,6 +432,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $cartItem->setTaxPercent(0);
         $cartItem->setCreatedAt(new \DateTime('now'));
         $cartItem->setUpdatedAt(new \DateTime('now'));
+        $cartItem->setOwner($this->organization);
 
         $this->em->persist($cartItem);
 
@@ -516,6 +520,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $orderItem->setDiscountPercent(4);
         $orderItem->setDiscountAmount(0);
         $orderItem->setRowTotal(234);
+        $orderItem->setOwner($this->organization);
 
         $this->em->persist($orderItem);
 
