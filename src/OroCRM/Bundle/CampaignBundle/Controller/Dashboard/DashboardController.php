@@ -43,7 +43,7 @@ class DashboardController extends Controller
                         'label' => array('field_name' => 'label'),
                         'value' => array('field_name' => 'number')
                     ),
-                    'settings' => array('xNoTicks' => self::CAMPAIGN_LEAD_COUNT),
+                    'settings' => array('xNoTicks' => count($items)),
                 )
             )
             ->getView();
@@ -81,7 +81,7 @@ class DashboardController extends Controller
                         'label' => array('field_name' => 'label'),
                         'value' => array('field_name' => 'number')
                     ),
-                    'settings' => array('xNoTicks' => self::CAMPAIGN_OPPORTUNITY_COUNT),
+                    'settings' => array('xNoTicks' => count($items)),
                 )
             )
             ->getView();
@@ -119,7 +119,7 @@ class DashboardController extends Controller
                         'label' => array('field_name' => 'label'),
                         'value' => array('field_name' => 'closeRevenue', 'formatter' => 'formatCurrency')
                     ),
-                    'settings' => array('xNoTicks' => self::CAMPAIGN_CLOSE_REVENUE_COUNT),
+                    'settings' => array('xNoTicks' => count($items)),
                 )
             )
             ->getView();

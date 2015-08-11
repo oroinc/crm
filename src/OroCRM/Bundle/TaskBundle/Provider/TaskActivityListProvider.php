@@ -9,6 +9,7 @@ use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface;
+use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
@@ -20,12 +21,17 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     /** @var DoctrineHelper */
     protected $doctrineHelper;
 
+    /** @var ServiceLink */
+    protected $entityOwnerAccessorLink;
+
     /**
      * @param DoctrineHelper $doctrineHelper
+     * @param ServiceLink    $entityOwnerAccessorLink
      */
-    public function __construct(DoctrineHelper $doctrineHelper)
+    public function __construct(DoctrineHelper $doctrineHelper, ServiceLink $entityOwnerAccessorLink)
     {
         $this->doctrineHelper = $doctrineHelper;
+        $this->entityOwnerAccessorLink = $entityOwnerAccessorLink;
     }
 
     /**
@@ -154,7 +160,7 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     public function getActivityOwners($entity, ActivityList $activityList)
     {
         $organization = $this->getOrganization($entity);
-        $owner = $entity->getOwner();
+        $owner = $this->entityOwnerAccessorLink->getService()->getOwner($entity);
 
         if (!$organization || !$owner) {
             return [];
