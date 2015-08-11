@@ -27,6 +27,10 @@ class EmailDirectionProvider implements DirectionProviderInterface
      */
     public function getDirection($activity, $target)
     {
+        if (method_exists($target, 'getEmail') === false) {
+            return DirectionProviderInterface::DIRECTION_UNKNOWN;
+        }
+
         /** @var $activity Email */
         /** @var $target EmailHolderInterface */
         if ($activity->getFromEmailAddress()->getEmail() === $target->getEmail()) {
