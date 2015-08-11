@@ -29,6 +29,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContactPhone;
  *          },
  *          "attachment"={
  *              "immutable"=true
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
  *          }
  *      }
  * )

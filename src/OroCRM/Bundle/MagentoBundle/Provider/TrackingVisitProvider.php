@@ -9,6 +9,7 @@ use Doctrine\ORM\NoResultException;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class TrackingVisitProvider
 {
@@ -48,11 +49,13 @@ class TrackingVisitProvider
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
+                ->andWhere($qb->expr()->eq('c.status', ':status'))
                 ->andWhere($qb->expr()->between('t.firstActionTime', ':from', ':to'))
                 ->setParameters([
                     'channel' => ChannelType::TYPE,
                     'from'    => $from,
                     'to'      => $to,
+                    'status'  => Channel::STATUS_ACTIVE
                 ])
                 ->andHaving('COUNT(t.userIdentifier) > 1');
 
@@ -78,11 +81,13 @@ class TrackingVisitProvider
                 ->join('t.trackingWebsite', 'tw')
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
+                ->andWhere($qb->expr()->eq('c.status', ':status'))
                 ->andWhere($qb->expr()->between('t.firstActionTime', ':from', ':to'))
                 ->setParameters([
                     'channel' => ChannelType::TYPE,
                     'from'    => $from,
                     'to'      => $to,
+                    'status'  => Channel::STATUS_ACTIVE
                 ]);
 
             return (int) $this->aclHelper->apply($qb)->getSingleScalarResult();

@@ -312,6 +312,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $orderItem->setPrice($cartItem->getPrice());
             $orderItem->setOriginalPrice($cartItem->getPrice());
             $orderItem->setName($cartItem->getName());
+            $orderItem->setOwner($order->getOrganization());
             $orderItems[] = $orderItem;
 
             $om->persist($orderItem);
@@ -415,6 +416,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $cartItem->setUpdatedAt(new \DateTime('now'));
             $cartItem->setOriginId($origin);
             $cartItem->setCart($cart);
+            $cartItem->setOwner($cart->getOrganization());
             $cart->getCartItems()->add($cartItem);
             $cart->setItemsQty($i+1);
             $cart->setItemsCount($i+1);
