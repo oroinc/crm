@@ -176,7 +176,10 @@ class EmailCampaignController extends Controller
      */
     protected function isManualSendAllowed(EmailCampaign $entity)
     {
-        $sendAllowed = $entity->getSchedule() === EmailCampaign::SCHEDULE_MANUAL && !$entity->isSent();
+        $sendAllowed = $entity->getSchedule() === EmailCampaign::SCHEDULE_MANUAL
+            && !$entity->isSent()
+            && $this->get('oro_security.security_facade')->isGranted('orocrm_email_campaign_send');
+
         if ($sendAllowed) {
             $transportSettings = $entity->getTransportSettings();
             if ($transportSettings) {
