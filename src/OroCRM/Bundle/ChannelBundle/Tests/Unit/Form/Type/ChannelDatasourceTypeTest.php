@@ -215,20 +215,19 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->disableOriginalConstructor()->getMock();
         $subscriberNS     = 'Oro\Bundle\IntegrationBundle\Form\EventListener';
 
-        $channelSubscriber      = new ChannelFormSubscriber($registry, $settingsProvider);
-        $ownerSubscriber        = $this->getMockBuilder($subscriberNS . '\DefaultUserOwnerSubscriber')
-            ->setMethods(['postSet'])
+        $securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
             ->disableOriginalConstructor()
             ->getMock();
-        $organizationSubscriber = $this->getMockBuilder($subscriberNS . '\OrganizationSubscriber')
+
+        $channelSubscriber      = new ChannelFormSubscriber($registry, $settingsProvider);
+        $ownerSubscriber        = $this->getMockBuilder($subscriberNS . '\DefaultOwnerSubscriber')
+            ->setConstructorArgs([$securityFacade, $registry])
             ->setMethods(['postSet'])
-            ->disableOriginalConstructor()
             ->getMock();
 
         return new ChannelType(
             $ownerSubscriber,
-            $channelSubscriber,
-            $organizationSubscriber
+            $channelSubscriber
         );
     }
 }
