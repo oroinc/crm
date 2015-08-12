@@ -118,6 +118,7 @@ class OrderStrategy extends AbstractImportStrategy
     protected function processItems(Order $order)
     {
         foreach ($order->getItems() as $item) {
+            $item->setOwner($order->getOrganization());
             $item->setOrder($order);
         }
 

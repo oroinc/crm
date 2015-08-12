@@ -40,7 +40,7 @@ class CartItemController extends RestController implements ClassResourceInterfac
      */
     public function getForm()
     {
-        return $this->get('orocrm_magento.form.type.cart_item.api');
+        return $this->get('orocrm_magento.form.cart_item.api');
     }
 
     /**

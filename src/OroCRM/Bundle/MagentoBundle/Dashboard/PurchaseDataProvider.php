@@ -78,22 +78,22 @@ class PurchaseDataProvider
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.visited'),
                 'value'    => $this->trackingVisitProvider->getVisitedCount($from, $to),
-                'isNozzle' => false,
+                'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.deeply_visited'),
                 'value'    => $this->trackingVisitProvider->getDeeplyVisitedCount($from, $to),
-                'isNozzle' => false,
+                'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.added_to_cart'),
                 'value'    => $this->getCartRepository()->getCustomersCountWhatMakeCarts($this->aclHelper, $from, $to),
-                'isNozzle' => false,
+                'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
                 'value'    => $this->getOrderRepository()->getUniqueBuyersCount($this->aclHelper, $from, $to),
-                'isNozzle' => true,
+                'isNozzle' => true
             ]
         ];
 
@@ -101,8 +101,8 @@ class PurchaseDataProvider
             [
                 'name' => 'flow_chart',
                 'settings' => [
-                    'quarterDate' => $from,
-                ],
+                    'quarterDate' => $from
+                ]
             ],
             $this->configProvider->getChartConfig('purchase_chart')
         );
