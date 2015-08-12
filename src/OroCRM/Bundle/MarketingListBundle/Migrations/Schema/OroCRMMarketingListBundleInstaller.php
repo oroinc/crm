@@ -18,7 +18,7 @@ class OroCRMMarketingListBundleInstaller implements Installation
      */
     public function getMigrationVersion()
     {
-        return 'v1_1';
+        return 'v1_2';
     }
 
     /**
@@ -109,8 +109,8 @@ class OroCRMMarketingListBundleInstaller implements Installation
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('marketing_list_id', 'integer', []);
         $table->addColumn('entity_id', 'integer', []);
-        $table->addColumn('contacted_times', 'integer', []);
-        $table->addColumn('last_contacted_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
+        $table->addColumn('contacted_times', 'integer', ['notnull' => false]);
+        $table->addColumn('last_contacted_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addColumn('created_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addIndex(['marketing_list_id'], 'idx_87fef39f96434d04', []);
         $table->addUniqueIndex(['entity_id', 'marketing_list_id'], 'orocrm_ml_list_ent_unq');
