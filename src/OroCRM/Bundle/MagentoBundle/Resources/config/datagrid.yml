@@ -996,6 +996,7 @@ datagrid:
                     - o.totalAmount
                     - o.totalPaidAmount
                     - o.status
+                    - o.currency
                     - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                 from:
@@ -1147,6 +1148,7 @@ datagrid:
                     - o.totalAmount
                     - o.totalPaidAmount
                     - o.status
+                    - o.currency
                     - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
                 from:
