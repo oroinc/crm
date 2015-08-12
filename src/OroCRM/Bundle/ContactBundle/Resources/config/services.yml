@@ -221,7 +221,7 @@ services:
             - @doctrine
             - @oro_email.provider.email_recipients.helper
         tags:
-            - { name: oro_email.recipients_provider, priority: 30 }
+            - { name: oro_email.recipients_provider, priority: 20 }
 
     orocrm_contact.widget_provider.actions.add_contact:
         parent: oro_ui.widget_provider.action_button.abstract
