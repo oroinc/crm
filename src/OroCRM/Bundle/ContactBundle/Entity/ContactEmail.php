@@ -28,6 +28,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContactEmail;
  *          },
  *          "attachment"={
  *              "immutable"=true
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
  *          }
  *      }
  * )

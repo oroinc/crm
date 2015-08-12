@@ -135,7 +135,7 @@ class CommentController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_case.form.type.comment.api');
+        return $this->get('orocrm_case.form.comment.api');
     }
 
     /**
