@@ -55,7 +55,7 @@ definitions:
                     - @create_entity:
                         class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
                         attribute: $.caseEntity
-                        flush: false
+                        flush: true
                         data:
                             owner:          $.mailbox.processSettings.owner
                             assignedTo:     $.mailbox.processSettings.assignTo
@@ -70,6 +70,9 @@ definitions:
                     - @add_email_activity_target:
                         email:              $.email
                         target_entity:      $.caseEntity
+                    - @copy_tagging:
+                        source: $.mailbox.processSettings
+                        destination: $.caseEntity
 
 triggers:
     convert_mailbox_email_to_case:
