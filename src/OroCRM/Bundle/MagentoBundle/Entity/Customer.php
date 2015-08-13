@@ -453,7 +453,7 @@ class Customer extends ExtendCustomer implements
      * Entity was synced or not
      * @var bool
      */
-    protected $isSynced = false;
+    protected $synced = false;
 
     /**
      * {@inheritdoc}
@@ -842,7 +842,7 @@ class Customer extends ExtendCustomer implements
             $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
 
-        if ($this->isSynced() === false) {
+        if ($this->isSynced() == false) {
             $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
     }
@@ -852,7 +852,7 @@ class Customer extends ExtendCustomer implements
      */
     public function preUpdate()
     {
-        if ($this->isSynced() === false) {
+        if ($this->isSynced() == false) {
             $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
     }
@@ -906,11 +906,11 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @param bool $isSynced
+     * @param bool $synced
      */
-    public function setIsSynced($isSynced)
+    public function setIsSynced($synced)
     {
-        $this->isSynced = (bool) $isSynced;
+        $this->synced = (bool) $synced;
     }
 
     /**
@@ -920,6 +920,6 @@ class Customer extends ExtendCustomer implements
      */
     public function isSynced()
     {
-        return $this->isSynced;
+        return $this->synced;
     }
 }
