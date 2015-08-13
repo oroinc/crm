@@ -25,5 +25,4 @@ class ContactGroups extends AbstractPageGrid
     {
         return $this;
     }
-
 }
