@@ -120,7 +120,9 @@ datagrid:
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
             bind_parameters:
-                - group
+                -
+                    name: group
+                    default: null
         columns:
             hasGroup:
                 label: orocrm.contact.group.has_group.label
