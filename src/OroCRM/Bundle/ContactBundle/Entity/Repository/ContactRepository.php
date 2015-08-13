@@ -10,13 +10,9 @@ use Oro\Bundle\EmailBundle\Entity\Repository\EmailAwareRepository;
 class ContactRepository extends EntityRepository implements EmailAwareRepository
 {
     /**
-     * @param string $fullNameQueryPart
-     * @param array $excludedEmails
-     * @param string|null $query
-     *
-     * @return QueryBuilder
+     * {@inheritdoc}
      */
-    public function getPrimaryEmailsQb($fullNameQueryPart, array $excludedEmails = [], $query = null)
+    public function getPrimaryEmailsQb($fullNameQueryPart, array $excludedEmailNames = [], $query = null)
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -36,23 +32,22 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
                 ->setParameter('query', sprintf('%%%s%%', $query));
         }
 
-        if ($excludedEmails) {
+        if ($excludedEmailNames) {
             $qb
-                ->andWhere($qb->expr()->notIn('c.email', ':excluded_emails'))
-                ->setParameter('excluded_emails', $excludedEmails);
+                ->andWhere($qb->expr()->notIn(
+                    sprintf('TRIM(CONCAT(%s, \' <\', c.email, \'>\'))', $fullNameQueryPart),
+                    ':excluded_emails'
+                ))
+                ->setParameter('excluded_emails', $excludedEmailNames);
         }
 
         return $qb;
     }
 
     /**
-     * @param string $fullNameQueryPart
-     * @param array $excludedEmails
-     * @param string|null $query
-     *
-     * @return QueryBuilder
+     * {@inheritdoc}
      */
-    public function getSecondaryEmailsQb($fullNameQueryPart, array $excludedEmails = [], $query = null)
+    public function getSecondaryEmailsQb($fullNameQueryPart, array $excludedEmailNames = [], $query = null)
     {
         $qb = $this->createQueryBuilder('c');
 
@@ -71,10 +66,13 @@ class ContactRepository extends EntityRepository implements EmailAwareRepository
                 ->setParameter('query', sprintf('%%%s%%', $query));
         }
 
-        if ($excludedEmails) {
+        if ($excludedEmailNames) {
             $qb
-                ->andWhere($qb->expr()->notIn('e.email', ':excluded_emails'))
-                ->setParameter('excluded_emails', $excludedEmails);
+                ->andWhere($qb->expr()->notIn(
+                    sprintf('TRIM(CONCAT(%s, \' <\', e.email, \'>\'))', $fullNameQueryPart),
+                    ':excluded_emails'
+                ))
+                ->setParameter('excluded_emails', $excludedEmailNames);
         }
 
         return $qb;
