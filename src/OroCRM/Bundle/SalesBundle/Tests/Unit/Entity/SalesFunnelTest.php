@@ -79,7 +79,17 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($obj->getCreatedAt());
     }
 
-    public function testGetEmail()
+    public function testGetLeadEmail()
+    {
+        $salesFunnel = new SalesFunnel();
+        $lead = new Lead();
+        $lead->setEmail('test@test.com');
+        $salesFunnel->setLead($lead);
+
+        $this->assertEquals('test@test.com', $salesFunnel->getEmail());
+    }
+
+    public function testGetOpportunityEmail()
     {
         $salesFunnel = new SalesFunnel();
         $email = new ContactEmail();
@@ -89,13 +99,9 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
         $contact->setPrimaryEmail($email);
         $opportunity = new Opportunity();
         $opportunity->setContact($contact);
-        $lead = new Lead();
-        $lead->setEmail('test2@test.com');
-
         $salesFunnel->setOpportunity($opportunity);
-        $salesFunnel->setLead($lead);
 
-        $this->assertEquals('test2@test.com;test@test.com', $salesFunnel->getEmail());
+        $this->assertEquals('test@test.com', $salesFunnel->getEmail());
     }
 
     public function testGetFirstName()

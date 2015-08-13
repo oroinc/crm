@@ -12,6 +12,7 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
@@ -50,7 +51,10 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *      }
  * )
  */
-class SalesFunnel extends ExtendSalesFunnel implements ChannelAwareInterface, FirstNameInterface
+class SalesFunnel extends ExtendSalesFunnel implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    EmailHolderInterface
 {
     use ChannelEntityTrait;
     /**
@@ -355,16 +359,16 @@ class SalesFunnel extends ExtendSalesFunnel implements ChannelAwareInterface, Fi
      */
     public function getEmail()
     {
-        $emails = [];
+        $email = null;
         if ($this->getLead() && $this->getLead()->getEmail()) {
-            $emails[] = $this->getLead()->getEmail();
+            $email = $this->getLead()->getEmail();
         }
 
         if ($this->getOpportunity() && $this->getOpportunity()->getEmail()) {
-            $emails[] = $this->getOpportunity()->getEmail();
+            $email = $this->getOpportunity()->getEmail();
         }
 
-        return count($emails) > 0 ? implode(';', $emails) : null;
+        return $email;
     }
 
     /**
@@ -384,5 +388,13 @@ class SalesFunnel extends ExtendSalesFunnel implements ChannelAwareInterface, Fi
         }
 
         return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getFirstName();
     }
 }
