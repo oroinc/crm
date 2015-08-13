@@ -138,6 +138,6 @@ class CampaignManagementTest extends Selenium2TestCase
             ->filterBy('Code', $campaignCode)
             ->getAllData();
 
-        $this->assertEquals('$100.00', $data[0]['CLOSE REVENUE']);
+        static::assertEquals('$100.00', $data[0]['CLOSE REVENUE']);
     }
 }

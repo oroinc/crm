@@ -74,8 +74,8 @@ class AclOpportunityTest extends Selenium2TestCase
             ->setUsername($username)
             ->enable()
             ->setOwner('Main')
-            ->setFirstpassword('123123q')
-            ->setSecondpassword('123123q')
+            ->setFirstPassword('123123q')
+            ->setSecondPassword('123123q')
             ->setFirstName('First_'.$username)
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
@@ -132,7 +132,7 @@ class AclOpportunityTest extends Selenium2TestCase
         /** @var Accounts $login */
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
-            ->setAccountName($accountName)
+            ->setName($accountName)
             ->setOwner('admin')
             ->save();
 
@@ -279,7 +279,7 @@ class AclOpportunityTest extends Selenium2TestCase
             'delete' => array('delete'),
             'update' => array('update'),
             'create' => array('create'),
-            'view' => array('view'),
+            'view' => array('view')
         );
     }
 }

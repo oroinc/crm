@@ -44,8 +44,8 @@ class AclCallTest extends Selenium2TestCase
             ->setUsername($username)
             ->enable()
             ->setOwner('Main')
-            ->setFirstpassword('123123q')
-            ->setSecondpassword('123123q')
+            ->setFirstPassword('123123q')
+            ->setSecondPassword('123123q')
             ->setFirstName('First_'.$username)
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
@@ -119,7 +119,8 @@ class AclCallTest extends Selenium2TestCase
 
     public function deleteAcl($login, $roleName, $username, $callSubject)
     {
-        $login->openRoles('Oro\Bundle\UserBundle')
+        /** @var Roles $login */
+        $login = $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
             ->setEntity('Call', array('Delete'), 'None')
@@ -127,14 +128,16 @@ class AclCallTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openCalls('OroCRM\Bundle\CallBundle')
+            ->submit();
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
             ->assertNoActionMenu('Delete');
     }
 
     public function updateAcl($login, $roleName, $username, $callSubject)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -143,14 +146,16 @@ class AclCallTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openCalls('OroCRM\Bundle\CallBundle')
+            ->submit();
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $callSubject)
             ->assertNoActionMenu('Update');
     }
 
     public function createAcl($login, $roleName, $username)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -159,8 +164,9 @@ class AclCallTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openCalls('OroCRM\Bundle\CallBundle')
+            ->submit();
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
             ->assertElementNotPresent(
                 "//div[@class='pull-right title-buttons-container']//a[contains(., 'Log call')]"
             );
@@ -168,6 +174,7 @@ class AclCallTest extends Selenium2TestCase
 
     public function viewAcl($login, $username, $roleName)
     {
+        /** @var Roles $login */
         $login->openRoles('Oro\Bundle\UserBundle')
             ->filterBy('Label', $roleName)
             ->open(array($roleName))
@@ -176,8 +183,9 @@ class AclCallTest extends Selenium2TestCase
             ->logout()
             ->setUsername($username)
             ->setPassword('123123q')
-            ->submit()
-            ->openCalls('OroCRM\Bundle\CallBundle')
+            ->submit();
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
             ->assertTitle('403 - Forbidden');
     }
 
@@ -192,7 +200,7 @@ class AclCallTest extends Selenium2TestCase
             'delete' => array('delete'),
             'update' => array('update'),
             'create' => array('create'),
-            'view' => array('view'),
+            'view' => array('view')
         );
     }
 }

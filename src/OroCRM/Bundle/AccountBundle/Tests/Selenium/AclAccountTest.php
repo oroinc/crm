@@ -44,8 +44,8 @@ class AclAccountTest extends Selenium2TestCase
             ->setUsername($username)
             ->enable()
             ->setOwner('Main')
-            ->setFirstpassword('123123q')
-            ->setSecondpassword('123123q')
+            ->setFirstPassword('123123q')
+            ->setSecondPassword('123123q')
             ->setFirstName('First_'.$username)
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
@@ -75,7 +75,7 @@ class AclAccountTest extends Selenium2TestCase
         $login->openAccounts('OroCRM\Bundle\AccountBundle')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')
-            ->setAccountName($accountName)
+            ->setName($accountName)
             ->setOwner('admin')
             ->save()
             ->assertMessage('Account saved')
@@ -204,7 +204,7 @@ class AclAccountTest extends Selenium2TestCase
             'delete' => array('delete'),
             'update' => array('update'),
             'create' => array('create'),
-            'view' => array('view'),
+            'view' => array('view')
         );
     }
 }

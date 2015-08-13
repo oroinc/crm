@@ -9,43 +9,23 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages
  * @method Cases openCases openCase(string)
+ * @method CaseEntity add add()
+ * @method CaseEntity open open()
  * {@inheritdoc}
  */
 class Cases extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Case']";
     const URL = 'case';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
+        $case = new CaseEntity($this->test);
+        return $case->init();
     }
 
-    /**
-     * @return CaseEntity
-     */
-    public function add()
+    public function entityView()
     {
-        $this->test->byXPath("//a[@title='Create Case']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-        $task = new CaseEntity($this->test);
-        return $task->init();
-    }
-
-    /**
-     * @param array $entityData
-     *
-     * @return CaseEntity
-     */
-    public function open($entityData = array())
-    {
-        $task = $this->getEntity($entityData, 1);
-        $task->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new CaseEntity($this->test);
     }
 }

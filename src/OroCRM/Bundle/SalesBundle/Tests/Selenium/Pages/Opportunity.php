@@ -35,11 +35,6 @@ class Opportunity extends AbstractPageEntity
 
     protected $owned = "//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_owner')]/a";
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     public function init()
     {
         $this->name = $this->test->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_name']");

@@ -64,8 +64,8 @@ class CreateContactTest extends Selenium2TestCase
             ->getAddress($addressPrimary)
             ->getAddress($addressSecondary, 1);
 
-        $this->assertEquals($this->addressPrimary, $addressPrimary);
-        $this->assertEquals($this->addressSecondary, $addressSecondary);
+        static::assertEquals($this->addressPrimary, $addressPrimary);
+        static::assertEquals($this->addressSecondary, $addressSecondary);
 
         return $contactName;
     }
@@ -98,7 +98,7 @@ class CreateContactTest extends Selenium2TestCase
             ->edit()
             ->getAddress($addressPrimary);
 
-        $this->assertEquals($this->addressPrimary, $addressPrimary);
+        static::assertEquals($this->addressPrimary, $addressPrimary);
     }
 
     /**

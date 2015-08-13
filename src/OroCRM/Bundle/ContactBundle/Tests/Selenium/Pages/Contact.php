@@ -29,10 +29,9 @@ class Contact extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $addressCollection;
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
+
+    /** @var string **/
+    protected $owner = "//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a";
 
     public function init()
     {
@@ -44,7 +43,6 @@ class Contact extends AbstractPageEntity
         $this->assignedTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_assignedTo')]/a");
         $this->reportsTo = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_reportsTo')]/a");
         $this->addressCollection = $this->test->byXpath("//div[@data-ftid='orocrm_contact_form_addresses']");
-        $this->owner = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_contact_form_owner')]/a");
 
         return $this;
     }
@@ -71,28 +69,6 @@ class Contact extends AbstractPageEntity
     public function getLastName()
     {
         return $this->lastName->value();
-    }
-
-    public function setOwner($owner)
-    {
-        $this->test->moveto($this->owner);
-        $this->owner->click();
-        $this->waitForAjax();
-        $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($owner);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
-
-        return $this;
-
-    }
-
-    public function getOwner()
-    {
-        return;
     }
 
     public function setEmail($email)
