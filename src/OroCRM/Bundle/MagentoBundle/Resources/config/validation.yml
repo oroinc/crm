@@ -1,4 +1,7 @@
 OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
+    constraints:
+        - OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
+              fields:     [ websiteId, wsdlUrl ]
     properties:
         wsdlUrl:
           - NotBlank: ~

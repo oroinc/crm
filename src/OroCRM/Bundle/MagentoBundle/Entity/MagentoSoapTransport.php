@@ -15,7 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
  * Class MagentoSoapTransport
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
  * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport
