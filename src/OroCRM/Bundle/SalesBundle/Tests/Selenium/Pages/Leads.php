@@ -20,7 +20,8 @@ class Leads extends AbstractPageFilteredGrid
 
     public function entityNew()
     {
-        return new Lead($this->test);
+        $lead = new Lead($this->test);
+        return $lead->init();
     }
 
     public function entityView()
