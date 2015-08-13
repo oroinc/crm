@@ -8,42 +8,22 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Calls
  * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
  * @method Calls openCalls openCalls(string)
+ * @method Call add add()
+ * @method Call open open()
  * {@inheritdoc}
  */
 class Calls extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Log call']";
     const URL = 'call';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return Call
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Log call']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new Call($this->test);
     }
 
-    /**
-     * @param array $entityData
-     * @return Call
-     */
-    public function open($entityData = array())
+    public function entityView()
     {
-        $cart = $this->getEntity($entityData, 3);
-        $cart->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new Call($this->test);
     }
 }

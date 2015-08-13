@@ -11,11 +11,6 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  */
 class Call extends AbstractPageEntity
 {
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     public function edit()
     {
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Call']")->click();

@@ -9,21 +9,21 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageGrid;
  *
  * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
  * @method ContactGroups openContactGroups openContactGroups(string)
+ * @method ContactGroups open open()
  * {@inheritdoc}
  */
 class ContactGroups extends AbstractPageGrid
 {
     const URL = 'contact/group';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-
+        return $this;
     }
 
-    public function open($entityData = array())
+    public function entityView()
     {
-        return;
+        return $this;
     }
+
 }

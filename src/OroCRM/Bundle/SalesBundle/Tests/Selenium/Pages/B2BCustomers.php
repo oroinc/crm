@@ -9,33 +9,22 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method B2BCustomers openB2BCustomers openB2BCustomers(string)
+ * @method B2BCustomer add add()
+ * @method B2BCustomer open open()
  * {@inheritdoc}
  */
 class B2BCustomers extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create B2B customer']";
     const URL = 'b2bcustomer';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return B2BCustomer
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Create B2B customer']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
         return new B2BCustomer($this->test);
     }
 
-    public function open($entityData = array())
+    public function entityView()
     {
-        $page = parent::open($entityData);
-
-        return new B2BCustomer($page->test);
+        return new B2BCustomer($this->test);
     }
 }

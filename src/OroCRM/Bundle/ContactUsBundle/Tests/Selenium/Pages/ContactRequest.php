@@ -11,11 +11,6 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  */
 class ContactRequest extends AbstractPageEntity
 {
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     /**
      * @param string $name
      * @return $this

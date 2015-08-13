@@ -32,12 +32,6 @@ class Task extends AbstractPageEntity
     /** @var  Workflow */
     protected $workflow;
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-
-    }
-
     public function setSubject($subject)
     {
         $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_task_subject']");
@@ -119,7 +113,7 @@ class Task extends AbstractPageEntity
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Task']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->init();
+
         return $this;
     }
 

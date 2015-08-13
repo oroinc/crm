@@ -85,11 +85,11 @@ class CasesTest extends Selenium2TestCase
         $data = $login->openCases('OroCRM\Bundle\CaseBundle')
             ->filterBy('Subject', $subject)
             ->getAllData();
-        $this->assertEquals($data[0]['STATUS'], $status['status']);
-        if ($status['closed'] == "") {
-            $this->assertEquals($data[0]['CLOSED ON'], $status['closed']);
+        static::assertEquals($data[0]['STATUS'], $status['status']);
+        if ($status['closed'] === "") {
+            static::assertEquals($data[0]['CLOSED ON'], $status['closed']);
         } else {
-            $this->assertNotEquals($data[0]['CLOSED ON'], "");
+            static::assertNotEquals($data[0]['CLOSED ON'], "");
         }
     }
 
@@ -98,7 +98,7 @@ class CasesTest extends Selenium2TestCase
         return array(
             array('In Progress' => array('status' => 'In Progress', 'closed' => '')),
             array('Resolved' => array('status' => 'Resolved',  'closed'  => '')),
-            array('Closed' => array('status' => 'Closed',  'closed' => date('c'))),
+            array('Closed' => array('status' => 'Closed',  'closed' => date('c')))
         );
     }
 

@@ -21,6 +21,15 @@ class CartControllerTest extends AbstractController
     }
 
     /**
+     * @afterClass
+     */
+    public function clear()
+    {
+        self::$cart = null;
+        gc_collect_cycles();
+    }
+
+    /**
      * @return int
      */
     protected function getMainEntityId()
