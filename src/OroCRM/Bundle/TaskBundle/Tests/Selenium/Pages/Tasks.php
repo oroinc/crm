@@ -9,39 +9,23 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method Tasks openTasks openTasks(string)
+ * @method Task add add()
+ * @method Task open open()
  *
  * {@inheritdoc}
  */
 class Tasks extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Task']";
     const URL = 'task';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return Task
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Create Task']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
         return new Task($this->test);
     }
 
-    /**
-     * @param array $entityData
-     *
-     * @return Task
-     */
-    public function open($entityData = array())
+    public function entityView()
     {
-        $page = parent::open($entityData);
-
-        return new Task($page->test);
+        return new Task($this->test);
     }
 }
