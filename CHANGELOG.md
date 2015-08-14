@@ -1,3 +1,63 @@
+CHANGELOG for 1.7.6
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.6 (2015-08-14)
+ * Magento order items are now organization-aware
+ * Fixed validation errors in REST API controller for Accounts
+
+CHANGELOG for 1.7.5
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.5 (2015-07-29)
+ * Role entity is now extendable
+ * Data types for Data Audit may now be added by developers
+ * Fixed issues with date & time queries in Reports
+
+CHANGELOG for 1.7.4
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.4 (2015-07-08)
+This release fixes a major security issue - a so-called Open Redirect that might be exploited to redirect users to third-party servers in an underhand way, and may potentially lead to steal of user's login and password.
+Also fixed minor security issues.
+
+CHANGELOG for 1.7.3
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.3 (2015-07-03)
+Oro Platform 1.7.3 dependency update
+
+CHANGELOG for 1.7.2
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.2 (2015-06-17)
+ * Fixed issue Magento cart items during sync
+ * Fixed email html code visibility
+
+CHANGELOG for 1.7.1
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+* 1.7.1 (2015-06-15)
+Guest Magento customer profiles
+With this feature we introduce a new type of Magento Customer – guest customers, i.e. those who for some reasons decided not to register in your Magento store but made a purchase anyway. Information collected during the guest check-out will be used to create Magento customer profiles that will look and behave exactly the same way as regular Magento customers except they won't be synced via integration and they won't have a current shopping cart.
+If, at some later point in time, this customer chooses to register, his existing guest profile will be automatically connected to his Magento account and then kept in sync by the integration. If a customer deletes an account in Magento, the Magento customer profile in Oro will remain, but turns into a guest one.
+Guest orders placed by registered customers will also be recognized and appended to their accounts, giving you the full picture of their purchases.
+This feature may be disabled in Magento integration settings. It is turned on by default.
+
+Items removed from Magento cart will be recorded in OroCRM
+Shopping carts in OroCRM will now contain the entire history of what has been put into the cart and what has been removed from it, giving you more data for marketing segmentation and campaigning. It will now be possible to set filtering conditions on item state like:
+ * filter all customers who do have item X in the cart
+ * filter all customers who have ever added item X to their carts
+ * filter all customers who have added but then removed item X from their carts
+
+List of improvements and fixed bugs
+ * Changed Oro Bridge detection to use soap getFunctions method
+ * Improved Magento Region connector
+ * Fixed "Create Magento Customer" is available for Organization without Magento Channel
+ * Fixed Delete Marketing list provokes errors
+ * Fixed error if add duplicate columns in Marketing list
+ * Fixed import B2B Customer which is related to existing Lead
+ * Fixed memory leak Sales Process
+
 CHANGELOG for 1.7.0
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
