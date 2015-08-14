@@ -8,8 +8,8 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class SalesFunnels
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method SalesFunnels openSalesFunnels openSalesFunnels(string)
- * @method Workflow open open()
+ * @method SalesFunnels openSalesFunnels(string $bundlePath)
+ * @method Workflow open(array $filter)
  * {@inheritdoc}
  */
 class SalesFunnels extends AbstractPageFilteredGrid

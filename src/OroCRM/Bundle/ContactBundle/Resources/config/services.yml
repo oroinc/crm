@@ -27,6 +27,7 @@ parameters:
     orocrm_contact.activity_widget_provider.class:    %oro_activity.widget_provider.activities.menu.class%
 
     orocrm_contact.provider.phone.contact.class:      OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider
+    orocrm_contact.provider.email_recipients.class:   OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider
 
 services:
     orocrm_contact.form.contact:
@@ -213,6 +214,14 @@ services:
         class: %orocrm_contact.provider.phone.contact.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_contact.entity.class% }
+
+    orocrm_contact.provider.email_recipients:
+        class: %orocrm_contact.provider.email_recipients.class%
+        arguments:
+            - @doctrine
+            - @oro_email.provider.email_recipients.helper
+        tags:
+            - { name: oro_email.recipients_provider, priority: 20 }
 
     orocrm_contact.widget_provider.actions.add_contact:
         parent: oro_ui.widget_provider.action_button.abstract
