@@ -9,39 +9,23 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
  * @method Opportunities openOpportunities openOpportunities(string)
+ * @method Opportunity add add()
+ * @method Opportunity open open()
  * {@inheritdoc}
  */
 class Opportunities extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Opportunity']";
     const URL = 'opportunity';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
+        $opportunity = new Opportunity($this->test);
+        return $opportunity->init();
     }
 
-    /**
-     * @return Opportunity
-     */
-    public function add()
+    public function entityView()
     {
-        $this->test->byXPath("//a[@title='Create Opportunity']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-        $lead = new Opportunity($this->test);
-
-        return $lead->init();
-    }
-
-    public function open($entityData = array())
-    {
-        $contact = $this->getEntity($entityData);
-        $contact->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new Opportunity($this->test);
     }
 }

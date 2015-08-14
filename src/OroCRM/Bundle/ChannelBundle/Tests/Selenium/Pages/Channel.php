@@ -11,11 +11,6 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  */
 class Channel extends AbstractPageEntity
 {
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     /**
      * @param string $status
      * @return $this

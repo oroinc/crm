@@ -8,42 +8,27 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Campaigns
  * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages
  * @method Campaigns openCampaigns openCampaigns(string)
+ * @method Campaign add add()
+ * @method Campaign open open()
  * {@inheritdoc}
  */
 class Campaigns extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Campaign']";
     const URL = 'campaign';
 
+    public function entityNew()
+    {
+        return new Campaign($this->test);
+    }
+
+    public function entityView()
+    {
+        return new Campaign($this->test);
+    }
     public function __construct($testCase, $redirect = true)
     {
         $this->redirectUrl = self::URL;
         parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return Campaign
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Create Campaign']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
-        return new Campaign($this->test);
-    }
-
-    /**
-     * @param array $entityData
-     * @return Campaign
-     */
-    public function open($entityData = array())
-    {
-        $cart = $this->getEntity($entityData, 3);
-        $cart->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
-        return new Campaign($this->test);
     }
 }

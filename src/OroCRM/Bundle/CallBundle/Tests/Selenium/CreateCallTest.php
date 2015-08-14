@@ -76,7 +76,7 @@ class CreateCallTest extends Selenium2TestCase
         /** @var Calls $login */
         $login->openCalls('OroCRM\Bundle\CallBundle')
             ->filterBy('Subject', $newCallSubject)
-            ->deleteEntity(array($newCallSubject))
+            ->delete(array($newCallSubject))
             ->assertMessage('Item deleted')
             ->assertTitle('All - Calls - Activities');
 

@@ -55,7 +55,7 @@ workflows:
                                 widget: single_text
                                 with_seconds: true
                         notes:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -135,7 +135,7 @@ workflows:
                                 widget: single_text
                                 with_seconds: true
                         notes:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -204,7 +204,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         email_body:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: true
                                 constraints:
@@ -275,7 +275,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         email_body:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: true
                                 constraints:
@@ -368,7 +368,7 @@ workflows:
                             options:
                                 required: false
                         notes:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: false
                     attribute_default_values:
@@ -395,7 +395,7 @@ workflows:
                 form_options:
                     attribute_fields:
                         notes:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: false
             reopen:
@@ -408,6 +408,6 @@ workflows:
                 form_options:
                     attribute_fields:
                         notes:
-                            form_type: oro_rich_text
+                            form_type: oro_resizeable_rich_text
                             options:
                                 required: false

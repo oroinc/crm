@@ -24,11 +24,6 @@ class Workflow extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $solution;
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     public function setContact($contact)
     {
         $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_step_contact')]/a")->click();

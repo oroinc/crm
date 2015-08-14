@@ -107,6 +107,7 @@ ROLE_SALES_REP:
 ROLE_ONLINE_SALES_REP:
     label: Online Sales Rep
     permissions:
+        entity|OroCRM\Bundle\ChannelBundle\Entity\Channel: [VIEW_SYSTEM]
         entity|OroCRM\Bundle\AccountBundle\Entity\Account: [VIEW_SYSTEM]
         entity|Oro\Bundle\OrganizationBundle\Entity\BusinessUnit: []
         entity|Oro\Bundle\CalendarBundle\Entity\Calendar: [VIEW_SYSTEM]
@@ -159,6 +160,7 @@ ROLE_ONLINE_SALES_REP:
 ROLE_MARKETING_MANAGER:
     label: Marketing Manager
     permissions:
+        entity|OroCRM\Bundle\ChannelBundle\Entity\Channel: [VIEW_SYSTEM]
         entity|OroCRM\Bundle\AccountBundle\Entity\Account: [VIEW_SYSTEM]
         entity|Oro\Bundle\OrganizationBundle\Entity\BusinessUnit: []
         entity|Oro\Bundle\CalendarBundle\Entity\Calendar: [VIEW_SYSTEM]
@@ -211,6 +213,7 @@ ROLE_MARKETING_MANAGER:
 ROLE_LEADS_DEVELOPMENT_REP:
     label: Leads Development Rep
     permissions:
+        entity|OroCRM\Bundle\ChannelBundle\Entity\Channel: [VIEW_SYSTEM]
         entity|OroCRM\Bundle\AccountBundle\Entity\Account: [VIEW_SYSTEM]
         entity|Oro\Bundle\OrganizationBundle\Entity\BusinessUnit: []
         entity|Oro\Bundle\CalendarBundle\Entity\Calendar: [VIEW_SYSTEM]
