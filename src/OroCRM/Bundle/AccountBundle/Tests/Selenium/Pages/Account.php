@@ -6,39 +6,16 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 class Account extends AbstractPageEntity
 {
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $accountName;
-    /** @var   \PHPUnit_Extensions_Selenium2TestCase_Element */
-    protected $owner;
+    protected $filtersPath = '';
+    protected $owner = "//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a";
 
-    public function setAccountName($accountName)
+    public function setName($name)
     {
-        $this->accountName = $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']");
-        $this->accountName->clear();
-        $this->accountName->value($accountName);
-        return $this;
-    }
-
-    public function setOwner($owner)
-    {
-        $this->owner = $this->test->byXPath("//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a");
-        $this->owner->click();
-        $this->waitForAjax();
-        $this->test->byXPath("//div[@id='select2-drop']/div/input")->value($owner);
-        $this->waitForAjax();
-        $this->assertElementPresent(
-            "//div[@id='select2-drop']//div[contains(., '{$owner}')]",
-            "Owner autocomplete doesn't return search value"
-        );
-        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$owner}')]")->click();
+        $element = $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']");
+        $element->clear();
+        $element->value($name);
 
         return $this;
-
-    }
-
-    public function getOwner()
-    {
-        return;
     }
 
     public function verifyTag($tag)
@@ -90,9 +67,9 @@ class Account extends AbstractPageEntity
         }
     }
 
-    public function getAccountName()
+    public function getName()
     {
-        return $this->accountName->value();
+        return $this->test->byXPath("//*[@data-ftid='orocrm_account_form_name']")->value();
     }
 
     /**
@@ -137,7 +114,7 @@ class Account extends AbstractPageEntity
         $this->test->byXPath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Account']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->init();
+
         return $this;
     }
 

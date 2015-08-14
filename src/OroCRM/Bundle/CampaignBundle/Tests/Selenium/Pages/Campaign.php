@@ -13,11 +13,6 @@ class Campaign extends AbstractPageEntity
 {
     protected $owner = "//div[starts-with(@id,'s2id_orocrm_campaign_form_owner')]/a";
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     /**
      * @param string $name
      * @return $this

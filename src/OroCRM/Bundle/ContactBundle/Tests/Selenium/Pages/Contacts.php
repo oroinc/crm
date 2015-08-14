@@ -8,39 +8,24 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Contacts
  *
  * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
- * @method Contacts openContacts openContacts(string)
+ * @method Contacts openContacts(string $bundlepath)
+ * @method Contact add()
+ * @method Contact open(array $filter)
  * {@inheritdoc}
  */
 class Contacts extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Contact']";
     const URL = 'contact';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return Contact
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Create Contact']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
         $contact = new Contact($this->test);
         return $contact->init();
     }
 
-    public function open($entityData = array())
+    public function entityView()
     {
-        $contact = $this->getEntity($entityData);
-        $contact->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new Contact($this->test);
     }
 }

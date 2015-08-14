@@ -8,40 +8,24 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Leads
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Leads openLeads openLeads(string)
+ * @method Leads openLeads(string $bundlePath)
+ * @method Lead add()
+ * @method Lead open(array $filter)
  * {@inheritdoc}
  */
 class Leads extends AbstractPageFilteredGrid
 {
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Lead']";
     const URL = 'lead';
 
-    public function __construct($testCase, $redirect = true)
+    public function entityNew()
     {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
-    }
-
-    /**
-     * @return Lead
-     */
-    public function add()
-    {
-        $this->test->byXPath("//a[@title='Create Lead']")->click();
-        $this->waitPageToLoad();
-        $this->waitForAjax();
         $lead = new Lead($this->test);
-
         return $lead->init();
     }
 
-    public function open($entityData = array())
+    public function entityView()
     {
-        $contact = $this->getEntity($entityData);
-        $contact->click();
-        sleep(1);
-        $this->waitPageToLoad();
-        $this->waitForAjax();
-
         return new Lead($this->test);
     }
 }

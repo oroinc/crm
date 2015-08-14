@@ -5,10 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\Controller;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
-/**
- * @outputBuffering enabled
- * @dbIsolation
- */
 abstract class AbstractController extends WebTestCase
 {
     /** @var Integration */
@@ -19,6 +15,15 @@ abstract class AbstractController extends WebTestCase
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
 
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
+    }
+
+    /**
+     * @afterClass
+     */
+    public function clear()
+    {
+        self::$integration = null;
+        gc_collect_cycles();
     }
 
     /**

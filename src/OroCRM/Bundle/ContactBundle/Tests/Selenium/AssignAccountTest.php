@@ -26,7 +26,7 @@ class AssignAccountTest extends Selenium2TestCase
             ->assertTitle('All - Accounts - Customers')
             ->add()
             ->assertTitle('Create Account - Accounts - Customers')
-            ->setAccountName($accountName)
+            ->setName($accountName)
             ->setOwner('admin')
             ->save()
             ->assertMessage('Account saved');
