@@ -105,7 +105,7 @@ class CustomerDataProvider
 
         $result = (empty($maxYear) && empty($maxMonth)) ? 'now' : sprintf('%s-%s', $maxYear, $maxMonth + 1);
 
-        return new \DateTime($result);
+        return new \DateTime($result, new \DateTimeZone('UTC'));
     }
 
     /**
