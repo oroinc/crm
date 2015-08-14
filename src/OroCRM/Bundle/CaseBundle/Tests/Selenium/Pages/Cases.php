@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Cases
  *
  * @package OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages
- * @method Cases openCases openCase(string)
+ * @method Cases openCases(string $bundlePath)
  * @method CaseEntity add add()
- * @method CaseEntity open open()
+ * @method CaseEntity open(array $filter)
  * {@inheritdoc}
  */
 class Cases extends AbstractPageFilteredGrid

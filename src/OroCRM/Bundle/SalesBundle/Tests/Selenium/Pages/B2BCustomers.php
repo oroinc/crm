@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class B2BCustomers
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method B2BCustomers openB2BCustomers openB2BCustomers(string)
- * @method B2BCustomer add add()
- * @method B2BCustomer open open()
+ * @method B2BCustomers openB2BCustomers(string $bundlePath)
+ * @method B2BCustomer add()
+ * @method B2BCustomer open(array $filter)
  * {@inheritdoc}
  */
 class B2BCustomers extends AbstractPageFilteredGrid
