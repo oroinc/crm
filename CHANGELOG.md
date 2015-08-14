@@ -1,13 +1,13 @@
 CHANGELOG for 1.7.6
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.6 versions.
 * 1.7.6 (2015-08-14)
  * Magento order items are now organization-aware
  * Fixed validation errors in REST API controller for Accounts
 
 CHANGELOG for 1.7.5
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.5 versions.
 * 1.7.5 (2015-07-29)
  * Role entity is now extendable
  * Data types for Data Audit may now be added by developers
@@ -15,27 +15,27 @@ This changelog references the relevant changes (new features, changes and bugs) 
 
 CHANGELOG for 1.7.4
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.4 versions.
 * 1.7.4 (2015-07-08)
 This release fixes a major security issue - a so-called Open Redirect that might be exploited to redirect users to third-party servers in an underhand way, and may potentially lead to steal of user's login and password.
 Also fixed minor security issues.
 
 CHANGELOG for 1.7.3
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.3 versions.
 * 1.7.3 (2015-07-03)
 Oro Platform 1.7.3 dependency update
 
 CHANGELOG for 1.7.2
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.2 versions.
 * 1.7.2 (2015-06-17)
  * Fixed issue Magento cart items during sync
  * Fixed email html code visibility
 
 CHANGELOG for 1.7.1
 ===================
-This changelog references the relevant changes (new features, changes and bugs) done in 1.7.0 versions.
+This changelog references the relevant changes (new features, changes and bugs) done in 1.7.1 versions.
 * 1.7.1 (2015-06-15)
 Guest Magento customer profiles
 With this feature we introduce a new type of Magento Customer – guest customers, i.e. those who for some reasons decided not to register in your Magento store but made a purchase anyway. Information collected during the guest check-out will be used to create Magento customer profiles that will look and behave exactly the same way as regular Magento customers except they won't be synced via integration and they won't have a current shopping cart.
