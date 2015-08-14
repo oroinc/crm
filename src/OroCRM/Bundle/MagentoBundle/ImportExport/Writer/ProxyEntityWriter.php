@@ -52,6 +52,10 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
                     $this->logSkipped($identifier);
                 }
 
+                if ($item instanceof Customer) {
+                    $item->setIsSynced(true);
+                }
+
                 $uniqueItems[$identifier] = $item;
             } elseif ($item instanceof Order) {
                 $identifier = $item->getIncrementId();
