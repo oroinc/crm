@@ -842,7 +842,7 @@ class Customer extends ExtendCustomer implements
             $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
 
-        if ($this->isSynced() == false) {
+        if (!$this->isSynced()) {
             $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
     }
@@ -852,7 +852,7 @@ class Customer extends ExtendCustomer implements
      */
     public function preUpdate()
     {
-        if ($this->isSynced() == false) {
+        if (!$this->isSynced()) {
             $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
     }
