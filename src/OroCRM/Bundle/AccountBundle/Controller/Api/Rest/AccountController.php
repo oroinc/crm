@@ -137,7 +137,7 @@ class AccountController extends RestController implements ClassResourceInterface
      */
     public function getForm()
     {
-        return $this->get('orocrm_account.form.type.account.api');
+        return $this->get('orocrm_account.form.account.api');
     }
 
     /**
