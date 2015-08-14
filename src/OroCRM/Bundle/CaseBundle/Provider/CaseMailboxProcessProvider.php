@@ -37,4 +37,12 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
     {
         return 'orocrm.case.mailbox.process.case.label';
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isEnabled()
+    {
+        return true;
+    }
 }

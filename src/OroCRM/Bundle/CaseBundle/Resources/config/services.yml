@@ -7,6 +7,7 @@ parameters:
     orocrm_case.view_factory.class:        OroCRM\Bundle\CaseBundle\Model\ViewFactory
     orocrm_case.provider.phone.case.class: OroCRM\Bundle\CaseBundle\Provider\CasePhoneProvider
     orocrm_case.provider.mailbox_process.case.class: OroCRM\Bundle\CaseBundle\Provider\CaseMailboxProcessProvider
+    orocrm_case.event_listener.mailbox_saved_listener.class: OroCRM\Bundle\CaseBundle\EventListener\MailboxSavedListener
 
 services:
     orocrm_case.manager:
@@ -56,3 +57,10 @@ services:
         class: %orocrm_case.provider.mailbox_process.case.class%
         tags:
             - { name: oro_email.mailbox_process, type: case }
+
+    orocrm_case.event_listener.mailbox_saved_listener.class:
+        class: %orocrm_case.event_listener.mailbox_saved_listener.class%
+        arguments:
+            - @oro_tag.tag.manager
+        tags:
+            - { name: kernel.event_listener, event: oro_email.mailbox_saved, method: onMailboxSave }
