@@ -12,6 +12,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  */
 class Contact extends AbstractPageEntity
 {
+    protected $filtersPath = '';
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $namePrefix;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
