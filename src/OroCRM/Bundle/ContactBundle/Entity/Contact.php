@@ -78,11 +78,6 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  */
 class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
 {
-    public function getEmailOwnerName()
-    {
-        return 'contact';
-    }
-
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
      */
