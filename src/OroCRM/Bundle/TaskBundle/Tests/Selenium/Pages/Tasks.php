@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Tasks
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Tasks openTasks openTasks(string)
- * @method Task add add()
- * @method Task open open()
+ * @method Tasks openTasks(string $bundlePath)
+ * @method Task add()
+ * @method Task open(array $filter)
  *
  * {@inheritdoc}
  */

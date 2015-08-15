@@ -7,7 +7,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 /**
  * Class B2BCustomer
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method B2BCustomer assertTitle() assertTitle($title, $message = '')
+ * @method B2BCustomer assertTitle($title, $message = '')
  */
 class B2BCustomer extends AbstractPageEntity
 {

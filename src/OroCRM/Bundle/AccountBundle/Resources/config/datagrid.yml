@@ -237,7 +237,9 @@ datagrid:
                           THEN true ELSE false END
                         END) as hasContact
             bind_parameters:
-                - account
+                -
+                    name: account
+                    default: null
         columns:
             hasContact:
                 label:   orocrm.account.assigned.label

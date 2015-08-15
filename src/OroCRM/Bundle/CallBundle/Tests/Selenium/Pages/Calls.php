@@ -7,9 +7,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 /**
  * Class Calls
  * @package OroCRM\Bundle\CallBundle\Tests\Selenium\Pages
- * @method Calls openCalls openCalls(string)
- * @method Call add add()
- * @method Call open open()
+ * @method Calls openCalls(string $bundlePath)
+ * @method Call add()
+ * @method Call open(array $filter)
  * {@inheritdoc}
  */
 class Calls extends AbstractPageFilteredGrid

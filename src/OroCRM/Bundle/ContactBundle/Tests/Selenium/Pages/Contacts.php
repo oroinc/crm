@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Contacts
  *
  * @package OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages
- * @method Contacts openContacts openContacts(string)
- * @method Contact add add()
- * @method Contact open open()
+ * @method Contacts openContacts(string $bundlepath)
+ * @method Contact add()
+ * @method Contact open(array $filter)
  * {@inheritdoc}
  */
 class Contacts extends AbstractPageFilteredGrid

@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Accounts
  *
  * @package OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages
- * @method Accounts openAccounts openAccounts(string)
- * @method Account add add()
- * @method Account open open()
+ * @method Accounts openAccounts(string $bundlePath)
+ * @method Account add()
+ * @method Account open(array $filter)
  * {@inheritdoc}
  */
 class Accounts extends AbstractPageFilteredGrid

@@ -7,9 +7,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 /**
  * Class Channel
  * @package OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages
- * @method Channels openChannels openChannels(string)
- * @method Channel add add()
- * @method Channel open open()
+ * @method Channels openChannels(string $bundlePath)
+ * @method Channel add()
+ * @method Channel open(array $filter)
  * {@inheritdoc}
  */
 class Channels extends AbstractPageFilteredGrid
