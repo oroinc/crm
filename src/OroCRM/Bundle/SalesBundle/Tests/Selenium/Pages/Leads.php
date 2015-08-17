@@ -8,9 +8,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  * Class Leads
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Leads openLeads openLeads(string)
- * @method Lead add add()
- * @method Lead open open()
+ * @method Leads openLeads(string $bundlePath)
+ * @method Lead add()
+ * @method Lead open(array $filter)
  * {@inheritdoc}
  */
 class Leads extends AbstractPageFilteredGrid
@@ -20,7 +20,8 @@ class Leads extends AbstractPageFilteredGrid
 
     public function entityNew()
     {
-        return new Lead($this->test);
+        $lead = new Lead($this->test);
+        return $lead->init();
     }
 
     public function entityView()

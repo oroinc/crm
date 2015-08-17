@@ -6,6 +6,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 class Account extends AbstractPageEntity
 {
+    protected $filtersPath = '';
     protected $owner = "//div[starts-with(@id,'s2id_orocrm_account_form_owner')]/a";
 
     public function setName($name)

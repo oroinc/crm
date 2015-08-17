@@ -7,9 +7,9 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
 /**
  * Class Campaigns
  * @package OroCRM\Bundle\CampaignBundle\Tests\Selenium\Pages
- * @method Campaigns openCampaigns openCampaigns(string)
- * @method Campaign add add()
- * @method Campaign open open()
+ * @method Campaigns openCampaigns(string $bundlePath)
+ * @method Campaign add()
+ * @method Campaign open(array $filter)
  * {@inheritdoc}
  */
 class Campaigns extends AbstractPageFilteredGrid
@@ -25,10 +25,5 @@ class Campaigns extends AbstractPageFilteredGrid
     public function entityView()
     {
         return new Campaign($this->test);
-    }
-    public function __construct($testCase, $redirect = true)
-    {
-        $this->redirectUrl = self::URL;
-        parent::__construct($testCase, $redirect);
     }
 }
