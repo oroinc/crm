@@ -29,13 +29,15 @@ class CustomerStrategy extends AbstractImportStrategy
         $importingAddresses = $entity->getAddresses();
         if ($importingAddresses) {
             foreach ($importingAddresses as $address) {
-                $originId = $address->getOriginId();
-                $this->importingAddresses[$originId] = $address;
+                if ($address->getSyncState() !== Address::SYNC_TO_MAGENTO) {
+                    $originId = $address->getOriginId();
+                    $this->importingAddresses[$originId] = $address;
 
-                if ($address->getRegion()) {
-                    $this->addressRegions[$originId] = $address->getRegion()->getCombinedCode();
-                } else {
-                    $this->addressRegions[$originId] = null;
+                    if ($address->getRegion()) {
+                        $this->addressRegions[$originId] = $address->getRegion()->getCombinedCode();
+                    } else {
+                        $this->addressRegions[$originId] = null;
+                    }
                 }
             }
         }
@@ -64,18 +66,20 @@ class CustomerStrategy extends AbstractImportStrategy
         if (!$entity->getAddresses()->isEmpty()) {
             /** @var Address $address */
             foreach ($entity->getAddresses() as $address) {
-                $address->setOwner($entity);
-                $originId = $address->getOriginId();
-                if (array_key_exists($originId, $this->importingAddresses)) {
-                    $remoteAddress = $this->importingAddresses[$originId];
-                    $this->addressHelper->mergeAddressTypes($address, $remoteAddress);
+                if ($address->getSyncState() !== Address::SYNC_TO_MAGENTO) {
+                    $address->setOwner($entity);
+                    $originId = $address->getOriginId();
+                    if (array_key_exists($originId, $this->importingAddresses)) {
+                        $remoteAddress = $this->importingAddresses[$originId];
+                        $this->addressHelper->mergeAddressTypes($address, $remoteAddress);
 
-                    if (!empty($this->addressRegions[$originId]) && $address->getCountry()) {
-                        $this->addressHelper->updateRegionByMagentoRegionId(
-                            $address,
-                            $address->getCountry()->getIso2Code(),
-                            $this->addressRegions[$originId]
-                        );
+                        if (!empty($this->addressRegions[$originId]) && $address->getCountry()) {
+                            $this->addressHelper->updateRegionByMagentoRegionId(
+                                $address,
+                                $address->getCountry()->getIso2Code(),
+                                $this->addressRegions[$originId]
+                            );
+                        }
                     }
                 }
             }
