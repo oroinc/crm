@@ -52,27 +52,31 @@ definitions:
                 array: $.mailboxes
                 value: $.mailbox
                 actions:
-                    - @create_entity:
-                        class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
-                        attribute: $.caseEntity
-                        flush: true
-                        data:
-                            owner:          $.mailbox.processSettings.owner
-                            assignedTo:     $.mailbox.processSettings.assignTo
-                            status:         $.mailbox.processSettings.status
-                            priority:       $.mailbox.processSettings.priority
-                            organization:   $.mailbox.organization
-                            subject:        $.email.subject
-                            description:    $.caseDescription
-                            source:         $.caseSource
-                            relatedContact: $.caseRelatedContact
-                            relatedAccount: $.caseRelatedAccount
-                    - @add_email_activity_target:
-                        email:              $.email
-                        target_entity:      $.caseEntity
-                    - @copy_tagging:
-                        source: $.mailbox.processSettings
-                        destination: $.caseEntity
+                    - @tree:
+                        conditions:
+                            @gt: [$.email.sentAt, $.mailbox.updatedAt]
+                        actions:
+                            - @create_entity:
+                                class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
+                                attribute: $.caseEntity
+                                flush: true
+                                data:
+                                    owner:          $.mailbox.processSettings.owner
+                                    assignedTo:     $.mailbox.processSettings.assignTo
+                                    status:         $.mailbox.processSettings.status
+                                    priority:       $.mailbox.processSettings.priority
+                                    organization:   $.mailbox.organization
+                                    subject:        $.email.subject
+                                    description:    $.caseDescription
+                                    source:         $.caseSource
+                                    relatedContact: $.caseRelatedContact
+                                    relatedAccount: $.caseRelatedAccount
+                            - @add_email_activity_target:
+                                email:              $.email
+                                target_entity:      $.caseEntity
+                            - @copy_tagging:
+                                source: $.mailbox.processSettings
+                                destination: $.caseEntity
 
 triggers:
     convert_mailbox_email_to_case:

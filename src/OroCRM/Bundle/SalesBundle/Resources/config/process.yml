@@ -70,28 +70,32 @@ definitions:
                 array: $.mailboxes
                 value: $.mailbox
                 actions:
-                    - @find_entity:
-                        attribute: $.leadSource
-                        class: Extend\Entity\EV_Lead_Source
-                        identifier: $.mailbox.processSettings.source
-                    - @create_entity:
-                        class: OroCRM\Bundle\SalesBundle\Entity\Lead
-                        attribute: $.leadEntity
-                        flush: false
-                        data:
-                            owner:          $.mailbox.processSettings.owner
-                            dataChannel:    $.mailbox.processSettings.channel
-                            source:         $.leadSource
-                            organization:   $.mailbox.organization
-                            name:           $.email.subject
-                            notes:          $.leadNotes
-                            contact:        $.leadContact
-                            firstName:      $.leadFirstName
-                            lastName:       $.leadLastName
-                            email:          $.email.fromEmailAddress.email
-                    - @add_email_activity_target:
-                        email:              $.email
-                        target_entity:      $.leadEntity
+                    - @tree:
+                        conditions:
+                            @gt: [$.email.sentAt, $.mailbox.updatedAt]
+                        actions:
+                            - @find_entity:
+                                attribute: $.leadSource
+                                class: Extend\Entity\EV_Lead_Source
+                                identifier: $.mailbox.processSettings.source
+                            - @create_entity:
+                                class: OroCRM\Bundle\SalesBundle\Entity\Lead
+                                attribute: $.leadEntity
+                                flush: false
+                                data:
+                                    owner:          $.mailbox.processSettings.owner
+                                    dataChannel:    $.mailbox.processSettings.channel
+                                    source:         $.leadSource
+                                    organization:   $.mailbox.organization
+                                    name:           $.email.subject
+                                    notes:          $.leadNotes
+                                    contact:        $.leadContact
+                                    firstName:      $.leadFirstName
+                                    lastName:       $.leadLastName
+                                    email:          $.email.fromEmailAddress.email
+                            - @add_email_activity_target:
+                                email:              $.email
+                                target_entity:      $.leadEntity
 
 triggers:
     convert_mailbox_email_to_lead:
