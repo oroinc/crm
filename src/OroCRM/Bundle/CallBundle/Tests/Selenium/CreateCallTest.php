@@ -19,7 +19,7 @@ class CreateCallTest extends Selenium2TestCase
      */
     public function testCreateCall()
     {
-        $callSubject = 'Call_'.mt_rand();
+        $callSubject = 'Call_'.mt_rand(100, 400);
         $phoneNumber = mt_rand(100, 999).'-'.mt_rand(100, 999).'-'.mt_rand(1000, 9999);
 
         $login = $this->login();
