@@ -27,3 +27,7 @@ OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
                     name:           message
                     target_type:    text
                     target_fields:  [message]
+
+OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings:
+    alias:           orocrm_case_mailbox_process_settings
+    search_template: OroCRMCaseBundle:CaseMailboxProcessSettings:searchResult.html.twig
