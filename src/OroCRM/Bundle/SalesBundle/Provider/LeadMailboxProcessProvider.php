@@ -7,8 +7,8 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
-
 use Oro\Bundle\SecurityBundle\SecurityFacade;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
@@ -21,7 +21,8 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     private $securityFacade;
 
     /**
-     * @param Registry $registry
+     * @param Registry       $registry
+     * @param SecurityFacade $securityFacade
      */
     public function __construct(Registry $registry, SecurityFacade $securityFacade)
     {
