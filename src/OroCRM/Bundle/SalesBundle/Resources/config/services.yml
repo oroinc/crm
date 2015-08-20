@@ -110,6 +110,7 @@ services:
         class: %orocrm_sales.provider.mailbox_process.lead.class%
         arguments:
             - @doctrine
+            - @oro_security.security_facade
         tags:
             - { name: oro_email.mailbox_process, type: lead }
 
