@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CampaignBundle\Model;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign;
 use OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics;
+use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListItemConnector;
 
 class EmailCampaignStatisticsConnector
@@ -18,6 +19,11 @@ class EmailCampaignStatisticsConnector
      * @var DoctrineHelper
      */
     protected $doctrineHelper;
+
+    /**
+     * @var MarketingListItem[]
+     */
+    protected $marketingListItemCache = [];
 
     /**
      * @var string
@@ -54,9 +60,24 @@ class EmailCampaignStatisticsConnector
         $marketingList = $emailCampaign->getMarketingList();
         $entityId = $this->doctrineHelper->getSingleEntityIdentifier($entity);
 
-        // Mark marketing list item as contacted
-        $marketingListItem = $this->marketingListItemConnector
-            ->getMarketingListItem($marketingList, $entityId);
+        /**
+         * Cache was added because there is a case:
+         * - 2 email campaigns linked to one marketing list
+         * - statistic can created using batches (marketing list item connector will be used)
+         *  and flush will be run once per N records creation
+         * in this case same Marketing list entity will be received twice for one marketing list
+         * and new MarketingListItem for same $marketingList and $entityId will be persisted twice.
+         *
+         * Marketing list name used as key for cache because Id can be empty and name is unique
+         *
+         */
+        if (empty($this->marketingListItemCache[$marketingList->getName()][$entityId])) {
+            // Mark marketing list item as contacted
+            $this->marketingListItemCache[$marketingList->getName()][$entityId] = $this->marketingListItemConnector
+                ->getMarketingListItem($marketingList, $entityId);
+        }
+        /** @var MarketingListItem $marketingListItem */
+        $marketingListItem = $this->marketingListItemCache[$marketingList->getName()][$entityId];
 
         $manager = $this->doctrineHelper->getEntityManager($this->entityName);
 
@@ -78,5 +99,14 @@ class EmailCampaignStatisticsConnector
         }
 
         return $statisticsRecord;
+    }
+
+    /**
+     * Method must be called on onClear Doctrine event, because after clear entity manager
+     * cached entities will be detached
+     */
+    public function clearMarketingListItemCache()
+    {
+        $this->marketingListItemCache = [];
     }
 }
