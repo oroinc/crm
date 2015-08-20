@@ -101,6 +101,10 @@ class EmailCampaignStatisticsConnector
         return $statisticsRecord;
     }
 
+    /**
+     * Method must be called on onClear Doctrine event, because after clear entity manager
+     * cached entities will be detached
+     */
     public function clearMarketingListItemCache()
     {
         $this->marketingListItemCache = [];
