@@ -38,6 +38,6 @@ class OroCRMCaseBundle implements Migration, ActivityExtensionAwareInterface
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        //$activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
     }
 }

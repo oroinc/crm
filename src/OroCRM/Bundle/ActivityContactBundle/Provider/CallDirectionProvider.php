@@ -7,12 +7,24 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallDirectionProvider implements DirectionProviderInterface
 {
+    /** @var ActivityManager */
+    protected $activityManager;
+
+    /**
+     * @param ActivityManager $activityManager
+     */
+    public function __construct(ActivityManager $activityManager)
+    {
+        $this->activityManager = $activityManager;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -85,6 +97,10 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
     {
+        if (!$this->activityManager->hasActivityAssociation(ClassUtils::getClass($target), $this->getSupportedClass())) {
+            return null;
+        }
+
         $qb = $em->getRepository('OroCRM\Bundle\CallBundle\Entity\Call')
             ->createQueryBuilder('call')
             ->select('call')
