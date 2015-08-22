@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CaseBundle\Provider;
 
+use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
 
 /**
@@ -41,7 +42,7 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(Mailbox $mailbox = null)
     {
         return true;
     }

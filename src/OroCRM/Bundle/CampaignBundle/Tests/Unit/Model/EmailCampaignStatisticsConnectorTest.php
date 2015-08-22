@@ -55,11 +55,11 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
         $emailCampaign = $this->getMockBuilder('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign')
             ->disableOriginalConstructor()
             ->getMock();
-        $emailCampaign->expects($this->once())
+        $emailCampaign->expects($this->exactly(2))
             ->method('getMarketingList')
             ->will($this->returnValue($marketingList));
 
-        $this->doctrineHelper->expects($this->once())
+        $this->doctrineHelper->expects($this->exactly(2))
             ->method('getSingleEntityIdentifier')
             ->with($entity)
             ->will($this->returnValue($entityId));
@@ -71,6 +71,9 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn(42);
 
+        /**
+         * Check marketingListItem cache
+         */
         $this->marketingListItemConnector->expects($this->once())
             ->method('getMarketingListItem')
             ->with($marketingList, $entityId)
@@ -85,33 +88,37 @@ class EmailCampaignStatisticsConnectorTest extends \PHPUnit_Framework_TestCase
         $manager = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
             ->disableArgumentCloning()
             ->getMock();
-        $manager->expects($this->once())
+        $manager->expects($this->exactly(2))
             ->method('getRepository')
             ->with($entityClass)
             ->will($this->returnValue($repository));
-        $this->doctrineHelper->expects($this->once())
+        $this->doctrineHelper->expects($this->exactly(2))
             ->method('getEntityManager')
             ->with($entityClass)
             ->will($this->returnValue($manager));
 
         if ($existing) {
-            $repository->expects($this->once())
+            $repository->expects($this->exactly(2))
                 ->method('findOneBy')
                 ->with(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem])
                 ->will($this->returnValue($statisticsRecord));
         } else {
-            $repository->expects($this->once())
+            $repository->expects($this->exactly(2))
                 ->method('findOneBy')
                 ->with(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem])
                 ->will($this->returnValue(null));
 
-            $manager->expects($this->once())
+            $manager->expects($this->exactly(2))
                 ->method('persist')
                 ->with($this->isInstanceOf('OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics'));
         }
 
         $this->connector->setEntityName($entityClass);
         $actualRecord = $this->connector->getStatisticsRecord($emailCampaign, $entity);
+        /**
+         * Check marketingListItem cache
+         */
+        $this->connector->getStatisticsRecord($emailCampaign, $entity);
 
         if (!$existing) {
             $this->assertEquals($emailCampaign, $actualRecord->getEmailCampaign(), 'unexpected email campaign');

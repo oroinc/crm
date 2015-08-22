@@ -25,29 +25,6 @@ definitions:
                         attribute: $.caseSource
                         class: OroCRMCaseBundle:CaseSource
                         identifier: 'email'
-                    # Assign related contact
-                    - @tree:
-                        conditions:
-                            @and:
-                                - @equal:      [$.email.fromEmailAddress.hasOwner, true]
-                                - @instanceof: [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
-                        actions:
-                            - @assign_value:
-                                attribute: $.caseRelatedContact
-                                value: $.email.fromEmailAddress.owner
-                    # Assign related account
-                    - @tree:
-                        conditions:
-                            @and:
-                                - @not_empty: [$.caseRelatedContact]
-                                - @not_empty: [$.caseRelatedContact.accounts]
-                                - @has_count:
-                                    countable: $.caseRelatedContact.accounts
-                                    equal_to: 1
-                        actions:
-                            - @assign_value:
-                                attribute: $.caseRelatedAccount
-                                value: $.caseRelatedContact.accounts[0]
             - @traverse:
                 array: $.mailboxes
                 value: $.mailbox
@@ -56,6 +33,30 @@ definitions:
                         conditions:
                             @gt: [$.email.sentAt, $.mailbox.updatedAt]
                         actions:
+                            # Assign related contact
+                            - @tree:
+                                conditions:
+                                    @and:
+                                        - @equal:      [$.email.fromEmailAddress.hasOwner, true]
+                                        - @instanceof: [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
+                                        - @equal:      [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
+                                actions:
+                                    - @assign_value:
+                                        attribute: $.caseRelatedContact
+                                        value: $.email.fromEmailAddress.owner
+                            # Assign related account
+                            - @tree:
+                                conditions:
+                                    @and:
+                                        - @not_empty: [$.caseRelatedContact]
+                                        - @not_empty: [$.caseRelatedContact.accounts]
+                                        - @has_count:
+                                            countable: $.caseRelatedContact.accounts
+                                            equal_to: 1
+                                actions:
+                                    - @assign_value:
+                                        attribute: $.caseRelatedAccount
+                                        value: $.caseRelatedContact.accounts[0]
                             - @create_entity:
                                 class: OroCRM\Bundle\CaseBundle\Entity\CaseEntity
                                 attribute: $.caseEntity
