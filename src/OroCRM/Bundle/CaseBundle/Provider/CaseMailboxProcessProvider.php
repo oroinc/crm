@@ -15,6 +15,8 @@ use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
  */
 class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
 {
+    const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_case';
+
     /**
      * {@inheritdoc}
      */
@@ -45,5 +47,13 @@ class CaseMailboxProcessProvider implements MailboxProcessProviderInterface
     public function isEnabled(Mailbox $mailbox = null)
     {
         return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessDefinitionName()
+    {
+        return self::PROCESS_DEFINITION_NAME;
     }
 }
