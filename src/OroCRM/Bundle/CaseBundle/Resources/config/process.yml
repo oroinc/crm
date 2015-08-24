@@ -87,3 +87,4 @@ definitions:
                             - @copy_tagging:
                                 source: $.mailbox.processSettings
                                 destination: $.caseEntity
+                                organization: $.mailbox.organization
