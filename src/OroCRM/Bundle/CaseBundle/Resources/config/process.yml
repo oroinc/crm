@@ -78,6 +78,7 @@ definitions:
                             - @copy_tagging:
                                 source: $.mailbox.processSettings
                                 destination: $.caseEntity
+                                organization: $.mailbox.organization
 
 triggers:
     convert_mailbox_email_to_case:
