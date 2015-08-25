@@ -3,7 +3,11 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 
 class SalesFunnelTest extends \PHPUnit_Framework_TestCase
 {
@@ -73,5 +77,47 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
         $this->assertNull($obj->getCreatedAt());
+    }
+
+    public function testGetLeadEmail()
+    {
+        $salesFunnel = new SalesFunnel();
+        $lead = new Lead();
+        $lead->setEmail('test@test.com');
+        $salesFunnel->setLead($lead);
+
+        $this->assertEquals('test@test.com', $salesFunnel->getEmail());
+    }
+
+    public function testGetOpportunityEmail()
+    {
+        $salesFunnel = new SalesFunnel();
+        $email = new ContactEmail();
+        $email->setEmail('test@test.com');
+        $contact = new Contact();
+        $contact->addEmail($email);
+        $contact->setPrimaryEmail($email);
+        $opportunity = new Opportunity();
+        $opportunity->setContact($contact);
+        $salesFunnel->setOpportunity($opportunity);
+
+        $this->assertEquals('test@test.com', $salesFunnel->getEmail());
+    }
+
+    public function testGetFirstName()
+    {
+        $salesFunnel = new SalesFunnel();
+        $opportunity = new Opportunity();
+        $opportunity->setName('test');
+        $salesFunnel->setOpportunity($opportunity);
+
+        $this->assertEquals('test', $salesFunnel->getFirstName());
+
+        $salesFunnel = new SalesFunnel();
+        $lead = new Lead();
+        $lead->setName('test2');
+        $salesFunnel->setLead($lead);
+
+        $this->assertEquals('test2', $salesFunnel->getFirstName());
     }
 }

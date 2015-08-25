@@ -11,9 +11,12 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
+use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 
 use OroCRM\Bundle\ChannelBundle\Model\ChannelEntityTrait;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
+use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
 
 /**
  * @ORM\Table(
@@ -51,7 +54,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      }
  * )
  */
-class SalesFunnel implements ChannelAwareInterface
+class SalesFunnel extends ExtendSalesFunnel implements
+    ChannelAwareInterface,
+    FirstNameInterface,
+    EmailHolderInterface
 {
     use ChannelEntityTrait;
     /**
@@ -349,5 +355,49 @@ class SalesFunnel implements ChannelAwareInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEmail()
+    {
+        $email = null;
+        if ($this->getLead() && $this->getLead()->getEmail()) {
+            $email = $this->getLead()->getEmail();
+        }
+
+        if ($this->getOpportunity() && $this->getOpportunity()->getEmail()) {
+            $email = $this->getOpportunity()->getEmail();
+        }
+
+        return $email;
+    }
+
+    /**
+     * Get name of Sales Funnel depends on opportunity or lead
+     *
+     * @return string
+     */
+    public function getFirstName()
+    {
+        $opportunity = $this->getOpportunity();
+        $lead = $this->getLead();
+
+        if ($opportunity) {
+            return $opportunity->getName();
+        } elseif ($lead) {
+            return $lead->getName();
+        }
+
+        return '';
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getFirstName();
     }
 }

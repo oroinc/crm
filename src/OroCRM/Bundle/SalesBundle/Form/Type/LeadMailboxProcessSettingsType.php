@@ -29,7 +29,7 @@ class LeadMailboxProcessSettingsType extends AbstractType
     {
         $builder->add(
             'owner',
-            'oro_user_select',
+            'oro_user_organization_acl_select',
             [
                 'required' => true,
                 'label'    => 'orocrm.sales.lead.owner.label',
