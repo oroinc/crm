@@ -30,6 +30,7 @@ class MailboxSavedListener
             return;
         }
 
-        $this->tagManager->saveTagging($processSetings);
+        $organization = $event->getMailbox()->getOrganization();
+        $this->tagManager->saveTagging($processSetings, true, $organization);
     }
 }

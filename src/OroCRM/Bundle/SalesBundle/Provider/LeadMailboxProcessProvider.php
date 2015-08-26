@@ -14,6 +14,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
     const LEAD_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+    const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
 
     /** @var Registry */
     protected $registry;
@@ -76,6 +77,14 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
             ->setParameter('owner', $organization)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessDefinitionName()
+    {
+        return self::PROCESS_DEFINITION_NAME;
     }
 
     /**
