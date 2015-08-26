@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CaseBundle\Form\EventSubscriber;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\TagBundle\Form\EventSubscriber\TagSubscriber;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
@@ -27,9 +28,9 @@ class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
      */
     public function preSet(FormEvent $event)
     {
-        $entity = $event->getForm()->getParent()->getData();
-        if ($entity instanceof CaseMailboxProcessSettings && $entity->getMailbox()) {
-            $organization = $entity->getMailbox()->getOrganization();
+        $mailbox = $event->getForm()->getRoot()->getData();
+        if ($mailbox instanceof Mailbox) {
+            $organization = $mailbox->getOrganization();
             $this->organization = $organization;
         }
 
