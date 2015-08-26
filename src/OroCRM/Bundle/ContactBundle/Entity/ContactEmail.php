@@ -23,6 +23,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContactEmail;
  *          "note"={
  *              "immutable"=true
  *          },
+ *          "comment"={
+ *              "immutable"=true
+ *          },
  *          "activity"={
  *              "immutable"=true
  *          },

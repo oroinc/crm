@@ -64,9 +64,6 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "acl"="orocrm_task_view",
  *              "action_button_widget"="orocrm_add_task_button",
  *              "action_link_widget"="orocrm_add_task_link"
- *          },
- *          "comment"={
- *              "applicable"=true
  *          }
  *      }
  * )
