@@ -97,7 +97,10 @@ class CallDirectionProvider implements DirectionProviderInterface
      */
     protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
     {
-        if (!$this->activityManager->hasActivityAssociation(ClassUtils::getClass($target), $this->getSupportedClass())) {
+        if (!$this->activityManager->hasActivityAssociation(
+            ClassUtils::getClass($target),
+            $this->getSupportedClass()
+        )) {
             return null;
         }
 
