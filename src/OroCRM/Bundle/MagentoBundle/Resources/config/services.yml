@@ -455,7 +455,8 @@ services:
     orocrm_magento.event_listener.channel_owner_set:
         class: %orocrm_magento.event_listener.channel_owner_set.class%
         arguments:
-            - @doctrine.orm.default_entity_manager
+#            - @doctrine.orm.default_entity_manager
+            - @doctrine
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
 
