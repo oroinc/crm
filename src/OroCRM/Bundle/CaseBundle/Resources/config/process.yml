@@ -25,6 +25,15 @@ definitions:
                         attribute: $.caseSource
                         class: OroCRMCaseBundle:CaseSource
                         identifier: 'email'
+                    - @assign_value:
+                        attribute: $.caseSubject
+                        value: $.email.subject
+                    - @trans:
+                        conditions:
+                            @empty: [$.caseSubject]
+                        parameters:
+                            id: 'oro.email.subject.no_subject.label'
+                            attribute: $.caseSubject
             - @traverse:
                 array: $.mailboxes
                 value: $.mailbox
@@ -67,7 +76,7 @@ definitions:
                                     status:         $.mailbox.processSettings.status
                                     priority:       $.mailbox.processSettings.priority
                                     organization:   $.mailbox.organization
-                                    subject:        $.email.subject
+                                    subject:        $.caseSubject
                                     description:    $.caseDescription
                                     source:         $.caseSource
                                     relatedContact: $.caseRelatedContact
@@ -78,8 +87,4 @@ definitions:
                             - @copy_tagging:
                                 source: $.mailbox.processSettings
                                 destination: $.caseEntity
-
-triggers:
-    convert_mailbox_email_to_case:
-        -
-            event: create
+                                organization: $.mailbox.organization

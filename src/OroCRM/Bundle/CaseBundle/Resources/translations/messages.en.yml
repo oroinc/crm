@@ -119,3 +119,4 @@ orocrm:
             owner.label:                    Owner
             priority.label:                 Priority
             status.label:                   Status
+            mailbox.label:                  Mailbox
