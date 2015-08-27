@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
