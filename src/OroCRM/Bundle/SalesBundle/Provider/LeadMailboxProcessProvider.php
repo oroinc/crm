@@ -20,17 +20,17 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     /** @var Registry */
     protected $registry;
 
-    /** @var SecurityFacade */
-    private $securityFacade;
+    /** @var ServiceLink */
+    private $securityLink;
 
     /**
      * @param Registry       $registry
-     * @param ServiceLink    $securityFacadeLink
+     * @param ServiceLink    $securityLink
      */
-    public function __construct(Registry $registry, ServiceLink $securityFacadeLink)
+    public function __construct(Registry $registry, ServiceLink $securityLink)
     {
         $this->registry = $registry;
-        $this->securityFacade = $securityFacadeLink->getService();
+        $this->securityLink = $securityLink;
     }
 
     /**
@@ -63,7 +63,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     public function isEnabled(Mailbox $mailbox = null)
     {
         if (($mailbox === null) || (null === $organization = $mailbox->getOrganization())) {
-            $organization = $this->securityFacade->getOrganization();
+            $organization = $this->securityLink->getService()->getOrganization();
         }
 
         $qb = $this->getChannelRepository()->createQueryBuilder('c');
