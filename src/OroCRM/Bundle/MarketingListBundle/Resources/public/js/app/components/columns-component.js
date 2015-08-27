@@ -20,7 +20,8 @@ define(function(require) {
         _.each(contactInformationFields, function(field) {
             list.append($('<li/>').html(field.label));
         });
-        $fieldsListEl.html(list);
+        $fieldsListEl.html(list)
+            .closest('.alert').toggleClass('has-fields', contactInformationFields.length > 0);
     };
 
     var updateContactInformationFields = function(contactInformationFields) {
@@ -77,8 +78,9 @@ define(function(require) {
     };
 
     return function(options) {
-        $entityEl = $(options.entityChoiceSelector);
-        $fieldsListEl = $(options.fieldsChoiceSelector);
+        var $form = $(options.formSelector);
+        $entityEl = $form.find(options.entityChoiceSelector);
+        $fieldsListEl = $form.find(options.fieldsChoiceSelector);
 
         if (!_.isEmpty(options.contactInformationFields)) {
             updateContactInformationFields(options.contactInformationFields);

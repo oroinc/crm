@@ -5,23 +5,30 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
     const LEAD_CLASS = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+    const PROCESS_DEFINITION_NAME = 'convert_mailbox_email_to_lead';
 
     /** @var Registry */
     protected $registry;
+    /** @var SecurityFacade */
+    private $securityFacade;
 
     /**
-     * @param Registry $registry
+     * @param Registry       $registry
+     * @param SecurityFacade $securityFacade
      */
-    public function __construct(Registry $registry)
+    public function __construct(Registry $registry, SecurityFacade $securityFacade)
     {
         $this->registry = $registry;
+        $this->securityFacade = $securityFacade;
     }
 
     /**
@@ -51,8 +58,12 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function isEnabled()
+    public function isEnabled(Mailbox $mailbox = null)
     {
+        if (($mailbox === null) || (null === $organization = $mailbox->getOrganization())) {
+            $organization = $this->securityFacade->getOrganization();
+        }
+
         $qb = $this->getChannelRepository()->createQueryBuilder('c');
 
         return (bool) $qb
@@ -60,10 +71,20 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
             ->join('c.entities', 'e')
             ->andWhere('e.name = :name')
             ->andWhere('c.status = :status')
+            ->andWhere('c.owner = :owner')
             ->setParameter('name', static::LEAD_CLASS)
             ->setParameter('status', Channel::STATUS_ACTIVE)
+            ->setParameter('owner', $organization)
             ->getQuery()
             ->getSingleScalarResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProcessDefinitionName()
+    {
+        return self::PROCESS_DEFINITION_NAME;
     }
 
     /**
