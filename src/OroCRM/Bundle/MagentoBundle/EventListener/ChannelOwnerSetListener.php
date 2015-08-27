@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\EntityManager;
 
@@ -25,9 +24,9 @@ class ChannelOwnerSetListener
     /**
      * @param EntityManager $em
      */
-    public function __construct(Registry $em)
+    public function __construct(EntityManager $em)
     {
-        $this->em = $em->getManager();
+        $this->em = $em;
     }
 
     /**
