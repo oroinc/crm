@@ -6,8 +6,14 @@ use Doctrine\ORM\EntityRepository;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
+
+use Oro\Bundle\EmailBundle\Entity\Mailbox;
+
+use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
 
 class CaseMailboxProcessSettingsType extends AbstractType
 {
@@ -81,11 +87,25 @@ class CaseMailboxProcessSettingsType extends AbstractType
             ]
         )->add(
             'tags',
-            'oro_tag_select',
+            'case_mailbox_process_settings_tag',
             [
                 'label' => 'oro.tag.entity_plural_label',
             ]
         );
 
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
+            if ($event->getData()) {
+                return;
+            }
+
+            $mailbox = $event->getForm()->getRoot()->getData();
+            if (!$mailbox instanceof Mailbox) {
+                return;
+            }
+
+            $processSettings = new CaseMailboxProcessSettings();
+            $mailbox->setProcessSettings($processSettings);
+            $event->setData($processSettings);
+        });
     }
 }

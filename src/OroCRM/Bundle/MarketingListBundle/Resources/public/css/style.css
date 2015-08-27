@@ -9,3 +9,10 @@
 #orocrm_marketing_list-column-list .name-cell .entity-field-path {
     padding-left: 2px
 }
+
+#column-information-notice:not(.has-fields) .column-information-fields-notice {
+    display: none;
+}
+#column-information-notice ul {
+    margin-bottom: 0;
+}

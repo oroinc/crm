@@ -93,7 +93,8 @@
     {% if not form.vars.value.manual %}
     {% set hasEntity = form.vars.value is not empty and form.vars.value.entity is defined and form.vars.value.entity is not empty %}
     {% set columnsComponentOptions = {
-        'entityChoiceSelector': '#orocrm_marketing_list_form_entity',
+        'formSelector': '#' ~ form.vars.id,
+        'entityChoiceSelector': '[data-ftid=orocrm_marketing_list_form_entity]',
         'fieldsChoiceSelector': '#contact-information-fields-list',
         'contactInformationFields': hasEntity ? get_contact_information_fields_info(form.vars.value.entity) : []
     } %}
@@ -106,7 +107,8 @@
     >
         <div id="column-information-notice" class="alert alert-info">
             <strong>{{ 'orocrm.marketinglist.form.importance'|trans }}</strong>:
-            {{ 'orocrm.marketinglist.form.columns_notice'|trans }}:
+            {{ 'orocrm.marketinglist.form.columns_notice'|trans }}
+            <div class="column-information-fields-notice">{{ 'orocrm.marketinglist.form.available_fields_notice'|trans }}:</div>
             <div id="contact-information-fields-list"></div>
         </div>
 
