@@ -1,5 +1,5 @@
 OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
-    alias:                          orocrm_contact_request
+    alias:                          orocrm_contactus_request
     title_fields:                   [firstName, lastName]
     route:
         name:                       orocrm_contactus_request_view
