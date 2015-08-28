@@ -14,9 +14,6 @@
             <li class="sub-widget" style="width: {{ itemWidth }}%">
                 {% include widgetDataItems[itemName].template with {item: item}%}
             </li>
-            {% if not loop.last and loop.index % 3 == 0 %}
-            <li class="separator"> &nbsp; </li>
-            {% endif %}
         {% endfor %}
         </ul>
     {% else %}
