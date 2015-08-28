@@ -8,13 +8,21 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
 class OroCRMCaseBundleInstaller implements
     Installation,
-    AttachmentExtensionAwareInterface
+    AttachmentExtensionAwareInterface,
+    ActivityExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
+
+    /**
+     * @var ActivityExtension
+     */
+    protected $activityExtension;
 
     /**
      * {@inheritdoc}
@@ -30,6 +38,14 @@ class OroCRMCaseBundleInstaller implements
     public function setAttachmentExtension(AttachmentExtension $attachmentExtension)
     {
         $this->attachmentExtension = $attachmentExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
     }
 
     /**
@@ -54,6 +70,8 @@ class OroCRMCaseBundleInstaller implements
         $this->addOrocrmCaseForeignKeys($schema);
         $this->addOrocrmCaseCommentForeignKeys($schema);
         $this->addOroEmailMailboxProcessSettingsForeignKeys($schema);
+
+        $this->addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
@@ -379,5 +397,16 @@ class OroCRMCaseBundleInstaller implements
             ['name'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
         );
+    }
+
+    /**
+     * Enables Email activity for Case entity
+     *
+     * @param Schema            $schema
+     * @param ActivityExtension $activityExtension
+     */
+    protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    {
+        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
     }
 }

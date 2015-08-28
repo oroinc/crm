@@ -7,9 +7,9 @@ use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 use Oro\Bundle\EmailBundle\Mailbox\MailboxProcessProviderInterface;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 {
@@ -18,17 +18,18 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
 
     /** @var Registry */
     protected $registry;
-    /** @var SecurityFacade */
-    private $securityFacade;
+
+    /** @var ServiceLink */
+    private $securityLink;
 
     /**
      * @param Registry       $registry
-     * @param SecurityFacade $securityFacade
+     * @param ServiceLink    $securityLink
      */
-    public function __construct(Registry $registry, SecurityFacade $securityFacade)
+    public function __construct(Registry $registry, ServiceLink $securityLink)
     {
         $this->registry = $registry;
-        $this->securityFacade = $securityFacade;
+        $this->securityLink = $securityLink;
     }
 
     /**
@@ -61,7 +62,7 @@ class LeadMailboxProcessProvider implements MailboxProcessProviderInterface
     public function isEnabled(Mailbox $mailbox = null)
     {
         if (($mailbox === null) || (null === $organization = $mailbox->getOrganization())) {
-            $organization = $this->securityFacade->getOrganization();
+            $organization = $this->securityLink->getService()->getOrganization();
         }
 
         $qb = $this->getChannelRepository()->createQueryBuilder('c');
