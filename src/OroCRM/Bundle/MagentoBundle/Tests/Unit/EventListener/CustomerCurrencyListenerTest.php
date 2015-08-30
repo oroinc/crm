@@ -23,7 +23,7 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerInterface');
 
-        $container->expects($this->once())
+        $container->expects($this->any())
             ->method('get')
             ->with('oro_locale.settings')
             ->will($this->returnValue($this->localeSettings));
