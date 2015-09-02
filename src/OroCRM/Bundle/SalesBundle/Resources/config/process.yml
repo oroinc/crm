@@ -22,6 +22,15 @@ definitions:
                     - @strip_html_tags:
                         attribute: $.leadNotes
                         html: $bodyContent
+                    - @assign_value:
+                        attribute: $.leadName
+                        value: $.email.subject
+                    - @trans:
+                        conditions:
+                            @empty: [$.leadName]
+                        parameters:
+                            id: 'oro.email.subject.no_subject.label'
+                            attribute: $.leadName
             - @traverse:
                 array: $.mailboxes
                 value: $.mailbox
@@ -90,7 +99,7 @@ definitions:
                                     dataChannel:    $.mailbox.processSettings.channel
                                     source:         $.leadSource
                                     organization:   $.mailbox.organization
-                                    name:           $.email.subject
+                                    name:           $.leadName
                                     notes:          $.leadNotes
                                     contact:        $.leadContact
                                     firstName:      $.leadFirstName
@@ -99,8 +108,3 @@ definitions:
                             - @add_email_activity_target:
                                 email:              $.email
                                 target_entity:      $.leadEntity
-
-triggers:
-    convert_mailbox_email_to_lead:
-        -
-            event: create

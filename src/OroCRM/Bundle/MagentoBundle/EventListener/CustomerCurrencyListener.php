@@ -37,10 +37,12 @@ class CustomerCurrencyListener implements ContainerAwareInterface
     {
         /** @var Customer $entity */
         $entity = $event->getEntity();
-        $localeSettings = $this->getLocaleSettings();
 
-        if ($localeSettings && $entity instanceof Customer && !$entity->getCurrency()) {
-            $entity->setCurrency($localeSettings->getCurrency());
+        if ($entity instanceof Customer && !$entity->getCurrency()) {
+            $localeSettings = $this->getLocaleSettings();
+            if ($localeSettings) {
+                $entity->setCurrency($localeSettings->getCurrency());
+            }
         }
     }
 

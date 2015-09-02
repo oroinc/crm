@@ -39,7 +39,8 @@ orocrm:
             choose_marketing_list_type:    Choose marketing list type
             choose_marketing_list:         Choose marketing list
             importance: Important
-            columns_notice: At least one column with contact information must be selected. Available contact information fields
+            columns_notice: At least one column with contact information must be selected.
+            available_fields_notice: Available contact information fields
 
         datagrid:
             subscribed: Subscribed
