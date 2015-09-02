@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityOwner;
+use Oro\Bundle\ActivityListBundle\Model\ActivityListDateProviderInterface;
 use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -13,7 +14,10 @@ use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\TaskBundle\Entity\Task;
 
-class TaskActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
+class TaskActivityListProvider implements
+    ActivityListProviderInterface,
+    CommentProviderInterface,
+    ActivityListDateProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
     const ACL_CLASS = 'OroCRM\Bundle\TaskBundle\Entity\Task';
@@ -61,6 +65,49 @@ class TaskActivityListProvider implements ActivityListProviderInterface, Comment
     {
         /** @var $entity Task */
         return $entity->getDescription();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOwner($entity)
+    {
+        /** @var $entity Task */
+        return $entity->getOwner();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedBy($entity)
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt($entity)
+    {
+        /** @var $entity Task */
+        return $entity->getCreatedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt($entity)
+    {
+        /** @var $entity Task */
+        return $entity->getUpdatedAt();
+    }
+
+    /**
+     *  {@inheritdoc}
+     */
+    public function isDateUpdatable()
+    {
+        return true;
     }
 
     /**

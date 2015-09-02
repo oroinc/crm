@@ -15,6 +15,8 @@ use Oro\Bundle\ReminderBundle\Model\ReminderData;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleDatesInterface;
+use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleOwnerInterface;
 
 use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
@@ -68,7 +70,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      }
  * )
  */
-class Task extends ExtendTask implements RemindableInterface
+class Task extends ExtendTask implements
+    RemindableInterface,
+    LifecycleDatesInterface,
+    LifecycleOwnerInterface
 {
     /**
      * @var integer
@@ -208,6 +213,11 @@ class Task extends ExtendTask implements RemindableInterface
      */
     protected $organization;
 
+    /**
+     * @var bool
+     */
+    protected $isUpdatedUpdatedAt = null;
+
     public function __construct()
     {
         parent::__construct();
@@ -300,7 +310,19 @@ class Task extends ExtendTask implements RemindableInterface
      */
     public function setUpdatedAt($updatedAt)
     {
+        if ($updatedAt !== null) {
+            $this->isUpdatedUpdatedAt = true;
+        }
+
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdatedUpdatedAtProperty()
+    {
+        return $this->isUpdatedUpdatedAt;
     }
 
     /**
@@ -338,7 +360,7 @@ class Task extends ExtendTask implements RemindableInterface
     /**
      * @param User $owner
      */
-    public function setOwner($owner = null)
+    public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
     }
@@ -427,23 +449,6 @@ class Task extends ExtendTask implements RemindableInterface
     public function getUpdatedAt()
     {
         return $this->updatedAt;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = $this->createdAt ? : new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**

@@ -10,6 +10,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleDatesInterface;
+use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleOwnerInterface;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 
@@ -51,7 +53,9 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      }
  * )
  */
-class Call extends ExtendCall
+class Call extends ExtendCall implements
+    LifecycleDatesInterface,
+    LifecycleOwnerInterface
 {
     /**
      * @var integer
@@ -165,6 +169,11 @@ class Call extends ExtendCall
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $organization;
+
+    /**
+     * @var bool
+     */
+    protected $isUpdatedUpdatedAt = null;
 
     public function __construct()
     {
@@ -327,7 +336,7 @@ class Call extends ExtendCall
      * @param User $owner
      * @return Call
      */
-    public function setOwner($owner)
+    public function setOwner(User $owner)
     {
         $this->owner = $owner;
 
@@ -396,7 +405,19 @@ class Call extends ExtendCall
      */
     public function setUpdatedAt($updatedAt)
     {
+        if ($updatedAt !== null) {
+            $this->isUpdatedUpdatedAt = true;
+        }
+
         $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdatedUpdatedAtProperty()
+    {
+        return $this->isUpdatedUpdatedAt;
     }
 
     /**
@@ -420,22 +441,5 @@ class Call extends ExtendCall
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
