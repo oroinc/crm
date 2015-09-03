@@ -6,7 +6,7 @@
     "license": "MIT",
     "require": {
         "php": ">=5.4.9",
-        "symfony/symfony": "2.3.*",
+        "symfony/symfony": "2.7.*",
         "oro/entity-extend-bundle": "dev-master",
         "oro/activity-bundle": "dev-master",
         "oro/activity-list-bundle": "dev-master"
