@@ -1,51 +1,31 @@
-define(function(require) {
+define(function (require) {
     'use strict';
 
-    var AssignedTasksSetuoView;
-    var _ = require('underscore');
+    var AssignedTasksSetupView;
     var __ = require('orotranslation/js/translator');
-    var BaseView = require('oroui/js/app/views/base/view');
+    var BaseWidgetSetupView = require('orosidebar/js/app/views/base-widget/base-widget-setup-view');
 
-    AssignedTasksSetuoView = BaseView.extend({
+    AssignedTasksSetupView = BaseWidgetSetupView.extend({
         template: require('tpl!orocrmtask/templates/sidebar-widget/assigned-tasks/assigned-tasks-setup-view.html'),
 
         widgetTitle: function() {
             return __('orocrm.task.assigned_tasks_widget.settings');
         },
 
-        events: {
-            'keyup input': function(e) {
-                if (e.which === 13) {
-                    this.onSubmit(e);
-                }
+        validation: {
+            perPage: {
+                NotBlank: {},
+                Regex: {pattern: '/^\\d+$/'},
+                Number: {min: 1, max: 20}
             }
         },
 
-        listen: {
-            'ok': 'onSubmit'
-        },
-
-        onSubmit: function() {
-            var model = this.model;
-            var settings = model.get('settings');
-            var perPageEl = this.$el.find('[name="perPage"]');
-            var perPage = parseInt(perPageEl.val());
-
-            if (_.isNaN(perPage) || perPage <= 0) {
-                perPageEl.val(settings.perPage || this.defaultPerPage);
-                perPageEl.focus();
-                return;
-            }
-
-            if (settings.perPage !== perPage) {
-                settings.perPage = perPage;
-                model.set({settings: settings}, {silent: true});
-                model.trigger('change');
-            }
-
-            this.trigger('close');
+        fetchFromData: function() {
+            var data = AssignedTasksSetupView.__super__.fetchFromData.call(this);
+            data.perPage = Number(data.perPage);
+            return data;
         }
     });
 
-    return AssignedTasksSetuoView;
+    return AssignedTasksSetupView;
 });
