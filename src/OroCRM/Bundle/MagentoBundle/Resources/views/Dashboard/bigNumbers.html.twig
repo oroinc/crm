@@ -16,6 +16,18 @@
             </li>
         {% endfor %}
         </ul>
+        <script>
+            require(['jquery'], function ($) {
+                var widgetContentId = '#{{ widgetContentId }}';
+                $('.title', widgetContentId).on('mouseenter', function () {
+                    var $this = $(this);
+
+                    if(this.offsetWidth < this.scrollWidth && !$this.attr('title')){
+                        $this.attr('title', $this.text());
+                    }
+                });
+            });
+        </script>
     {% else %}
         <div class="container-fluid">
             <div class="clearfix no-data">

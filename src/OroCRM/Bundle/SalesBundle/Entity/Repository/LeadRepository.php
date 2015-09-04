@@ -2,7 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
+use DateTime;
+
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -113,5 +116,55 @@ class LeadRepository extends EntityRepository
                 return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
             }
         );
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $start
+     * @param DateTime $end
+     *
+     * @return int
+     */
+    public function getLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    {
+        $qb = $this->createLeadsCountQb($start, $end);
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param AclHelper $aclHelper
+     * @param DateTime $start
+     * @param DateTime $end
+     *
+     * @return int
+     */
+    public function getNewLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    {
+        $qb = $this->createLeadsCountQb($start, $end)
+            ->andWhere('l.status = :status')
+            ->setParameter('status', 'new');
+
+        return $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param DateTime $start
+     * @param DateTime $end
+     *
+     * @return QueryBuilder
+     */
+    protected function createLeadsCountQb(DateTime $start, DateTime $end)
+    {
+        $qb = $this->createQueryBuilder('l');
+
+        $qb
+            ->select('COUNT(l.id)')
+            ->andWhere($qb->expr()->between('l.createdAt', ':start', ':end'))
+            ->leftJoin('l.opportunities', 'o')
+            ->setParameter('start', $start)
+            ->setParameter('end', $end);
+
+        return $qb;
     }
 }
