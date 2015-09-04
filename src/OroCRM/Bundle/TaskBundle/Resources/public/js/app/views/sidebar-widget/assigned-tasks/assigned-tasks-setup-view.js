@@ -3,10 +3,15 @@ define(function(require) {
 
     var AssignedTasksSetuoView;
     var _ = require('underscore');
+    var __ = require('orotranslation/js/translator');
     var BaseView = require('oroui/js/app/views/base/view');
 
     AssignedTasksSetuoView = BaseView.extend({
         template: require('tpl!orocrmtask/templates/sidebar-widget/assigned-tasks/assigned-tasks-setup-view.html'),
+
+        widgetTitle: function() {
+            return __('orocrm.task.assigned_tasks_widget.settings');
+        },
 
         events: {
             'keyup input': function(e) {
