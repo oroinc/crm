@@ -18,6 +18,7 @@ parameters:
 
     orocrm_campaign.listener.email_campaign_statistic_groupping.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticGroupingListener
     orocrm_campaign.listener.email_campaign_statistic.class: OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener
+    orocrm_campaign.listener.email_campaign_statistic_connector.cache_clear.class: OroCRM\Bundle\CampaignBundle\EventListener\EmailCampaignStatisticConnectorCacheClearListener
     orocrm_campaign.form.type.internal_transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\Type\InternalTransportSettingsType
     orocrm_campaign.form.subscriber.transport_settings.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsListener
     orocrm_campaign.form.subscriber.transport_settings_email_template.class: OroCRM\Bundle\CampaignBundle\Form\EventListener\TransportSettingsEmailTemplateListener
@@ -148,6 +149,13 @@ services:
             - @orocrm_campaign.group_by_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: -10 }
+
+    orocrm_campaign.listener.email_campaign_statistic_connector.cache_clear:
+        class: %orocrm_campaign.listener.email_campaign_statistic_connector.cache_clear.class%
+        arguments:
+            - @orocrm_campaign.email_campaign.statistics_connector
+        tags:
+            - { name: doctrine.event_subscriber }
 
     orocrm_campaign.form.type.internal_transport_settings:
         class: %orocrm_campaign.form.type.internal_transport_settings.class%
