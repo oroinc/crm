@@ -1,9 +1,9 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
@@ -15,18 +15,29 @@ use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
 use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
     /** @var ContainerInterface */
     private $container;
 
+    /** @var User[] */
+    private $users;
+
     /** @var EntityRepository */
     protected $user;
 
     /** @var CalendarRepository */
     protected $calendar;
+
+    /** @var Organization */
+    protected $organization;
+
+    /** @var EntityManager */
+    protected $em;
 
     /**
      * {@inheritdoc}
@@ -39,30 +50,37 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         ];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setContainer(ContainerInterface $container = null)
     {
         $this->container = $container;
-        /** @var  EntityManager $entityManager */
-        $entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->user = $entityManager->getRepository('OroUserBundle:User');
-        $this->calendar = $entityManager->getRepository('OroCalendarBundle:Calendar');
+
+        $this->em           = $container->get('doctrine')->getManager();
+        $this->user         = $this->em->getRepository('OroUserBundle:User');
+        $this->calendar     = $this->em->getRepository('OroCalendarBundle:Calendar');
+
+        //$this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $this->organization = $this->getReference('default_organization');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function load(ObjectManager $manager)
     {
+        $this->users = $this->user->findAll();
+
         $this->loadCalendars();
         $this->connectCalendars();
     }
 
     protected function loadCalendars()
     {
-        /** @var \Oro\Bundle\OrganizationBundle\Entity\Organization $organization */
-        $organization = $this->getReference('default_organization');
-        /** @var \Oro\Bundle\UserBundle\Entity\User[] $users */
-        $users = $this->user->findAll();
-        foreach ($users as $user) {
+        foreach ($this->users as $user) {
             //get default calendar, each user has default calendar after creation
-            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $organization->getId());
+            $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
             /** @var CalendarEvent $event */
             $days = $this->getDatePeriod();
@@ -136,15 +154,20 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     $calendar->addEvent($event);
                 }
             }
-            $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendar);
+            $this->em->persist($calendar);
         }
-        $this->flush($this->container->get('doctrine.orm.entity_manager'));
+
+        var_dump(sprintf('>>> pre flushed at -> %s', date('Y-m-d H:i:s', time())));
+        $this->em->flush();
+        $this->em->clear('Oro\Bundle\DataAuditBundle\Entity\AuditField');
+        $this->em->clear('Oro\Bundle\DataAuditBundle\Entity\Audit');
+        $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
+        $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
+        var_dump(sprintf('>>> end at -> %s', date('Y-m-d H:i:s', time())));
     }
 
     protected function connectCalendars()
     {
-        /** @var \Oro\Bundle\UserBundle\Entity\User[] $users */
-        $users = $this->user->findAll();
         // first user is admin, often
         /** @var \Oro\Bundle\UserBundle\Entity\User $admin */
         $admin = $this->user->find(1);
@@ -161,13 +184,17 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         /** @var Calendar $calendarMarket */
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
+        $countUsers = count($this->users);
+
         $i = 0;
         while ($i <= 5) {
             //get random user
-            $userId = mt_rand(2, count($users)-1);
-            $user = $users[$userId];
-            unset($users[$userId]);
-            $users = array_values($users);
+            $userId = mt_rand(2, $countUsers - 1);
+            $user   = $this->users[$userId];
+            unset($this->users[$userId]);
+
+            //$users = array_values($users);
+
             if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
                 //to prevent self assignment
                 continue;
@@ -181,7 +208,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setTargetCalendar($calendarAdmin)
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
-                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
+
+                $this->em->persist($calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
@@ -190,7 +218,8 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setTargetCalendar($calendarSale)
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
-                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
+
+                $this->em->persist($calendarProperty);
             }
 
             if (mt_rand(0, 1)) {
@@ -199,13 +228,15 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                     ->setTargetCalendar($calendarMarket)
                     ->setCalendarAlias('user')
                     ->setCalendar($calendar->getId());
-                $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendarProperty);
+
+                $this->em->persist($calendarProperty);
             }
 
-            $this->persist($this->container->get('doctrine.orm.entity_manager'), $calendar);
+            $this->em->persist($calendar);
             $i++;
         }
-        $this->flush($this->container->get('doctrine.orm.entity_manager'));
+
+        $this->em->flush();
     }
 
     protected function getDatePeriod()
@@ -216,6 +247,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             new \DateTime('now +1 month'),
             \DatePeriod::EXCLUDE_START_DATE
         );
+
         return $month;
     }
 
@@ -229,42 +261,18 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         if ($day == 0 || $day == 6) {
             return true;
         }
+
         return false;
     }
 
     /**
      * @param User $user
      */
-    protected function setSecurityContext($user)
+    protected function setSecurityContext(User $user)
     {
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+
         $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            $user->getUsername(),
-            'main',
-            $this->getReference('default_organization')
-        );
         $securityContext->setToken($token);
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
-    }
-
-    /**
-     * Flush objects
-     *
-     * @param mixed $manager
-     */
-    private function flush($manager)
-    {
-        $manager->flush();
     }
 }
