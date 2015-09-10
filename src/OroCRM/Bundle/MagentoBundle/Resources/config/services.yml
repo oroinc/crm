@@ -742,6 +742,7 @@ services:
 
     orocrm_magento.wsdl.guzzle_client:
         class: %orocrm_magento.wsdl.guzzle_client.class%
+        lazy: true
 
     orocrm_magento.wsdl_manager:
         class: %orocrm_magento.wsdl_manager.class%
