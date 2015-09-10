@@ -91,6 +91,6 @@ class UniqueCustomerEmailValidator extends ConstraintValidator
         $filters = $filter->getAppliedFilters();
         $customers = $this->transport->call(SoapTransport::ACTION_CUSTOMER_LIST, $filters);
 
-        return is_array($customers) ? $customers : [$customers];
+        return is_array($customers) ? $customers : (empty((array)$customers) ? [] : [$customers]);
     }
 }
