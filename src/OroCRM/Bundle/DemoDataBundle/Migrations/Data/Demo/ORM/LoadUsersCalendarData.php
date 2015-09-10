@@ -58,11 +58,11 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $this->container = $container;
 
         $this->em           = $container->get('doctrine')->getManager();
+
         $this->user         = $this->em->getRepository('OroUserBundle:User');
         $this->calendar     = $this->em->getRepository('OroCalendarBundle:Calendar');
-
-        //$this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
-        $this->organization = $this->getReference('default_organization');
+        $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        //$this->organization = $this->getReference('default_organization');
     }
 
     /**
@@ -157,13 +157,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $this->em->persist($calendar);
         }
 
-        var_dump(sprintf('>>> pre flushed at -> %s', date('Y-m-d H:i:s', time())));
         $this->em->flush();
-        $this->em->clear('Oro\Bundle\DataAuditBundle\Entity\AuditField');
-        $this->em->clear('Oro\Bundle\DataAuditBundle\Entity\Audit');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\CalendarEvent');
         $this->em->clear('Oro\Bundle\CalendarBundle\Entity\Calendar');
-        var_dump(sprintf('>>> end at -> %s', date('Y-m-d H:i:s', time())));
     }
 
     protected function connectCalendars()
@@ -184,17 +180,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         /** @var Calendar $calendarMarket */
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
-        $countUsers = count($this->users);
-
-        $i = 0;
-        while ($i <= 5) {
-            //get random user
-            $userId = mt_rand(2, $countUsers - 1);
-            $user   = $this->users[$userId];
-            unset($this->users[$userId]);
-
-            //$users = array_values($users);
-
+        /** @var User[] $users */
+        $users = array_rand($this->users, 5);
+        foreach ($users as $user) {
             if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
                 //to prevent self assignment
                 continue;
@@ -233,12 +221,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             }
 
             $this->em->persist($calendar);
-            $i++;
         }
 
         $this->em->flush();
     }
 
+    /**
+     * @return \DatePeriod
+     */
     protected function getDatePeriod()
     {
         $month = new \DatePeriod(
