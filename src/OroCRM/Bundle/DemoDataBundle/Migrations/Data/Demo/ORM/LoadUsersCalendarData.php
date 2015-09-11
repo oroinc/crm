@@ -57,12 +57,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $this->container = $container;
 
-        $this->em           = $container->get('doctrine')->getManager();
-
-        $this->user         = $this->em->getRepository('OroUserBundle:User');
-        $this->calendar     = $this->em->getRepository('OroCalendarBundle:Calendar');
-        $this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
-        //$this->organization = $this->getReference('default_organization');
+        $this->em       = $container->get('doctrine')->getManager();
+        $this->user     = $this->em->getRepository('OroUserBundle:User');
+        $this->calendar = $this->em->getRepository('OroCalendarBundle:Calendar');
     }
 
     /**
@@ -70,7 +67,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->users = $this->user->findAll();
+        $this->users        = $this->user->findAll();
+        $this->organization = $this->getReference('default_organization');
+        //$this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $this->loadCalendars();
         $this->connectCalendars();
@@ -181,7 +180,13 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
         /** @var User[] $users */
-        $users = array_rand($this->users, 5);
+        $users = $this->user->createQueryBuilder('u')
+            ->addSelect('RAND() as HIDDEN rand')
+            ->addOrderBy('rand')
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult();
+
         foreach ($users as $user) {
             if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
                 //to prevent self assignment
