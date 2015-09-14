@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\DBAL\Query\QueryBuilder;
-use Oro\Bundle\UserBundle\Entity\Repository\UserRepository;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -78,12 +76,6 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $this->organization = $this->container->get('doctrine')->getManager()
             ->getRepository('OroOrganizationBundle:Organization')->getFirst();
-
-
-//        $channel = $this->container->get('doctrine')->getManager()
-//            ->getRepository('OroCRMChannelBundle:Channel')->find(3);
-//
-//        $this->setReference('default_channel', $channel);
 
         $this->initSupportingEntities($manager);
         $this->loadFlows();

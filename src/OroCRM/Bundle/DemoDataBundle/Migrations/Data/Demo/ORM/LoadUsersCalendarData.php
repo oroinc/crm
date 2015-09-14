@@ -18,6 +18,7 @@ use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
+use Symfony\Component\Security\Core\SecurityContext;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -39,6 +40,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     /** @var EntityManager */
     protected $em;
 
+    /** @var SecurityContext */
+    protected $securityContext;
+
     /**
      * {@inheritdoc}
      */
@@ -57,7 +61,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $this->container = $container;
 
-        $this->em       = $container->get('doctrine')->getManager();
+        $this->em              = $container->get('doctrine')->getManager();
+        $this->securityContext = $container->get('security.context');
+
         $this->user     = $this->em->getRepository('OroUserBundle:User');
         $this->calendar = $this->em->getRepository('OroCalendarBundle:Calendar');
     }
@@ -69,7 +75,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $this->users        = $this->user->findAll();
         $this->organization = $this->getReference('default_organization');
-        //$this->organization = $this->em->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
         $this->loadCalendars();
         $this->connectCalendars();
@@ -77,83 +82,94 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     protected function loadCalendars()
     {
+        $days   = $this->getDatePeriod();
+        $events = [];
+        foreach ($days as $day) {
+            /** @var \DateTime $day */
+            if (!$this->isWeekend($day)) {
+                //work day
+                $event = new CalendarEvent();
+                $event->setTitle('Work Reminder');
+                $day->setTime(8, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(18, 0, 0);
+                $event->setEnd(clone $day);
+                $event->setAllDay(true);
+
+                $events['workday'][] = $event;
+
+                //call
+                $event = new CalendarEvent();
+                $event->setTitle('Client Call');
+                $day->setTime(11, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(12, 0, 0);
+                $event->setEnd(clone $day);
+                $event->setAllDay(false);
+
+                $events['call'][] = $event;
+
+                //meeting
+                $event = new CalendarEvent();
+                $event->setTitle('Meeting');
+                $day->setTime(16, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(18, 0, 0);
+                $event->setEnd(clone $day);
+                $event->setAllDay(false);
+
+                $events['meeting'][] = $event;
+
+                //lunch
+                $event = new CalendarEvent();
+                $event->setTitle('Lunch');
+                $day->setTime(12, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(12, 30, 0);
+                $event->setEnd(clone $day);
+                $event->setAllDay(false);
+
+                $events['lunch'][] = $event;
+
+                //business trip
+                $event = new CalendarEvent();
+                $event->setTitle('Business trip');
+                $day->setTime(0, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(0, 0, 0);
+                $day->add(\DateInterval::createFromDateString('+3 days'));
+                $event->setEnd(clone $day);
+                $event->setAllDay(true);
+
+                $events['b_trip'][] = $event;
+            } else {
+                $event = new CalendarEvent();
+                $event->setTitle('Weekend');
+                $day->setTime(8, 0, 0);
+                $event->setStart(clone $day);
+                $day->setTime(18, 0, 0);
+                $event->setEnd(clone $day);
+                $event->setAllDay(true);
+
+                $events['weekend'][] = $event;
+            }
+        }
+
+        $counter = 0;
         foreach ($this->users as $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
-            /** @var CalendarEvent $event */
-            $days = $this->getDatePeriod();
-            foreach ($days as $day) {
-                /** @var \DateTime $day */
-                if (!$this->isWeekend($day)) {
-                    //work day
-                    if (mt_rand(0, 1)) {
-                        $event = new CalendarEvent();
-                        $event->setTitle('Work Reminder');
-                        $day->setTime(8, 0, 0);
-                        $event->setStart(clone $day);
-                        $day->setTime(18, 0, 0);
-                        $event->setEnd(clone $day);
-                        $event->setAllDay(true);
-                        $calendar->addEvent($event);
+            foreach ($events as $typeEvents) {
+                if (mt_rand(1, 100) > 25) {
+                    foreach ($typeEvents as $typeEvent) {
+                        $calendar->addEvent(clone $typeEvent);
                     }
-                    //call
-                    if (mt_rand(0, 1)) {
-                        $event = new CalendarEvent();
-                        $event->setTitle('Client Call');
-                        $day->setTime(11, 0, 0);
-                        $event->setStart(clone $day);
-                        $day->setTime(12, 0, 0);
-                        $event->setEnd(clone $day);
-                        $event->setAllDay(false);
-                        $calendar->addEvent($event);
-                    }
-                    //meeting
-                    if (mt_rand(0, 1)) {
-                        $event = new CalendarEvent();
-                        $event->setTitle('Meeting');
-                        $day->setTime(16, 0, 0);
-                        $event->setStart(clone $day);
-                        $day->setTime(18, 0, 0);
-                        $event->setEnd(clone $day);
-                        $event->setAllDay(false);
-                        $calendar->addEvent($event);
-                    }
-                    //lunch
-                    if (mt_rand(0, 1)) {
-                        $event = new CalendarEvent();
-                        $event->setTitle('Lunch');
-                        $day->setTime(12, 0, 0);
-                        $event->setStart(clone $day);
-                        $day->setTime(12, 30, 0);
-                        $event->setEnd(clone $day);
-                        $event->setAllDay(false);
-                        $calendar->addEvent($event);
-                    }
-                    //business trip
-                    if (mt_rand(0, 1)) {
-                        $event = new CalendarEvent();
-                        $event->setTitle('Business trip');
-                        $day->setTime(0, 0, 0);
-                        $event->setStart(clone $day);
-                        $day->setTime(0, 0, 0);
-                        $day->add(\DateInterval::createFromDateString('+3 days'));
-                        $event->setEnd(clone $day);
-                        $event->setAllDay(true);
-                        $calendar->addEvent($event);
-                    }
-                } else {
-                    $event = new CalendarEvent();
-                    $event->setTitle('Weekend');
-                    $day->setTime(8, 0, 0);
-                    $event->setStart(clone $day);
-                    $day->setTime(18, 0, 0);
-                    $event->setEnd(clone $day);
-                    $event->setAllDay(true);
-                    $calendar->addEvent($event);
                 }
             }
+
             $this->em->persist($calendar);
+            $counter++;
         }
 
         $this->em->flush();
@@ -266,8 +282,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     protected function setSecurityContext(User $user)
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-
-        $securityContext = $this->container->get('security.context');
-        $securityContext->setToken($token);
+        $this->securityContext->setToken($token);
     }
 }
