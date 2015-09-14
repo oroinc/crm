@@ -142,6 +142,14 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $task = new Task();
         $task->setUpdatedAt($date);
 
-        $this->assertTrue($task->isUpdatedUpdatedAtProperty());
+        $this->assertTrue($task->isUpdatedAtSetted());
+    }
+
+    public function testIsNotUpdatedFlags()
+    {
+        $task = new Task();
+        $task->setUpdatedAt(null);
+
+        $this->assertFalse($task->isUpdatedAtSetted());
     }
 }

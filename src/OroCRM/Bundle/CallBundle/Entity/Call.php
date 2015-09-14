@@ -10,8 +10,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
-use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleDatesInterface;
-use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleOwnerInterface;
+use Oro\Bundle\EntityBundle\Model\DatesAwareInterface;
+use Oro\Bundle\EntityBundle\Model\DatesAwareTrait;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 
@@ -54,9 +54,10 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  * )
  */
 class Call extends ExtendCall implements
-    LifecycleDatesInterface,
-    LifecycleOwnerInterface
+    DatesAwareInterface
 {
+    use DatesAwareTrait;
+
     /**
      * @var integer
      *
@@ -134,34 +135,6 @@ class Call extends ExtendCall implements
     protected $direction;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
@@ -169,11 +142,6 @@ class Call extends ExtendCall implements
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $organization;
-
-    /**
-     * @var bool
-     */
-    protected $isUpdatedUpdatedAt = null;
 
     public function __construct()
     {
@@ -374,50 +342,6 @@ class Call extends ExtendCall implements
     public function getCallStatus()
     {
         return $this->callStatus;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        if ($updatedAt !== null) {
-            $this->isUpdatedUpdatedAt = true;
-        }
-
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUpdatedUpdatedAtProperty()
-    {
-        return $this->isUpdatedUpdatedAt;
     }
 
     /**

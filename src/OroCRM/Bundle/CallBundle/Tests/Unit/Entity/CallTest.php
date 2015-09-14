@@ -52,6 +52,14 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $call = new Call();
         $call->setUpdatedAt($date);
 
-        $this->assertTrue($call->isUpdatedUpdatedAtProperty());
+        $this->assertTrue($call->isUpdatedAtSetted());
+    }
+
+    public function testIsNotUpdatedFlags()
+    {
+        $call = new Call();
+        $call->setUpdatedAt(null);
+
+        $this->assertFalse($call->isUpdatedAtSetted());
     }
 }

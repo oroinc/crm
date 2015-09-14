@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\TaskBundle\Entity;
 
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,8 +17,8 @@ use Oro\Bundle\ReminderBundle\Model\ReminderData;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleDatesInterface;
-use Oro\Bundle\EntityBundle\Model\Lifecycle\LifecycleOwnerInterface;
+use Oro\Bundle\EntityBundle\Model\DatesAwareInterface;
+use Oro\Bundle\EntityBundle\Model\DatesAwareTrait;
 
 use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
@@ -72,9 +74,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  */
 class Task extends ExtendTask implements
     RemindableInterface,
-    LifecycleDatesInterface,
-    LifecycleOwnerInterface
+    DatesAwareInterface
 {
+    use DatesAwareTrait;
+
     /**
      * @var integer
      *
@@ -178,45 +181,12 @@ class Task extends ExtendTask implements
     protected $reminders;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.created_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(type="datetime")
-     * @ConfigField(
-     *      defaultValues={
-     *          "entity"={
-     *              "label"="oro.ui.updated_at"
-     *          }
-     *      }
-     * )
-     */
-    protected $updatedAt;
-
-    /**
      * @var Organization
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
-
-    /**
-     * @var bool
-     */
-    protected $isUpdatedUpdatedAt = null;
 
     public function __construct()
     {
@@ -295,34 +265,6 @@ class Task extends ExtendTask implements
     public function setDueDate(\DateTime $dueDate = null)
     {
         $this->dueDate = $dueDate;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        if ($updatedAt !== null) {
-            $this->isUpdatedUpdatedAt = true;
-        }
-
-        $this->updatedAt = $updatedAt;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isUpdatedUpdatedAtProperty()
-    {
-        return $this->isUpdatedUpdatedAt;
     }
 
     /**
@@ -433,22 +375,6 @@ class Task extends ExtendTask implements
         $result->setRecipient($this->getOwner());
 
         return $result;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
