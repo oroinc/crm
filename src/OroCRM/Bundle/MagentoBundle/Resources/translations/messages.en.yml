@@ -124,6 +124,8 @@ orocrm:
                     unknown: Not defined
                 metricName: Metric name
                 actions: Actions
+                discount_amount: Discount amount
+                discount_percent: Discount percent
         channel_type:
             label:  Magento
         transport:
