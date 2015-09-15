@@ -305,7 +305,6 @@ services:
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
-        - { name: doctrine.event_listener, event: onClear, method: onClear }
 
     orocrm_channel.event_listener.timezone_change:
       class: %orocrm_channel.event_listener.timezone_change.class%

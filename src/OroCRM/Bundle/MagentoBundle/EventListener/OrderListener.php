@@ -19,6 +19,9 @@ class OrderListener
     /** @var ChannelDoctrineListener */
     protected $channelDoctrineListener;
 
+    /** @var array */
+    protected $ordersForUpdate = [];
+
     /**
      * @param ChannelDoctrineListener $channelDoctrineListener
      */
@@ -26,9 +29,6 @@ class OrderListener
     {
         $this->channelDoctrineListener = $channelDoctrineListener;
     }
-
-    /** @var array */
-    protected $ordersForUpdate = [];
 
     /**
      * @param LifecycleEventArgs $event
@@ -121,12 +121,12 @@ class OrderListener
     protected function isOrderValid($order)
     {
         return $order instanceof Order
-            && $order->getCustomer() instanceof Customer;
+        && $order->getCustomer() instanceof Customer;
     }
 
     /**
      * @param EntityManager $entityManager
-     * @param Order $order
+     * @param Order         $order
      */
     protected function updateCustomerLifetime(EntityManager $entityManager, Order $order)
     {
