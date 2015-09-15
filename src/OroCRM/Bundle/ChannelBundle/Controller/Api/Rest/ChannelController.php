@@ -17,6 +17,10 @@ use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\ChainParameterFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\BooleanParameterFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\EntityClassParameterFilter;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
 
 use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelBeforeDeleteEvent;
@@ -43,6 +47,19 @@ class ChannelController extends RestController
      *      nullable=true,
      *      description="Number of items per page. Defaults to 10."
      * )
+     * @QueryParam(
+     *      name="entity",
+     *      requirements=".+",
+     *      nullable=true,
+     *      description="The entity alias. One or several aliases separated by comma. Defaults to all entities"
+     * )
+     * @QueryParam(
+     *      name="active",
+     *      requirements="true|false",
+     *      nullable=true,
+     *      strict=true,
+     *      description="The channel active status. Default for all(active, inactive) channel statuses"
+     * )
      * @ApiDoc(
      *      description="Get all channels",
      *      resource=true
@@ -52,10 +69,32 @@ class ChannelController extends RestController
      */
     public function cgetAction()
     {
-        $page  = (int)$this->getRequest()->get('page', 1);
-        $limit = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $page     = (int)$this->getRequest()->get('page', 1);
+        $limit    = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $entities = $this->getRequest()->get('entity', null);
 
-        return $this->handleGetListRequest($page, $limit);
+        $filterParameters = [
+            'entity' => new ChainParameterFilter(
+                [
+                    new StringToArrayParameterFilter(),
+                    new EntityClassParameterFilter($this->get('oro_entity.entity_class_name_helper'))
+                ]
+            ),
+            'active' => new BooleanParameterFilter(),
+        ];
+        $map              = [
+            'entity' => 'entities.name',
+            'active' => 'status',
+        ];
+
+        $joins = [];
+        if (!empty($entities)) {
+            $joins[] = 'entities';
+        }
+
+        $criteria = $this->getFilterCriteria($this->getSupportedQueryParameters('cgetAction'), $filterParameters, $map);
+
+        return $this->handleGetListRequest($page, $limit, $criteria, $joins);
     }
 
     /**
