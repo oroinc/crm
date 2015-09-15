@@ -17,8 +17,6 @@ use Oro\Bundle\ReminderBundle\Model\ReminderData;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
-use Oro\Bundle\EntityBundle\Model\DatesAwareInterface;
-use Oro\Bundle\EntityBundle\Model\DatesAwareTrait;
 
 use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
 
@@ -73,10 +71,8 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  * )
  */
 class Task extends ExtendTask implements
-    RemindableInterface,
-    DatesAwareInterface
+    RemindableInterface
 {
-    use DatesAwareTrait;
 
     /**
      * @var integer
@@ -187,6 +183,40 @@ class Task extends ExtendTask implements
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.created_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime")
+     * @ConfigField(
+     *      defaultValues={
+     *          "entity"={
+     *              "label"="oro.ui.updated_at"
+     *          }
+     *      }
+     * )
+     */
+    protected $updatedAt;
+
+    /**
+     * @var bool
+     */
+    protected $isUpdatedAtSetted;
+
 
     public function __construct()
     {
@@ -398,6 +428,58 @@ class Task extends ExtendTask implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->isUpdatedAtSetted = false;
+        if ($updatedAt !== null) {
+            $this->isUpdatedAtSetted = true;
+        }
+
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdatedAtSetted()
+    {
+        return $this->isUpdatedAtSetted;
     }
 
     /**
