@@ -378,6 +378,7 @@ orocrm:
             shipping_method.label:  Shipping method
             tax_amount.label:       Tax amount
             discount_amount.label:  Discount amount
+            coupon_code.label:      Coupon code
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status
