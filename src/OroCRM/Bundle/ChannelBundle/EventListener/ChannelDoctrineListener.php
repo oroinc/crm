@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Event\OnClearEventArgs;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\PersistentCollection;
@@ -69,69 +68,6 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @return array|CustomerIdentityInterface[]
-     */
-    protected function getChangedTrackedEntities()
-    {
-        $entities = array_merge(
-            $this->uow->getScheduledEntityInsertions(),
-            $this->uow->getScheduledEntityDeletions(),
-            $this->uow->getScheduledEntityUpdates()
-        );
-
-        $collections = array_merge(
-            $this->uow->getScheduledCollectionDeletions(),
-            $this->uow->getScheduledCollectionUpdates()
-        );
-
-        /** @var PersistentCollection $collectionToChange */
-        foreach ($collections as $collectionToChange) {
-            $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
-        }
-
-        return array_filter(
-            $entities,
-            function ($entity) {
-                return $entity instanceof CustomerIdentityInterface
-                    && array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
-            }
-        );
-    }
-
-    /**
-     * @param CustomerIdentityInterface $entity
-     * @param array $changeSet
-     */
-    protected function checkAndUpdate(CustomerIdentityInterface $entity, array $changeSet)
-    {
-        $className = ClassUtils::getClass($entity);
-
-        if ($this->isUpdateRequired($className, $changeSet)) {
-            $account = $entity->getAccount();
-            $channel = $entity->getDataChannel();
-            $this->scheduleUpdate($className, $account, $channel);
-
-            $oldChannel = $this->getOldValue($changeSet, 'dataChannel');
-            $oldAccount = $this->getOldValue($changeSet, 'account');
-            if ($oldChannel || $oldAccount) {
-                $this->scheduleUpdate($className, $oldAccount ?: $account, $oldChannel ?: $channel);
-            }
-        }
-    }
-
-    /**
-     * @param string $className
-     * @param array $changeSet
-     * @return bool
-     */
-    protected function isUpdateRequired($className, array $changeSet)
-    {
-        return array_key_exists('dataChannel', $changeSet)
-            || array_key_exists('account', $changeSet)
-            || array_key_exists($this->customerIdentities[$className], $changeSet);
-    }
-
-    /**
      * @param PostFlushEventArgs $args
      */
     public function postFlush(PostFlushEventArgs $args)
@@ -157,7 +93,7 @@ class ChannelDoctrineListener
                         ? $data['channel']
                         : $this->em->getReference('OroCRMChannelBundle:Channel', $data['channel']);
 
-                    $entity = $this->createHistoryEntry($customerIdentity, $account, $channel);
+                    $entity      = $this->createHistoryEntry($customerIdentity, $account, $channel);
                     $toOutDate[] = [$account, $channel, $entity];
 
                     $this->em->persist($entity);
@@ -172,13 +108,101 @@ class ChannelDoctrineListener
                 $this->getLifetimeRepository()->massStatusUpdate($chunks);
             }
 
-            $this->queued = [];
+            $this->queued       = [];
             $this->isInProgress = false;
         }
     }
 
     /**
-     * @param string $customerIdentity
+     * @param object       $customerIdentityEntity
+     * @param Account|null $account
+     * @param Channel|null $channel
+     */
+    public function scheduleEntityUpdate($customerIdentityEntity, Account $account = null, Channel $channel = null)
+    {
+        if (!$this->uow) {
+            throw new \RuntimeException('UOW is missing, listener is not initialized');
+        }
+
+        $customerIdentity = ClassUtils::getClass($customerIdentityEntity);
+
+        $this->scheduleUpdate($customerIdentity, $account, $channel);
+    }
+
+    /**
+     * @param PostFlushEventArgs|OnFlushEventArgs $args
+     */
+    public function initializeFromEventArgs($args)
+    {
+        $this->em  = $args->getEntityManager();
+        $this->uow = $this->em->getUnitOfWork();
+    }
+
+    /**
+     * @return array|CustomerIdentityInterface[]
+     */
+    protected function getChangedTrackedEntities()
+    {
+        $entities = array_merge(
+            $this->uow->getScheduledEntityInsertions(),
+            $this->uow->getScheduledEntityDeletions(),
+            $this->uow->getScheduledEntityUpdates()
+        );
+
+        $collections = array_merge(
+            $this->uow->getScheduledCollectionDeletions(),
+            $this->uow->getScheduledCollectionUpdates()
+        );
+
+        /** @var PersistentCollection $collectionToChange */
+        foreach ($collections as $collectionToChange) {
+            $entities = array_merge($entities, $collectionToChange->unwrap()->toArray());
+        }
+
+        return array_filter(
+            $entities,
+            function ($entity) {
+                return $entity instanceof CustomerIdentityInterface
+                && array_key_exists(ClassUtils::getClass($entity), $this->customerIdentities);
+            }
+        );
+    }
+
+    /**
+     * @param CustomerIdentityInterface $entity
+     * @param array                     $changeSet
+     */
+    protected function checkAndUpdate(CustomerIdentityInterface $entity, array $changeSet)
+    {
+        $className = ClassUtils::getClass($entity);
+
+        if ($this->isUpdateRequired($className, $changeSet)) {
+            $account = $entity->getAccount();
+            $channel = $entity->getDataChannel();
+            $this->scheduleUpdate($className, $account, $channel);
+
+            $oldChannel = $this->getOldValue($changeSet, 'dataChannel');
+            $oldAccount = $this->getOldValue($changeSet, 'account');
+            if ($oldChannel || $oldAccount) {
+                $this->scheduleUpdate($className, $oldAccount ? : $account, $oldChannel ? : $channel);
+            }
+        }
+    }
+
+    /**
+     * @param string $className
+     * @param array  $changeSet
+     * @return bool
+     */
+    protected function isUpdateRequired($className, array $changeSet)
+    {
+        return array_key_exists('dataChannel', $changeSet)
+        || array_key_exists('account', $changeSet)
+        || array_key_exists($this->customerIdentities[$className], $changeSet);
+    }
+
+    /**
+     * @param string  $customerIdentity
      * @param Account $account
      * @param Channel $channel
      */
@@ -193,32 +217,16 @@ class ChannelDoctrineListener
             $key = sprintf('%s__%s', spl_object_hash($account), spl_object_hash($channel));
 
             $this->queued[$customerIdentity][$key] = [
-                'account' => $account->getId() ?: $account,
-                'channel' => $channel->getId() ?: $channel
+                'account' => $account->getId() ? : $account,
+                'channel' => $channel->getId() ? : $channel
             ];
         }
     }
 
     /**
-     * @param object $customerIdentityEntity
-     * @param Account $account
-     * @param Channel $channel
-     */
-    public function scheduleEntityUpdate($customerIdentityEntity, Account $account = null, Channel $channel = null)
-    {
-        if (!$this->uow) {
-            throw new \RuntimeException('UOW is missing, listener is not initialized');
-        }
-
-        $customerIdentity = ClassUtils::getClass($customerIdentityEntity);
-
-        $this->scheduleUpdate($customerIdentity, $account, $channel);
-    }
-
-    /**
      * Returns value before change, or null otherwise
      *
-     * @param array $changeSet
+     * @param array  $changeSet
      * @param string $key
      *
      * @return null|object
@@ -229,7 +237,7 @@ class ChannelDoctrineListener
     }
 
     /**
-     * @param string $customerIdentity
+     * @param string  $customerIdentity
      * @param Account $account
      * @param Channel $channel
      *
@@ -250,23 +258,6 @@ class ChannelDoctrineListener
         $history->setAccount($account);
 
         return $history;
-    }
-
-    /**
-     * @param PostFlushEventArgs|OnFlushEventArgs $args
-     */
-    public function initializeFromEventArgs($args)
-    {
-        $this->em = $args->getEntityManager();
-        $this->uow = $this->em->getUnitOfWork();
-    }
-
-    /**
-     * @param OnClearEventArgs $event
-     */
-    public function onClear(OnClearEventArgs $event)
-    {
-        $this->queued = [];
     }
 
     /**
