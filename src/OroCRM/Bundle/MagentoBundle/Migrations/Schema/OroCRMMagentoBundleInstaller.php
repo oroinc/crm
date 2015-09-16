@@ -290,6 +290,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('coupon_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
