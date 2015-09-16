@@ -700,6 +700,7 @@ datagrid:
                     - cw.name as websiteName
                     - o.discountAmount
                     - o.discountPercent
+                    - o.couponCode
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
@@ -884,6 +885,11 @@ datagrid:
                     type:             percent
                     data_name:        o.discountPercent
                     enabled:          false
+                couponCode:
+                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    type:      string
+                    data_name: o.couponCode
+                    enabled:   false
         actions:
             view:
                 type:         navigate
@@ -1166,6 +1172,7 @@ datagrid:
                     - COUNT(items.id) as itemsCount
                     - o.discountAmount
                     - o.discountPercent
+                    - o.couponCode
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
@@ -1256,6 +1263,11 @@ datagrid:
                     type:             percent
                     data_name:        o.discountPercent
                     enabled:          false
+                couponCode:
+                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    type:      string
+                    data_name: o.couponCode
+                    enabled:   false
         sorters:
             columns:
                 incrementId:     { data_name: o.incrementId }
