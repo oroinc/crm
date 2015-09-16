@@ -169,7 +169,7 @@ class ChannelDoctrineListener
             $this->em->flush();
 
             foreach (array_chunk($toOutDate, self::MAX_UPDATE_CHUNK_SIZE) as $chunks) {
-                $this->lifetimeRepo->massStatusUpdate($chunks);
+                $this->getLifetimeRepository()->massStatusUpdate($chunks);
             }
 
             $this->queued = [];
@@ -237,7 +237,7 @@ class ChannelDoctrineListener
      */
     protected function createHistoryEntry($customerIdentity, Account $account, Channel $channel)
     {
-        $lifetimeAmount = $this->lifetimeRepo->calculateAccountLifetime(
+        $lifetimeAmount = $this->getLifetimeRepository()->calculateAccountLifetime(
             $customerIdentity,
             $this->customerIdentities[$customerIdentity],
             $account,
@@ -259,7 +259,6 @@ class ChannelDoctrineListener
     {
         $this->em = $args->getEntityManager();
         $this->uow = $this->em->getUnitOfWork();
-        $this->lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
     }
 
     /**
@@ -268,5 +267,17 @@ class ChannelDoctrineListener
     public function onClear(OnClearEventArgs $event)
     {
         $this->queued = [];
+    }
+
+    /**
+     * @return LifetimeHistoryRepository
+     */
+    protected function getLifetimeRepository()
+    {
+        if (null === $this->lifetimeRepo) {
+            $this->lifetimeRepo = $this->em->getRepository('OroCRMChannelBundle:LifetimeValueHistory');
+        }
+
+        return $this->lifetimeRepo;
     }
 }
