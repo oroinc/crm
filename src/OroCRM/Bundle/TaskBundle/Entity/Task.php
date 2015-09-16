@@ -332,7 +332,7 @@ class Task extends ExtendTask implements
     /**
      * @param User $owner
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner = null)
     {
         $this->owner = $owner;
     }
@@ -488,5 +488,22 @@ class Task extends ExtendTask implements
     public function __toString()
     {
         return (string)$this->getSubject();
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = $this->createdAt ? : new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->updatedAt = clone $this->createdAt;
+    }
+
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
