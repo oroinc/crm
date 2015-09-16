@@ -52,7 +52,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $call = new Call();
         $call->setUpdatedAt($date);
 
-        $this->assertTrue($call->isUpdatedAtSetted());
+        $this->assertTrue($call->isUpdatedAtSet());
     }
 
     public function testIsNotUpdatedFlags()
@@ -60,6 +60,6 @@ class CallTest extends \PHPUnit_Framework_TestCase
         $call = new Call();
         $call->setUpdatedAt(null);
 
-        $this->assertFalse($call->isUpdatedAtSetted());
+        $this->assertFalse($call->isUpdatedAtSet());
     }
 }
