@@ -120,21 +120,6 @@ class ChannelDoctrineListenerTest extends OrmTestCase
         return $this->channelDoctrineListener;
     }
 
-    /**
-     * @param ChannelDoctrineListener $listener
-     * @depends testOnFlush
-     */
-    public function testOnClear(ChannelDoctrineListener $listener)
-    {
-        $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->assertAttributeNotEmpty('queued', $listener);
-        $listener->onClear(new OnClearEventArgs($entityManager));
-        $this->assertAttributeEmpty('queued', $listener);
-    }
-
     public function testPostFlush()
     {
         $args = new PostFlushEventArgs($this->em);
