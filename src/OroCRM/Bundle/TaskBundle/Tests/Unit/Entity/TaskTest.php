@@ -142,7 +142,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $task = new Task();
         $task->setUpdatedAt($date);
 
-        $this->assertTrue($task->isUpdatedAtSetted());
+        $this->assertTrue($task->isUpdatedAtSet());
     }
 
     public function testIsNotUpdatedFlags()
@@ -150,6 +150,6 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $task = new Task();
         $task->setUpdatedAt(null);
 
-        $this->assertFalse($task->isUpdatedAtSetted());
+        $this->assertFalse($task->isUpdatedAtSet());
     }
 }

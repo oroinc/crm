@@ -2,12 +2,11 @@
 
 namespace OroCRM\Bundle\TaskBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -70,8 +69,7 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      }
  * )
  */
-class Task extends ExtendTask implements
-    RemindableInterface
+class Task extends ExtendTask implements RemindableInterface, DatesAwareInterface
 {
 
     /**
@@ -215,8 +213,7 @@ class Task extends ExtendTask implements
     /**
      * @var bool
      */
-    protected $isUpdatedAtSetted;
-
+    protected $updatedAtSet;
 
     public function __construct()
     {
@@ -464,9 +461,9 @@ class Task extends ExtendTask implements
      */
     public function setUpdatedAt(\DateTime $updatedAt = null)
     {
-        $this->isUpdatedAtSetted = false;
+        $this->updatedAtSet = false;
         if ($updatedAt !== null) {
-            $this->isUpdatedAtSetted = true;
+            $this->updatedAtSet = true;
         }
 
         $this->updatedAt = $updatedAt;
@@ -477,9 +474,9 @@ class Task extends ExtendTask implements
     /**
      * @return bool
      */
-    public function isUpdatedAtSetted()
+    public function isUpdatedAtSet()
     {
-        return $this->isUpdatedAtSetted;
+        return $this->updatedAtSet;
     }
 
     /**
@@ -488,22 +485,5 @@ class Task extends ExtendTask implements
     public function __toString()
     {
         return (string)$this->getSubject();
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = $this->createdAt ? : new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
