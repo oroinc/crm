@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
@@ -49,6 +50,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var Organization */
     protected $organization;
 
+    /** @var SecurityContext */
+    protected $securityContext;
+
     /**
      * {@inheritdoc}
      */
@@ -77,6 +81,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         $this->organization = $this->container->get('doctrine')->getManager()
             ->getRepository('OroOrganizationBundle:Organization')->getFirst();
 
+        $this->securityContext = $this->container->get('security.context');
+
         $this->initSupportingEntities($manager);
         $this->loadFlows();
     }
@@ -91,18 +97,41 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
         }
 
         $this->users         = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->leads         = $this->em->getRepository('OroCRMSalesBundle:Lead')->createQueryBuilder('l')
-            ->addSelect('RAND() as HIDDEN rand')
-            ->addOrderBy('rand')
-            ->setMaxResults(25)
+        $this->leads         = $this->getRandomEntityRecords('OroCRMSalesBundle:Lead');
+        $this->opportunities = $this->getRandomEntityRecords('OroCRMSalesBundle:Opportunity');
+    }
+
+    /**
+     * @param string $entityName
+     * @param int    $limit
+     * @return array
+     */
+    protected function getRandomEntityRecords($entityName, $limit = 25)
+    {
+        $repo = $this->em->getRepository($entityName);
+
+        $entityIds = $repo->createQueryBuilder('e')
+            ->select('e.id')
             ->getQuery()
-            ->getResult();
-        $this->opportunities = $this->em->getRepository('OroCRMSalesBundle:Opportunity')->createQueryBuilder('o')
-            ->addSelect('RAND() as HIDDEN rand')
-            ->addOrderBy('rand')
-            ->setMaxResults(25)
-            ->getQuery()
-            ->getResult();
+            ->getScalarResult();
+
+        if (count($entityIds) > $limit) {
+            $rawList = [];
+            foreach ($entityIds as $key => $value) {
+                // due array_rand() will pick only keywords
+                $rawList[$value['id']] = null;
+            }
+            $keyList = array_rand($rawList, $limit);
+            $result  = $repo->createQueryBuilder('e')
+                ->where('e.id IN(:ids)')
+                ->setParameter(':ids', implode(',', $keyList))
+                ->getQuery()
+                ->getResult();
+        } else {
+            $result = $repo->findAll();
+        }
+
+        return $result;
     }
 
     protected function loadFlows()
@@ -154,7 +183,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $step,
             $salesFunnel,
             $parameters
-        )) {
+        )
+        ) {
             return;
         }
 
@@ -234,9 +264,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     protected function setSecurityContext($user)
     {
         $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-
-        $securityContext = $this->container->get('security.context');
-        $securityContext->setToken($token);
+        $this->securityContext->setToken($token);
     }
 
     /**

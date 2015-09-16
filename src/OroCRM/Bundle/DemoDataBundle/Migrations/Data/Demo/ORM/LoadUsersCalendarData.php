@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
 use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
@@ -18,7 +19,6 @@ use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -73,7 +73,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->users = $this->user->findAll();
+        $this->users        = $this->user->findAll();
         $this->organization = $this->getReference('default_organization');
 
         $this->loadCalendars();
@@ -194,12 +194,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $calendarMarket = $this->calendar->findDefaultCalendar($market->getId(), $market->getOrganization()->getId());
 
         /** @var User[] $users */
-        $users = $this->user->createQueryBuilder('u')
-            ->addSelect('RAND() as HIDDEN rand')
-            ->addOrderBy('rand')
-            ->setMaxResults(5)
-            ->getQuery()
-            ->getResult();
+        $users = $this->getRandomUsers();
 
         foreach ($users as $user) {
             if (in_array($user->getId(), [$admin->getId(), $sale->getId(), $market->getId()])) {
@@ -243,6 +238,37 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         }
 
         $this->em->flush();
+    }
+
+    /**
+     * @param int $limit
+     * @return User[]
+     */
+    protected function getRandomUsers($limit = 5)
+    {
+        $userIds = $this->user->createQueryBuilder('u')
+            ->select('u.id')
+            ->getQuery()
+            ->getScalarResult();
+
+        if (count($userIds) > $limit) {
+            $rawList = [];
+            foreach ($userIds as $key => $value) {
+                // due array_rand() will pick only keywords
+                $rawList[$value['id']] = null;
+            }
+            $keyList = array_rand($rawList, $limit);
+            $result  = $this->user->createQueryBuilder('u')
+                ->where('u.id IN(:ids)')
+                ->setParameter(':ids', implode(',', $keyList))
+                ->getQuery()
+                ->getResult();
+        } else {
+            $result = $this->users;
+        }
+
+
+        return $result;
     }
 
     /**

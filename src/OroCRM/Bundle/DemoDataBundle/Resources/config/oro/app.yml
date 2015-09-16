@@ -1,5 +1,0 @@
-doctrine:
-    orm:
-        dql:
-            numeric_functions:
-                Rand: OroCRM\Bundle\DemoDataBundle\Engine\Orm\PdoMysql\Rand
