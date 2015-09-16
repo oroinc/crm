@@ -304,7 +304,7 @@ class Call extends ExtendCall implements
      * @param User $owner
      * @return Call
      */
-    public function setOwner(User $owner = null)
+    public function setOwner($owner)
     {
         $this->owner = $owner;
 
