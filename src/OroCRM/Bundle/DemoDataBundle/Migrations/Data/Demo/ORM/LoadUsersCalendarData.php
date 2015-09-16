@@ -73,7 +73,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->users        = $this->user->findAll();
+        $this->users = $this->user->findAll();
         $this->organization = $this->getReference('default_organization');
 
         $this->loadCalendars();
@@ -155,13 +155,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             }
         }
 
-        $counter = 0;
         foreach ($this->users as $user) {
             //get default calendar, each user has default calendar after creation
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
             foreach ($events as $typeEvents) {
-                if (mt_rand(1, 100) > 25) {
+                if (mt_rand(1, 100) > 50) {
                     foreach ($typeEvents as $typeEvent) {
                         $calendar->addEvent(clone $typeEvent);
                     }
@@ -169,7 +168,6 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             }
 
             $this->em->persist($calendar);
-            $counter++;
         }
 
         $this->em->flush();
