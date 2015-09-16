@@ -126,6 +126,7 @@ orocrm:
                 actions: Actions
                 discount_amount: Discount amount
                 discount_percent: Discount percent
+                coupon_code: Coupon code
         channel_type:
             label:  Magento
         transport:
