@@ -96,6 +96,7 @@ class RemoveExtendSourceFieldQuery extends ParametrizedMigrationQuery
         foreach ($rows as $row) {
             $data = $this->connection->convertToPHPValue($row['data'], 'array');
             unset($data['extend']['schema']['relation']['extend_source']);
+            unset($data['extend']['index']['extend_source']);
 
             $query  = 'UPDATE oro_entity_config SET data = :data WHERE id = :id';
             $params = ['data' => $data, 'id' => $row['id']];
