@@ -2,11 +2,11 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\SecurityContext;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
