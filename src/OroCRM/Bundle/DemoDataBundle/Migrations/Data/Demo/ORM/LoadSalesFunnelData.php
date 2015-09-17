@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\Collections\Criteria;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -24,8 +25,6 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const FLUSH_MAX = 50;
-
     /** @var array */
     protected $probabilities = [0.2, 0.5, 0.8];
 
@@ -104,6 +103,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /**
      * @param string $entityName
      * @param int    $limit
+     *
      * @return array
      */
     protected function getRandomEntityRecords($entityName, $limit = 25)
@@ -121,10 +121,14 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
                 // due array_rand() will pick only keywords
                 $rawList[$value['id']] = null;
             }
+
             $keyList = array_rand($rawList, $limit);
-            $result  = $repo->createQueryBuilder('e')
-                ->where('e.id IN(:ids)')
-                ->setParameter(':ids', implode(',', $keyList))
+
+            $criteria = new Criteria();
+            $criteria->where(Criteria::expr()->in('id', $keyList));
+
+            $result = $repo->createQueryBuilder('e')
+                ->addCriteria($criteria)
                 ->getQuery()
                 ->getResult();
         } else {
@@ -183,8 +187,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $step,
             $salesFunnel,
             $parameters
-        )
-        ) {
+        )) {
             return;
         }
 

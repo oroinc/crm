@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -73,7 +74,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
      */
     public function load(ObjectManager $manager)
     {
-        $this->users        = $this->user->findAll();
+        $this->users = $this->user->findAll();
         $this->organization = $this->getReference('default_organization');
 
         $this->loadCalendars();
@@ -160,7 +161,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             $calendar = $this->calendar->findDefaultCalendar($user->getId(), $this->organization->getId());
             $this->setSecurityContext($calendar->getOwner());
             foreach ($events as $typeEvents) {
-                if (mt_rand(1, 100) > 50) {
+                if (mt_rand(0, 1)) {
                     foreach ($typeEvents as $typeEvent) {
                         $calendar->addEvent(clone $typeEvent);
                     }
@@ -242,6 +243,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
 
     /**
      * @param int $limit
+     *
      * @return User[]
      */
     protected function getRandomUsers($limit = 5)
@@ -257,16 +259,19 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
                 // due array_rand() will pick only keywords
                 $rawList[$value['id']] = null;
             }
+
             $keyList = array_rand($rawList, $limit);
-            $result  = $this->user->createQueryBuilder('u')
-                ->where('u.id IN(:ids)')
-                ->setParameter(':ids', implode(',', $keyList))
+
+            $criteria = new Criteria();
+            $criteria->where(Criteria::expr()->in('id', $keyList));
+
+            $result = $this->user->createQueryBuilder('u')
+                ->addCriteria($criteria)
                 ->getQuery()
                 ->getResult();
         } else {
             $result = $this->users;
         }
-
 
         return $result;
     }
