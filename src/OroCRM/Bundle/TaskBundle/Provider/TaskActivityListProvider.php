@@ -87,14 +87,6 @@ class TaskActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDate($entity)
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCreatedAt($entity)
     {
         /** @var $entity Task */
@@ -108,14 +100,6 @@ class TaskActivityListProvider implements
     {
         /** @var $entity Task */
         return $entity->getUpdatedAt();
-    }
-
-    /**
-     *  {@inheritdoc}
-     */
-    public function isDateUpdatable()
-    {
-        return true;
     }
 
     /**

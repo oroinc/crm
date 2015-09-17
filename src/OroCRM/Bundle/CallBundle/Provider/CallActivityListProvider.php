@@ -87,14 +87,6 @@ class CallActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getDate($entity)
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCreatedAt($entity)
     {
         /** @var $entity Call */
@@ -108,14 +100,6 @@ class CallActivityListProvider implements
     {
         /** @var $entity Call */
         return $entity->getUpdatedAt();
-    }
-
-    /**
-     *  {@inheritdoc}
-     */
-    public function isDateUpdatable()
-    {
-        return true;
     }
 
     /**
