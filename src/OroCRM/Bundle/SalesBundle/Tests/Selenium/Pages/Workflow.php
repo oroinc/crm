@@ -8,7 +8,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
  * Class Workflow
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Workflow openWorkflow openWorkflow(string)
+ * @method Workflow openWorkflow openWorkflow(string $bundlePath)
  * {@inheritdoc}
  */
 class Workflow extends AbstractPageEntity
@@ -23,11 +23,6 @@ class Workflow extends AbstractPageEntity
     protected $probability;
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element */
     protected $solution;
-
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
 
     public function setContact($contact)
     {

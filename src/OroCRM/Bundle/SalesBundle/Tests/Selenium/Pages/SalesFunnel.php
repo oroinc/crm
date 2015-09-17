@@ -20,11 +20,6 @@ class SalesFunnel extends AbstractPageEntity
 
     protected $owner = "//div[starts-with(@id,'s2id_oro_workflow_transition_sales_funnel_owner')]/a";
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-    }
-
     public function setStartDate($date)
     {
         $this->startDate = $this->test->byXpath("//*[@data-ftid='oro_workflow_transition_sales_funnel_start_date']/..".

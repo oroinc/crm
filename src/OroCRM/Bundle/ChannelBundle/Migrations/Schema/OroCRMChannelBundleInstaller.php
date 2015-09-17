@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
+use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -33,7 +35,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
      */
     public function getMigrationVersion()
     {
-        return 'v1_3';
+        return 'v1_5';
     }
 
     /**
@@ -57,6 +59,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
 
         /** Add extended fields */
         $this->addExtendedFields($schema);
+        $this->addChannelForeignKeyToTrackingWebsite($schema);
     }
 
     /**
@@ -295,6 +298,43 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
             'orocrm_channel',
             'name',
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM, 'is_extend' => true]]
+        );
+    }
+
+    /**
+     * Add 'channel' to oro_tracking_website
+     *
+     * @param Schema $schema
+     */
+    protected function addChannelForeignKeyToTrackingWebsite(Schema $schema)
+    {
+        $this->extendExtension->addManyToOneRelation(
+            $schema,
+            'oro_tracking_website',
+            'channel',
+            'orocrm_channel',
+            'name',
+            [
+                ExtendOptionsManager::MODE_OPTION => ConfigModelManager::MODE_READONLY,
+                'entity' => ['label' => 'orocrm.channel.entity_label'],
+                'extend' => [
+                    'is_extend' => true,
+                    'owner'     => ExtendScope::OWNER_CUSTOM
+                ],
+                'datagrid' => [
+                    'is_visible' => false
+                ],
+                'form' => [
+                    'is_enabled' => true,
+                    'form_type'  => 'orocrm_channel_select_type',
+                    'form_options' => [
+                        'tooltip'  => 'orocrm.channel.tracking_website_channel_select.tooltip'
+                    ]
+                ],
+                'view'      => ['is_displayable' => true],
+                'merge'     => ['display' => false],
+                'dataaudit' => ['auditable' => false]
+            ]
         );
     }
 }

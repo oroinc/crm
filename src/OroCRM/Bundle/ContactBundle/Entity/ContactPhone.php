@@ -24,6 +24,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContactPhone;
  *          "note"={
  *              "immutable"=true
  *          },
+ *          "comment"={
+ *              "immutable"=true
+ *          },
  *          "activity"={
  *              "immutable"=true
  *          },

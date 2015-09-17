@@ -22,12 +22,6 @@ class CaseEntity extends AbstractPageEntity
     /** @var  \PHPUnit_Extensions_Selenium2TestCase_Element_Select */
     protected $status;
 
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-
-    }
-
     public function init()
     {
         $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_subject']");

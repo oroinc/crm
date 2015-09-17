@@ -10,7 +10,7 @@ use Symfony\Component\Config\Definition\Exception\Exception;
  * Class Task
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
- * @method Task assertTitle() assertTitle($title, $message = '')
+ * @method Task assertTitle($title, $message = '')
  */
 class Task extends AbstractPageEntity
 {
@@ -31,12 +31,6 @@ class Task extends AbstractPageEntity
 
     /** @var  Workflow */
     protected $workflow;
-
-    public function __construct($testCase, $redirect = true)
-    {
-        parent::__construct($testCase, $redirect);
-
-    }
 
     public function setSubject($subject)
     {
@@ -119,7 +113,7 @@ class Task extends AbstractPageEntity
         $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Task']")->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->init();
+
         return $this;
     }
 

@@ -11,9 +11,16 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
     /** @var CallDirectionProvider */
     protected $provider;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $activityManager;
+
     public function setUp()
     {
-        $this->provider = new CallDirectionProvider();
+        $this->activityManager = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new CallDirectionProvider($this->activityManager);
     }
 
     public function testGetSupportedClass()

@@ -29,7 +29,7 @@ class OroCRMAnalyticsBundle implements Migration
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('category_type', 'string', ['length' => 16]);
-        $table->addColumn('category_index', 'integer', ['notnull' => true]);
+        $table->addColumn('category_index', 'integer', []);
         $table->addColumn('min_value', 'float', ['notnull' => false]);
         $table->addColumn('max_value', 'float', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);

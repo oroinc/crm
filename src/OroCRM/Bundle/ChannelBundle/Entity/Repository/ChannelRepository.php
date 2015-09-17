@@ -61,6 +61,6 @@ class ChannelRepository extends EntityRepository
             ->setParameter('dateEnd', $end)
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
-        return $aclHelper->apply($qb)->getSingleScalarResult();
+        return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }
 }

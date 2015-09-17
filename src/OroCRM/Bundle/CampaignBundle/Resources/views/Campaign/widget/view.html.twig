@@ -1,5 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -14,6 +15,10 @@
             {{ ui.renderHtmlProperty('orocrm.campaign.start_date.label'|trans, entity.startDate is empty ? 'N/A'|trans : entity.startDate|oro_format_date) }}
             {{ ui.renderHtmlProperty('orocrm.campaign.end_date.label'|trans, entity.endDate is empty ? 'N/A'|trans : entity.endDate|oro_format_date) }}
             {{ ui.renderProperty('orocrm.campaign.report_period.label'|trans, ('orocrm.campaign.report_period.' ~ entity.reportPeriod)|trans) }}
+        </div>
+
+        <div class="responsive-block">
+            {{ entityConfig.renderDynamicFields(entity) }}
         </div>
     </div>
 </div>

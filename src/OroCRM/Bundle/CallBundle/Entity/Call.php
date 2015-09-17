@@ -47,9 +47,6 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *              "acl"="orocrm_call_view",
  *              "action_button_widget"="orocrm_log_call_button",
  *              "action_link_widget"="orocrm_log_call_link"
- *          },
- *          "comment"={
- *              "applicable"=true
  *          }
  *      }
  * )

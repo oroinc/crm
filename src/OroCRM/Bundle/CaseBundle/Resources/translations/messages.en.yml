@@ -5,6 +5,7 @@ orocrm:
             contact_cases: Cases
 
         datagrid:
+            id.label:                       Case Id
             case_number.label:              Case ID
             subject.label:                  Subject
             related_contact.label:          Related Contact
@@ -107,3 +108,16 @@ orocrm:
 
         message:
             saved: Case saved
+
+        mailbox.process:
+            case.label: Convert To Case
+
+        casemailboxprocesssettings:
+            entity_label:                   Case Mailbox Process Settings
+            entity_plural_label:            Case Mailbox Process Settings
+            id.label:                       Id
+            assign_to.label:                Assign To
+            owner.label:                    Owner
+            priority.label:                 Priority
+            status.label:                   Status
+            mailbox.label:                  Mailbox

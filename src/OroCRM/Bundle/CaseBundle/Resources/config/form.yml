@@ -4,6 +4,9 @@ parameters:
     orocrm_case.form.type.comment.class:                     OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentType
     orocrm_case.form.type.comment.api.class:                 OroCRM\Bundle\CaseBundle\Form\Type\CaseCommentApiType
     orocrm_case.form.handler.entity.class:                   OroCRM\Bundle\CaseBundle\Form\Handler\CaseEntityHandler
+    orocrm_case.form.type.case_mailbox_process.class:        OroCRM\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsType
+    orocrm_case.form.type.case_mailbox_process_settings_tag.class: OroCRM\Bundle\CaseBundle\Form\Type\CaseMailboxProcessSettingsTagType
+    orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class: OroCRM\Bundle\CaseBundle\Form\EventSubscriber\CaseMailboxProcessSettingsTagSubscriber
 
 services:
     orocrm_case.form.type.entity:
@@ -25,6 +28,11 @@ services:
         class: %orocrm_case.form.type.comment.api.class%
         tags:
             - { name: form.type, alias: orocrm_case_comment_api }
+
+    orocrm_case.form.type.case_mailbox_process:
+        class: %orocrm_case.form.type.case_mailbox_process.class%
+        tags:
+            - { name: form.type, alias: orocrm_case_mailbox_process_settings }
 
     orocrm_case.form.entity:
         class: Symfony\Component\Form\Form
@@ -97,3 +105,15 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @event_dispatcher
+
+    orocrm_case.form.type.case_mailbox_process_settings_tag:
+        class: %orocrm_case.form.type.case_mailbox_process_settings_tag.class%
+        arguments:
+            - @oro_tag.form.subscriber.tag_select
+            - @orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber
+        tags:
+            - { name: form.type, alias: case_mailbox_process_settings_tag }
+
+    orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber:
+        class: %orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber.class%
+        parent: oro_tag.form.subscriber.tag_select
