@@ -87,7 +87,6 @@ orocrm:
                 gift_message:     Gift message
                 row_total:        Row Total
                 tax_amount:       Tax Amount
-                discount_amount:  Discount Amount
                 weight:           Weight
                 added_on:         Placed On
                 removed_at:       Removed At
