@@ -12,6 +12,7 @@ orocrm_channel:
               - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.opportunities_by_status
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_by_opportunities
               - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.won_by_period
+              - application_menu.reports_tab.static_reports_tab.opportunities_report_tab.total_forecast
               - application_menu.reports_tab.static_reports_tab.accounts_report_tab.accounts_life_time_value
 
        -

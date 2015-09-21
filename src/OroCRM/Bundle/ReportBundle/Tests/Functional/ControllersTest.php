@@ -93,6 +93,12 @@ class ControllersTest extends WebTestCase
                 'opportunities',
                 'Won opportunities by date period'
             ),
+            'total_forecast'    => array(
+                'orocrm_report-opportunities',
+                'total_forecast',
+                'opportunities',
+                'Total Forecast'
+            ),
             'by_date'          => array(
                 'orocrm_report-leads',
                 'by_date',

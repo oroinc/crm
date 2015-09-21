@@ -86,6 +86,17 @@ oro_menu_config:
                 description: 'orocrm.report.menu.won_by_period.description'
                 skipBreadcrumbs: true
 
+        total_forecast:
+            label: 'orocrm.report.menu.total_forecast.label'
+            route: 'orocrm_report_index'
+            routeParameters:
+                reportGroupName: 'opportunities'
+                reportName:      'total_forecast'
+            display: false
+            extras:
+                description: 'orocrm.report.menu.total_forecast.description'
+                skipBreadcrumbs: true
+
     tree:
         application_menu:
             children:
@@ -106,6 +117,7 @@ oro_menu_config:
                                     children:
                                         opportunities_by_status: ~
                                         won_by_period: ~
+                                        total_forecast: ~
 
 oro_titles:
     orocrm_report_index: '%%reportName%% - %%reportGroup%%'
