@@ -25,15 +25,15 @@ class ImportExportTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
+
+        $this->getBatchJobManager()->beginTransaction();
     }
 
     protected function tearDown()
     {
         // clear DB from separate connection
-        $batchJobManager = $this->getBatchJobManager();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
+        $this->getBatchJobManager()->rollback();
+
         parent::tearDown();
     }
 

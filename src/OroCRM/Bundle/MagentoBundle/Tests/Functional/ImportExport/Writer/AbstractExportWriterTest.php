@@ -25,6 +25,8 @@ abstract class AbstractExportWriterTest extends WebTestCase
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
 
         $this->transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Provider\Transport\MagentoTransportInterface');
+
+        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
     }
 
     protected function tearDown()
@@ -38,10 +40,7 @@ abstract class AbstractExportWriterTest extends WebTestCase
     protected function dropBatchJobs()
     {
         // clear DB from separate connection
-        $batchJobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
+        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->rollback();
 
         unset($this->transport);
     }
