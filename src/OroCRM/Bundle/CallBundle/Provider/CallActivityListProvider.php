@@ -79,14 +79,6 @@ class CallActivityListProvider implements
     /**
      * {@inheritdoc}
      */
-    public function getUpdatedBy($entity)
-    {
-        return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getCreatedAt($entity)
     {
         /** @var $entity Call */
