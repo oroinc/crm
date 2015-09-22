@@ -77,4 +77,28 @@ class OpportunityRepository extends EntityRepository
 
         return $resultData;
     }
+
+    /**
+     * @param $ownerId
+     * @param $date
+     * @param AclHelper $aclHelper
+     * @return mixed
+     */
+    public function getForecastOfOpporunitiesData($ownerId, $date, AclHelper $aclHelper)
+    {
+        $qb = $this->createQueryBuilder('opportunity');
+
+        $select = "
+            SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
+            SUM( opportunity.budgetAmount ) as budgetAmount,
+            SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
+        $qb->select($select)
+            ->join('opportunity.owner', 'owner')
+            ->where('owner.id IN(:ownerId)')
+            ->andWhere('opportunity.probability <> 0')
+            ->andWhere('opportunity.probability <> 1')
+            ->setParameter('ownerId', $ownerId);
+
+        return $aclHelper->apply($qb)->getOneOrNullResult();
+    }
 }
