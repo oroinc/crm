@@ -26,25 +26,17 @@ class ImportExportTest extends WebTestCase
     {
         $this->initClient(array(), $this->generateBasicAuthHeader());
 
-        $this->getBatchJobManager()->beginTransaction();
+        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
     }
 
     protected function tearDown()
     {
         // clear DB from separate connection
-        $this->getBatchJobManager()->rollback();
+        $manager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
+        $manager->rollback();
+        $manager->getConnection()->close();
 
         parent::tearDown();
-    }
-
-    /**
-     * @return \Doctrine\ORM\EntityManager
-     */
-    protected function getBatchJobManager()
-    {
-        /** @var BatchJobRepository $batchJobRepository */
-        $batchJobRepository = $this->getContainer()->get('akeneo_batch.job_repository');
-        return $batchJobRepository->getJobManager();
     }
 
     public function strategyDataProvider()

@@ -117,6 +117,7 @@ class OrderPlaceControllerTest extends WebTestCase
             $this->getUrl('orocrm_magento_order_view', ['id' => $this->order->getId()])
         );
         $jobManager->rollback();
+        $jobManager->getConnection()->close();
 
         $this->client->request('GET', $this->getUrl('orocrm_magento_cart_view', ['id' => $this->cart->getId()]));
         $result = $this->client->getResponse();
@@ -213,6 +214,7 @@ class OrderPlaceControllerTest extends WebTestCase
             ['HTTP_X-Requested-With' => 'XMLHttpRequest']
         );
         $jobManager->rollback();
+        $jobManager->getConnection()->close();
 
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 200);
