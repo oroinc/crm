@@ -47,6 +47,11 @@ datagrid:
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+                editable: true
+                cell_editor:
+                    view: orodatagrid/js/app/views/editor/date-editor-view
+                validation_rules:
+                    required: true
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
