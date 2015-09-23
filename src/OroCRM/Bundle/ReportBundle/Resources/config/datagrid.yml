@@ -394,38 +394,34 @@ datagrid:
             query:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
-                    - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                    - SUM( (CASE WHEN (s.name = 'in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
                     - SUM( o.budgetAmount ) as budgetAmount
                     - SUM( o.budgetAmount * o.probability ) as weightedForecast
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.customer, alias: c }
                         - { join: o.status, alias: s }
                         - { join: o.owner, alias: oo }
                 where:
                     and:
                         - o.probability <> 0
                         - o.probability <> 1
-                groupBy: oo.id, o.probability
-                orderBy:
-                    - column: weightedForecast
-                      dir: desc
+                groupBy: oo.id
         totals:
             total:
                 extends: grand_total
                 per_page: true
                 hide_if_one_page: true
                 columns:
-                    name:
+                    ownerName:
                         label: orocrm.magento.datagrid.columns.page_total
             grand_total:
                 columns:
-                    name:
+                    ownerName:
                         label: orocrm.magento.datagrid.columns.grand_total
                     inProgressCount:
-                        expr: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
+                        expr: SUM( (CASE WHEN (s.name = 'in_progress') THEN 1 ELSE 0 END) )
                     budgetAmount:
                         expr: SUM( o.budgetAmount )
                         formatter: currency
@@ -439,10 +435,10 @@ datagrid:
             weightedForecast: { label: orocrm.report.datagrid.columns.weightedForecast, frontend_type: currency }
         sorters:
             columns:
-                weightedForecast: { data_name: weightedForecast }
                 ownerName:        { data_name: ownerName }
                 inProgressCount:  { data_name: inProgressCount }
                 budgetAmount:     { data_name: budgetAmount }
+                weightedForecast: { data_name: weightedForecast }
         filters:
             columns:
                 ownerName:
@@ -453,18 +449,20 @@ datagrid:
                     type:      number
                     data_name: inProgressCount
                     filter_by_having: true
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_INTEGER
                 budgetAmount:
                     type:      currency
                     data_name: budgetAmount
                     filter_by_having: true
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 weightedForecast:
                     type:      currency
                     data_name: weightedForecast
                     filter_by_having: true
-                ownerName:
-                    type:      string
-                    label:     orocrm.report.datagrid.columns.owner
-                    data_name: o.owner
+                    options:
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
             entityHint: report data
             export: true
