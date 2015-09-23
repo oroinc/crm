@@ -68,7 +68,8 @@ class Order extends ExtendOrder implements
     LastNameInterface,
     IntegrationAwareInterface
 {
-    const STATUS_CANCELED = 'canceled';
+    const STATUS_CANCELED  = 'canceled';
+    const STATUS_COMPLETED = 'completed';
 
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
 
@@ -793,5 +794,21 @@ class Order extends ExtendOrder implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled()
+    {
+        return strtolower($this->status) === self::STATUS_CANCELED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        return strtolower($this->status) === self::STATUS_COMPLETED;
     }
 }

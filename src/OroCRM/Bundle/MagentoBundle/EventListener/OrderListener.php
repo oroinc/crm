@@ -41,7 +41,7 @@ class OrderListener
         // if new order has valuable subtotal and status
         if ($this->isOrderValid($entity)
             && $entity->getSubtotalAmount()
-            && $entity->getStatus() !== Order::STATUS_CANCELED
+            && !$entity->isCanceled()
         ) {
             $this->channelDoctrineListener->initializeFromEventArgs($event);
             $this->updateCustomerLifetime($event->getEntityManager(), $entity);
@@ -140,7 +140,7 @@ class OrderListener
                 ? $subtotalAmount - abs($discountAmount)
                 : $subtotalAmount;
             // if order status changed to canceled we should remove order lifetime value from customer lifetime
-            if ($order->getStatus() === Order::STATUS_CANCELED) {
+            if ($order->isCanceled()) {
                 $lifetimeValue *= -1;
             }
 
