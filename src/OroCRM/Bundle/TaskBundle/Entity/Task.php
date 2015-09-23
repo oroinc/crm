@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
@@ -71,8 +72,9 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *      }
  * )
  */
-class Task extends ExtendTask implements RemindableInterface
+class Task extends ExtendTask implements RemindableInterface, DatesAwareInterface
 {
+
     /**
      * @var integer
      *
@@ -176,6 +178,14 @@ class Task extends ExtendTask implements RemindableInterface
     protected $reminders;
 
     /**
+     * @var Organization
+     *
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
+     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+    protected $organization;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(type="datetime")
@@ -204,12 +214,9 @@ class Task extends ExtendTask implements RemindableInterface
     protected $updatedAt;
 
     /**
-     * @var Organization
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\OrganizationBundle\Entity\Organization")
-     * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
+     * @var bool
      */
-    protected $organization;
+    protected $updatedAtSet;
 
     public function __construct()
     {
@@ -288,22 +295,6 @@ class Task extends ExtendTask implements RemindableInterface
     public function setDueDate(\DateTime $dueDate = null)
     {
         $this->dueDate = $dueDate;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
     }
 
     /**
@@ -417,39 +408,6 @@ class Task extends ExtendTask implements RemindableInterface
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = $this->createdAt ? : new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization
@@ -470,6 +428,58 @@ class Task extends ExtendTask implements RemindableInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * @return $this
+     */
+    public function setCreatedAt(\DateTime $createdAt = null)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     *
+     * @return $this
+     */
+    public function setUpdatedAt(\DateTime $updatedAt = null)
+    {
+        $this->updatedAtSet = false;
+        if ($updatedAt !== null) {
+            $this->updatedAtSet = true;
+        }
+
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdatedAtSet()
+    {
+        return $this->updatedAtSet;
     }
 
     /**
