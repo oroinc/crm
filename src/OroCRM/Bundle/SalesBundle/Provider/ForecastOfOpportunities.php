@@ -69,21 +69,29 @@ class ForecastOfOpportunities
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
-        $ownerIds         = $widgetOptions->get('owners');
-        $ownerIds         = is_array($ownerIds) ? $ownerIds : [$ownerIds];
+        $owners         = $widgetOptions->get('owners');
+        $owners         = is_array($owners) ? $owners : array($owners);
+
+        $ownerIds = [];
+        foreach ($owners as $owner) {
+            if (is_object($owner)) {
+                $ownerIds[] = $owner->getId();
+            }
+        }
+
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
-        $compareToDate = $widgetOptions->get('compareToDate', []);
+        $compareToDate = $widgetOptions->get('compareToDate');
 
-        if (count($compareToDate)) {
-            $pastResult = $this->{$getterName}($ownerIds, $compareToDate);
+        if (isset($compareToDate['useDate']) && $compareToDate['useDate']) {
+            $pastResult = $this->{$getterName}($ownerIds, $compareToDate['date']);
 
             $result['deviation'] = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
 
             $deviation = $value - $pastResult;
-            if ($pastResult !== 0 && $dataType !== 'percent') {
-                if ($deviation !== 0) {
+            if ($pastResult != 0 && $dataType !== 'percent') {
+                if ($deviation != 0) {
                     $deviationPercent    = $deviation / $pastResult;
                     $result['deviation'] = sprintf(
                         '%s (%s)',
@@ -97,7 +105,7 @@ class ForecastOfOpportunities
                     }
                 }
             } else {
-                if (round(($deviation) * 100, 0) !== 0) {
+                if (round(($deviation) * 100, 0) != 0) {
                     $result['deviation'] = $this->formatValue($deviation, $dataType, true);
                     if (!$lessIsBetter) {
                         $result['isPositive'] = $deviation > 0;
@@ -107,7 +115,7 @@ class ForecastOfOpportunities
                 }
             }
 
-            $result['previousRange'] = $this->dateTimeFormatter->formatDate($compareToDate);
+            $result['previousRange'] = $this->dateTimeFormatter->formatDate($compareToDate['date']);
         }
 
         return $result;
