@@ -90,7 +90,9 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
             ->will($this->returnValue(true));
         $config->expects($this->any())->method('get')->with($this->equalTo('grid_name'))
             ->will($this->returnValue('test_grid'));
-        $cp = $this->getMock('Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface');
+        $cp = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
         $cp->expects($this->any())->method('getConfig')->will($this->returnValue($config));
         $cm = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
             ->disableOriginalConstructor()->getMock();

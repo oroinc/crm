@@ -10,13 +10,13 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigInterface;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityConfigBundle\Config\Id\FieldConfigId;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
 class EntityActivityContactDataProvider
 {
-    /** @var ConfigProviderInterface */
+    /** @var ConfigProvider */
     protected $extendProvider;
 
     /** @var PropertyAccessor */
