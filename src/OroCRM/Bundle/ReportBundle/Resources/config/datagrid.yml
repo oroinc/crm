@@ -385,3 +385,60 @@ datagrid:
         options:
             entityHint: report data
             export: true
+
+    orocrm_report-opportunities-total_forecast:
+        pageTitle: orocrm.report.opportunities.total_forecast
+        source:
+            type: orm
+            acl_resource: oro_report_view
+            query:
+                select:
+                    - SUM( o.budgetAmount ) as budgetAmount
+                    - o.probability as probability
+                from:
+                    - { table: OroCRMSalesBundle:Opportunity, alias: o }
+                where:
+                    and:
+                        - o.probability <> 0
+                        - o.probability <> 1
+                groupBy: probability
+                orderBy:
+                    - column: probability
+                      dir: desc
+        totals:
+            total:
+                extends: grand_total
+                per_page: true
+                hide_if_one_page: true
+                columns:
+                    name:
+                        label: orocrm.magento.datagrid.columns.page_total
+            grand_total:
+                columns:
+                    name:
+                        label: orocrm.magento.datagrid.columns.grand_total
+                    budgetAmount:
+                        expr: SUM( o.budgetAmount )
+                        formatter: currency
+                    probability:
+                        expr: AVG( o.probability )
+                        formatter: percent
+        columns:
+            budgetAmount: { label: orocrm.report.datagrid.columns.budgetAmount, frontend_type: currency }
+            probability:  { label: orocrm.report.datagrid.columns.probability,  frontend_type: percent }
+        sorters:
+            columns:
+                budgetAmount: { data_name: budgetAmount }
+                probability:  { data_name: o.probability }
+        filters:
+            columns:
+                budgetAmount:
+                    type:        currency
+                    data_name:   budgetAmount
+                    filter_by_having: true
+                probability:
+                    type:        percent
+                    data_name:   o.probability
+        options:
+            entityHint: report data
+            export: true
