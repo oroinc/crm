@@ -56,17 +56,21 @@ class ForecastOfOpportunities
 
     /**
      * @param WidgetOptionBag $widgetOptions
-     * @param                 $getterName
-     * @param                 $dataType
+     * @param string          $getterName
+     * @param string          $dataType
      * @param bool            $lessIsBetter
      * @return array
      */
-    public function getForecastOfOpportunitiesValues(WidgetOptionBag $widgetOptions, $getterName, $dataType, $lessIsBetter = false)
-    {
+    public function getForecastOfOpportunitiesValues(
+        WidgetOptionBag $widgetOptions,
+        $getterName,
+        $dataType,
+        $lessIsBetter = false
+    ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
         $ownerIds         = $widgetOptions->get('owners');
-        $ownerIds         = is_array($ownerIds) ? $ownerIds : array($ownerIds);
+        $ownerIds         = is_array($ownerIds) ? $ownerIds : [$ownerIds];
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
         $compareToDate = $widgetOptions->get('compareToDate', []);
@@ -74,11 +78,12 @@ class ForecastOfOpportunities
         if (count($compareToDate)) {
             $pastResult = $this->{$getterName}($ownerIds, $compareToDate);
 
-            $result['deviation'] = $this->translator->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
+            $result['deviation'] = $this->translator
+                ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
 
             $deviation = $value - $pastResult;
-            if ($pastResult != 0 && $dataType !== 'percent') {
-                if ($deviation != 0) {
+            if ($pastResult !== 0 && $dataType !== 'percent') {
+                if ($deviation !== 0) {
                     $deviationPercent    = $deviation / $pastResult;
                     $result['deviation'] = sprintf(
                         '%s (%s)',
@@ -92,7 +97,7 @@ class ForecastOfOpportunities
                     }
                 }
             } else {
-                if (round(($deviation) * 100, 0) != 0) {
+                if (round(($deviation) * 100, 0) !== 0) {
                     $result['deviation'] = $this->formatValue($deviation, $dataType, true);
                     if (!$lessIsBetter) {
                         $result['isPositive'] = $deviation > 0;
@@ -109,7 +114,7 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param $ownerIds
+     * @param array $ownerIds
      * @param null $compareToDate
      * @return int
      */
@@ -121,7 +126,7 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param $ownerIds
+     * @param array $ownerIds
      * @param null $compareToDate
      * @return int
      */
@@ -133,7 +138,7 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param $ownerIds
+     * @param array $ownerIds
      * @param null $compareToDate
      * @return int
      */
@@ -146,7 +151,7 @@ class ForecastOfOpportunities
 
     /**
      * @param array $ownerIds
-     * @param $date
+     * @param \DateTime|string|int $date
      * @return mixed
      */
     protected function getOwnersValues(array $ownerIds, $date)

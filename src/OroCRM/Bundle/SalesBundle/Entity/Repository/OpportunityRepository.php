@@ -79,12 +79,13 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param $ownerId
+     * @param array $ownerIds
      * @param $date
      * @param AclHelper $aclHelper
+     *
      * @return mixed
      */
-    public function getForecastOfOpporunitiesData($ownerId, $date, AclHelper $aclHelper)
+    public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper)
     {
         $qb = $this->createQueryBuilder('opportunity');
 
@@ -97,7 +98,7 @@ class OpportunityRepository extends EntityRepository
             ->where('owner.id IN(:ownerId)')
             ->andWhere('opportunity.probability <> 0')
             ->andWhere('opportunity.probability <> 1')
-            ->setParameter('ownerId', $ownerId);
+            ->setParameter('ownerId', $ownerIds);
 
         return $aclHelper->apply($qb)->getOneOrNullResult();
     }

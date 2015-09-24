@@ -123,7 +123,7 @@ oro_dashboard_config:
                     type: oro_type_widget_items
                     options:
                        label: orocrm.sales.dashboard.forecast_of_opportunities.metrics
-                       item_label: orocrm.sales.opportunity.datagrid.columns.metricName
+                       item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
                        required: false
                        widget_name: forecast_of_opportunities
 

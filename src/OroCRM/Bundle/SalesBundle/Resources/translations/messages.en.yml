@@ -129,7 +129,7 @@ orocrm:
                 view:     View
                 update:   Update
                 delete:   Delete
-                columns.metricName: Metric Name
+                columns.metric_name: Metric Name
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
