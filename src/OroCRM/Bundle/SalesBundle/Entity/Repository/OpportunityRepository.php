@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
+use Doctrine\ORM\Query\Expr\Join;
+use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
@@ -79,13 +81,27 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $ownerIds
-     * @param $date
+     * @param array     $ownerIds
+     * @param DateTime  $date
      * @param AclHelper $aclHelper
      *
      * @return mixed
      */
     public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper)
+    {
+        if ($date === null) {
+            return $this->getForecastOfOpporunitiesCurrentData($ownerIds, $aclHelper);
+        }
+
+        return $this->getForecastOfOpporunitiesOldData($ownerIds, $date, $aclHelper);
+    }
+
+    /**
+     * @param array $ownerIds
+     * @param AclHelper $aclHelper
+     * @return mixed
+     */
+    protected function getForecastOfOpporunitiesCurrentData($ownerIds, AclHelper $aclHelper)
     {
         $qb = $this->createQueryBuilder('opportunity');
 
@@ -95,11 +111,94 @@ class OpportunityRepository extends EntityRepository
             SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
         $qb->select($select)
             ->join('opportunity.owner', 'owner')
-            ->where('owner.id IN(:ownerId)')
+            ->where('owner.id IN(:ownerIds)')
             ->andWhere('opportunity.probability <> 0')
             ->andWhere('opportunity.probability <> 1')
-            ->setParameter('ownerId', $ownerIds);
+            ->setParameter('ownerIds', $ownerIds);
 
         return $aclHelper->apply($qb)->getOneOrNullResult();
+    }
+
+    /**
+     * @param array     $ownerIds
+     * @param DateTime  $date
+     * @param AclHelper $aclHelper
+     * @return mixed
+     */
+    protected function getForecastOfOpporunitiesOldData($ownerIds, $date, AclHelper $aclHelper)
+    {
+        //clone date for avoiding wrong date on printing with current locale
+        $newDate = clone $date;
+        $newDate->setTime(23, 59, 59);
+        $qb = $this->createQueryBuilder('opportunity')
+            ->where('opportunity.createdAt < :date')
+            ->setParameter('date', $newDate);
+
+        $opportunities = $aclHelper->apply($qb)->getResult();
+
+        $result['inProgressCount'] = 0;
+        $result['budgetAmount'] = 0;
+        $result['weightedForecast'] = 0;
+
+        $auditRepository = $this->getEntityManager()->getRepository('OroDataAuditBundle:Audit');
+        $userRepository = $this->getEntityManager()->getRepository('OroUserBundle:User');
+        foreach ($opportunities as $opportunity) {
+            $auditQb = $auditRepository->getLogEntriesQueryBuilder($opportunity);
+            $auditQb->andWhere('a.action = :action')
+                ->andWhere('a.loggedAt > :date')
+                ->setParameter('action', LoggableManager::ACTION_UPDATE)
+                ->setParameter('date', $newDate);
+            $opportunityHistory =  $aclHelper->apply($auditQb)->getResult();
+
+            if ($oldOwner = $this->getHistoryOldValue($opportunityHistory, 'owner')) {
+                $isOwnerOk = in_array($userRepository->findOneByUsername($oldOwner)->getId(), $ownerIds);
+            } else {
+                $isOwnerOk = in_array($opportunity->getOwner()->getId(), $ownerIds);
+            }
+
+            if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
+                $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
+                $probability = $oldProbability;
+            } else {
+                $probability = $opportunity->getProbability();
+                $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
+            }
+
+            if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
+                $isStatusOk = $oldStatus == 'In Progress';
+            } else {
+                $isStatusOk = $opportunity->getStatus()->getName() == 'in_progress';
+            }
+
+            if ($isOwnerOk && $isProbabilityOk && $isStatusOk) {
+                $result['inProgressCount'] += 1;
+                $oldBudgetAmount = $this->getHistoryOldValue($opportunityHistory, 'budgetAmount');
+
+                $budget = $oldBudgetAmount !== null ? $oldBudgetAmount : $opportunity->getBudgetAmount();
+                $result['budgetAmount'] += $budget;
+                $result['weightedForecast'] += $budget * $probability;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param mixed  $opportunityHistory
+     * @param string $field
+     * @return mixed
+     */
+    protected function getHistoryOldValue($opportunityHistory, $field)
+    {
+        $result = null;
+
+        $opportunityHistory = is_array($opportunityHistory) ? $opportunityHistory : [$opportunityHistory];
+        foreach ($opportunityHistory as $item) {
+            if ($item->getField($field)) {
+                $result = $item->getField($field)->getOldValue();
+            }
+        }
+
+        return $result;
     }
 }

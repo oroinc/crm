@@ -119,6 +119,17 @@ oro_dashboard_config:
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
             configuration:
+                owners:
+                    type: oro_type_widget_user_multiselect
+                    show_on_widget: true
+                    options:
+                        label: orocrm.sales.dashboard.forecast_of_opportunities.owner
+                        required: false
+                compareToDate:
+                    type: oro_type_widget_date
+                    options:
+                       label: orocrm.sales.dashboard.forecast_of_opportunities.compareToDate
+                       required: false
                 subWidgets:
                     type: oro_type_widget_items
                     options:
@@ -126,4 +137,3 @@ oro_dashboard_config:
                        item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
                        required: false
                        widget_name: forecast_of_opportunities
-
