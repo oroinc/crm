@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -16,7 +17,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
@@ -68,7 +68,8 @@ class Order extends ExtendOrder implements
     LastNameInterface,
     IntegrationAwareInterface
 {
-    const STATUS_CANCELED = 'canceled';
+    const STATUS_CANCELED  = 'canceled';
+    const STATUS_COMPLETED = 'completed';
 
     use IntegrationEntityTrait, NamesAwareTrait, ChannelEntityTrait;
 
@@ -812,9 +813,28 @@ class Order extends ExtendOrder implements
 
     /**
      * @param string $couponCode
+     * @return Order
      */
     public function setCouponCode($couponCode)
     {
         $this->couponCode = $couponCode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCanceled()
+    {
+        return strtolower($this->status) === self::STATUS_CANCELED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isCompleted()
+    {
+        return strtolower($this->status) === self::STATUS_COMPLETED;
     }
 }

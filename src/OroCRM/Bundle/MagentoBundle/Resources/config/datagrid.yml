@@ -864,8 +864,8 @@ datagrid:
                     options:
                         field_options:
                             choices:
-                                false: orocrm.magento.datagrid.columns.order_is_guest.no
-                                true: orocrm.magento.datagrid.columns.order_is_guest.yes
+                                'false': orocrm.magento.datagrid.columns.order_is_guest.no
+                                'true': orocrm.magento.datagrid.columns.order_is_guest.yes
                     data_name: o.isGuest
                 createdAt:
                     type:             datetime
