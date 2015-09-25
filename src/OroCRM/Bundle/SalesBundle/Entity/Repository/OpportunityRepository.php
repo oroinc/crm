@@ -4,10 +4,11 @@ namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
 
-use Doctrine\ORM\Query\Expr\Join;
 use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
@@ -121,7 +122,7 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param array     $ownerIds
-     * @param DateTime  $date
+     * @param \DateTime  $date
      * @param AclHelper $aclHelper
      * @return mixed
      */
@@ -141,7 +142,7 @@ class OpportunityRepository extends EntityRepository
         $result['weightedForecast'] = 0;
 
         $auditRepository = $this->getEntityManager()->getRepository('OroDataAuditBundle:Audit');
-        $userRepository = $this->getEntityManager()->getRepository('OroUserBundle:User');
+        /** @var Opportunity $opportunity */
         foreach ($opportunities as $opportunity) {
             $auditQb = $auditRepository->getLogEntriesQueryBuilder($opportunity);
             $auditQb->andWhere('a.action = :action')
@@ -149,12 +150,6 @@ class OpportunityRepository extends EntityRepository
                 ->setParameter('action', LoggableManager::ACTION_UPDATE)
                 ->setParameter('date', $newDate);
             $opportunityHistory =  $aclHelper->apply($auditQb)->getResult();
-
-            if ($oldOwner = $this->getHistoryOldValue($opportunityHistory, 'owner')) {
-                $isOwnerOk = in_array($userRepository->findOneByUsername($oldOwner)->getId(), $ownerIds);
-            } else {
-                $isOwnerOk = in_array($opportunity->getOwner()->getId(), $ownerIds);
-            }
 
             if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
                 $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
@@ -164,19 +159,11 @@ class OpportunityRepository extends EntityRepository
                 $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
             }
 
-            if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
-                $isStatusOk = $oldStatus == 'In Progress';
-            } else {
-                $isStatusOk = $opportunity->getStatus()->getName() == 'in_progress';
-            }
-
-            if ($isOwnerOk && $isProbabilityOk && $isStatusOk) {
-                $result['inProgressCount'] += 1;
-                $oldBudgetAmount = $this->getHistoryOldValue($opportunityHistory, 'budgetAmount');
-
-                $budget = $oldBudgetAmount !== null ? $oldBudgetAmount : $opportunity->getBudgetAmount();
-                $result['budgetAmount'] += $budget;
-                $result['weightedForecast'] += $budget * $probability;
+            if ($isProbabilityOk
+                && $this->isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
+                && $this->isStatusOk($opportunityHistory, $opportunity)
+            ) {
+                $result = $this->calculateOpportunityOldValue($result, $opportunityHistory, $opportunity, $probability);
             }
         }
 
@@ -198,6 +185,61 @@ class OpportunityRepository extends EntityRepository
                 $result = $item->getField($field)->getOldValue();
             }
         }
+
+        return $result;
+    }
+
+    /**
+     * @param array $opportunityHistory
+     * @param Opportunity $opportunity
+     * @return bool
+     */
+    protected function isStatusOk($opportunityHistory, $opportunity)
+    {
+        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
+            $isStatusOk = $oldStatus === 'In Progress';
+        } else {
+            $isStatusOk = $opportunity->getStatus()->getName() === 'in_progress';
+        }
+
+        return $isStatusOk;
+    }
+
+    /**
+     * @param array $ownerIds
+     * @param array $opportunityHistory
+     * @param Opportunity $opportunity
+     *
+     * @return bool
+     */
+    protected function isOwnerOk($ownerIds, $opportunityHistory, $opportunity)
+    {
+        $userRepository = $this->getEntityManager()->getRepository('OroUserBundle:User');
+        if ($oldOwner = $this->getHistoryOldValue($opportunityHistory, 'owner')) {
+            $isOwnerOk = in_array($userRepository->findOneByUsername($oldOwner)->getId(), $ownerIds);
+        } else {
+            $isOwnerOk = in_array($opportunity->getOwner()->getId(), $ownerIds);
+        }
+
+        return $isOwnerOk;
+    }
+
+    /**
+     * @param array $result
+     * @param array $opportunityHistory
+     * @param Opportunity $opportunity
+     * @param mixed $probability
+     *
+     * @return array
+     */
+    protected function calculateOpportunityOldValue($result, $opportunityHistory, $opportunity, $probability)
+    {
+        ++$result['inProgressCount'];
+        $oldBudgetAmount = $this->getHistoryOldValue($opportunityHistory, 'budgetAmount');
+
+        $budget = $oldBudgetAmount !== null ? $oldBudgetAmount : $opportunity->getBudgetAmount();
+        $result['budgetAmount'] += $budget;
+        $result['weightedForecast'] += $budget * $probability;
 
         return $result;
     }
