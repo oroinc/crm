@@ -182,6 +182,7 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
+                    - CONCAT(o.firstName, CONCAT(' ', o.lastName)) as ownerName
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -192,9 +193,13 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                        - { join: c.owner, alias: o }
+                        - { join: o.owner, alias: bu }
             hints:
                 - HINT_TRANSLATABLE
         columns:
+            ownerName:
+                label:         Owner
             firstName:
                 label:         orocrm.contact.first_name.label
             lastName:
@@ -305,6 +310,20 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                owner:
+                    type: entity
+                    label: Owner
+                    data_name: c.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: bu.id
         actions:
             view:
                 type: navigate
