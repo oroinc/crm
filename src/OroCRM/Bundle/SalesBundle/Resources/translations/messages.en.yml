@@ -52,6 +52,8 @@ orocrm:
                 metrics: Metrics
                 no_changes: No Changes
                 no_available_metrics: No available metrics
+                owner: Owner
+                compareToDate: Compare to Date
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads

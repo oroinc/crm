@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
@@ -69,45 +68,20 @@ class ForecastOfOpportunities
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
-        $ownerIds         = $widgetOptions->get('owners');
-        $ownerIds         = is_array($ownerIds) ? $ownerIds : [$ownerIds];
+        $ownerIds         = $this->getOwnerIds($widgetOptions);
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
-        $compareToDate = $widgetOptions->get('compareToDate', []);
+        $compareToDate = $widgetOptions->get('compareToDate');
 
-        if (count($compareToDate)) {
-            $pastResult = $this->{$getterName}($ownerIds, $compareToDate);
+        if (isset($compareToDate['useDate']) && $compareToDate['useDate']) {
+            $pastResult = $this->{$getterName}($ownerIds, $compareToDate['date']);
 
             $result['deviation'] = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
 
-            $deviation = $value - $pastResult;
-            if ($pastResult !== 0 && $dataType !== 'percent') {
-                if ($deviation !== 0) {
-                    $deviationPercent    = $deviation / $pastResult;
-                    $result['deviation'] = sprintf(
-                        '%s (%s)',
-                        $this->formatValue($deviation, $dataType, true),
-                        $this->formatValue($deviationPercent, 'percent', true)
-                    );
-                    if (!$lessIsBetter) {
-                        $result['isPositive'] = $deviation > 0;
-                    } else {
-                        $result['isPositive'] = !($deviation > 0);
-                    }
-                }
-            } else {
-                if (round(($deviation) * 100, 0) !== 0) {
-                    $result['deviation'] = $this->formatValue($deviation, $dataType, true);
-                    if (!$lessIsBetter) {
-                        $result['isPositive'] = $deviation > 0;
-                    } else {
-                        $result['isPositive'] = !($deviation > 0);
-                    }
-                }
-            }
+            $result = $this->prepareData($dataType, $lessIsBetter, $pastResult, $value - $pastResult, $result);
 
-            $result['previousRange'] = $this->dateTimeFormatter->formatDate($compareToDate);
+            $result['previousRange'] = $this->dateTimeFormatter->formatDate($compareToDate['date']);
         }
 
         return $result;
@@ -199,5 +173,64 @@ class ForecastOfOpportunities
         }
 
         return $isDeviant && !is_null($sign) ? sprintf('%s%s', $sign, $value) : $value;
+    }
+
+    /**
+     * @param $dataType
+     * @param $lessIsBetter
+     * @param $pastResult
+     * @param $deviation
+     * @param $result
+     *
+     * @return array
+     */
+    protected function prepareData($dataType, $lessIsBetter, $pastResult, $deviation, $result)
+    {
+        if ($pastResult != 0 && $dataType !== 'percent') {
+            if ($deviation != 0) {
+                $deviationPercent = $deviation / $pastResult;
+                $result['deviation'] = sprintf(
+                    '%s (%s)',
+                    $this->formatValue($deviation, $dataType, true),
+                    $this->formatValue($deviationPercent, 'percent', true)
+                );
+                if (!$lessIsBetter) {
+                    $result['isPositive'] = $deviation > 0;
+                } else {
+                    $result['isPositive'] = !($deviation > 0);
+                }
+            }
+        } else {
+            if (round(($deviation) * 100, 0) != 0) {
+                $result['deviation'] = $this->formatValue($deviation, $dataType, true);
+                if (!$lessIsBetter) {
+                    $result['isPositive'] = $deviation > 0;
+                } else {
+                    $result['isPositive'] = !($deviation > 0);
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param WidgetOptionBag $widgetOptions
+     *
+     * @return array
+     */
+    protected function getOwnerIds(WidgetOptionBag $widgetOptions)
+    {
+        $owners = $widgetOptions->get('owners');
+        $owners = is_array($owners) ? $owners : array($owners);
+
+        $ownerIds = [];
+        foreach ($owners as $owner) {
+            if (is_object($owner)) {
+                $ownerIds[] = $owner->getId();
+            }
+        }
+
+        return $ownerIds;
     }
 }
