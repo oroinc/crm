@@ -25,8 +25,9 @@ datagrid:
                         - { join: task.workflowStep, alias: workflowStep }
         inline_editing:
             enabled: true
-            http_method: PUT
-            route_name: orocrm_account_update
+            save_api_accessor:
+                route: orocrm_account_update
+                http_method: PUT
         columns:
             subject:
                 label:         orocrm.task.subject.label
@@ -34,10 +35,14 @@ datagrid:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
                 editable: true
-                cell_editor:
-                    view: orodatagrid/js/app/views/editor/datetime-editor-view
-                validation_rules:
-                    required: true
+                editor:
+                  cell_editor:
+                      view: orodatagrid/js/app/views/editor/datetime-editor-view
+                  validation_rules:
+                      required: true
+                save_api_accessor:
+                    route: orocrm_account_update
+                    http_method: PUT
             workflowStepLabel:
                 label:         orocrm.task.workflow_step.label
             priorityLabel:

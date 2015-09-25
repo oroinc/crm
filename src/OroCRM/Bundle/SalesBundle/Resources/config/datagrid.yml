@@ -32,8 +32,9 @@ datagrid:
                         - { join: o.owner, alias: owner }
         inline_editing:
             enabled: true
-            http_method: PUT
-            route_name: orocrm_account_update
+            save_api_accessor:
+              http_method: PUT
+              route: orocrm_account_update
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -49,6 +50,7 @@ datagrid:
                 frontend_type: date
                 editable: true
                 cell_editor:
+                    component: orodatagrid/js/app/components/cell-popup-editor-component
                     view: orodatagrid/js/app/views/editor/date-editor-view
                 validation_rules:
                     required: true
