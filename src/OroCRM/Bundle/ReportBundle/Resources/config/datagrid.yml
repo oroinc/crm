@@ -444,7 +444,6 @@ datagrid:
                 ownerName:
                     type:      string
                     data_name: ownerName
-                    filter_by_having: true
                 inProgressCount:
                     type:      number
                     data_name: inProgressCount
