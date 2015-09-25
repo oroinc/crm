@@ -36,7 +36,8 @@ orocrm:
                 inProgressCount:   Number In Progress
                 totalOps:          Total
                 budgetAmount:      Budget Amount
-                probability:       Probability
+                weightedForecast:  Weighted Forecast
+                ownerName:         Owner Name
 
         controller:
             report:
