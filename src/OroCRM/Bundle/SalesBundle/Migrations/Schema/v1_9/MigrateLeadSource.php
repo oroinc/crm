@@ -4,8 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_9;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -39,7 +38,7 @@ class MigrateLeadSource implements Migration, ExtendExtensionAwareInterface
         $queries->addPostQuery(
             sprintf(
                 'UPDATE oro_entity_config_field SET mode=\'%s\' WHERE field_name=\'%s\'',
-                ConfigModelManager::MODE_HIDDEN,
+                ConfigModel::MODE_HIDDEN,
                 'extend_source'
             )
         );
