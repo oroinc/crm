@@ -70,6 +70,7 @@ class RestAccountTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['account']['name'], $result['name']);
+        $this->assertTrue(array_key_exists('lifetimeValue', $result));
     }
 
     /**

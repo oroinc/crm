@@ -19,6 +19,8 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
+use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+
 /**
  * @RouteResource("account")
  * @NamePrefix("oro_api_")
@@ -149,5 +151,18 @@ class AccountController extends RestController implements ClassResourceInterface
     public function getFormHandler()
     {
         return $this->get('orocrm_account.form.handler.account.api');
+    }
+
+    protected function getItemArray($id)
+    {
+        $result = parent::getItemArray($id);
+        $manager = $this->getManager();
+
+        /** @var AmountProvider $amountProvider  */
+        $amountProvider = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+
+        $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($manager->find($id));
+
+        return $result;
     }
 }
