@@ -12,7 +12,8 @@ class ChannelApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         $config = [
-            'fields' => [
+            'excluded_fields' => ['data'],
+            'fields'          => [
                 'dataSource' => ['fields' => 'id'],
                 'entities'   => ['fields' => 'name'],
                 'status'     => [
