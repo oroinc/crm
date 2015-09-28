@@ -3,22 +3,38 @@
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
+
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+
 use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_7\OroCRMContactUsBundle;
+use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_10\OroCRMContactUsBundle as ContactRequestActivityAssociations;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMContactUsBundleInstaller implements Installation
+class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionAwareInterface
 {
+    /** @var ActivityExtension */
+    protected $activityExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityExtension(ActivityExtension $activityExtension)
+    {
+        $this->activityExtension = $activityExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v1_10';
     }
 
     /**
@@ -37,6 +53,8 @@ class OroCRMContactUsBundleInstaller implements Installation
         $this->addOrocrmContactusRequestForeignKeys($schema);
         $this->addOrocrmContactusRequestCallsForeignKeys($schema);
         OroCRMContactUsBundle::addOwner($schema);
+
+        ContactRequestActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
