@@ -81,6 +81,7 @@ class OrderTest extends AbstractEntityTestCase
             'channel'             => ['channel', $channel, $channel],
             'owner'               => ['owner', $owner, $owner],
             'organization'        => ['organization', $organization, $organization],
+            'couponCode'          => ['couponCode', 'TEST COUPON CODE', 'TEST COUPON CODE'],
         ];
     }
 
