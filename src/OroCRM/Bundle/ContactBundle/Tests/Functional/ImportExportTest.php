@@ -37,7 +37,7 @@ class ImportExportTest extends WebTestCase
      */
     protected function tearDown()
     {
-        // clear DB from separate connection
+        // clear DB from separate connection, close to avoid connection limit and memory leak
         $batchJobManager = $this->getBatchJobManager();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
