@@ -20,6 +20,7 @@ use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 
 /**
  * @RouteResource("account")
@@ -160,8 +161,48 @@ class AccountController extends RestController implements ClassResourceInterface
 
         /** @var AmountProvider $amountProvider  */
         $amountProvider = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+        $entity = $manager->find($id);
 
-        $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($manager->find($id));
+        if ($entity) {
+            $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPreparedItems($entities, $resultFields = [])
+    {
+        $result = [];
+        $ids = array_map(
+            function (Account $account) {
+                return $account->getId();
+            },
+            $entities
+        );
+
+        $ap = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+        $lifetimeValues = $ap->getAccountsLifetimeQueryBuilder($ids)
+            ->getQuery()
+            ->getArrayResult();
+        $lifetimeMap = [];
+        foreach ($lifetimeValues as $value) {
+            $lifetimeMap[$value['accountId']] = $value['lifetimeValue'];
+        }
+
+        foreach ($entities as $entity) {
+            /** @var Account $entity */
+            $entityArray = $this->getPreparedItem($entity, $resultFields);
+            if (array_key_exists($entity->getId(), $lifetimeMap)) {
+                $entityArray['lifetimeValue'] = $lifetimeMap[$entity->getId()];
+            } else {
+                $entityArray['lifetimeValue'] = 0.0;
+            }
+
+            $result[] = $entityArray;
+        }
 
         return $result;
     }
