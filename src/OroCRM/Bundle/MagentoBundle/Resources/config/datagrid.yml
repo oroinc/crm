@@ -698,6 +698,9 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - channel.name as channelName
                     - cw.name as websiteName
+                    - o.discountAmount
+                    - o.discountPercent
+                    - o.couponCode
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
@@ -861,8 +864,8 @@ datagrid:
                     options:
                         field_options:
                             choices:
-                                false: orocrm.magento.datagrid.columns.order_is_guest.no
-                                true: orocrm.magento.datagrid.columns.order_is_guest.yes
+                                'false': orocrm.magento.datagrid.columns.order_is_guest.no
+                                'true': orocrm.magento.datagrid.columns.order_is_guest.yes
                     data_name: o.isGuest
                 createdAt:
                     type:             datetime
@@ -872,6 +875,21 @@ datagrid:
                     type:             datetime
                     data_name:        o.updatedAt
                     enabled:          false
+                discountAmount:
+                    label:            orocrm.magento.datagrid.columns.discount_amount
+                    type:             currency
+                    data_name:        o.discountAmount
+                    enabled:          false
+                discountPercent:
+                    label:            orocrm.magento.datagrid.columns.discount_percent
+                    type:             percent
+                    data_name:        o.discountPercent
+                    enabled:          false
+                couponCode:
+                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    type:      string
+                    data_name: o.couponCode
+                    enabled:   false
         actions:
             view:
                 type:         navigate
@@ -1152,6 +1170,9 @@ datagrid:
                     - o.currency
                     - MAX(step.label) as stepLabel
                     - COUNT(items.id) as itemsCount
+                    - o.discountAmount
+                    - o.discountPercent
+                    - o.couponCode
                 from:
                     - { table: %orocrm_magento.order.entity.class%, alias: o }
                 join:
@@ -1232,6 +1253,21 @@ datagrid:
                         field_type: oro_workflow_step_select
                         field_options:
                             workflow_entity_class: %orocrm_magento.order.entity.class%
+                discountAmount:
+                    label:            orocrm.magento.datagrid.columns.discount_amount
+                    type:             currency
+                    data_name:        o.discountAmount
+                    enabled:          false
+                discountPercent:
+                    label:            orocrm.magento.datagrid.columns.discount_percent
+                    type:             percent
+                    data_name:        o.discountPercent
+                    enabled:          false
+                couponCode:
+                    label:     orocrm.magento.datagrid.columns.coupon_code
+                    type:      string
+                    data_name: o.couponCode
+                    enabled:   false
         sorters:
             columns:
                 incrementId:     { data_name: o.incrementId }
