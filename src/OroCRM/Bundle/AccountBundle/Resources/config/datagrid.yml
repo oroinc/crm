@@ -58,6 +58,7 @@ datagrid:
             save_api_accessor:
               http_method: PUT
               route: orocrm_account_update
+              form_name: account
         source:
             type:           orm
             acl_resource:   orocrm_account_view
@@ -102,6 +103,9 @@ datagrid:
                     enabled: true
                     validation_rules:
                         required: true
+                    save_api_accessor:
+                        form_name: contact
+                        field_name: name
             contactEmail:
                 label:         orocrm.account.contact.email
                 inline_editing:
@@ -110,6 +114,9 @@ datagrid:
                         email: "Some nice message"
                         required: true
                         minlength: 3
+                    save_api_accessor:
+                        form_name: contact
+                        field_name: email
             contactPhone:
                 label:         orocrm.account.contact.phone
                 frontend_type: phone
