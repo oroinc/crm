@@ -194,12 +194,9 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.owner, alias: o }
-                        - { join: o.owner, alias: bu }
             hints:
                 - HINT_TRANSLATABLE
         columns:
-            ownerName:
-                label:         Owner
             firstName:
                 label:         orocrm.contact.first_name.label
             lastName:
@@ -312,7 +309,7 @@ datagrid:
                     enabled: false
                 owner:
                     type: entity
-                    label: Owner
+                    label: oro.user.owner.label
                     data_name: c.owner
                     options:
                         field_options:
@@ -323,7 +320,7 @@ datagrid:
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
-                    data_name: bu.id
+                    data_name: c.owner
         actions:
             view:
                 type: navigate
@@ -447,9 +444,20 @@ datagrid:
                 contactPhone:
                     type:      string
                     data_name: contactPhone
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: a.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: a.owner
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
