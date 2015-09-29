@@ -30,6 +30,11 @@ datagrid:
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
+        inline_editing:
+            enabled: true
+            save_api_accessor:
+              http_method: PUT
+              route: orocrm_account_update
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -43,9 +48,23 @@ datagrid:
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
+                editable: true
+                cell_editor:
+                    component: orodatagrid/js/app/components/cell-popup-editor-component
+                    view: orodatagrid/js/app/views/editor/date-editor-view
+                validation_rules:
+                    required: true
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
+                editable: true
+                cell_editor:
+                    view: orodatagrid/js/app/views/editor/number-editor-view
+                    options:
+                        decimalPlaces: 2
+                validation_rules:
+                    required: true
+                    min: 0
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
