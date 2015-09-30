@@ -176,6 +176,7 @@ datagrid:
                     - c.lastName
                     - c.createdAt
                     - c.updatedAt
+                    - contactSource.name as contactSourceName
                     - contactSource.label as contactSourceLabel
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
@@ -194,6 +195,12 @@ datagrid:
                         - { join: address.region, alias: region }
             hints:
                 - HINT_TRANSLATABLE
+        inline_editing:
+            enabled: true
+            save_api_accessor:
+                http_method: PUT
+                route: orocrm_contact_update
+                form_name: contact
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label
@@ -206,6 +213,26 @@ datagrid:
                 frontend_type: phone
             contactSourceLabel:
                 label:         orocrm.contact.source.label
+                inline_editing:
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
+                        view_options:
+                            placeholder: "Select a Source"
+                            id_field_name: contactSourceName
+                            choices:
+                                other: "Other Source"
+                                call: "Phone Call"
+                                tv: "TV"
+                                website: "Website"
+            contactSourceName:
+                label:         orocrm.contact.source.label
+                frontend_type: select
+#                choices: @choiceProvider->getAll
+                choices:
+                    other: "Other Source"
+                    call: "Phone Call"
+                    tv: "TV"
+                    website: "Website"
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
@@ -220,6 +247,7 @@ datagrid:
                 frontend_type: datetime
         properties:
             id: ~
+            contactSourceName: ~
             view_link:
                 type:       url
                 route:      orocrm_contact_view
@@ -271,6 +299,9 @@ datagrid:
                 primaryPhone:
                     type: string
                     data_name: phone.phone
+                contactSourceName:
+                    type: string
+                    data_name: contactSource.name
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
