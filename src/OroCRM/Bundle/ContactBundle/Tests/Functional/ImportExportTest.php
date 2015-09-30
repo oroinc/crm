@@ -27,13 +27,22 @@ class ImportExportTest extends WebTestCase
         $this->initClient(array(), $this->generateBasicAuthHeader());
     }
 
+    /**
+     * Delete data required because there is commit to job repository in import/export controller action
+     * Please use
+     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
+     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->rollback();
+     *   $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->getConnection()->clear();
+     * if you don't use controller
+     */
     protected function tearDown()
     {
-        // clear DB from separate connection
+        // clear DB from separate connection, close to avoid connection limit and memory leak
         $batchJobManager = $this->getBatchJobManager();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
         $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
+
         parent::tearDown();
     }
 
