@@ -151,9 +151,20 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: o.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: o.owner
         actions:
             view:
                 type:          navigate
@@ -358,9 +369,20 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
-                 ownerName:
-                    type:      string
-                    data_name: ownerName
+                 owner:
+                     type: entity
+                     label: oro.user.owner.label
+                     data_name: l.owner
+                     options:
+                         field_options:
+                             class: OroUserBundle:User
+                             multiple: true
+                             property: fullName
+                             translatable_options: false
+                 businessUnitId:
+                     label: oro.business_unit.label
+                     type: choice-business-unit
+                     data_name: l.owner
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -512,9 +534,20 @@ datagrid:
                         field_options:
                             workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
                             translatable_options: false
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: salesFunnel.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: salesFunnel.owner
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -1211,9 +1244,16 @@ datagrid:
                 primaryEmail:
                     type: string
                     data_name: email.email
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: o.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
 
     orocrm-sales-b2bcustomers-for-context-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
