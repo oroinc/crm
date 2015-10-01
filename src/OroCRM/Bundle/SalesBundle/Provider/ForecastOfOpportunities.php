@@ -30,6 +30,7 @@ class ForecastOfOpportunities
     /** @var TranslatorInterface */
     protected $translator;
 
+    /** @var  array */
     protected $ownersValues;
 
     /**
@@ -231,6 +232,42 @@ class ForecastOfOpportunities
             }
         }
 
+        $businessUnitIds = $this->getBusinessUnitsIds($widgetOptions);
+
+        if (!empty($businessUnitIds)) {
+            //need to load from repository, because it returns unserialized object without users from widget options
+            $businessUnits = $this->doctrine
+                ->getRepository('OroOrganizationBundle:BusinessUnit')
+                ->findById($businessUnitIds);
+
+            foreach ($businessUnits as $businessUnit) {
+                $users = $businessUnit->getUsers();
+                foreach ($users as $user) {
+                    $ownerIds[] = $user->getId();
+                }
+            }
+
+            $ownerIds = array_unique($ownerIds);
+        }
+
         return $ownerIds;
+    }
+
+    /**
+     * @param WidgetOptionBag $widgetOptions
+     *
+     * @return array
+     */
+    protected function getBusinessUnitsIds(WidgetOptionBag $widgetOptions)
+    {
+        $businessUnits = $widgetOptions->get('businessUnits');
+
+        $businessUnitIds = [];
+
+        foreach ($businessUnits as $businessUnit) {
+            $businessUnitIds[] = $businessUnit->getId();
+        }
+
+        return $businessUnitIds;
     }
 }

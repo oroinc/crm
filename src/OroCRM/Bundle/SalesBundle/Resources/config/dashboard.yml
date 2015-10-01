@@ -119,6 +119,12 @@ oro_dashboard_config:
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
             configuration:
+                businessUnits:
+                    type: oro_type_widget_business_unit_select
+                    show_on_widget: true
+                    options:
+                        label: orocrm.sales.dashboard.forecast_of_opportunities.business_unit
+                        required: false
                 owners:
                     type: oro_type_widget_user_multiselect
                     show_on_widget: true
