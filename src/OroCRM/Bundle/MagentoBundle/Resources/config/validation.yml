@@ -252,6 +252,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Order:
         status:
             - NotBlank: ~
             - Length: { max: 255 }
+        couponCode:
+            - Length: { max: 255 }
         cart:
             - Valid: ~
         items:

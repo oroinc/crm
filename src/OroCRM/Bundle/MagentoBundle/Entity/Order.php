@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -16,7 +17,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
@@ -281,6 +281,13 @@ class Order extends ExtendOrder implements
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="coupon_code", type="string", length=255, nullable=true)
+     */
+    protected $couponCode;
 
     /**
      * @param WorkflowItem $workflowItem
@@ -794,6 +801,25 @@ class Order extends ExtendOrder implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCouponCode()
+    {
+        return $this->couponCode;
+    }
+
+    /**
+     * @param string $couponCode
+     * @return Order
+     */
+    public function setCouponCode($couponCode)
+    {
+        $this->couponCode = $couponCode;
+
+        return $this;
     }
 
     /**
