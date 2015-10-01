@@ -108,6 +108,8 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: task.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getListBU
                 createdAt:
                     type:      datetime
                     data_name: task.createdAt
