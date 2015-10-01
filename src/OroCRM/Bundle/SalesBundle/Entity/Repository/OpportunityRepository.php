@@ -196,7 +196,7 @@ class OpportunityRepository extends EntityRepository
      */
     protected function isStatusOk($opportunityHistory, $opportunity)
     {
-        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
+        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'status')) {
             $isStatusOk = $oldStatus === 'In Progress';
         } else {
             $isStatusOk = $opportunity->getStatus()->getName() === 'in_progress';
