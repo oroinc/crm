@@ -33,9 +33,10 @@ orocrm:
                 workflow:          Workflow
                 wonCount:          Number Won
                 lostCount:         Number Lost
-                inProgressCount:   Number In Progress
+                inProgressCount:   Opportunities In Progress
                 totalOps:          Total
-                budgetAmount:      Budget Amount
+                probability:       Probability
+                budgetAmount:      Budget Forecast
                 weightedForecast:  Weighted Forecast
                 ownerName:         Owner Name
 
@@ -60,4 +61,4 @@ orocrm:
         opportunities_by_status: Opportunities by status
         opportunities_won_by_period: Won opportunities by date period
         opportunities:
-            total_forecast: Total forecast
+            total_forecast: Forecast
