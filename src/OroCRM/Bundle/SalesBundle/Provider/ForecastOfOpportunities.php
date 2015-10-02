@@ -223,7 +223,7 @@ class ForecastOfOpportunities
     protected function getOwnerIds(WidgetOptionBag $widgetOptions)
     {
         $owners = $widgetOptions->get('owners');
-        $owners = is_array($owners) ? $owners : array($owners);
+        $owners = is_array($owners) ? $owners : [$owners];
 
         $ownerIds = [];
         foreach ($owners as $owner) {
@@ -262,10 +262,14 @@ class ForecastOfOpportunities
     {
         $businessUnits = $widgetOptions->get('businessUnits');
 
+        $businessUnits = is_array($businessUnits) ? $businessUnits : [$businessUnits];
+
         $businessUnitIds = [];
 
         foreach ($businessUnits as $businessUnit) {
-            $businessUnitIds[] = $businessUnit->getId();
+            if (is_object($businessUnit)) {
+                $businessUnitIds[] = $businessUnit->getId();
+            }
         }
 
         return $businessUnitIds;
