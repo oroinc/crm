@@ -34,7 +34,9 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
      */
     protected $aclHelper;
 
-    /** @var ForecastOfOpportunities */
+    /**
+     * @var ForecastOfOpportunities
+     */
     protected $provider;
 
     /**
@@ -67,7 +69,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $doctrineResult = function ($repository) {
             if ($repository == 'OroCRMSalesBundle:Opportunity') {
                 return $this->opportunityRepository;
-            } else if ($repository == 'OroOrganizationBundle:BusinessUnit') {
+            } elseif ($repository == 'OroOrganizationBundle:BusinessUnit') {
                 return $this->businessUnitRepository;
             }
 
@@ -111,7 +113,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
-            $this->translator);
+            $this->translator
+        );
     }
 
     public function tearDown()
