@@ -55,6 +55,7 @@ class OrderControllerTest extends WebTestCase
             'feedback'            => 'nope',
             'customerEmail'       => 'test details',
             'currency'            => 'AU',
+            'couponCode'         => 'some coupon code',
             'taxAmount'           => 5,
             'discountPercent'     => 10,
             'subtotalAmount'      => 10,

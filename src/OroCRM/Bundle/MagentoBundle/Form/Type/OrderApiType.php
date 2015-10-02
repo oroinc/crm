@@ -39,6 +39,7 @@ class OrderApiType extends AbstractType
         $builder->add('shippingAmount', 'oro_money', ['required' => false]);
         $builder->add('shippingMethod', 'text', ['required' => false]);
         $builder->add('taxAmount', 'oro_money', ['required' => false]);
+        $builder->add('couponCode', 'text', ['required' => false]);
         $builder->add('discountAmount', 'oro_money', ['required' => false]);
         $builder->add('discountPercent', 'oro_percent', ['required' => false]);
         $builder->add('totalAmount', 'oro_money', ['required' => false]);
