@@ -308,19 +308,17 @@ datagrid:
                     data_name: c.updatedAt
                     enabled: false
                 owner:
-                    type: entity
+                    type: choice-tree
                     label: oro.user.owner.label
                     data_name: c.owner
                     options:
-                        field_options:
-                            class: OroUserBundle:User
-                            multiple: true
-                            property: fullName
-                            translatable_options: false
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: c.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getList
         actions:
             view:
                 type: navigate
@@ -445,19 +443,17 @@ datagrid:
                     type:      string
                     data_name: contactPhone
                 owner:
-                    type: entity
+                    type: choice-tree
                     label: oro.user.owner.label
                     data_name: a.owner
                     options:
-                        field_options:
-                            class: OroUserBundle:User
-                            multiple: true
-                            property: fullName
-                            translatable_options: false
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getList
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt

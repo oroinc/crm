@@ -152,19 +152,17 @@ datagrid:
                     type: string
                     data_name: email.email
                 owner:
-                    type: entity
+                    type: choice-tree
                     label: oro.user.owner.label
                     data_name: o.owner
                     options:
-                        field_options:
-                            class: OroUserBundle:User
-                            multiple: true
-                            property: fullName
-                            translatable_options: false
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getList
         actions:
             view:
                 type:          navigate
@@ -370,19 +368,17 @@ datagrid:
                     data_name: addressPostalCode
                     enabled: false
                  owner:
-                     type: entity
-                     label: oro.user.owner.label
-                     data_name: l.owner
-                     options:
-                         field_options:
-                             class: OroUserBundle:User
-                             multiple: true
-                             property: fullName
-                             translatable_options: false
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: l.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                  businessUnitId:
-                     label: oro.business_unit.label
-                     type: choice-business-unit
-                     data_name: l.owner
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: l.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getList
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -535,19 +531,18 @@ datagrid:
                             workflow_entity_class: %orocrm_sales.salesfunnel.entity.class%
                             translatable_options: false
                 owner:
-                    type: entity
+                    type: choice-tree
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
                     options:
-                        field_options:
-                            class: OroUserBundle:User
-                            multiple: true
-                            property: fullName
-                            translatable_options: false
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
+                    options:
+                        data: @oro_organization.business_unit_manager->getList
+
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
