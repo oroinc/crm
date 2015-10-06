@@ -183,6 +183,9 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
+                    - contactOwner.id as ownerId
+                    - CONCAT(contactOwner.firstName, CONCAT(' ', contactOwner.lastName)) as ownerName
+                    - CONCAT(contactOwner.firstName, CONCAT(' ', contactOwner.lastName)) as ownerNameSecond
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -193,6 +196,7 @@ datagrid:
                         - { join: c.source, alias: contactSource }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+                        - { join: c.owner, alias: contactOwner }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -224,6 +228,8 @@ datagrid:
                                 call: "Phone Call"
                                 tv: "TV"
                                 website: "Website"
+#            contactSourceLabel:
+#                entity_field: %orocrm_contact.entity.class%::source
             contactSourceName:
                 label:         orocrm.contact.source.label
                 frontend_type: select
@@ -233,6 +239,27 @@ datagrid:
                     call: "Phone Call"
                     tv: "TV"
                     website: "Website"
+            ownerName:
+                label:         orocrm.contact.owner.label
+                inline_editing:
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            id_field_name: ownerId
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_ContactBundle_Entity_Contact
+            ownerNameSecond:
+                label:         orocrm.contact.owner.label
+                inline_editing:
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            id_field_name: ownerId
+                    autocomplete_api_accessor:
+                        # by default class: oroentity/js/tools/entity-select-search-api-accessor
+                        entity_name: OroCRM_Bundle_ContactBundle_Entity_Contact
+                        field_name: lastName
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
@@ -247,6 +274,7 @@ datagrid:
                 frontend_type: datetime
         properties:
             id: ~
+            ownerId: ~
             contactSourceName: ~
             view_link:
                 type:       url
@@ -299,9 +327,6 @@ datagrid:
                 primaryPhone:
                     type: string
                     data_name: phone.phone
-                contactSourceName:
-                    type: string
-                    data_name: contactSource.name
                 contactSourceLabel:
                     type: entity
                     data_name: contactSource.name
