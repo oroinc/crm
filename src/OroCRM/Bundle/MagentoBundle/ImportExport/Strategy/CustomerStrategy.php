@@ -97,7 +97,9 @@ class CustomerStrategy extends AbstractImportStrategy
                 ['originId' => $entity->getWebsite()->getOriginId()]
             );
 
-            $searchContext['website'] = $website;
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
             /** @var Customer $existingEntity */
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
