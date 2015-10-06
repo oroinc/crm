@@ -81,6 +81,62 @@ class OrderTest extends AbstractEntityTestCase
             'channel'             => ['channel', $channel, $channel],
             'owner'               => ['owner', $owner, $owner],
             'organization'        => ['organization', $organization, $organization],
+            'couponCode'          => ['couponCode', 'TEST COUPON CODE', 'TEST COUPON CODE'],
+        ];
+    }
+
+    /**
+     * @dataProvider isCanceledDataProvider
+     * @param $status
+     * @param $result
+     */
+    public function testIsCanceled($status, $result)
+    {
+        $this->entity->setStatus($status);
+        if ($result) {
+            $this->assertTrue($this->entity->isCanceled());
+        } else {
+            $this->assertFalse($this->entity->isCanceled());
+        }
+    }
+
+    /**
+     * @dataProvider isCompletedDataProvider
+     * @param $status
+     * @param $result
+     */
+    public function testIsCompleted($status, $result)
+    {
+        $this->entity->setStatus($status);
+        if ($result) {
+            $this->assertTrue($this->entity->isCompleted());
+        } else {
+            $this->assertFalse($this->entity->isCompleted());
+        }
+
+    }
+
+    /**
+     * @return array
+     */
+    public function isCanceledDataProvider()
+    {
+        return [
+            'Order is canceled'              => ['canceled', true],
+            'Order is canceled(ignore case)' => ['Canceled', true],
+            'Order is not canceled'          => ['completed', false],
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function isCompletedDataProvider()
+    {
+        return [
+            'Order is completed'              => ['completed', true],
+            'Order is completed(ignore case)' => ['Completed', true],
+            'Order is not completed'          => ['canceled', false],
         ];
     }
 }
