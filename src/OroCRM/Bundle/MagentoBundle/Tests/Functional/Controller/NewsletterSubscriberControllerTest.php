@@ -56,21 +56,19 @@ class NewsletterSubscriberControllerTest extends AbstractController
             ->willReturn($jobResult);
 
         $this->getContainer()->set('oro_importexport.job_executor', $jobExecutor);
+
+        $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager()->beginTransaction();
     }
 
     protected function tearDown()
     {
-        // clear DB from separate connection
-        $batchJobManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobInstance')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:JobExecution')->execute();
-        $batchJobManager->createQuery('DELETE AkeneoBatchBundle:StepExecution')->execute();
+        // clear DB from separate connection, close to avoid connection limit and memory leak
+        $manager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
+        $manager->rollback();
+        $manager->getConnection()->close();
 
         $this->getContainer()->set('oro_importexport.job_executor', $this->baseJobExecutor);
         unset($this->transport, $this->baseJobExecutor);
-
-        $entityManager = $this->getContainer()->get('akeneo_batch.job_repository')->getJobManager();
-        $entityManager->getConnection()->close();
 
         parent::tearDown();
     }

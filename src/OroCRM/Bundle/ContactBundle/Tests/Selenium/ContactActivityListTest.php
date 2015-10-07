@@ -78,4 +78,10 @@ class ContactActivityListTest extends Selenium2TestCase
             ->assertMessage('Task created successfully')
             ->verifyActivity('Task', $subject);
     }
+
+    public function testCloseWidgetWindow()
+    {
+        $login = $this->login();
+        $login->closeWidgetWindow();
+    }
 }
