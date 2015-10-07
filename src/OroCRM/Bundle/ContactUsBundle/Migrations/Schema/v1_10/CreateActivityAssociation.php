@@ -4,17 +4,37 @@ namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+
+use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
+
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
-use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 
-class OroCRMContactUsBundle implements Migration, ActivityExtensionAwareInterface
+class CreateActivityAssociation implements
+    Migration,
+    OrderedMigrationInterface,
+    ActivityExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 1;
+    }
 
     /**
      * {@inheritdoc}
@@ -27,10 +47,19 @@ class OroCRMContactUsBundle implements Migration, ActivityExtensionAwareInterfac
     /**
      * {@inheritdoc}
      */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
         self::enableActivityAssociations($schema);
         self::addActivityAssociations($schema, $this->activityExtension);
+        self::addActivityListAssociationTable($schema, $this->activityListExtension);
     }
 
     /**
@@ -52,5 +81,18 @@ class OroCRMContactUsBundle implements Migration, ActivityExtensionAwareInterfac
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
         $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contactus_request');
+    }
+
+    /**
+     * Manually create activitylist association table for further filling.
+     *
+     * @param Schema                $schema
+     * @param ActivityListExtension $activityListExtension
+     */
+    public static function addActivityListAssociationTable(
+        Schema $schema,
+        ActivityListExtension $activityListExtension
+    ) {
+        $activityListExtension->addActivityListAssociation($schema, 'orocrm_contactus_request');
     }
 }

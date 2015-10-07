@@ -10,7 +10,7 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
 use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_7\OroCRMContactUsBundle;
-use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_10\OroCRMContactUsBundle as ContactRequestActivityAssociations;
+use OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_10\CreateActivityAssociation;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -54,7 +54,7 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
         $this->addOrocrmContactusRequestCallsForeignKeys($schema);
         OroCRMContactUsBundle::addOwner($schema);
 
-        ContactRequestActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
+        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**

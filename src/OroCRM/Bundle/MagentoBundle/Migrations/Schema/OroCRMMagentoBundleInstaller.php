@@ -17,7 +17,7 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\OroCrmMagentoBundle as MagentoActivityAssociations;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -1515,7 +1515,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
 
-        MagentoActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
+        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
