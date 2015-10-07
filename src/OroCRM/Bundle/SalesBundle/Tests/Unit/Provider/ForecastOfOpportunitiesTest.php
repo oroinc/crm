@@ -153,6 +153,9 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(['value' => 500], $result);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
     public function testForecastOfOpportunitiesValuesWithCompareDate()
     {
         $user = new User();
