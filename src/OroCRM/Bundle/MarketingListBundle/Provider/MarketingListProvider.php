@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MarketingListBundle\Provider;
 
 use Doctrine\ORM\Query\Expr\From;
+use Doctrine\ORM\Query\Expr\Select;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
@@ -22,6 +23,7 @@ class MarketingListProvider
     const FULL_ENTITIES_MIXIN = 'orocrm-marketing-full-mixin';
     const MANUAL_RESULT_ITEMS_MIXIN = 'orocrm-marketing-list-manual-items-mixin';
     const MANUAL_RESULT_ENTITIES_MIXIN = 'orocrm-marketing-list-manual-entities-mixin';
+    const DATAGRID_COLUMN_ALIASES_PATH = '[source][query_config][column_aliases]';
 
     /**
      * @var Manager
@@ -32,6 +34,11 @@ class MarketingListProvider
      * @var array
      */
     protected $dataGrid = [];
+
+    /**
+     * @var array
+     */
+    protected $columnInformation = [];
 
     /**
      * @param Manager $dataGridManager
@@ -53,7 +60,10 @@ class MarketingListProvider
 
         /** @var OrmDatasource $dataSource */
         $dataSource = $dataGrid->getAcceptedDatasource();
-        return $dataSource->getQueryBuilder();
+        $qb =  $dataSource->getQueryBuilder();
+        $this->saveColumnInformation($marketingList, $dataGrid, $qb);
+
+        return $qb;
     }
 
     /**
@@ -129,6 +139,19 @@ class MarketingListProvider
 
     /**
      * @param MarketingList $marketingList
+     * @return null|array
+     */
+    public function getColumnInformation(MarketingList $marketingList)
+    {
+        if (array_key_exists($marketingList->getId(), $this->columnInformation)) {
+            return $this->columnInformation[$marketingList->getId()];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param MarketingList $marketingList
      * @param null|string $mixin
      *
      * @return DatagridInterface
@@ -150,5 +173,38 @@ class MarketingListProvider
         }
 
         return $this->dataGrid[$resultKey];
+    }
+
+    /**
+     * @param MarketingList $marketingList
+     * @param DatagridInterface $dataGrid
+     * @param QueryBuilder $qb
+     */
+    protected function saveColumnInformation(
+        MarketingList $marketingList,
+        DatagridInterface $dataGrid,
+        QueryBuilder $qb
+    ) {
+        /** @var Select[] $selects */
+        $selects = $qb->getDQLPart('select');
+        $columnToSelectExpr = [];
+        foreach ($selects as $select) {
+            foreach ($select->getParts() as $selectPart) {
+                $selectData = explode(strrev(' as '), strrev($selectPart), 2);
+                if (count($selectData) === 2) {
+                    $columnToSelectExpr[strrev($selectData[0])] = strrev($selectData[1]);
+                }
+            }
+        }
+
+        $columnAliases = $dataGrid->getConfig()->offsetGetByPath(self::DATAGRID_COLUMN_ALIASES_PATH);
+        $columnInformation = [];
+        foreach ($columnAliases as $alias => $selectAlias) {
+            if (array_key_exists($selectAlias, $columnToSelectExpr)) {
+                $columnInformation[$alias] = $columnToSelectExpr[$selectAlias];
+            }
+        }
+
+        $this->columnInformation[$marketingList->getId()] = $columnInformation;
     }
 }
