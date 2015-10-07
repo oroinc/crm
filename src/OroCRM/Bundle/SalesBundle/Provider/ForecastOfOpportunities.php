@@ -75,6 +75,13 @@ class ForecastOfOpportunities
         $compareToDate = $widgetOptions->get('compareToDate');
 
         if (isset($compareToDate['useDate']) && $compareToDate['useDate']) {
+
+            if (empty($compareToDate['date'])) {
+                $compareToDate['date'] = new \DateTime();
+                $compareToDate['date']->modify('-1 month');
+                $compareToDate['date']->setTime(0, 0, 0);
+            }
+
             $pastResult = $this->{$getterName}($ownerIds, $compareToDate['date']);
 
             $result['deviation'] = $this->translator
