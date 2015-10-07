@@ -23,26 +23,12 @@ datagrid:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.owner, alias: owner }
                         - { join: task.workflowStep, alias: workflowStep }
-        inline_editing:
-            enabled: true
-            save_api_accessor:
-                route: orocrm_account_update
-                http_method: PUT
         columns:
             subject:
                 label:         orocrm.task.subject.label
             dueDate:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
-                editable: true
-                editor:
-                  cell_editor:
-                      view: orodatagrid/js/app/views/editor/datetime-editor-view
-                  validation_rules:
-                      required: true
-                save_api_accessor:
-                    route: orocrm_account_update
-                    http_method: PUT
             workflowStepLabel:
                 label:         orocrm.task.workflow_step.label
             priorityLabel:
