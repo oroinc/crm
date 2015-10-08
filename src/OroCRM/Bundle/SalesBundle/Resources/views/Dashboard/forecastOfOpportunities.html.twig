@@ -1,0 +1,22 @@
+{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
+
+{% set widgetType = 'quick-launchpad' %}
+
+{% block content %}
+    {% if items|length %}
+        <ul class="quick-launchpad-toolbar with-subwidgets">
+            {% set itemWidth = (100 / 3)|round(2)%}
+            {% for itemName, item in items %}
+                <li class="sub-widget" style="width: {{ itemWidth }}%">
+                    {% include widgetDataItems[itemName].template with {item: item}%}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="container-fluid">
+            <div class="clearfix no-data">
+                <span>{{ 'orocrm.sales.dashboard.forecast_of_opportunities.no_available_metrics'|trans }}</span>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

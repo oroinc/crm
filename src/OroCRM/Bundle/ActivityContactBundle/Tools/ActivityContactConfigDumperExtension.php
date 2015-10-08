@@ -108,9 +108,8 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
     protected function updateConfigs($className, $fieldName, $options)
     {
         foreach ($options as $scope => $scopeValues) {
-            $configProvider = $this->configManager->getProvider($scope);
-            $config         = $configProvider->getConfig($className, $fieldName);
-            $hasChanges     = false;
+            $config     = $this->configManager->getProvider($scope)->getConfig($className, $fieldName);
+            $hasChanges = false;
             foreach ($scopeValues as $code => $val) {
                 if (!$config->is($code, $val)) {
                     $config->set($code, $val);
@@ -118,7 +117,7 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
                 }
             }
             if ($hasChanges) {
-                $configProvider->persist($config);
+                $this->configManager->persist($config);
             }
         }
     }
