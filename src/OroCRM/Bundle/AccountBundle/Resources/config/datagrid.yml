@@ -54,7 +54,7 @@ datagrid:
     accounts-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
         inline_editing:
-            enabled: true
+            enable: true
             save_api_accessor:
               http_method: PUT
               route: orocrm_account_update
@@ -102,7 +102,7 @@ datagrid:
             contactName:
                 label:         orocrm.account.contact.name
                 inline_editing:
-                    enabled: true
+                    enable: true
                     validation_rules:
                         required: true
                     save_api_accessor:
@@ -111,7 +111,7 @@ datagrid:
             contactEmail:
                 label:         orocrm.account.contact.email
                 inline_editing:
-                    enabled: true
+                    enable: true
                     validation_rules:
                         email: "Some nice message"
                         required: true
@@ -128,7 +128,7 @@ datagrid:
                     editor:
                         view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
-                            id_field_name: ownerId
+                            value_field_name: ownerId
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account

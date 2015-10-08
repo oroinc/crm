@@ -24,7 +24,7 @@ datagrid:
                         - { join: task.owner, alias: owner }
                         - { join: task.workflowStep, alias: workflowStep }
         inline_editing:
-            enabled: true
+            enable: true
             save_api_accessor:
                 route: orocrm_account_update
                 http_method: PUT

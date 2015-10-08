@@ -31,7 +31,7 @@ datagrid:
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
         inline_editing:
-            enabled: true
+            enable: true
             save_api_accessor:
               http_method: PUT
               route: orocrm_account_update
