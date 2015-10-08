@@ -10,6 +10,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityBundle\EntityProperty\DatesAwareInterface;
 
 use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 
@@ -51,7 +52,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      }
  * )
  */
-class Call extends ExtendCall
+class Call extends ExtendCall implements DatesAwareInterface
 {
     /**
      * @var integer
@@ -165,6 +166,11 @@ class Call extends ExtendCall
      * @Soap\ComplexType("string", nillable=true)
      */
     protected $organization;
+
+    /**
+     * @var bool
+     */
+    protected $updatedAtSet;
 
     public function __construct()
     {
@@ -377,10 +383,13 @@ class Call extends ExtendCall
 
     /**
      * @param \DateTime $createdAt
+     * @return $this
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt(\DateTime $createdAt = null)
     {
         $this->createdAt = $createdAt;
+
+        return $this;
     }
 
     /**
@@ -393,10 +402,27 @@ class Call extends ExtendCall
 
     /**
      * @param \DateTime $updatedAt
+     *
+     * @return $this
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt(\DateTime $updatedAt = null)
     {
+        $this->updatedAtSet = false;
+        if ($updatedAt !== null) {
+            $this->updatedAtSet = true;
+        }
+
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUpdatedAtSet()
+    {
+        return $this->updatedAtSet;
     }
 
     /**
@@ -420,22 +446,5 @@ class Call extends ExtendCall
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->updatedAt = clone $this->createdAt;
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 }
