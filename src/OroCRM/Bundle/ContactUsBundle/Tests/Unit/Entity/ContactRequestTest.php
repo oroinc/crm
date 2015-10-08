@@ -25,8 +25,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $updatedAt              = new \DateTime();
         $lead                   = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead');
         $opportunity            = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
-        $call                   = $this->getMock('OroCRM\Bundle\CallBundle\Entity\Call');
-        $emailEntity            = $this->getMock('Oro\Bundle\EmailBundle\Entity\Email');
         $workflowStep           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
         $workflowItem           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem');
         $contactReason          = $this->getMock(
@@ -53,13 +51,9 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($request->getContactReason());
         $this->assertNull($request->getLead());
         $this->assertNull($request->getOpportunity());
-        $this->assertFalse($request->hasCall($call));
-        $this->assertFalse($request->hasEmail($emailEntity));
 
         $request->setLead($lead);
         $request->setOpportunity($opportunity);
-        $request->addCall($call);
-        $request->addEmail($emailEntity);
         $request->setContactReason($contactReason);
         $request->setWorkflowItem($workflowItem);
         $request->setWorkflowStep($workflowStep);
@@ -82,11 +76,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($workflowItem, $request->getWorkflowItem());
         // should not provoke fatal error, because it's not mandatory field
         $request->setContactReason(null);
-
-        $request->removeCall($call);
-        $this->assertCount(0, $request->getCalls());
-        $request->removeEmail($emailEntity);
-        $this->assertCount(0, $request->getEmails());
     }
 
     public function testBeforeSave()
