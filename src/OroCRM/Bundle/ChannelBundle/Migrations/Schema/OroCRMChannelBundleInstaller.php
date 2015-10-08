@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
@@ -315,7 +315,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
             'orocrm_channel',
             'name',
             [
-                ExtendOptionsManager::MODE_OPTION => ConfigModelManager::MODE_READONLY,
+                ExtendOptionsManager::MODE_OPTION => ConfigModel::MODE_READONLY,
                 'entity' => ['label' => 'orocrm.channel.entity_label'],
                 'extend' => [
                     'is_extend' => true,
