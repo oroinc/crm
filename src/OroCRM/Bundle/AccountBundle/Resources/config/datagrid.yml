@@ -136,9 +136,18 @@ datagrid:
                 contactPhone:
                     type:      string
                     data_name: contactPhone
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: a.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: a.owner
+                    options:
+                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
@@ -374,9 +383,18 @@ datagrid:
                 contactPhone:
                     type:      string
                     data_name: contactPhone
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: a.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
+                businessUnitId:
+                    label: oro.business_unit.label
+                    type: choice-business-unit
+                    data_name: a.owner
+                    options:
+                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
         options:
             entityHint: account
 
@@ -441,9 +459,16 @@ datagrid:
                 contactPhone:
                     type:      string
                     data_name: contactPhone
-                ownerName:
-                    type:      string
-                    data_name: ownerName
+                owner:
+                    type: entity
+                    label: oro.user.owner.label
+                    data_name: a.owner
+                    options:
+                        field_options:
+                            class: OroUserBundle:User
+                            multiple: true
+                            property: fullName
+                            translatable_options: false
         options:
             entityHint: account
             entity_pagination: true
