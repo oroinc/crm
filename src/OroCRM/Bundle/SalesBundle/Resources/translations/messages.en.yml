@@ -43,6 +43,18 @@ orocrm:
             opportunities_by_lead_source_chart:
                 title:       Opportunities By Lead Source
                 description: This widget displays a breakdown of opportunities by Lead source in form of a pie chart.
+            forecast_of_opportunities:
+                title:       Forecast
+                description: This widget displays forecast of opportunities
+                in_progress.label: In Progress
+                total_forecast.label: Total Forecast
+                weighted_forecast.label: Weighted Forecast
+                metrics: Metrics
+                no_changes: No Changes
+                no_available_metrics: No available metrics
+                owner: Owner
+                compareToDate: Compare to Date
+                business_unit: Business Unit
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
@@ -120,6 +132,7 @@ orocrm:
                 view:     View
                 update:   Update
                 delete:   Delete
+                columns.metric_name: Metric Name
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
