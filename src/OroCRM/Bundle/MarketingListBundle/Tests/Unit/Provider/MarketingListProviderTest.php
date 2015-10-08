@@ -2,8 +2,11 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\Query\Expr\Select;
 use Oro\Bundle\DataGridBundle\Datagrid\Builder;
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
+
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
@@ -21,9 +24,6 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $provider;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $em;
-
     protected function setUp()
     {
         $this->dataGridManager = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Manager')
@@ -31,27 +31,36 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->provider = new MarketingListProvider($this->dataGridManager);
-
-        $this->em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
     }
 
     protected function tearDown()
     {
-        unset($this->provider, $this->dataGridManager, $this->em);
+        unset($this->provider, $this->dataGridManager);
     }
 
     /**
      * Gets mock object for query builder
      *
+     * @param array $dqlParts
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getQueryBuilder()
+    protected function getQueryBuilder(array $dqlParts = [])
     {
-        return $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setConstructorArgs([$this->em])
+        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->disableOriginalClone()
             ->getMock();
+
+        $select = new Select();
+        $select->add('t0.test as c1');
+
+        $dqlParts[] = ['select', [$select]];
+
+        $qb->expects($this->any())
+            ->method('getDQLPart')
+            ->will($this->returnValueMap($dqlParts));
+
+        return $qb;
     }
 
     /**
@@ -62,11 +71,12 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
     {
         $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getQueryBuilder();
-        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->getMockForAbstractClass();
+        $dataGrid = $this->getDataGrid();
         $this->assertGetQueryBuilder($marketingList, $queryBuilder, $dataGrid);
 
         $this->assertEquals($queryBuilder, $this->provider->getMarketingListQueryBuilder($marketingList));
+        $expectedColumnInformation = ['testField' => 't0.test'];
+        $this->assertEquals($expectedColumnInformation, $this->provider->getColumnInformation($marketingList));
     }
 
     public function queryBuilderDataProvider()
@@ -92,18 +102,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 
         $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getQueryBuilder();
-        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->getMockForAbstractClass();
-        $config = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $config->expects($this->once())
-            ->method('offsetGetByPath')
-            ->with(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH)
-            ->will($this->returnValue(true));
-        $dataGrid->expects($this->once())
-            ->method('getConfig')
-            ->will($this->returnValue($config));
+        $dataGrid = $this->getDataGrid();
 
         $this->assertGetQueryBuilder(
             $marketingList,
@@ -129,11 +128,8 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $from->expects($this->once())
             ->method('getAlias')
             ->will($this->returnValue('alias'));
-        $queryBuilder = $this->assertEntitiesQueryBuilder($marketingList, 'alias');
-        $queryBuilder->expects($this->once())
-            ->method('getDQLPart')
-            ->with('from')
-            ->will($this->returnValue([$from]));
+        $queryBuilder = $this->getQueryBuilder([['from', [$from]]]);
+        $this->assertEntitiesQueryBuilder($queryBuilder, $marketingList, 'alias');
 
         $this->assertInstanceOf(
             'Doctrine\ORM\QueryBuilder',
@@ -155,21 +151,18 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $from->expects($this->once())
             ->method('getAlias')
             ->will($this->returnValue('alias'));
-        $queryBuilder = $this->assertEntitiesQueryBuilder($marketingList, 'alias');
-        $queryBuilder->expects($this->once())
-            ->method('getDQLPart')
-            ->with('from')
-            ->will($this->returnValue([$from]));
+        $queryBuilder = $this->getQueryBuilder([['from', [$from]]]);
+        $this->assertEntitiesQueryBuilder($queryBuilder, $marketingList, 'alias');
 
         $this->assertInstanceOf('\Iterator', $this->provider->getMarketingListEntitiesIterator($marketingList));
     }
 
     /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $queryBuilder
      * @param MarketingList $marketingList
      * @param string $alias
-     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function assertEntitiesQueryBuilder(MarketingList $marketingList, $alias)
+    protected function assertEntitiesQueryBuilder($queryBuilder, MarketingList $marketingList, $alias)
     {
         if ($marketingList->isManual()) {
             $mixin = MarketingListProvider::MANUAL_RESULT_ENTITIES_MIXIN;
@@ -177,9 +170,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             $mixin = MarketingListProvider::RESULT_ENTITIES_MIXIN;
         }
 
-        $queryBuilder = $this->getQueryBuilder();
-        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
-            ->getMockForAbstractClass();
+        $dataGrid = $this->getDataGrid();
 
         $queryBuilder->expects($this->exactly(2))
             ->method('resetDQLPart')
@@ -199,8 +190,6 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             $dataGrid,
             $mixin
         );
-
-        return $queryBuilder;
     }
 
     protected function assertGetQueryBuilder(MarketingList $marketingList, $queryBuilder, $dataGrid, $mixin = null)
@@ -250,5 +239,24 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($typeName === MarketingListType::TYPE_MANUAL));
 
         return $marketingList;
+    }
+
+    /**
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function getDataGrid()
+    {
+        $dataGrid = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface')
+            ->getMockForAbstractClass();
+
+        $columnAliases = ['testField' => 'c1'];
+        $config = DatagridConfiguration::createNamed('test', []);
+        $config->offsetSetByPath(MarketingListProvider::DATAGRID_COLUMN_ALIASES_PATH, $columnAliases);
+
+        $dataGrid->expects($this->any())
+            ->method('getConfig')
+            ->will($this->returnValue($config));
+
+        return $dataGrid;
     }
 }
