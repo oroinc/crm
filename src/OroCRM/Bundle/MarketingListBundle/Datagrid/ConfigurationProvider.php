@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
-use Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
@@ -19,7 +19,7 @@ class ConfigurationProvider implements ConfigurationProviderInterface
     protected $chainConfigurationProvider;
 
     /**
-     * @var ConfigProviderInterface
+     * @var ConfigProvider
      */
     protected $configProvider;
 
@@ -35,12 +35,12 @@ class ConfigurationProvider implements ConfigurationProviderInterface
 
     /**
      * @param ConfigurationProviderInterface $chainConfigurationProvider
-     * @param ConfigProviderInterface $configProvider
-     * @param MarketingListHelper $helper
+     * @param ConfigProvider                 $configProvider
+     * @param MarketingListHelper            $helper
      */
     public function __construct(
         ConfigurationProviderInterface $chainConfigurationProvider,
-        ConfigProviderInterface $configProvider,
+        ConfigProvider $configProvider,
         MarketingListHelper $helper
     ) {
         $this->chainConfigurationProvider = $chainConfigurationProvider;
