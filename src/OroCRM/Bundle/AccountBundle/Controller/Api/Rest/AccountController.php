@@ -154,18 +154,14 @@ class AccountController extends RestController implements ClassResourceInterface
         return $this->get('orocrm_account.form.handler.account.api');
     }
 
-    protected function getItemArray($id)
+    protected function getPreparedItem($entity, $resultFields = [])
     {
-        $result = parent::getItemArray($id);
-        $manager = $this->getManager();
+        $result = parent::getPreparedItem($entity, $resultFields);
 
         /** @var AmountProvider $amountProvider  */
         $amountProvider = $this->get('orocrm_channel.provider.lifetime.amount_provider');
-        $entity = $manager->find($id);
 
-        if ($entity) {
-            $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
-        }
+        $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
 
         return $result;
     }
