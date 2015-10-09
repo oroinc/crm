@@ -8,7 +8,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use JMS\JobQueueBundle\Entity\Job;
 
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 use OroCRM\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
@@ -28,9 +27,6 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
     /** @var EntityRepository|\PHPUnit_Framework_MockObject_MockObject */
     protected $repo;
 
-    /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $cm;
-
     protected function setUp()
     {
         $this->registry = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
@@ -38,21 +34,19 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->em       = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
-        $this->cm       = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Config\ConfigManager')
-            ->disableOriginalConstructor()->getMock();
         $this->listener = new TimezoneChangeListener($this->registry);
     }
 
     protected function tearDown()
     {
-        unset($this->listener, $this->em, $this->registry, $this->registry, $this->cm);
+        unset($this->listener, $this->em, $this->registry, $this->registry);
     }
 
     public function testWasNotChanged()
     {
         $this->registry->expects($this->never())->method('getManager');
 
-        $this->listener->onConfigUpdate(new ConfigUpdateEvent($this->cm, [], []));
+        $this->listener->onConfigUpdate(new ConfigUpdateEvent([]));
     }
 
     public function testChangedButAlreadyScheduled()
@@ -66,7 +60,7 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
             ->with(['command' => LifetimeAverageAggregateCommand::COMMAND_NAME, 'state' => Job::STATE_PENDING])
             ->will($this->returnValue($scheduled = true));
 
-        $this->listener->onConfigUpdate(new ConfigUpdateEvent($this->cm, ['oro_locale.timezone' => 1], []));
+        $this->listener->onConfigUpdate(new ConfigUpdateEvent(['oro_locale.timezone' => ['old' => 1, 'new' => 2]]));
     }
 
     public function testSuccessChange()
@@ -84,6 +78,6 @@ class TimezoneChangeListenerTest extends \PHPUnit_Framework_TestCase
         $this->em->expects($this->once())->method('persist');
         $this->em->expects($this->once())->method('flush');
 
-        $this->listener->onConfigUpdate(new ConfigUpdateEvent($this->cm, ['oro_locale.timezone' => 1], []));
+        $this->listener->onConfigUpdate(new ConfigUpdateEvent(['oro_locale.timezone' => ['old' => 1, 'new' => 2]]));
     }
 }

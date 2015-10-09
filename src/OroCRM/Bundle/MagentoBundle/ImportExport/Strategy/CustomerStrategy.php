@@ -92,6 +92,14 @@ class CustomerStrategy extends AbstractImportStrategy
     protected function findExistingEntity($entity, array $searchContext = [])
     {
         if ($entity instanceof Customer) {
+            $website = $this->databaseHelper->findOneBy(
+                'OroCRM\Bundle\MagentoBundle\Entity\Website',
+                ['originId' => $entity->getWebsite()->getOriginId()]
+            );
+
+            if ($website) {
+                $searchContext['website'] = $website;
+            }
             /** @var Customer $existingEntity */
             $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
@@ -100,7 +108,8 @@ class CustomerStrategy extends AbstractImportStrategy
                     'OroCRM\Bundle\MagentoBundle\Entity\Customer',
                     [
                         'email' => $entity->getEmail(),
-                        'channel' => $entity->getChannel()
+                        'channel' => $entity->getChannel(),
+                        'website' => $website
                     ]
                 );
                 if ($existingEntity && $existingEntity->getId()) {
