@@ -103,9 +103,11 @@ class FillActivityAssociationTables implements
     {
         $queries->addPreQuery(
             new SqlMigrationQuery(
-                [$this->getFillCartEmailActivityQuery(), $this->getFillCartCallActivityQuery(
-                ), $this->getFillOrderEmailActivityQuery(), $this->getFillOrderCallActivityQuery()
-
+                [
+                    $this->getFillCartEmailActivityQuery(),
+                    $this->getFillCartCallActivityQuery(),
+                    $this->getFillOrderEmailActivityQuery(),
+                    $this->getFillOrderCallActivityQuery()
                 ]
             )
         );

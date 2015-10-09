@@ -6,18 +6,6 @@ workflows:
                 order: 10
                 allowed_transitions:
                     - record_feedback
-# @todo: Prepare migration for this steps - move them to the not_contacted step.
-#            emailed:
-#                label: 'Emailed'
-#                order: 20
-#                allowed_transitions:
-#                    - log_call
-#                    - record_feedback
-#            called:
-#                label: 'Called'
-#                order: 30
-#                allowed_transitions:
-#                    - no_reply
             contacted:
                 label: 'Contacted'
                 order: 40
