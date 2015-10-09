@@ -8,7 +8,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Comparator;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\EntityExtendBundle\Migration\EntityMetadataHelper;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
@@ -152,7 +152,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
         $result = [];
 
         $sql    = 'SELECT class_name, data FROM oro_entity_config WHERE mode = ?';
-        $params = [ConfigModelManager::MODE_DEFAULT];
+        $params = [ConfigModel::MODE_DEFAULT];
         $types  = [Type::STRING];
 
         $this->logQuery($logger, $sql, $params, $types);
