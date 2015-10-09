@@ -21,6 +21,8 @@ parameters:
 
     orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
+    orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -122,3 +124,12 @@ services:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.orocrm-sales-b2bcustomers-for-context-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-lead-for-context-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-opportunity-for-context-grid, method: onBuildAfter }
+
+    orocrm_sales.provider.forecast_of_opportunities:
+        class: %orocrm_sales.provider.forecast_of_opportunity.class%
+        arguments:
+            - @doctrine
+            - @oro_locale.formatter.number
+            - @oro_locale.formatter.date_time
+            - @oro_security.acl_helper
+            - @translator

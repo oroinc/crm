@@ -15,6 +15,8 @@ orocrm:
             opportunities_by_status.description: Opportunities by status report
             won_by_period.label: Won opportunities by period
             won_by_period.description: Won opportunities by period report
+            total_forecast.label: Total Forecast
+            total_forecast.description: Total Forecast report
         datagrid:
             columns:
                 account_name:      Account name
@@ -31,8 +33,12 @@ orocrm:
                 workflow:          Workflow
                 wonCount:          Number Won
                 lostCount:         Number Lost
-                inProgressCount:   Number In Progress
+                inProgressCount:   Opportunities In Progress
                 totalOps:          Total
+                probability:       Probability
+                budgetAmount:      Budget Forecast
+                weightedForecast:  Weighted Forecast
+                ownerName:         Owner Name
 
         controller:
             report:
@@ -54,3 +60,5 @@ orocrm:
         leads_by_date: Number leads by date
         opportunities_by_status: Opportunities by status
         opportunities_won_by_period: Won opportunities by date period
+        opportunities:
+            total_forecast: Forecast

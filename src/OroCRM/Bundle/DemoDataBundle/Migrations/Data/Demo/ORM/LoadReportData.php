@@ -18,24 +18,16 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
     protected $em;
 
     // @codingStandardsIgnoreStart
-    protected $reports = array(
-        array(
-            'name' => 'Total Forecast',
-            'description' => 'This report forecasts maximum projected income from all current opportunities.',
-            'type' => ReportType::TYPE_TABLE,
-            'owner' => 'Acme, General',
-            'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-            'definition' => '{"filters":[{"columnName":"probability","criterion":{"filter":"number","data":{"value":0,"type":"4"}}},"AND",{"columnName":"probability","criterion":{"filter":"number","data":{"value":1,"type":"4"}}}],"grouping_columns":[{"name":"probability"}],"columns":[{"name":"budgetAmount","label":"Budget amount","func":{"name":"Sum","group_type":"aggregates","group_name":"number"},"sorting":""},{"name":"probability","label":"Probability","func":"","sorting":"DESC"}]}'
-        ),
-        array(
+    protected $reports = [
+        [
             'name' => 'Leads by Geography',
             'description' => 'Geographical distribution of Leads',
             'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
             'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
             'definition' => '{"filters":[],"grouping_columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region_name"}],"columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
-        ),
-    );
+        ],
+    ];
     // @codingStandardsIgnoreEnd
 
     /**
