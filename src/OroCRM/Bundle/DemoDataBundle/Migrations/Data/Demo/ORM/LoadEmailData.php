@@ -165,6 +165,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
         $this->setSecurityContext($owner);
 
         $emailUser->addFolder($origin->getFolder(FolderType::SENT));
+        $emailUser->setOrigin($origin);
         $emailUser->setOwner($owner);
         $emailUser->setOrganization($owner->getOrganization());
 
