@@ -95,18 +95,17 @@ class AmountProvider
         /** @var EntityManager $em */
         $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
         $qb = $em->createQueryBuilder();
-        $qb->select('ac.id AS accountId, SUM(h.amount) AS lifetimeValue')
+        $qb->select('IDENTITY(h.account) AS accountId, SUM(h.amount) AS lifetimeValue')
             ->from('OroCRMChannelBundle:LifetimeValueHistory', 'h')
             ->leftJoin('h.dataChannel', 'ch')
             ->andWhere('ch.status = :channelStatus')
             ->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE))
             ->andWhere('h.status = :status')
             ->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW))
-            ->leftJoin('h.account', 'ac')
-            ->groupBy('ac.id');
+            ->groupBy('h.account');
 
         if ($ids) {
-            $qb->andWhere('ac.id IN(:ids)')
+            $qb->andWhere('IDENTITY(h.account) IN(:ids)')
                 ->setParameter('ids', array_values($ids));
         }
 

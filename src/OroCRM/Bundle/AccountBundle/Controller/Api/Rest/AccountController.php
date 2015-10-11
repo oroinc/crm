@@ -185,7 +185,7 @@ class AccountController extends RestController implements ClassResourceInterface
             ->getArrayResult();
         $lifetimeMap = [];
         foreach ($lifetimeValues as $value) {
-            $lifetimeMap[$value['accountId']] = $value['lifetimeValue'];
+            $lifetimeMap[$value['accountId']] = (float)$value['lifetimeValue'];
         }
 
         foreach ($entities as $entity) {
