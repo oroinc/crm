@@ -196,6 +196,9 @@ datagrid:
                         - { join: c.owner, alias: o }
             hints:
                 - HINT_TRANSLATABLE
+        inline_editing:
+            enable: true
+            entity_name: OroCRMContactBundle:Contact
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label
