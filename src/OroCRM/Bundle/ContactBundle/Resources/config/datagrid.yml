@@ -199,6 +199,9 @@ datagrid:
         inline_editing:
             enable: true
             entity_name: OroCRMContactBundle:Contact
+            save_api_accessor:
+                default_route_parameters:
+                    className: OroCRM_Bundle_ContactBundle_Entity_Contact
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label
@@ -211,6 +214,21 @@ datagrid:
                 frontend_type: phone
             contactSourceLabel:
                 label:         orocrm.contact.source.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
+                        view_options:
+                            placeholder: "Select a Source"
+                            value_field_name: contactSourceName
+                            choices:
+                                other: "Other Source"
+                                call: "Phone Call"
+                                tv: "TV"
+                                website: "Website"
+                save_api_accessor:
+                    default_route_parameters:
+                        className: OroCRM_Bundle_ContactBundle_Entity_Contact
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
