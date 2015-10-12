@@ -82,4 +82,33 @@ class AmountProvider
 
         return $qb;
     }
+
+    /**
+     * Returns query builder that allows to fetch list of lifetime values for each account
+     *
+     * @param null $ids     the identifiers of accounts the lifetimeValues for which is need to be fetched
+     *
+     * @return QueryBuilder
+     */
+    public function getAccountsLifetimeQueryBuilder($ids = null)
+    {
+        /** @var EntityManager $em */
+        $em = $this->registry->getManagerForClass('OroCRMChannelBundle:LifetimeValueHistory');
+        $qb = $em->createQueryBuilder();
+        $qb->select('IDENTITY(h.account) AS accountId, SUM(h.amount) AS lifetimeValue')
+            ->from('OroCRMChannelBundle:LifetimeValueHistory', 'h')
+            ->leftJoin('h.dataChannel', 'ch')
+            ->andWhere('ch.status = :channelStatus')
+            ->setParameter('channelStatus', $qb->expr()->literal((int)Channel::STATUS_ACTIVE))
+            ->andWhere('h.status = :status')
+            ->setParameter('status', $qb->expr()->literal(LifetimeValueHistory::STATUS_NEW))
+            ->groupBy('h.account');
+
+        if ($ids) {
+            $qb->andWhere('IDENTITY(h.account) IN(:ids)')
+                ->setParameter('ids', array_values($ids));
+        }
+
+        return $qb;
+    }
 }
