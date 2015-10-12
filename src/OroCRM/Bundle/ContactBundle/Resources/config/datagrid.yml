@@ -211,6 +211,18 @@ datagrid:
                 frontend_type: phone
             contactSourceLabel:
                 label:         orocrm.contact.source.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
+                        view_options:
+                            placeholder: "Select a Source"
+                            value_field_name: contactSourceName
+                            choices:
+                                other: "Other Source"
+                                call: "Phone Call"
+                                tv: "TV"
+                                website: "Website"
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
