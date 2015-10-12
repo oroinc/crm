@@ -190,7 +190,7 @@ class AccountController extends RestController implements ClassResourceInterface
 
         foreach ($entities as $entity) {
             /** @var Account $entity */
-            $entityArray = $this->getPreparedItem($entity, $resultFields);
+            $entityArray = parent::getPreparedItem($entity, $resultFields);
             if (array_key_exists($entity->getId(), $lifetimeMap)) {
                 $entityArray['lifetimeValue'] = $lifetimeMap[$entity->getId()];
             } else {
