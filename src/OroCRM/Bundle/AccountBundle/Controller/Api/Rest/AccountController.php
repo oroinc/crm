@@ -19,6 +19,9 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
+use OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AmountProvider;
+use OroCRM\Bundle\AccountBundle\Entity\Account;
+
 /**
  * @RouteResource("account")
  * @NamePrefix("oro_api_")
@@ -149,5 +152,54 @@ class AccountController extends RestController implements ClassResourceInterface
     public function getFormHandler()
     {
         return $this->get('orocrm_account.form.handler.account.api');
+    }
+
+    protected function getPreparedItem($entity, $resultFields = [])
+    {
+        $result = parent::getPreparedItem($entity, $resultFields);
+
+        /** @var AmountProvider $amountProvider  */
+        $amountProvider = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+
+        $result['lifetimeValue'] = $amountProvider->getAccountLifeTimeValue($entity);
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getPreparedItems($entities, $resultFields = [])
+    {
+        $result = [];
+        $ids = array_map(
+            function (Account $account) {
+                return $account->getId();
+            },
+            $entities
+        );
+
+        $ap = $this->get('orocrm_channel.provider.lifetime.amount_provider');
+        $lifetimeValues = $ap->getAccountsLifetimeQueryBuilder($ids)
+            ->getQuery()
+            ->getArrayResult();
+        $lifetimeMap = [];
+        foreach ($lifetimeValues as $value) {
+            $lifetimeMap[$value['accountId']] = (float)$value['lifetimeValue'];
+        }
+
+        foreach ($entities as $entity) {
+            /** @var Account $entity */
+            $entityArray = parent::getPreparedItem($entity, $resultFields);
+            if (array_key_exists($entity->getId(), $lifetimeMap)) {
+                $entityArray['lifetimeValue'] = $lifetimeMap[$entity->getId()];
+            } else {
+                $entityArray['lifetimeValue'] = 0.0;
+            }
+
+            $result[] = $entityArray;
+        }
+
+        return $result;
     }
 }
