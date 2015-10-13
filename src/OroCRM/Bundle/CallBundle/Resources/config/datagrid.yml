@@ -158,6 +158,12 @@ datagrid:
     dashboard-recent-calls-grid:
         options:
             entityHint: call
+            toolbarOptions:
+                addColumnManager: false
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10
         source:
             type: orm
             acl_resource: orocrm_call_view
@@ -201,9 +207,3 @@ datagrid:
                     data_name: call.callDateTime
             default:
                 dateTime: DESC
-        options:
-            toolbarOptions:
-                hide: true
-                pageSize:
-                    items: [10]
-                    default_per_page: 10
