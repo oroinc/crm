@@ -6,13 +6,39 @@ define([
     'use strict';
 
     var Select2GridChannelAwareView = Select2View.extend({
-        watchChannelParams: function(channelSelector, additionalParamsCb) {
+        $channelSelector: null,
+
+        requiredOptions: [
+            '$channelSelector',
+            'additionalParamsCb'
+        ],
+
+        initialize: function(options) {
+            Select2GridChannelAwareView.__super__.initialize.apply(this, arguments);
+
+            _.each(this.requiredOptions, function(optionName) {
+                if (!_.has(options, optionName)) {
+                    throw new Error('Required option "' + optionName + '" not found.');
+                }
+            });
+
             var updateData = _.bind(function() {
-                this.$el.data('select2_query_additional_params', additionalParamsCb());
+                this.$el.data('select2_query_additional_params', options.additionalParamsCb());
             }, this);
 
-            $(channelSelector).on('change' + this.eventNamespace(), updateData);
+            options.$channelSelector.on('change' + this.eventNamespace(), updateData);
             updateData();
+        },
+
+        dispose: function () {
+            if (this.disposed) {
+                return;
+            }
+
+            this.$channelSelector.off(this.eventNamespace());
+            delete this.$channelSelector;
+
+            Select2View.__super__.dispose.apply(this, arguments);
         }
     });
 

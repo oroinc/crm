@@ -8,18 +8,24 @@ define(function(require) {
     var Select2View = require('orocrmchannel/js/app/views/select2-grid-channel-aware-view');
 
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
+        $sourceElement: null,
         channelId: '',
         channelFieldName: '',
-        channelSelector: '',
         gridName: '',
         ViewType: Select2View,
         initialize: function(options) {
+            this.$sourceElement = options._sourceElement;
             this.channelId = _.result(options, 'channel_id') || this.channelId;
             this.channelFieldName = _.result(options, 'channel_field_name') || this.channelFieldName;
-            this.channelSelector = 'select[name="' + this.channelFieldName + '"]';
             this.gridName = options.configs.grid.name;
             Select2GridChannelAwareComponent.__super__.initialize.call(this, options);
-            this.view.watchChannelParams(this.channelSelector, _.bind(this._getAdditionalParams, this));
+        },
+        prepareViewOptions: function(options, config) {
+            var opts = Select2GridChannelAwareComponent.__super__.prepareViewOptions.apply(this, arguments);
+            opts.$channelSelector = this.findChannelSelectorElement();
+            opts.additionalParamsCb = _.bind(this._getAdditionalParams, this);
+
+            return opts;
         },
         preConfig: function(config) {
             Select2GridChannelAwareComponent.__super__.preConfig.call(this, config);
@@ -33,10 +39,13 @@ define(function(require) {
 
             return config;
         },
-        _getAdditionalParams: function () {
+        findChannelSelectorElement: function() {
+            return this.$sourceElement.closest('form').find('select[name="' + this.channelFieldName + '"]');
+        },
+        _getAdditionalParams: function() {
             var result = {};
 
-            var $channel = $(this.channelSelector);
+            var $channel = this.findChannelSelectorElement();
             var channelIds = [$channel.val()];
             if (this.channelId) {
                 channelIds.push(this.channelId);
