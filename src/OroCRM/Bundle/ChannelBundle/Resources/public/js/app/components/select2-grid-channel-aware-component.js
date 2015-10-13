@@ -2,7 +2,6 @@ define(function(require) {
     'use strict';
 
     var Select2GridChannelAwareComponent;
-    var $ = require('jquery');
     var _ = require('underscore');
     var Select2GridComponent = require('oro/select2-grid-component');
     var Select2View = require('orocrmchannel/js/app/views/select2-grid-channel-aware-view');

@@ -30,7 +30,7 @@ define([
             updateData();
         },
 
-        dispose: function () {
+        dispose: function() {
             if (this.disposed) {
                 return;
             }
