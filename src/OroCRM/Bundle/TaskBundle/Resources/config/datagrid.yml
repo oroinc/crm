@@ -55,8 +55,8 @@ datagrid:
                 label:         orocrm.task.task_priority.label
                 frontend_type: select
             ownerName:
-#                type:          twig
                 label:         orocrm.task.owner.label
+#                type:          twig
 #                frontend_type: html
 #                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
                 inline_editing:
