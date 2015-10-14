@@ -176,6 +176,7 @@ datagrid:
                     - c.lastName
                     - c.createdAt
                     - c.updatedAt
+                    - contactSource.name as source
                     - contactSource.label as contactSourceLabel
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
@@ -198,7 +199,7 @@ datagrid:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
-            entity_name: OroCRMContactBundle:Contact
+            entity_name: %orocrm_contact.entity.class%
             save_api_accessor:
                 default_route_parameters:
                     className: OroCRM_Bundle_ContactBundle_Entity_Contact
@@ -220,15 +221,22 @@ datagrid:
                         view: orodatagrid/js/app/views/editor/related-id-select-editor-view
                         view_options:
                             placeholder: "Select a Source"
-                            value_field_name: contactSourceName
+                            value_field_name: source
                             choices:
                                 other: "Other Source"
                                 call: "Phone Call"
                                 tv: "TV"
                                 website: "Website"
-                save_api_accessor:
-                    default_route_parameters:
-                        className: OroCRM_Bundle_ContactBundle_Entity_Contact
+            source:
+                label:         orocrm.contact.source.label
+                frontend_type: select
+                inline_editing:
+                    enable: true
+                choices:
+                    other: "Other Source"
+                    call: "Phone Call"
+                    tv: "TV"
+                    website: "Website"
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:

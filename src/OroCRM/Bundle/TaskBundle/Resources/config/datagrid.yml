@@ -23,6 +23,12 @@ datagrid:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.owner, alias: owner }
                         - { join: task.workflowStep, alias: workflowStep }
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_task.entity.class%
+            save_api_accessor:
+                default_route_parameters:
+                    className: OroCRM_Bundle_TaskBundle_Entity_Task
         columns:
             subject:
                 label:         orocrm.task.subject.label
@@ -33,6 +39,18 @@ datagrid:
                 label:         orocrm.task.workflow_step.label
             priorityLabel:
                 label:         orocrm.task.task_priority.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
+                        view_options:
+                            placeholder: "Select a Priority"
+                            value_field_name: taskPriority
+#                            choices:
+#                                other: "Other Source"
+#                                call: "Phone Call"
+#                                tv: "TV"
+#                                website: "Website"
             ownerName:
                 type:          twig
                 label:         orocrm.task.owner.label

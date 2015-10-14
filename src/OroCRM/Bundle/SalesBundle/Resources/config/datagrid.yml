@@ -16,6 +16,7 @@ datagrid:
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
+                    - o.budgetAmount as ba
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
                     - status.label as statusLabel
                     - email.email as primaryEmail
@@ -30,6 +31,12 @@ datagrid:
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: owner }
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_sales.opportunity.class%
+            save_api_accessor:
+                default_route_parameters:
+                    className: OroCRM_Bundle_SalesBundle_Entity_Opportunity
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -46,6 +53,21 @@ datagrid:
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
+#                cell_editor:
+#                    view: orodatagrid/js/app/views/editor/number-editor-view
+#                    options:
+#                        decimalPlaces: 2
+#                validation_rules:
+#                    required: true
+#                    min: 0
+            ba:
+                label:         orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+                inline_editing:
+                    enable: true
+                    save_api_accessor:
+                    options:
+                        field_name: budgetAmount
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
