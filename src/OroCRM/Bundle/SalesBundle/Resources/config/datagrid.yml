@@ -34,9 +34,6 @@ datagrid:
         inline_editing:
             enable: true
             entity_name: %orocrm_sales.opportunity.class%
-            save_api_accessor:
-                default_route_parameters:
-                    className: OroCRM_Bundle_SalesBundle_Entity_Opportunity
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -53,13 +50,6 @@ datagrid:
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
-#                cell_editor:
-#                    view: orodatagrid/js/app/views/editor/number-editor-view
-#                    options:
-#                        decimalPlaces: 2
-#                validation_rules:a
-#                    required: true
-#                    min: 0
             ba:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency

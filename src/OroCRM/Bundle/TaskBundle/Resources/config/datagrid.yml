@@ -27,9 +27,6 @@ datagrid:
         inline_editing:
             enable: true
             entity_name: %orocrm_task.entity.class%
-            save_api_accessor:
-                default_route_parameters:
-                    className: OroCRM_Bundle_TaskBundle_Entity_Task
         columns:
             subject:
                 label:         orocrm.task.subject.label
@@ -56,9 +53,6 @@ datagrid:
                 frontend_type: select
             ownerName:
                 label:         orocrm.task.owner.label
-#                type:          twig
-#                frontend_type: html
-#                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
                 inline_editing:
                     enable: true
                     editor:

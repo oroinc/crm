@@ -200,9 +200,6 @@ datagrid:
         inline_editing:
             enable: true
             entity_name: %orocrm_contact.entity.class%
-            save_api_accessor:
-                default_route_parameters:
-                    className: OroCRM_Bundle_ContactBundle_Entity_Contact
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label
