@@ -10,7 +10,8 @@ datagrid:
                     - task.subject
                     - task.description
                     - task.dueDate
-                    - taskPriority.label as priorityLabel
+                    - tp.name as taskPriority
+                    - tp.label as priorityLabel
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
                     - owner.id as ownerId
                     - task.createdAt
@@ -20,7 +21,7 @@ datagrid:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
                     left:
-                        - { join: task.taskPriority, alias: taskPriority }
+                        - { join: task.taskPriority, alias: tp }
                         - { join: task.owner, alias: owner }
                         - { join: task.workflowStep, alias: workflowStep }
         inline_editing:
@@ -46,16 +47,27 @@ datagrid:
                         view_options:
                             placeholder: "Select a Priority"
                             value_field_name: taskPriority
-#                            choices:
-#                                other: "Other Source"
-#                                call: "Phone Call"
-#                                tv: "TV"
-#                                website: "Website"
+                            choices:
+                                low: "Low"
+                                normal: "Normal"
+                                high: "High"
+            taskPriority:
+                label:         orocrm.task.task_priority.label
+                frontend_type: select
             ownerName:
-                type:          twig
+#                type:          twig
                 label:         orocrm.task.owner.label
-                frontend_type: html
-                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+#                frontend_type: html
+#                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_TaskBundle_Entity_Task
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime

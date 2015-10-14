@@ -230,13 +230,6 @@ datagrid:
             source:
                 label:         orocrm.contact.source.label
                 frontend_type: select
-                inline_editing:
-                    enable: true
-                choices:
-                    other: "Other Source"
-                    call: "Phone Call"
-                    tv: "TV"
-                    website: "Website"
             countryName:
                 label:         orocrm.contact.contactaddress.country.label
             regionLabel:
