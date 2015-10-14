@@ -26,7 +26,8 @@ define([
                 this.$el.data('select2_query_additional_params', options.additionalParamsCb());
             }, this);
 
-            options.$channelSelector.on('change' + this.eventNamespace(), updateData);
+            this.$channelSelector = options.$channelSelector;
+            this.$channelSelector.on('change' + this.eventNamespace(), updateData);
             updateData();
         },
 
