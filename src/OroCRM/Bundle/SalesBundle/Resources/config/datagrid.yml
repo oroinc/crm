@@ -57,7 +57,7 @@ datagrid:
 #                    view: orodatagrid/js/app/views/editor/number-editor-view
 #                    options:
 #                        decimalPlaces: 2
-#                validation_rules:
+#                validation_rules:a
 #                    required: true
 #                    min: 0
             ba:
@@ -76,6 +76,15 @@ datagrid:
                 label:         orocrm.contact.email.label
             ownerName:
                 label:         orocrm.sales.opportunity.owner.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
         properties:
             id: ~
             view_link:
