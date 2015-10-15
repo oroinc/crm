@@ -201,7 +201,7 @@ datagrid:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
-            behaviour: enable_selected
+            behaviour: enable_all
             save_api_accessor:
                 http_method: PUT
                 route: orocrm_contact_update
@@ -235,6 +235,8 @@ datagrid:
             contactSourceName:
                 label:         orocrm.contact.source.label
                 frontend_type: select
+                inline_editing:
+                    enable: true
 #                choices: @choiceProvider->getAll
                 choices:
                     other: "Other Source"
@@ -245,11 +247,11 @@ datagrid:
                 label:         orocrm.contact.owner.label
                 inline_editing:
                     enable: true
-                inline_editing:
                     editor:
                         view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: ownerId
+                            css_class_name: 'test2'
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_ContactBundle_Entity_Contact
