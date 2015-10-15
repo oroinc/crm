@@ -50,13 +50,6 @@ datagrid:
             budgetAmount:
                 label:         orocrm.sales.opportunity.budget_amount.label
                 frontend_type: currency
-            ba:
-                label:         orocrm.sales.opportunity.budget_amount.label
-                frontend_type: currency
-                inline_editing:
-                    enable: true
-                    save_api_accessor:
-                        field_name: budgetAmount
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent

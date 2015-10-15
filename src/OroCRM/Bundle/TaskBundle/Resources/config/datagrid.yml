@@ -35,19 +35,6 @@ datagrid:
                 frontend_type: datetime
             workflowStepLabel:
                 label:         orocrm.task.workflow_step.label
-            priorityLabel:
-                label:         orocrm.task.task_priority.label
-                inline_editing:
-                    enable: true
-                    editor:
-                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
-                        view_options:
-                            placeholder: "Select a Priority"
-                            value_field_name: taskPriority
-                            choices:
-                                low: "Low"
-                                normal: "Normal"
-                                high: "High"
             taskPriority:
                 label:         orocrm.task.task_priority.label
                 frontend_type: select
