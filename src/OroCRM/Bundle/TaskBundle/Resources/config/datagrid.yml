@@ -63,7 +63,7 @@ datagrid:
                     data_name: task.dueDate
                 workflowStepLabel:
                     data_name: workflowStep.stepOrder
-                priorityLabel:
+                taskPriority:
                     data_name: taskPriority.order
                 ownerName:
                     data_name: ownerName

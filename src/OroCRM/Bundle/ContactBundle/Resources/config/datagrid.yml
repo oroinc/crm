@@ -210,6 +210,20 @@ datagrid:
             primaryPhone:
                 label:         orocrm.contact.contactphone.phone.label
                 frontend_type: phone
+#            contactSourceLabel:
+#                label:         orocrm.contact.source.label
+#                inline_editing:
+#                    enable: true
+#                    editor:
+#                        view: orodatagrid/js/app/views/editor/related-id-select-editor-view
+#                        view_options:
+#                            placeholder: "Select a Source"
+#                            value_field_name: source
+#                            choices:
+#                                other: "Other Source"
+#                                call: "Phone Call"
+#                                tv: "TV"
+#                                website: "Website"
             source:
                 label:         orocrm.contact.source.label
                 frontend_type: select
@@ -249,7 +263,7 @@ datagrid:
                     data_name: email.email
                 primaryPhone:
                     data_name: phone.phone
-                contactSourceLabel:
+                source:
                     data_name: contactSource.label
                 countryName:
                     data_name: country.name
