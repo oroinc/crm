@@ -64,7 +64,7 @@ datagrid:
                 workflowStepLabel:
                     data_name: workflowStep.stepOrder
                 taskPriority:
-                    data_name: taskPriority.order
+                    data_name: tp.order
                 ownerName:
                     data_name: ownerName
                 createdAt:
