@@ -24,6 +24,7 @@ define([
 
             var updateData = _.bind(function() {
                 this.$el.data('select2_query_additional_params', options.additionalParamsCb());
+                this.$el.val(null).change();
             }, this);
 
             this.$channelSelector = options.$channelSelector;
