@@ -101,7 +101,6 @@ datagrid:
                 label:         orocrm.account.name.label
             contactName:
                 label:         orocrm.account.contact.name
-<<<<<<< HEAD
                 inline_editing:
                     enable: true
                     validation_rules:
