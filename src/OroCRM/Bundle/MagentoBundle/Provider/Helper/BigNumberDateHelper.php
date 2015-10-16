@@ -51,4 +51,30 @@ class BigNumberDateHelper
 
         return [$start, $end];
     }
+
+    /**
+     * @param integer $weeksDiff
+     *
+     * @return DateTime[]
+     */
+    public function getLastWeekPeriod($weeksDiff = 0)
+    {
+        $end = new DateTime('last Saturday', new DateTimeZone('UTC'));
+        $end->setTime(23, 59, 59);
+
+        $start = clone $end;
+        $start->modify('-6 days');
+        $start->setTime(0, 0, 0);
+
+        if ($weeksDiff) {
+            $days = $weeksDiff * 7;
+            $start->modify("{$days} days");
+            $end->modify("{$days} days");
+        }
+
+        return [
+            'start' => $start,
+            'end'   => $end
+        ];
+    }
 }

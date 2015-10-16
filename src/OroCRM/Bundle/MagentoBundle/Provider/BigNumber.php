@@ -67,19 +67,27 @@ class BigNumber
      * @param                 $getterName
      * @param                 $dataType
      * @param bool            $lessIsBetter
+     * @param bool            $lastWeek
      * @return array
      */
-    public function getBigNumberValues(WidgetOptionBag $widgetOptions, $getterName, $dataType, $lessIsBetter = false)
-    {
+    public function getBigNumberValues(
+        WidgetOptionBag $widgetOptions,
+        $getterName, $dataType,
+        $lessIsBetter = false, $lastWeek = false
+    ) {
         $getter           = $this->getGetter($getterName);
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
-        $dateRange        = $widgetOptions->get('dateRange');
+        $dateRange        = $lastWeek ? $this->dateHelper->getLastWeekPeriod() : $widgetOptions->get('dateRange');
         $value            = call_user_func($getter, $dateRange);
         $result['value']  = $this->bigNumberFormatter->formatValue($value, $dataType);
         $previousInterval = $widgetOptions->get('usePreviousInterval', []);
 
         if (count($previousInterval)) {
+            if ($lastWeek) {
+                $previousInterval = $this->dateHelper->getLastWeekPeriod(-1);
+            }
+
             $pastResult = call_user_func($getter, $previousInterval);
 
             $result['deviation'] = $this->translator->trans('orocrm.magento.dashboard.e_commerce_statistic.no_changes');
