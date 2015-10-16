@@ -70,6 +70,7 @@ class RestAccountTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['account']['name'], $result['name']);
+        $this->assertTrue(array_key_exists('lifetimeValue', $result));
     }
 
     /**
@@ -105,6 +106,22 @@ class RestAccountTest extends WebTestCase
     /**
      * @param array $request
      * @depends testCreate
+     */
+    public function testList($request)
+    {
+        $this->client->request(
+            'GET',
+            $this->getUrl('oro_api_get_accounts')
+        );
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+        $this->assertEquals(1, count($result));
+    }
+
+    /**
+     * @param array $request
+     * @depends testCreate
+     * @depends testList
      */
     public function testDelete(array $request)
     {
