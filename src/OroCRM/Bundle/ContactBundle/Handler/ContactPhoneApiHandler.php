@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Handler;
 
-use Oro\Bundle\DataGridBundle\Extension\InlineEditing\Processor\AbstractEntityApiHandler;
+use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
 use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 
 /**
