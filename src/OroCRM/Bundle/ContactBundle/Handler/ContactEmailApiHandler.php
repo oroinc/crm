@@ -33,8 +33,11 @@ class ContactEmailApiHandler extends AbstractEntityApiHandler
     {
         $owner = $entity->getOwner();
         $owner->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+        $changeSet = $this->getChangeSet($owner);
         $this->entityManager->persist($owner);
         $this->entityManager->flush();
+
+        return $changeSet;
     }
 
     /**
@@ -43,5 +46,32 @@ class ContactEmailApiHandler extends AbstractEntityApiHandler
     public function getClass()
     {
         return self::ENTITY_CLASS;
+    }
+
+    /**
+     * @param $entity
+     *
+     * @return array
+     */
+    protected function getChangeSet($entity)
+    {
+        $uow = $this->entityManager->getUnitOfWork();
+        $uow->computeChangeSets();
+        $changeSet = $uow->getEntityChangeSet($entity);
+
+        $keyEntity = str_replace('\\', '_', get_class($entity));
+
+        $response = [
+            $keyEntity => [
+                'entityClass' => get_class($entity),
+                'fields' => []
+            ]
+        ];
+
+        foreach ($changeSet as $key => $item) {
+            $response[$keyEntity]['fields'][$key] = $item[1];
+        }
+
+        return $response;
     }
 }
