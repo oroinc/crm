@@ -67,19 +67,21 @@ class UpdateEmailAccessLevels extends AbstractFixture implements ContainerAwareI
         ];
         foreach ($roles as $roleName) {
             $sid = $manager->getSid($this->getRole($roleName));
-
-            $oid = $manager->getOid('entity:Oro\Bundle\EmailBundle\Entity\EmailUser');
-            $maskBuilder = $manager->getMaskBuilder($oid)
-                ->add('VIEW_BASIC')
-                ->add('CREATE_BASIC')
-                ->add('EDIT_BASIC');
-            $manager->setPermission($sid, $oid, $maskBuilder->get());
+            $role = $this->getRole($roleName);
+            if ($role) {
+                $oid = $manager->getOid('entity:Oro\Bundle\EmailBundle\Entity\EmailUser');
+                $maskBuilder = $manager->getMaskBuilder($oid)
+                    ->add('VIEW_BASIC')
+                    ->add('CREATE_BASIC')
+                    ->add('EDIT_BASIC');
+                $manager->setPermission($sid, $oid, $maskBuilder->get());
+            }
         }
     }
 
     /**
      * @param string $roleName
-     * @return Role
+     * @return Role|null
      */
     protected function getRole($roleName)
     {
