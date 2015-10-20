@@ -4,7 +4,9 @@ define(function(require) {
     var Select2GridChannelAwareComponent;
     var _ = require('underscore');
     var Select2GridComponent = require('oro/select2-grid-component');
-    var Select2View = require('orocrmchannel/js/app/views/select2-grid-channel-aware-view');
+    var BaseSelect2View = require('oroform/js/app/views/select2-view');
+    var viewFactory = require('orocrmchannel/js/app/factory/select2-channel-aware-view-factory');
+    var Select2View = viewFactory(BaseSelect2View);
 
     Select2GridChannelAwareComponent = Select2GridComponent.extend({
         $sourceElement: null,
