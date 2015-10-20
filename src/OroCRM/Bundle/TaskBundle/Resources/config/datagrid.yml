@@ -89,6 +89,7 @@ datagrid:
                         field_options:
                             workflow_entity_class: %orocrm_task.entity.class%
                 priorityLabel:
+                    label: orocrm.task.task_priority.label
                     type:      string
                     data_name: priorityLabel
                 owner:
