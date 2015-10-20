@@ -12,8 +12,8 @@ datagrid:
                     - task.dueDate
                     - tp.name as taskPriority
                     - tp.label as priorityLabel
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
-                    - owner.id as ownerId
+                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - own.id as owner
                     - task.createdAt
                     - task.updatedAt
                     - workflowStep.label as workflowStepLabel
@@ -22,7 +22,7 @@ datagrid:
                 join:
                     left:
                         - { join: task.taskPriority, alias: tp }
-                        - { join: task.owner, alias: owner }
+                        - { join: task.owner, alias: own }
                         - { join: task.workflowStep, alias: workflowStep }
         inline_editing:
             enable: true
@@ -112,6 +112,7 @@ datagrid:
                     data_name: task.updatedAt
         properties:
             id: ~
+            owner: ~
             view_link:
                 type:       url
                 route:      orocrm_task_view
