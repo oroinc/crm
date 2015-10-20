@@ -246,11 +246,11 @@ services:
         arguments:
             - @doctrine.orm.entity_manager
         tags:
-            - { name: oro_datagrid.extension.api.handler }
+            - { name: oro_entity.form.entity_field.handler }
 
     orocrm_contact.handler.contact_phone_api:
         class: %orocrm_contact.handler.contact_phone_api.class%
         arguments:
             - @doctrine.orm.entity_manager
         tags:
-            - { name: oro_datagrid.extension.api.handler }
+            - { name: oro_entity.form.entity_field.handler }
