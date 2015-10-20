@@ -69,7 +69,6 @@ datagrid:
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
-                    - accountOwner.id as ownerId
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -80,7 +79,6 @@ datagrid:
                         - { join: a.owner, alias: accountOwner }
         properties:
             id: ~
-            ownerId: ~
             view_link:
                 type:       url
                 route:      orocrm_account_view
@@ -110,7 +108,7 @@ datagrid:
                     editor:
                         view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
-                            value_field_name: ownerId
+                            value_field_name: owner
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account

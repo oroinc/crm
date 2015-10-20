@@ -45,7 +45,7 @@ datagrid:
                     editor:
                         view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
-                            value_field_name: ownerId
+                            value_field_name: owner
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_TaskBundle_Entity_Task
@@ -111,7 +111,6 @@ datagrid:
                     data_name: task.updatedAt
         properties:
             id: ~
-            ownerId: ~
             view_link:
                 type:       url
                 route:      orocrm_task_view
