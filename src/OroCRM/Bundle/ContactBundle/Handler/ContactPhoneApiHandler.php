@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ContactBundle\Handler;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
 use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
 
@@ -55,21 +57,13 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
      */
     protected function getChangeSet($entity)
     {
-        $uow = $this->entityManager->getUnitOfWork();
-        $uow->computeChangeSets();
-        $changeSet = $uow->getEntityChangeSet($entity);
-
-        $keyEntity = str_replace('\\', '_', get_class($entity));
-
+        $accessor = PropertyAccess::createPropertyAccessor();
         $response = [
-            $keyEntity => [
-                'entityClass' => get_class($entity),
-                'fields' => []
-            ]
+            'fields' => []
         ];
 
-        foreach ($changeSet as $key => $item) {
-            $response[$keyEntity]['fields'][$key] = $item[1];
+        if ($accessor->isReadable($entity, 'updatedAt')) {
+            $response['fields']['updatedAt'] = $accessor->getValue($entity, 'updatedAt');
         }
 
         return $response;
