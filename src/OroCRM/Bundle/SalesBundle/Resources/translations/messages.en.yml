@@ -156,7 +156,6 @@ orocrm:
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
-            extend_source.label:  Source
             source.label:         Source
             notes.label:          Additional comments
             opportunities.label:  Opportunities
@@ -169,11 +168,6 @@ orocrm:
             data_channel.label:   Channel
             assigned.label:       Assigned
             source:
-                unclassified:     Unclassified
-                others:           Others
-                none:             None
-
-            extend_source:
                 unclassified:     Unclassified
                 others:           Others
                 none:             None
