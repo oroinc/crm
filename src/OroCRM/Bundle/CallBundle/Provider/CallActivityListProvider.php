@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\CallBundle\Provider;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityList;
 use Oro\Bundle\ActivityListBundle\Model\ActivityListProviderInterface;
 use Oro\Bundle\ActivityListBundle\Entity\ActivityOwner;
+use Oro\Bundle\ActivityListBundle\Model\ActivityListDateProviderInterface;
 use Oro\Bundle\CommentBundle\Model\CommentProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -13,7 +14,10 @@ use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
-class CallActivityListProvider implements ActivityListProviderInterface, CommentProviderInterface
+class CallActivityListProvider implements
+    ActivityListProviderInterface,
+    CommentProviderInterface,
+    ActivityListDateProviderInterface
 {
     const ACTIVITY_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
     const ACL_CLASS = 'OroCRM\Bundle\CallBundle\Entity\Call';
@@ -61,6 +65,33 @@ class CallActivityListProvider implements ActivityListProviderInterface, Comment
     {
         /** @var $entity Call */
         return $entity->getNotes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOwner($entity)
+    {
+        /** @var $entity Call */
+        return $entity->getOwner();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getCreatedAt($entity)
+    {
+        /** @var $entity Call */
+        return $entity->getCreatedAt();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUpdatedAt($entity)
+    {
+        /** @var $entity Call */
+        return $entity->getUpdatedAt();
     }
 
     /**
