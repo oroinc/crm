@@ -50,12 +50,12 @@ class MetadataProvider implements MetadataProviderInterface
         $result = [];
 
         foreach ($this->getChannelEntities() as $entityName) {
-            $entityConfig      = $this->entityProvider->getEntity($entityName, true);
-            $extendConfig      = $this->configManager->getProvider('extend')->getConfig($entityName);
-            $configEntityModel = $this->configManager->getConfigEntityModel($entityName);
+            $entityConfig        = $this->entityProvider->getEntity($entityName, true);
+            $extendConfig        = $this->configManager->getProvider('extend')->getConfig($entityName);
+            $entityConfigModelId = $this->configManager->getConfigModelId($entityName);
 
-            if ($configEntityModel instanceof EntityConfigModel) {
-                $entityConfig = array_merge($entityConfig, $this->getEntityLinks($configEntityModel));
+            if (null !== $entityConfigModelId) {
+                $entityConfig = array_merge($entityConfig, $this->getEntityLinks($entityConfigModelId));
             }
 
             $result[$entityName] = array_merge($entityConfig, ['type' => $extendConfig->get('owner')]);
@@ -100,16 +100,16 @@ class MetadataProvider implements MetadataProviderInterface
     }
 
     /**
-     * @param EntityConfigModel $configEntityModel
+     * @param int $entityConfigModelId
      *
      * @return array
      */
-    protected function getEntityLinks(EntityConfigModel $configEntityModel)
+    protected function getEntityLinks($entityConfigModelId)
     {
         return [
-            'entity_id' => $configEntityModel->getId(),
-            'edit_link' => $this->generateUrl(self::ENTITY_EDIT_ROUTE, ['id' => $configEntityModel->getId()]),
-            'view_link' => $this->generateUrl(self::ENTITY_VIEW_ROUTE, ['id' => $configEntityModel->getId()]),
+            'entity_id' => $entityConfigModelId,
+            'edit_link' => $this->generateUrl(self::ENTITY_EDIT_ROUTE, ['id' => $entityConfigModelId]),
+            'view_link' => $this->generateUrl(self::ENTITY_VIEW_ROUTE, ['id' => $entityConfigModelId]),
         ];
     }
 
