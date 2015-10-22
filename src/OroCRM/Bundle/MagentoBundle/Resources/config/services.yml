@@ -132,6 +132,7 @@ parameters:
     orocrm_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
     orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
+    orocrm_magento.provider.metrics.class:                                  OroCRM\Bundle\MagentoBundle\Provider\MagentoMetricsProvider
 
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 
@@ -789,12 +790,19 @@ services:
     orocrm_magento.provider.big_number:
         class: %orocrm_magento.provider.big_number.class%
         arguments:
-            - @doctrine
             - @orocrm_magento.provider.formatter.big_number_formatter
             - @oro_locale.formatter.date_time
-            - @oro_security.acl_helper
             - @orocrm_magento.provider.helper.big_number_date_helper
             - @translator
+
+    orocrm_magento.provider.metrics:
+        class: %orocrm_magento.provider.metrics.class%
+        arguments:
+            - @doctrine
+            - @oro_security.acl_helper
+            - @orocrm_magento.provider.helper.big_number_date_helper
+        tags:
+            - { name: orocrm_magento.big_numbers_provider }
 
     orocrm_magento.service.order.information_loader:
         class: %orocrm_magento.service.information_loader.class%
