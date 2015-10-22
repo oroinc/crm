@@ -6,7 +6,6 @@ use Symfony\Component\Routing\RouterInterface;
 
 use Oro\Bundle\EntityBundle\Provider\EntityProvider;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel;
 
 use OroCRM\Bundle\ChannelBundle\Provider\MetadataProvider;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
@@ -79,12 +78,6 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
     /** @var ConfigManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $configManager;
 
-    /** @var EntityConfigModel|\PHPUnit_Framework_MockObject_MockObject */
-    protected $entityConfigModel1;
-
-    /** @var EntityConfigModel|\PHPUnit_Framework_MockObject_MockObject */
-    protected $entityConfigModel2;
-
     /** @var RouterInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $router;
 
@@ -94,22 +87,12 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->settingsProvider->expects($this->once())
             ->method('getSettings')
-            ->will($this->returnvalue($this->testConfig));
+            ->will($this->returnValue($this->testConfig));
 
         $this->entityProvider     = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityProvider')
             ->disableOriginalConstructor()->getMock();
         $this->configManager      = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
             ->disableOriginalConstructor()->getMock();
-        $this->entityConfigModel1 = $this->getMock('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel');
-        $this->entityConfigModel2 = $this->getMock('Oro\Bundle\EntityConfigBundle\Entity\EntityConfigModel');
-
-        $this->entityConfigModel1->expects($this->any())
-            ->method('getId')
-            ->will($this->returnvalue($this->entityId1));
-
-        $this->entityConfigModel2->expects($this->any())
-            ->method('getId')
-            ->will($this->returnvalue($this->entityId2));
 
         $this->router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')
             ->disableOriginalConstructor()->getMock();
@@ -121,9 +104,7 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             $this->router,
             $this->entityProvider,
             $this->configManager,
-            $this->settingsProvider,
-            $this->entityConfigModel1,
-            $this->entityConfigModel2
+            $this->settingsProvider
         );
     }
 
@@ -131,13 +112,13 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->entityProvider->expects($this->at(0))
             ->method('getEntity')
-            ->will($this->returnvalue($this->entityConfig1));
+            ->will($this->returnValue($this->entityConfig1));
         $this->entityProvider->expects($this->at(1))
             ->method('getEntity')
-            ->will($this->returnvalue($this->entityConfig2));
+            ->will($this->returnValue($this->entityConfig2));
         $this->entityProvider->expects($this->at(2))
             ->method('getEntity')
-            ->will($this->returnvalue($this->entityConfig3));
+            ->will($this->returnValue($this->entityConfig3));
 
         $extendConfigModel = $this->getMock('Oro\Bundle\EntityConfigBundle\Config\ConfigInterface');
         $extendConfigModel->expects($this->any())
@@ -159,8 +140,8 @@ class MetadataProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('extend'))
             ->will($this->returnValue($extendProvider));
         $this->configManager->expects($this->any())
-            ->method('getConfigEntityModel')
-            ->will($this->onConsecutiveCalls($this->entityConfigModel1, $this->entityConfigModel2));
+            ->method('getConfigModelId')
+            ->will($this->onConsecutiveCalls($this->entityId1, $this->entityId2));
 
         $this->router->expects($this->exactly(4))
             ->method('generate');

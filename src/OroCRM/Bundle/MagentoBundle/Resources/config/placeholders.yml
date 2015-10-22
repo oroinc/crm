@@ -5,9 +5,15 @@ placeholders:
     orocrm_account_orders:
         items:
             orocrm_account_orders_grid: ~
+    page_header_stats_after:
+         items:
+             orocrm_magento_customer_stats:
+                 order: 30
 
 items:
     orocrm_magento_account_channel_info:
         action: OroCRMMagentoBundle:Customer:accountCustomersInfo
     orocrm_account_orders_grid:
         template: OroCRMMagentoBundle:Order:accountOrdersPlaceholder.html.twig
+    orocrm_magento_customer_stats:
+        template: OroCRMMagentoBundle:Customer:customerStats.html.twig
