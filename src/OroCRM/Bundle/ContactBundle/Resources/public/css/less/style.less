@@ -1,0 +1,84 @@
+@import "../../../oroui/css/less/mixins";
+
+.form-horizontal.contact-info .control-group .controls {
+  .control-label.html-content {
+    overflow: visible;
+  }
+}
+.contact-box-wrapper {
+  position: relative;
+}
+.contact-box-row {
+  padding: 5px 0;
+  span:first-of-type {
+    padding-right: 5px;
+  }
+}
+.contact-box:hover {
+  background-color: #EDF1FA;
+}
+.contact-box {
+  background-color: #F6F6F6;
+  float: left;
+  margin: 3px;
+  padding: 10px 20px;
+  width: calc(50% - 6px);
+  cursor: pointer;
+}
+.contact-widget-wrapper {
+  padding: 0 0 0 20px;
+  .title {
+    padding-left: 3px;
+  }
+}
+.contact-box-name-link {
+  font-weight: bold;
+}
+.contact-collection-element {
+  vertical-align: top;
+  line-height: 1.2em;
+  padding-bottom: 5px;
+  .contact-collection-element-wrapper {
+    white-space: nowrap;
+    display: inline-block;
+    padding: 5px;
+    margin: -7px 0 0 -5px;
+    .contact-element-actions {
+      visibility: hidden;
+    }
+    &:hover {
+      background: #F4EFD4;
+      .contact-element-actions {
+        visibility: visible;
+      }
+    }
+  }
+  &.primary {
+    .phone, .email {
+      font-weight: bold;
+    }
+  }
+}
+.contact-element-actions {
+  .btn {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    height: 22px;
+    padding: 0;
+    [class^="icon-"], [class*=" icon-"] {
+      width: 14px;
+      height: 20px;
+      font: @baseFontSize/26px 'FontAwesome';
+      color: @btnTextColor;
+      &:before {
+        font-size: 15px;
+        line-height: 20px;
+      }
+      &.hide-text {
+        .hide-text();
+      }
+    }
+  }
+}

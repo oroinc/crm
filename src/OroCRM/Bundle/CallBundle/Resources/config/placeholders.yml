@@ -1,3 +1,14 @@
+placeholders:
+    phone_actions:
+        items:
+            orocrm_hangouts_action_button:
+                order: 10
+            orocrm_log_call_action_button:
+                order: 20
+    email_actions:
+        items:
+            orocrm_hangouts_action_button:
+                order: 10
 items:
     orocrm_log_call_button:
         template: OroCRMCallBundle:Call:activityButton.html.twig
@@ -5,3 +16,7 @@ items:
     orocrm_log_call_link:
         template: OroCRMCallBundle:Call:activityLink.html.twig
         acl: orocrm_call_create
+    orocrm_hangouts_action_button:
+        template: OroCRMCallBundle:Call/ContactAction:hangoutsButton.html.twig
+    orocrm_log_call_action_button:
+        template: OroCRMCallBundle:Call/ContactAction:logCallButton.html.twig
