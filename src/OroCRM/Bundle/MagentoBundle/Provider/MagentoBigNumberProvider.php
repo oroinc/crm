@@ -4,10 +4,10 @@ namespace OroCRM\Bundle\MagentoBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Oro\Bundle\DashboardBundle\Provider\BigNumber\BigNumberDateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use OroCRM\Bundle\MagentoBundle\Provider\Helper\BigNumberDateHelper;
 
-class MagentoMetricsProvider
+class MagentoBigNumberProvider
 {
     /** @var RegistryInterface */
     protected $doctrine;
@@ -28,16 +28,16 @@ class MagentoMetricsProvider
         AclHelper $aclHelper,
         BigNumberDateHelper $dateHelper
     ) {
-        $this->doctrine           = $doctrine;
-        $this->aclHelper          = $aclHelper;
-        $this->dateHelper         = $dateHelper;
+        $this->doctrine   = $doctrine;
+        $this->aclHelper  = $aclHelper;
+        $this->dateHelper = $dateHelper;
     }
 
     /**
      * @param array $dateRange
      * @return int
      */
-    protected function getRevenueValues($dateRange)
+    public function getRevenueValues($dateRange)
     {
         list($start, $end) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
 
