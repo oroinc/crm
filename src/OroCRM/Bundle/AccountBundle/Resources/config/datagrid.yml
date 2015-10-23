@@ -53,6 +53,9 @@ datagrid:
 
     accounts-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_account.account.entity.class%
         source:
             type:           orm
             acl_resource:   orocrm_account_view
@@ -66,6 +69,7 @@ datagrid:
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - accountOwner.id as owner
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -76,6 +80,7 @@ datagrid:
                         - { join: a.owner, alias: accountOwner }
         properties:
             id: ~
+            owner: ~
             view_link:
                 type:       url
                 route:      orocrm_account_view
@@ -100,6 +105,15 @@ datagrid:
                 frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
