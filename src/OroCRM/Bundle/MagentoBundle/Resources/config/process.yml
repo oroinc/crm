@@ -137,7 +137,9 @@ definitions:
         order:   20
         exclude_definitions: [magento_customer_export, magento_customer_creation]
         pre_conditions:
-            @equal: [$channel.enabled, true]
+            @and:
+                - @not_empty: $channel
+                - @equal: [$channel.enabled, true]
         actions_configuration:
             - @call_method:
                 attribute: $.isTwoWaySyncEnabled
@@ -202,7 +204,9 @@ definitions:
         exclude_definitions: [magento_customer_address_export, magento_customer_creation]
         pre_conditions:
             @and:
+                - @not_empty: $channel
                 - @equal: [$channel.enabled, true]
+                - @not_empty: $owner
                 - @not_empty: $owner.originId
         actions_configuration:
             - @call_method:
@@ -302,6 +306,7 @@ definitions:
         pre_conditions:
             @and:
                 - @equal: [$code, 1]
+                - @not_empty: $channel
                 - @equal: [$channel.type, 'magento']
                 - @equal: [$connector, 'order']
         actions_configuration:
