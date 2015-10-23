@@ -136,6 +136,8 @@ definitions:
         entity:  OroCRM\Bundle\MagentoBundle\Entity\Customer
         order:   20
         exclude_definitions: [magento_customer_export, magento_customer_creation]
+        pre_conditions:
+            @equal: [$channel.enabled, true]
         actions_configuration:
             - @call_method:
                 attribute: $.isTwoWaySyncEnabled
@@ -149,9 +151,7 @@ definitions:
                 method_parameters: ['syncPriority']
             - @tree:
                 conditions:
-                    @and:
-                        - @equal: [$channel.enabled, true]
-                        - @equal: [$.isTwoWaySyncEnabled, true]
+                    @equal: [$.isTwoWaySyncEnabled, true]
                 actions:
                     - @assign_constant_value:
                         attribute: $.scheduleSyncState
