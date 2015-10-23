@@ -563,7 +563,7 @@ services:
             - @oro_security.acl_helper
 
     orocrm_magento.placeholder.filter:
-            class: %orocrm_magento.placeholder.filter.class%
+        class: %orocrm_magento.placeholder.filter.class%
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider

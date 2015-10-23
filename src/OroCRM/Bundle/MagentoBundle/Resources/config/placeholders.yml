@@ -6,9 +6,9 @@ placeholders:
         items:
             orocrm_account_orders_grid: ~
     page_header_stats_after:
-             items:
-                 orocrm_magento_customer_stats:
-                     order: 30
+        items:
+            orocrm_magento_customer_stats:
+                order: 30
 
 items:
     orocrm_magento_account_channel_info:
