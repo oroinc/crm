@@ -3,6 +3,8 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 
 /**
@@ -27,14 +29,15 @@ class CreateLeadTest extends Selenium2TestCase
     public function testCreateLead()
     {
         $name = 'Lead_'.mt_rand();
-
         $login = $this->login();
+        $channelName = $this->createChannel($login);
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->assertTitle('All - Leads - Sales')
             ->add()
             ->assertTitle('Create Lead - Leads - Sales')
             ->setName($name)
+            ->setChannel($channelName)
             ->setFirstName($name . '_first_name')
             ->setLastName($name . '_last_name')
             ->setJobTitle('Manager')
@@ -51,6 +54,27 @@ class CreateLeadTest extends Selenium2TestCase
             ->assertTitle('All - Leads - Sales');
 
         return $name;
+    }
+
+    /**
+     * @param Login $login
+     * @return string
+     */
+    protected function createChannel(Login $login)
+    {
+        $channelName = 'Channel_'.mt_rand();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('B2B')
+            ->setName($channelName)
+            ->setStatus('Active')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $channelName;
     }
 
     /**
