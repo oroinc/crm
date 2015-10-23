@@ -16,7 +16,8 @@ datagrid:
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
+                    - contactAlias.id as contact
                     - status.label as statusLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
@@ -26,9 +27,9 @@ datagrid:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
                     left:
-                        - { join: o.contact , alias: contact }
+                        - { join: o.contact, alias: contactAlias }
                         - { join: o.status, alias: status }
-                        - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+                        - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.owner, alias: own }
         inline_editing:
@@ -44,6 +45,16 @@ datagrid:
                 frontend_type: datetime
             contactName:
                 label:         orocrm.sales.opportunity.contact.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: contact
+                    autocomplete_api_accessor:
+                        class: oroui/js/tools/search-api-accessor
+                        search_handler_name: contacts
+                        label_field_name: fullName
             closeDate:
                 label:         orocrm.sales.opportunity.close_date.label
                 frontend_type: date
@@ -71,6 +82,7 @@ datagrid:
         properties:
             id: ~
             owner: ~
+            contact: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_opportunity_view
@@ -208,7 +220,8 @@ datagrid:
                             END, ''
                         ) as regionLabel
                     - channel.name as channelName
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - own.id as owner
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
@@ -218,9 +231,12 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
-                        - { join: l.owner, alias: owner }
+                        - { join: l.owner, alias: own }
             hints:
                 - HINT_TRANSLATABLE
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_sales.lead.entity.class%
         columns:
             channelName:
                 label:         orocrm.sales.lead.data_channel.label
@@ -248,8 +264,19 @@ datagrid:
                 label:         orocrm.sales.lead.datagrid.postal_code
             ownerName:
                 label:         orocrm.sales.lead.owner.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Lead
+
         properties:
             id: ~
+            owner: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_lead_view
