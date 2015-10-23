@@ -91,6 +91,8 @@ parameters:
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
     orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
 
+    orocrm_magento.placeholder.filter.class:                                OroCRM\Bundle\MagentoBundle\Placeholder\PlaceholderFilter
+
     orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
     orocrm_magento.provider.phone.order_address.class:                      OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
@@ -559,6 +561,9 @@ services:
             - @orocrm_magento.provider.tracking_visit
             - @translator
             - @oro_security.acl_helper
+
+    orocrm_magento.placeholder.filter:
+            class: %orocrm_magento.placeholder.filter.class%
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
