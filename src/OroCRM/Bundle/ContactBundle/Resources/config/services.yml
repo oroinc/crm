@@ -29,6 +29,9 @@ parameters:
     orocrm_contact.provider.phone.contact.class:      OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider
     orocrm_contact.provider.email_recipients.class:   OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider
 
+    orocrm_contact.handler.contact_email_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactEmailApiHandler
+    orocrm_contact.handler.contact_phone_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactPhoneApiHandler
+
 services:
     orocrm_contact.form.contact:
         class: Symfony\Component\Form\Form
@@ -237,3 +240,17 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }
+
+    orocrm_contact.handler.contact_email_api:
+        class: %orocrm_contact.handler.contact_email_api.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_contact.handler.contact_phone_api:
+        class: %orocrm_contact.handler.contact_phone_api.class%
+        arguments:
+            - @doctrine.orm.entity_manager
+        tags:
+            - { name: oro_entity.form.entity_field.handler }

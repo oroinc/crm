@@ -10,9 +10,10 @@ datagrid:
                     - task.subject
                     - task.description
                     - task.dueDate
-                    - taskPriority.label as priorityLabel
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
-                    - owner.id as ownerId
+                    - tp.name as taskPriority
+                    - tp.label as priorityLabel
+                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - own.id as owner
                     - task.createdAt
                     - task.updatedAt
                     - workflowStep.label as workflowStepLabel
@@ -20,9 +21,12 @@ datagrid:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
                     left:
-                        - { join: task.taskPriority, alias: taskPriority }
-                        - { join: task.owner, alias: owner }
+                        - { join: task.taskPriority, alias: tp }
+                        - { join: task.owner, alias: own }
                         - { join: task.workflowStep, alias: workflowStep }
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_task.entity.class%
         columns:
             subject:
                 label:         orocrm.task.subject.label
@@ -31,13 +35,20 @@ datagrid:
                 frontend_type: datetime
             workflowStepLabel:
                 label:         orocrm.task.workflow_step.label
-            priorityLabel:
+            taskPriority:
                 label:         orocrm.task.task_priority.label
+                frontend_type: select
             ownerName:
-                type:          twig
                 label:         orocrm.task.owner.label
-                frontend_type: html
-                template:      OroCRMTaskBundle:Task:Datagrid/Property/owner.html.twig
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view_options:
+                            value_field_name: owner
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_TaskBundle_Entity_Task
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
@@ -52,8 +63,8 @@ datagrid:
                     data_name: task.dueDate
                 workflowStepLabel:
                     data_name: workflowStep.stepOrder
-                priorityLabel:
-                    data_name: taskPriority.order
+                taskPriority:
+                    data_name: tp.order
                 ownerName:
                     data_name: ownerName
                 createdAt:
@@ -78,6 +89,7 @@ datagrid:
                         field_options:
                             workflow_entity_class: %orocrm_task.entity.class%
                 priorityLabel:
+                    label: orocrm.task.task_priority.label
                     type:      string
                     data_name: priorityLabel
                 owner:
@@ -100,6 +112,7 @@ datagrid:
                     data_name: task.updatedAt
         properties:
             id: ~
+            owner: ~
             view_link:
                 type:       url
                 route:      orocrm_task_view
