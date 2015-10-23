@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
 use Oro\Bundle\EmailBundle\Tests\Selenium\Pages\Email;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Call;
+use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Calls;
 use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
 class ContactContactedCountTest extends Selenium2TestCase
@@ -12,6 +13,7 @@ class ContactContactedCountTest extends Selenium2TestCase
     const EMAIL = 'mailbox3@example.com';
 
     /**
+     * Test check that newly created Contact has no contact counter
      * @return string
      */
     public function testCreateContact()
@@ -44,6 +46,7 @@ class ContactContactedCountTest extends Selenium2TestCase
         $phoneNumber = mt_rand(100, 999).'-'.mt_rand(100, 999).'-'.mt_rand(1000, 9999);
 
         $login = $this->login();
+        /** Log call to Contact */
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
@@ -57,22 +60,51 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->logCall()
             ->assertMessage('Call saved')
             ->verifyActivity('Call', $callSubject);
+        /** Check that counter increased */
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Times Contacted: 1', 'Last Contacted']);
-
-        return $contactName;
+        /** Edit call */
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
+            ->filterBy('Subject', $callSubject)
+            ->open(array($callSubject))
+            ->assertTitle($callSubject . ' - Calls - Activities')
+            ->edit()
+            ->assertTitle($callSubject . ' - Edit - Calls - Activities')
+            ->setCallSubject($callSubject)
+            ->save()
+            ->assertMessage('Call saved');
+        /** Check that counter does not change */
+        /** @var Contacts $login */
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
+            ->filterBy('Email', self::EMAIL)
+            ->open([$contactName])
+            ->checkContactStatus(['Times Contacted: 1', 'Last Contacted']);
+        /** Delete call */
+        /** @var Calls $login */
+        $login->openCalls('OroCRM\Bundle\CallBundle')
+            ->filterBy('Subject', $callSubject)
+            ->delete(array($callSubject))
+            ->assertMessage('Item deleted');
+        /** Check that counter decreased */
+        /** @var Contacts $login */
+        $login->openContacts('OroCRM\Bundle\ContactBundle')
+            ->filterBy('Email', self::EMAIL)
+            ->open([$contactName])
+            ->checkContactStatus(['Not contacted yet']);
     }
 
     /**
-     * @depends testCheckLogCallActivityCount
+     * @depends testCheckLogCallCount
      * @param $contactName
      */
     public function testCheckSendEmailCount($contactName)
     {
         $login = $this->login();
+        /** Send email */
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
@@ -82,11 +114,14 @@ class ContactContactedCountTest extends Selenium2TestCase
         $login->openEmail('Oro\Bundle\EmailBundle')
             ->setSubject('Test contacted count')
             ->send();
+        /** Check that count increased */
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
-            ->checkContactStatus(['Times Contacted: 2']);
+            ->checkContactStatus(['Times Contacted: 1']);
+
+        return $contactName;
     }
 
     public function testCloseWidgetWindow()
