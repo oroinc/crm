@@ -95,6 +95,8 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Not contacted yet']);
+
+        return $contactName;
     }
 
     /**
@@ -120,8 +122,6 @@ class ContactContactedCountTest extends Selenium2TestCase
             ->filterBy('Email', self::EMAIL)
             ->open([$contactName])
             ->checkContactStatus(['Times Contacted: 1']);
-
-        return $contactName;
     }
 
     public function testCloseWidgetWindow()
