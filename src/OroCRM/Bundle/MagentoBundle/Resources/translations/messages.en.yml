@@ -18,8 +18,6 @@ orocrm:
                 customer_count: Customers count
                 month: Month
             e_commerce_statistic:
-                no_available_metrics: No available metrics
-                no_changes: No changes
                 title: Ecommerce Statistics
                 description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
                 sub_widgets.label: Metrics
@@ -35,7 +33,6 @@ orocrm:
                 site_visits.label: Site visits
                 order_conversion.label: Order conversion rate
                 customer_conversion.label: Customer conversion rate
-                compare_to.label: Compare to
                 new_leads_count.label: New Leads
                 leads_count.label: Leads for the period
                 new_opportunities_count.label: New Opportunities

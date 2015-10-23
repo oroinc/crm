@@ -161,7 +161,7 @@ class LeadRepository extends EntityRepository
         $qb
             ->select('COUNT(DISTINCT l.id)')
             ->andWhere($qb->expr()->between('l.createdAt', ':start', ':end'))
-            ->leftJoin('l.opportunities', 'o')
+            ->innerJoin('l.opportunities', 'o')
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 

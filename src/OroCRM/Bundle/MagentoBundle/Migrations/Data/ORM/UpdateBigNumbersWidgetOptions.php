@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\DashboardBundle\Migrations\Data\ORM;
+namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
