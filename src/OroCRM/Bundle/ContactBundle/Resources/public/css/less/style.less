@@ -35,23 +35,41 @@
   font-weight: bold;
 }
 .contact-collection-element {
-  vertical-align: top;
-  line-height: 1.2em;
-  padding-bottom: 5px;
+  overflow: visible;
+  margin: -4px 0 4px -2px;
+  &:only-child {
+    margin-bottom: 0;
+  }
+  &:last-child {
+    margin-bottom: 2px;
+  }
   .contact-collection-element-wrapper {
     white-space: nowrap;
+    padding: 0 0 0 2px;
+    overflow: visible;
+    position: relative;
+    line-height: 19px;
+    height: 23px;
     display: inline-block;
-    padding: 5px;
-    margin: -7px 0 0 -5px;
     .contact-element-actions {
       visibility: hidden;
+      margin-left: 5px;
+      display: inline-block;
+      vertical-align: top;
     }
     &:hover {
       background: #F4EFD4;
+      outline: solid 2px #F4EFD4;
       .contact-element-actions {
         visibility: visible;
       }
     }
+  }
+  .phone, .email {
+    padding: 5px 0 3px;
+    line-height: 13px;
+    height: 21px;
+    display: inline-block;
   }
   &.primary {
     .phone, .email {
@@ -65,7 +83,8 @@
     color: transparent;
     text-shadow: none;
     background-color: transparent;
-    height: 22px;
+    width: 23px;
+    height: 23px;
     padding: 0;
     [class^="icon-"], [class*=" icon-"] {
       width: 14px;
@@ -74,11 +93,15 @@
       color: @btnTextColor;
       &:before {
         font-size: 15px;
-        line-height: 20px;
+        line-height: 21px;
+        height: 21px;
       }
       &.hide-text {
         .hide-text();
       }
+    }
+    &:hover{
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
   }
 }
