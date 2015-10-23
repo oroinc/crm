@@ -108,36 +108,6 @@ oro_dashboard_config:
                     label:         orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                new_leads_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getNewLeadsCount, integer)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.new_leads_count.label
-                    acl:           orocrm_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                leads_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getLeadsCount, integer)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.leads_count.label
-                    acl:           orocrm_sales_lead_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                new_opportunities_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getNewOpportunitiesCount, integer)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.new_opportunities_count.label
-                    acl:           orocrm_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                opportunities_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOpportunitiesCount, integer)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.opportunities_count.label
-                    acl:           orocrm_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                total_open_pipeline_amount:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getTotalServicePipelineAmount, currency)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.total_open_pipeline_amount.label
-                    acl:           orocrm_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
-                open_weighted_pipeline_amount:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOpenWeightedPipelineAmount, currency)
-                    label:         orocrm.magento.dashboard.e_commerce_statistic.open_weighted_pipeline_amount.label
-                    acl:           orocrm_sales_opportunity_view
-                    template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -155,8 +125,8 @@ oro_dashboard_config:
                 subWidgets:
                     type: oro_type_widget_items
                     options:
-                       label: orocrm.magento.dashboard.e_commerce_statistic.choose_metrics
-                       item_label: orocrm.magento.datagrid.columns.metricName
+                       label: oro.dashboard.widget.big_number.choose_metrics
+                       item_label: oro.dashboard.widget.big_number.metricName
                        required: false
                        widget_name: big_numbers_widget
         revenue_over_time_chart:

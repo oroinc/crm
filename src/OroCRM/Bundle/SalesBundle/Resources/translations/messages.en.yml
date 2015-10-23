@@ -3,6 +3,9 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
+        b2b_statistics_widget:
+            title: B2B Statistics
+            description: This widget displays a set of metrics that indicate performance of your B2B channels.
     entityextend:
         enums:
             lead_source:
