@@ -23,6 +23,8 @@ parameters:
 
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
 
+    orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -133,3 +135,12 @@ services:
             - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
             - @translator
+
+    orocrm_sales.provider.b2b_statistics:
+        class: %orocrm_sales.provider.b2b_statistics.class%
+        arguments:
+            - @doctrine
+            - @oro_security.acl_helper
+            - @oro_dashboard.provider.big_number.date_helper
+        tags:
+            - { name: oro_dashboard.big_number.provider, alias: b2b }
