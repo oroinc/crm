@@ -2,40 +2,40 @@
 {% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
-{% macro renderCollectionWithPrimaryElement(collection, isEmail) %}
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
     {% import 'OroUIBundle::macros.html.twig' as ui %}
     {% import 'OroEmailBundle::macros.html.twig' as email %}
 
     {% set primaryElement = null %}
-    {% set secondaryElements = [] %}
+    {% set elements = [] %}
 
     {% for element in collection %}
         {% if element.primary %}
             {% set primaryElement = element %}
         {% else %}
-            {% set secondaryElements = secondaryElements|merge([element]) %}
+            {% set elements = elements|merge([element]) %}
         {% endif %}
     {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
 
     <ul class="extra-list">
-        {% if primaryElement %}
-            <li class="contact-collection-element">
-                <strong>
-                    {% if isEmail %}
-                        {{ email.email_address_simple(primaryElement) }}
-                    {% else %}
-                        {{ ui.renderPhone(primaryElement) }}
-                    {% endif %}
-                </strong>
-            </li>
-        {% endif %}
-        {% for secondaryElement in secondaryElements %}
-            <li class="contact-collection-element">
+        {% for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                <span class="contact-collection-element-wrapper">
                 {% if isEmail %}
-                    {{ email.email_address_simple(secondaryElement) }}
+                    {{ email.email_address_simple(element) }}
+                    <span class="contact-element-actions">
+                        {% placeholder email_actions with {entity: entity, email: element.email } %}
+                    </span>
                 {% else %}
-                    {{ ui.renderPhone(secondaryElement) }}
+                    {{ ui.renderPhone(element) }}
+                    <span class="contact-element-actions">
+                        {% placeholder phone_actions with {entity: entity, phone: element.phone }%}
+                    </span>
                 {% endif %}
+                </span>
             </li>
         {% endfor %}
     </ul>
@@ -50,7 +50,7 @@
 {%- endmacro -%}
 
 <div class="widget-content">
-    <div class="row-fluid form-horizontal">
+    <div class="row-fluid form-horizontal contact-info">
         <div class="responsive-block">
             {%- set skypeData -%}
                 {%- if entity.skype -%}
@@ -94,8 +94,8 @@
             {%- endset -%}
 
             {{ ui.renderHtmlProperty('orocrm.contact.description.label'|trans, entity.description|nl2br) }}
-            {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false) : null) }}
-            {{ ui.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.skype.label'|trans, skypeData) }}
             {{ ui.renderProperty('orocrm.contact.method.label'|trans, entity.method) }}

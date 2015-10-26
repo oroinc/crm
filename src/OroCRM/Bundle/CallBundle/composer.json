@@ -14,6 +14,7 @@
         "oro/ui-bundle": "dev-master",
         "oro/user-bundle": "dev-master",
         "oro/dashboard-bundle": "dev-master",
+        "oro/hangouts-bundle": "dev-master",
         "orocrm/contact-bundle": "dev-master"
     },
     "autoload": {

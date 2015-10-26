@@ -1,0 +1,107 @@
+@import "../../../oroui/css/less/mixins";
+
+.form-horizontal.contact-info .control-group .controls {
+  .control-label.html-content {
+    overflow: visible;
+  }
+}
+.contact-box-wrapper {
+  position: relative;
+}
+.contact-box-row {
+  padding: 5px 0;
+  span:first-of-type {
+    padding-right: 5px;
+  }
+}
+.contact-box:hover {
+  background-color: #EDF1FA;
+}
+.contact-box {
+  background-color: #F6F6F6;
+  float: left;
+  margin: 3px;
+  padding: 10px 20px;
+  width: calc(50% - 6px);
+  cursor: pointer;
+}
+.contact-widget-wrapper {
+  padding: 0 0 0 20px;
+  .title {
+    padding-left: 3px;
+  }
+}
+.contact-box-name-link {
+  font-weight: bold;
+}
+.contact-collection-element {
+  overflow: visible;
+  margin: -4px 0 4px -2px;
+  &:only-child {
+    margin-bottom: 0;
+  }
+  &:last-child {
+    margin-bottom: 2px;
+  }
+  .contact-collection-element-wrapper {
+    white-space: nowrap;
+    padding: 0 0 0 2px;
+    overflow: visible;
+    position: relative;
+    line-height: 19px;
+    height: 23px;
+    display: inline-block;
+    .contact-element-actions {
+      visibility: hidden;
+      margin-left: 5px;
+      display: inline-block;
+      vertical-align: top;
+    }
+    &:hover {
+      background: #F4EFD4;
+      outline: solid 2px #F4EFD4;
+      .contact-element-actions {
+        visibility: visible;
+      }
+    }
+  }
+  .phone, .email {
+    padding: 5px 0 3px;
+    line-height: 13px;
+    height: 21px;
+    display: inline-block;
+  }
+  &.primary {
+    .phone, .email {
+      font-weight: bold;
+    }
+  }
+}
+.contact-element-actions {
+  .btn {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    width: 23px;
+    height: 23px;
+    padding: 0;
+    [class^="icon-"], [class*=" icon-"] {
+      width: 14px;
+      height: 20px;
+      font: @baseFontSize/26px 'FontAwesome';
+      color: @btnTextColor;
+      &:before {
+        font-size: 15px;
+        line-height: 22px;
+        height: 22px;
+      }
+      &.hide-text {
+        .hide-text();
+      }
+    }
+    &:hover{
+      box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+  }
+}
