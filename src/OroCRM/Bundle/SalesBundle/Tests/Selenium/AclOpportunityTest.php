@@ -14,31 +14,8 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 class AclOpportunityTest extends Selenium2TestCase
 {
     /**
-     * @return string
+     * @return int
      */
-    public function testCreateChannel()
-    {
-        $name = 'Channel_' . mt_rand();
-
-        $login = $this->login();
-        /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('All - Channels - System')
-            ->add()
-            ->assertTitle('Create Channel - Channels - System')
-            ->setType('Custom')
-            ->setName($name)
-            ->setStatus('Active')
-            ->addEntity('Opportunity')
-            ->addEntity('Lead')
-            ->addEntity('Sales Process')
-            ->addEntity('B2B customer')
-            ->save()
-            ->assertMessage('Channel saved');
-
-        return $name;
-    }
-
     public function testCreateRole()
     {
         $randomPrefix = mt_rand();
@@ -101,12 +78,14 @@ class AclOpportunityTest extends Selenium2TestCase
 
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
+        $channelName = $this->createChannel($login);
         $customer = $this->createB2BCustomer($login, $accountName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
             ->setB2BCustomer($customer)
+            ->setChannel($channelName)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
@@ -154,6 +133,27 @@ class AclOpportunityTest extends Selenium2TestCase
             ->setOwner('admin')
             ->setAccount($account)
             ->save();
+
+        return $name;
+    }
+
+    /**
+     * @param Login $login
+     * @return string
+     */
+    public function createChannel(Login $login)
+    {
+        $name = 'Channel_' . mt_rand();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('B2B')
+            ->setName($name)
+            ->setStatus('Active')
+            ->save()
+            ->assertMessage('Channel saved');
 
         return $name;
     }

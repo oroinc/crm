@@ -441,4 +441,21 @@ class Contact extends AbstractPageEntity
         $this->waitForAjax();
         return new Contacts($this->test, false);
     }
+
+    /**
+     * Method checks Contact contacted count status
+     * @param $values
+     * @return $this
+     */
+    public function checkContactStatus($values)
+    {
+        foreach ($values as $value) {
+            $this->assertElementPresent(
+                "//div[@class='customer-content pull-left']//div[starts-with(@id, 'activity-count')]".
+                "[contains(., '{$value}')]",
+                'Contacted count does not match'
+            );
+        }
+        return $this;
+    }
 }
