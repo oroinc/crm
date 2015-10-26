@@ -159,9 +159,9 @@ class LeadRepository extends EntityRepository
         $qb = $this->createQueryBuilder('l');
 
         $qb
-            ->select('COUNT(l.id)')
+            ->select('COUNT(DISTINCT l.id)')
             ->andWhere($qb->expr()->between('l.createdAt', ':start', ':end'))
-            ->leftJoin('l.opportunities', 'o')
+            ->innerJoin('l.opportunities', 'o')
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
