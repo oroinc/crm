@@ -66,6 +66,16 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block stats %}
+    {{ parent() }}
+    <li>
+        <div class="pull-right label label-info orocrm-channel-lifetime-value-label">
+            {{ 'orocrm.magento.customer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
+        </div>
+    </li>
+    {% include 'OroCRMAnalyticsBundle::label.html.twig' %}
+{% endblock stats %}
+
 {% block content_data %}
     {% set customerInformationWidget %}
         {{ oro_widget_render({
