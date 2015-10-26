@@ -33,12 +33,6 @@ orocrm:
                 site_visits.label: Site visits
                 order_conversion.label: Order conversion rate
                 customer_conversion.label: Customer conversion rate
-                new_leads_count.label: New Leads
-                leads_count.label: Leads for the period
-                new_opportunities_count.label: New Opportunities
-                opportunities_count.label: Opportunities for the period
-                total_open_pipeline_amount.label: Total pipeline amount
-                open_weighted_pipeline_amount.label: Weighted pipeline amount
             revenue_over_time_chart:
                 title: Revenue over time
                 description: This widget gives you a quick overview of magento revenues
