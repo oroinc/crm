@@ -94,6 +94,24 @@ class Opportunity extends AbstractPageEntity
         )->text();
     }
 
+    public function setChannel($channel)
+    {
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_opportunity_form_dataChannel')]/a");
+        $element->click();
+        $this->waitForAjax();
+        if ($this->isElementPresent("//div[@id='select2-drop']/div/input")) {
+            $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($channel);
+            $this->waitForAjax();
+            $this->assertElementPresent(
+                "//div[@id='select2-drop']//div[contains(., '{$channel}')]",
+                "Channel autocomplete doesn't return search value"
+            );
+        }
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$channel}')]")->click();
+
+        return $this;
+    }
+
     public function setB2BCustomer($customer)
     {
         $this->b2b_customer->click();
@@ -102,7 +120,7 @@ class Opportunity extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$customer}')]",
-            "Account autocomplete doesn't return search value"
+            "B2B customer autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$customer}')]")->click();
 

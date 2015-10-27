@@ -1,4 +1,3 @@
 css:
     'orocrmmagento':
         - 'bundles/orocrmmagento/css/style.css'
-        - 'bundles/orocrmmagento/css/style.less'
