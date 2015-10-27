@@ -377,8 +377,18 @@ class Lead extends AbstractPageEntity
 
     public function setChannel($channel)
     {
-        $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_dataChannel')]/a")->click();
-        $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(.) = '{$channel}']")->click();
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_dataChannel')]/a");
+        $element->click();
+        $this->waitForAjax();
+        if ($this->isElementPresent("//div[@id='select2-drop']/div/input")) {
+            $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($channel);
+            $this->waitForAjax();
+            $this->assertElementPresent(
+                "//div[@id='select2-drop']//div[contains(., '{$channel}')]",
+                "Channel autocomplete doesn't return search value"
+            );
+        }
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$channel}')]")->click();
 
         return $this;
     }
