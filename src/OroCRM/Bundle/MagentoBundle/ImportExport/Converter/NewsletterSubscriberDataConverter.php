@@ -36,6 +36,10 @@ class NewsletterSubscriberDataConverter extends AbstractTreeDataConverter
             $importedRecord['customer_id'] = filter_var($importedRecord['customer_id'], FILTER_SANITIZE_NUMBER_INT);
         }
 
+        if (array_key_exists('subscriber_email', $importedRecord) && is_string($importedRecord['subscriber_email'])) {
+            $importedRecord['subscriber_email'] = filter_var($importedRecord['subscriber_email'], FILTER_SANITIZE_NUMBER_INT);
+        }
+
         return parent::convertToImportFormat($importedRecord, $skipNullValues);
     }
 
