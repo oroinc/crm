@@ -18,11 +18,8 @@ orocrm:
                 customer_count: Customers count
                 month: Month
             e_commerce_statistic:
-                no_available_metrics: No available metrics
-                no_changes: No changes
                 title: Ecommerce Statistics
                 description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
-                choose_metrics: Choose Metrics
                 sub_widgets.label: Metrics
                 revenue.label: Revenue
                 orders_number.label: Orders placed
@@ -36,7 +33,6 @@ orocrm:
                 site_visits.label: Site visits
                 order_conversion.label: Order conversion rate
                 customer_conversion.label: Customer conversion rate
-                compare_to.label: Compare to
             revenue_over_time_chart:
                 title: Revenue over time
                 description: This widget gives you a quick overview of magento revenues
@@ -121,7 +117,6 @@ orocrm:
                     yes: Yes
                     no: No
                     unknown: Not defined
-                metricName: Metric name
                 actions: Actions
                 discount_amount: Discount amount
                 discount_percent: Discount percent

@@ -32,7 +32,10 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "share_scopes"={
+ *                  "user"
+ *              }
  *          }
  *      }
  * )
