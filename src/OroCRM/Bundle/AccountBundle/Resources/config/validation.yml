@@ -3,7 +3,6 @@ OroCRM\Bundle\AccountBundle\Entity\Account:
         name:
             - NotBlank:     ~
             - Length:
-                min:        3
                 max:        255
         organization:
             - NotBlank:     ~
