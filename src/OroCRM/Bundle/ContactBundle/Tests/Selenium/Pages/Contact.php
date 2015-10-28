@@ -451,7 +451,7 @@ class Contact extends AbstractPageEntity
     {
         foreach ($values as $value) {
             $this->assertElementPresent(
-                "//div[@class='customer-content pull-left']//div[starts-with(@id, 'activity-count')]".
+                "//div[@class='customer-content']//div[starts-with(@id, 'activity-count')]".
                 "[contains(., '{$value}')]",
                 'Contacted count does not match'
             );
