@@ -1,0 +1,31 @@
+.contact-collection-element {
+  .contact-collection-element-wrapper {
+    height: 28px;
+    .contact-element-actions {
+      visibility: visible;
+    }
+  }
+  .phone, .email {
+    line-height: 17px;
+    height: 28px;
+  }
+}
+.contact-element-actions {
+  .btn {
+    width: 28px;
+    height: 28px;
+    margin-left: 5px;
+    &:first-of-type{
+      margin-left: 0;
+    }
+    [class^="icon-"], [class*=" icon-"] {
+      width: 18px;
+      height: 26px;
+      &:before {
+        font-size: 17.5px;
+        line-height: 26px;
+        height: 26px;
+      }
+    }
+  }
+}
