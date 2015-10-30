@@ -79,7 +79,7 @@ class InitialSyncCommand extends ContainerAwareCommand
 
         $processor = $this->getSyncProcessor($logger);
         try {
-            $logger->notice(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
+            $logger->info(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
             $result = $processor->process($integration, null, ['skip-dictionary' => $skipDictionary]);
             $exitCode = $result ?: self::STATUS_FAILED;
@@ -90,7 +90,7 @@ class InitialSyncCommand extends ContainerAwareCommand
 
         $this->scheduleAnalyticRecalculation($integration);
 
-        $logger->notice('Completed');
+        $logger->info('Completed');
 
         return $exitCode;
     }

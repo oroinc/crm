@@ -83,7 +83,7 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
         /** @var Channel $channel */
         foreach ($channels as $channel) {
             try {
-                $logger->notice(sprintf('Run sync for "%s" channel.', $channel->getName()));
+                $logger->info(sprintf('Run sync for "%s" channel.', $channel->getName()));
 
                 $processor->process($channel);
             } catch (\Exception $e) {
@@ -93,7 +93,7 @@ class CartExpirationSyncCommand extends AbstractSyncCronCommand
             }
         }
 
-        $logger->notice('Completed');
+        $logger->info('Completed');
 
         return 0;
     }
