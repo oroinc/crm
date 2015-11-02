@@ -93,7 +93,8 @@ class NewsletterSubscriberExportWriterTest extends AbstractExportWriterTest
                 [
                     'subscriber_status' => NewsletterSubscriber::STATUS_SUBSCRIBED,
                     'subscriber_id' => $originId,
-                    'store_id' => $store->getOriginId()
+                    'store_id' => $store->getOriginId(),
+                    'email' => $newsletterSubscriber->getEmail()
                 ]
             );
 
