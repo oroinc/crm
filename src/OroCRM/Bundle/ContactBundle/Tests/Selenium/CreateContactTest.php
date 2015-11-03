@@ -174,4 +174,10 @@ class CreateContactTest extends Selenium2TestCase
             ->filterBy('Email', $contactName . '@mail.com')
             ->assertNoDataMessage('No contact was found to match your search');
     }
+
+    public function testCloseWidgetWindow()
+    {
+        $login = $this->login();
+        $login->closeWidgetWindow();
+    }
 }

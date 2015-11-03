@@ -136,25 +136,20 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testPrePersist()
+    public function testIsUpdatedFlags()
     {
-        $obj = new Task();
+        $date = new \DateTime('2012-12-12 12:12:12');
+        $task = new Task();
+        $task->setUpdatedAt($date);
 
-        $this->assertNull($obj->getCreatedAt());
-        $this->assertNull($obj->getUpdatedAt());
-
-        $obj->prePersist();
-        $this->assertInstanceOf('\DateTime', $obj->getCreatedAt());
-        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
+        $this->assertTrue($task->isUpdatedAtSet());
     }
 
-    public function testPreUpdate()
+    public function testIsNotUpdatedFlags()
     {
-        $obj = new Task();
+        $task = new Task();
+        $task->setUpdatedAt(null);
 
-        $this->assertNull($obj->getUpdatedAt());
-
-        $obj->preUpdate();
-        $this->assertInstanceOf('\DateTime', $obj->getUpdatedAt());
+        $this->assertFalse($task->isUpdatedAtSet());
     }
 }
