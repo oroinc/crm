@@ -22,7 +22,7 @@ class ContactPaginationTest extends Selenium2TestCase
     }
 
     /**
-     * Test creates two contacts and test pagination functionality between them
+     * Test creates three contacts and test pagination functionality between them
      * @depends testContactsMassDelete
      * @return string
      */
