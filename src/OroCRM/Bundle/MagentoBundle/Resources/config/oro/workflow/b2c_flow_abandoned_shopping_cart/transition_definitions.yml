@@ -5,11 +5,6 @@ workflows:
                 pre_conditions:
                     @not_empty: $cart.id
 
-            convert_to_contacted_definition:
-                pre_conditions:
-                    @and:
-                        - @equal: [$cart.status.name, 'open']
-
             convert_definition:
                 pre_conditions:
                     @equal: [$cart.status.name, 'open']

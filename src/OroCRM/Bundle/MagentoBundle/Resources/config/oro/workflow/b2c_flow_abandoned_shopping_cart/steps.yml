@@ -5,14 +5,6 @@ workflows:
                 label: 'Open'
                 order: 10
                 allowed_transitions:
-                    - convert_to_contacted
-                    - place_order
-                    - convert_to_opportunity
-                    - convert
-            contacted:
-                label: 'Contacted'
-                order: 20
-                allowed_transitions:
                     - place_order
                     - convert_to_opportunity
                     - abandon
