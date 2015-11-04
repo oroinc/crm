@@ -90,6 +90,8 @@ parameters:
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
     orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
 
+    orocrm_magento.placeholder.filter.class:                                OroCRM\Bundle\MagentoBundle\Placeholder\PlaceholderFilter
+
     orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
     orocrm_magento.provider.phone.order_address.class:                      OroCRM\Bundle\MagentoBundle\Provider\OrderAddressPhoneProvider
@@ -127,7 +129,7 @@ parameters:
     orocrm_magento.integration_entity.remove_listener.class:                OroCRM\Bundle\MagentoBundle\EventListener\IntegrationRemoveListener
     orocrm_magento.wsdl.guzzle_client.class:                                Guzzle\Http\Client
 
-    orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\BigNumber
+    orocrm_magento.provider.big_number.class:                               OroCRM\Bundle\MagentoBundle\Provider\MagentoBigNumberProvider
 
     orocrm_magento.model.channel_settings_provider.class:                   OroCRM\Bundle\MagentoBundle\Model\ChannelSettingsProvider
 
@@ -147,7 +149,7 @@ parameters:
     orocrm_magento.form.handler.cart_address.class:                         OroCRM\Bundle\MagentoBundle\Form\Handler\CartAddressHandler
     orocrm_magento.form.handler.cart_item.class:                            OroCRM\Bundle\MagentoBundle\Form\Handler\CartItemHandler
     orocrm_magento.form.handler.order.class:                                OroCRM\Bundle\MagentoBundle\Form\Handler\OrderHandler
-    orocrm_magento.form.handler.order_address.api.class:                        OroCRM\Bundle\MagentoBundle\Form\Handler\OrderAddressApiHandler
+    orocrm_magento.form.handler.order_address.api.class:                    OroCRM\Bundle\MagentoBundle\Form\Handler\OrderAddressApiHandler
     orocrm_magento.form.handler.order_item.class:                           OroCRM\Bundle\MagentoBundle\Form\Handler\OrderItemHandler
     orocrm_magento.form.api.handler.customer.class:                         OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerApiHandler
     orocrm_magento.form.handler.customer_address.class:                     OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler
@@ -551,6 +553,9 @@ services:
             - @translator
             - @oro_security.acl_helper
 
+    orocrm_magento.placeholder.filter:
+        class: %orocrm_magento.placeholder.filter.class%
+
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
         arguments:
@@ -767,10 +772,10 @@ services:
         class: %orocrm_magento.provider.big_number.class%
         arguments:
             - @doctrine
-            - @oro_locale.formatter.number
-            - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
-            - @translator
+            - @oro_dashboard.provider.big_number.date_helper
+        tags:
+            - { name: oro_dashboard.big_number.provider, alias: magento }
 
     orocrm_magento.service.order.information_loader:
         class: %orocrm_magento.service.information_loader.class%

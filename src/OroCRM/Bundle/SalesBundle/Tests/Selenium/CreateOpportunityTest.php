@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 
@@ -24,13 +25,15 @@ class CreateOpportunityTest extends Selenium2TestCase
 
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
-        $customer = $this->createB2BCustomer($login, $accountName);
+        $channelName = $this->createChannel($login);
+        $customer = $this->createB2BCustomer($login, $accountName, $channelName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->assertTitle('All - Opportunities - Sales')
             ->add()
             ->assertTitle('Create Opportunity - Opportunities - Sales')
             ->setName($opportunityName)
+            ->setChannel($channelName)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
@@ -48,7 +51,7 @@ class CreateOpportunityTest extends Selenium2TestCase
     }
 
     /**
-     * @param  Login  $login
+     * @param Login $login
      * @return string
      */
     protected function createAccount(Login $login)
@@ -65,11 +68,33 @@ class CreateOpportunityTest extends Selenium2TestCase
     }
 
     /**
-     * @param Login  $login
-     * @param string $account
+     * @param Login $login
      * @return string
      */
-    protected function createB2BCustomer(Login $login, $account)
+    protected function createChannel(Login $login)
+    {
+        $channelName = 'Channel_'.mt_rand();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('B2B')
+            ->setName($channelName)
+            ->setStatus('Active')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $channelName;
+    }
+
+    /**
+     * @param Login $login
+     * @param string $account
+     * @param string $channel
+     * @return string
+     */
+    protected function createB2BCustomer(Login $login, $account, $channel)
     {
         $name = 'B2BCustomer_'.mt_rand();
         /** @var B2BCustomers $login */
@@ -78,6 +103,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->setName($name)
             ->setOwner('admin')
             ->setAccount($account)
+            ->setChannel($channel)
             ->save();
 
         return $name;

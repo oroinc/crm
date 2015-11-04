@@ -35,7 +35,10 @@ use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "share_scopes"={
+ *                  "user"
+ *              }
  *          },
  *          "form"={
  *              "form_type"="orocrm_marketing_list_select",
