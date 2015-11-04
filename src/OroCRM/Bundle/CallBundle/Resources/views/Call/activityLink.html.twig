@@ -5,7 +5,7 @@
         'orocrm_call_create', {
         entityClass: oro_class_name(entity, true),
         entityId: entity.id,
-        phone: phone is defined ? phone : null
+        phone: phone is defined ? phone|escape('html_attr') : null
     }),
     'class': cssClass is defined ? cssClass : '',
     'aCss': 'no-hash',

@@ -1,5 +1,5 @@
 {% import 'OroEmailBundle::actions.html.twig' as EmailActions %}
-{{ EmailActions.sendEmailLink(email, entity, {
+{{ EmailActions.sendEmailLink(email|escape('html'), entity, {
     iCss: 'icon-envelope',
     cssClass: 'btn icons-holder-text'
 }) }}
