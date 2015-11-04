@@ -1,7 +1,8 @@
 workflows:
     b2c_flow_abandoned_shopping_cart:
         attributes:
-        # Call related fields
+           # Do not remove this attributes. Need to correct restoring data for the workflow item.
+           # Call related fields
            call:
                label: 'Call log'
                type: entity
@@ -34,7 +35,8 @@ workflows:
                options:
                    class: DateTime
 
-           # Email related fields
+          # Do not remove this attributes. Need to correct restoring data for the workflow item.
+          # Email related fields
            email:
                label: 'Email'
                type: entity
@@ -54,31 +56,31 @@ workflows:
                type: string
 
             # Other workflow attributes
-            cart_id:
-                type: integer
-                property_path: cart.id
-            notes:
-                label: 'Notes'
-                type: string
-                property_path: cart.notes
-            opportunity_name:
-                label: 'Opportunity name'
-                type: string
-            opportunity_owner:
-                label: 'Owner'
-                type: entity
-                options:
-                    class: Oro\Bundle\UserBundle\Entity\User
-            opportunity_budget:
-                label: 'Budget amount'
-                type: float
-            account:
-                label: 'Account'
-                type: entity
-                options:
-                    class: OroCRM\Bundle\AccountBundle\Entity\Account
-            contact:
-                label: 'Contact'
-                type: entity
-                options:
-                    class: OroCRM\Bundle\ContactBundle\Entity\Contact
+           cart_id:
+               type: integer
+               property_path: cart.id
+           notes:
+               label: 'Notes'
+               type: string
+               property_path: cart.notes
+           opportunity_name:
+               label: 'Opportunity name'
+               type: string
+           opportunity_owner:
+               label: 'Owner'
+               type: entity
+               options:
+                   class: Oro\Bundle\UserBundle\Entity\User
+           opportunity_budget:
+               label: 'Budget amount'
+               type: float
+           account:
+               label: 'Account'
+               type: entity
+               options:
+                   class: OroCRM\Bundle\AccountBundle\Entity\Account
+           contact:
+               label: 'Contact'
+               type: entity
+               options:
+                   class: OroCRM\Bundle\ContactBundle\Entity\Contact
