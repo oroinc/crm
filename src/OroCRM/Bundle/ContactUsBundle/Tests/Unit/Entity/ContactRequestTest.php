@@ -15,6 +15,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
     {
         $firstName              = uniqid('firstName');
         $lastName               = uniqid('lastName');
+        $fullName               = sprintf('%s %s', $firstName, $lastName);
         $email                  = uniqid('@');
         $comment                = uniqid('comment');
         $organizationName       = uniqid('organizationName');
@@ -72,6 +73,8 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($email, $request->getEmailAddress());
         $this->assertEquals($firstName, $request->getFirstName());
         $this->assertEquals($lastName, $request->getLastName());
+        $this->assertEquals($fullName, $request->getFullName());
+        $this->assertEquals($fullName, (string)$request);
         $this->assertEquals($phone, $request->getPhone());
         $this->assertEquals($preferredContactMethod, $request->getPreferredContactMethod());
         $this->assertEquals($createdAt, $request->getCreatedAt());

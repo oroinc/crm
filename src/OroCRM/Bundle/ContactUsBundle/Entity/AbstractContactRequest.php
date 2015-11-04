@@ -254,4 +254,23 @@ abstract class AbstractContactRequest implements
 
         return $result;
     }
+
+    /**
+     * Get full name
+     *
+     * @return string
+     */
+    public function getFullName()
+    {
+        return sprintf('%s %s', $this->getFirstName(), $this->getLastName());
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getFullName();
+    }
+
 }
