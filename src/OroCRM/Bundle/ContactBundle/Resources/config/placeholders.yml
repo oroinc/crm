@@ -3,10 +3,6 @@ placeholders:
         items:
             contacts_launchpad:
                 order: 10
-    email_actions:
-        items:
-            orocrm_send_email_action_button:
-                order: 20
 
 items:
     orocrm_add_contact_button:
@@ -21,6 +17,3 @@ items:
 
     contacts_launchpad:
         template: OroCRMContactBundle:Dashboard:contactsLaunchpad.html.twig
-
-    orocrm_send_email_action_button:
-        template: OroCRMContactBundle:Contact/ContactAction:sendEmailButton.html.twig
