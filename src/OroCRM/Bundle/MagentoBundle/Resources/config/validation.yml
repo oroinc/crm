@@ -1,3 +1,8 @@
+OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber:
+    properties:
+        email:
+            - NotBlank: ~
+
 OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport:
     constraints:
         - OroCRM\Bundle\MagentoBundle\Validator\Constraints\UniqueWsdlUrlAndWebsiteIdsConstraint:
@@ -251,6 +256,8 @@ OroCRM\Bundle\MagentoBundle\Entity\Order:
             - Length: { max: 255 }
         status:
             - NotBlank: ~
+            - Length: { max: 255 }
+        couponCode:
             - Length: { max: 255 }
         cart:
             - Valid: ~

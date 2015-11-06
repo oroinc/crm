@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
+use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Roles;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Users;
 use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
@@ -11,31 +12,8 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 class AclLeadTest extends Selenium2TestCase
 {
     /**
-     * @return string
+     * @return int
      */
-    public function testCreateChannel()
-    {
-        $name = 'Channel_' . mt_rand();
-
-        $login = $this->login();
-        /** @var Channels $login */
-        $login->openChannels('OroCRM\Bundle\ChannelBundle')
-            ->assertTitle('All - Channels - System')
-            ->add()
-            ->assertTitle('Create Channel - Channels - System')
-            ->setType('Custom')
-            ->setName($name)
-            ->setStatus('Active')
-            ->addEntity('Opportunity')
-            ->addEntity('Lead')
-            ->addEntity('Sales Process')
-            ->addEntity('B2B customer')
-            ->save()
-            ->assertMessage('Channel saved');
-
-        return $name;
-    }
-
     public function testCreateRole()
     {
         $randomPrefix = mt_rand();
@@ -97,10 +75,12 @@ class AclLeadTest extends Selenium2TestCase
         $name = 'Lead_'.mt_rand();
 
         $login = $this->login();
+        $channelName = $this->createChannel($login);
         /** @var Leads $login */
         $login->openLeads('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($name)
+            ->setChannel($channelName)
             ->setFirstName($name . '_first_name')
             ->setLastName($name . '_last_name')
             ->assertTitle('Create Lead - Leads - Sales')
@@ -110,6 +90,27 @@ class AclLeadTest extends Selenium2TestCase
             ->assertTitle('All - Leads - Sales');
 
         return $name;
+    }
+
+    /**
+     * @param Login $login
+     * @return string
+     */
+    public function createChannel(Login $login)
+    {
+        $channelName = 'Channel_' . mt_rand();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('B2B')
+            ->setName($channelName)
+            ->setStatus('Active')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $channelName;
     }
 
     /**

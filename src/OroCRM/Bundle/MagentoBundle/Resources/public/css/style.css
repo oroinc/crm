@@ -47,8 +47,6 @@
 }
 
 .place-order-transaction-dialog {
-    /* allow to be scalled by widget content */
-    height: auto!important;
 }
 
 .ui-dialog-minimized.place-order-transaction-dialog {
@@ -81,4 +79,18 @@
 
 .collection-remove-disabled + .removeRow {
     display: none;
+}
+.customer-info ul.inline li.magento-customer-info {
+  border-left: 0 none;
+  vertical-align: middle;
+  padding-left: 0;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+.customer-info ul.inline li.magento-customer-info .orocrm-channel-lifetime-value-label {
+  margin-left: 0;
+  margin-right: 10px;
+}
+.customer-info ul.inline li.magento-customer-info > div {
+  float: none;
 }

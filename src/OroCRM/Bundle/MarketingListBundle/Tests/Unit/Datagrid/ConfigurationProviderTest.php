@@ -32,8 +32,8 @@ class ConfigurationProviderTest extends \PHPUnit_Framework_TestCase
         $this->chainConfigurationProvider = $this
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface')
             ->getMock();
-        $this->configProvider = $this
-            ->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProviderInterface')
+        $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()
             ->getMock();
         $this->helper = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()

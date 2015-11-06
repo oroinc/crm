@@ -18,11 +18,8 @@ orocrm:
                 customer_count: Customers count
                 month: Month
             e_commerce_statistic:
-                no_available_metrics: No available metrics
-                no_changes: No changes
                 title: Ecommerce Statistics
                 description: This widget displays a set of metrics that indicate performance of your eCommerce channels.
-                choose_metrics: Choose Metrics
                 sub_widgets.label: Metrics
                 revenue.label: Revenue
                 orders_number.label: Orders placed
@@ -36,7 +33,6 @@ orocrm:
                 site_visits.label: Site visits
                 order_conversion.label: Order conversion rate
                 customer_conversion.label: Customer conversion rate
-                compare_to.label: Compare to
             revenue_over_time_chart:
                 title: Revenue over time
                 description: This widget gives you a quick overview of magento revenues
@@ -87,7 +83,6 @@ orocrm:
                 gift_message:     Gift message
                 row_total:        Row Total
                 tax_amount:       Tax Amount
-                discount_amount:  Discount Amount
                 weight:           Weight
                 added_on:         Placed On
                 removed_at:       Removed At
@@ -122,8 +117,10 @@ orocrm:
                     yes: Yes
                     no: No
                     unknown: Not defined
-                metricName: Metric name
                 actions: Actions
+                discount_amount: Discount amount
+                discount_percent: Discount percent
+                coupon_code: Coupon code
         channel_type:
             label:  Magento
         transport:
@@ -376,6 +373,7 @@ orocrm:
             shipping_method.label:  Shipping method
             tax_amount.label:       Tax amount
             discount_amount.label:  Discount amount
+            coupon_code.label:      Coupon code
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status

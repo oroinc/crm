@@ -1,9 +1,12 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\Security\Core\SecurityContext;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -22,10 +25,8 @@ use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    const FLUSH_MAX = 50;
-
     /** @var array */
-    protected $probabilities = array (0.2, 0.5, 0.8);
+    protected $probabilities = [0.2, 0.5, 0.8];
 
     /** @var ContainerInterface */
     protected $container;
@@ -48,6 +49,9 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     /** @var Organization */
     protected $organization;
 
+    /** @var SecurityContext */
+    protected $securityContext;
+
     /**
      * {@inheritdoc}
      */
@@ -64,7 +68,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     public function setContainer(ContainerInterface $container = null)
     {
-        $this->container = $container;
+        $this->container       = $container;
         $this->workflowManager = $container->get('oro_workflow.manager');
     }
 
@@ -75,6 +79,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
     {
         $this->organization = $this->container->get('doctrine')->getManager()
             ->getRepository('OroOrganizationBundle:Organization')->getFirst();
+
+        $this->securityContext = $this->container->get('security.context');
 
         $this->initSupportingEntities($manager);
         $this->loadFlows();
@@ -89,53 +95,88 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
             $this->em = $manager;
         }
 
-        $this->users = $this->em->getRepository('OroUserBundle:User')->findAll();
-        $this->leads = $this->em->getRepository('OroCRMSalesBundle:Lead')->findAll();
-        $this->opportunities = $this->em->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
+        $this->users         = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->leads         = $this->getRandomEntityRecords('OroCRMSalesBundle:Lead');
+        $this->opportunities = $this->getRandomEntityRecords('OroCRMSalesBundle:Opportunity');
+    }
+
+    /**
+     * @param string $entityName
+     * @param int    $limit
+     *
+     * @return array
+     */
+    protected function getRandomEntityRecords($entityName, $limit = 25)
+    {
+        $repo = $this->em->getRepository($entityName);
+
+        $entityIds = $repo->createQueryBuilder('e')
+            ->select('e.id')
+            ->getQuery()
+            ->getScalarResult();
+
+        if (count($entityIds) > $limit) {
+            $rawList = [];
+            foreach ($entityIds as $key => $value) {
+                // due array_rand() will pick only keywords
+                $rawList[$value['id']] = null;
+            }
+
+            $keyList = array_rand($rawList, $limit);
+
+            $criteria = new Criteria();
+            $criteria->where(Criteria::expr()->in('id', $keyList));
+
+            $result = $repo->createQueryBuilder('e')
+                ->addCriteria($criteria)
+                ->getQuery()
+                ->getResult();
+        } else {
+            $result = $repo->findAll();
+        }
+
+        return $result;
     }
 
     protected function loadFlows()
     {
         $randomUser = count($this->users) - 1;
 
-        $leads = array_rand($this->leads, 25);
-        $opportunities = array_rand($this->opportunities, 25);
-
-        foreach ($leads as $lead) {
+        foreach ($this->leads as $lead) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
-            $this->loadSalesFlows($this->leads[$lead], $user);
+            $this->loadSalesFlows($lead, $user);
         }
         $this->flush($this->em);
 
-        foreach ($opportunities as $opportunity) {
+        foreach ($this->opportunities as $opportunity) {
             $user = $this->users[mt_rand(0, $randomUser)];
             $this->setSecurityContext($user);
-            $this->loadSalesFlows($this->opportunities[$opportunity], $user);
+            $this->loadSalesFlows($opportunity, $user);
         }
         $this->flush($this->em);
     }
 
     /**
      * @param Lead | Opportunity $entity
-     * @param User $owner
+     * @param User               $owner
      */
     protected function loadSalesFlows($entity, $owner)
     {
         if ($entity instanceof Lead) {
-            $step = 'start_from_lead';
-            $parameters = array('lead' => $entity);
+            $step       = 'start_from_lead';
+            $parameters = ['lead' => $entity];
         } else {
-            $step = 'start_from_opportunity';
-            $parameters = array('opportunity' => $entity);
+            $step       = 'start_from_opportunity';
+            $parameters = ['opportunity' => $entity];
         }
 
         $parameters = array_merge(
-            array(
-            'sales_funnel' => null,
-            'sales_funnel_owner' => $owner,
-            'sales_funnel_start_date' => new \DateTime('now'),
-            ),
+            [
+                'sales_funnel'            => null,
+                'sales_funnel_owner'      => $owner,
+                'sales_funnel_start_date' => new \DateTime('now'),
+            ],
             $parameters
         );
 
@@ -202,7 +243,7 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
 
     /**
      * @param WorkflowItem $workflowItem
-     * @param string $transition
+     * @param string       $transition
      * @return bool
      */
     protected function isTransitionAllowed(WorkflowItem $workflowItem, $transition)
@@ -225,14 +266,8 @@ class LoadSalesFunnelData extends AbstractFixture implements ContainerAwareInter
      */
     protected function setSecurityContext($user)
     {
-        $securityContext = $this->container->get('security.context');
-        $token = new UsernamePasswordOrganizationToken(
-            $user,
-            $user->getUsername(),
-            'main',
-            $this->organization
-        );
-        $securityContext->setToken($token);
+        $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
+        $this->securityContext->setToken($token);
     }
 
     /**

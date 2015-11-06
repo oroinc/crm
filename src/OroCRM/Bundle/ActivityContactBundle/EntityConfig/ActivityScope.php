@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\EntityConfig;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigModelManager;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
 class ActivityScope
@@ -33,7 +33,7 @@ class ActivityScope
     public static $fieldsConfiguration = [
         self::LAST_CONTACT_DATE     => [
             'type'    => 'datetime',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date.label',
@@ -53,7 +53,7 @@ class ActivityScope
         ],
         self::LAST_CONTACT_DATE_IN  => [
             'type'    => 'datetime',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date_in.label',
@@ -73,7 +73,7 @@ class ActivityScope
         ],
         self::LAST_CONTACT_DATE_OUT => [
             'type'    => 'datetime',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_last_contact_date_out.label',
@@ -93,7 +93,7 @@ class ActivityScope
         ],
         self::CONTACT_COUNT         => [
             'type'    => 'integer',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count.label',
@@ -113,7 +113,7 @@ class ActivityScope
         ],
         self::CONTACT_COUNT_IN      => [
             'type'    => 'integer',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count_in.label',
@@ -133,7 +133,7 @@ class ActivityScope
         ],
         self::CONTACT_COUNT_OUT     => [
             'type'    => 'integer',
-            'mode'    => ConfigModelManager::MODE_READONLY,
+            'mode'    => ConfigModel::MODE_READONLY,
             'options' => [
                 'entity'       => [
                     'label'       => 'orocrm.activity_contact.ac_contact_count_out.label',

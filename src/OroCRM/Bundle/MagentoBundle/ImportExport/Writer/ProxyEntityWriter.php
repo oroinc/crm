@@ -45,15 +45,12 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
     public function write(array $items)
     {
         $uniqueItems = [];
+        $uniqueKeys = [];
         foreach ($items as $item) {
             if ($item instanceof Customer || $item instanceof Cart) {
                 $identifier = $item->getOriginId();
                 if (array_key_exists($identifier, $uniqueItems)) {
                     $this->logSkipped($identifier);
-                }
-
-                if ($item instanceof Customer) {
-                    $item->setIsSynced(true);
                 }
 
                 $uniqueItems[$identifier] = $item;
@@ -64,6 +61,15 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
                 }
 
                 $uniqueItems[$identifier] = $item;
+            } elseif ($item instanceof NewsletterSubscriber) {
+                $identifier = $item->getCustomer() ? $item->getCustomer()->getId() : 0;
+                if ($identifier !== 0 && in_array($identifier, $uniqueKeys)) {
+                    $this->logSkipped($item->getOriginId());
+                } else {
+                    $uniqueKeys[] = $identifier;
+                    $uniqueItems[] = $item;
+                }
+
             } else {
                 $uniqueItems[] = $item;
             }

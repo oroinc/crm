@@ -3,6 +3,15 @@ oro:
         my_sales_flow:
             b2b: B2B
             b2c: B2C
+        b2b_statistics_widget:
+            title: B2B Statistics
+            description: This widget displays a set of metrics that indicate performance of your B2B channels.
+            new_leads_count.label: New Leads
+            leads_count.label: Leads for the period
+            new_opportunities_count.label: New Opportunities
+            opportunities_count.label: Opportunities for the period
+            total_open_pipeline_amount.label: Total pipeline amount
+            open_weighted_pipeline_amount.label: Weighted pipeline amount
     entityextend:
         enums:
             lead_source:
@@ -43,6 +52,18 @@ orocrm:
             opportunities_by_lead_source_chart:
                 title:       Opportunities By Lead Source
                 description: This widget displays a breakdown of opportunities by Lead source in form of a pie chart.
+            forecast_of_opportunities:
+                title:       Forecast
+                description: This widget displays forecast of opportunities
+                in_progress.label: In Progress
+                total_forecast.label: Total Forecast
+                weighted_forecast.label: Weighted Forecast
+                metrics: Metrics
+                no_changes: No Changes
+                no_available_metrics: No available metrics
+                owner: Owner
+                compareToDate: Compare to Date
+                business_unit: Business Unit
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
@@ -120,6 +141,7 @@ orocrm:
                 view:     View
                 update:   Update
                 delete:   Delete
+                columns.metric_name: Metric Name
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -156,7 +178,6 @@ orocrm:
             owner.label:          Owner
             address.label:        Address
             details.label:        Lead Details
-            extend_source.label:  Source
             source.label:         Source
             notes.label:          Additional comments
             opportunities.label:  Opportunities
@@ -169,11 +190,6 @@ orocrm:
             data_channel.label:   Channel
             assigned.label:       Assigned
             source:
-                unclassified:     Unclassified
-                others:           Others
-                none:             None
-
-            extend_source:
                 unclassified:     Unclassified
                 others:           Others
                 none:             None

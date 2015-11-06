@@ -15,7 +15,8 @@ datagrid:
                     - relatedAccount.name as relatedAccountName
                     - assignedTo.id as assignedToId
                     - status.label as statusLabel
-                    - priority.label as priorityLabel
+                    - pr.label as priorityLabel
+                    - pr.name as priority
                 from:
                     - { table: %orocrm_case.entity.class%, alias: caseEntity }
                 join:
@@ -26,11 +27,16 @@ datagrid:
                         - { join: caseEntity.owner, alias: owner }
                         - { join: caseEntity.source, alias: source }
                         - { join: caseEntity.status, alias: status }
-                        - { join: caseEntity.priority, alias: priority }
+                        - { join: caseEntity.priority, alias: pr }
+        inline_editing:
+            enable: true
+            entity_name: %orocrm_case.entity.class%
         columns:
             caseNumber:
                 label: orocrm.case.datagrid.case_number.label
             subject:
+                inline_editing:
+                    enable: false
                 type: twig
                 label: orocrm.case.datagrid.subject.label
                 frontend_type: html
@@ -48,7 +54,7 @@ datagrid:
                 frontend_type: datetime
             statusLabel:
                 label: orocrm.case.datagrid.status.label
-            priorityLabel:
+            priority:
                 label: orocrm.case.datagrid.priority.label
         sorters:
             columns:
@@ -64,8 +70,8 @@ datagrid:
                     data_name: caseEntity.closedAt
                 statusLabel:
                     data_name: status.order
-                priorityLabel:
-                    data_name: priority.order
+                priority:
+                    data_name: pr.order
             default:
                 reportedAt: DESC
         filters:
@@ -96,7 +102,7 @@ datagrid:
                 priorityLabel:
                     label: orocrm.case.datagrid.priority.label
                     type: entity
-                    data_name: priority.name
+                    data_name: pr.name
                     options:
                         field_options:
                             class: OroCRMCaseBundle:CasePriority

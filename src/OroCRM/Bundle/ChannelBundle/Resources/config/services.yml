@@ -261,7 +261,7 @@ services:
     orocrm_channel.state_cache:
           parent: oro.cache.abstract
           calls:
-              - [setNamespace, ['orocrm_channel.state_cache']]
+              - [setNamespace, [ 'orocrm_channel_state' ] ]
 
     orocrm_channel.form.subscriber.channel_subscriber:
         class: %orocrm_channel.form.subscriber.channel_subscriber.class%
@@ -305,7 +305,6 @@ services:
       tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
-        - { name: doctrine.event_listener, event: onClear, method: onClear }
 
     orocrm_channel.event_listener.timezone_change:
       class: %orocrm_channel.event_listener.timezone_change.class%
