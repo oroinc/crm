@@ -1,7 +1,7 @@
 placeholders:
     phone_actions:
         items:
-            orocrm_log_call_action_button:
+            orocrm_phone_action_log_call_button:
                 order: 20
 
 items:
@@ -11,5 +11,7 @@ items:
     orocrm_log_call_link:
         template: OroCRMCallBundle:Call:activityLink.html.twig
         acl: orocrm_call_create
-    orocrm_log_call_action_button:
-        template: OroCRMCallBundle:Call/ContactAction:logCallButton.html.twig
+    orocrm_phone_action_log_call_button:
+        applicable: @orocrm_call.placeholder.log_call.filter->isApplicable($entity$)
+        template: OroCRMCallBundle:Call/action:logCallButton.html.twig
+        acl: orocrm_call_create

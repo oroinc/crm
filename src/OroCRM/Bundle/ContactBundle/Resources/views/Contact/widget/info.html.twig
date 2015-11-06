@@ -23,19 +23,11 @@
     <ul class="extra-list">
         {% for element in elements %}
             <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
-                <span class="contact-collection-element-wrapper">
                 {% if isEmail %}
-                    {{ email.email_address_simple(element) }}
-                    <span class="contact-element-actions">
-                        {% placeholder email_actions with {entity: entity, email: element.email } %}
-                    </span>
+                    {{ email.renderEmailWithActions(element, entity) }}
                 {% else %}
-                    {{ ui.renderPhone(element) }}
-                    <span class="contact-element-actions">
-                        {% placeholder phone_actions with {entity: entity, phone: element.phone }%}
-                    </span>
+                    {{ ui.renderPhoneWithActions(element, entity) }}
                 {% endif %}
-                </span>
             </li>
         {% endfor %}
     </ul>
