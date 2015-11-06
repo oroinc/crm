@@ -272,5 +272,4 @@ abstract class AbstractContactRequest implements
     {
         return (string)$this->getFullName();
     }
-
 }

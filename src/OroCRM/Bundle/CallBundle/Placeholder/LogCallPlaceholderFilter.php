@@ -10,7 +10,8 @@ class LogCallPlaceholderFilter
     /** @var Call */
     protected $call;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->call  = new Call();
     }
 
