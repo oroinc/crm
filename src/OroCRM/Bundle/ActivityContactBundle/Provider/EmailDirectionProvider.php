@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
@@ -20,6 +21,14 @@ class EmailDirectionProvider implements DirectionProviderInterface
     public function getSupportedClass()
     {
         return 'Oro\Bundle\EmailBundle\Entity\Email';
+    }
+
+    /**
+     * @param EmailHolderHelper $emailHolderHelper
+     */
+    public function __construct(EmailHolderHelper $emailHolderHelper)
+    {
+        $this->emailHolderHelper = $emailHolderHelper;
     }
 
     /**
@@ -50,7 +59,6 @@ class EmailDirectionProvider implements DirectionProviderInterface
          */
         return false;
     }
-
 
     /**
      * {@inheritdoc}
@@ -122,9 +130,18 @@ class EmailDirectionProvider implements DirectionProviderInterface
             }
             $qb->join('email.fromEmailAddress', 'fromEmailAddress')
                 ->andWhere('fromEmailAddress.email ' . $operator . ':email')
-                ->setParameter('email', $target->getEmail());
+                ->setParameter('email', $this->getTargetEmail($target));
         }
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param object $target
+     * @return string
+     */
+    protected function getTargetEmail($target)
+    {
+        return $this->emailHolderHelper->getEmail($target);
     }
 }

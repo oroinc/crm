@@ -11,12 +11,19 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 
 class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $emailHolderHelper;
+
     /** @var EmailDirectionProvider */
     protected $provider;
 
     public function setUp()
     {
-        $this->provider = new EmailDirectionProvider();
+        $this->emailHolderHelper = $this->getMockBuilder('Oro\Bundle\EmailBundle\Tools\EmailHolderHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new EmailDirectionProvider($this->emailHolderHelper);
     }
 
     public function testGetSupportedClass()
