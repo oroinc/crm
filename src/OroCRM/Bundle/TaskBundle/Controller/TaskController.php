@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\TaskBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -147,7 +146,10 @@ class TaskController extends Controller
      */
     public function infoAction(Task $entity)
     {
-        return array('entity' => $entity);
+        return [
+            'entity'         => $entity,
+            'renderContexts' => true
+        ];
     }
 
     /**
