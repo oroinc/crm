@@ -1,15 +1,14 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
-{% import "OroEmailBundle::actions.html.twig" as Actions %}
 {% import "OroActivityBundle::macros.html.twig" as AC %}
+{% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
         {# Button for add context on the activity list item view page #}
-        {{ Actions.addContextButton(entity) }}
+        {{ AC.addContextButton(entity) }}
         {{ UI.editButton({
             'path' : path('orocrm_task_update', { id: entity.id }),
             'entity_label': 'orocrm.task.entity_label'|trans
