@@ -1,8 +1,3 @@
-.form-horizontal.contact-info .control-group .controls {
-  .control-label.html-content {
-    overflow: visible;
-  }
-}
 .contact-box-wrapper {
   position: relative;
 }
@@ -34,11 +29,14 @@
 }
 .contact-collection-element {
   margin-bottom: 2px;
+  &:last-child {
+    margin-bottom: -3px;
+  }
   .mobile-version & {
     margin-bottom: 8px;
-  }
-  &:only-child, &:last-child {
-    margin-bottom: -3px;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
   &.primary {
     .phone, .email {
