@@ -89,7 +89,11 @@ class CallHandler
         if ($targetEntityClass && $this->request->getMethod() === 'GET') {
             $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
             if (!$entity->getId()) {
-                $entity->setPhoneNumber($this->phoneProvider->getPhoneNumber($targetEntity));
+                $phone = $this->request->query->get('phone');
+                if (!$phone) {
+                    $phone = $this->phoneProvider->getPhoneNumber($targetEntity);
+                }
+                $entity->setPhoneNumber($phone);
             }
             $options = [
                 'phone_suggestions' => array_unique(
