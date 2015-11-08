@@ -6,7 +6,7 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, email.email_address_simple(entity.email)) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.customer.email.label'|trans, email.renderEmailWithActions(entity.email, entity.contact)) }}
             {% if entity.group %}
                 {{ ui.renderProperty('orocrm.magento.customer.group.label'|trans, entity.group.name) }}
             {% endif %}
