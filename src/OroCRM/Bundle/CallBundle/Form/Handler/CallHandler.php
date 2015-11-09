@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +35,9 @@ class CallHandler
     /** @var PhoneProviderInterface */
     protected $phoneProvider;
 
+    /** @var ActivityManager */
+    protected $activityManager;
+
     /** @var CallActivityManager */
     protected $callActivityManager;
 
@@ -49,6 +53,7 @@ class CallHandler
      * @param Request                $request
      * @param ObjectManager          $manager
      * @param PhoneProviderInterface $phoneProvider
+     * @param ActivityManager        $activityManager
      * @param CallActivityManager    $callActivityManager
      * @param EntityRoutingHelper    $entityRoutingHelper
      * @param FormFactory            $formFactory
@@ -59,6 +64,7 @@ class CallHandler
         Request $request,
         ObjectManager $manager,
         PhoneProviderInterface $phoneProvider,
+        ActivityManager $activityManager,
         CallActivityManager $callActivityManager,
         EntityRoutingHelper $entityRoutingHelper,
         FormFactory $formFactory
@@ -68,6 +74,7 @@ class CallHandler
         $this->request             = $request;
         $this->manager             = $manager;
         $this->phoneProvider       = $phoneProvider;
+        $this->activityManager     = $activityManager;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
         $this->formFactory         = $formFactory;
@@ -114,6 +121,10 @@ class CallHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
+                if ($this->form->has('contexts')) {
+                    $contexts = $this->form->get('contexts')->getData();
+                    $this->activityManager->setActivityTargets($entity, $contexts);
+                }
                 if ($targetEntityClass) {
                     $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
                     $this->callActivityManager->addAssociation($entity, $targetEntity);
