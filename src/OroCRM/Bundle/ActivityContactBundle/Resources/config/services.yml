@@ -39,8 +39,11 @@ services:
 
     orocrm_activity_contact.email_activity_direction.provider:
         class: %orocrm_activity_contact.email_activity_direction.provider.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+            - @oro_entity.doctrine_helper
         tags:
-           - {name: orocrm_activity_direction.provider}
+            - {name: orocrm_activity_direction.provider}
 
     orocrm_activity_contact.call_activity_direction.provider:
         class: %orocrm_activity_contact.call_activity_direction.provider.class%
