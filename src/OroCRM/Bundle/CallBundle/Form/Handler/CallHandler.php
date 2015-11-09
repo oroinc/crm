@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\CallBundle\Form\Handler;
 
-use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
