@@ -133,13 +133,21 @@ class CallController extends Controller
     }
 
     /**
-     * @Route("/widget/info/{id}", name="orocrm_call_widget_info", requirements={"id"="\d+"})
+     * @Route(
+     *      "/widget/info/{id}/{renderContexts}",
+     *      name="orocrm_call_widget_info",
+     *      requirements={"id"="\d+", "renderContexts"="\d+"},
+     *      defaults={"renderContexts"=true}
+     * )
      * @Template
      * @AclAncestor("orocrm_call_view")
      */
-    public function infoAction(Call $entity)
+    public function infoAction(Call $entity, $renderContexts)
     {
-        return array('entity' => $entity);
+        return [
+            'entity'         => $entity,
+            'renderContexts' => (bool) $renderContexts
+        ];
     }
 
     /**
