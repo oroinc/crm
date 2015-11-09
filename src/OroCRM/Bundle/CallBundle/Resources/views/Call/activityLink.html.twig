@@ -1,9 +1,13 @@
-{{ UI.clientLink({
+{% import 'OroUIBundle::macros.html.twig' as UI %}
+
+{% set options = {
     'dataUrl': path(
         'orocrm_call_create', {
-            entityClass: oro_class_name(entity, true),
-            entityId: entity.id
+        entityClass: oro_class_name(entity, true),
+        entityId: entity.id,
+        phone: phone is defined ? phone|escape('html_attr') : null
     }),
+    'class': cssClass is defined ? cssClass : '',
     'aCss': 'no-hash',
     'iCss': 'icon-phone-sign',
     'dataId': entity.id,
@@ -24,4 +28,8 @@
             }
         }
     }
-}) }}
+} %}
+
+{% block action_controll %}
+    {{ UI.clientLink(options) }}
+{% endblock %}

@@ -7,7 +7,7 @@
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.magento.cart.email.label'|trans, email.email_address_simple(entity.email)) }}
+            {{ ui.renderHtmlProperty('orocrm.magento.cart.email.label'|trans, email.renderEmailWithActions(entity.email, entity.customer ? entity.customer.contact : null)) }}
 
             {{ channel.renderChannelProperty(entity, 'orocrm.magento.cart.data_channel.label') }}
 

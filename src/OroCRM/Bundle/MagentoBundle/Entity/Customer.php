@@ -450,12 +450,6 @@ class Customer extends ExtendCustomer implements
     protected $newsletterSubscriber;
 
     /**
-     * Entity was synced or not
-     * @var bool
-     */
-    protected $synced = false;
-
-    /**
      * {@inheritdoc}
      */
     public function __construct()
@@ -842,18 +836,8 @@ class Customer extends ExtendCustomer implements
             $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
         }
 
-        if (!$this->isSynced()) {
-            $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        }
-    }
-
-    /**
-     * @ORM\PreUpdate
-     */
-    public function preUpdate()
-    {
-        if (!$this->isSynced()) {
-            $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$this->updatedAt) {
+            $this->updatedAt = $this->createdAt;
         }
     }
 
@@ -903,23 +887,5 @@ class Customer extends ExtendCustomer implements
     public function getNewsletterSubscriber()
     {
         return $this->newsletterSubscriber;
-    }
-
-    /**
-     * @param bool $synced
-     */
-    public function setIsSynced($synced)
-    {
-        $this->synced = (bool) $synced;
-    }
-
-    /**
-     * Entity was synced from magento or created via web interface
-     *
-     * @return bool
-     */
-    public function isSynced()
-    {
-        return $this->synced;
     }
 }

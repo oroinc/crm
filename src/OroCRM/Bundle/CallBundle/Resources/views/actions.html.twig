@@ -14,7 +14,8 @@
         'dataUrl': path(
             'orocrm_call_create', {
                 entityClass: oro_class_name(entity, true),
-                entityId: entity.id
+                entityId: entity.id,
+                phone: phone is defined ? phone : null
         }),
         'aCss': parameters.aCss is defined ? parameters.aCss ~ ' no-hash' : 'no-hash',
         'label' : phone,

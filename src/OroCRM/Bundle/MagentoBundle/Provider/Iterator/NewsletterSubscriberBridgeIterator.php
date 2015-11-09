@@ -46,7 +46,11 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
         } else {
             $dateField = 'change_status_at';
             $this->filter->addDateFilter($dateField, 'gt', $this->lastSyncDate);
-            $this->fixServerTime($dateField);
+            $fixTime = $this->fixServerTime($dateField);
+
+            if ($fixTime) {
+                $this->setStartDate($fixTime);
+            }
         }
 
         $this->applyStoreFilter($this->filter);
