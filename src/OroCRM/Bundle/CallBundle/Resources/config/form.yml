@@ -41,6 +41,7 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @oro_address.provider.phone
+            - @oro_activity.manager
             - @orocrm_call.call.activity.manager
             - @oro_entity.routing_helper
             - @form.factory

@@ -82,6 +82,10 @@ class TaskHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
+                if ($this->form->has('contexts')) {
+                    $contexts = $this->form->get('contexts')->getData();
+                    $this->activityManager->setActivityTargets($entity, $contexts);
+                }
                 if ($targetEntityClass && $action === 'activity') {
                     $this->activityManager->addActivityTarget(
                         $entity,

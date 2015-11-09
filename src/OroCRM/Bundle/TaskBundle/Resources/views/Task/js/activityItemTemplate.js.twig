@@ -1,4 +1,6 @@
 {% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.js.twig' %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+
 {% set entityClass = 'OroCRM\\Bundle\\TaskBundle\\Entity\\Task' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 
@@ -20,26 +22,7 @@
     {% set action %}
         {# Add button for add context in the activity list item #}
         {% if resource_granted('orocrm_task_update') %}
-            <a href="#" title="{{ 'oro.activity.contexts.placeholder'|trans|raw }}"
-               data-url="<%= routing.generate('oro_activity_context', {'id': relatedActivityId, 'activity': '{{ entityClass }}' }) %>"
-                    {{ UI.renderWidgetDataAttributes({
-                        'type' : 'dialog',
-                        'multiple' : true,
-                        'refresh-widget-alias': 'activity-list-widget',
-                        'options' : {
-                            'alias': 'activity-context-dialog',
-                            'dialogOptions' : {
-                                'title' : 'oro.activity.contexts.add_context_entity.label'|trans,
-                                'allowMaximize': true,
-                                'allowMinimize': true,
-                                'modal': true,
-                                'dblclick': 'maximize',
-                                'maximizedHeightDecreaseBy': 'minimize-bar',
-                                'width': 1000,
-                                'height': 600
-                            }
-                        }
-                    }) }}><i class="icon-link hide-text">{{ 'oro.activity.contexts.placeholder'|trans|raw }}</i></a>
+            {{ AC.activity_context_link() }}
         {% endif %}
     {% endset %}
     {% set actions = [action] %}
