@@ -10,6 +10,8 @@ parameters:
 services:
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
+        arguments:
+            - @oro_address.provider.phone
         tags:
             - { name: form.type, alias: orocrm_call_form }
 
