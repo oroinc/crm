@@ -6,7 +6,7 @@
         {# Display contexts targets in the activity list item view #}
         {% if renderContexts is defined and renderContexts %}
             <div class="activity-context-activity-list">
-                {{ AC.activity_contexts(entity) }}
+                {{ AC.activity_contexts(entity, target, true) }}
             </div>
         {% endif %}
         {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
