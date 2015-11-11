@@ -9,6 +9,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
+
 use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallType extends AbstractType
@@ -16,14 +17,16 @@ class CallType extends AbstractType
     /** @var PhoneProviderInterface */
     protected $phoneProvider;
 
+    /**
+     * @param PhoneProviderInterface $phoneProvider
+     */
     public function __construct(PhoneProviderInterface $phoneProvider)
     {
         $this->phoneProvider = $phoneProvider;
     }
 
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -127,7 +130,7 @@ class CallType extends AbstractType
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -140,7 +143,7 @@ class CallType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
