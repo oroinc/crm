@@ -146,8 +146,8 @@ class CallController extends Controller
     {
         return [
             'entity'         => $entity,
-            'target' => $this->getTargetEntity(),
-            'renderContexts' => (bool) $renderContexts
+            'target'         => $this->getTargetEntity(),
+            'renderContexts' => (bool)$renderContexts
         ];
     }
 
@@ -193,8 +193,8 @@ class CallController extends Controller
     protected function getTargetEntity()
     {
         $entityRoutingHelper = $this->get('oro_entity.routing_helper');
-        $targetEntityClass = $entityRoutingHelper->getEntityClassName($this->getRequest(), 'targetActivityClass');
-        $targetEntityId = $entityRoutingHelper->getEntityId($this->getRequest(), 'targetActivityId');
+        $targetEntityClass   = $entityRoutingHelper->getEntityClassName($this->getRequest(), 'targetActivityClass');
+        $targetEntityId      = $entityRoutingHelper->getEntityId($this->getRequest(), 'targetActivityId');
         if (!$targetEntityClass || !$targetEntityId) {
             return null;
         }
