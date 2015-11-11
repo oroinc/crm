@@ -110,7 +110,7 @@ class CallType extends AbstractType
         $entity = $event->getData();
         $form   = $event->getForm();
 
-        if ($entity->getId()) {
+        if (!is_object($entity) || $entity->getId()) {
             return;
         }
 
