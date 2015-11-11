@@ -121,11 +121,14 @@ class CallHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
+                // TODO: should be refactored after finishing BAP-8722
+                // Contexts handling should be moved to common for activities form handler
                 if ($this->form->has('contexts')) {
                     $contexts = $this->form->get('contexts')->getData();
                     $this->activityManager->setActivityTargets($entity, $contexts);
-                }
-                if ($targetEntityClass) {
+                } elseif ($targetEntityClass) {
+                    // if we don't have "contexts" form field
+                    // we should save association between activity and target manually
                     $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
                     $this->callActivityManager->addAssociation($entity, $targetEntity);
                     $phones = $this->phoneProvider->getPhoneNumbers($targetEntity);
