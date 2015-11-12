@@ -75,6 +75,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "activity"={
+ *              "inheritance_targets"={"OroCRM\Bundle\AccountBundle\Entity\Account"}
  *          }
  *      }
  * )

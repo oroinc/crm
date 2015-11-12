@@ -62,7 +62,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
- *          }
+ *          },
+ *          "activity"={
+ *              "inheritance_targets"={"OroCRM\Bundle\AccountBundle\Entity\Account"}
+ *          },
  *      }
  * )
  *

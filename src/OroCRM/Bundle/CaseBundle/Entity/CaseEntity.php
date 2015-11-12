@@ -48,7 +48,10 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "share_scopes"={
  *                  "user"
  *              }
- *          }
+ *          },
+ *          "activity"={
+ *              "inheritance_targets"={"OroCRM\Bundle\AccountBundle\Entity\Account"}
+ *          },
  *      }
  * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

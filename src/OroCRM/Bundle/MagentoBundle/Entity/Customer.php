@@ -62,6 +62,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          "form"={
  *              "grid_name"="magento-customers-grid",
  *          },
+ *          "activity"={
+ *              "inheritance_targets"={"OroCRM\Bundle\AccountBundle\Entity\Account"}
+ *          },
  *      }
  * )
  * @Oro\Loggable
