@@ -48,8 +48,29 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     /** @var string */
     protected $testEntityName = 'OroIntegration:Channel';
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $fieldProvider;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $entityConfigProvider;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $translator;
+
     public function setUp()
     {
+        $this->fieldProvider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\EntityFieldProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->entityConfigProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translator = $this->getMockBuilder('Oro\Bundle\TranslationBundle\Translation\Translator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         parent::setUp();
         $this->registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\ManagerRegistry')
             ->disableOriginalConstructor()->getMock();
@@ -125,7 +146,7 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
                             $this->getMock('Symfony\Component\Form\Extension\Csrf\CsrfProvider\CsrfProviderInterface')
                         ),
                         new FormTypeValidatorExtension($validator),
-                        new TooltipFormExtension(),
+                        new TooltipFormExtension($this->fieldProvider, $this->entityConfigProvider, $this->translator),
                     ],
                     'oro_integration_channel_form' => [
                         new IntegrationTypeExtension($settingsProvider)
