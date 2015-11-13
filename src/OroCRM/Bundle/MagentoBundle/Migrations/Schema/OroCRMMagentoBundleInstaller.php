@@ -18,6 +18,7 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\InheritenceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -80,7 +81,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_36';
+        return 'v1_37';
     }
 
     /**
@@ -137,6 +138,7 @@ class OroCRMMagentoBundleInstaller implements
 
         $this->addActivityAssociations($schema);
         $this->addIdentifierEventAssociations($schema);
+        InheritenceActivityTargets::addInheritenceTargets($schema, $this->activityExtension);
     }
 
     /**
