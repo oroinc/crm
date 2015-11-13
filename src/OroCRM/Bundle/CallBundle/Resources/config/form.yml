@@ -10,6 +10,8 @@ parameters:
 services:
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
+        arguments:
+            - @oro_address.provider.phone
         tags:
             - { name: form.type, alias: orocrm_call_form }
 
@@ -41,6 +43,7 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @oro_address.provider.phone
+            - @oro_activity.manager
             - @orocrm_call.call.activity.manager
             - @oro_entity.routing_helper
             - @form.factory

@@ -4,13 +4,29 @@ namespace OroCRM\Bundle\CallBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
+
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class CallType extends AbstractType
 {
+    /** @var PhoneProviderInterface */
+    protected $phoneProvider;
+
     /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
+     * @param PhoneProviderInterface $phoneProvider
+     */
+    public function __construct(PhoneProviderInterface $phoneProvider)
+    {
+        $this->phoneProvider = $phoneProvider;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
@@ -74,10 +90,47 @@ class CallType extends AbstractType
                     'class'    => 'OroCRM\Bundle\CallBundle\Entity\CallDirection'
                 ]
             );
+
+        if ($builder->has('contexts')) {
+            $builder->addEventListener(
+                FormEvents::POST_SET_DATA,
+                [$this, 'addPhoneContextListener']
+            );
+        }
     }
 
     /**
-     * @param OptionsResolverInterface $resolver
+     * Adds phone number owner to default contexts
+     *
+     * @param FormEvent $event
+     */
+    public function addPhoneContextListener(FormEvent $event)
+    {
+        /** @var Call $entity */
+        $entity = $event->getData();
+        $form   = $event->getForm();
+
+        if (!is_object($entity) || $entity->getId()) {
+            return;
+        }
+
+        $contexts = $form->get('contexts')->getData();
+        $phoneContexts = [];
+
+        foreach ($contexts as $targetEntity) {
+            $phones = $this->phoneProvider->getPhoneNumbers($targetEntity);
+            foreach ($phones as $phone) {
+                if ($entity->getPhoneNumber() === $phone[0]) {
+                    $phoneContexts[] = $phone[1];
+                }
+            }
+        }
+
+        $form->get('contexts')->setData(array_merge($contexts, $phoneContexts));
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
@@ -90,7 +143,7 @@ class CallType extends AbstractType
     }
 
     /**
-     * @return string
+     * {@inheritdoc}
      */
     public function getName()
     {
