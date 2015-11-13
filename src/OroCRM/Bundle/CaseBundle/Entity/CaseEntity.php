@@ -49,9 +49,6 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *                  "user"
  *              }
  *          },
- *          "activity"={
- *              "inheritance_targets"={"OroCRM\Bundle\AccountBundle\Entity\Account"}
- *          },
  *      }
  * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
