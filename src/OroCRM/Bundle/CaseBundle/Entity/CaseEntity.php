@@ -48,7 +48,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "share_scopes"={
  *                  "user"
  *              }
- *          }
+ *          },
  *      }
  * )
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)

@@ -52,11 +52,11 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
  *              "grid_name"="sales-opportunity-grid",
- *      },
- *      "dataaudit"={
- *          "auditable"=true
+ *          },
+ *          "dataaudit"={
+ *              "auditable"=true
+ *          },
  *      }
- *  }
  * )
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
