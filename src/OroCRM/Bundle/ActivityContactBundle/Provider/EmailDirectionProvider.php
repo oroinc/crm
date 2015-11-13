@@ -9,6 +9,7 @@ use Doctrine\Common\Inflector\Inflector;
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -36,10 +37,14 @@ class EmailDirectionProvider implements DirectionProviderInterface
      * @param ConfigProvider $configProvider
      * @param DoctrineHelper $doctrineHelper
      */
-    public function __construct(ConfigProvider $configProvider, DoctrineHelper $doctrineHelper)
-    {
+    public function __construct(
+        ConfigProvider $configProvider,
+        DoctrineHelper $doctrineHelper,
+        EmailHolderHelper $emailHolderHelper
+    ) {
         $this->configProvider = $configProvider;
         $this->doctrineHelper = $doctrineHelper;
+        $this->emailHolderHelper = $emailHolderHelper;
     }
 
     /**
@@ -119,7 +124,6 @@ class EmailDirectionProvider implements DirectionProviderInterface
         return false;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -183,16 +187,26 @@ class EmailDirectionProvider implements DirectionProviderInterface
                 ->setParameter('skipId', $skipId);
         }
 
-        if ($direction) {
+        if ($direction && $target instanceof EmailHolderInterface) {
             $operator = '!=';
             if ($direction === DirectionProviderInterface::DIRECTION_OUTGOING) {
                 $operator = '=';
             }
+
             $qb->join('email.fromEmailAddress', 'fromEmailAddress')
                 ->andWhere('fromEmailAddress.email ' . $operator . ':email')
-                ->setParameter('email', $target->getEmail());
+                ->setParameter('email', $this->getTargetEmail($target));
         }
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param object $target
+     * @return string
+     */
+    protected function getTargetEmail($target)
+    {
+        return $this->emailHolderHelper->getEmail($target);
     }
 }

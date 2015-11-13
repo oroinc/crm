@@ -17,7 +17,11 @@ class CallTypeTest extends FormIntegrationTestCase
     {
         parent::setUp();
 
-        $this->type = new CallType();
+        $phoneProvider = $this->getMockBuilder('Oro\Bundle\AddressBundle\Provider\PhoneProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->type = new CallType($phoneProvider);
     }
 
     public function testSetDefaultOptions()
