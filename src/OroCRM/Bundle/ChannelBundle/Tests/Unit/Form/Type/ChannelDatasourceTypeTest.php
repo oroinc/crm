@@ -49,9 +49,6 @@ class ChannelDatasourceTypeTest extends FormIntegrationTestCase
     protected $testEntityName = 'OroIntegration:Channel';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
-    protected $fieldProvider;
-
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $entityConfigProvider;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
