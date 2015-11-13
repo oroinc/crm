@@ -11,6 +11,8 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
+use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_7\InheritenceActivityTargets;
+
 class OroCRMCaseBundleInstaller implements
     Installation,
     AttachmentExtensionAwareInterface,
@@ -72,6 +74,7 @@ class OroCRMCaseBundleInstaller implements
         $this->addOroEmailMailboxProcessSettingsForeignKeys($schema);
 
         $this->addActivityAssociations($schema, $this->activityExtension);
+        InheritenceActivityTargets::addInheritenceTargets($schema, $this->activityExtension);
     }
 
     /**
