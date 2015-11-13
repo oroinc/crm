@@ -21,6 +21,7 @@ class InheritenceActivityTargets implements Migration, ActivityExtensionAwareInt
     {
         $this->activityExtension = $activityExtension;
     }
+
     /**
      * {@inheritdoc}
      */

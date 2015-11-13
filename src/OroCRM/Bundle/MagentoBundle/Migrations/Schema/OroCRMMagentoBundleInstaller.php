@@ -81,7 +81,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_36';
+        return 'v1_37';
     }
 
     /**
