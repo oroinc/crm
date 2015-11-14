@@ -195,6 +195,7 @@ orocrm:
             password:
                 label:      Password
                 section:    Password Management
+                tooltip:    Password is set only when it is not empty
             sync_state:
                 label: Sync State
                 info: Partially synced
@@ -335,9 +336,12 @@ orocrm:
             is_extension_installed.label: Is extension installed
             is_wsi_mode.label:            WS-I Compliance
             guest_customer_sync.label:    Guest Customer Sync
+            guest_customer_sync.tooltip:  Selecting this option will cause guest orders to be combined under a single customer based on email. If a registered customer exists with this email all guest orders with his email will be attributed to his account.
             sync_start_date.label:        Sync start date
+            sync_start_date.tooltip:      This is a starting date for data synchronization. Only records updated after this date will be synchronized
             sync_range.label:             Sync range
             website_id.label:             Website
+            website_id.tooltip:           This is a list of websites associated to the Magento instance specified above. Only one website can be selected per channel. To refresh the list, click on the Sync website list link next to the control.
             websites.label:               Websites
             wsdl_url.label:               SOAP WSDL URL
             check_connection.label:       Check connection
