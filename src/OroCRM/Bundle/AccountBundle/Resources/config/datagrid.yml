@@ -100,6 +100,16 @@ datagrid:
         columns:
             name:
                 label:         orocrm.account.name.label
+                frontend_type: multi-select
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/multi-select-editor-view
+                choices:
+                    0: test
+                    1: test2
+                    2: test3
+                    3: test4
             contactName:
                 label:         orocrm.account.contact.name
             contactEmail:
@@ -109,11 +119,11 @@ datagrid:
                 frontend_type: phone
             contacts:
                 label:         Contacts
-                frontend_type: multi-select
+                frontend_type: multi-relation
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/multi-select-editor-view
+                        view: orodatagrid/js/app/views/editor/multi-relation-editor-view
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account
