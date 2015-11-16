@@ -109,7 +109,7 @@ datagrid:
                 frontend_type: phone
             contacts:
                 label:         Contacts
-                frontend_type: multiselect
+                frontend_type: multi-select
                 inline_editing:
                     enable: true
                     editor:
