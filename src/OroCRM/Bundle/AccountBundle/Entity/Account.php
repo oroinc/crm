@@ -56,6 +56,11 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "activity"={
+ *              "inheritence_targets"={
+ *                  "OroCRM\Bundle\ContactBundle\Entity\Contact"
+ *              }
  *          }
  *      }
  * )
