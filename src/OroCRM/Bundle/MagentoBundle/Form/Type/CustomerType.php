@@ -110,41 +110,7 @@ class CustomerType extends AbstractType
             );
         }
 
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                /** @var Customer $entity */
-                $entity = $event->getData();
-                $dataChannel = $entity->getDataChannel();
-                if ($dataChannel) {
-                    $entity->setChannel($dataChannel->getDataSource());
-                }
-
-                $store = $entity->getStore();
-                if ($store) {
-                    $entity->setWebsite($store->getWebsite());
-                }
-
-                if (!$entity->getAddresses()->isEmpty()) {
-                    /** @var Address $address */
-                    foreach ($entity->getAddresses() as $address) {
-                        if (!$address->getChannel()) {
-                            $address->setChannel($entity->getChannel());
-                        }
-                    }
-                }
-            }
-        );
-
-        //change updatedAt value here, to avoid confusion situations with preUpdate on importing data
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
-                /** @var Customer $entity */
-                $entity = $event->getForm()->getData();
-                $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-            }
-        );
+        $this->initFormEvents($builder);
     }
 
     /**
@@ -187,5 +153,47 @@ class CustomerType extends AbstractType
         }
 
         return true;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    protected function initFormEvents(FormBuilderInterface $builder)
+    {
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) {
+                /** @var Customer $entity */
+                $entity = $event->getData();
+                $dataChannel = $entity->getDataChannel();
+                if ($dataChannel) {
+                    $entity->setChannel($dataChannel->getDataSource());
+                }
+
+                $store = $entity->getStore();
+                if ($store) {
+                    $entity->setWebsite($store->getWebsite());
+                }
+
+                if (!$entity->getAddresses()->isEmpty()) {
+                    /** @var Address $address */
+                    foreach ($entity->getAddresses() as $address) {
+                        if (!$address->getChannel()) {
+                            $address->setChannel($entity->getChannel());
+                        }
+                    }
+                }
+            }
+        );
+
+        //change updatedAt value here, to avoid confusion situations with preUpdate on importing data
+        $builder->addEventListener(
+            FormEvents::PRE_SUBMIT,
+            function (FormEvent $event) {
+                /** @var Customer $entity */
+                $entity = $event->getForm()->getData();
+                $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            }
+        );
     }
 }

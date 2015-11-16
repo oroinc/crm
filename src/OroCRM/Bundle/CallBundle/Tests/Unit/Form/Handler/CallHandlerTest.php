@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
@@ -29,6 +30,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|PhoneProviderInterface */
     protected $phoneProvider;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ActivityManager */
+    protected $activityManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject|CallActivityManager */
     protected $callActivityManager;
@@ -57,6 +61,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->phoneProvider       = $this->getMock('Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface');
+        $this->activityManager = $this->getMockBuilder('Oro\Bundle\ActivityBundle\Manager\ActivityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->callActivityManager = $this->getMockBuilder(
             'OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager'
         )
@@ -76,6 +83,7 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             $this->request,
             $this->manager,
             $this->phoneProvider,
+            $this->activityManager,
             $this->callActivityManager,
             $this->entityRoutingHelper,
             $this->formFactory

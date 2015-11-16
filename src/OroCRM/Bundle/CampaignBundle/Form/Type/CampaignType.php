@@ -22,7 +22,7 @@ class CampaignType extends AbstractType
                 [
                     'label'    => 'orocrm.campaign.name.label',
                     'required' => true,
-                    'tooltip'  => 'orocrm.campaign.name.tooltip',
+                    'tooltip'  => 'orocrm.campaign.name.description',
                 ]
             )
             ->add(
@@ -31,7 +31,7 @@ class CampaignType extends AbstractType
                 [
                     'label'    => 'orocrm.campaign.code.label',
                     'required' => true,
-                    'tooltip'  => 'orocrm.campaign.code.tooltip',
+                    'tooltip'  => 'orocrm.campaign.code.description',
                 ]
             )
             ->add(
@@ -75,7 +75,7 @@ class CampaignType extends AbstractType
                         Campaign::PERIOD_DAILY   => 'orocrm.campaign.report_period.day',
                         Campaign::PERIOD_MONTHLY => 'orocrm.campaign.report_period.month',
                     ],
-                    'tooltip' => 'orocrm.campaign.report_period.tooltip'
+                    'tooltip' => 'orocrm.campaign.report_period.description'
                 ]
             );
     }
