@@ -19,7 +19,7 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
-use OroCRM\Bundle\SaleBundle\Migrations\Schema\v1_21\InheritenceActivityTargets;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritenceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
