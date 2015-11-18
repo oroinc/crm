@@ -2,14 +2,16 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
+use Doctrine\Common\Inflector\Inflector;
+
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
 use Oro\Bundle\EmailBundle\Tests\Unit\Entity\TestFixtures\EmailAddress;
 use Oro\Bundle\EmailBundle\Tests\Unit\Fixtures\Entity\TestEmailHolder;
+
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider;
 use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
-use Doctrine\Common\Inflector\Inflector;
 
 class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -53,7 +55,11 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
             ->withAnyParameters()
             ->will($this->returnValue($metadataMock));
 
-        $this->provider = new EmailDirectionProvider($configProvider, $doctrineHelper);
+        $emailHolderHelper = $this->getMockBuilder('Oro\Bundle\EmailBundle\Tools\EmailHolderHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new EmailDirectionProvider($configProvider, $doctrineHelper, $emailHolderHelper);
     }
 
     public function testGetSupportedClass()

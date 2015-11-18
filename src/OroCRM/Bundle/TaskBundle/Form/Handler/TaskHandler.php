@@ -82,7 +82,14 @@ class TaskHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                if ($targetEntityClass && $action === 'activity') {
+                // TODO: should be refactored after finishing BAP-8722
+                // Contexts handling should be moved to common for activities form handler
+                if ($this->form->has('contexts')) {
+                    $contexts = $this->form->get('contexts')->getData();
+                    $this->activityManager->setActivityTargets($entity, $contexts);
+                } elseif ($targetEntityClass && $action === 'activity') {
+                    // if we don't have "contexts" form field
+                    // we should save association between activity and target manually
                     $this->activityManager->addActivityTarget(
                         $entity,
                         $this->entityRoutingHelper->getEntityReference($targetEntityClass, $targetEntityId)

@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
 
@@ -34,6 +35,9 @@ class CallHandler
     /** @var PhoneProviderInterface */
     protected $phoneProvider;
 
+    /** @var ActivityManager */
+    protected $activityManager;
+
     /** @var CallActivityManager */
     protected $callActivityManager;
 
@@ -49,6 +53,7 @@ class CallHandler
      * @param Request                $request
      * @param ObjectManager          $manager
      * @param PhoneProviderInterface $phoneProvider
+     * @param ActivityManager        $activityManager
      * @param CallActivityManager    $callActivityManager
      * @param EntityRoutingHelper    $entityRoutingHelper
      * @param FormFactory            $formFactory
@@ -59,6 +64,7 @@ class CallHandler
         Request $request,
         ObjectManager $manager,
         PhoneProviderInterface $phoneProvider,
+        ActivityManager $activityManager,
         CallActivityManager $callActivityManager,
         EntityRoutingHelper $entityRoutingHelper,
         FormFactory $formFactory
@@ -68,6 +74,7 @@ class CallHandler
         $this->request             = $request;
         $this->manager             = $manager;
         $this->phoneProvider       = $phoneProvider;
+        $this->activityManager     = $activityManager;
         $this->callActivityManager = $callActivityManager;
         $this->entityRoutingHelper = $entityRoutingHelper;
         $this->formFactory         = $formFactory;
@@ -114,7 +121,14 @@ class CallHandler
             $this->form->submit($this->request);
 
             if ($this->form->isValid()) {
-                if ($targetEntityClass) {
+                // TODO: should be refactored after finishing BAP-8722
+                // Contexts handling should be moved to common for activities form handler
+                if ($this->form->has('contexts')) {
+                    $contexts = $this->form->get('contexts')->getData();
+                    $this->activityManager->setActivityTargets($entity, $contexts);
+                } elseif ($targetEntityClass) {
+                    // if we don't have "contexts" form field
+                    // we should save association between activity and target manually
                     $targetEntity = $this->entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
                     $this->callActivityManager->addAssociation($entity, $targetEntity);
                     $phones = $this->phoneProvider->getPhoneNumbers($targetEntity);
