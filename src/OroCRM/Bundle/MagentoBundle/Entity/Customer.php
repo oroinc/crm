@@ -445,7 +445,7 @@ class Customer extends ExtendCustomer implements
     /**
      * @var NewsletterSubscriber
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
      */
     protected $newsletterSubscriber;
 
