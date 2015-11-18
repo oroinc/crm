@@ -59,7 +59,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "activity"={
  *              "inheritance_targets"={
- *                  "OroCRM\Bundle\ContactBundle\Entity\Contact"
+ *                  {
+ *                      "target"="OroCRM\Bundle\ContactBundle\Entity\Contact",
+ *                      "path"={"accounts"}
+ *                  }
  *              }
  *          }
  *      }

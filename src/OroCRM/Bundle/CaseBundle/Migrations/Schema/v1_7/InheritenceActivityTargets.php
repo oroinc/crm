@@ -36,6 +36,6 @@ class InheritanceActivityTargets implements Migration, ActivityExtensionAwareInt
      */
     public static function addInheritanceTargets(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_case');
+        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_case', ['relatedAccount']);
     }
 }

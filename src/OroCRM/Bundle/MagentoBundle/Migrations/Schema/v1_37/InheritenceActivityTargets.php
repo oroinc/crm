@@ -36,8 +36,18 @@ class InheritanceActivityTargets implements Migration, ActivityExtensionAwareInt
      */
     public static function addInheritanceTargets(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_customer');
-        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_order');
-        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_cart');
+        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_customer', ['account']);
+        $activityExtension->addInheritanceTargets(
+            $schema,
+            'orocrm_account',
+            'orocrm_magento_order',
+            ['customer', 'account']
+        );
+        $activityExtension->addInheritanceTargets(
+            $schema,
+            'orocrm_account',
+            'orocrm_magento_cart',
+            ['customer', 'account']
+        );
     }
 }
