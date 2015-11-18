@@ -200,7 +200,6 @@ datagrid:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
-            entity_name: %orocrm_contact.entity.class%
         columns:
             firstName:
                 label:         orocrm.contact.first_name.label

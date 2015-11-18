@@ -34,7 +34,6 @@ datagrid:
                         - { join: o.owner, alias: own }
         inline_editing:
             enable: true
-            entity_name: %orocrm_sales.opportunity.class%
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -236,7 +235,6 @@ datagrid:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
-            entity_name: %orocrm_sales.lead.entity.class%
         columns:
             channelName:
                 label:         orocrm.sales.lead.data_channel.label
