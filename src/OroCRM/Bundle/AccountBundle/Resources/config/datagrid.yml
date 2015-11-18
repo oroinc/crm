@@ -26,7 +26,7 @@ datagrid:
                 where:
                     and:
                       - history.user = @oro_security.security_facade->getLoggedUserId
-                groupBy:  a.id, a.name, contactEmail, contactPhone
+                groupBy:  a.id
                 orderBy:
                     - column: visitDate
                       dir: desc
@@ -65,22 +65,26 @@ datagrid:
                     - a.name
                     - a.createdAt
                     - a.updatedAt
-                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
+                    - CONCAT(defaultContact.firstName, ' ', defaultContact.lastName) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
                     - accountOwner.id as owner
+                    - CONCAT('{"data":[{"label":"', GROUP_CONCAT(contact.firstName, ' ', contact.lastName, '","id":' , contact.id SEPARATOR '},{"label":"'), '}], "count":', COUNT(contact.id), '}') as contacts
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
                     left:
                         - { join: a.defaultContact, alias: defaultContact }
+                        - { join: a.contacts, alias: contact }
                         - { join: defaultContact.emails, alias: defaultContactEmail, conditionType: 'WITH', condition: 'defaultContactEmail.primary = true' }
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
+                groupBy:  a.id
         properties:
             id: ~
             owner: ~
+            ctx: ~
             view_link:
                 type:       url
                 route:      orocrm_account_view
@@ -96,6 +100,16 @@ datagrid:
         columns:
             name:
                 label:         orocrm.account.name.label
+                frontend_type: multi-select
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/multi-select-editor-view
+                choices:
+                    0: test
+                    1: test2
+                    2: test3
+                    3: test4
             contactName:
                 label:         orocrm.account.contact.name
             contactEmail:
@@ -103,6 +117,16 @@ datagrid:
             contactPhone:
                 label:         orocrm.account.contact.phone
                 frontend_type: phone
+            contacts:
+                label:         Contacts
+                frontend_type: multi-relation
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: orodatagrid/js/app/views/editor/multi-relation-editor-view
+                    autocomplete_api_accessor:
+                        class: orouser/js/tools/acl-users-search-api-accessor
+                        permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account
             ownerName:
                 label:         orocrm.account.owner.label
                 inline_editing:
