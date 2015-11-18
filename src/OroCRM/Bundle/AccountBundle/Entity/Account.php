@@ -58,7 +58,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *              "auditable"=true
  *          },
  *          "activity"={
- *              "inheritence_targets"={
+ *              "inheritance_targets"={
  *                  "OroCRM\Bundle\ContactBundle\Entity\Contact"
  *              }
  *          }

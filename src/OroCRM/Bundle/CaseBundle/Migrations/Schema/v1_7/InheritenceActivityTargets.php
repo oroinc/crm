@@ -9,7 +9,7 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterfac
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class InheritenceActivityTargets implements Migration, ActivityExtensionAwareInterface
+class InheritanceActivityTargets implements Migration, ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -27,15 +27,15 @@ class InheritenceActivityTargets implements Migration, ActivityExtensionAwareInt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addInheritenceTargets($schema, $this->activityExtension);
+        self::addInheritanceTargets($schema, $this->activityExtension);
     }
 
     /**
      * @param Schema $schema
      * @param ActivityExtension $activityExtension
      */
-    public static function addInheritenceTargets(Schema $schema, ActivityExtension $activityExtension)
+    public static function addInheritanceTargets(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addInheritenceTargets($schema, 'orocrm_account', 'orocrm_case');
+        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_case');
     }
 }
