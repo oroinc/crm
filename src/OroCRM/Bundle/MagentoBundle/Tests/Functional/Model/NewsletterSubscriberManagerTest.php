@@ -54,11 +54,9 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         $newsletterSubscribers = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
-        $this->assertCount(1, $newsletterSubscribers);
+        $this->assertCount(2, $newsletterSubscribers);
         $newsletterSubscriber = $newsletterSubscribers[0];
         $this->assertEquals($customer, $newsletterSubscriber->getCustomer());
         $this->assertNotEmpty($newsletterSubscriber->getId());
-
-        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $newsletterSubscriber->getStatus()->getId());
     }
 }
