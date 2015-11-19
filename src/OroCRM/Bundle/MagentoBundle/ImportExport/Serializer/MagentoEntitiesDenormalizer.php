@@ -51,9 +51,7 @@ class MagentoEntitiesDenormalizer extends ConfigurableEntityNormalizer implement
      */
     public function supportsDenormalization($data, $type, $format = null, array $context = [])
     {
-        $usedTraits = class_uses($type);
-
-        return in_array('OroCRM\Bundle\MagentoBundle\Entity\IntegrationEntityTrait', $usedTraits)
+        return is_a($type, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)
             && array_key_exists('channel', $data)
             && !array_key_exists('id', $data['channel'])
             && $type !== MagentoConnectorInterface::ORDER_ITEM_TYPE;
