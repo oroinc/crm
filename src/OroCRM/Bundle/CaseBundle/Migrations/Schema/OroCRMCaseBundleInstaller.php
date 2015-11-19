@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\CaseBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
@@ -16,7 +18,8 @@ use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_7\InheritanceActivityTargets;
 class OroCRMCaseBundleInstaller implements
     Installation,
     AttachmentExtensionAwareInterface,
-    ActivityExtensionAwareInterface
+    ActivityExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
@@ -25,6 +28,17 @@ class OroCRMCaseBundleInstaller implements
      * @var ActivityExtension
      */
     protected $activityExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -74,7 +88,7 @@ class OroCRMCaseBundleInstaller implements
         $this->addOroEmailMailboxProcessSettingsForeignKeys($schema);
 
         $this->addActivityAssociations($schema, $this->activityExtension);
-        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityExtension);
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
     /**

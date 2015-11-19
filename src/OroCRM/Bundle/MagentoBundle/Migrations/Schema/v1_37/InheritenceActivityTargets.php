@@ -4,22 +4,22 @@ namespace OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class InheritanceActivityTargets implements Migration, ActivityExtensionAwareInterface
+class InheritanceActivityTargets implements Migration, ActivityListExtensionAwareInterface
 {
-    /** @var ActivityExtension */
-    protected $activityExtension;
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
 
     /**
      * {@inheritdoc}
      */
-    public function setActivityExtension(ActivityExtension $activityExtension)
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
     {
-        $this->activityExtension = $activityExtension;
+        $this->activityListExtension = $activityListExtension;
     }
 
     /**
@@ -27,23 +27,23 @@ class InheritanceActivityTargets implements Migration, ActivityExtensionAwareInt
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addInheritanceTargets($schema, $this->activityExtension);
+        self::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
     /**
      * @param Schema $schema
-     * @param ActivityExtension $activityExtension
+     * @param ActivityListExtension $activityListExtension
      */
-    public static function addInheritanceTargets(Schema $schema, ActivityExtension $activityExtension)
+    public static function addInheritanceTargets(Schema $schema, ActivityListExtension $activityListExtension)
     {
-        $activityExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_customer', ['account']);
-        $activityExtension->addInheritanceTargets(
+        $activityListExtension->addInheritanceTargets($schema, 'orocrm_account', 'orocrm_magento_customer', ['account']);
+        $activityListExtension->addInheritanceTargets(
             $schema,
             'orocrm_account',
             'orocrm_magento_order',
             ['customer', 'account']
         );
-        $activityExtension->addInheritanceTargets(
+        $activityListExtension->addInheritanceTargets(
             $schema,
             'orocrm_account',
             'orocrm_magento_cart',

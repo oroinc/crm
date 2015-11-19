@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -30,7 +32,8 @@ class OroCRMMagentoBundleInstaller implements
     ActivityExtensionAwareInterface,
     IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
-    VisitEventAssociationExtensionAwareInterface
+    VisitEventAssociationExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -43,6 +46,17 @@ class OroCRMMagentoBundleInstaller implements
 
     /** @var VisitEventAssociationExtension */
     protected $visitExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -138,7 +152,7 @@ class OroCRMMagentoBundleInstaller implements
 
         $this->addActivityAssociations($schema);
         $this->addIdentifierEventAssociations($schema);
-        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityExtension);
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
     /**
