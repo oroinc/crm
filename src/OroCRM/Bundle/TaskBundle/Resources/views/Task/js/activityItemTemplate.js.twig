@@ -1,4 +1,6 @@
 {% extends 'OroActivityListBundle:ActivityList/js:activityItemTemplate.js.twig' %}
+{% import 'OroActivityBundle::macros.html.twig' as AC %}
+
 {% set entityClass = 'OroCRM\\Bundle\\TaskBundle\\Entity\\Task' %}
 {% set entityName = oro_entity_config_value(entityClass, 'label')|trans %}
 
@@ -18,6 +20,14 @@
 
 {% block activityActions %}
     {% set action %}
+        {# Add button for add context in the activity list item #}
+        {% if resource_granted('orocrm_task_update') %}
+            {{ AC.activity_context_link() }}
+        {% endif %}
+    {% endset %}
+    {% set actions = [action] %}
+
+    {% set action %}
         <% if (editable) { %>
         <a href="#" class="action item-edit-button"
            title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">
@@ -25,7 +35,7 @@
         </a>
         <% } %>
     {% endset %}
-    {% set actions = [action] %}
+    {% set actions = actions|merge([action]) %}
 
     {% set action %}
         <% if (removable) { %>

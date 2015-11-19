@@ -5,7 +5,9 @@ orocrm:
         entity_plural_label: Campaigns
         id.label:            Id
         name.label:          Name
+        name.description:    This value should not exceed 100 characters.
         code.label:          Code
+        code.description:    This value should not exceed 20 characters.
         combined_name.label: Combined name
         start_date.label:    Start Date
         end_date.label:      End Date
@@ -21,6 +23,10 @@ orocrm:
             hour:  Hourly
             day:   Daily
             month: Monthly
+            description: |
+                This is the time scale of the recorded events graph.
+                In case when items amount is more than 40 it will be
+                increased to larger scale
         controller:
             campaign.saved.message:  "Campaign saved"
         menu:
