@@ -1,9 +1,0 @@
-orocrm:
-    campaign:
-        name.tooltip: This value should not exceed 100 characters.
-        code.tooltip: This value should not exceed 20 characters.
-
-        report_period.tooltip: |
-            This is the time scale of the recorded events graph.
-            In case when items amount is more than 40 it will be
-            increased to larger scale

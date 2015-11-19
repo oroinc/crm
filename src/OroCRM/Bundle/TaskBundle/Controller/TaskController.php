@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\TaskBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
@@ -147,7 +146,11 @@ class TaskController extends Controller
      */
     public function infoAction(Task $entity)
     {
-        return array('entity' => $entity);
+        return [
+            'entity'         => $entity,
+            'target'         => $this->getTargetEntity(),
+            'renderContexts' => true
+        ];
     }
 
     /**
@@ -222,5 +225,22 @@ class TaskController extends Controller
     protected function getRepository($entityName)
     {
         return $this->getDoctrine()->getRepository($entityName);
+    }
+
+    /**
+     * Get target entity
+     *
+     * @return object|null
+     */
+    protected function getTargetEntity()
+    {
+        $entityRoutingHelper = $this->get('oro_entity.routing_helper');
+        $targetEntityClass   = $entityRoutingHelper->getEntityClassName($this->getRequest(), 'targetActivityClass');
+        $targetEntityId      = $entityRoutingHelper->getEntityId($this->getRequest(), 'targetActivityId');
+        if (!$targetEntityClass || !$targetEntityId) {
+            return null;
+        }
+
+        return $entityRoutingHelper->getEntity($targetEntityClass, $targetEntityId);
     }
 }
