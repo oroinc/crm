@@ -27,11 +27,13 @@ class NewsletterSubscriberManagerTest extends WebTestCase
         /** @var Customer $customer */
         $customer = new Customer();
         $customer->setChannel($integration);
-        $this->assertEmpty($customer->getNewsletterSubscriber());
+        $this->assertEmpty($customer->getNewsletterSubscribers());
 
-        $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
+        $this->assertNotEmpty($newsletterSubscribers);
+        $newsletterSubscriber = $newsletterSubscribers[0];
         $this->assertEquals($customer->getEmail(), $newsletterSubscriber->getEmail());
         $this->assertEquals($customer, $newsletterSubscriber->getCustomer());
         $this->assertEquals($customer->getChannel(), $newsletterSubscriber->getChannel());
@@ -47,11 +49,13 @@ class NewsletterSubscriberManagerTest extends WebTestCase
     {
         /** @var Customer $customer */
         $customer = $this->getReference('customer');
-        $this->assertNotEmpty($customer->getNewsletterSubscriber());
+        $this->assertNotEmpty($customer->getNewsletterSubscribers());
 
-        $newsletterSubscriber = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
+        $newsletterSubscribers = $this->getContainer()->get('orocrm_magento.model.newsletter_subscriber_manager')
             ->getOrCreateFromCustomer($customer);
 
+        $this->assertCount(1, $newsletterSubscribers);
+        $newsletterSubscriber = $newsletterSubscribers[0];
         $this->assertEquals($customer, $newsletterSubscriber->getCustomer());
         $this->assertNotEmpty($newsletterSubscriber->getId());
 
