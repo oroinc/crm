@@ -44,4 +44,12 @@ class CustomerGroup extends ExtendCustomerGroup implements OriginAwareInterface,
      * @Oro\Versioned
      */
     protected $name;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->name;
+    }
 }
