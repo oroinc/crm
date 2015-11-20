@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\TagBundle\Entity\TagManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -13,6 +14,16 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactType extends AbstractType
 {
+    /** @var TagManager */
+    protected $tagManager;
+
+    /**
+     * @param TagManager $manager
+     */
+    public function __construct(TagManager $manager)
+    {
+        $this->tagManager = $manager;
+    }
     /**
      * {@inheritdoc}
      */
@@ -117,9 +128,6 @@ class ContactType extends AbstractType
                 'empty_value' => 'orocrm.contact.form.choose_contact_method'
             )
         );
-
-        // tags
-        $builder->add('tags', 'oro_tag_select', array('label' => 'oro.tag.entity_plural_label'));
 
         // addresses, emails and phones
         $builder->add(

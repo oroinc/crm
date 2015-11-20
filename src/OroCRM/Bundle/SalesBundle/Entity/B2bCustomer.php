@@ -10,7 +10,6 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -53,7 +52,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    Taggable,
     EmailHolderInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface

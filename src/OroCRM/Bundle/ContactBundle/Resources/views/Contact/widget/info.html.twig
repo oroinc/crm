@@ -146,10 +146,6 @@
             {{ ui.renderHtmlProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
             {{ ui.renderHtmlProperty('orocrm.contact.reports_to.label'|trans, reportsToData) }}
             {{ ui.renderProperty('orocrm.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
-
-            {% if resource_granted('oro_tag_view') %}
-                {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
-            {% endif %}
         </div>
     </div>
 </div>

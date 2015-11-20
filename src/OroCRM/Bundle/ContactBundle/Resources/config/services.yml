@@ -48,6 +48,7 @@ services:
     orocrm_contact.form.type.contact:
         class: %orocrm_contact.type.contact.class%
         arguments:
+            - @oro_tag.tag.manager
             - %orocrm_contact.entity.class%
             - %orocrm_contact.contact_address.entity.class%
         tags:
