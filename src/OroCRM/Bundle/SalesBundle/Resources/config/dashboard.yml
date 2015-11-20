@@ -134,15 +134,17 @@ oro_dashboard_config:
                 compareToDate:
                     type: oro_type_widget_date
                     options:
-                       label: orocrm.sales.dashboard.forecast_of_opportunities.compareToDate
-                       required: false
+                        label: orocrm.sales.dashboard.forecast_of_opportunities.compareToDate
+                        required: false
                 subWidgets:
                     type: oro_type_widget_items
                     options:
-                       label: orocrm.sales.dashboard.forecast_of_opportunities.metrics
-                       item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
-                       required: false
-                       widget_name: forecast_of_opportunities
+                        label: orocrm.sales.dashboard.forecast_of_opportunities.metrics
+                        attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                        item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
+                        required: false
+                        widget_name: forecast_of_opportunities
         b2b_statistics_widget:
             label:       oro.dashboard.b2b_statistics_widget.title
             route:       oro_dashboard_itemized_data_widget
