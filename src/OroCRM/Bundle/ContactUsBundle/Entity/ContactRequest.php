@@ -101,28 +101,6 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
     protected $lead;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
-     * @ORM\JoinTable(name="orocrm_contactus_request_calls",
-     *      joinColumns={@ORM\JoinColumn(name="request_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $calls;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
-     * @ORM\JoinTable(name="orocrm_contactus_req_emails",
-     *      joinColumns={@ORM\JoinColumn(name="request_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $emails;
-
-    /**
      * @var WorkflowItem
      *
      * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
@@ -145,14 +123,6 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
      * @ORM\JoinColumn(name="owner_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $owner;
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        $this->calls  = new ArrayCollection();
-        $this->emails = new ArrayCollection();
-    }
 
     /**
      * @param string $organizationName
@@ -248,82 +218,6 @@ class ContactRequest extends ExtendContactRequest implements ChannelAwareInterfa
     public function getOpportunity()
     {
         return $this->opportunity;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getCalls()
-    {
-        return $this->calls;
-    }
-
-    /**
-     * @param Call $call
-     */
-    public function addCall(Call $call)
-    {
-        if (!$this->hasCall($call)) {
-            $this->getCalls()->add($call);
-        }
-    }
-
-    /**
-     * @param Call $call
-     */
-    public function removeCall(Call $call)
-    {
-        if ($this->hasCall($call)) {
-            $this->getCalls()->removeElement($call);
-        }
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return bool
-     */
-    public function hasCall(Call $call)
-    {
-        return $this->getCalls()->contains($call);
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getEmails()
-    {
-        return $this->emails;
-    }
-
-    /**
-     * @param Email $email
-     */
-    public function addEmail(Email $email)
-    {
-        if (!$this->hasEmail($email)) {
-            $this->getEmails()->add($email);
-        }
-    }
-
-    /**
-     * @param Email $email
-     */
-    public function removeEmail(Email $email)
-    {
-        if ($this->hasEmail($email)) {
-            $this->getEmails()->removeElement($email);
-        }
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return bool
-     */
-    public function hasEmail(Email $email)
-    {
-        return $this->getEmails()->contains($email);
     }
 
     /**
