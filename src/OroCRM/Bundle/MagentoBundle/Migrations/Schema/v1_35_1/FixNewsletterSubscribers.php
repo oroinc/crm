@@ -17,7 +17,7 @@ class FixNewsletterSubscribers implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         // Add minimal id received during newsletter_subscriber_initial sync
-        $table = $schema->createTable('oro_integration_transport');
+        $table = $schema->getTable('oro_integration_transport');
         $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
 
         // Remove unique constraint on customer_id
