@@ -911,4 +911,12 @@ class Cart extends ExtendCart implements
     {
         return $this->organization;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }
