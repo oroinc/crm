@@ -347,4 +347,12 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }
