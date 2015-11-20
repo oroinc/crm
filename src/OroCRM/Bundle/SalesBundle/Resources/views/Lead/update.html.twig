@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroAddressBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
 
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 
@@ -90,7 +90,8 @@
         form_row(form.numberOfEmployees),
         form_row(form.industry),
         form_row(form.source),
-        form_row(form.notes)
+        form_row(form.notes),
+        form_row(form.tags)
     ]) %}
 
     {% set dataBlocks = [{
