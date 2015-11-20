@@ -7,7 +7,7 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_36_1\FixNewsletterSubscribers as CreateMissedData;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_35_1\FixNewsletterSubscribers as CreateMissedData;
 
 class FixNewsletterSubscribers implements Migration
 {
