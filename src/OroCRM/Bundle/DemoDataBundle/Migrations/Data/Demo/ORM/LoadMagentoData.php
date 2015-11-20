@@ -88,10 +88,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             ->setWebsite($website);
         $om->persist($store);
 
-        $group = new CustomerGroup();
-        $group->setName('General');
-        $om->persist($group);
-
         $transport = new MagentoSoapTransport();
         $transport->setApiUser('api_user');
         $transport->setApiKey('api_key');
@@ -116,6 +112,13 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $this->dataChannel = $builder->getChannel();
 
         $om->persist($this->dataChannel);
+
+        $group = new CustomerGroup();
+        $group->setName('General');
+        $group->setOriginId(15000);
+        $group->setChannel($integration);
+        $om->persist($group);
+
         $om->flush();
 
         $this->persistDemoCustomers($om, $website, $store, $group, $integration);
