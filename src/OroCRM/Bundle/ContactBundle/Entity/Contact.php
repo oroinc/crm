@@ -994,37 +994,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     }
 
     /**
-     * @return int
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getTags()
-    {
-        if (null === $this->tags) {
-            $this->tags = new ArrayCollection();
-        }
-
-        return $this->tags;
-    }
-
-    /**
-     * @param $tags
-     * @return Contact
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
      * Set emails.
      *
      * This method could not be named setEmails because of bug CRM-253.
