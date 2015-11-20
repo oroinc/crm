@@ -837,4 +837,12 @@ class Order extends ExtendOrder implements
     {
         return strtolower($this->status) === self::STATUS_COMPLETED;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getIncrementId();
+    }
 }
