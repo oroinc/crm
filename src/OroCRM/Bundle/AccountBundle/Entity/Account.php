@@ -31,7 +31,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-suitcase",
- *              "context-grid"="accounts-for-context-grid"
+ *              "context-grid"="accounts-for-context-grid",
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -210,6 +210,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      *          }
      *      }
      * )
+     * @TODO Skip removing tags field for now because of merge config
      */
     protected $tags;
 
