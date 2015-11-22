@@ -1,6 +1,7 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
     alias: orocrm_contact
     label: orocrm.contact.entity_plural_label
+    title_fields: [namePrefix, firstName, lastName]
     route:
         name: orocrm_contact_view
         parameters:
