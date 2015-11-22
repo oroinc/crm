@@ -20,7 +20,7 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\InheritanceActivityTargets;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
