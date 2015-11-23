@@ -1,7 +1,7 @@
 {% set subscribedId = constant('OroCRM\\Bundle\\MagentoBundle\\Entity\\NewsletterSubscriber::STATUS_SUBSCRIBED') %}
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% if newsletterSubscriber is defined and newsletterSubscriber.id is not empty %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if resource_granted('EDIT', newsletterSubscriber) %}
         <div class="pull-left" data-page-component-module="orocrmmagento/js/app/components/subscription-manager">
         {% if newsletterSubscriber.status.id|default(false) == subscribedId %}
         {{ UI.clientButton({
