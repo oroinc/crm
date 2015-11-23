@@ -61,7 +61,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",
- *          },
+ *          }
  *      }
  * )
  * @Oro\Loggable
@@ -921,5 +921,13 @@ class Customer extends ExtendCustomer implements
         }
 
         return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getLastName() . (string)$this->getFirstName();
     }
 }
