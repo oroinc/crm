@@ -23,7 +23,7 @@ class FixNewsletterSubscribers implements Migration
         // Remove unique constraint on customer_id
         $table = $schema->getTable('orocrm_magento_newsl_subscr');
         $table->dropIndex('uniq_7c8eaa9395c3f3');
-        $table->addIndex(['customer_id'], 'idx_7c8eaa9395c3f3', []);
+        $table->addIndex(['customer_id']);
 
         // Delete sync status for newsletter_subscriber_initial connector to be able to force it's update
         $sql = sprintf(

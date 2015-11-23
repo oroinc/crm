@@ -692,6 +692,7 @@ services:
 
     orocrm_magento.datagrid.customer_actions_provider:
         class: %orocrm_magento.datagrid.customer_actions_provider.class%
+        parent: orocrm_magento.datagrid.newsletter_subscriber_provider
         arguments:
             - @orocrm_magento.model.channel_settings_provider
 
@@ -707,6 +708,8 @@ services:
         class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
         arguments:
             - @orocrm_magento.model.channel_settings_provider
+        calls:
+            - [setSecurityFacade, [@oro_security.security_facade]]
 
     orocrm_magento.model.newsletter_subscriber_manager:
         class: %orocrm_magento.model.newsletter_subscriber_manager.class%
