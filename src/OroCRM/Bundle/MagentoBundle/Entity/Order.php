@@ -834,4 +834,12 @@ class Order extends ExtendOrder implements
     {
         $this->couponCode = $couponCode;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getIncrementId();
+    }
 }

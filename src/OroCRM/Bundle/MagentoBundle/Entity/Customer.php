@@ -956,4 +956,12 @@ class Customer extends ExtendCustomer implements
     {
         return $this->synced;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getLastName() . (string)$this->getFirstName();
+    }
 }

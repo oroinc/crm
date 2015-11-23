@@ -355,4 +355,12 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     {
         return $this->getStatus()->getId() == self::STATUS_SUBSCRIBED;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }
