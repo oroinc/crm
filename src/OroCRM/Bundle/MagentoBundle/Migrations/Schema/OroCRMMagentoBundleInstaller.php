@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -16,8 +18,9 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareI
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -29,7 +32,8 @@ class OroCRMMagentoBundleInstaller implements
     ActivityExtensionAwareInterface,
     IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
-    VisitEventAssociationExtensionAwareInterface
+    VisitEventAssociationExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -42,6 +46,17 @@ class OroCRMMagentoBundleInstaller implements
 
     /** @var VisitEventAssociationExtension */
     protected $visitExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -80,7 +95,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_36';
+        return 'v1_37';
     }
 
     /**
@@ -137,6 +152,7 @@ class OroCRMMagentoBundleInstaller implements
 
         $this->addActivityAssociations($schema);
         $this->addIdentifierEventAssociations($schema);
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
     /**
@@ -1514,7 +1530,8 @@ class OroCRMMagentoBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
-        MagentoActivities::disableActivityAssociations($schema);
+
+        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
