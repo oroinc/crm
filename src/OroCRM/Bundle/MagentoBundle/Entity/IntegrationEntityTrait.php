@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity;
 
-use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 trait IntegrationEntityTrait
@@ -12,13 +11,6 @@ trait IntegrationEntityTrait
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\IntegrationBundle\Entity\Channel")
      * @ORM\JoinColumn(name="channel_id", referencedColumnName="id", onDelete="SET NULL")
-     * @ConfigField(
-     *      defaultValues={
-     *          "importexport"={
-     *              "identity"=true
-     *          }
-     *      }
-     * )
      */
     protected $channel;
 
