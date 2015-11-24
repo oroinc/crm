@@ -20,6 +20,7 @@
 {% macro render_contact_box(account, contact, isDefault) %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
     {% import 'OroEmailBundle::actions.html.twig' as EmailActions %}
+    {% import 'OroEmailBundle::macros.html.twig' as Email %}
     {% import 'OroCRMCallBundle::actions.html.twig' as CallActions %}
     <div class="contact-box">
         <div class="contact-box-row">
@@ -31,17 +32,25 @@
             </a>
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.account.phone.label"|trans }}:</span>
+            <span class="contact-element-container">{{ "orocrm.account.phone.label"|trans }}:</span>
             {% if contact.primaryPhone %}
-                {{ CallActions.logCallLink(contact.primaryPhone, contact, {'aCss': 'contact-box-link'}) }}
+                {{ UI.renderElementWithPhoneActions(
+                    CallActions.logCallLink(contact.primaryPhone, contact, {'aCss': 'contact-box-link'}),
+                    contact.primaryPhone,
+                    contact
+                ) }}
             {% else %}
                 {{ 'N/A'|trans }}
             {% endif %}
         </div>
         <div class="contact-box-row">
-            <span>{{ "orocrm.account.email.label"|trans }}:</span>
+            <span class="contact-element-container">{{ "orocrm.account.email.label"|trans }}:</span>
             {% if contact.primaryEmail %}
-                {{ EmailActions.sendEmailLink(contact.primaryEmail.email, contact, {'aCss': 'contact-box-link'}) }}
+                {{ Email.renderElementWithEmailActions(
+                    EmailActions.sendEmailLink(contact.primaryEmail.email, contact, {'aCss': 'contact-box-link'}),
+                    contact.primaryEmail.email,
+                    contact
+                ) }}
             {% else %}
                 {{ 'N/A'|trans }}
             {% endif %}
