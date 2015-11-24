@@ -346,6 +346,10 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
             $contact->addAccount($this);
         }
 
+        if (!$this->defaultContact) {
+            $this->defaultContact = $contact;
+        }
+
         return $this;
     }
 
