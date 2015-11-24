@@ -86,7 +86,7 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var Customer
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscriber")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscribers")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
@@ -346,5 +346,21 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribed()
+    {
+        return $this->getStatus()->getId() == self::STATUS_SUBSCRIBED;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
     }
 }

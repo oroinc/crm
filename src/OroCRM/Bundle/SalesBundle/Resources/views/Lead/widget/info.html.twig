@@ -1,4 +1,5 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
+{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
@@ -33,11 +34,15 @@
             {{ ui.renderProperty('orocrm.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
+
+            {% if resource_granted('oro_tag_view') %}
+                {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
+            {% endif %}
         </div>
 
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.email_address_simple(entity.email) : null) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhone(entity.phoneNumber) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.renderEmailWithActions(entity.email, entity) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
         </div>

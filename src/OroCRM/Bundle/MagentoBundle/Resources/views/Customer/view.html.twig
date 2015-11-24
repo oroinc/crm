@@ -36,7 +36,7 @@
             })
         }}
     {% endif %}
-    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity.newsletterSubscriber, customer: entity } %}
+    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { customer: entity } %}
     {% if resource_granted('EDIT', entity) %}
         {% if entity.guest %}
             {{ UI.clientButton({
@@ -65,16 +65,6 @@
     } %}
     {{ parent() }}
 {% endblock pageHeader %}
-
-{% block stats %}
-    {{ parent() }}
-    <li>
-        <div class="pull-right label label-info orocrm-channel-lifetime-value-label">
-            {{ 'orocrm.magento.customer.lifetime.label'|trans}}: {{ entity.lifetime|oro_format_currency }}
-        </div>
-    </li>
-    {% include 'OroCRMAnalyticsBundle::label.html.twig' %}
-{% endblock stats %}
 
 {% block content_data %}
     {% set customerInformationWidget %}
@@ -138,12 +128,14 @@
         }
     ] %}
 
-    {% if entity.newsletterSubscriber is not empty %}
+    {% if entity.newsletterSubscribers|length > 0 %}
         {% set newsletterSubscriberBlock %}
-            {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('orocrm_magento_newsletter_subscriber_info', {id: entity.newsletterSubscriber.id})
-            }) }}
+            {% for newsletterSubscriber in entity.newsletterSubscribers %}
+                {{ oro_widget_render({
+                    'widgetType': 'block',
+                    'url': path('orocrm_magento_newsletter_subscriber_info', {id: newsletterSubscriber.id})
+                }) }}
+            {% endfor %}
         {% endset %}
         {% if newsletterSubscriberBlock %}
             {% set dataBlocks = dataBlocks|merge([

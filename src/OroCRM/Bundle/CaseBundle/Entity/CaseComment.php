@@ -116,4 +116,12 @@ class CaseComment extends ExtendCaseComment
     {
         return (bool)$this->public;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

@@ -4,16 +4,49 @@ namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Common\Inflector\Inflector;
 
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EmailBundle\Tools\EmailHolderHelper;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
+use OroCRM\Bundle\MarketingListBundle\Provider\ContactInformationFieldsProvider;
 
+/**
+ * Class EmailDirectionProvider
+ * @package OroCRM\Bundle\ActivityContactBundle\Provider
+ */
 class EmailDirectionProvider implements DirectionProviderInterface
 {
+    /**
+     * @var ConfigProvider
+     */
+    protected $configProvider;
+
+    /**
+     * @var DoctrineHelper
+     */
+    protected $doctrineHelper;
+
+    /**
+     * @param ConfigProvider $configProvider
+     * @param DoctrineHelper $doctrineHelper
+     */
+    public function __construct(
+        ConfigProvider $configProvider,
+        DoctrineHelper $doctrineHelper,
+        EmailHolderHelper $emailHolderHelper
+    ) {
+        $this->configProvider = $configProvider;
+        $this->doctrineHelper = $doctrineHelper;
+        $this->emailHolderHelper = $emailHolderHelper;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -27,7 +60,29 @@ class EmailDirectionProvider implements DirectionProviderInterface
      */
     public function getDirection($activity, $target)
     {
+        //check if target is entity created from admin part
         if (!$target instanceof EmailHolderInterface) {
+            $metadata = $this->doctrineHelper->getEntityMetadata($target);
+            $columns = $metadata->getColumnNames();
+            $className = get_class($target);
+
+            foreach ($columns as $column) {
+                //check only columns with 'contact_information'
+                if ($this->isEmailType($className, $column)) {
+                    $getMethodName = "get" . Inflector::classify($column);
+                    /** @var $activity Email */
+                    if ($activity->getFromEmailAddress()->getEmail() === $target->$getMethodName()) {
+                        return DirectionProviderInterface::DIRECTION_OUTGOING;
+                    } else {
+                        foreach ($activity->getTo() as $recipient) {
+                            if ($recipient->getEmailAddress()->getEmail() === $target->$getMethodName()) {
+                                return DirectionProviderInterface::DIRECTION_INCOMING;
+                            }
+                        }
+                    }
+                }
+            }
+
             return DirectionProviderInterface::DIRECTION_UNKNOWN;
         }
 
@@ -41,6 +96,24 @@ class EmailDirectionProvider implements DirectionProviderInterface
     }
 
     /**
+     * @param string      $className
+     * @param string|null $column
+     *
+     * @return bool
+     */
+    protected function isEmailType($className, $column)
+    {
+        if ($this->configProvider->hasConfig($className, $column)) {
+            $fieldConfiguration = $this->configProvider->getConfig($className, $column);
+            $type = $fieldConfiguration->get('contact_information');
+
+            return $type == ContactInformationFieldsProvider::CONTACT_INFORMATION_SCOPE_EMAIL;
+        }
+
+        return false;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isDirectionChanged($changeSet = [])
@@ -50,7 +123,6 @@ class EmailDirectionProvider implements DirectionProviderInterface
          */
         return false;
     }
-
 
     /**
      * {@inheritdoc}
@@ -115,16 +187,26 @@ class EmailDirectionProvider implements DirectionProviderInterface
                 ->setParameter('skipId', $skipId);
         }
 
-        if ($direction) {
+        if ($direction && $target instanceof EmailHolderInterface) {
             $operator = '!=';
             if ($direction === DirectionProviderInterface::DIRECTION_OUTGOING) {
                 $operator = '=';
             }
+
             $qb->join('email.fromEmailAddress', 'fromEmailAddress')
                 ->andWhere('fromEmailAddress.email ' . $operator . ':email')
-                ->setParameter('email', $target->getEmail());
+                ->setParameter('email', $this->getTargetEmail($target));
         }
 
         return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    /**
+     * @param object $target
+     * @return string
+     */
+    protected function getTargetEmail($target)
+    {
+        return $this->emailHolderHelper->getEmail($target);
     }
 }

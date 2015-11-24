@@ -24,7 +24,7 @@ class CustomerSearchController extends RestGetController
      * Search customers.
      *
      *
-     * @Get("/customers/search", name="")
+     * @Get("/customers/search")
      *
      * @QueryParam(
      *      name="page",

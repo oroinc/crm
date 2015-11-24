@@ -29,7 +29,6 @@ parameters:
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
     orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
-    orocrm_magento.provider.email_recipients.class:                         OroCRM\Bundle\MagentoBundle\Provider\EmailRecipientsProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -90,6 +89,8 @@ parameters:
     orocrm_magento.dashboard.data_provider.order.class:                     OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider
     orocrm_magento.dashboard.data_provider.customer.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\CustomerDataProvider
     orocrm_magento.dashboard.data_provider.purchase.class:                  OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider
+
+    orocrm_magento.placeholder.filter.class:                                OroCRM\Bundle\MagentoBundle\Placeholder\PlaceholderFilter
 
     orocrm_magento.provider.phone.address.class:                            OroCRM\Bundle\MagentoBundle\Provider\AddressPhoneProvider
     orocrm_magento.provider.phone.cart_address.class:                       OroCRM\Bundle\MagentoBundle\Provider\CartAddressPhoneProvider
@@ -181,14 +182,6 @@ services:
         arguments:
             - @doctrine
             - @oro_security.acl_helper
-
-    orocrm_magento.provider.email_recipients:
-        class: %orocrm_magento.provider.email_recipients.class%
-        arguments:
-            - @doctrine
-            - @oro_email.related_emails.provider
-        tags:
-            - { name: oro_email.recipients_provider, priority: 10 }
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -474,10 +467,11 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
-    oro_email.listener.datagrid.context.magento:
-        class: %oro_email.listener.datagrid.context.class%
+    oro_activity.listener.datagrid.context.magento:
+        class: %oro_activity.listener.datagrid.context.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - @oro_entity.doctrine_helper
+            - @oro_entity.entity_class_name_helper
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-for-context-grid, method: onBuildAfter }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-for-context-grid, method: onBuildAfter }
@@ -559,6 +553,9 @@ services:
             - @orocrm_magento.provider.tracking_visit
             - @translator
             - @oro_security.acl_helper
+
+    orocrm_magento.placeholder.filter:
+        class: %orocrm_magento.placeholder.filter.class%
 
     orocrm_magento.provider.enitity_state:
         parent: orocrm_channel.provider.utils.entity_state_provider
@@ -692,6 +689,7 @@ services:
 
     orocrm_magento.datagrid.customer_actions_provider:
         class: %orocrm_magento.datagrid.customer_actions_provider.class%
+        parent: orocrm_magento.datagrid.newsletter_subscriber_provider
         arguments:
             - @orocrm_magento.model.channel_settings_provider
 
@@ -707,6 +705,8 @@ services:
         class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
         arguments:
             - @orocrm_magento.model.channel_settings_provider
+        calls:
+            - [setSecurityFacade, [@oro_security.security_facade]]
 
     orocrm_magento.model.newsletter_subscriber_manager:
         class: %orocrm_magento.model.newsletter_subscriber_manager.class%

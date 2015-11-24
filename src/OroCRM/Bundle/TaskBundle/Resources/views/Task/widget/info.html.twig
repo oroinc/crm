@@ -1,7 +1,14 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
+{% import "OroActivityBundle::macros.html.twig" as AC %}
 
 <div class="widget-content form-horizontal box-content row-fluid">
     <div class="responsive-block">
+        {# Display contexts targets in the activity list item view #}
+        {% if renderContexts is defined and renderContexts %}
+            <div class="activity-context-activity-list">
+                {{ AC.activity_contexts(entity, target, true) }}
+            </div>
+        {% endif %}
         {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
         {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
         {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
