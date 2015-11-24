@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Converter;
 
+use ReflectionClass;
+use ReflectionProperty;
+
 use Doctrine\Common\Util\Inflector;
 
 use Oro\Bundle\ImportExportBundle\Context\ContextInterface;
@@ -13,6 +16,7 @@ class AttributesConverterHelper
     const VALUE = 'value';
     const ID_MARK = '_id';
     const CHANNEL_KEY = 'channel';
+    const ENTITY_NAME_KEY = 'entityName';
 
     /**
      * @param array $importedRecord
@@ -26,6 +30,7 @@ class AttributesConverterHelper
             $channelId = $context->getOption(self::CHANNEL_KEY);
         }
 
+        $addedAttributes = [];
         if (!empty($importedRecord[self::ATTRIBUTES_KEY])) {
             foreach ($importedRecord[self::ATTRIBUTES_KEY] as $attribute) {
                 $name = $attribute[self::KEY];
@@ -35,6 +40,7 @@ class AttributesConverterHelper
                 if ($isIdentifier && $channelId) {
                     $name = Inflector::camelize($name);
                     $importedRecord = self::addAttribute($importedRecord, $name, $value);
+                    $addedAttributes[] = $name;
 
                     $name = substr($name, 0, strlen($name) - strlen(self::ID_MARK) + 1);
                     $value = ['originId' => $value, self::CHANNEL_KEY => ['id' => $channelId]];
@@ -42,11 +48,12 @@ class AttributesConverterHelper
 
                 $name = Inflector::camelize($name);
                 $importedRecord = self::addAttribute($importedRecord, $name, $value);
+                $addedAttributes[] = $name;
             }
             unset($importedRecord[self::ATTRIBUTES_KEY]);
         }
 
-        return $importedRecord;
+        return static::normalizeProperties($importedRecord, $addedAttributes, $context);
     }
 
     /**
@@ -62,5 +69,44 @@ class AttributesConverterHelper
         }
 
         return $importedRecord;
+    }
+
+    /**
+     * Converts properties into correct case
+     *
+     * @param array $record
+     * @param array $properties
+     * @param ContextInterface|null $context
+     *
+     * @return array Normalized record
+     */
+    public static function normalizeProperties(array $record, array $properties, ContextInterface $context = null)
+    {
+        if (!$properties || !$context || !$context->hasOption(static::ENTITY_NAME_KEY)) {
+            return $record;
+        }
+
+        $class = $context->getOption(static::ENTITY_NAME_KEY);
+        $classRef = new ReflectionClass($class);
+        $classProperties = array_map(
+            function (ReflectionProperty $prop) {
+                return $prop->getName();
+            },
+            $classRef->getProperties()
+        );
+
+        $classPropertyMap = array_combine(array_map('strtolower', $classProperties), $classProperties);
+
+        $result = [];
+        foreach ($record as $key => $value) {
+            $lkey = strtolower($key);
+            if (in_array($key, $properties) && array_key_exists($lkey, $classPropertyMap)) {
+                $result[$classPropertyMap[$lkey]] = $value;
+            } else {
+                $result[$key] = $value;
+            }
+        }
+
+        return $result;
     }
 }

@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Converter;
 
+use Oro\Bundle\ImportExportBundle\Context\Context;
+
 use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\AttributesConverterHelper;
 
 class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
@@ -20,8 +22,9 @@ class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUnknownAttributesSimpleAttributes()
     {
-        $context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
-            ->getMock();
+        $context = new Context([
+            AttributesConverterHelper::ENTITY_NAME_KEY => 'Oro\Bundle\UserBundle\Entity\User',
+        ]);
 
         $data = [
             'test' => '1',
@@ -44,6 +47,10 @@ class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
                     AttributesConverterHelper::KEY => 'existing_camel_case',
                     AttributesConverterHelper::VALUE => 'val4'
                 ],
+                [
+                    AttributesConverterHelper::KEY => 'emAil',
+                    AttributesConverterHelper::VALUE => 'em@example.com'
+                ],
             ]
         ];
 
@@ -52,7 +59,8 @@ class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
             'existing' => '2',
             'existingCamelCase' => 3,
             'someAttributeOne' => 'val1',
-            'someAttributeTwo' => 'val2'
+            'someAttributeTwo' => 'val2',
+            'email' => 'em@example.com',
         ];
 
         $this->assertEquals($expected, AttributesConverterHelper::addUnknownAttributes($data, $context));
@@ -83,16 +91,10 @@ class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
 
     public function testAddUnknownAttributesIdAttributes()
     {
-        $context = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Context\ContextInterface')
-            ->getMock();
-        $context->expects($this->once())
-            ->method('hasOption')
-            ->with(AttributesConverterHelper::CHANNEL_KEY)
-            ->will($this->returnValue(true));
-        $context->expects($this->once())
-            ->method('getOption')
-            ->with(AttributesConverterHelper::CHANNEL_KEY)
-            ->will($this->returnValue(1));
+        $context = new Context([
+            AttributesConverterHelper::CHANNEL_KEY => true,
+            AttributesConverterHelper::CHANNEL_KEY => 1,
+        ]);
 
         $data = [
             'test' => '1',
@@ -116,5 +118,72 @@ class AttributesConverterHelperTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->assertEquals($expected, AttributesConverterHelper::addUnknownAttributes($data, $context));
+    }
+
+    /**
+     * @dataProvider normalizePropertiesProvider
+     */
+    public function testNormalizeProperties($record, $properties, $contextConfiguration, $expectedRecord)
+    {
+        $context = new Context($contextConfiguration);
+
+        $this->assertEquals(
+            $expectedRecord,
+            AttributesConverterHelper::normalizeProperties($record, $properties, $context)
+        );
+    }
+
+    public function normalizePropertiesProvider()
+    {
+        return [
+            [
+                'record' => [
+                    'username' => 'user',
+                    'email' => 'email@example.com',
+                ],
+                'properties' => [
+                    'email',
+                ],
+                'contextConfiguration' => [
+                    AttributesConverterHelper::ENTITY_NAME_KEY => 'Oro\Bundle\UserBundle\Entity\User',
+                ],
+                'expectedRecord' => [
+                    'username' => 'user',
+                    'email' => 'email@example.com',
+                ],
+            ],
+            [
+                'record' => [
+                    'username' => 'user',
+                    'eMail' => 'email@example.com',
+                ],
+                'properties' => [
+                    'eMail',
+                ],
+                'contextConfiguration' => [
+                    AttributesConverterHelper::ENTITY_NAME_KEY => 'Oro\Bundle\UserBundle\Entity\User',
+                ],
+                'expectedRecord' => [
+                    'username' => 'user',
+                    'email' => 'email@example.com',
+                ],
+            ],
+            [
+                'record' => [
+                    'username' => 'user',
+                    'eMail' => 'email@example.com',
+                ],
+                'properties' => [
+                    'username',
+                ],
+                'contextConfiguration' => [
+                    AttributesConverterHelper::ENTITY_NAME_KEY => 'Oro\Bundle\UserBundle\Entity\User',
+                ],
+                'expectedRecord' => [
+                    'username' => 'user',
+                    'eMail' => 'email@example.com',
+                ],
+            ],
+        ];
     }
 }
