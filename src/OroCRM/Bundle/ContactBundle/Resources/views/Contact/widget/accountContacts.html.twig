@@ -31,8 +31,9 @@
                 {% endif %}
             </a>
         </div>
+        <div class="contact-box-row"></div>
         <div class="contact-box-row">
-            <span class="contact-element-container">{{ "orocrm.account.phone.label"|trans }}:</span>
+            <span class="contact-element-label">{{ "orocrm.account.phone.label"|trans }}:</span>
             {% if contact.primaryPhone %}
                 {{ UI.renderElementWithPhoneActions(
                     CallActions.logCallLink(contact.primaryPhone, contact, {'aCss': 'contact-box-link'}),
@@ -44,7 +45,7 @@
             {% endif %}
         </div>
         <div class="contact-box-row">
-            <span class="contact-element-container">{{ "orocrm.account.email.label"|trans }}:</span>
+            <span class="contact-element-label">{{ "orocrm.account.email.label"|trans }}:</span>
             {% if contact.primaryEmail %}
                 {{ Email.renderElementWithEmailActions(
                     EmailActions.sendEmailLink(contact.primaryEmail.email, contact, {'aCss': 'contact-box-link'}),
