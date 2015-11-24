@@ -203,7 +203,7 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
-            newsletter_subscriber.label: Newsletter Subscriber
+            newsletter_subscribers.label: Newsletter Subscribers
             confirmed.label: Confirmed
             created_in.label: Created In
 
