@@ -20,19 +20,17 @@
         {% set elements = [primaryElement]|merge(elements) %}
     {% endif %}
 
-    <div class="contact-element-container">
-        <ul class="extra-list">
-            {% for element in elements %}
-                <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
-                    {% if isEmail %}
-                        {{ email.renderEmailWithActions(element, entity) }}
-                    {% else %}
-                        {{ ui.renderPhoneWithActions(element, entity) }}
-                    {% endif %}
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+    <ul class="extra-list">
+        {% for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 {% endmacro %}
 
 {%- macro getSocialUrl(type, value) -%}
