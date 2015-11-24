@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -17,8 +19,9 @@ use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -29,7 +32,8 @@ class OroCRMSalesBundleInstaller implements
     ExtendExtensionAwareInterface,
     NoteExtensionAwareInterface,
     ActivityExtensionAwareInterface,
-    AttachmentExtensionAwareInterface
+    AttachmentExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /**
      * @var ExtendExtension
@@ -50,6 +54,17 @@ class OroCRMSalesBundleInstaller implements
      * @var AttachmentExtension
      */
     protected $attachmentExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -88,7 +103,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_20';
+        return 'v1_21';
     }
 
     /**
@@ -130,6 +145,7 @@ class OroCRMSalesBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_opportunity');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_b2bcustomer');
         OpportunityAttachment::addOpportunityAttachment($schema, $this->attachmentExtension);
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
     }

@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\AccountBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -13,6 +15,7 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 
 /**
@@ -23,6 +26,7 @@ class OroCRMAccountBundleInstaller implements
     Installation,
     NoteExtensionAwareInterface,
     ActivityExtensionAwareInterface,
+    ActivityListExtensionAwareInterface,
     AttachmentExtensionAwareInterface
 {
     /** @var NoteExtension */
@@ -33,6 +37,17 @@ class OroCRMAccountBundleInstaller implements
 
     /** @var AttachmentExtension */
     protected $attachmentExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -99,6 +114,7 @@ class OroCRMAccountBundleInstaller implements
             ],
             2
         );
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         // update to 1.8
         $addReferredBy = new AddReferredBy();
