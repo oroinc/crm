@@ -5,19 +5,6 @@ workflows:
                 label: 'Not contacted'
                 order: 10
                 allowed_transitions:
-                    - send_email
-                    - log_call
-            emailed:
-                label: 'Emailed'
-                order: 20
-                allowed_transitions:
-                    - log_call
-                    - record_feedback
-            called:
-                label: 'Called'
-                order: 30
-                allowed_transitions:
-                    - no_reply
                     - record_feedback
             contacted:
                 label: 'Contacted'

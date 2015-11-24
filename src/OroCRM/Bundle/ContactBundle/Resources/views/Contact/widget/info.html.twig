@@ -21,7 +21,7 @@
     {% endif %}
 
     <ul class="extra-list">
-        {% for element in elements %}
+        {%- for element in elements %}
             <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
                 {% if isEmail %}
                     {{ email.renderEmailWithActions(element, entity) }}
@@ -29,7 +29,7 @@
                     {{ ui.renderPhoneWithActions(element, entity) }}
                 {% endif %}
             </li>
-        {% endfor %}
+        {% endfor -%}
     </ul>
 {% endmacro %}
 

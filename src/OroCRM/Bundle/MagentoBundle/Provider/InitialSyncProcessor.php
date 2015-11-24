@@ -90,10 +90,6 @@ class InitialSyncProcessor extends AbstractInitialProcessor
             $this->processDictionaryConnectors($integration);
         }
 
-        $callback = function ($connector) {
-            return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
-        };
-
         // Set start date for initial connectors
         $startSyncDate = $integration->getTransport()->getSettingsBag()->get('start_sync_date');
         $parameters[self::START_SYNC_DATE] = $startSyncDate;
@@ -104,7 +100,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
         // Collect initial connectors
         $postProcessConnectorTypes = array_keys($this->postProcessors);
-        $connectors = $this->getConnectorsToSync($integration, $callback);
+        $connectors = $this->getConnectorsToSync($integration, $this->getConnectorsFilterFunction($callback));
         $postProcessConnectors = array_intersect($connectors, $postProcessConnectorTypes);
         $connectors = array_diff($connectors, $postProcessConnectorTypes);
 
@@ -177,6 +173,21 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         }
 
         return $isSuccess;
+    }
+
+    /**
+     * @param callable|null $callback
+     * @return \Closure
+     */
+    protected function getConnectorsFilterFunction(callable $callback = null)
+    {
+        return function ($connector) use ($callback) {
+            if (is_callable($callback) && !call_user_func($callback, $connector)) {
+                return false;
+            }
+
+            return strpos($connector, self::INITIAL_CONNECTOR_SUFFIX) !== false;
+        };
     }
 
     /**

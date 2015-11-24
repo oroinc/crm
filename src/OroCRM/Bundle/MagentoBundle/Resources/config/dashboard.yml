@@ -125,10 +125,12 @@ oro_dashboard_config:
                 subWidgets:
                     type: oro_type_widget_items
                     options:
-                       label: oro.dashboard.widget.big_number.choose_metrics
-                       item_label: oro.dashboard.widget.big_number.metricName
-                       required: false
-                       widget_name: big_numbers_widget
+                        label: oro.dashboard.widget.big_number.metrics
+                        attr:
+                            placeholder: oro.dashboard.widget.big_number.choose_metrics_placeholder
+                        item_label: oro.dashboard.widget.big_number.metricName
+                        required: false
+                        widget_name: big_numbers_widget
         revenue_over_time_chart:
             label:       orocrm.magento.dashboard.revenue_over_time_chart.title
             route:       orocrm_magento_dashboard_revenue_over_time_chart
