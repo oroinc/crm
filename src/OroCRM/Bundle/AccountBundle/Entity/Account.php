@@ -149,7 +149,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      *
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="defaultInAccounts")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -346,10 +346,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
             $contact->addAccount($this);
         }
 
-        if (!$this->defaultContact) {
-            $this->defaultContact = $contact;
-        }
-
         return $this;
     }
 
@@ -465,7 +461,18 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      */
     public function setDefaultContact($defaultContact)
     {
+        if ($this->defaultContact === $defaultContact) {
+            return $this;
+        }
+
+        if ($this->defaultContact) {
+            $this->defaultContact->removeDefaultInAccount($this);
+        }
+
         $this->defaultContact = $defaultContact;
+        if ($defaultContact) {
+            $defaultContact->addDefaultInAccount($this);
+        }
 
         if ($defaultContact && !$this->contacts->contains($defaultContact)) {
             $this->addContact($defaultContact);

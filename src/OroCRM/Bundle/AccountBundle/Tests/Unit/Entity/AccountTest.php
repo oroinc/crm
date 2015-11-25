@@ -55,34 +55,6 @@ class AccountTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($contact, current($actualContacts));
     }
 
-    public function testAddContactShouldSetDefaultContactIfNotSetAlready()
-    {
-        $account = new Account();
-
-        // guards
-        $this->assertTrue($account->getContacts()->isEmpty());
-        $this->assertNull($account->getDefaultContact());
-
-        $newContact = new Contact();
-        $account->addContact($newContact);
-        $this->assertCount(1, $account->getContacts());
-        $this->assertSame($newContact, $account->getContacts()->first());
-        $this->assertSame($newContact, $account->getDefaultContact());
-    }
-
-    public function testAddContactsShouldNotOverwriteExistingDefaultContact()
-    {
-        $account = new Account();
-        $existingContact = new Contact();
-        $account->addContact($existingContact);
-
-        // guard
-        $this->assertSame($existingContact, $account->getDefaultContact());
-
-        $account->addContact(new Contact());
-        $this->assertSame($existingContact, $account->getDefaultContact());
-    }
-
     public function testRemoveContact()
     {
         $account = new Account();
