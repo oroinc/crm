@@ -153,8 +153,6 @@ class CartControllerTest extends WebTestCase
             $cart['billingAddress'],
             $cart['shippingAddress'],
             $cart['cartItems'],
-            $cart['relatedCalls'],
-            $cart['relatedEmails'],
             $cart['itemsCount'],
             $cart['firstName'],
             $cart['lastName'],

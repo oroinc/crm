@@ -104,4 +104,12 @@ class CartAddress extends ExtendCartAddress implements OriginAwareInterface
     {
         return $this->phone;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

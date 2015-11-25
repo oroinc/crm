@@ -67,6 +67,7 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-accounts-by_opportunities:
         pageTitle: orocrm.report.accounts_by_opportunities
@@ -168,6 +169,7 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-leads-by_date:
         pageTitle: orocrm.report.leads_by_date
@@ -209,6 +211,7 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-by_status:
         pageTitle: orocrm.report.opportunities_by_status
@@ -292,6 +295,7 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-won_by_period:
         pageTitle: orocrm.report.opportunities_won_by_period
@@ -385,6 +389,7 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-total_forecast:
         pageTitle: orocrm.report.opportunities.total_forecast
@@ -465,3 +470,4 @@ datagrid:
         options:
             entityHint: report data
             export: true
+        entity_pagination: true

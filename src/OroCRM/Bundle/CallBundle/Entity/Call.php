@@ -450,4 +450,12 @@ class Call extends ExtendCall implements DatesAwareInterface
     {
         return $this->organization;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getSubject();
+    }
 }
