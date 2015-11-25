@@ -224,7 +224,7 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/text-editor-view
+                        view: oroform/js/app/views/editor/text-editor-view
                     validation_rules:
                         required: true
                     save_api_accessor:

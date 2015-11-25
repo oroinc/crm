@@ -43,7 +43,7 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: owner
                     autocomplete_api_accessor:
