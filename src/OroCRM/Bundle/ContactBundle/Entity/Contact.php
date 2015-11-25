@@ -684,7 +684,8 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     /**
      * @var Account[]|Collection
      *
-     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account", mappedBy="defaultContact")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account",
+     *    mappedBy="defaultContact", cascade={"persist"})
      */
     protected $defaultInAccounts;
 
