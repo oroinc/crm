@@ -101,8 +101,6 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
-        tags:
-            - { name: oro_tag.tag_manager }
 
     orocrm_sales.lead.form.handler.api:
         class: %orocrm_sales.lead.form.handler.class%
@@ -112,8 +110,6 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
-        tags:
-            - { name: oro_tag.tag_manager }
 
     orocrm_sales.form.type.opportunity_select:
         class: %orocrm_sales.form.type.opportunity_select.class%
@@ -217,8 +213,6 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
-        tags:
-            - { name: oro_tag.tag_manager }
 
     orocrm_sales.b2bcustomer.form.handler.api:
         class: %orocrm_sales.b2bcustomer.form.handler.class%
@@ -228,5 +222,3 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
-        tags:
-            - { name: oro_tag.tag_manager }

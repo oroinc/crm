@@ -26,7 +26,6 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
                         [['name', 'text'], $this->returnSelf()],
                         [['account', 'orocrm_account_select'], $this->returnSelf()],
                         [['contact', 'orocrm_contact_select'], $this->returnSelf()],
-                        [['tags', 'oro_tag_select'], $this->returnSelf()],
                         [['channel', 'orocrm_channel_select_type'], $this->returnSelf()],
                         [['shippingAddress', 'oro_address'], $this->returnSelf()],
                         [['billingAddress', 'oro_address'], $this->returnSelf()]
