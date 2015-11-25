@@ -12,16 +12,10 @@
         {% endif %}
     </div>
 </div>
-<script type="text/javascript">
-    require(['orocrm/contact/widgets/account-contacts-widget'], function(ContactWidget){
-        ContactWidget.init();
-    });
-</script>
+
 {% macro render_contact_box(account, contact, isDefault) %}
     {% import 'OroUIBundle::macros.html.twig' as UI %}
-    {% import 'OroEmailBundle::actions.html.twig' as EmailActions %}
     {% import 'OroEmailBundle::macros.html.twig' as Email %}
-    {% import 'OroCRMCallBundle::actions.html.twig' as CallActions %}
     <div class="contact-box">
         <div class="contact-box-row">
             <a class="contact-box-name-link contact-box-link" href="{{ path('orocrm_contact_view',{'id': contact.id }) }}">
@@ -35,11 +29,7 @@
         <div class="contact-box-row">
             <span class="contact-element-label">{{ "orocrm.account.phone.label"|trans }}:</span>
             {% if contact.primaryPhone %}
-                {{ UI.renderElementWithPhoneActions(
-                    CallActions.logCallLink(contact.primaryPhone, contact, {'aCss': 'contact-box-link'}),
-                    contact.primaryPhone,
-                    contact
-                ) }}
+                {{ UI.renderPhoneWithActions(contact.primaryPhone, contact) }}
             {% else %}
                 {{ 'N/A'|trans }}
             {% endif %}
@@ -47,11 +37,7 @@
         <div class="contact-box-row">
             <span class="contact-element-label">{{ "orocrm.account.email.label"|trans }}:</span>
             {% if contact.primaryEmail %}
-                {{ Email.renderElementWithEmailActions(
-                    EmailActions.sendEmailLink(contact.primaryEmail.email, contact, {'aCss': 'contact-box-link'}),
-                    contact.primaryEmail.email,
-                    contact
-                ) }}
+                {{ Email.renderEmailWithActions(contact.primaryEmail.email, contact) }}
             {% else %}
                 {{ 'N/A'|trans }}
             {% endif %}
