@@ -15,7 +15,7 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { entity: entity } %}
+    {% include 'OroCRMMagentoBundle:NewsletterSubscriber:buttons.html.twig' with { newsletterSubscriber: entity } %}
     {{ parent() }}
 {% endblock navButtons %}
 

@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
@@ -16,7 +15,6 @@ use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendCart;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
@@ -254,28 +252,6 @@ class Cart extends ExtendCart implements
     protected $opportunity;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
-     * @ORM\JoinTable(name="orocrm_magento_cart_calls",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $relatedCalls;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
-     * @ORM\JoinTable(name="orocrm_magento_cart_emails",
-     *      joinColumns={@ORM\JoinColumn(name="cart_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $relatedEmails;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
@@ -364,102 +340,8 @@ class Cart extends ExtendCart implements
     {
         parent::__construct();
 
-        $this->status        = new CartStatus('open');
-        $this->cartItems     = new ArrayCollection();
-        $this->relatedCalls  = new ArrayCollection();
-        $this->relatedEmails = new ArrayCollection();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRelatedCalls()
-    {
-        return $this->relatedCalls;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return Cart
-     */
-    public function addRelatedCall(Call $call)
-    {
-        if (!$this->hasRelatedCall($call)) {
-            $this->getRelatedCalls()->add($call);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return Cart
-     */
-    public function removeRelatedCall(Call $call)
-    {
-        if ($this->hasRelatedCall($call)) {
-            $this->getRelatedCalls()->removeElement($call);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return bool
-     */
-    public function hasRelatedCall(Call $call)
-    {
-        return $this->getRelatedCalls()->contains($call);
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRelatedEmails()
-    {
-        return $this->relatedEmails;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return Cart
-     */
-    public function addRelatedEmail(Email $email)
-    {
-        if (!$this->hasRelatedEmail($email)) {
-            $this->getRelatedEmails()->add($email);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return Cart
-     */
-    public function removeRelatedEmail(Email $email)
-    {
-        if ($this->hasRelatedEmail($email)) {
-            $this->getRelatedEmails()->removeElement($email);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return bool
-     */
-    public function hasRelatedEmail(Email $email)
-    {
-        return $this->getRelatedEmails()->contains($email);
+        $this->status    = new CartStatus('open');
+        $this->cartItems = new ArrayCollection();
     }
 
     /**
@@ -910,5 +792,13 @@ class Cart extends ExtendCart implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
     }
 }

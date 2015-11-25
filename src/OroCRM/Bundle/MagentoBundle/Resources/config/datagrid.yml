@@ -6,7 +6,7 @@ datagrid:
             acl_resource: orocrm_magento_customer_view
             query:
                 select:
-                    - c.id
+                    - DISTINCT c.id
                     - c.firstName
                     - c.lastName
                     - c.email
@@ -36,8 +36,8 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
-                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
+                        - { join: c.newsletterSubscribers, alias: newsletterSubscribers }
+                        - { join: newsletterSubscribers.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label

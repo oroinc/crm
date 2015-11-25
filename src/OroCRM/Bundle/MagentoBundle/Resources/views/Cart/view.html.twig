@@ -104,59 +104,6 @@
         }
     ] %}
 
-    {% set relatedInformation = [] %}
-
-    {% if resource_granted('oro_email_email_view') %}
-        {% set emailIds = [] %}
-        {% for email in entity.getRelatedEmails %}
-            {% set emailIds = emailIds|merge([email.id]) %}
-        {% endfor %}
-        {% if emailIds is empty %}
-            {% set emailIds = [0] %}
-        {% endif %}
-        {% set cartEmailsWidget %}
-            {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('oro_email_widget_base_emails', {'emailIds': emailIds}),
-                'title': 'oro.email.entity_plural_label'|trans,
-                'alias': 'cart_emails'
-            }) }}
-        {% endset %}
-        {% set relatedInformation = relatedInformation|merge([
-            {'data' : [cartEmailsWidget]}
-        ]) %}
-    {% endif %}
-
-    {% if resource_granted('orocrm_call_view') %}
-        {% set callIds = [] %}
-        {% for call in entity.getRelatedCalls %}
-            {% set callIds = callIds|merge([call.id]) %}
-        {% endfor %}
-        {% if callIds is empty %}
-            {% set callIds = [0] %}
-        {% endif %}
-        {% set cartCallsWidget %}
-            {{ oro_widget_render({
-                'widgetType': 'block',
-                'url': path('orocrm_call_base_widget_calls', {'callIds': callIds}),
-                'title': 'orocrm.call.entity_plural_label'|trans,
-                'alias': 'cart_calls'
-            }) }}
-        {% endset %}
-        {% set relatedInformation = relatedInformation|merge([
-            {'data' : [cartCallsWidget]}
-        ]) %}
-    {% endif %}
-
-    {% if relatedInformation is not empty %}
-        {% set dataBlocks = dataBlocks|merge([
-            {
-                'title': 'orocrm.magento.communications'|trans,
-                'subblocks': relatedInformation
-            }
-        ]) %}
-    {% endif %}
-
     {% set id = 'magentoCartView' %}
     {% set data = {'dataBlocks': dataBlocks} %}
     {{ parent() }}
