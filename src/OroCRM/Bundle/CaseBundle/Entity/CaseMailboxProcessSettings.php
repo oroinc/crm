@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
@@ -16,7 +15,7 @@ use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
  * @ORM\Entity
  * @Config
  */
-class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
+class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings
 {
     /**
      * @var User
@@ -141,33 +140,5 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     public function getType()
     {
         return 'case';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTags()
-    {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
-        return $this->tags;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
     }
 }

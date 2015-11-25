@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Form\Type;
 
+use Oro\Bundle\TagBundle\Entity\TagManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
@@ -13,6 +14,16 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class ContactType extends AbstractType
 {
+    /** @var TagManager */
+    protected $tagManager;
+
+    /**
+     * @param TagManager $manager
+     */
+    public function __construct(TagManager $manager)
+    {
+        $this->tagManager = $manager;
+    }
     /**
      * {@inheritdoc}
      */
