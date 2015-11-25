@@ -55,7 +55,6 @@ datagrid:
         extended_entity_name: %orocrm_account.account.entity.class%
         inline_editing:
             enable: true
-            entity_name: %orocrm_account.account.entity.class%
         source:
             type:           orm
             acl_resource:   orocrm_account_view

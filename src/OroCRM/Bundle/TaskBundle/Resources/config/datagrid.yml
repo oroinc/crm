@@ -26,7 +26,6 @@ datagrid:
                         - { join: task.workflowStep, alias: workflowStep }
         inline_editing:
             enable: true
-            entity_name: %orocrm_task.entity.class%
         columns:
             subject:
                 label:         orocrm.task.subject.label
