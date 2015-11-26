@@ -47,6 +47,9 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "share_scopes"={
  *                  "user"
  *              }
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

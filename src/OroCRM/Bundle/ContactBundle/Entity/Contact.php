@@ -74,6 +74,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

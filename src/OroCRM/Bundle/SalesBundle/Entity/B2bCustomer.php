@@ -47,6 +47,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_b2bcustomer_select"
+ *          },
+ *         "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

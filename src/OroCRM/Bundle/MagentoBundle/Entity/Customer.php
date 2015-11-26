@@ -61,6 +61,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
