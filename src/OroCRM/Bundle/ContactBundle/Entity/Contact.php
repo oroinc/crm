@@ -1605,7 +1605,9 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function removeDefaultInAccount(Account $account)
     {
         $this->defaultInAccounts->removeElement($account);
-        $account->setDefaultContact(null);
+        if ($account->getDefaultContact() === $this) {
+            $account->setDefaultContact(null);
+        }
 
         return $this;
     }
