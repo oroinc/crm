@@ -108,12 +108,17 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->provider = new ForecastOfOpportunities(
             $this->doctrine,
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
-            $this->translator
+            $this->translator,
+            $this->securityFacade
         );
     }
 
@@ -124,7 +129,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
-            $this->translator
+            $this->translator,
+            $this->securityFacade
         );
     }
 
