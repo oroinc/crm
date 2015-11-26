@@ -465,13 +465,15 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
             return $this;
         }
 
-        if ($this->defaultContact) {
-            $this->defaultContact->removeDefaultInAccount($this);
-        }
-
+        $originalContact = $this->defaultContact;
         $this->defaultContact = $defaultContact;
+
         if ($defaultContact) {
             $defaultContact->addDefaultInAccount($this);
+        }
+
+        if ($originalContact) {
+            $originalContact->removeDefaultInAccount($this);
         }
 
         if ($defaultContact && !$this->contacts->contains($defaultContact)) {
