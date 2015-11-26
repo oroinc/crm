@@ -61,6 +61,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

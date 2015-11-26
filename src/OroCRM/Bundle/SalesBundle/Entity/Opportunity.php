@@ -55,6 +55,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      },
  *      "dataaudit"={
  *          "auditable"=true
+ *      },
+ *      "tag"={
+ *          "enabled"=true
  *      }
  *  }
  * )
