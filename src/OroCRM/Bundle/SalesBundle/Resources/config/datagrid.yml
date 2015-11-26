@@ -44,14 +44,13 @@ datagrid:
                 frontend_type: datetime
             contactName:
                 label:         orocrm.sales.opportunity.contact.label
+                frontend_type: relation
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: contact
                     autocomplete_api_accessor:
-                        class: oroui/js/tools/search-api-accessor
                         search_handler_name: contacts
                         label_field_name: fullName
             closeDate:
