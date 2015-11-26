@@ -46,7 +46,6 @@ class FlowContactRequestTest extends Selenium2TestCase
      */
     public function testFlowContactRequest($email)
     {
-        $callSubject = 'Call_' . mt_rand(10, 99);
         $feedback    = 'Test feedback_' . mt_rand(10, 99);
 
         $login = $this->login();
@@ -54,11 +53,6 @@ class FlowContactRequestTest extends Selenium2TestCase
         $login->openContactRequests('OroCRM\Bundle\ContactUsBundle')
             ->filterBy('Email', $email)
             ->open([$email])
-            ->logCall()
-            ->setCallSubject($callSubject)
-            ->submit()
-            ->checkStep('Contacted')
-            ->checkCommunication('Calls', $callSubject)
             ->resolve()
             ->setFeedback($feedback)
             ->submit()

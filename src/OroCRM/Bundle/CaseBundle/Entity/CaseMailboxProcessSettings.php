@@ -141,4 +141,12 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings
     {
         return 'case';
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

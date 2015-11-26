@@ -597,4 +597,12 @@ class EmailCampaign extends ExtendEmailCampaign
     {
         return $this->organization;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

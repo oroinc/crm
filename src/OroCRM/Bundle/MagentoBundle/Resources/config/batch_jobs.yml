@@ -265,7 +265,7 @@ connector:
                     services:
                         reader:    orocrm_magento.mage.newsletter_subscriber_connector_initial
                         processor: orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        writer:    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber
                         job_executor: oro_importexport.job_executor
                     parameters:
                         batch_size: 25
@@ -291,7 +291,7 @@ connector:
                     services:
                         reader:    orocrm_magento.reader.context_newsletter_subscriber
                         processor: orocrm_magento.importexport.processor.context_newsletter_subscriber
-                        writer:    orocrm_magento.writer.proxy_entity_writer
+                        writer:    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber
                     parameters:
                         batch_size: 25
                 load_customer_info:

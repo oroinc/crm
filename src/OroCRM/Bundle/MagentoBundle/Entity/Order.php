@@ -10,7 +10,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\AddressBundle\Entity\AbstractTypedAddress;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -18,7 +17,6 @@ use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Bundle\LocaleBundle\Model\FirstNameInterface;
 use Oro\Bundle\LocaleBundle\Model\LastNameInterface;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\MagentoBundle\Model\ExtendOrder;
 use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 
@@ -212,28 +210,6 @@ class Order extends ExtendOrder implements
     protected $items;
 
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="OroCRM\Bundle\CallBundle\Entity\Call")
-     * @ORM\JoinTable(name="orocrm_magento_order_calls",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="call_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $relatedCalls;
-
-    /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Oro\Bundle\EmailBundle\Entity\Email")
-     * @ORM\JoinTable(name="orocrm_magento_order_emails",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id", onDelete="CASCADE")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="email_id", referencedColumnName="id", onDelete="CASCADE")}
-     * )
-     */
-    protected $relatedEmails;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
@@ -336,101 +312,7 @@ class Order extends ExtendOrder implements
     {
         parent::__construct();
 
-        $this->items         = new ArrayCollection();
-        $this->relatedCalls  = new ArrayCollection();
-        $this->relatedEmails = new ArrayCollection();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRelatedCalls()
-    {
-        return $this->relatedCalls;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return Order
-     */
-    public function addRelatedCall(Call $call)
-    {
-        if (!$this->hasRelatedCall($call)) {
-            $this->getRelatedCalls()->add($call);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return Order
-     */
-    public function removeRelatedCall(Call $call)
-    {
-        if ($this->hasRelatedCall($call)) {
-            $this->getRelatedCalls()->removeElement($call);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Call $call
-     *
-     * @return bool
-     */
-    public function hasRelatedCall(Call $call)
-    {
-        return $this->getRelatedCalls()->contains($call);
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getRelatedEmails()
-    {
-        return $this->relatedEmails;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return Order
-     */
-    public function addRelatedEmail(Email $email)
-    {
-        if (!$this->hasRelatedEmail($email)) {
-            $this->getRelatedEmails()->add($email);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return Order
-     */
-    public function removeRelatedEmail(Email $email)
-    {
-        if ($this->hasRelatedEmail($email)) {
-            $this->getRelatedEmails()->removeElement($email);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param Email $email
-     *
-     * @return bool
-     */
-    public function hasRelatedEmail(Email $email)
-    {
-        return $this->getRelatedEmails()->contains($email);
+        $this->items = new ArrayCollection();
     }
 
     /**
@@ -839,5 +721,13 @@ class Order extends ExtendOrder implements
     public function isCompleted()
     {
         return strtolower($this->status) === self::STATUS_COMPLETED;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getIncrementId();
     }
 }
