@@ -61,7 +61,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",
- *          },
+ *          }
  *      }
  * )
  * @Oro\Loggable
@@ -443,11 +443,19 @@ class Customer extends ExtendCustomer implements
     protected $password;
 
     /**
-     * @var NewsletterSubscriber
+     * @var NewsletterSubscriber[]|Collection
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber",
+     *      mappedBy="customer", cascade={"remove"}, orphanRemoval=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
-    protected $newsletterSubscriber;
+    protected $newsletterSubscribers;
 
     /**
      * {@inheritdoc}
@@ -458,6 +466,7 @@ class Customer extends ExtendCustomer implements
 
         $this->carts  = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->newsletterSubscribers = new ArrayCollection();
     }
 
     /**
@@ -882,10 +891,43 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @return NewsletterSubscriber
+     * @return NewsletterSubscriber[]|Collection
      */
-    public function getNewsletterSubscriber()
+    public function getNewsletterSubscribers()
     {
-        return $this->newsletterSubscriber;
+        return $this->newsletterSubscribers;
+    }
+
+    /**
+     * @param Collection|NewsletterSubscriber[] $newsletterSubscribers
+     * @return Customer
+     */
+    public function setNewsletterSubscribers($newsletterSubscribers)
+    {
+        $this->newsletterSubscribers = $newsletterSubscribers;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribed()
+    {
+        foreach ($this->getNewsletterSubscribers() as $newsletterSubscriber) {
+            if ($newsletterSubscriber->isSubscribed()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getLastName() . (string)$this->getFirstName();
     }
 }
