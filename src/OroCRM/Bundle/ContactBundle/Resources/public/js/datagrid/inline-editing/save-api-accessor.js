@@ -8,37 +8,6 @@ define(function(require) {
     var ApiAccessor = require('oroui/js/tools/api-accessor');
 
     ContactApiAccessor = ApiAccessor.extend(/** @exports ContactApiAccessor.prototype */{
-        DEFAULT_HTTP_METHOD: 'GET',
-
-        formName: void 0,
-        /**
-         * @returns {boolean}
-         */
-        isActiveCreateEntityRoute: function() {
-            return this.route.get('routeName') === this.initialOptions.route_create_entity.route;
-        },
-
-        setUpdateEntityRoute: function() {
-            this.route.set('routeName', this.initialOptions.route);
-            this.httpMethod = this.initialOptions.http_method;
-        },
-
-        setCreateEntityRoute: function() {
-            this.route.set('routeName', this.initialOptions.route_create_entity.route);
-            this.httpMethod = this.initialOptions.route_create_entity.http_method;
-        },
-
-        initRoute: function(urlParameters) {
-            var _urlParameters = _.clone(urlParameters);
-
-            this.setUpdateEntityRoute();
-            _urlParameters = this.prepareUrlParameters(_urlParameters);
-
-            if (!this.route.validateParameters(_urlParameters)) {
-                this.setCreateEntityRoute();
-            }
-        },
-
         /**
          * Validates url parameters
          *
@@ -60,6 +29,32 @@ define(function(require) {
             }
 
             return ContactApiAccessor.__super__.send.apply(this, arguments);
+        },
+
+        initRoute: function(urlParameters) {
+            var _urlParameters = _.clone(urlParameters);
+
+            this.setUpdateEntityRoute();
+            _urlParameters = this.prepareUrlParameters(_urlParameters);
+
+            if (!this.route.validateParameters(_urlParameters)) {
+                this.setCreateEntityRoute();
+            }
+        },
+
+        setUpdateEntityRoute: function() {
+            this.route.set('routeName', this.initialOptions.route);
+            this.httpMethod = this.initialOptions.http_method;
+        },
+
+        setCreateEntityRoute: function() {
+            this.route.set('routeName', this.initialOptions.route_create_entity.name);
+            this.httpMethod = this.initialOptions.route_create_entity.http_method;
+        },
+
+        /** @returns {boolean} */
+        isActiveCreateEntityRoute: function() {
+            return this.route.get('routeName') === this.initialOptions.route_create_entity.name;
         }
     });
 

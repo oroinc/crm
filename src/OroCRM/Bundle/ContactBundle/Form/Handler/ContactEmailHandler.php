@@ -52,8 +52,12 @@ class ContactEmailHandler
         if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
             $this->form->submit($submitData);
 
-            if ($this->form->isValid()) {
+            if ($this->form->isValid() && $this->request->request->get('contactId')) {
                 $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
+                if ($contact->getPrimaryEmail() && $this->request->request->get('primary') === true) {
+                    return false;
+                }
+
                 $this->onSuccess($entity, $contact);
 
                 return true;

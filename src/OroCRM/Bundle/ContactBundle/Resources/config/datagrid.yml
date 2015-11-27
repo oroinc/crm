@@ -215,7 +215,7 @@ datagrid:
                     save_api_accessor:
                         class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
-                            route: oro_api_post_contact_email
+                            name: oro_api_post_contact_email
                             http_method: POST
                         default_route_parameters:
                             className: OroCRM_Bundle_ContactBundle_Entity_ContactEmail
@@ -233,7 +233,7 @@ datagrid:
                     save_api_accessor:
                         class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
-                            route: oro_api_post_contact_phone
+                            name: oro_api_post_contact_phone
                             http_method: POST
                         default_route_parameters:
                             className: OroCRM_Bundle_ContactBundle_Entity_ContactPhone
