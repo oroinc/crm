@@ -1,14 +1,21 @@
 parameters:
     orocrm_contact.entity.class:                      OroCRM\Bundle\ContactBundle\Entity\Contact
+    orocrm_contact.entity.phone.class:                OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+    orocrm_contact.entity.email.class:                OroCRM\Bundle\ContactBundle\Entity\ContactEmail
     orocrm_contact.type.contact.class:                OroCRM\Bundle\ContactBundle\Form\Type\ContactType
     orocrm_contact.type.group.class:                  OroCRM\Bundle\ContactBundle\Form\Type\GroupType
     orocrm_contact.handler.contact.class:             OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
     orocrm_contact.form.type.contact_select.class:    OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
     orocrm_contact.handler.group.class:               OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
 
+    #manager
     orocrm_contact.contact.manager.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_contact.contact.manager.api.class:         OroCRM\Bundle\ContactBundle\Entity\Manager\ContactApiEntityManager
     orocrm_contact.contact_address.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.contact_phone.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.contact_email.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    #type
     orocrm_contact.form.type.contact.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType
 
     orocrm_contact.group.entity.class:                OroCRM\Bundle\ContactBundle\Entity\Group
@@ -255,3 +262,15 @@ services:
             - @doctrine.orm.entity_manager
         tags:
             - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_contact.contact_phone.manager.api:
+        class: %orocrm_contact.contact_phone.manager.api.class%
+        arguments:
+            - %orocrm_contact.entity.phone.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_contact.contact_email.manager.api:
+        class: %orocrm_contact.contact_email.manager.api.class%
+        arguments:
+            - %orocrm_contact.entity.email.class%
+            - @doctrine.orm.entity_manager
