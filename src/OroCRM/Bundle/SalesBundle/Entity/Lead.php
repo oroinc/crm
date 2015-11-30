@@ -481,11 +481,6 @@ class Lead extends ExtendLead implements
     protected $customer;
 
     /**
-     * @var ArrayCollection
-     */
-    protected $tags;
-
-    /**
      * Constructor
      */
     public function __construct()
