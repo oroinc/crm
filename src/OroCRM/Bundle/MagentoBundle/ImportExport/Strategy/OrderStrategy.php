@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
@@ -173,6 +174,11 @@ class OrderStrategy extends AbstractImportStrategy
             if ($existingEntity && $entity->getOriginId()) {
                 $existingEntity->setOriginId($entity->getOriginId());
             }
+        }
+
+        if ($entity instanceof OrderItem && is_null($entity->getName())) {
+            //name can't be null, so to avoid import job failing empty string is used
+            $entity->setName('');
         }
 
         return $existingEntity;
