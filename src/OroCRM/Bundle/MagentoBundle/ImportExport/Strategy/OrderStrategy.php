@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
@@ -10,6 +9,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends AbstractImportStrategy
 {
