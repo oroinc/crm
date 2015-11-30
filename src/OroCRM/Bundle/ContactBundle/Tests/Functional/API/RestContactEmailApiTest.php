@@ -18,7 +18,7 @@ class RestContactEmailApiTest extends WebTestCase
         ]);
     }
 
-    public function testCreateContactPhone()
+    public function testCreateContactEmail()
     {
         $contact = $this->getReference('Contact_Brenda');
         $content = json_encode([
@@ -34,18 +34,9 @@ class RestContactEmailApiTest extends WebTestCase
         $this->assertNotEmpty($contact['id']);
     }
 
-    public function testCreateSecondPrimaryContactEmail()
+    public function testCreateSecondPrimaryEmail()
     {
         $contact = $this->getReference('Contact_Brenda');
-        $content = json_encode([
-            'contactId' => $contact->getId(),
-            'email' =>'test@test.test',
-            'primary' => true
-        ]);
-
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact_email'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), 201);
-
         $content = json_encode([
             'contactId' => $contact->getId(),
             'email' =>'test1@test.test',
