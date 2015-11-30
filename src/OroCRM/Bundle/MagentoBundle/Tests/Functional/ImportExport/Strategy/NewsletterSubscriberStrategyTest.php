@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Functional\ImportExport\Strategy;
 
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
+use Akeneo\Bundle\BatchBundle\Entity\JobInstance;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
 use Oro\Bundle\ImportExportBundle\Context\StepExecutionProxyContext;
@@ -40,7 +41,11 @@ class NewsletterSubscriberStrategyTest extends WebTestCase
         $this->strategy = $this->getContainer()
             ->get('orocrm_magento.import.strategy.newsletter_subscriber.add_or_update');
 
-        $this->stepExecution = new StepExecution('step', new JobExecution());
+        $jobInstance = new JobInstance();
+        $jobInstance->setRawConfiguration(['channel' => 3]);
+        $jobExecution = new JobExecution();
+        $jobExecution->setJobInstance($jobInstance);
+        $this->stepExecution = new StepExecution('step', $jobExecution);
         $this->context = new StepExecutionProxyContext($this->stepExecution);
         $this->strategy->setImportExportContext($this->context);
         $this->strategy->setStepExecution($this->stepExecution);
