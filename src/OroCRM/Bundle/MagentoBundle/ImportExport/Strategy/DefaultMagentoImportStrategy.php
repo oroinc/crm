@@ -44,7 +44,8 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
             $identityValues = $searchContext;
 
             $usedTraits = class_uses($entityName);
-            if ($this->context->hasOption('channel') && in_array('IntegrationEntityTrait', $usedTraits)) {
+            $targetTrait = 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationEntityTrait';
+            if ($this->context->hasOption('channel') && in_array($targetTrait, $usedTraits)) {
                 $channel = $this->databaseHelper->findOneBy(
                     'Oro\Bundle\IntegrationBundle\Entity\Channel',
                     ['id' => $this->context->getOption('channel')]
