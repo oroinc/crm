@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
+use FOS\RestBundle\Util\Codes;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 /**
@@ -27,7 +28,7 @@ class RestContactPhoneApiTest extends WebTestCase
             'primary' => true
         ]);
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $contact = $this->getJsonResponseContent($this->client->getResponse(), 201);
+        $contact = $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_CREATED);
 
         $this->assertArrayHasKey('id', $contact);
         $this->assertNotEmpty($contact['id']);
@@ -44,7 +45,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), 400);
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyContactId()
@@ -55,7 +56,7 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), 400);
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 
     public function testEmptyPhone()
@@ -67,6 +68,6 @@ class RestContactPhoneApiTest extends WebTestCase
         ]);
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
-        $this->getJsonResponseContent($this->client->getResponse(), 400);
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 }
