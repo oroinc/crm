@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Service;
 
+use Doctrine\ORM\Query\Expr;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\Owner\Metadata\OwnershipMetadataProvider;
 
@@ -148,13 +149,7 @@ class AutomaticDiscoveryTest extends \PHPUnit_Framework_TestCase
 
         $service = $this->getDiscovery($config);
 
-        $expr = $this->getMockBuilder('Doctrine\Orm\Query\Expr')
-            ->disableOriginalConstructor()
-            ->setMethods(['neq'])
-            ->getMock();
-        $expr->expects($this->once())
-            ->method('neq')
-            ->with('e.id', ':id');
+        $expr = new Expr();
         $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
             ->disableOriginalConstructor()
             ->getMock();
