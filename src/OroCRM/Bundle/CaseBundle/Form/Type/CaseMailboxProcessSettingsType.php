@@ -92,7 +92,7 @@ class CaseMailboxProcessSettingsType extends AbstractType
                 'label' => 'oro.tag.entity_plural_label',
             ]
         );
-//@TODO need investigation about this case
+
         $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event) {
             if ($event->getData()) {
                 return;

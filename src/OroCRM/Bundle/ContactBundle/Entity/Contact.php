@@ -549,11 +549,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     protected $linkedIn;
 
     /**
-     * @var ArrayCollection
-     */
-    protected $tags;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
@@ -691,7 +686,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
         $this->accounts = new ArrayCollection();
         $this->emails   = new ArrayCollection();
         $this->phones   = new ArrayCollection();
-        $this->tags     = new ArrayCollection();
     }
 
     public function __clone()
@@ -709,9 +703,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
         }
         if ($this->phones) {
             $this->phones = clone $this->phones;
-        }
-        if ($this->tags) {
-            $this->tags = clone $this->tags;
         }
     }
 

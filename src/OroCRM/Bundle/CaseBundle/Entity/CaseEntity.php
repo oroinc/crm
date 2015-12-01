@@ -49,7 +49,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              }
  *          },
  *          "tag"={
- *              "enabled"=true
+ *              "enabled"=true,
+ *              "immutable"=true
  *          }
  *      }
  * )
@@ -290,11 +291,6 @@ class CaseEntity extends ExtendCaseEntity implements EmailHolderInterface
      * @var bool
      */
     private $updateClosedAt = null;
-
-    /**
-     * @var ArrayCollection $tags
-     */
-    protected $tags;
 
     /**
      * @var Organization

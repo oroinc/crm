@@ -8,14 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\UserBundle\Entity\User;
-
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
 
 /**
  * @ORM\Entity
  * @Config
  */
-class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings
+class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implements Taggable
 {
     /**
      * @var User
@@ -148,5 +148,33 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings
     public function __toString()
     {
         return (string)$this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTaggableId()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTags()
+    {
+        $this->tags = $this->tags ?: new ArrayCollection();
+
+        return $this->tags;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setTags($tags)
+    {
+        $this->tags = $tags;
+
+        return $this;
     }
 }

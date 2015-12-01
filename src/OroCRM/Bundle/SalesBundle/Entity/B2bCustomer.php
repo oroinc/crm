@@ -223,11 +223,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     protected $organization;
 
     /**
-     * @var ArrayCollection $tags
-     */
-    protected $tags;
-
-    /**
      * @var \DateTime $created
      *
      * @ORM\Column(type="datetime")
