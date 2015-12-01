@@ -9,6 +9,7 @@ use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\OrderAddress;
 use OroCRM\Bundle\MagentoBundle\Provider\MagentoConnectorInterface;
+use OroCRM\Bundle\MagentoBundle\Entity\OrderItem;
 
 class OrderStrategy extends AbstractImportStrategy
 {
@@ -173,6 +174,11 @@ class OrderStrategy extends AbstractImportStrategy
             if ($existingEntity && $entity->getOriginId()) {
                 $existingEntity->setOriginId($entity->getOriginId());
             }
+        }
+
+        if ($entity instanceof OrderItem && is_null($entity->getName())) {
+            //name can't be null, so to avoid import job failing empty string is used
+            $entity->setName('');
         }
 
         return $existingEntity;
