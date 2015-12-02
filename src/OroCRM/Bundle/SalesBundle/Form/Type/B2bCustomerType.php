@@ -49,13 +49,6 @@ class B2bCustomerType extends AbstractType
             ]
         );
         $builder->add(
-            'tags',
-            'oro_tag_select',
-            [
-                'label' => 'oro.tag.entity_plural_label'
-            ]
-        );
-        $builder->add(
             'dataChannel',
             'orocrm_channel_select_type',
             [

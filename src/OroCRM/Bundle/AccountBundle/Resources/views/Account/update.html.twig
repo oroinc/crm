@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
 {% oro_title_set({params : {"%account.name%": form.vars.value.name|default('N/A')} }) %}
 
 {% set formAction = form.vars.value.id ? path('orocrm_account_update', { 'id': form.vars.value.id }) : path('orocrm_account_create')  %}
@@ -57,8 +57,7 @@
             {
                 'title': 'Basic Information'|trans,
                 'data': [
-                    form_row(form.name),
-                    form_row(form.tags)
+                    form_row(form.name)
                 ]
             }
         ]

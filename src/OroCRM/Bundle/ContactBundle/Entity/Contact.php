@@ -16,7 +16,6 @@ use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -75,11 +74,14 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
  */
-class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
+class Contact extends ExtendContact implements EmailOwnerInterface
 {
     /*
      * Fields have to be duplicated here to enable dataaudit and soap transformation only for contact
@@ -547,11 +549,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     protected $linkedIn;
 
     /**
-     * @var ArrayCollection
-     */
-    protected $tags;
-
-    /**
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\ContactBundle\Entity\ContactAddress",
@@ -689,7 +686,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         $this->accounts = new ArrayCollection();
         $this->emails   = new ArrayCollection();
         $this->phones   = new ArrayCollection();
-        $this->tags     = new ArrayCollection();
     }
 
     public function __clone()
@@ -707,9 +703,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
         }
         if ($this->phones) {
             $this->phones = clone $this->phones;
-        }
-        if ($this->tags) {
-            $this->tags = clone $this->tags;
         }
     }
 
@@ -991,37 +984,6 @@ class Contact extends ExtendContact implements Taggable, EmailOwnerInterface
     public function getTwitter()
     {
         return $this->twitter;
-    }
-
-    /**
-     * @return int
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getTags()
-    {
-        if (null === $this->tags) {
-            $this->tags = new ArrayCollection();
-        }
-
-        return $this->tags;
-    }
-
-    /**
-     * @param $tags
-     * @return Contact
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
     }
 
     /**

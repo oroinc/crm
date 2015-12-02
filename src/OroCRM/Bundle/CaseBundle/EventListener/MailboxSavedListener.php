@@ -25,12 +25,12 @@ class MailboxSavedListener
      */
     public function onMailboxSave(MailboxSaved $event)
     {
-        $processSetings = $event->getMailbox()->getProcessSettings();
-        if (!$processSetings instanceof CaseMailboxProcessSettings) {
+        $processSettings = $event->getMailbox()->getProcessSettings();
+        if (!$processSettings instanceof CaseMailboxProcessSettings) {
             return;
         }
 
         $organization = $event->getMailbox()->getOrganization();
-        $this->tagManager->saveTagging($processSetings, true, $organization);
+        $this->tagManager->saveTagging($processSettings, true, $organization);
     }
 }

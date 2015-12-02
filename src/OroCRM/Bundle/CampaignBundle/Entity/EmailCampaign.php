@@ -36,6 +36,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *              "share_scopes"={
  *                  "user"
  *              }
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
