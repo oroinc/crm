@@ -2,15 +2,27 @@
 namespace OroCRM\Bundle\MarketingListBundle\EventListener;
 
 use Oro\Bundle\EntityExtendBundle\Event\ValueRenderEvent;
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 class ExtendFieldValueBeforeRenderListener
 {
     /**
-     * @param ConfigManager $configManager
+     * @var ConfigProvider
      */
-    public function __construct(ConfigManager $configManager) {
-        $this->entityProvider = $configManager->getProvider('entity');
+    protected $configProvider;
+
+    /**
+     * @var array
+     */
+    protected $contactInformationMap;
+
+    /**
+     * @param ConfigProvider $configProvider
+     * @param array $contactInformationMap
+     */
+    public function __construct(ConfigProvider $configProvider, array $contactInformationMap) {
+        $this->configProvider = $configProvider;
+        $this->contactInformationMap = $contactInformationMap;
     }
 
     /**
@@ -18,16 +30,15 @@ class ExtendFieldValueBeforeRenderListener
      */
     public function beforeValueRender(ValueRenderEvent $event)
     {
-        $fieldConfig = $this->entityProvider->getConfigById($event->getFieldConfigId());
+        $fieldConfig = $this->configProvider->getConfigById($event->getFieldConfigId());
         $contactInformationType = $fieldConfig->get('contact_information');
 
         // if some contact information type is defined -- applies proper template for its value
-        if ($contactInformationType) {
-            $template = "OroCRMMarketingListBundle:MarketingList/ExtendField:{$contactInformationType}.html.twig";
+        if (isset($this->contactInformationMap[$contactInformationType])) {
             $event->setFieldViewValue([
                 'value' => $event->getFieldValue(),
                 'entity' => $event->getEntity(),
-                'template' => $template,
+                'template' => $this->contactInformationMap[$contactInformationType],
             ]);
         }
     }
