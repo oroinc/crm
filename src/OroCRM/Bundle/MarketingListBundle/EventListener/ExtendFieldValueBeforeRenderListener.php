@@ -20,8 +20,9 @@ class ExtendFieldValueBeforeRenderListener
      * @param ConfigProvider $configProvider
      * @param array $contactInformationMap
      */
-    public function __construct(ConfigProvider $configProvider, array $contactInformationMap) {
-        $this->configProvider = $configProvider;
+    public function __construct(ConfigProvider $configProvider, array $contactInformationMap)
+    {
+        $this->configProvider        = $configProvider;
         $this->contactInformationMap = $contactInformationMap;
     }
 
@@ -30,16 +31,20 @@ class ExtendFieldValueBeforeRenderListener
      */
     public function beforeValueRender(ValueRenderEvent $event)
     {
-        $fieldConfig = $this->configProvider->getConfigById($event->getFieldConfigId());
+        $fieldConfig            = $this->configProvider->getConfigById($event->getFieldConfigId());
         $contactInformationType = $fieldConfig->get('contact_information');
 
         // if some contact information type is defined -- applies proper template for its value
-        if (isset($this->contactInformationMap[$contactInformationType])) {
-            $event->setFieldViewValue([
-                'value' => $event->getFieldValue(),
-                'entity' => $event->getEntity(),
-                'template' => $this->contactInformationMap[$contactInformationType],
-            ]);
+        if (null !== $contactInformationType
+            && isset($this->contactInformationMap[$contactInformationType])
+        ) {
+            $event->setFieldViewValue(
+                [
+                    'value'    => $event->getFieldValue(),
+                    'entity'   => $event->getEntity(),
+                    'template' => $this->contactInformationMap[$contactInformationType],
+                ]
+            );
         }
     }
 }
