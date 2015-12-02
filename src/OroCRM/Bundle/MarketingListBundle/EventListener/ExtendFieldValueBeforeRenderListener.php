@@ -18,7 +18,7 @@ class ExtendFieldValueBeforeRenderListener
 
     /**
      * @param ConfigProvider $configProvider
-     * @param array $contactInformationMap
+     * @param array          $contactInformationMap
      */
     public function __construct(ConfigProvider $configProvider, array $contactInformationMap)
     {
