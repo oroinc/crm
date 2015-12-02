@@ -69,7 +69,7 @@ datagrid:
                     - defaultContactPhone.phone as contactPhone
                     - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
                     - accountOwner.id as owner
-                    - CONCAT('{"data":[{"label":"', GROUP_CONCAT(contact.firstName, ' ', contact.lastName, '","id":' , contact.id SEPARATOR '},{"label":"'), '}], "count":', COUNT(contact.id), '}') as contacts
+#                    - CONCAT('{"data":[{"label":"', GROUP_CONCAT(contact.firstName, ' ', contact.lastName, '","id":' , contact.id SEPARATOR '},{"label":"'), '}], "count":', COUNT(contact.id), '}') as contacts
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -106,14 +106,14 @@ datagrid:
             contactPhone:
                 label:         orocrm.account.contact.phone
                 frontend_type: phone
-            contacts:
-                label:         Contacts
-                frontend_type: multi-relation
-                inline_editing:
-                    enable: true
-                    autocomplete_api_accessor:
-                        class: orouser/js/tools/acl-users-search-api-accessor
-                        permission_check_entity_name: OroCRM_Bundle_AccountBundle_Entity_Account
+#            contacts:
+#                label:         Contacts
+#                frontend_type: multi-relation
+#                inline_editing:
+#                    enable: true
+#                    autocomplete_api_accessor:
+#                        search_handler_name: contacts
+#                        label_field_name: fullName
             ownerName:
                 label:         orocrm.account.owner.label
                 frontend_type: relation
