@@ -49,7 +49,7 @@ class ContactEmailHandler
             'primary' => $this->request->request->get('primary')
         ];
 
-        if (in_array($this->request->getMethod(), array('POST', 'PUT'))) {
+        if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $this->form->submit($submitData);
 
             if ($this->form->isValid() && $this->request->request->get('contactId')) {
