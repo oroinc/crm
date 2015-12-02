@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\MarketingListBundle\EventListener;
 
 use Oro\Bundle\EntityExtendBundle\Event\ValueRenderEvent;
