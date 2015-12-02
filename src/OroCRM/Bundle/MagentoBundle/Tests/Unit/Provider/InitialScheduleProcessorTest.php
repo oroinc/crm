@@ -390,6 +390,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $dictionaryConnector->expects($this->any())
             ->method('getType')
             ->willReturn('dictionary');
+        $dictionaryConnector->expects($this->any())
+            ->method('getImportJobName')
+            ->willReturn('test job');
 
         $this->typesRegistry->expects($this->any())
             ->method('getRegisteredConnectorsTypes')

@@ -84,7 +84,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     /**
      * {@inheritdoc}
      */
-    protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
+    protected function processConnectors(Integration $integration, array $parameters = [], \Closure $callback = null)
     {
         if (empty($parameters['skip-dictionary'])) {
             $this->processDictionaryConnectors($integration);
@@ -100,7 +100,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
         // Collect initial connectors
         $postProcessConnectorTypes = array_keys($this->postProcessors);
-        $connectors = $this->getConnectorsToSync($integration, $this->getConnectorsFilterFunction($callback));
+        $connectors = $this->getTypesOfConnectorsToSync($integration, $this->getConnectorsFilterFunction($callback));
         $postProcessConnectors = array_intersect($connectors, $postProcessConnectorTypes);
         $connectors = array_diff($connectors, $postProcessConnectorTypes);
 
@@ -133,9 +133,11 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                             $parameters,
                             [self::INITIAL_SYNCED_TO => clone $connectorsSyncedTo[$connector]]
                         );
+
+                        $realConnector = clone $this->registry->getConnectorType($integration->getType(), $connector);
                         $result = $this->processIntegrationConnector(
                             $integration,
-                            $connector,
+                            $realConnector,
                             $parameters
                         );
                         // Move sync date into past by interval value
@@ -176,10 +178,10 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     }
 
     /**
-     * @param callable|null $callback
+     * @param \Closure|null $callback
      * @return \Closure
      */
-    protected function getConnectorsFilterFunction(callable $callback = null)
+    protected function getConnectorsFilterFunction(\Closure $callback = null)
     {
         return function ($connector) use ($callback) {
             if (is_callable($callback) && !call_user_func($callback, $connector)) {
