@@ -31,6 +31,9 @@ parameters:
     orocrm_marketing_list.provider.virtual_relation.marketing_list.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListVirtualRelationProvider
     orocrm_marketing_list.provider.virtual_field.marketing_list_item.class: OroCRM\Bundle\MarketingListBundle\Provider\MarketingListItemVirtualFieldProvider
 
+    #event listeners
+    orocrm_marketing_list.event_listener.before_value_render_listener.class: OroCRM\Bundle\MarketingListBundle\EventListener\ExtendFieldValueBeforeRenderListener
+
     # Workflow actions and conditions
     orocrm_marketing_list.workflow.condition.has_contact_information.class: OroCRM\Bundle\MarketingListBundle\Model\Condition\HasContactInformation
 
@@ -186,6 +189,15 @@ services:
             - @orocrm_marketing_list.provider.virtual_relation.marketing_list
         tags:
             - { name: oro_entity.virtual_field_provider, priority: 150 }
+
+    orocrm_marketing_list.event_listener.user_before_value_render_listener:
+        class: %orocrm_marketing_list.event_listener.before_value_render_listener.class%
+        arguments:
+            - @oro_entity_config.provider.entity
+            - phone: 'OroCRMMarketingListBundle:MarketingList/ExtendField:phone.html.twig'
+              email: 'OroCRMMarketingListBundle:MarketingList/ExtendField:email.html.twig'
+        tags:
+            - { name: kernel.event_listener, event: oro.entity_extend_event.before_value_render, method: beforeValueRender }
 
     # Workflow actions and conditions
     orocrm_marketing_list.workflow.condition.has_contact_information:

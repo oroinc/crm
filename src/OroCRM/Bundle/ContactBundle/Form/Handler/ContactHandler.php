@@ -8,12 +8,10 @@ use Doctrine\ORM\UnitOfWork;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
-class ContactHandler implements TagHandlerInterface
+class ContactHandler
 {
     /**
      * @var FormInterface
@@ -29,11 +27,6 @@ class ContactHandler implements TagHandlerInterface
      * @var EntityManagerInterface
      */
     protected $manager;
-
-    /**
-     * @var TagManager
-     */
-    protected $tagManager;
 
     /**
      * @param FormInterface          $form
@@ -89,7 +82,6 @@ class ContactHandler implements TagHandlerInterface
         $this->setUpdatedAt($entity);
 
         $this->manager->flush();
-        $this->tagManager->saveTagging($entity);
     }
 
     /**
@@ -139,13 +131,5 @@ class ContactHandler implements TagHandlerInterface
         foreach ($accounts as $account) {
             $contact->removeAccount($account);
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTagManager(TagManager $tagManager)
-    {
-        $this->tagManager = $tagManager;
     }
 }

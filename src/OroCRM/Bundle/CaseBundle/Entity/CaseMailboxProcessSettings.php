@@ -7,9 +7,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
-
+use Oro\Bundle\TagBundle\Entity\Taggable;
 use OroCRM\Bundle\CaseBundle\Model\ExtendCaseMailboxProcessSettings;
 
 /**
@@ -144,6 +143,14 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getTaggableId()
@@ -169,13 +176,5 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
         $this->tags = $tags;
 
         return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string)$this->getId();
     }
 }

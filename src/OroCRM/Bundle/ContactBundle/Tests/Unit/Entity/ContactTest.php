@@ -311,16 +311,6 @@ class ContactTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Mr. First Middle Last Sn.', $contact->__toString());
     }
 
-    public function testGetTags()
-    {
-        $contact = new Contact();
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $contact->getTags());
-        $this->assertTrue($contact->getTags()->isEmpty());
-
-        $contact->setTags(array('tag'));
-        $this->assertEquals(array('tag'), $contact->getTags());
-    }
-
     /**
      * @dataProvider flatPropertiesDataProvider
      */
