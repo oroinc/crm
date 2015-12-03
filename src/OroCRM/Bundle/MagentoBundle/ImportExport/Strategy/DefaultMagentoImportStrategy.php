@@ -7,6 +7,8 @@ use Doctrine\Common\Util\ClassUtils;
 
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
+    const TARGET_TRAIT = 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationEntityTrait';
+
     /**
      * {@inheritdoc}
      */
@@ -43,7 +45,8 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
         ) {
             $identityValues = $searchContext;
 
-            if ($this->context->hasOption('channel')) {
+            $usedTraits = class_uses($entityName);
+            if ($this->context->hasOption('channel') && in_array(self::TARGET_TRAIT, $usedTraits)) {
                 $channel = $this->databaseHelper->findOneBy(
                     'Oro\Bundle\IntegrationBundle\Entity\Channel',
                     ['id' => $this->context->getOption('channel')]
