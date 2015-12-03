@@ -40,6 +40,9 @@
                     <div class="span6">
                         {{ form_rest(form) }}
                     </div>
+                    <div class="span6">
+                        {% placeholder call_log_widget_additional_properties with {entity: entity, form: form, formAction: formAction, saved: saved} %}
+                    </div>
                     <div class="widget-actions form-actions">
                         <button class="btn" type="reset">{{ 'Cancel'|trans }}</button>
                         {% if form.vars.value.id %}

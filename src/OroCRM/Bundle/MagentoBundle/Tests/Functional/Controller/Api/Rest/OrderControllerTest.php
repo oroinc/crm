@@ -139,8 +139,6 @@ class OrderControllerTest extends WebTestCase
             $order['id'],
             $order['items'],
             $order['addresses'],
-            $order['relatedCalls'],
-            $order['relatedEmails'],
             $order['createdAt'],
             $order['updatedAt'],
             $order['firstName'],

@@ -4,10 +4,14 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
+use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Class ForecastOfOpportunities
@@ -33,25 +37,34 @@ class ForecastOfOpportunities
     /** @var  array */
     protected $ownersValues;
 
+    /** @var SecurityFacade */
+    protected $securityFacade;
+
+    /** @var User */
+    protected $currentUser;
+
     /**
      * @param RegistryInterface   $doctrine
      * @param NumberFormatter     $numberFormatter
      * @param DateTimeFormatter   $dateTimeFormatter
      * @param AclHelper           $aclHelper
      * @param TranslatorInterface $translator
+     * @param SecurityFacade      $securityFacade
      */
     public function __construct(
         RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
         AclHelper $aclHelper,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        SecurityFacade $securityFacade
     ) {
         $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
+        $this->securityFacade    = $securityFacade;
     }
 
     /**
@@ -69,12 +82,16 @@ class ForecastOfOpportunities
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
+
+        /** @var WidgetOptionBag $widgetOptions */
+        $widgetOptions = $this->prepareDefaultOptions($widgetOptions);
+
         $ownerIds         = $this->getOwnerIds($widgetOptions);
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
         $compareToDate = $widgetOptions->get('compareToDate');
 
-        if (isset($compareToDate['useDate']) && $compareToDate['useDate']) {
+        if (!empty($compareToDate['useDate'])) {
             if (empty($compareToDate['date'])) {
                 $compareToDate['date'] = new \DateTime();
                 $compareToDate['date']->modify('-1 month');
@@ -88,6 +105,36 @@ class ForecastOfOpportunities
         }
 
         return $result;
+    }
+
+    /**
+     * Prepare Default Options for User and business Units
+     *
+     * @param WidgetOptionBag $widgetOptions
+     *
+     * @return bool
+     */
+    protected function prepareDefaultOptions($widgetOptions)
+    {
+        $owners = $widgetOptions->get('owners');
+        $businessUnits = $widgetOptions->get('businessUnits');
+
+        if (!$owners && !$businessUnits) {
+            $user = $this->getCurrentUser();
+            if ($user instanceof User) {
+                $businessUnits = $user->getBusinessUnits();
+                $businessUnitsData = [];
+                foreach ($businessUnits as $businessUnit) {
+                    if (is_object($businessUnit)) {
+                        $businessUnitsData[] = $businessUnit;
+                    }
+                }
+                $options = ['owners' => [$user], 'businessUnits' => $businessUnitsData];
+                $widgetOptions = new WidgetOptionBag($options);
+            }
+        }
+
+        return $widgetOptions;
     }
 
     /**
@@ -153,29 +200,29 @@ class ForecastOfOpportunities
     protected function formatValue($value, $type = '', $isDeviant = false)
     {
         $sign = null;
+        $precision = 2;
 
-        if ($isDeviant && $value !== 0) {
-            $sign  = $value > 0 ? '+' : '&minus;';
-            $value = abs($value);
-        }
-        switch ($type) {
-            case 'currency':
-                $value = $this->numberFormatter->formatCurrency($value);
-                break;
-            case 'percent':
-                if ($isDeviant) {
-                    $value = round(($value) * 100, 0) / 100;
-                } else {
-                    $value = round(($value) * 100, 2) / 100;
-                }
-
-                $value = $this->numberFormatter->formatPercent($value);
-                break;
-            default:
-                $value = $this->numberFormatter->formatDecimal($value);
+        if ($isDeviant) {
+            if ($value !== 0) {
+                $sign  = $value > 0 ? '+' : '&minus;';
+                $value = abs($value);
+            }
+            $precision = 0;
         }
 
-        return $isDeviant && !is_null($sign) ? sprintf('%s%s', $sign, $value) : $value;
+        if ($type === 'currency') {
+            $formattedValue = $this->numberFormatter->formatCurrency($value);
+        } elseif ($type === 'percent') {
+            $value = round(($value) * 100, $precision) / 100;
+            $formattedValue = $this->numberFormatter->formatPercent($value);
+        } else {
+            $formattedValue = $this->numberFormatter->formatDecimal($value);
+        }
+
+        if ($sign) {
+            $formattedValue = sprintf('%s%s', $sign, $formattedValue);
+        }
+        return $formattedValue;
     }
 
     /**
@@ -197,23 +244,33 @@ class ForecastOfOpportunities
                     $this->formatValue($deviation, $dataType, true),
                     $this->formatValue($deviationPercent, 'percent', true)
                 );
-                if (!$lessIsBetter) {
-                    $result['isPositive'] = $deviation > 0;
-                } else {
-                    $result['isPositive'] = !($deviation > 0);
-                }
+                $result['isPositive'] = $this->isPositive($lessIsBetter, $deviation);
             }
         } else {
             if (round(($deviation) * 100, 0) != 0) {
                 $result['deviation'] = $this->formatValue($deviation, $dataType, true);
-                if (!$lessIsBetter) {
-                    $result['isPositive'] = $deviation > 0;
-                } else {
-                    $result['isPositive'] = !($deviation > 0);
-                }
+                $result['isPositive'] = $this->isPositive($lessIsBetter, $deviation);
             }
         }
 
+        return $result;
+    }
+
+    /**
+     * Get is positive value
+     *
+     * @param $lessIsBetter
+     * @param $deviation
+     *
+     * @return bool
+     */
+    protected function isPositive($lessIsBetter, $deviation)
+    {
+        if (!$lessIsBetter) {
+            $result = $deviation > 0;
+        } else {
+            $result = !($deviation > 0);
+        }
         return $result;
     }
 
@@ -275,5 +332,20 @@ class ForecastOfOpportunities
         }
 
         return $businessUnitIds;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    protected function getCurrentUser()
+    {
+        if (!$this->currentUser) {
+            $user = $this->securityFacade->getLoggedUser();
+            if ($user instanceof UserInterface) {
+                $this->currentUser = $user;
+            }
+        }
+
+        return $this->currentUser;
     }
 }

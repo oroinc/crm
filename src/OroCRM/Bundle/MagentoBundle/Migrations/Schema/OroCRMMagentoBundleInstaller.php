@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -16,8 +18,9 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\IdentifierEventExtensionAwareI
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension;
 use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtensionAwareInterface;
 
-use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_14\OroCRMMagentoBundle as MagentoActivities;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -29,7 +32,8 @@ class OroCRMMagentoBundleInstaller implements
     ActivityExtensionAwareInterface,
     IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
-    VisitEventAssociationExtensionAwareInterface
+    VisitEventAssociationExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -42,6 +46,17 @@ class OroCRMMagentoBundleInstaller implements
 
     /** @var VisitEventAssociationExtension */
     protected $visitExtension;
+
+    /** @var ActivityListExtension */
+    protected $activityListExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
+    }
 
     /**
      * {@inheritdoc}
@@ -80,7 +95,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_36';
+        return 'v1_39';
     }
 
     /**
@@ -137,6 +152,7 @@ class OroCRMMagentoBundleInstaller implements
 
         $this->addActivityAssociations($schema);
         $this->addIdentifierEventAssociations($schema);
+        InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
     /**
@@ -154,6 +170,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
+        $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
     }
 
     /**
@@ -830,13 +847,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('confirm_code', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addIndex(['channel_id'], 'idx_7c8eaa72f5a1aa', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'idx_7c8eaa7e3c61f9', []);
-        $table->addIndex(['store_id'], 'idx_7c8eaab092a811', []);
-        $table->addIndex(['organization_id'], 'idx_7c8eaa32c8a3de', []);
-        $table->addIndex(['data_channel_id'], 'idx_7c8eaabdc09b73', []);
-        $table->addUniqueIndex(['customer_id'], 'uniq_7c8eaa9395c3f3');
 
         $this->extendExtension->addEnumField(
             $schema,
@@ -1514,7 +1525,8 @@ class OroCRMMagentoBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
-        MagentoActivities::disableActivityAssociations($schema);
+
+        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
