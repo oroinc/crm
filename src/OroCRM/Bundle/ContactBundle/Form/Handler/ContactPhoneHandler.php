@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,6 +67,24 @@ class ContactPhoneHandler
         }
 
         return false;
+    }
+
+    /**
+     * @param $id
+     * @param ApiEntityManager $manager
+     */
+    public function handleDelete($id, ApiEntityManager $manager)
+    {
+        /** @var ContactPhone $contactPhone */
+        $contactPhone = $manager->find($id);
+
+        if ($contactPhone->isPrimary() && $contactPhone->getOwner()->getPhones()->count() === 1) {
+            $em = $manager->getObjectManager();
+            $em->remove($contactPhone);
+            $em->flush();
+        } else {
+            throw new ForbiddenException("Contact has several phones");
+        }
     }
 
     /**

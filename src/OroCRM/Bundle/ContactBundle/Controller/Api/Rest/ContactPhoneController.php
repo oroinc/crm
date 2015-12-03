@@ -102,6 +102,25 @@ class ContactPhoneController extends RestController implements ClassResourceInte
         return $response;
     }
 
+    /**
+     * Delete entity ContactPhone
+     * oro_api_delete_contact_phone
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete ContactPhone"
+     * )
+     **
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+
+        return new JsonResponse(["id" => ""]);
+    }
+
     protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
@@ -142,5 +161,13 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     public function getForm()
     {
         return $this->get('orocrm_contact.form.type.contact_phone.type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeleteHandler()
+    {
+        return $this->get('orocrm_contact.form.type.contact_phone.handler');
     }
 }

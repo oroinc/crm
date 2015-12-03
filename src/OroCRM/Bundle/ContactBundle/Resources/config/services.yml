@@ -265,12 +265,14 @@ services:
 
     orocrm_contact.contact_phone.manager.api:
         class: %orocrm_contact.contact_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.phone.class%
             - @doctrine.orm.entity_manager
 
     orocrm_contact.contact_email.manager.api:
         class: %orocrm_contact.contact_email.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.email.class%
             - @doctrine.orm.entity_manager

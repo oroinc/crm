@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
+use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,6 +67,24 @@ class ContactEmailHandler
         }
 
         return false;
+    }
+
+    /**
+     * @param $id
+     * @param ApiEntityManager $manager
+     */
+    public function handleDelete($id, ApiEntityManager $manager)
+    {
+        /** @var ContactEmail $contactEmail */
+        $contactEmail = $manager->find($id);
+
+        if ($contactEmail->isPrimary() && $contactEmail->getOwner()->getEmails()->count() === 1) {
+            $em = $manager->getObjectManager();
+            $em->remove($contactEmail);
+            $em->flush();
+        } else {
+            throw new ForbiddenException("Contact has several emails");
+        }
     }
 
     /**

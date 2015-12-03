@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ContactBundle\Controller\Api\Rest;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 use FOS\RestBundle\Controller\Annotations\NamePrefix;
@@ -42,6 +43,25 @@ class ContactEmailController extends RestController implements ClassResourceInte
     }
 
     /**
+     * Delete entity ContactEmail
+     * oro_api_delete_contact_email
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete ContactEmail"
+     * )
+     *
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+
+        return new JsonResponse(["id" => ""]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getManager()
@@ -63,5 +83,13 @@ class ContactEmailController extends RestController implements ClassResourceInte
     public function getForm()
     {
         return $this->get('orocrm_contact.form.type.contact_email.type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeleteHandler()
+    {
+        return $this->get('orocrm_contact.form.type.contact_email.handler');
     }
 }
