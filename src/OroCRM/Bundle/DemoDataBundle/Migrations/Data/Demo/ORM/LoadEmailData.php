@@ -153,10 +153,14 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
      */
     protected function addEmailUser($randomTemplate, $owner, $contact, $origin)
     {
+        $ownerEmail = $owner->getFullName() . ' <' . $owner->getEmail() . '>';
+        $contactEmail
+            = $contact->getFirstName() . ' ' . $contact->getLastName()
+            . ' <' . $contact->getPrimaryEmail()->getEmail() . '>';
         $emailUser = $this->emailEntityBuilder->emailUser(
             $this->templates[$randomTemplate]['Subject'],
-            $owner->getEmail(),
-            $contact->getPrimaryEmail()->getEmail(),
+            $ownerEmail,
+            $contactEmail,
             new \DateTime('now'),
             new \DateTime('now'),
             new \DateTime('now')
