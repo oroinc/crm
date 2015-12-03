@@ -51,11 +51,6 @@ class AccountHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->entity  = new Account();
         $this->handler = new AccountHandler($this->form, $this->request, $this->manager);
-        $this->handler->setTagManager(
-            $this->getMockBuilder('Oro\Bundle\TagBundle\Entity\TagManager')
-                ->disableOriginalConstructor()
-                ->getMock()
-        );
     }
 
 

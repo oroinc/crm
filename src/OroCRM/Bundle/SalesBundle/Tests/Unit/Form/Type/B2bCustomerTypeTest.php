@@ -18,7 +18,7 @@ class B2bCustomerTypeTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $builder->expects($this->exactly(7))
+        $builder->expects($this->exactly(6))
             ->method('add')
             ->will(
                 $this->returnValueMap(
