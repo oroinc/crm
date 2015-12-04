@@ -12,7 +12,7 @@ use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
 class TaskCalendarProvider extends AbstractCalendarProvider
 {
-    const ALIAS = 'tasks';
+    const ALIAS                = 'tasks';
     const MY_TASKS_CALENDAR_ID = 1;
 
     /** @var AclHelper */
@@ -101,11 +101,14 @@ class TaskCalendarProvider extends AbstractCalendarProvider
 
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
-            $repo  = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
+            $repo = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
 
-            $extraFields = array_intersect($extraFields, $this->getSupportedFields('OroCRM\Bundle\TaskBundle\Entity\Task'));
-            $qb    = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end, $extraFields);
-            $query = $this->aclHelper->apply($qb);
+            $extraFields = array_intersect(
+                $extraFields,
+                $this->getSupportedFields('OroCRM\Bundle\TaskBundle\Entity\Task')
+            );
+            $qb          = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end, $extraFields);
+            $query       = $this->aclHelper->apply($qb);
 
             return $this->taskCalendarNormalizer->getTasks(self::MY_TASKS_CALENDAR_ID, $query);
         }
