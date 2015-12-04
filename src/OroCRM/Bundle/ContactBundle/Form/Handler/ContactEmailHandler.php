@@ -4,8 +4,8 @@ namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+use OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,16 +23,24 @@ class ContactEmailHandler
     /** @var EntityManagerInterface */
     protected $manager;
 
+    /** @var  ContactEmailDeleteValidator */
+    protected $contactEmailDeleteValidator;
+
     /**
      * @param FormInterface          $form
      * @param Request                $request
      * @param EntityManagerInterface $manager
      */
-    public function __construct(FormInterface $form, Request $request, EntityManagerInterface $manager)
-    {
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        EntityManagerInterface $manager,
+        ContactEmailDeleteValidator $contactEmailDeleteValidator
+    ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
+        $this->contactEmailDeleteValidator = $contactEmailDeleteValidator;
     }
 
     /**
@@ -72,18 +80,19 @@ class ContactEmailHandler
     /**
      * @param $id
      * @param ApiEntityManager $manager
+     * @throws \Exception
      */
     public function handleDelete($id, ApiEntityManager $manager)
     {
         /** @var ContactEmail $contactEmail */
         $contactEmail = $manager->find($id);
 
-        if ($contactEmail->isPrimary() && $contactEmail->getOwner()->getEmails()->count() === 1) {
+        if ($this->contactEmailDeleteValidator->validate($contactEmail)) {
             $em = $manager->getObjectManager();
             $em->remove($contactEmail);
             $em->flush();
         } else {
-            throw new ForbiddenException("Contact has several emails");
+            throw new \Exception("oro.contact.email.error.delete.more_one", 500);
         }
     }
 

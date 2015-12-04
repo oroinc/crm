@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Oro\Bundle\SecurityBundle\Exception\ForbiddenException;
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+
+use OroCRM\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -23,16 +24,24 @@ class ContactPhoneHandler
     /** @var EntityManagerInterface */
     protected $manager;
 
+    /** @var  ContactPhoneDeleteValidator */
+    protected $contactPhoneDeleteValidator;
+
     /**
      * @param FormInterface          $form
      * @param Request                $request
      * @param EntityManagerInterface $manager
      */
-    public function __construct(FormInterface $form, Request $request, EntityManagerInterface $manager)
-    {
+    public function __construct(
+        FormInterface $form,
+        Request $request,
+        EntityManagerInterface $manager,
+        ContactPhoneDeleteValidator $contactPhoneDeleteValidator
+    ) {
         $this->form    = $form;
         $this->request = $request;
         $this->manager = $manager;
+        $this->contactPhoneDeleteValidator = $contactPhoneDeleteValidator;
     }
 
     /**
@@ -72,18 +81,19 @@ class ContactPhoneHandler
     /**
      * @param $id
      * @param ApiEntityManager $manager
+     * @throws \Exception
      */
     public function handleDelete($id, ApiEntityManager $manager)
     {
         /** @var ContactPhone $contactPhone */
         $contactPhone = $manager->find($id);
 
-        if ($contactPhone->isPrimary() && $contactPhone->getOwner()->getPhones()->count() === 1) {
+        if ($this->contactPhoneDeleteValidator->validate($contactPhone)) {
             $em = $manager->getObjectManager();
             $em->remove($contactPhone);
             $em->flush();
         } else {
-            throw new ForbiddenException("Contact has several phones");
+            throw new \Exception("oro.contact.phone.error.delete.more_one", 500);
         }
     }
 

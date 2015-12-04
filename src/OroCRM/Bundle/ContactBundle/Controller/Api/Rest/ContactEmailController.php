@@ -11,6 +11,7 @@ use FOS\RestBundle\Routing\ClassResourceInterface;
 use FOS\RestBundle\Controller\Annotations as Rest;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
@@ -52,13 +53,24 @@ class ContactEmailController extends RestController implements ClassResourceInte
      *      description="Delete ContactEmail"
      * )
      *
+     * @Acl(
+     *      id="orocrm_contact_email_delete",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
+     * )
+     *
      * @return Response
      */
     public function deleteAction($id)
     {
-        $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+        try {
+            $this->getDeleteHandler()->handleDelete($id, $this->getManager());
 
-        return new JsonResponse(["id" => ""]);
+            return new JsonResponse(["id" => ""]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["code" => $e->getCode(), "message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     /**

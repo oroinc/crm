@@ -111,14 +111,25 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      * @ApiDoc(
      *      description="Delete ContactPhone"
      * )
-     **
+     *
+     * @Acl(
+     *      id="orocrm_contact_email_delete",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
+     * )
+     *
      * @return Response
      */
     public function deleteAction($id)
     {
-        $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+        try {
+            $this->getDeleteHandler()->handleDelete($id, $this->getManager());
 
-        return new JsonResponse(["id" => ""]);
+            return new JsonResponse(["id" => ""]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["code" => $e->getCode(), "message"=>$e->getMessage() ], $e->getCode());
+        }
     }
 
     protected function getContactManager()

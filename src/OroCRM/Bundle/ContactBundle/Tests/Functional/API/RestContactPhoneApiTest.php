@@ -3,7 +3,11 @@
 namespace OroCRM\Bundle\ContactBundle\Tests\Functional\API;
 
 use FOS\RestBundle\Util\Codes;
+
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData;
+use OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData;
 
 /**
  * @outputBuffering enabled
@@ -15,13 +19,13 @@ class RestContactPhoneApiTest extends WebTestCase
     {
         $this->initClient([], $this->generateWsseAuthHeader());
         $this->loadFixtures([
-            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData'
+            'OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactPhoneData'
         ]);
     }
 
     public function testCreateContactPhone()
     {
-        $contact = $this->getReference('Contact_Brenda');
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'contactId' => $contact->getId(),
             'phone' => '111',
@@ -36,7 +40,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testCreateSecondPrimaryPhone()
     {
-        $contact = $this->getReference('Contact_Brenda');
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
 
         $content = json_encode([
             'contactId' => $contact->getId(),
@@ -61,7 +65,7 @@ class RestContactPhoneApiTest extends WebTestCase
 
     public function testEmptyPhone()
     {
-        $contact = $this->getReference('Contact_Brenda');
+        $contact = $this->getReference('Contact_'. LoadContactEntitiesData::THIRD_ENTITY_NAME);
         $content = json_encode([
             'contactId' => $contact->getId(),
             'primary' => true
@@ -69,5 +73,29 @@ class RestContactPhoneApiTest extends WebTestCase
 
         $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
+    }
+
+    public function testDeletePhoneForbidden()
+    {
+        $contactPhone = $this->getReference('ContactPhone_Several_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
+        $routeParams = [
+            'id' => $contactPhone->getId()
+        ];
+        $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
+
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
+        $this->assertJson('{"code":500,"message":"Internal Server Error"}', $this->client->getResponse()->getContent());
+    }
+
+    public function testDeletePhoneSuccess()
+    {
+        $contactPhone = $this->getReference('ContactPhone_Single_'. LoadContactPhoneData::FIRST_ENTITY_NAME);
+        $routeParams = [
+            'id' => $contactPhone->getId()
+        ];
+        $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
+
+        $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_OK);
+        $this->assertJson('{"id":""}', $this->client->getResponse()->getContent());
     }
 }
