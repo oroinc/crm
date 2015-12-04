@@ -101,12 +101,8 @@ class TaskCalendarProvider extends AbstractCalendarProvider
 
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
-            $repo = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
-
-            $extraFields = array_intersect(
-                $extraFields,
-                $this->getSupportedFields('OroCRM\Bundle\TaskBundle\Entity\Task')
-            );
+            $repo        = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
+            $extraFields = $this->filterSupportedFields($extraFields, 'OroCRM\Bundle\TaskBundle\Entity\Task');
             $qb          = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end, $extraFields);
             $query       = $this->aclHelper->apply($qb);
 
