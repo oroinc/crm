@@ -114,6 +114,14 @@ class TaskCalendarProvider implements CalendarProviderInterface
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getExtraFieldEntityClass()
+    {
+        return 'OroCRM\Bundle\TaskBundle\Entity\Task';
+    }
+
+    /**
      * @param array $connections
      * @param int   $calendarId
      * @param bool  $default
