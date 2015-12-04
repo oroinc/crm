@@ -143,7 +143,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                         // Move sync date into past by interval value
                         $connectorsSyncedTo[$connector]->sub($interval);
 
-                        $isSuccess = $isSuccess && $status->getCode() == Status::STATUS_COMPLETED;
+                        $isSuccess = $isSuccess && $this->isIntegrationConnectorProcessSuccess($status);
 
                         if ($isSuccess) {
                             // Save synced to date for connector
@@ -152,6 +152,11 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                                 $syncedTo = $startSyncDate;
                             }
                             $this->updateSyncedTo($integration, $connector, $syncedTo);
+
+                            /**
+                             * Moved from ChannelRepository::addStatus method contract
+                             */
+                            $this->doctrineRegistry->getManager()->flush();
                         } else {
                             break 2;
                         }
