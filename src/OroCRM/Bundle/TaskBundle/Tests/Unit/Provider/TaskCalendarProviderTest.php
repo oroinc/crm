@@ -180,12 +180,4 @@ class TaskCalendarProviderTest extends \PHPUnit_Framework_TestCase
         $result = $this->provider->getCalendarEvents($organizationId, $userId, $calendarId, $start, $end, $connections);
         $this->assertEquals([], $result);
     }
-
-    public function testGetExtraFieldEntityClass()
-    {
-        $this->assertEquals(
-            'OroCRM\Bundle\TaskBundle\Entity\Task',
-            $this->provider->getExtraFieldEntityClass()
-        );
-    }
 }

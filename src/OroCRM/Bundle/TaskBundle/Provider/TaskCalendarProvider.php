@@ -4,18 +4,16 @@ namespace OroCRM\Bundle\TaskBundle\Provider;
 
 use Symfony\Component\Translation\TranslatorInterface;
 
-use Oro\Bundle\CalendarBundle\Provider\CalendarProviderInterface;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\CalendarBundle\Provider\AbstractCalendarProvider;
+
 use OroCRM\Bundle\TaskBundle\Entity\Repository\TaskRepository;
 
-class TaskCalendarProvider implements CalendarProviderInterface
+class TaskCalendarProvider extends AbstractCalendarProvider
 {
     const ALIAS = 'tasks';
     const MY_TASKS_CALENDAR_ID = 1;
-
-    /** @var DoctrineHelper */
-    protected $doctrineHelper;
 
     /** @var AclHelper */
     protected $aclHelper;
@@ -48,7 +46,7 @@ class TaskCalendarProvider implements CalendarProviderInterface
         TranslatorInterface $translator,
         $myTasksEnabled
     ) {
-        $this->doctrineHelper         = $doctrineHelper;
+        parent::__construct($doctrineHelper);
         $this->aclHelper              = $aclHelper;
         $this->taskCalendarNormalizer = $taskCalendarNormalizer;
         $this->translator             = $translator;
@@ -104,6 +102,8 @@ class TaskCalendarProvider implements CalendarProviderInterface
         if ($this->isCalendarVisible($connections, self::MY_TASKS_CALENDAR_ID)) {
             /** @var TaskRepository $repo */
             $repo  = $this->doctrineHelper->getEntityRepository('OroCRMTaskBundle:Task');
+
+            $extraFields = array_intersect($extraFields, $this->getSupportedFields('OroCRM\Bundle\TaskBundle\Entity\Task'));
             $qb    = $repo->getTaskListByTimeIntervalQueryBuilder($userId, $start, $end, $extraFields);
             $query = $this->aclHelper->apply($qb);
 
@@ -111,14 +111,6 @@ class TaskCalendarProvider implements CalendarProviderInterface
         }
 
         return [];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getExtraFieldEntityClass()
-    {
-        return 'OroCRM\Bundle\TaskBundle\Entity\Task';
     }
 
     /**
