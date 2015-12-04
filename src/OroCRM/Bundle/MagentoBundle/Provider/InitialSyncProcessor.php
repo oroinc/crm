@@ -84,7 +84,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     /**
      * {@inheritdoc}
      */
-    protected function processConnectors(Integration $integration, array $parameters = [], \Closure $callback = null)
+    protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
         if (empty($parameters['skip-dictionary'])) {
             $this->processDictionaryConnectors($integration);
@@ -100,7 +100,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
         // Collect initial connectors
         $postProcessConnectorTypes = array_keys($this->postProcessors);
-        $connectors = $this->getTypesOfConnectorsToSync($integration, $this->getConnectorsFilterFunction($callback));
+        $connectors = $this->getTypesOfConnectorsToProcess($integration, $this->getConnectorsFilterFunction($callback));
         $postProcessConnectors = array_intersect($connectors, $postProcessConnectorTypes);
         $connectors = array_diff($connectors, $postProcessConnectorTypes);
 
@@ -134,8 +134,8 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                             [self::INITIAL_SYNCED_TO => clone $connectorsSyncedTo[$connector]]
                         );
 
-                        $realConnector = clone $this->registry->getConnectorType($integration->getType(), $connector);
-                        $result = $this->processIntegrationConnector(
+                        $realConnector = $this->getRealConnector($integration, $connector);
+                        $status = $this->processIntegrationConnector(
                             $integration,
                             $realConnector,
                             $parameters
@@ -143,7 +143,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                         // Move sync date into past by interval value
                         $connectorsSyncedTo[$connector]->sub($interval);
 
-                        $isSuccess = $isSuccess && $result;
+                        $isSuccess = $isSuccess && $status->getCode() == Status::STATUS_COMPLETED;
 
                         if ($isSuccess) {
                             // Save synced to date for connector
@@ -178,10 +178,10 @@ class InitialSyncProcessor extends AbstractInitialProcessor
     }
 
     /**
-     * @param \Closure|null $callback
+     * @param callable|null $callback
      * @return \Closure
      */
-    protected function getConnectorsFilterFunction(\Closure $callback = null)
+    protected function getConnectorsFilterFunction(callable $callback = null)
     {
         return function ($connector) use ($callback) {
             if (is_callable($callback) && !call_user_func($callback, $connector)) {
