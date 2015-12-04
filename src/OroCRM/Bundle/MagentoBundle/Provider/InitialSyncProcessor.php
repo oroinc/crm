@@ -152,11 +152,6 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                                 $syncedTo = $startSyncDate;
                             }
                             $this->updateSyncedTo($integration, $connector, $syncedTo);
-
-                            /**
-                             * Moved from ChannelRepository::addStatus method contract
-                             */
-                            $this->doctrineRegistry->getManager()->flush();
                         } else {
                             break 2;
                         }
@@ -211,7 +206,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
 
-        $this->getChannelRepository()->addStatus($integration, $lastStatus);
+        $this->addConnectorStatusAndFlush($integration, $lastStatus);
     }
 
     /**
