@@ -105,7 +105,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
     /**
      * {@inheritdoc}
      */
-    protected function processConnectors(Integration $integration, array $parameters = [], \Closure $callback = null)
+    protected function processConnectors(Integration $integration, array $parameters = [], callable $callback = null)
     {
         if (null === $callback) {
             $callback = function ($connector) {
