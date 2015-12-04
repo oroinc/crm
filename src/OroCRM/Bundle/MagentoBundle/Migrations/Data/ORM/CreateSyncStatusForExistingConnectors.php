@@ -50,6 +50,11 @@ class CreateSyncStatusForExistingConnectors extends AbstractFixture
                 }
             }
         }
+
+        /**
+         * Moved from ChannelRepository::addStatus method contract
+         */
+        $manager->flush();
     }
 
     /**

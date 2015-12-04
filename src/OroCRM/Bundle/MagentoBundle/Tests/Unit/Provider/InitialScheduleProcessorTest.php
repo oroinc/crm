@@ -136,7 +136,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->em->expects($this->never())
             ->method('persist');
-        $this->em->expects($this->never())
+
+        /** Will be called once per connector to save connector's status */
+        $this->em->expects($this->once())
             ->method('flush');
         $this->repository->expects($this->once())
             ->method('getRunningSyncJobsCount')
