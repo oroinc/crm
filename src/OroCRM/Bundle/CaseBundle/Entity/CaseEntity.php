@@ -44,10 +44,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
- *              "type"="ACL",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "type"="ACL"
  *          }
  *      }
  * )
