@@ -28,9 +28,10 @@ class ContactPhoneHandler
     protected $contactPhoneDeleteValidator;
 
     /**
-     * @param FormInterface          $form
-     * @param Request                $request
+     * @param FormInterface $form
+     * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param ContactPhoneDeleteValidator $contactPhoneDeleteValidator
      */
     public function __construct(
         FormInterface $form,

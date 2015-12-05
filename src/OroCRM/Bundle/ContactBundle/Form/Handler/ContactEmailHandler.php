@@ -4,11 +4,12 @@ namespace OroCRM\Bundle\ContactBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
-use OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
+
+use OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
@@ -27,9 +28,10 @@ class ContactEmailHandler
     protected $contactEmailDeleteValidator;
 
     /**
-     * @param FormInterface          $form
-     * @param Request                $request
+     * @param FormInterface $form
+     * @param Request $request
      * @param EntityManagerInterface $manager
+     * @param ContactEmailDeleteValidator $contactEmailDeleteValidator
      */
     public function __construct(
         FormInterface $form,

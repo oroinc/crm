@@ -49,6 +49,7 @@ define(function(require) {
             }
         },
 
+        /** @returns {boolean} */
         canSetDeleteEntityRoute: function(data) {
             if (data) {
                 if (typeof (data.email) !== "undefined") {
