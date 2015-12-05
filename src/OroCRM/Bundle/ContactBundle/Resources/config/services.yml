@@ -39,6 +39,10 @@ parameters:
     orocrm_contact.handler.contact_email_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactEmailApiHandler
     orocrm_contact.handler.contact_phone_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactPhoneApiHandler
 
+    #validator
+    orocrm_contact.validator.contact_email_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator
+    orocrm_contact.validator.contact_phone_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator
+
 services:
     orocrm_contact.form.contact:
         class: Symfony\Component\Form\Form
@@ -265,12 +269,20 @@ services:
 
     orocrm_contact.contact_phone.manager.api:
         class: %orocrm_contact.contact_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.phone.class%
             - @doctrine.orm.entity_manager
 
     orocrm_contact.contact_email.manager.api:
         class: %orocrm_contact.contact_email.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.email.class%
             - @doctrine.orm.entity_manager
+
+    orocrm_contact.validator.contact_email_delete:
+        class: %orocrm_contact.validator.contact_email_delete.class%
+
+    orocrm_contact.validator.contact_phone_delete:
+        class: %orocrm_contact.validator.contact_phone_delete.class%

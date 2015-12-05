@@ -25,6 +25,7 @@ services:
             - @orocrm_contact.form.type.contact_phone
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_contact.validator.contact_phone_delete
 
     orocrm_contact.form.type.contact_email:
         class: Symfony\Component\Form\Form
@@ -44,3 +45,4 @@ services:
             - @orocrm_contact.form.type.contact_email
             - @request
             - @doctrine.orm.entity_manager
+            - @orocrm_contact.validator.contact_email_delete

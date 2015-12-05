@@ -17,11 +17,12 @@ define(function(require) {
         validateUrlParameters: function(urlParameters) {
             this.initRoute(urlParameters);
             var parameters = this.prepareUrlParameters(urlParameters);
+
             return this.route.validateParameters(parameters);
         },
 
         send: function(urlParameters, body, headers, options) {
-            this.initRoute(urlParameters);
+            this.initRoute(urlParameters, body);
 
             if (this.isActiveCreateEntityRoute()) {
                 body.contactId = urlParameters.id;
@@ -31,7 +32,7 @@ define(function(require) {
             return ContactApiAccessor.__super__.send.apply(this, arguments);
         },
 
-        initRoute: function(urlParameters) {
+        initRoute: function(urlParameters, body) {
             var _urlParameters = _.clone(urlParameters);
 
             this.setUpdateEntityRoute();
@@ -40,6 +41,31 @@ define(function(require) {
             if (!this.route.validateParameters(_urlParameters)) {
                 this.setCreateEntityRoute();
             }
+
+            if (this.route.validateParameters(_urlParameters)) {
+                if (this.canSetDeleteEntityRoute(body)) {
+                    this.setDeleteEntityRoute();
+                }
+            }
+        },
+
+        /** @returns {boolean} */
+        canSetDeleteEntityRoute: function(data) {
+            if (data) {
+                if (typeof (data.email) !== "undefined") {
+                    if (data.email === "") {
+                        return true;
+                    }
+                }
+
+                if (typeof (data.phone) !== "undefined") {
+                    if (data.phone === "") {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         },
 
         setUpdateEntityRoute: function() {
@@ -52,9 +78,19 @@ define(function(require) {
             this.httpMethod = this.initialOptions.route_create_entity.http_method;
         },
 
+        setDeleteEntityRoute: function() {
+            this.route.set('routeName', this.initialOptions.route_delete_entity.name);
+            this.httpMethod = this.initialOptions.route_delete_entity.http_method;
+        },
+
         /** @returns {boolean} */
         isActiveCreateEntityRoute: function() {
             return this.route.get('routeName') === this.initialOptions.route_create_entity.name;
+        },
+
+        /** @returns {boolean} */
+        isActiveDeleteEntityRoute: function() {
+            return this.route.get('routeName') === this.initialOptions.route_delete_entity.name;
         }
     });
 

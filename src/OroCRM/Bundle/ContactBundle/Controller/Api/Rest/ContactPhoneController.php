@@ -12,9 +12,11 @@ use FOS\RestBundle\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
@@ -102,6 +104,36 @@ class ContactPhoneController extends RestController implements ClassResourceInte
         return $response;
     }
 
+    /**
+     * Delete entity ContactPhone
+     * oro_api_delete_contact_phone
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete ContactPhone"
+     * )
+     *
+     * @Acl(
+     *      id="orocrm_contact_email_delete",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMContactBundle:Contact"
+     * )
+     *
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        try {
+            $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+
+            return new JsonResponse(["id" => ""]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["code" => $e->getCode(), "message"=>$e->getMessage() ], $e->getCode());
+        }
+    }
+
     protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
@@ -142,5 +174,13 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     public function getForm()
     {
         return $this->get('orocrm_contact.form.type.contact_phone.type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeleteHandler()
+    {
+        return $this->get('orocrm_contact.form.type.contact_phone.handler');
     }
 }
