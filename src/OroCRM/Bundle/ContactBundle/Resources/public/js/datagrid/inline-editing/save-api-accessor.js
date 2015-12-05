@@ -17,6 +17,7 @@ define(function(require) {
         validateUrlParameters: function(urlParameters) {
             this.initRoute(urlParameters);
             var parameters = this.prepareUrlParameters(urlParameters);
+
             return this.route.validateParameters(parameters);
         },
 
@@ -28,45 +29,42 @@ define(function(require) {
                 body.primary = true;
             }
 
-            if (this.isActiveDeleteEntityRoute()) {
-
-            }
-
             return ContactApiAccessor.__super__.send.apply(this, arguments);
         },
 
         initRoute: function(urlParameters, body) {
             var _urlParameters = _.clone(urlParameters);
 
-            this.resetRoute();
+            this.setUpdateEntityRoute();
+            _urlParameters = this.prepareUrlParameters(_urlParameters);
 
-            if (body) {
-                if (typeof (body.email) !== "undefined") {
-                    if (body.email === "") {
-                        this.setDeleteEntityRoute();
-                    }
-                }
-
-                if (typeof (body.phone) !== "undefined") {
-                    if (body.phone === "") {
-                        this.setDeleteEntityRoute();
-                    }
-                }
+            if (!this.route.validateParameters(_urlParameters)) {
+                this.setCreateEntityRoute();
             }
 
-            if (!this.isActiveDeleteEntityRoute()) {
-                this.setUpdateEntityRoute();
-                _urlParameters = this.prepareUrlParameters(_urlParameters);
-
-                if (!this.route.validateParameters(_urlParameters)) {
-                    this.setCreateEntityRoute();
+            if (this.route.validateParameters(_urlParameters)) {
+                if (this.canSetDeleteEntityRoute(body)) {
+                    this.setDeleteEntityRoute();
                 }
             }
         },
 
-        resetRoute: function() {
-            this.route.set('routeName', this.initialOptions.route);
-            this.httpMethod = this.initialOptions.http_method;
+        canSetDeleteEntityRoute: function(data) {
+            if (data) {
+                if (typeof (data.email) !== "undefined") {
+                    if (data.email === "") {
+                        return true;
+                    }
+                }
+
+                if (typeof (data.phone) !== "undefined") {
+                    if (data.phone === "") {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         },
 
         setUpdateEntityRoute: function() {
