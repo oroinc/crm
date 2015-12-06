@@ -66,11 +66,6 @@ class ContactEmailHandler
     {
         $this->form->setData($entity);
 
-        $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
-        if (!$this->securityFacade->isGranted('EDIT', $contact)) {
-            throw new AccessDeniedException();
-        }
-
         $submitData = [
             'email' => $this->request->request->get('email'),
             'primary' => $this->request->request->get('primary')
@@ -80,6 +75,10 @@ class ContactEmailHandler
             $this->form->submit($submitData);
 
             if ($this->form->isValid() && $this->request->request->get('contactId')) {
+                $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
+                if (!$this->securityFacade->isGranted('EDIT', $contact)) {
+                    throw new AccessDeniedException();
+                }
 
                 if ($contact->getPrimaryEmail() && $this->request->request->get('primary') === true) {
                     return false;

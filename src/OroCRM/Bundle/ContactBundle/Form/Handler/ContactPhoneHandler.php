@@ -66,11 +66,6 @@ class ContactPhoneHandler
     {
         $this->form->setData($entity);
 
-        $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
-        if (!$this->securityFacade->isGranted('EDIT', $contact)) {
-            throw new AccessDeniedException();
-        }
-
         $submitData = [
             'phone' => $this->request->request->get('phone'),
             'primary' => $this->request->request->get('primary')
@@ -80,6 +75,11 @@ class ContactPhoneHandler
             $this->form->submit($submitData);
 
             if ($this->form->isValid() && $this->request->request->get('contactId')) {
+                $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
+                if (!$this->securityFacade->isGranted('EDIT', $contact)) {
+                    throw new AccessDeniedException();
+                }
+
                 if ($contact->getPrimaryPhone() && $this->request->request->get('primary') === true) {
                     return false;
                 }
