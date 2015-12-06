@@ -75,7 +75,10 @@ class ContactEmailHandler
             $this->form->submit($submitData);
 
             if ($this->form->isValid() && $this->request->request->get('contactId')) {
-                $contact = $this->manager->find(Contact::class, $this->request->request->get('contactId'));
+                $contact = $this->manager->find(
+                    'OroCRMContactBundle:Contact',
+                    $this->request->request->get('contactId')
+                );
                 if (!$this->securityFacade->isGranted('EDIT', $contact)) {
                     throw new AccessDeniedException();
                 }
