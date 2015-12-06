@@ -114,13 +114,6 @@ class ContactPhoneController extends RestController implements ClassResourceInte
      *      description="Delete ContactPhone"
      * )
      *
-     * @Acl(
-     *      id="orocrm_contact_email_delete",
-     *      type="entity",
-     *      permission="EDIT",
-     *      class="OroCRMContactBundle:Contact"
-     * )
-     *
      * @return Response
      */
     public function deleteAction($id)
