@@ -52,14 +52,14 @@ define(function(require) {
         /** @returns {boolean} */
         canSetDeleteEntityRoute: function(data) {
             if (data) {
-                if (typeof (data.email) !== "undefined") {
-                    if (data.email === "") {
+                if (typeof (data.email) !== 'undefined') {
+                    if (data.email === '') {
                         return true;
                     }
                 }
 
-                if (typeof (data.phone) !== "undefined") {
-                    if (data.phone === "") {
+                if (typeof (data.phone) !== 'undefined') {
+                    if (data.phone === '') {
                         return true;
                     }
                 }

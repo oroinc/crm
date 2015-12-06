@@ -84,7 +84,10 @@ class RestContactPhoneApiTest extends WebTestCase
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_phone', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        $this->assertEquals('{"code":500,"message":"oro.contact.phone.error.delete.more_one"}', $this->client->getResponse()->getContent());
+        $this->assertEquals(
+            '{"code":500,"message":"oro.contact.phone.error.delete.more_one"}',
+            $this->client->getResponse()->getContent()
+        );
     }
 
     public function testDeletePhoneSuccess()

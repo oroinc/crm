@@ -82,7 +82,10 @@ class RestContactEmailApiTest extends WebTestCase
         $this->client->request('DELETE', $this->getUrl('oro_api_delete_contact_email', $routeParams));
 
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_INTERNAL_SERVER_ERROR);
-        $this->assertEquals('{"code":500,"message":"oro.contact.email.error.delete.more_one"}', $this->client->getResponse()->getContent());
+        $this->assertEquals(
+            '{"code":500,"message":"oro.contact.email.error.delete.more_one"}',
+            $this->client->getResponse()->getContent()
+        );
     }
 
     public function testDeleteEmailSuccess()
