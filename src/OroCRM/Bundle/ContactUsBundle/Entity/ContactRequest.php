@@ -39,10 +39,7 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *          "security"={
  *              "type"="ACL",
  *              "permissions"="All",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          }
  *      }
  * )

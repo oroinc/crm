@@ -12,8 +12,11 @@ use FOS\RestBundle\Util\Codes;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 
+use Oro\Bundle\SecurityBundle\Annotation\Acl;
+use Oro\Bundle\FormBundle\Form\Handler\ApiFormHandler;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
@@ -80,6 +83,50 @@ class ContactPhoneController extends RestController implements ClassResourceInte
         return new Response($responseData, $phone ? Codes::HTTP_OK : Codes::HTTP_NOT_FOUND);
     }
 
+    /**
+     * Create entity ContactPhone
+     * oro_api_post_contact_phone
+     *
+     * @return Response
+     *
+     * @ApiDoc(
+     *      description="Create entity",
+     *      resource=true,
+     *      requirements = {
+     *          {"name"="id", "dataType"="integer"},
+     *      }
+     * )
+     */
+    public function postAction()
+    {
+        $response = $this->handleCreateRequest();
+
+        return $response;
+    }
+
+    /**
+     * Delete entity ContactPhone
+     * oro_api_delete_contact_phone
+     *
+     * @param int $id
+     *
+     * @ApiDoc(
+     *      description="Delete ContactPhone"
+     * )
+     *
+     * @return Response
+     */
+    public function deleteAction($id)
+    {
+        try {
+            $this->getDeleteHandler()->handleDelete($id, $this->getManager());
+
+            return new JsonResponse(["id" => ""]);
+        } catch (\Exception $e) {
+            return new JsonResponse(["code" => $e->getCode(), "message"=>$e->getMessage() ], $e->getCode());
+        }
+    }
+
     protected function getContactManager()
     {
         return $this->get('orocrm_contact.contact.manager.api');
@@ -94,22 +141,6 @@ class ContactPhoneController extends RestController implements ClassResourceInte
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function getForm()
-    {
-        throw new \BadMethodCallException('Form is not available.');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFormHandler()
-    {
-        throw new \BadMethodCallException('FormHandler is not available.');
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function getPreparedItem($entity, $resultFields = [])
@@ -118,7 +149,31 @@ class ContactPhoneController extends RestController implements ClassResourceInte
         $result['owner']   = (string) $entity->getOwner();
         $result['phone']   = $entity->getPhone();
         $result['primary'] = $entity->isPrimary();
-        
+
         return $result;
+    }
+
+    /**
+     * @return ApiFormHandler
+     */
+    public function getFormHandler()
+    {
+        return $this->get('orocrm_contact.form.type.contact_phone.handler');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getForm()
+    {
+        return $this->get('orocrm_contact.form.type.contact_phone.type');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDeleteHandler()
+    {
+        return $this->get('orocrm_contact.form.type.contact_phone.handler');
     }
 }
