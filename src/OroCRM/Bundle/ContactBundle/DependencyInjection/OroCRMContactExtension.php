@@ -30,5 +30,6 @@ class OroCRMContactExtension extends Extension
         $loader->load('services.yml');
         $loader->load('twig_extensions.yml');
         $loader->load('importexport.yml');
+        $loader->load('form.yml');
     }
 }
