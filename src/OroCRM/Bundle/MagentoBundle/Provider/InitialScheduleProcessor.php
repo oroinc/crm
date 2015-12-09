@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -218,6 +220,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      */
     protected function markConnectorSyncStatusesSkipped(Integration $integration, $connectorName)
     {
+        /** @var EntityManager $em */
         $em = $this->doctrineRegistry->getManager();
 
         $processedStatuses = [];
