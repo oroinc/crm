@@ -135,7 +135,7 @@
                 'data' : [
                     form_widget(form.appendAccounts, {'id': 'appendAccounts'}),
                     form_widget(form.removeAccounts, {'id': 'removeAccounts'}),
-                    dataGrid.renderGrid(gridName, { contact: form.vars.value.id }, { cssClass: 'inner-grid' })
+                    dataGrid.renderGrid(gridName, { contact: form.vars.value.id ? form.vars.value.id : -1 }, { cssClass: 'inner-grid' })
                 ]
             }
         ]
