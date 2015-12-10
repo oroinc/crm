@@ -33,6 +33,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

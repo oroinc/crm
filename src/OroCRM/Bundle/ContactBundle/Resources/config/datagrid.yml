@@ -229,7 +229,9 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/text-editor-view
+                        view: oroform/js/app/views/editor/text-editor-view
+                    validation_rules:
+                        required: true
                     save_api_accessor:
                         class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:

@@ -144,12 +144,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
             $securityContext->setToken($token);
 
             $ownTag = array($this->tagsUser[rand(0, $this->randomUserTag)]);
-            $user->setTags(
-                array(
-                    'owner' => $ownTag,
-                    'all' => array()
-                )
-            );
+            $this->tagManager->setTags($user, ['owner' => $ownTag, 'all' => []]);
             $this->persist($this->em, $user);
             $this->tagManager->saveTagging($user, false);
         }
@@ -186,12 +181,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 $this->tagsAccount[rand(0, $this->randomAccountTag)]
             );
 
-            $account->setTags(
-                array(
-                    'owner' => $ownTags ,
-                    'all' => array()
-                )
-            );
+            $this->tagManager->setTags($account, ['owner' => $ownTags, 'all' => []]);
             $this->persist($this->em, $account);
             $this->tagManager->saveTagging($account, false);
         }
@@ -212,13 +202,8 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 $this->tagsUser[rand(0, $this->randomUserTag)],
                 $this->tagsAccount[rand(0, $this->randomAccountTag-1)]
             );
+            $this->tagManager->setTags($contact, ['owner' => $ownTags, 'all' => []]);
 
-            $contact->setTags(
-                array(
-                    'owner' => $ownTags,
-                    'all' => array()
-                )
-            );
             $this->persist($this->em, $contact);
             $this->tagManager->saveTagging($contact, false);
         }

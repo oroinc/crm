@@ -1,5 +1,5 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
+{% form_theme form with ['OroFormBundle:Form:fields.html.twig'] %}
 
 {% oro_title_set({params : {"%b2bcustomer.name%": entity.name} }) %}
 
@@ -56,8 +56,7 @@
         form_row(form.name),
         form_row(form.dataChannel),
         form_row(form.account),
-        form_row(form.contact),
-        form_row(form.tags),
+        form_row(form.contact)
     ]) %}
 
     {% set dataBlocks = [{
