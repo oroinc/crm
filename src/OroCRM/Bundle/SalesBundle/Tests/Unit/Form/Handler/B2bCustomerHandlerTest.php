@@ -66,10 +66,6 @@ class B2bCustomerHandlerTest extends \PHPUnit_Framework_TestCase
             $this->manager,
             $this->requestChannelProvider
         );
-        $this->handler->setTagManager(
-            $this->getMockBuilder('Oro\Bundle\TagBundle\Entity\TagManager')
-                ->disableOriginalConstructor()->getMock()
-        );
     }
 
     public function testProcessUnsupportedRequest()

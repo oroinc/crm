@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Form\Type;
 
-use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-
 use OroCRM\Bundle\ContactBundle\Form\Type\ContactType;
 
 class ContactTypeTest extends \PHPUnit_Framework_TestCase
@@ -57,7 +54,6 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'assignedTo' => 'oro_user_organization_acl_select',
             'reportsTo' => 'orocrm_contact_select',
             'method' => 'translatable_entity',
-            'tags' => 'oro_tag_select',
             'addresses' => 'oro_address_collection',
             'emails' => 'oro_email_collection',
             'phones' => 'oro_phone_collection',

@@ -34,7 +34,6 @@ datagrid:
                         - { join: o.owner, alias: own }
         inline_editing:
             enable: true
-            entity_name: %orocrm_sales.opportunity.class%
         columns:
             channelName:
                 label:         orocrm.sales.opportunity.data_channel.label
@@ -45,14 +44,13 @@ datagrid:
                 frontend_type: datetime
             contactName:
                 label:         orocrm.sales.opportunity.contact.label
+                frontend_type: relation
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: contact
                     autocomplete_api_accessor:
-                        class: oroui/js/tools/search-api-accessor
                         search_handler_name: contacts
                         label_field_name: fullName
             closeDate:
@@ -73,7 +71,7 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: owner
                     autocomplete_api_accessor:
@@ -236,7 +234,6 @@ datagrid:
                 - HINT_TRANSLATABLE
         inline_editing:
             enable: true
-            entity_name: %orocrm_sales.lead.entity.class%
         columns:
             channelName:
                 label:         orocrm.sales.lead.data_channel.label
@@ -267,7 +264,7 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
+                        view: oroform/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: owner
                     autocomplete_api_accessor:

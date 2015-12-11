@@ -43,13 +43,13 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          },
  *          "workflow"={
  *              "active_workflow"="b2b_flow_sales_funnel"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

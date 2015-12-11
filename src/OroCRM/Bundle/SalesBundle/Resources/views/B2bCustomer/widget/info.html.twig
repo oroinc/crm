@@ -1,5 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
@@ -31,10 +30,6 @@
 
             {% if entity.shippingAddress is not empty %}
                 {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.shipping_address.label'|trans, address.renderAddress(entity.shippingAddress)) }}
-            {% endif %}
-
-            {% if resource_granted('oro_tag_view') %}
-                {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
             {% endif %}
         </div>
         <div class="responsive-block">

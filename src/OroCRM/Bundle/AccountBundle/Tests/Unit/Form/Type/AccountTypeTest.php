@@ -55,13 +55,9 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(1))
             ->method('add')
-            ->with('tags', 'oro_tag_select')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(2))
-            ->method('add')
             ->with('default_contact', 'oro_entity_identifier')
             ->will($this->returnSelf());
-        $builder->expects($this->at(3))
+        $builder->expects($this->at(2))
             ->method('add')
             ->with('contacts', 'oro_multiple_entity')
             ->will($this->returnSelf());
@@ -84,10 +80,6 @@ class AccountTypeTest extends \PHPUnit_Framework_TestCase
         $builder->expects($this->at(0))
             ->method('add')
             ->with('name', 'text')
-            ->will($this->returnSelf());
-        $builder->expects($this->at(1))
-            ->method('add')
-            ->with('tags', 'oro_tag_select')
             ->will($this->returnSelf());
 
         $type = new AccountType($this->router, $this->entityNameResolver, $this->securityFacade);
