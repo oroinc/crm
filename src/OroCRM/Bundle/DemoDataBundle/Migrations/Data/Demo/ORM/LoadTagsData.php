@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -22,27 +23,19 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var Account[]
-     */
+    /** @var EntityRepository */
     protected $accountsRepository;
 
-    /**
-     * @var User[]
-     */
+    /** @var EntityRepository */
     protected $usersRepository;
 
-    /**
-     * @var Contact[]
-     */
+    /* @var EntityRepository */
     protected $contactsRepository;
 
-    /** @var  TagManager */
+    /** @var TagManager */
     protected $tagManager;
 
     /** @var Tag[] */
@@ -51,12 +44,10 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     /** @var Tag[] */
     protected $tagsAccount;
 
-    /** @var  EntityManager */
+    /** @var EntityManager */
     protected $em;
 
-    /**
-     * @var Organization
-     */
+    /** @var Organization */
     protected $organization;
 
     /**
@@ -72,7 +63,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
@@ -80,7 +71,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -95,7 +86,6 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
      */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
-
         if ($manager) {
             $this->em = $manager;
         } else {
@@ -110,15 +100,15 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
         $this->organization = $this->getReference('default_organization');
 
         /** @var User $adminUser */
-        $adminUser       = $this->em->getRepository('OroUserBundle:User')->find(1);
-        $token           = new UsernamePasswordOrganizationToken(
+        $adminUser    = $this->em->getRepository('OroUserBundle:User')->find(1);
+        $token        = new UsernamePasswordOrganizationToken(
             $adminUser,
             $adminUser->getUsername(),
             'main',
             $this->organization
         );
-        $securityContext = $this->container->get('security.context');
-        $securityContext->setToken($token);
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken($token);
     }
 
     /**
@@ -152,7 +142,6 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                     ]
                 )
             );
-            $this->persist($this->em, $user);
             $this->tagManager->saveTagging($user, false);
         }
         $this->flush($this->em);
@@ -172,7 +161,8 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 '#popular',
                 '#call',
                 '#discontinued',
-                'Premium']
+                'Premium'
+            ]
         );
         $userTagsCount     = count($this->tagsUser);
         $accountTagsCount  = count($this->tagsAccount);
@@ -187,11 +177,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                     ]
                 )
             );
-            $this->persist($this->em, $account);
             $this->tagManager->saveTagging($account, false);
         }
         $this->flush($this->em);
-        $this->em->clear('Oro\\Bundle\\AccountBundle\\Entity\\Account');
     }
 
     public function loadContactsTags()
@@ -210,22 +198,9 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 )
             );
 
-            $this->persist($this->em, $contact);
             $this->tagManager->saveTagging($contact, false);
         }
         $this->flush($this->em);
-        $this->em->clear('Oro\\Bundle\\ContactBundle\\Entity\\Contact');
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
     }
 
     /**
