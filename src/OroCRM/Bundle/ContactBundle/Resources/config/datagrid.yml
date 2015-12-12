@@ -229,7 +229,9 @@ datagrid:
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/text-editor-view
+                        view: oroform/js/app/views/editor/text-editor-view
+                    validation_rules:
+                        required: true
                     save_api_accessor:
                         class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
@@ -423,7 +425,10 @@ datagrid:
                         - { join: defaultContact.phones, alias: defaultContactPhone, conditionType: 'WITH', condition: 'defaultContactPhone.primary = true' }
                         - { join: a.owner, alias: accountOwner }
             bind_parameters:
-                - contact
+                -
+                    name: contact
+                    default: null
+                    type: integer
         columns:
             hasContact:
                 label:         orocrm.contact.assigned_to.label

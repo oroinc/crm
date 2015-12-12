@@ -1,5 +1,4 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
@@ -34,10 +33,6 @@
             {{ ui.renderProperty('orocrm.sales.lead.source.label'|trans, entity.source) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
-
-            {% if resource_granted('oro_tag_view') %}
-                {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
-            {% endif %}
         </div>
 
         <div class="responsive-block">
