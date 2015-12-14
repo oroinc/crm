@@ -116,9 +116,17 @@ class OpportunityRepository extends EntityRepository
         $qb->select($select)
             ->join('opportunity.owner', 'owner')
             ->where('owner.id IN(:ownerIds)')
-            ->andWhere('opportunity.probability <> 0')
-            ->andWhere('opportunity.probability <> 1')
             ->setParameter('ownerIds', $ownerIds);
+
+        $probabilityCondition = $qb->expr()->orX(
+            $qb->expr()->andX(
+                'opportunity.probability <> 0',
+                'opportunity.probability <> 1'
+            ),
+            'opportunity.probability is NULL'
+        );
+
+        $qb->andWhere($probabilityCondition);
 
         return $aclHelper->apply($qb)->getOneOrNullResult();
     }
