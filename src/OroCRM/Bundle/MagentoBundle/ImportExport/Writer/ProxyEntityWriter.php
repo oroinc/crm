@@ -10,13 +10,19 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use Oro\Bundle\BatchBundle\Step\StepExecutionRestoreInterface;
+
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
-class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterface, LoggerAwareInterface
+class ProxyEntityWriter implements
+    ItemWriterInterface,
+    StepExecutionAwareInterface,
+    StepExecutionRestoreInterface,
+    LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -25,6 +31,9 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
 
     /** @var DatabaseHelper */
     protected $databaseHelper;
+
+    /** @var StepExecution|null */
+    protected $previousStepExecution;
 
     /**
      * @param ItemWriterInterface $writer
@@ -88,6 +97,16 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
     {
         if ($this->writer instanceof StepExecutionAwareInterface) {
             $this->writer->setStepExecution($stepExecution);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function restoreStepExecution()
+    {
+        if ($this->writer instanceof StepExecutionRestoreInterface) {
+            $this->writer->restoreStepExecution();
         }
     }
 
