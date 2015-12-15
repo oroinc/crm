@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\EventListener;
 
+use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
@@ -10,6 +11,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
+use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
@@ -47,6 +49,11 @@ class ActivityListener
     {
         $activity  = $event->getActivity();
         $target    = $event->getTarget();
+
+        if (TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+            return;
+        }
+
         $direction = $this->activityContactProvider->getActivityDirection($activity, $target);
         if ($direction !== DirectionProviderInterface::DIRECTION_UNKNOWN) {
             $accessor = PropertyAccess::createPropertyAccessor();
@@ -103,11 +110,13 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        $targetsInfo[] = [
-                            'class'     => $this->doctrineHelper->getEntityClass($target),
-                            'id'        => $this->doctrineHelper->getSingleEntityIdentifier($target),
-                            'direction' => $this->activityContactProvider->getActivityDirection($entity, $target)
-                        ];
+                        if (!TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+                            $targetsInfo[] = [
+                                'class' => $this->doctrineHelper->getEntityClass($target),
+                                'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
+                                'direction' => $this->activityContactProvider->getActivityDirection($entity, $target)
+                            ];
+                        }
                     }
                     $this->deletedEntities[$key] = [
                         'class'       => $class,
@@ -133,12 +142,14 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        $targetsInfo[] = [
-                            'class'     => $this->doctrineHelper->getEntityClass($target),
-                            'id'        => $this->doctrineHelper->getSingleEntityIdentifier($target),
-                            'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
-                            'is_direction_changed' => $isDirectionChanged
-                        ];
+                        if (!TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+                            $targetsInfo[] = [
+                                'class' => $this->doctrineHelper->getEntityClass($target),
+                                'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
+                                'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
+                                'is_direction_changed' => $isDirectionChanged
+                            ];
+                        }
                     }
                     $this->updatedEntities[$key] = [
                         'class'       => $class,
