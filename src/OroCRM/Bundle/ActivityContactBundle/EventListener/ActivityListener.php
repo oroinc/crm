@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ActivityContactBundle\EventListener;
 
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
+use Doctrine\ORM\PersistentCollection;
+use Doctrine\ORM\UnitOfWork;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
@@ -94,6 +96,7 @@ class ActivityListener
     {
         $entitiesToDelete = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityDeletions();
         $entitiesToUpdate = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates();
+        $allRemovedTargets = $this->getRemovedTargets($args->getEntityManager()->getUnitOfWork());
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
@@ -118,7 +121,7 @@ class ActivityListener
                 }
             }
 
-            foreach ($entitiesToUpdate as $entity) {
+            foreach ($entitiesToUpdate as $oid => $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
@@ -133,13 +136,14 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        $targetsInfo[] = [
-                            'class'     => $this->doctrineHelper->getEntityClass($target),
-                            'id'        => $this->doctrineHelper->getSingleEntityIdentifier($target),
-                            'direction' => $this->activityContactProvider->getActivityDirection($entity, $target),
-                            'is_direction_changed' => $isDirectionChanged
-                        ];
+                        $targetsInfo[] = $this->createUpdatedTargetInfo($entity, $target, $isDirectionChanged, false);
                     }
+                    $eid = $this->getEntityId($args->getEntityManager()->getUnitOfWork(), $entity);
+                    $removedTargets = isset($allRemovedTargets[$eid]) ? $allRemovedTargets[$eid] : [];
+                    foreach ($removedTargets as $target) {
+                        $targetsInfo[] = $this->createUpdatedTargetInfo($entity, $target, $isDirectionChanged, true);
+                    }
+
                     $this->updatedEntities[$key] = [
                         'class'       => $class,
                         'id'          => $id,
@@ -233,16 +237,34 @@ class ActivityListener
                             )['direction']
                         );
                     }
+
+                    list($oldDirection, $newDirection) = $this->getDirectionProperties($direction, $isDirectionChanged);
+
                     /** process counts (in case direction was changed) */
                     if ($isDirectionChanged) {
-                        $increment = ActivityScope::CONTACT_COUNT_OUT;
-                        $decrement = ActivityScope::CONTACT_COUNT_IN;
-                        if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
-                            $increment = ActivityScope::CONTACT_COUNT_IN;
-                            $decrement = ActivityScope::CONTACT_COUNT_OUT;
-                        }
-                        $accessor->setValue($target, $increment, ((int)$accessor->getValue($target, $increment) + 1));
-                        $accessor->setValue($target, $decrement, ((int)$accessor->getValue($target, $decrement) - 1));
+                        $accessor->setValue(
+                            $target,
+                            $newDirection,
+                            (int)$accessor->getValue($target, $newDirection) + 1
+                        );
+                        $accessor->setValue(
+                            $target,
+                            $oldDirection,
+                            (int)$accessor->getValue($target, $oldDirection) - 1
+                        );
+                    }
+
+                    if ($targetInfo['is_removed']) {
+                        $accessor->setValue(
+                            $target,
+                            $newDirection,
+                            (int)$accessor->getValue($target, $newDirection) - 1
+                        );
+                        $accessor->setValue(
+                            $target,
+                            ActivityScope::CONTACT_COUNT,
+                            (int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1
+                        );
                     }
 
                     $em->persist($target);
@@ -254,5 +276,97 @@ class ActivityListener
 
             $em->flush();
         }
+    }
+
+    /**
+     * @param string $currentDirection
+     * @param bool $isDirectionChanged
+     *
+     * @return array Where first value is old property and second is new
+     */
+    protected function getDirectionProperties($currentDirection, $isDirectionChanged)
+    {
+        if ($isDirectionChanged) {
+            $properties = [
+                ActivityScope::CONTACT_COUNT_IN,
+                ActivityScope::CONTACT_COUNT_OUT,
+            ];
+
+            return $currentDirection === DirectionProviderInterface::DIRECTION_INCOMING
+                ? array_reverse($properties)
+                : $properties;
+        }
+
+        return $currentDirection === DirectionProviderInterface::DIRECTION_INCOMING
+            ? [ActivityScope::CONTACT_COUNT_IN, ActivityScope::CONTACT_COUNT_IN]
+            : [ActivityScope::CONTACT_COUNT_OUT, ActivityScope::CONTACT_COUNT_OUT];
+    }
+
+    /**
+     * @param object $entity
+     * @param object $target
+     * @param bool $isDirectionChanged
+     * @param bool $isTargetRemoved
+     *
+     * @return array
+     */
+    protected function createUpdatedTargetInfo($entity, $target, $isDirectionChanged, $isTargetRemoved)
+    {
+        return [
+            'class'      => $this->doctrineHelper->getEntityClass($target),
+            'id'         => $this->doctrineHelper->getSingleEntityIdentifier($target),
+            'direction'  => $this->activityContactProvider->getActivityDirection($entity, $target),
+            'is_removed' => $isTargetRemoved,
+            'is_direction_changed' => $isDirectionChanged,
+        ];
+    }
+
+    /**
+     * @param UnitOfWork $uow
+     *
+     * @return array
+     */
+    protected function getRemovedTargets(UnitOfWork $uow)
+    {
+        /* @var $collectionUpdates PersistentCollection[] */
+        $collectionUpdates = $uow->getScheduledCollectionUpdates();
+
+        $removedTargets = [];
+        foreach ($collectionUpdates as $collectionUpdate) {
+            $id = $this->getEntityId($uow, $collectionUpdate->getOwner());
+            if (!$id) {
+                continue;
+            }
+
+            if (!array_key_exists($id, $removedTargets)) {
+                $removedTargets[$id] = [];
+            }
+
+            $removedTargets[$id] = array_merge(
+                $removedTargets[$id],
+                $collectionUpdate->getDeleteDiff()
+            );
+        }
+
+        return $removedTargets;
+    }
+
+    /**
+     * @param UnitOfWork $uow
+     * @param object $entity
+     *
+     * @return string|null
+     */
+    protected function getEntityId(UnitOfWork $uow, $entity)
+    {
+        if ($uow->isScheduledForInsert($entity)) {
+            return null;
+        }
+
+        return sprintf(
+            '%s:%s',
+            $this->doctrineHelper->getEntityClass($entity),
+            implode(',', $uow->getEntityIdentifier($entity))
+        );
     }
 }
