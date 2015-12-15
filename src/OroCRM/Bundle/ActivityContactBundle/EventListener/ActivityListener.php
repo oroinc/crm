@@ -142,7 +142,7 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        if (TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+                        if (!TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
                             $targetsInfo[] = [
                                 'class' => $this->doctrineHelper->getEntityClass($target),
                                 'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
