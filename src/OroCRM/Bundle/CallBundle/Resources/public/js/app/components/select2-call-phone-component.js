@@ -26,7 +26,7 @@ define(function(require) {
             }
             config.query = function(options) {
                 var data = {results: []};
-                var items = that.suggestions;
+                var items = _.clone(that.suggestions);
                 var initialVal = $.trim(that.value);
                 var currentVal = $.trim(options.element.val());
                 var term = $.trim(options.term);
