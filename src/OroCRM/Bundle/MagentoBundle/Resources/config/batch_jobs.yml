@@ -180,7 +180,7 @@ connector:
                     parameters:
                         batch_size: 25
                 load_order_info:
-                    title:     mage_order_import_post_process_load_order_info
+                    title:     import
                     class:     Oro\Bundle\BatchBundle\Step\ItemStep
                     services:
                         reader:    orocrm_magento.reader.order_info
