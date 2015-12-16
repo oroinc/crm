@@ -109,12 +109,10 @@ class OpportunityRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('opportunity');
 
-        $weightedForecastFunction = count($ownerIds) > 1 ? 'AVG' : 'SUM';
-
         $select = "
             SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
-            {$weightedForecastFunction}( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
+            SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
         $qb->select($select)
             ->join('opportunity.owner', 'owner');
 

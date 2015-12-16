@@ -449,8 +449,10 @@ datagrid:
         filters:
             columns:
                 ownerName:
-                    type:      string
-                    data_name: ownerName
+                    type: choice-tree
+                    data_name: o.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 inProgressCount:
                     type:      number
                     data_name: inProgressCount
