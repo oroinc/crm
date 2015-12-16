@@ -433,7 +433,7 @@ datagrid:
                         expr: SUM( o.budgetAmount )
                         formatter: currency
                     weightedForecast:
-                        expr: AVG( o.budgetAmount * o.probability )
+                        expr: SUM( o.budgetAmount * o.probability )
                         formatter: currency
         columns:
             ownerName:        { label: orocrm.report.datagrid.columns.ownerName,        frontend_type: string }

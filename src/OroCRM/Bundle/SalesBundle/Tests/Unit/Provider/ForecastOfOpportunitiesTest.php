@@ -148,12 +148,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
         $this->opportunityRepository->expects($this->any())
             ->method('getForecastOfOpporunitiesData')
-            ->with([$user->getId()], null, $this->aclHelper)
+            ->with([], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
-
-        $this->securityFacade->expects($this->once())
-            ->method('getLoggedUser')
-            ->willReturn($user);
 
         $result = $this->provider
             ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);

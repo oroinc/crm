@@ -136,7 +136,6 @@ services:
             - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
             - @translator
-            - @oro_security.security_facade
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%

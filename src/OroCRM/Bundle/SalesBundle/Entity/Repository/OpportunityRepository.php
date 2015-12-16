@@ -116,9 +116,12 @@ class OpportunityRepository extends EntityRepository
             SUM( opportunity.budgetAmount ) as budgetAmount,
             {$weightedForecastFunction}( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
         $qb->select($select)
-            ->join('opportunity.owner', 'owner')
-            ->where('owner.id IN(:ownerIds)')
-            ->setParameter('ownerIds', $ownerIds);
+            ->join('opportunity.owner', 'owner');
+
+        if (!empty($ownerIds)) {
+            $qb->where('owner.id IN(:ownerIds)')
+                ->setParameter('ownerIds', $ownerIds);
+        }
 
         $probabilityCondition = $qb->expr()->orX(
             $qb->expr()->andX(
