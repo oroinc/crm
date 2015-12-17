@@ -48,7 +48,7 @@ class ActivityListenerTest extends WebTestCase
         $this->assertEquals($firstContacted + 1, $firstContact->getAcContactCount());
         $this->assertEquals($secondContacted + 1, $secondContact->getAcContactCount());
 
-        $call->removeActivityTarget($secondContact);
+        $this->getActivityManager()->removeActivityTarget($call, $secondContact);
         $this->getEntityManager()->flush();
 
         $this->assertEquals($firstContacted + 1, $firstContact->getAcContactCount());
