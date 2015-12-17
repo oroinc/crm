@@ -2,12 +2,14 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\EventListener;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 use Doctrine\ORM\PersistentCollection;
 use Doctrine\ORM\UnitOfWork;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
@@ -121,7 +123,7 @@ class ActivityListener
                 }
             }
 
-            foreach ($entitiesToUpdate as $oid => $entity) {
+            foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
@@ -163,119 +165,136 @@ class ActivityListener
     public function postFlush(PostFlushEventArgs $args)
     {
         $em = $args->getEntityManager();
-        if (!empty($this->deletedEntities) || !empty($this->updatedEntities)) {
-            $accessor = PropertyAccess::createPropertyAccessor();
-            /** process deleted entities */
-            foreach ($this->deletedEntities as $activityData) {
-                foreach ($activityData['targets'] as $targetInfo) {
-                    $direction = $targetInfo['direction'];
-                    $target    = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
+        if (empty($this->deletedEntities) && empty($this->updatedEntities)) {
+            return;
+        }
+
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $this->processDeletedEntities($em, $accessor);
+        $this->processUpdatedEntities($em, $accessor);
+
+        $em->flush();
+    }
+
+    /**
+     * @param EntityManager $em
+     * @param PropertyAccessorInterface $accessor
+     */
+    protected function processDeletedEntities(EntityManager $em, PropertyAccessorInterface $accessor)
+    {
+        foreach ($this->deletedEntities as $activityData) {
+            foreach ($activityData['targets'] as $targetInfo) {
+                $direction = $targetInfo['direction'];
+                $target    = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
+                $accessor->setValue(
+                    $target,
+                    ActivityScope::CONTACT_COUNT,
+                    ((int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1)
+                );
+
+                $directionCountPath = ActivityScope::CONTACT_COUNT_OUT;
+                $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_OUT;
+                if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
+                    $directionCountPath = ActivityScope::CONTACT_COUNT_IN;
+                    $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_IN;
+                }
+
+                $accessor->setValue(
+                    $target,
+                    $directionCountPath,
+                    ((int)$accessor->getValue($target, $directionCountPath) - 1)
+                );
+
+                $activityDate = $this->activityContactProvider->getLastContactActivityDate(
+                    $em,
+                    $target,
+                    $direction,
+                    $activityData['id'],
+                    $activityData['class']
+                );
+                if ($activityDate) {
+                    $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $activityDate['all']);
+                    $accessor->setValue($target, $contactDatePath, $activityDate['direction']);
+                }
+
+                $em->persist($target);
+            }
+        }
+
+        $this->deletedEntities = [];
+    }
+
+    /**
+     * @param EntityManager $em
+     */
+    protected function processUpdatedEntities(EntityManager $em, PropertyAccessorInterface $accessor)
+    {
+        foreach ($this->updatedEntities as $activityData) {
+            foreach ($activityData['targets'] as $targetInfo) {
+                $direction          = $targetInfo['direction'];
+                $isDirectionChanged = $targetInfo['is_direction_changed'];
+                $target             = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
+                /** process dates */
+                if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
+                    $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_IN;
+                    $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_OUT;
+                    $oppositeDirection       = DirectionProviderInterface::DIRECTION_OUTGOING;
+                } else {
+                    $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_OUT;
+                    $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_IN;
+                    $oppositeDirection       = DirectionProviderInterface::DIRECTION_INCOMING;
+                }
+
+                $lastActivityDate = $this->activityContactProvider
+                    ->getLastContactActivityDate($em, $target, $direction);
+                if ($lastActivityDate) {
+                    $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $lastActivityDate['all']);
+                    $accessor->setValue($target, $contactDatePath, $lastActivityDate['direction']);
+                    $accessor->setValue(
+                        $target,
+                        $oppositeContactDatePath,
+                        $this->activityContactProvider->getLastContactActivityDate(
+                            $em,
+                            $target,
+                            $oppositeDirection
+                        )['direction']
+                    );
+                }
+
+                list($oldDirection, $newDirection) = $this->getDirectionProperties($direction, $isDirectionChanged);
+
+                /** process counts (in case direction was changed) */
+                if ($isDirectionChanged) {
+                    $accessor->setValue(
+                        $target,
+                        $newDirection,
+                        (int)$accessor->getValue($target, $newDirection) + 1
+                    );
+                    $accessor->setValue(
+                        $target,
+                        $oldDirection,
+                        (int)$accessor->getValue($target, $oldDirection) - 1
+                    );
+                }
+
+                if ($targetInfo['is_removed']) {
+                    $accessor->setValue(
+                        $target,
+                        $newDirection,
+                        (int)$accessor->getValue($target, $newDirection) - 1
+                    );
                     $accessor->setValue(
                         $target,
                         ActivityScope::CONTACT_COUNT,
-                        ((int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1)
+                        (int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1
                     );
-
-                    $directionCountPath = ActivityScope::CONTACT_COUNT_OUT;
-                    $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_OUT;
-                    if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
-                        $directionCountPath = ActivityScope::CONTACT_COUNT_IN;
-                        $contactDatePath    = ActivityScope::LAST_CONTACT_DATE_IN;
-                    }
-
-                    $accessor->setValue(
-                        $target,
-                        $directionCountPath,
-                        ((int)$accessor->getValue($target, $directionCountPath) - 1)
-                    );
-
-                    $activityDate = $this->activityContactProvider->getLastContactActivityDate(
-                        $em,
-                        $target,
-                        $direction,
-                        $activityData['id'],
-                        $activityData['class']
-                    );
-                    if ($activityDate) {
-                        $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $activityDate['all']);
-                        $accessor->setValue($target, $contactDatePath, $activityDate['direction']);
-                    }
-
-                    $em->persist($target);
                 }
+
+                $em->persist($target);
             }
-
-            /** process updated entities */
-            foreach ($this->updatedEntities as $activityData) {
-                foreach ($activityData['targets'] as $targetInfo) {
-                    $direction          = $targetInfo['direction'];
-                    $isDirectionChanged = $targetInfo['is_direction_changed'];
-                    $target             = $em->getRepository($targetInfo['class'])->find($targetInfo['id']);
-                    /** process dates */
-                    if ($direction === DirectionProviderInterface::DIRECTION_INCOMING) {
-                        $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_IN;
-                        $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_OUT;
-                        $oppositeDirection       = DirectionProviderInterface::DIRECTION_OUTGOING;
-                    } else {
-                        $contactDatePath         = ActivityScope::LAST_CONTACT_DATE_OUT;
-                        $oppositeContactDatePath = ActivityScope::LAST_CONTACT_DATE_IN;
-                        $oppositeDirection       = DirectionProviderInterface::DIRECTION_INCOMING;
-                    }
-
-                    $lastActivityDate = $this->activityContactProvider
-                        ->getLastContactActivityDate($em, $target, $direction);
-                    if ($lastActivityDate) {
-                        $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $lastActivityDate['all']);
-                        $accessor->setValue($target, $contactDatePath, $lastActivityDate['direction']);
-                        $accessor->setValue(
-                            $target,
-                            $oppositeContactDatePath,
-                            $this->activityContactProvider->getLastContactActivityDate(
-                                $em,
-                                $target,
-                                $oppositeDirection
-                            )['direction']
-                        );
-                    }
-
-                    list($oldDirection, $newDirection) = $this->getDirectionProperties($direction, $isDirectionChanged);
-
-                    /** process counts (in case direction was changed) */
-                    if ($isDirectionChanged) {
-                        $accessor->setValue(
-                            $target,
-                            $newDirection,
-                            (int)$accessor->getValue($target, $newDirection) + 1
-                        );
-                        $accessor->setValue(
-                            $target,
-                            $oldDirection,
-                            (int)$accessor->getValue($target, $oldDirection) - 1
-                        );
-                    }
-
-                    if ($targetInfo['is_removed']) {
-                        $accessor->setValue(
-                            $target,
-                            $newDirection,
-                            (int)$accessor->getValue($target, $newDirection) - 1
-                        );
-                        $accessor->setValue(
-                            $target,
-                            ActivityScope::CONTACT_COUNT,
-                            (int)$accessor->getValue($target, ActivityScope::CONTACT_COUNT) - 1
-                        );
-                    }
-
-                    $em->persist($target);
-                }
-            }
-
-            $this->deletedEntities = [];
-            $this->updatedEntities = [];
-
-            $em->flush();
         }
+
+        $this->updatedEntities = [];
     }
 
     /**
