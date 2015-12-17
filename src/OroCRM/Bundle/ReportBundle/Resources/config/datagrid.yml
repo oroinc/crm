@@ -412,6 +412,8 @@ datagrid:
                     and:
                         - o.probability <> 0
                         - o.probability <> 1
+                    or:
+                        - o.probability is NULL
                 groupBy: oo.id
         totals:
             total:
