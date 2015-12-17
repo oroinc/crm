@@ -226,6 +226,7 @@ class ActivityListener
 
     /**
      * @param EntityManager $em
+     * @param PropertyAccessorInterface $accessor
      */
     protected function processUpdatedEntities(EntityManager $em, PropertyAccessorInterface $accessor)
     {
