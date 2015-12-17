@@ -121,7 +121,7 @@ class ActivityListener
                 }
             }
 
-            foreach ($entitiesToUpdate as $oid => $entity) {
+            foreach ($entitiesToUpdate as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
@@ -138,8 +138,8 @@ class ActivityListener
                     foreach ($targets as $target) {
                         $targetsInfo[] = $this->createUpdatedTargetInfo($entity, $target, $isDirectionChanged, false);
                     }
-                    $eid = $this->getEntityId($args->getEntityManager()->getUnitOfWork(), $entity);
-                    $removedTargets = isset($allRemovedTargets[$eid]) ? $allRemovedTargets[$eid] : [];
+                    $entityId = $this->getEntityId($args->getEntityManager()->getUnitOfWork(), $entity);
+                    $removedTargets = isset($allRemovedTargets[$entityId]) ? $allRemovedTargets[$entityId] : [];
                     foreach ($removedTargets as $target) {
                         $targetsInfo[] = $this->createUpdatedTargetInfo($entity, $target, $isDirectionChanged, true);
                     }
