@@ -97,7 +97,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
                  * Check if entity already has all needed columns.
                  * If at least one is not present we should check and add it.
                  */
-                if ($this->isEntityHasNeededColumns($tableColumns)) {
+                if ($this->hasEntityNeededColumns($tableColumns)) {
                     continue;
                 }
 
@@ -203,7 +203,7 @@ class ActivityContactMigrationQuery extends ParametrizedMigrationQuery
      * @param array $tableColumns
      * @return bool
      */
-    protected function isEntityHasNeededColumns($tableColumns)
+    protected function hasEntityNeededColumns($tableColumns)
     {
         return false === (bool)array_diff(
             array_keys(ActivityScope::$fieldsConfiguration),
