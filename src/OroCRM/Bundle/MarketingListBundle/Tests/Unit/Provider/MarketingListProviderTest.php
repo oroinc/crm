@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
+use Oro\Bundle\TagBundle\Grid\TagsExtension;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
@@ -216,7 +217,8 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dataSource));
 
         $parameters = [
-            PagerInterface::PAGER_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true]
+            PagerInterface::PAGER_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true],
+            TagsExtension::TAGS_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true],
         ];
         if ($mixin) {
             $parameters['grid-mixin'] = $mixin;
