@@ -17,6 +17,7 @@ use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class ProxyEntityWriter implements
     ItemWriterInterface,
@@ -57,19 +58,9 @@ class ProxyEntityWriter implements
         $uniqueKeys = [];
         foreach ($items as $item) {
             if ($item instanceof Customer || $item instanceof Cart) {
-                $identifier = $item->getOriginId();
-                if (array_key_exists($identifier, $uniqueItems)) {
-                    $this->logSkipped($identifier);
-                }
-
-                $uniqueItems[$identifier] = $item;
+                $this->handleIdentifier($uniqueItems, $item, $item->getOriginId());
             } elseif ($item instanceof Order) {
-                $identifier = $item->getIncrementId();
-                if (array_key_exists($identifier, $uniqueItems)) {
-                    $this->logSkipped($item->getIncrementId());
-                }
-
-                $uniqueItems[$identifier] = $item;
+                $this->handleIdentifier($uniqueItems, $item, $item->getIncrementId());
             } elseif ($item instanceof NewsletterSubscriber) {
                 $identifier = $item->getCustomer() ? $item->getCustomer()->getId() : 0;
                 if ($identifier !== 0 && in_array($identifier, $uniqueKeys)) {
@@ -107,6 +98,24 @@ class ProxyEntityWriter implements
     {
         if ($this->writer instanceof StepExecutionRestoreInterface) {
             $this->writer->restoreStepExecution();
+        }
+    }
+
+    /**
+     * @param array $uniqueItems
+     * @param object $item
+     * @param string|null $identifier
+     */
+    protected function handleIdentifier(array &$uniqueItems, $item, $identifier = null)
+    {
+        if ($identifier && array_key_exists($identifier, $uniqueItems)) {
+            $this->logSkipped($identifier);
+        }
+
+        if ($identifier) {
+            $uniqueItems[$identifier] = $item;
+        } else {
+            $uniqueItems[spl_object_hash($item)] = $item;
         }
     }
 
