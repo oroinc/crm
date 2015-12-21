@@ -320,7 +320,7 @@ class Cart extends ExtendCart implements
     }
 
     /**
-     * @param WorkflowItem $workflowStep
+     * @param WorkflowStep $workflowStep
      *
      * @return Cart
      */
