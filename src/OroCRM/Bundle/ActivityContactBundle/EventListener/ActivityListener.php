@@ -102,6 +102,10 @@ class ActivityListener
         $activity = $event->getActivity();
         $target = $event->getTarget();
 
+        if (TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+            return;
+        }
+
         $accessor = PropertyAccess::createPropertyAccessor();
         $accessor->setValue(
             $target,
