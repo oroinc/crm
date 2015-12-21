@@ -90,5 +90,4 @@ class UpdateConfigQuery extends ParametrizedMigrationQuery
         $statement->execute($parameters);
         $this->logQuery($logger, $sql, $parameters);
     }
-
 }
