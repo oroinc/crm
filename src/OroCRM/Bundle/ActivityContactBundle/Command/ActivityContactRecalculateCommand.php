@@ -28,6 +28,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener;
 use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {
@@ -105,6 +106,9 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
 
             foreach ($entityConfigsWithApplicableActivities as $activityScopeConfig) {
                 $entityClassName = $activityScopeConfig->getId()->getClassName();
+                if (TargetExcludeList::isExcluded($entityClassName)) {
+                    continue;
+                }
                 $offset          = 0;
                 $startTimestamp  = time();
                 $allRecordIds    = $this->getTargetIds($entityClassName);
