@@ -48,8 +48,8 @@ class LoadPriorityData extends AbstractTranslatableEntityFixture
                 // save
                 $manager->persist($casePriority);
             }
-        }
 
-        $manager->flush();
+            $manager->flush();
+        }
     }
 }
