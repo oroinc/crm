@@ -64,6 +64,7 @@ class InitialSyncCommand extends ContainerAwareCommand
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
         $logger = $this->getLogger($output);
+        $this->getContainer()->get('oro_integration.logger.strategy')->setLogger($logger);
         $this->initEntityManager();
 
         if ($this->isJobRunning($integrationId)) {
@@ -83,6 +84,8 @@ class InitialSyncCommand extends ContainerAwareCommand
             return self::STATUS_SUCCESS;
         }
 
+        $this->scheduleAnalyticRecalculation($integration);
+
         $processor = $this->getSyncProcessor($logger);
         try {
             $logger->notice(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
@@ -94,8 +97,6 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
         }
-
-        $this->scheduleAnalyticRecalculation($integration);
 
         $logger->notice('Completed');
 

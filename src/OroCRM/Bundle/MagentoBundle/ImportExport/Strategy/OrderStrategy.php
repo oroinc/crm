@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -151,18 +149,16 @@ class OrderStrategy extends AbstractImportStrategy
         $existingEntity = parent::findExistingEntity($entity, $searchContext);
 
         if (!$existingEntity && $entity instanceof OrderAddress) {
-            $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
             /** @var OrderAddress $existingEntity */
             $existingEntity = $this->existingEntity->getAddresses()
                 ->filter(
-                    function (OrderAddress $address) use ($entity, $propertyAccessor) {
+                    function (OrderAddress $address) use ($entity) {
                         $isMatched = true;
                         $fieldsToMatch = ['street', 'city', 'postalCode', 'country', 'region'];
 
                         foreach ($fieldsToMatch as $fieldToMatch) {
-                            $addressValue = $propertyAccessor->getValue($address, $fieldToMatch);
-                            $entityValue = $propertyAccessor->getValue($entity, $fieldToMatch);
+                            $addressValue = $this->getPropertyAccessor()->getValue($address, $fieldToMatch);
+                            $entityValue = $this->getPropertyAccessor()->getValue($entity, $fieldToMatch);
                             $isMatched = $isMatched && ($addressValue === $entityValue);
                         }
 
