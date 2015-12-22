@@ -28,6 +28,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener;
 use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
+use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 
 class ActivityContactRecalculateCommand extends ContainerAwareCommand
 {
@@ -105,9 +106,13 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
 
             foreach ($entityConfigsWithApplicableActivities as $activityScopeConfig) {
                 $entityClassName = $activityScopeConfig->getId()->getClassName();
+                if (TargetExcludeList::isExcluded($entityClassName)) {
+                    continue;
+                }
                 $offset          = 0;
                 $startTimestamp  = time();
                 $allRecordIds    = $this->getTargetIds($entityClassName);
+                $this->resetRecordsWithoutActivities($entityClassName, $allRecordIds);
                 while ($allRecords = $this->getRecordsToRecalculate($entityClassName, $allRecordIds, $offset)) {
                     $needsFlush = false;
                     foreach ($allRecords as $record) {
@@ -166,6 +171,21 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
     }
 
     /**
+     * @param string $entityClassName
+     * @param array $recordIdsWithActivities
+     */
+    protected function resetRecordsWithoutActivities($entityClassName, array $recordIdsWithActivities)
+    {
+        $offset = 0;
+        while ($records = $this->getRecordsToReset($entityClassName, $recordIdsWithActivities, $offset)) {
+            array_map([$this, 'resetRecordStatistic'], $records);
+            $this->em->flush();
+            $this->em->clear();
+            $offset += self::BATCH_SIZE;
+        }
+    }
+
+    /**
      * Resets entity statistics.
      *
      * @param object $entity
@@ -195,6 +215,27 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
         $entityRepository = $this->em->getRepository($entityClassName);
 
         return $entityRepository->findBy(['id' => $ids], ['id' => 'ASC'], self::BATCH_SIZE, $offset);
+    }
+
+    /**
+     * @param string  $entityClassName
+     * @param array   $excludedIds
+     * @param integer $offset
+     *
+     * @return array
+     */
+    protected function getRecordsToReset($entityClassName, array $excludedIds, $offset)
+    {
+        $qb = $this->em->getRepository($entityClassName)->createQueryBuilder('e');
+
+        if ($excludedIds) {
+            $qb->andWhere($qb->expr()->notIn('e.id', $excludedIds));
+        }
+
+        return $qb->setMaxResults(static::BATCH_SIZE)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
     }
 
     /**

@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\Query\Expr\Select;
-use Oro\Bundle\DataGridBundle\Datagrid\Builder;
+
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
+use Oro\Bundle\TagBundle\Grid\TagsExtension;
+use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType;
@@ -15,7 +17,7 @@ use OroCRM\Bundle\MarketingListBundle\Provider\MarketingListProvider;
 class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|Manager
      */
     protected $dataGridManager;
 
@@ -79,6 +81,9 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedColumnInformation, $this->provider->getColumnInformation($marketingList));
     }
 
+    /**
+     * @return array
+     */
     public function queryBuilderDataProvider()
     {
         return [
@@ -192,6 +197,12 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @param MarketingList $marketingList
+     * @param \PHPUnit_Framework_MockObject_MockObject $queryBuilder
+     * @param \PHPUnit_Framework_MockObject_MockObject $dataGrid
+     * @param null|string $mixin
+     */
     protected function assertGetQueryBuilder(MarketingList $marketingList, $queryBuilder, $dataGrid, $mixin = null)
     {
         $dataSource = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource')
@@ -205,7 +216,8 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dataSource));
 
         $parameters = [
-            PagerInterface::PAGER_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true]
+            PagerInterface::PAGER_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true],
+            TagsExtension::TAGS_ROOT_PARAM => [PagerInterface::DISABLED_PARAM => true],
         ];
         if ($mixin) {
             $parameters['grid-mixin'] = $mixin;
@@ -216,6 +228,10 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($dataGrid));
     }
 
+    /**
+     * @param string $typeName
+     * @return \PHPUnit_Framework_MockObject_MockObject|MarketingList
+     */
     protected function getMarketingList($typeName)
     {
         $type = $this->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Entity\MarketingListType')
