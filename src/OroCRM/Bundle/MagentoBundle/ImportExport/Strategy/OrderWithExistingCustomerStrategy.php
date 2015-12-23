@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
+use OroCRM\Bundle\MagentoBundle\ImportExport\Converter\GuestCustomerDataConverter;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCartReader;
 use OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader;
 
@@ -57,7 +58,10 @@ class OrderWithExistingCustomerStrategy extends OrderStrategy
         }
 
         if (!$customer && $order->getIsGuest() && $transport->getGuestCustomerSync()) {
-            $this->appendDataToContext('postProcessGuestCustomers', $this->context->getValue('itemData'));
+            $this->appendDataToContext(
+                'postProcessGuestCustomers',
+                GuestCustomerDataConverter::extractCustomersValues((array)$this->context->getValue('itemData'))
+            );
 
             $isProcessingAllowed = false;
         }

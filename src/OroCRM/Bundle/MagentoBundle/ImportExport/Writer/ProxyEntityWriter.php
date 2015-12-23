@@ -10,13 +10,20 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
+use Oro\Bundle\BatchBundle\Step\StepExecutionRestoreInterface;
+
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
-class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterface, LoggerAwareInterface
+class ProxyEntityWriter implements
+    ItemWriterInterface,
+    StepExecutionAwareInterface,
+    StepExecutionRestoreInterface,
+    LoggerAwareInterface
 {
     use LoggerAwareTrait;
 
@@ -25,6 +32,9 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
 
     /** @var DatabaseHelper */
     protected $databaseHelper;
+
+    /** @var StepExecution|null */
+    protected $previousStepExecution;
 
     /**
      * @param ItemWriterInterface $writer
@@ -48,23 +58,13 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
         $uniqueKeys = [];
         foreach ($items as $item) {
             if ($item instanceof Customer || $item instanceof Cart) {
-                $identifier = $item->getOriginId();
-                if (array_key_exists($identifier, $uniqueItems)) {
-                    $this->logSkipped($identifier);
-                }
+                $this->handleIdentifier($uniqueItems, $item, $item->getOriginId());
 
                 if ($item instanceof Customer) {
                     $item->setIsSynced(true);
                 }
-
-                $uniqueItems[$identifier] = $item;
             } elseif ($item instanceof Order) {
-                $identifier = $item->getIncrementId();
-                if (array_key_exists($identifier, $uniqueItems)) {
-                    $this->logSkipped($item->getIncrementId());
-                }
-
-                $uniqueItems[$identifier] = $item;
+                $this->handleIdentifier($uniqueItems, $item, $item->getIncrementId());
             } elseif ($item instanceof NewsletterSubscriber) {
                 $identifier = $item->getCustomer() ? $item->getCustomer()->getId() : 0;
                 if ($identifier !== 0 && in_array($identifier, $uniqueKeys)) {
@@ -92,6 +92,34 @@ class ProxyEntityWriter implements ItemWriterInterface, StepExecutionAwareInterf
     {
         if ($this->writer instanceof StepExecutionAwareInterface) {
             $this->writer->setStepExecution($stepExecution);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function restoreStepExecution()
+    {
+        if ($this->writer instanceof StepExecutionRestoreInterface) {
+            $this->writer->restoreStepExecution();
+        }
+    }
+
+    /**
+     * @param array $uniqueItems
+     * @param object $item
+     * @param string|null $identifier
+     */
+    protected function handleIdentifier(array &$uniqueItems, $item, $identifier = null)
+    {
+        if ($identifier && array_key_exists($identifier, $uniqueItems)) {
+            $this->logSkipped($identifier);
+        }
+
+        if ($identifier) {
+            $uniqueItems[$identifier] = $item;
+        } else {
+            $uniqueItems[spl_object_hash($item)] = $item;
         }
     }
 
