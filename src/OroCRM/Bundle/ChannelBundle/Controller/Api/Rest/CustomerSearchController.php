@@ -12,6 +12,7 @@ use FOS\RestBundle\Controller\Annotations\Get;
 use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestGetController;
+use Oro\Bundle\SoapBundle\Request\Parameters\Filter\StringToArrayParameterFilter;
 use OroCRM\Bundle\ChannelBundle\Entity\Manager\CustomerSearchApiEntityManager;
 
 /**
@@ -22,7 +23,6 @@ class CustomerSearchController extends RestGetController
 {
     /**
      * Search customers.
-     *
      *
      * @Get("/customers/search")
      *
@@ -44,7 +44,12 @@ class CustomerSearchController extends RestGetController
      *     nullable=true,
      *     description="The search string."
      * )
-     *
+     * @QueryParam(
+     *     name="dataChannel",
+     *     requirements=".+",
+     *     nullable=true,
+     *     description="One or several channel ids separated by comma."
+     * )
      * @ApiDoc(
      *      description="Search customers",
      *      resource=true
@@ -54,11 +59,24 @@ class CustomerSearchController extends RestGetController
      */
     public function cgetAction()
     {
-        $page   = (int)$this->getRequest()->get('page', 1);
-        $limit  = (int)$this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
-        $search = $this->getRequest()->get('search', '');
+        $page     = (int) $this->getRequest()->get('page', 1);
+        $limit    = (int) $this->getRequest()->get('limit', self::ITEMS_PER_PAGE);
+        $search   = $this->getRequest()->get('search', '');
+        $criteria = null;
 
-        $data = $this->getManager()->getSearchResult($page, $limit, $search);
+        if ($this->getRequest()->get('dataChannel')) {
+            $criteria = $this->getFilterCriteria(
+                $this->getSupportedQueryParameters(__FUNCTION__),
+                [
+                    'dataChannel' => new StringToArrayParameterFilter()
+                ],
+                [
+                    'dataChannel' => 'integer.dataChannelId'
+                ]
+            );
+        }
+
+        $data = $this->getManager()->getSearchResult($page, $limit, $search, $criteria);
 
         return $this->buildResponse($data['result'], self::ACTION_LIST, $data);
     }
