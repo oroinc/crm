@@ -38,7 +38,8 @@ class OrderDataConverter extends AbstractTreeDataConverter
             'billing_address'     => 'addresses:1',
             'created_at'          => 'createdAt',
             'updated_at'          => 'updatedAt',
-            'customer_email'      => 'customerEmail'
+            'customer_email'      => 'customerEmail',
+            'coupon_code'         => 'couponCode',
         ];
     }
 

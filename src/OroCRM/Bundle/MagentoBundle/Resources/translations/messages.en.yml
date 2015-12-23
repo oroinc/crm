@@ -87,7 +87,6 @@ orocrm:
                 gift_message:     Gift message
                 row_total:        Row Total
                 tax_amount:       Tax Amount
-                discount_amount:  Discount Amount
                 weight:           Weight
                 added_on:         Placed On
                 removed_at:       Removed At
@@ -124,6 +123,9 @@ orocrm:
                     unknown: Not defined
                 metricName: Metric name
                 actions: Actions
+                discount_amount: Discount amount
+                discount_percent: Discount percent
+                coupon_code: Coupon code
         channel_type:
             label:  Magento
         transport:
@@ -201,7 +203,7 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
-            newsletter_subscriber.label: Newsletter Subscriber
+            newsletter_subscribers.label: Newsletter Subscribers
             confirmed.label: Confirmed
             created_in.label: Created In
 
@@ -376,6 +378,7 @@ orocrm:
             shipping_method.label:  Shipping method
             tax_amount.label:       Tax amount
             discount_amount.label:  Discount amount
+            coupon_code.label:      Coupon code
             discount_percent.label: Discount percent
             total_amount.label:     Total amount
             status.label:           Status

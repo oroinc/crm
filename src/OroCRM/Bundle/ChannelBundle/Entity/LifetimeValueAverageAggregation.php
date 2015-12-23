@@ -195,4 +195,12 @@ class LifetimeValueAverageAggregation implements ChannelAwareInterface
         $this->setYear($date->format('Y'));
         $this->setQuarter(ceil($date->format('m') / 3));
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

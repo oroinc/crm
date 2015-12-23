@@ -173,4 +173,12 @@ class LifetimeValueHistory implements ChannelAwareInterface
             $this->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
         }
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

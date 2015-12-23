@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendConfigDumper;
 use Oro\Bundle\EntityExtendBundle\Tools\DumperExtensions\AbstractEntityConfigDumperExtension;
 
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
+use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExtension
@@ -53,6 +54,10 @@ class ActivityContactConfigDumperExtension extends AbstractEntityConfigDumperExt
         foreach ($entityConfigs as $entityConfig) {
             if ($entityConfig->is('is_extend')) {
                 $entityClassName = $entityConfig->getId()->getClassName();
+                // Skipp excluded entity
+                if (TargetExcludeList::isExcluded($entityClassName)) {
+                    continue;
+                }
 
                 /**
                  * Check if entity has any activity from contact activities group

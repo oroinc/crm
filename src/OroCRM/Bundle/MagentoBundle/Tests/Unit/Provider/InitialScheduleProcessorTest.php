@@ -136,6 +136,8 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->em->expects($this->never())
             ->method('persist');
+
+        /** Will be called once per connector to save connector's status */
         $this->em->expects($this->never())
             ->method('flush');
         $this->repository->expects($this->once())
@@ -390,6 +392,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $dictionaryConnector->expects($this->any())
             ->method('getType')
             ->willReturn('dictionary');
+        $dictionaryConnector->expects($this->any())
+            ->method('getImportJobName')
+            ->willReturn('test job');
 
         $this->typesRegistry->expects($this->any())
             ->method('getRegisteredConnectorsTypes')

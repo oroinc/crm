@@ -203,4 +203,12 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

@@ -219,4 +219,12 @@ class OrderItem extends ExtendOrderItem implements IntegrationAwareInterface, Or
     {
         return $this->owner;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

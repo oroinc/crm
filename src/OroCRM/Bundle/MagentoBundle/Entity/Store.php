@@ -169,4 +169,12 @@ class Store extends ExtendStore implements OriginAwareInterface, IntegrationAwar
     {
         return $this->website ? $this->website->getName() : null;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

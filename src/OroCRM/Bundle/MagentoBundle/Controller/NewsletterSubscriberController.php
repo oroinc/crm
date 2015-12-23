@@ -127,10 +127,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function subscribeByCustomerAction(Customer $customer)
     {
-        $newsletterSubscriber = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->getOrCreateFromCustomer($customer);
-
-        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_SUBSCRIBED));
+        return $this->processCustomerSubscription($customer, NewsletterSubscriber::STATUS_SUBSCRIBED);
     }
 
     /**
@@ -151,10 +148,7 @@ class NewsletterSubscriberController extends Controller
      */
     public function unsubscribeByCustomerAction(Customer $customer)
     {
-        $newsletterSubscriber = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
-            ->getOrCreateFromCustomer($customer);
-
-        return new JsonResponse($this->doJob($newsletterSubscriber, NewsletterSubscriber::STATUS_UNSUBSCRIBED));
+        return $this->processCustomerSubscription($customer, NewsletterSubscriber::STATUS_UNSUBSCRIBED);
     }
 
     /**
@@ -179,8 +173,30 @@ class NewsletterSubscriberController extends Controller
 
         return [
             'successful' => $jobResult->isSuccessful(),
-            'error' => $jobResult->getFailureExceptions(),
-            'state' => $jobResult->isSuccessful() ? $statusIdentifier : $newsletterSubscriber->getStatus()->getId()
+            'error' => $jobResult->getFailureExceptions()
         ];
+    }
+
+    /**
+     * @param Customer $customer
+     * @param int $status
+     * @return JsonResponse
+     */
+    protected function processCustomerSubscription(Customer $customer, $status)
+    {
+        $newsletterSubscribers = $this->get('orocrm_magento.model.newsletter_subscriber_manager')
+            ->getOrCreateFromCustomer($customer);
+
+        $jobResult = ['successful' => false];
+        foreach ($newsletterSubscribers as $newsletterSubscriber) {
+            if ($newsletterSubscriber->getStatus()->getId() != $status) {
+                $jobResult = $this->doJob($newsletterSubscriber, $status);
+                if (!$jobResult['successful']) {
+                    break;
+                }
+            }
+        }
+
+        return new JsonResponse($jobResult);
     }
 }

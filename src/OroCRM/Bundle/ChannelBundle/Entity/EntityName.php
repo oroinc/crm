@@ -81,4 +81,12 @@ class EntityName
     {
         return $this->channel;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

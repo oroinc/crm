@@ -4,5 +4,6 @@ config:
         'orocrmchannel/js/app/components/channel':                       'bundles/orocrmchannel/js/app/components/channel.js'
         'orocrmchannel/js/entity-management/entity-component-view':      'bundles/orocrmchannel/js/entity-management/entity-component-view.js'
         'orocrmchannel/js/entity-management/model':                      'bundles/orocrmchannel/js/entity-management/model.js'
+        'orocrmchannel/js/app/factory/select2-channel-aware-view-factory': 'bundles/orocrmchannel/js/app/factory/select2-channel-aware-view-factory.js'
         'oro/select2-autocomplete-channel-aware-component':              'bundles/orocrmchannel/js/app/components/select2-autocomplete-channel-aware-component.js'
         'oro/select2-grid-channel-aware-component':                      'bundles/orocrmchannel/js/app/components/select2-grid-channel-aware-component.js'

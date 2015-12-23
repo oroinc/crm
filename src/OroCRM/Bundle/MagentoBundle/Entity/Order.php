@@ -283,6 +283,13 @@ class Order extends ExtendOrder implements
     protected $organization;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="coupon_code", type="string", length=255, nullable=true)
+     */
+    protected $couponCode;
+
+    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Order
@@ -810,5 +817,29 @@ class Order extends ExtendOrder implements
     public function isCompleted()
     {
         return strtolower($this->status) === self::STATUS_COMPLETED;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCouponCode()
+    {
+        return $this->couponCode;
+    }
+
+    /**
+     * @param string $couponCode
+     */
+    public function setCouponCode($couponCode)
+    {
+        $this->couponCode = $couponCode;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getIncrementId();
     }
 }

@@ -4,10 +4,26 @@ namespace OroCRM\Bundle\MagentoBundle\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
 
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
+    /**
+     * @var SecurityFacade
+     */
+    protected $securityFacade;
+
+    /**
+     * @var bool|null
+     */
+    protected $subscribeGranted;
+
+    /**
+     * @var bool|null
+     */
+    protected $unsubscribeGranted;
+
     /**
      * @param ResultRecordInterface $record
      * @param array $actions
@@ -32,13 +48,50 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
         $isSubscribed = $statusId === NewsletterSubscriber::STATUS_SUBSCRIBED;
 
         if (array_key_exists('subscribe', $permissions)) {
-            $permissions['subscribe'] = $isActionAllowed && !$isSubscribed;
+            $permissions['subscribe'] = $this->isSubscribeGranted() && $isActionAllowed && !$isSubscribed;
         }
 
         if (array_key_exists('unsubscribe', $permissions)) {
-            $permissions['unsubscribe'] = $isActionAllowed && $isSubscribed;
+            $permissions['unsubscribe'] = $this->isUnsubscribeGranted() && $isActionAllowed && $isSubscribed;
         }
 
         return $permissions;
+    }
+
+    /**
+     * @param SecurityFacade $securityFacade
+     * @return NewsletterSubscriberPermissionProvider
+     */
+    public function setSecurityFacade(SecurityFacade $securityFacade)
+    {
+        $this->securityFacade = $securityFacade;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isSubscribeGranted()
+    {
+        if ($this->subscribeGranted === null) {
+            $this->subscribeGranted = $this->securityFacade
+                ->isGranted('orocrm_magento_newsletter_subscriber_subscribe_customer');
+        }
+
+        return $this->subscribeGranted;
+    }
+
+    /**
+     * @return bool
+     */
+    protected function isUnsubscribeGranted()
+    {
+        if ($this->unsubscribeGranted === null) {
+            $this->unsubscribeGranted = $this->securityFacade
+                ->isGranted('orocrm_magento_newsletter_subscriber_unsubscribe_customer');
+        }
+
+        return $this->unsubscribeGranted;
     }
 }

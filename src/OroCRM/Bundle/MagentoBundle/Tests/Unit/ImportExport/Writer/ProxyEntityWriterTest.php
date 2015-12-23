@@ -80,6 +80,9 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
         $customer1->setOriginId(111);
         $customer2 = clone $customer1;
 
+        $customerGuest1 = new Customer();
+        $customerGuest2 = new Customer();
+
         $someEntity  = new \stdClass();
         $someEntity2 = new \stdClass();
 
@@ -95,6 +98,13 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
             'should skip non-unique customers'                               => [
                 '$items'         => [$customer1, $customer2],
                 '$expectedItems' => [$customer2->getOriginId() => $customer2]
+            ],
+            'dont skip guest customers'                                      => [
+                '$items'         => [$customerGuest1, $customerGuest1, $customerGuest2],
+                '$expectedItems' => [
+                    spl_object_hash($customerGuest1) => $customerGuest1,
+                    spl_object_hash($customerGuest2) => $customerGuest2,
+                ],
             ],
             'should not break logic with entities that not consist originId' => [
                 '$items'         => [$someEntity, $someEntity2],

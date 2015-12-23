@@ -80,7 +80,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_35';
+        return 'v1_37';
     }
 
     /**
@@ -154,6 +154,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
+        $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
     }
 
     /**
@@ -290,6 +291,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('coupon_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -829,13 +831,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('confirm_code', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addIndex(['channel_id'], 'idx_7c8eaa72f5a1aa', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'idx_7c8eaa7e3c61f9', []);
-        $table->addIndex(['store_id'], 'idx_7c8eaab092a811', []);
-        $table->addIndex(['organization_id'], 'idx_7c8eaa32c8a3de', []);
-        $table->addIndex(['data_channel_id'], 'idx_7c8eaabdc09b73', []);
-        $table->addUniqueIndex(['customer_id'], 'uniq_7c8eaa9395c3f3');
 
         $this->extendExtension->addEnumField(
             $schema,

@@ -120,7 +120,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
-                    'expectedResultCount' => 2
+                    'expectedResultCount' => 3
                 ]
             ],
             'filters' => [
@@ -136,7 +136,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
                         'customerName' => 'John Doe',
                         'customerEmail' => 'test@example.com'
                     ],
-                    'expectedResultCount' => 2
+                    'expectedResultCount' => 3
                 ]
             ],
             'no result' => [
@@ -163,7 +163,7 @@ class NewsletterSubscriberControllerTest extends AbstractController
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $result['state']);
+        $this->assertTrue($result['successful']);
     }
 
     /**
@@ -177,12 +177,9 @@ class NewsletterSubscriberControllerTest extends AbstractController
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $result['state']);
+        $this->assertTrue($result['successful']);
     }
 
-    /**
-     * @depends testSubscribe
-     */
     public function testUnsubscribeByCustomer()
     {
         $this->client->request(
@@ -194,22 +191,20 @@ class NewsletterSubscriberControllerTest extends AbstractController
         );
 
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEquals(NewsletterSubscriber::STATUS_UNSUBSCRIBED, $result['state']);
+        $this->assertTrue($result['successful']);
     }
 
-    /**
-     * @depends testUnsubscribeByCustomer
-     */
     public function testSubscribeByCustomer()
     {
+        $subscriber = $this->getReference('newsletter_subscriber3');
         $this->client->request(
             'GET',
             $this->getUrl(
                 'orocrm_magento_newsletter_subscriber_subscribe_customer',
-                ['id' => $this->subscriber->getCustomer()->getId()]
+                ['id' => $subscriber->getCustomer()->getId()]
             )
         );
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
-        $this->assertEquals(NewsletterSubscriber::STATUS_SUBSCRIBED, $result['state']);
+        $this->assertTrue($result['successful']);
     }
 }

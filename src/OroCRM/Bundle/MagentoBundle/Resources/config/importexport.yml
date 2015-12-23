@@ -70,6 +70,8 @@ parameters:
     orocrm_magento.importexport.writer.customer.class:                          OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerExportWriter
     orocrm_magento.importexport.writer.customer_address.class:                  OroCRM\Bundle\MagentoBundle\ImportExport\Writer\CustomerAddressExportWriter
     orocrm_magento.importexport.writer.newsletter_subscriber.class:             OroCRM\Bundle\MagentoBundle\ImportExport\Writer\NewsletterSubscriberExportWriter
+    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber.class: OroCRM\Bundle\MagentoBundle\ImportExport\Writer\NewsletterSubscriberInitialWriter
+
     # Readers
     orocrm_magento.reader.context_customer.class:                               OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextCustomerReader
     orocrm_magento.reader.context.class:                                        OroCRM\Bundle\MagentoBundle\Provider\Reader\ContextReader
@@ -446,8 +448,6 @@ services:
     orocrm_magento.provider.newsletter_subscriber.initial_sync_processor:
         class: %orocrm_magento.provider.newsletter_subscriber.initial_sync_processor.class%
         parent: orocrm_magento.provider.initial_processor
-        calls:
-            - [setSubscriberClassName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
 
     orocrm_magento.provider.initial_sync_processor:
         class: %orocrm_magento.provider.initial_sync_processor.class%
@@ -568,6 +568,10 @@ services:
     orocrm_magento.importexport.writer.newsletter_subscriber:
         class: %orocrm_magento.importexport.writer.newsletter_subscriber.class%
         parent: orocrm_magento.importexport.writer.abstract_export
+
+    orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber:
+        class: %orocrm_magento.importexport.writer.initial_sync.newsletter_subscriber.class%
+        parent: orocrm_magento.writer.proxy_entity_writer
 
     # readers
     orocrm_magento.importexport.reader.entity:

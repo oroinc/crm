@@ -227,4 +227,12 @@ class Product extends ExtendProduct implements IntegrationAwareInterface
     {
         return $this->originId;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

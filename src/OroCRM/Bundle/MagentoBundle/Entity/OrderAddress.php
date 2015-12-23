@@ -189,4 +189,12 @@ class OrderAddress extends ExtendOrderAddress implements IntegrationAwareInterfa
     {
         return $this->phone;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

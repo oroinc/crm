@@ -50,6 +50,7 @@ class OrderApiTypeTest extends \PHPUnit_Framework_TestCase
             'shippingAmount'      => 'oro_money',
             'shippingMethod'      => 'text',
             'taxAmount'           => 'oro_money',
+            'couponCode'          => 'text',
             'discountAmount'      => 'oro_money',
             'discountPercent'     => 'oro_percent',
             'totalAmount'         => 'oro_money',

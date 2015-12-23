@@ -13,6 +13,7 @@
             {{ ui.renderProperty('orocrm.magento.order.subtotal_amount.label'|trans, entity.subtotalAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.total_amount.label'|trans, entity.totalAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.discount_amount.label'|trans, entity.discountAmount|oro_format_currency({'currency': entity.currency})) }}
+            {{ ui.renderProperty('orocrm.magento.order.coupon_code.label'|trans, entity.couponCode) }}
             {{ ui.renderProperty('orocrm.magento.order.tax_amount.label'|trans, entity.taxAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.shipping_amount.label'|trans, entity.shippingAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.total_paid_amount.label'|trans, entity.totalPaidAmount|oro_format_currency({'currency': entity.currency})) }}

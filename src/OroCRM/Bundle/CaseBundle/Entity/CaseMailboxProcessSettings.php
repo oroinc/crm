@@ -170,4 +170,12 @@ class CaseMailboxProcessSettings extends ExtendCaseMailboxProcessSettings implem
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

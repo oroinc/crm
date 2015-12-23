@@ -47,8 +47,6 @@
 }
 
 .place-order-transaction-dialog {
-    /* allow to be scalled by widget content */
-    height: auto!important;
 }
 
 .ui-dialog-minimized.place-order-transaction-dialog {

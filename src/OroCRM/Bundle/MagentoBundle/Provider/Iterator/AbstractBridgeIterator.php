@@ -125,7 +125,11 @@ abstract class AbstractBridgeIterator extends AbstractPageableSoapIterator imple
             if (false !== $time) {
                 $frameLimit = new \DateTime($time, new \DateTimeZone('UTC'));
                 $this->filter->addDateFilter($dateField, 'lte', $frameLimit);
+
+                return $frameLimit;
             }
         }
+
+        return false;
     }
 }

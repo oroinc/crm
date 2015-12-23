@@ -59,4 +59,12 @@ class InternalTransportSettings extends TransportSettings
 
         return $this->settings;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

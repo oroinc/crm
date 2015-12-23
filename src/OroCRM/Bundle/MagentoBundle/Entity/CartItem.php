@@ -491,4 +491,12 @@ class CartItem extends ExtendCartItem implements OriginAwareInterface, Integrati
     {
         return $this->owner;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getName();
+    }
 }

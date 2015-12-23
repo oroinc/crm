@@ -250,4 +250,12 @@ class RFMMetricCategory
     {
         return $this->channel;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string)$this->getId();
+    }
 }

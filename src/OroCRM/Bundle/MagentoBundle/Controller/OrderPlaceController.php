@@ -137,7 +137,7 @@ class OrderPlaceController extends Controller
         return [
             'error'       => $urlGenerator->isError() ? $translator->trans($urlGenerator->getError()) : false,
             'sourceUrl'   => $urlGenerator->getSourceUrl(),
-            'customerId'  => $customer->getid(),
+            'customerId'  => $customer->getId(),
         ];
     }
 
