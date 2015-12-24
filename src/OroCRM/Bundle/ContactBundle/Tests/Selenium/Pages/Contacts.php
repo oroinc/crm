@@ -51,7 +51,9 @@ class Contacts extends AbstractPageFilteredGrid
                 $this->test->byXPath(
                     "//div[@class='grid-container']//div[@class='dropdown btn-group open']//a[@title ='Delete']"
                 )->click();
-                $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
+                $this->test
+                    ->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")
+                    ->click();
                 $this->waitForAjax();
                 $this->waitPageToLoad();
             }
