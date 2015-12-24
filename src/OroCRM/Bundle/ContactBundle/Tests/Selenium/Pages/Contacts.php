@@ -35,25 +35,26 @@ class Contacts extends AbstractPageFilteredGrid
      */
     public function massDelete()
     {
-        if ($this->isElementPresent("//div[@class='oro-datagrid floatThead-fixed floatThead']")) {
-            $this->test->byXPath(
-                "//div[@class='grid-container']//button[@class='btn btn-default btn-small dropdown-toggle']"
-            )->click();
-            $this->waitForAjax();
-            $this->test->byXPath(
-                "//div[@class='grid-container']//div[@class='btn-group dropdown open']//a[text() ='All']"
-            )->click();
-            $this->waitForAjax();
-            $this->test->byXPath(
-                "//div[@class='grid-container']//button[@title='Mass Actions']"
-            )->click();
-            $this->waitForAjax();
-            $this->test->byXPath(
-                "//div[@class='grid-container']//div[@class='dropdown btn-group open']//a[@title ='Delete']"
-            )->click();
-            $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
-            $this->waitForAjax();
-            $this->waitPageToLoad();
+        if ($this->isElementPresent("//thead[not(@class)]//*[@title='Mass Actions']")) {
+            $massActions = $this->test->byXPath("//thead[not(@class)]//*[@title='Mass Actions']");
+            if ($massActions->displayed()) {
+                $this->test->byXPath(
+                    "//thead[not(@class)]//button[@class='btn btn-default btn-small dropdown-toggle' and not(@type)]"
+                )->click();
+                $this->waitForAjax();
+                $this->test->byXPath(
+                    "//div[@class='grid-container']//div[@class='btn-group dropdown open']//a[text() ='All']"
+                )->click();
+                $this->waitForAjax();
+                $massActions->click();
+                $this->waitForAjax();
+                $this->test->byXPath(
+                    "//div[@class='grid-container']//div[@class='dropdown btn-group open']//a[@title ='Delete']"
+                )->click();
+                $this->test->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")->click();
+                $this->waitForAjax();
+                $this->waitPageToLoad();
+            }
         }
         return $this;
     }
