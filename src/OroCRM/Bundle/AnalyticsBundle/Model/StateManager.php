@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Model;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
 use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 
 class StateManager
@@ -24,7 +25,7 @@ class StateManager
 
     /**
      * @param string $args
-     * @param array $states
+     * @param array  $states
      *
      * @return Job[]
      */
@@ -44,7 +45,7 @@ class StateManager
             ->setParameters(
                 [
                     'command' => CalculateAnalyticsCommand::COMMAND_NAME,
-                    'states' => $states ?: [Job::STATE_PENDING]
+                    'states'  => $states ?: [Job::STATE_PENDING, Job::STATE_RUNNING]
                 ]
             );
 
