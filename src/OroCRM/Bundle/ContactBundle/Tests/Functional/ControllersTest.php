@@ -154,7 +154,7 @@ class ControllersTest extends WebTestCase
         }
         $id = implode(',', $id);
         $this->client->request(
-            'GET',
+            'DELETE',
             $this->getUrl(
                 'oro_datagrid_mass_action',
                 array('gridName' => 'contacts-grid', 'actionName' => 'delete', 'values' => $id, 'inset' => 1)

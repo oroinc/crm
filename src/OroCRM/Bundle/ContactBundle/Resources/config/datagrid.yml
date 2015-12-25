@@ -377,14 +377,6 @@ datagrid:
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
-        mass_actions:
-            delete:
-                type: delete
-                entity_name: %orocrm_contact.entity.class%
-                data_identifier: c.id
-                acl_resource: orocrm_contact_delete
-                label: oro.grid.action.delete
-                icon: trash
         options:
             entityHint: contact
             export: true
