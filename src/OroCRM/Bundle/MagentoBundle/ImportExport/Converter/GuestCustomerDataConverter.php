@@ -7,19 +7,39 @@ use Oro\Bundle\IntegrationBundle\ImportExport\DataConverter\AbstractTreeDataConv
 class GuestCustomerDataConverter extends AbstractTreeDataConverter
 {
     /**
+     * @var array
+     */
+    public static $conversionRules = [
+        'customerEmail' => 'email',
+        'customer_firstname' => 'firstName',
+        'customer_lastname' => 'lastName',
+        'createdAt' => 'createdAt',
+        'updatedAt' => 'updatedAt',
+        'store_id' => 'store:originId',
+        'storeName' => 'createdIn',
+    ];
+
+    /**
+     * @param array $orderData
+     * @return array
+     */
+    public static function extractCustomersValues(array $orderData)
+    {
+        $customerData = array_intersect_key($orderData, self::$conversionRules);
+
+        if (!empty($orderData['store']['originId'])) {
+            $customerData['store_id'] = $orderData['store']['originId'];
+        }
+
+        return $customerData;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function getHeaderConversionRules()
     {
-        return [
-            'customerEmail' => 'email',
-            'customer_firstname' => 'firstName',
-            'customer_lastname' => 'lastName',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt',
-            'store_id' => 'store:originId',
-            'created_in' => 'createdIn'
-        ];
+        return self::$conversionRules;
     }
 
     /**
@@ -31,6 +51,12 @@ class GuestCustomerDataConverter extends AbstractTreeDataConverter
             $importedRecord['store:channel:id'] = $this->context->getOption('channel');
             $importedRecord['website:channel:id'] = $this->context->getOption('channel');
             $importedRecord['group:channel:id'] = $this->context->getOption('channel');
+        }
+
+        // extract view from 'website\nstore\view' string
+        if (!empty($importedRecord['storeName'])) {
+            $createdIn = explode("\n", $importedRecord['storeName']);
+            $importedRecord['storeName'] = end($createdIn);
         }
 
         $importedRecord = parent::convertToImportFormat($importedRecord, $skipNullValues);
