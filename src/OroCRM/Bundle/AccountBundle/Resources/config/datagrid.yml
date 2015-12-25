@@ -1,8 +1,8 @@
 datagrid:
     dashboard-my-accounts-activity-grid:
+        acl_resource: orocrm_account_view
         source:
             type: orm
-            acl_resource: orocrm_account_view
             query:
                 select:
                     - a.id
@@ -55,9 +55,9 @@ datagrid:
         extended_entity_name: %orocrm_account.account.entity.class%
         inline_editing:
             enable: true
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id
@@ -199,9 +199,9 @@ datagrid:
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -337,9 +337,9 @@ datagrid:
 
     accounts-select-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id
@@ -413,9 +413,9 @@ datagrid:
 
     accounts-for-context-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id

@@ -1,8 +1,8 @@
 datagrid:
     orocrm-channels-grid:
+        acl_resource: orocrm_channel_view
         source:
             type: orm
-            acl_resource: orocrm_channel_view
             query:
                 select:
                     - c.id
