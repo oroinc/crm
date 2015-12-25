@@ -4,14 +4,11 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\SecurityBundle\SecurityFacade;
-use Oro\Bundle\UserBundle\Entity\User;
 
 /**
  * Class ForecastOfOpportunities
@@ -37,34 +34,25 @@ class ForecastOfOpportunities
     /** @var  array */
     protected $ownersValues;
 
-    /** @var SecurityFacade */
-    protected $securityFacade;
-
-    /** @var User */
-    protected $currentUser;
-
     /**
      * @param RegistryInterface   $doctrine
      * @param NumberFormatter     $numberFormatter
      * @param DateTimeFormatter   $dateTimeFormatter
      * @param AclHelper           $aclHelper
      * @param TranslatorInterface $translator
-     * @param SecurityFacade      $securityFacade
      */
     public function __construct(
         RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
         AclHelper $aclHelper,
-        TranslatorInterface $translator,
-        SecurityFacade $securityFacade
+        TranslatorInterface $translator
     ) {
         $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
-        $this->securityFacade    = $securityFacade;
     }
 
     /**
@@ -82,9 +70,6 @@ class ForecastOfOpportunities
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
-
-        /** @var WidgetOptionBag $widgetOptions */
-        $widgetOptions = $this->prepareDefaultOptions($widgetOptions);
 
         $ownerIds         = $this->getOwnerIds($widgetOptions);
         $value            = $this->{$getterName}($ownerIds);
@@ -105,36 +90,6 @@ class ForecastOfOpportunities
         }
 
         return $result;
-    }
-
-    /**
-     * Prepare Default Options for User and business Units
-     *
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return bool
-     */
-    protected function prepareDefaultOptions($widgetOptions)
-    {
-        $owners = $widgetOptions->get('owners');
-        $businessUnits = $widgetOptions->get('businessUnits');
-
-        if (!$owners && !$businessUnits) {
-            $user = $this->getCurrentUser();
-            if ($user instanceof User) {
-                $businessUnits = $user->getBusinessUnits();
-                $businessUnitsData = [];
-                foreach ($businessUnits as $businessUnit) {
-                    if (is_object($businessUnit)) {
-                        $businessUnitsData[] = $businessUnit;
-                    }
-                }
-                $options = ['owners' => [$user], 'businessUnits' => $businessUnitsData];
-                $widgetOptions = new WidgetOptionBag($options);
-            }
-        }
-
-        return $widgetOptions;
     }
 
     /**
@@ -271,6 +226,7 @@ class ForecastOfOpportunities
         } else {
             $result = !($deviation > 0);
         }
+
         return $result;
     }
 
@@ -332,20 +288,5 @@ class ForecastOfOpportunities
         }
 
         return $businessUnitIds;
-    }
-
-    /**
-     * @return UserInterface
-     */
-    protected function getCurrentUser()
-    {
-        if (!$this->currentUser) {
-            $user = $this->securityFacade->getLoggedUser();
-            if ($user instanceof UserInterface) {
-                $this->currentUser = $user;
-            }
-        }
-
-        return $this->currentUser;
     }
 }

@@ -94,13 +94,11 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                     count($entityConfigsWithApplicableActivities)
                 )
             );
-
             $this->em                     = $this->getContainer()->get('doctrine')->getManager();
             $this->activityListRepository = $this->em->getRepository(ActivityList::ENTITY_NAME);
 
             /** @var ActivityListener $activityListener */
             $activityListener = $this->getContainer()->get('orocrm_activity_contact.listener.activity_listener');
-
             /** @var ActivityListFilterHelper $activityListHelper */
             $activityListHelper = $this->getContainer()->get('oro_activity_list.filter.helper');
 
@@ -117,7 +115,6 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                     $needsFlush = false;
                     foreach ($allRecords as $record) {
                         $this->resetRecordStatistic($record);
-
                         /** @var QueryBuilder $qb */
                         $qb = $this->activityListRepository->getBaseActivityListQueryBuilder(
                             $entityClassName,
@@ -138,18 +135,14 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
 
                                 $activityListener->onAddActivity(new ActivityEvent($activity, $record));
                             }
-
                             $this->em->persist($record);
                             $needsFlush = true;
                         }
                     }
-
                     if ($needsFlush) {
                         $this->em->flush();
                     }
-
                     $this->em->clear();
-
                     $offset += self::BATCH_SIZE;
                 }
 
@@ -164,7 +157,6 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
                 );
             }
         }
-
         $logger->info(sprintf('<info>Processing finished at %s</info>', date('Y-m-d H:i:s')));
 
         return self::STATUS_SUCCESS;

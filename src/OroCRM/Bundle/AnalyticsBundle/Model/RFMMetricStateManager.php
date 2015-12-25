@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Model;
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
 use OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand;
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -23,14 +24,14 @@ class RFMMetricStateManager extends StateManager
 
     /**
      * @param DoctrineHelper $doctrineHelper
-     * @param string $interface
-     * @param string $channelClass
+     * @param string         $interface
+     * @param string         $channelClass
      */
     public function __construct(DoctrineHelper $doctrineHelper, $interface, $channelClass)
     {
         parent::__construct($doctrineHelper);
 
-        $this->interface = $interface;
+        $this->interface    = $interface;
         $this->channelClass = $channelClass;
     }
 
@@ -71,7 +72,7 @@ class RFMMetricStateManager extends StateManager
 
     /**
      * @param string $className
-     * @param array $ids
+     * @param array  $ids
      */
     protected function executeResetQuery($className, $ids)
     {
@@ -103,6 +104,12 @@ class RFMMetricStateManager extends StateManager
     public function scheduleRecalculation(Channel $channel = null)
     {
         if ($channel) {
+            $argument = sprintf('--channel=%s', $channel->getId());
+
+            if ($this->isJobRunning($argument)) {
+                return;
+            }
+
             $isActiveChannel = $channel->getStatus() === Channel::STATUS_ACTIVE;
             $channelData = $channel->getData();
             $rfmEnabled = !empty($channelData[RFMAwareInterface::RFM_STATE_KEY]);
