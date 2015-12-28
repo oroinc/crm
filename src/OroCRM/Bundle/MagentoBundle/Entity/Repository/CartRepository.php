@@ -226,7 +226,7 @@ class CartRepository extends ChannelAwareEntityRepository
         $result = null;
 
         $qb = $this->createQueryBuilder('cart');
-        $qb ->join('cart.status', 'cstatus')
+        $qb->join('cart.status', 'cstatus')
             ->select('SUM(cart.grandTotal) as val')
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
@@ -235,9 +235,9 @@ class CartRepository extends ChannelAwareEntityRepository
             ->setParameter('dateEnd', $end);
         $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
-        $allCards = $allCards['val'] ? : 0;
+        $allCards = $allCards['val'] ?: null;
 
-        if ($allCards) {
+        if (null !== $allCards && 0 !== $allCards) {
             $abandonedCartsCount = $this->getAbandonedCountByPeriod($start, $end, $aclHelper);
 
             $result = $abandonedCartsCount / $allCards;
