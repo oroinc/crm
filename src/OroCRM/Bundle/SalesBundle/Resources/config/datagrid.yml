@@ -153,6 +153,7 @@ datagrid:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
                             translatable_options: false
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -1031,9 +1032,25 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email
+
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_opportunity_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_opportunity_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
 
     sales-b2bcustomer-opportunities-grid:
         extends: base-sales-b2bcustomer-opportunities-grid
