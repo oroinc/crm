@@ -311,7 +311,7 @@ datagrid:
                 phone:
                     type: string
                     data_name: phone.phone
-                contactSourceLabel:
+                source:
                     type: entity
                     data_name: contactSource.name
                     enabled: false
