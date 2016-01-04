@@ -117,7 +117,7 @@ orocrm:
                     no: Registered
                     all: All
                 is_subscriber:
-                    label: Is a Subsciber
+                    label: Is a Subscriber
                     yes: Yes
                     no: No
                     unknown: Not defined
