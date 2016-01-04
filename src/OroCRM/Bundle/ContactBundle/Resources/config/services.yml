@@ -253,6 +253,7 @@ services:
         class: %orocrm_contact.handler.contact_email_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -260,6 +261,7 @@ services:
         class: %orocrm_contact.handler.contact_phone_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
