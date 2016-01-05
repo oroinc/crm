@@ -12,22 +12,27 @@ use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
 use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_7\InheritanceActivityTargets;
+use OroCRM\Bundle\CaseBundle\Migrations\Schema\v1_8\CreateActivityAssociation;
 
 class OroCRMCaseBundleInstaller implements
     Installation,
     AttachmentExtensionAwareInterface,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    NoteExtensionAwareInterface
 {
     /** @var AttachmentExtension */
     protected $attachmentExtension;
 
-    /**
-     * @var ActivityExtension
-     */
+    /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var NoteExtension */
+    protected $noteExtension;
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
@@ -35,17 +40,17 @@ class OroCRMCaseBundleInstaller implements
     /**
      * {@inheritdoc}
      */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    public function getMigrationVersion()
     {
-        $this->activityListExtension = $activityListExtension;
+        return 'v1_8';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMigrationVersion()
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
     {
-        return 'v1_7';
+        $this->activityListExtension = $activityListExtension;
     }
 
     /**
@@ -63,6 +68,15 @@ class OroCRMCaseBundleInstaller implements
     {
         $this->activityExtension = $activityExtension;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setNoteExtension(NoteExtension $noteExtension)
+    {
+        $this->noteExtension = $noteExtension;
+    }
+
 
     /**
      * {@inheritdoc}
@@ -88,6 +102,7 @@ class OroCRMCaseBundleInstaller implements
         $this->addOroEmailMailboxProcessSettingsForeignKeys($schema);
 
         $this->addActivityAssociations($schema, $this->activityExtension);
+        CreateActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
 
@@ -425,5 +440,6 @@ class OroCRMCaseBundleInstaller implements
     protected function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_case');
+        CreateActivityAssociation::addActivityAssociations($schema, $activityExtension);
     }
 }
