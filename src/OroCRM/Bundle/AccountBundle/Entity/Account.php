@@ -29,8 +29,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      routeView="orocrm_account_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-suitcase",
- *              "context-grid"="accounts-for-context-grid",
+ *              "icon"="icon-suitcase"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -52,6 +51,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="accounts-grid",
+ *              "context"="accounts-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true
