@@ -94,12 +94,3 @@ services:
         class: %orocrm_account.provider.phone.account.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_account.account.entity.class% }
-
-    oro_activity.listener.datagrid.context.account:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.accounts-for-context-grid, method: onBuildAfter }
-
