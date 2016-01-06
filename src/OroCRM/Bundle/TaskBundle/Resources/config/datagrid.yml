@@ -230,3 +230,90 @@ datagrid:
         extends: tasks-grid
         options:
             entity_pagination: false
+
+    task-for-context-grid:
+        extended_entity_name: %orocrm_task.entity.class%
+        options:
+            entityHint: tasks
+            entity_pagination: true
+            toolbarOptions:
+                pageSize:
+                    default_per_page: 10
+            routerEnabled: false
+
+        source:
+            type: orm
+            acl_resource: orocrm_task_view
+            query:
+                select:
+                    - task.id
+                    - task.subject
+                    - task.description
+                    - task.dueDate
+                    - tp.name as taskPriority
+                    - tp.label as priorityLabel
+                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - own.id as owner
+                    - workflowStep.label as workflowStepLabel
+                from:
+                    - { table: %orocrm_task.entity.class%, alias: task }
+                join:
+                    left:
+                        - { join: task.taskPriority, alias: tp }
+                        - { join: task.owner, alias: own }
+                        - { join: task.workflowStep, alias: workflowStep }
+            hints:
+                - HINT_TRANSLATABLE
+        columns:
+            id:
+                label:         orocrm.task.id.label
+            subject:
+                label:         orocrm.task.subject.label
+            dueDate:
+                label:         orocrm.task.due_date.label
+                frontend_type: datetime
+            workflowStepLabel:
+                label:         orocrm.task.workflow_step.label
+            taskPriority:
+                label:         orocrm.task.task_priority.label
+            ownerName:
+                label:         orocrm.task.owner.label
+        sorters:
+            columns:
+                subject:
+                    data_name: task.subject
+                dueDate:
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    data_name: workflowStep.stepOrder
+                taskPriority:
+                    data_name: tp.order
+                ownerName:
+                    data_name: ownerName
+            default:
+                dueDate: ASC
+        filters:
+            columns:
+                subject:
+                    type:      string
+                    data_name: task.subject
+                dueDate:
+                    type:      datetime
+                    data_name: task.dueDate
+                workflowStepLabel:
+                    type:      entity
+                    data_name: task.workflowStep
+                    options:
+                        field_type: oro_workflow_step_select
+                        field_options:
+                            workflow_entity_class: %orocrm_task.entity.class%
+                priorityLabel:
+                    label: orocrm.task.task_priority.label
+                    type:      string
+                    data_name: priorityLabel
+                owner:
+                    type: choice-tree
+                    label: oro.user.owner.label
+                    data_name: task.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
