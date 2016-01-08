@@ -1,8 +1,8 @@
 datagrid:
     base-case-grid:
+        acl_resource: orocrm_case_view
         source:
             type: orm
-            acl_resource: orocrm_case_view
             query:
                 select:
                     - caseEntity.id

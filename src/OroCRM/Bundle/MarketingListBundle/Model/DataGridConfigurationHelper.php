@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Model;
 
+use Oro\Component\PhpUtils\ArrayUtil;
+
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Provider\ConfigurationProviderInterface;
-use Oro\Bundle\UIBundle\Tools\ArrayUtils;
 
 class DataGridConfigurationHelper
 {
@@ -65,7 +66,7 @@ class DataGridConfigurationHelper
 
             $configuration->offsetSetByPath(
                 $path,
-                ArrayUtils::arrayMergeRecursiveDistinct($baseParams, $additionalParams)
+                ArrayUtil::arrayMergeRecursiveDistinct($baseParams, $additionalParams)
             );
         }
 
