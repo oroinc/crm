@@ -57,8 +57,4 @@ services:
 
     orocrm_activity_contact.placeholder.filter:
         class: %orocrm_activity_contact.placeholder.filter.class%
-        arguments:
-            - @oro_activity_list.provider.chain
-            - @doctrine
-            - @oro_entity.doctrine_helper
-            - @oro_entity_config.provider.activity
+        parent: oro_activity_list.placeholder.filter
