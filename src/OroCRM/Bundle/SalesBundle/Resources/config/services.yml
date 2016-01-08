@@ -113,12 +113,3 @@ services:
             - @oro_security.security_facade.link
         tags:
             - { name: oro_email.mailbox_process, type: lead }
-
-    oro_email.listener.datagrid.context.sales:
-        class: %oro_email.listener.datagrid.context.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.orocrm-sales-b2bcustomers-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-lead-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-opportunity-for-context-grid, method: onBuildAfter }

@@ -30,8 +30,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      routeView="orocrm_account_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-suitcase",
- *              "context-grid"="accounts-for-context-grid"
+ *              "icon"="icon-suitcase"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -50,6 +49,10 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          "form"={
  *              "form_type"="orocrm_account_select",
  *              "grid_name"="accounts-select-grid",
+ *          },
+ *          "grid"={
+ *              "default"="accounts-grid",
+ *              "context"="accounts-for-context-grid"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
