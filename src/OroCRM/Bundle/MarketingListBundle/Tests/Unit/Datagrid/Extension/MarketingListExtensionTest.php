@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid\Extension;
 
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Func;
-use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\Extension\MarketingListExtension;
@@ -38,17 +37,18 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
             ->disableOriginalConstructor()
             ->getMock();
+
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->once())
+            ->method('getDatasourceType')
+            ->with()
+            ->will($this->returnValue('INCORRECT'));
+
+        $config
+            ->expects($this->once())
             ->method('offsetGetByPath')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        [Builder::DATASOURCE_TYPE_PATH, null, 'INCORRECT'],
-                        ['[name]', null, 'grid'],
-                    ]
-                )
-            );
+            ->with('[name]', null)
+            ->will($this->returnValue('grid'));
 
         $this->assertFalse($this->extension->isApplicable($config));
     }
@@ -61,16 +61,16 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $config
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
+            ->method('getDatasourceType')
+            ->with()
+            ->will($this->returnValue(OrmDatasource::TYPE));
+
+        $config
+            ->expects($this->atLeastOnce())
             ->method('offsetGetByPath')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['[name]', null, ConfigurationProvider::GRID_PREFIX . '1'],
-                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE]
-                    ]
-                )
-            );
+            ->with('[name]', null)
+            ->will($this->returnValue(ConfigurationProvider::GRID_PREFIX . '1'));
 
         $this->marketingListHelper->expects($this->any())
             ->method('getMarketingListIdByGridName')
@@ -235,17 +235,19 @@ class MarketingListExtensionTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
             ->disableOriginalConstructor()
             ->getMock();
+
         $config
-            ->expects($this->any())
+            ->expects($this->atLeastOnce())
+            ->method('getDatasourceType')
+            ->with()
+            ->will($this->returnValue(OrmDatasource::TYPE));
+
+        $config
+            ->expects($this->atLeastOnce())
             ->method('offsetGetByPath')
-            ->will(
-                $this->returnValueMap(
-                    [
-                        ['[name]', null, $gridName],
-                        [Builder::DATASOURCE_TYPE_PATH, null, OrmDatasource::TYPE]
-                    ]
-                )
-            );
+            ->with('[name]', null)
+            ->will($this->returnValue($gridName));
+
         $this->marketingListHelper->expects($this->any())
             ->method('getMarketingListIdByGridName')
             ->with($gridName)

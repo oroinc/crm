@@ -1,9 +1,9 @@
 datagrid:
     tasks-grid:
         extended_entity_name: %orocrm_task.entity.class%
+        acl_resource: orocrm_task_view
         source:
             type: orm
-            acl_resource: orocrm_task_view
             query:
                 select:
                     - task.id
@@ -148,9 +148,9 @@ datagrid:
             entity_pagination: true
 
     widget-base-tasks-grid:
+        acl_resource: orocrm_task_view
         source:
             type: orm
-            acl_resource: orocrm_task_view
             query:
                 select:
                     - task.id
