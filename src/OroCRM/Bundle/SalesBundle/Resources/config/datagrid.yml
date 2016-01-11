@@ -1270,6 +1270,7 @@ datagrid:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
                             translatable_options: false
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email
