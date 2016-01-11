@@ -16,7 +16,7 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->filter = new BatchFilterBag();
     }
 
-    public function testGetAppliedFiltersShouldReturnFiltersWithUniqueKeysBecauseOfMagento1_7Workaround()
+    public function testGetAppliedFiltersShouldReturnFiltersWithUniqueKeysBecauseOfMagento17Workaround()
     {
         $from = new DateTime('2015-01-01');
         $to = new DateTime('2015-01-07');
