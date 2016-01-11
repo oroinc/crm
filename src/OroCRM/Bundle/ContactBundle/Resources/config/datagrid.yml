@@ -1,8 +1,8 @@
 datagrid:
     dashboard-my-contacts-activity-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -50,9 +50,9 @@ datagrid:
 
     # contact groups grid, shown on orocrm_contact_group_index
     contact-groups-grid:
+        acl_resource: orocrm_contact_group_view
         source:
             type: orm
-            acl_resource: orocrm_contact_group_view
             query:
                 select:
                     - g.id
@@ -101,9 +101,9 @@ datagrid:
 
     # contacts assigned to group, shown on orocrm_contact_group_update route
     contact-group-contacts-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -166,9 +166,9 @@ datagrid:
     # contacts main grid show on  orocrm_contact_index route
     contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -384,9 +384,9 @@ datagrid:
 
     # assigned accounts grid
     contact-accounts-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - a.id
@@ -507,9 +507,9 @@ datagrid:
     # contacts select grid used for contact selection in dialog
     contacts-select-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -621,9 +621,9 @@ datagrid:
     # contacts grid for context
     contacts-for-context-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id

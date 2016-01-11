@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ChannelBundle\Datagrid;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query\Expr\Join;
 
-use Oro\Bundle\DataGridBundle\Datagrid\Builder;
 use Oro\Bundle\DataGridBundle\Extension\AbstractExtension;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Datasource\DatasourceInterface;
@@ -21,7 +20,7 @@ class ChannelLimitationExtension extends AbstractExtension
      */
     public function isApplicable(DatagridConfiguration $config)
     {
-        return $config->offsetGetByPath(Builder::DATASOURCE_TYPE_PATH) == OrmDatasource::TYPE
+        return $config->getDatasourceType() == OrmDatasource::TYPE
             && $this->getParameters()->get('channelIds', false);
     }
 

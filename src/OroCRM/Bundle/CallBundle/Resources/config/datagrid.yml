@@ -1,9 +1,9 @@
 datagrid:
     calls-grid:
         extended_entity_name: %orocrm_call.call.entity.class%
+        acl_resource: orocrm_call_view
         source:
             type: orm
-            acl_resource: orocrm_call_view
             query:
                 select:
                     - call.id
@@ -82,9 +82,9 @@ datagrid:
             entity_pagination: true
 
     widget-base-calls-grid:
+        acl_resource: orocrm_call_view
         source:
             type: orm
-            acl_resource: orocrm_call_view
             query:
                 select:
                     - call.id
@@ -164,9 +164,9 @@ datagrid:
                 pageSize:
                     items: [10]
                     default_per_page: 10
+        acl_resource: orocrm_call_view
         source:
             type: orm
-            acl_resource: orocrm_call_view
             query:
                 select:
                     - call.id
