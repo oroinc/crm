@@ -2,12 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use JMS\JobQueueBundle\Entity\Job;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
 use Oro\Bundle\IntegrationBundle\Provider\ForceConnectorInterface;
+
 use OroCRM\Bundle\MagentoBundle\Command\InitialSyncCommand;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
@@ -26,6 +29,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param DoctrineHelper $doctrineHelper
+     *
      * @return AbstractInitialProcessor
      */
     public function setDoctrineHelper($doctrineHelper)
@@ -58,8 +62,9 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param Integration $integration
-     * @param \DateTime $initialSyncStartDate
-     * @param \DateTime $startSyncDate
+     * @param \DateTime   $initialSyncStartDate
+     * @param \DateTime   $startSyncDate
+     *
      * @return bool
      */
     protected function isInitialSyncRequired(
@@ -88,6 +93,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param Integration $integration
+     *
      * @return array
      */
     protected function getInitialConnectors(Integration $integration)
@@ -119,11 +125,12 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param Integration $integration
+     *
      * @return bool
      */
     protected function isInitialJobRunning(Integration $integration)
     {
-        $initialJobsRunning = $this->getChannelRepository()->getRunningSyncJobsCount(
+        $initialJobsRunning = $this->getChannelRepository()->getExistingSyncJobsCount(
             InitialSyncCommand::COMMAND_NAME,
             $integration->getId()
         );
@@ -179,6 +186,7 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
 
     /**
      * @param object $entity
+     *
      * @return Integration
      */
     protected function reloadEntity($entity)
@@ -214,10 +222,11 @@ class InitialScheduleProcessor extends AbstractInitialProcessor
      * Mark connector statuses as skipped for further checks.
      *
      * @param Integration $integration
-     * @param string $connectorName
+     * @param string      $connectorName
      */
     protected function markConnectorSyncStatusesSkipped(Integration $integration, $connectorName)
     {
+        /** @var EntityManager $em */
         $em = $this->doctrineRegistry->getManager();
 
         $processedStatuses = [];

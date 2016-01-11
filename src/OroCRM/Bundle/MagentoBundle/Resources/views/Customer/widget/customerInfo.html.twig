@@ -56,12 +56,14 @@
         {{ UI.renderProperty('orocrm.magento.customer.gender.label'|trans, oro_gender(customer.gender)) }}
         {{ UI.renderProperty('orocrm.magento.customer.vat.label'|trans, customer.vat ) }}
 
-        {% if customer.newsletterSubscriber is not empty %}
+        {% if customer.newsletterSubscribers|length > 0 %}
             {% set newsletterSubscriberBlock %}
-                {{ oro_widget_render({
-                    'widgetType': 'block',
-                    'url': path('orocrm_magento_newsletter_subscriber_info', {id: customer.newsletterSubscriber.id})
-                }) }}
+                {% for newsletterSubscriber in customer.newsletterSubscribers %}
+                    {{ oro_widget_render({
+                        'widgetType': 'block',
+                        'url': path('orocrm_magento_newsletter_subscriber_info', {id: newsletterSubscriber.id})
+                    }) }}
+                {% endfor %}
             {% endset %}
             {% if newsletterSubscriberBlock %}
                 {{ newsletterSubscriberBlock }}

@@ -45,10 +45,7 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
- *              "type"="ACL",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "type"="ACL"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
@@ -68,6 +65,9 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "acl"="orocrm_task_view",
  *              "action_button_widget"="orocrm_add_task_button",
  *              "action_link_widget"="orocrm_add_task_link"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

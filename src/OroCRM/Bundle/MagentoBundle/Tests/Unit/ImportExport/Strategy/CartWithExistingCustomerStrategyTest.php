@@ -32,6 +32,10 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
     {
         $strategy = $this->getStrategy();
 
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $strategy->setImportExportContext($context);
+
         $customer = new Customer();
         $customer->setOriginId(1);
         $channel = new Channel();

@@ -2,8 +2,10 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Model;
 
-use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
@@ -27,13 +29,13 @@ class NewsletterSubscriberManager
     /**
      * @param Customer $customer
      *
-     * @return NewsletterSubscriber
+     * @return NewsletterSubscriber[]|Collection
      */
     public function getOrCreateFromCustomer(Customer $customer)
     {
-        $newsletterSubscriber = $customer->getNewsletterSubscriber();
+        $newsletterSubscribers = $customer->getNewsletterSubscribers();
 
-        if (null === $newsletterSubscriber) {
+        if (count($newsletterSubscribers) === 0) {
             $newsletterSubscriber = new NewsletterSubscriber();
             $newsletterSubscriber
                 ->setCustomer($customer)
@@ -44,9 +46,10 @@ class NewsletterSubscriberManager
                 ->setOwner($customer->getOwner())
                 ->setStatus($this->getStatus(NewsletterSubscriber::STATUS_UNSUBSCRIBED))
                 ->setDataChannel($customer->getDataChannel());
+            $newsletterSubscribers = new ArrayCollection([$newsletterSubscriber]);
         }
 
-        return $newsletterSubscriber;
+        return $newsletterSubscribers;
     }
 
     /**

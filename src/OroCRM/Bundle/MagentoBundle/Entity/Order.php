@@ -54,6 +54,9 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_order_follow_up"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )

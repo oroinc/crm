@@ -9,6 +9,8 @@ parameters:
     orocrm_call.activity_list.provider.class:       OroCRM\Bundle\CallBundle\Provider\CallActivityListProvider
     orocrm_call.placeholder.log_call.filter.class:  OroCRM\Bundle\CallBundle\Placeholder\LogCallPlaceholderFilter
 
+    orocrm_call.twig.class: OroCRM\Bundle\CallBundle\Twig\OroCRMCallExtension
+
 services:
     orocrm_call.event_listener.datagrid.call:
         class: %orocrm_call.event_listener.datagrid.call.class%
@@ -48,3 +50,10 @@ services:
 
     orocrm_call.placeholder.log_call.filter:
         class: %orocrm_call.placeholder.log_call.filter.class%
+
+    orocrm_call.twig.call_extension:
+        class: %orocrm_call.twig.class%
+        arguments:
+            - @orocrm_call.placeholder.log_call.filter
+        tags:
+            - { name: twig.extension }

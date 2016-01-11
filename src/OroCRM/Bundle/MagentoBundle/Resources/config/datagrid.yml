@@ -1,12 +1,12 @@
 datagrid:
     magento-customers-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
-                    - c.id
+                    - DISTINCT c.id
                     - c.firstName
                     - c.lastName
                     - c.email
@@ -36,8 +36,8 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
-                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
+                        - { join: c.newsletterSubscribers, alias: newsletterSubscribers }
+                        - { join: newsletterSubscribers.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -183,7 +183,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_customer_view
+                acl_resource: orocrm_magento_customer_view
                 rowAction:    true
             update:
                 type:         navigate
@@ -196,7 +196,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -209,7 +209,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -226,9 +226,9 @@ datagrid:
 
     magento-cart-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -396,7 +396,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
         options:
             entityHint: cart
@@ -405,9 +405,9 @@ datagrid:
 
     magento-cartitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -575,9 +575,9 @@ datagrid:
 
     magento-products-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
+        acl_resource: orocrm_magento_product_view
         source:
             type: orm
-            acl_resource: orocrm_magento_product_view
             query:
                 select:
                     - p
@@ -669,16 +669,16 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_product_view
+                acl_resource: orocrm_magento_product_view
                 rowAction:    true
         options:
             entityHint: magento product
 
     magento-order-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -896,7 +896,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
         options:
             entityHint: order
@@ -905,9 +905,9 @@ datagrid:
 
     magento-orderitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - oi.id
@@ -1005,9 +1005,9 @@ datagrid:
                     hide: true
 
     magento-customer-order-grid:
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1070,13 +1070,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-grid:
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -1150,13 +1150,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
 
     magento-customer-orders-widget-grid:
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1293,13 +1293,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-widget-grid:
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -1398,16 +1398,16 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
 
     magento-customers-group-by-channel-grid:
         extended_entity_name: %orocrm_magento.entity.customer_group.class%
         channel_limitation:
             channel_relation_path: dataChannel
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - g.id
@@ -1438,9 +1438,9 @@ datagrid:
         extended_entity_name: %orocrm_magento.entity.store.class%
         channel_limitation:
             channel_relation_path: dataChannel
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - s.id
@@ -1485,9 +1485,9 @@ datagrid:
 
     magento-newsletter-subscriber-grid:
         extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
+        acl_resource: orocrm_magento_newsletter_subscriber_view
         source:
             type: orm
-            acl_resource: orocrm_magento_newsletter_subscriber_view
             query:
                 select:
                     - newsletterSubscriber.id
@@ -1595,7 +1595,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -1608,7 +1608,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -1624,9 +1624,9 @@ datagrid:
 
     magento-customers-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - c.id
@@ -1638,8 +1638,6 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
-                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as customerOriginId
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
@@ -1651,8 +1649,6 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
-                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
             id:
                 label:            orocrm.magento.customer.id.label
@@ -1714,9 +1710,9 @@ datagrid:
 
     magento-order-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1877,9 +1873,9 @@ datagrid:
 
     magento-cart-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id

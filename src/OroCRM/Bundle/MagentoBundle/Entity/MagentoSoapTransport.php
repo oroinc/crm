@@ -126,6 +126,13 @@ class MagentoSoapTransport extends Transport
     protected $adminUrl;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="mage_newsl_subscr_synced_to_id", type="integer", nullable=true)
+     */
+    protected $newsletterSubscriberSyncedToId;
+
+    /**
      * @var string
      */
     protected $wsdlCachePath;
@@ -406,6 +413,7 @@ class MagentoSoapTransport extends Transport
                     'initial_sync_start_date' => $this->getInitialSyncStartDate(),
                     'extension_version' => $this->getExtensionVersion(),
                     'magento_version' => $this->getMagentoVersion(),
+                    'newsletter_subscriber_synced_to_id' => $this->getNewsletterSubscriberSyncedToId()
                 ]
             );
         }
@@ -472,6 +480,25 @@ class MagentoSoapTransport extends Transport
     {
         $this->wsdlCachePath = $wsdlCachePath;
         $this->settings = null;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getNewsletterSubscriberSyncedToId()
+    {
+        return $this->newsletterSubscriberSyncedToId;
+    }
+
+    /**
+     * @param int $newsletterSubscriberSyncedToId
+     * @return MagentoSoapTransport
+     */
+    public function setNewsletterSubscriberSyncedToId($newsletterSubscriberSyncedToId)
+    {
+        $this->newsletterSubscriberSyncedToId = $newsletterSubscriberSyncedToId;
 
         return $this;
     }

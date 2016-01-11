@@ -72,6 +72,6 @@ class CreateSyncStatusForExistingConnectors extends AbstractFixture
         $status->setCode(Status::STATUS_COMPLETED);
         $status->setMessage('Automatically added initial connector status.');
 
-        $repository->addStatus($integration, $status);
+        $repository->addStatusAndFlush($integration, $status);
     }
 }

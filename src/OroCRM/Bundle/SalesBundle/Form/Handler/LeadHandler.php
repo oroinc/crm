@@ -2,9 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
-use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\TagBundle\Form\Handler\TagHandlerInterface;
-
 use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
@@ -13,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LeadHandler implements TagHandlerInterface
+class LeadHandler
 {
     /** @var FormInterface */
     protected $form;
@@ -26,9 +23,6 @@ class LeadHandler implements TagHandlerInterface
 
     /** @var RequestChannelProvider */
     protected $requestChannelProvider;
-
-    /** @var TagManager */
-    protected $tagManager;
 
     /**
      * @param FormInterface          $form
@@ -46,14 +40,6 @@ class LeadHandler implements TagHandlerInterface
         $this->request                = $request;
         $this->manager                = $manager;
         $this->requestChannelProvider = $requestChannelProvider;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTagManager(TagManager $tagManager)
-    {
-        $this->tagManager = $tagManager;
     }
 
     /**
@@ -91,7 +77,5 @@ class LeadHandler implements TagHandlerInterface
     {
         $this->manager->persist($entity);
         $this->manager->flush();
-
-        $this->tagManager->saveTagging($entity);
     }
 }

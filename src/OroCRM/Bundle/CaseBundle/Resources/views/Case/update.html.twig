@@ -1,5 +1,4 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
-{% form_theme form with ['OroTagBundle:Form:fields.html.twig'] %}
 {% oro_title_set({params : {"%entity.subject%": entity.subject, "%entityName%": 'orocrm.case.caseentity.entity_label'|trans }}) %}
 
 {% set entityId = entity.id %}
@@ -48,8 +47,7 @@
                     form_row(form.status),
                     form_row(form.priority),
                     form_row(form.relatedContact),
-                    form_row(form.relatedAccount),
-                    form_row(form.tags)
+                    form_row(form.relatedAccount)
                 ]
             }
         ]

@@ -94,7 +94,10 @@ class CustomerStrategy extends AbstractImportStrategy
         if ($entity instanceof Customer) {
             $website = $this->databaseHelper->findOneBy(
                 'OroCRM\Bundle\MagentoBundle\Entity\Website',
-                ['originId' => $entity->getWebsite()->getOriginId()]
+                [
+                    'originId' => $entity->getWebsite()->getOriginId(),
+                    'channel' => $entity->getChannel()
+                ]
             );
 
             if ($website) {

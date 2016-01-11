@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Translation\TranslatorInterface;
+
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
@@ -69,12 +70,13 @@ class ForecastOfOpportunities
     ) {
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
+
         $ownerIds         = $this->getOwnerIds($widgetOptions);
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
         $compareToDate = $widgetOptions->get('compareToDate');
 
-        if (isset($compareToDate['useDate']) && $compareToDate['useDate']) {
+        if (!empty($compareToDate['useDate'])) {
             if (empty($compareToDate['date'])) {
                 $compareToDate['date'] = new \DateTime();
                 $compareToDate['date']->modify('-1 month');
@@ -153,29 +155,29 @@ class ForecastOfOpportunities
     protected function formatValue($value, $type = '', $isDeviant = false)
     {
         $sign = null;
+        $precision = 2;
 
-        if ($isDeviant && $value !== 0) {
-            $sign  = $value > 0 ? '+' : '&minus;';
-            $value = abs($value);
-        }
-        switch ($type) {
-            case 'currency':
-                $value = $this->numberFormatter->formatCurrency($value);
-                break;
-            case 'percent':
-                if ($isDeviant) {
-                    $value = round(($value) * 100, 0) / 100;
-                } else {
-                    $value = round(($value) * 100, 2) / 100;
-                }
-
-                $value = $this->numberFormatter->formatPercent($value);
-                break;
-            default:
-                $value = $this->numberFormatter->formatDecimal($value);
+        if ($isDeviant) {
+            if ($value !== 0) {
+                $sign  = $value > 0 ? '+' : '&minus;';
+                $value = abs($value);
+            }
+            $precision = 0;
         }
 
-        return $isDeviant && !is_null($sign) ? sprintf('%s%s', $sign, $value) : $value;
+        if ($type === 'currency') {
+            $formattedValue = $this->numberFormatter->formatCurrency($value);
+        } elseif ($type === 'percent') {
+            $value = round(($value) * 100, $precision) / 100;
+            $formattedValue = $this->numberFormatter->formatPercent($value);
+        } else {
+            $formattedValue = $this->numberFormatter->formatDecimal($value);
+        }
+
+        if ($sign) {
+            $formattedValue = sprintf('%s%s', $sign, $formattedValue);
+        }
+        return $formattedValue;
     }
 
     /**
@@ -197,21 +199,32 @@ class ForecastOfOpportunities
                     $this->formatValue($deviation, $dataType, true),
                     $this->formatValue($deviationPercent, 'percent', true)
                 );
-                if (!$lessIsBetter) {
-                    $result['isPositive'] = $deviation > 0;
-                } else {
-                    $result['isPositive'] = !($deviation > 0);
-                }
+                $result['isPositive'] = $this->isPositive($lessIsBetter, $deviation);
             }
         } else {
             if (round(($deviation) * 100, 0) != 0) {
                 $result['deviation'] = $this->formatValue($deviation, $dataType, true);
-                if (!$lessIsBetter) {
-                    $result['isPositive'] = $deviation > 0;
-                } else {
-                    $result['isPositive'] = !($deviation > 0);
-                }
+                $result['isPositive'] = $this->isPositive($lessIsBetter, $deviation);
             }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Get is positive value
+     *
+     * @param $lessIsBetter
+     * @param $deviation
+     *
+     * @return bool
+     */
+    protected function isPositive($lessIsBetter, $deviation)
+    {
+        if (!$lessIsBetter) {
+            $result = $deviation > 0;
+        } else {
+            $result = !($deviation > 0);
         }
 
         return $result;

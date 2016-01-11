@@ -49,6 +49,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
      */
     protected $businessUnitRepository;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockBuilder
+     */
+    protected $securityFacade;
+
     protected function setUp()
     {
         $opportunityRepository = 'OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository';
@@ -108,12 +113,17 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->provider = new ForecastOfOpportunities(
             $this->doctrine,
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
-            $this->translator
+            $this->translator,
+            $this->securityFacade
         );
     }
 
@@ -124,8 +134,34 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
-            $this->translator
+            $this->translator,
+            $this->securityFacade
         );
+    }
+
+    public function testForecastOfOpportunitiesValuesWithUserAutoFill()
+    {
+        $user = new User();
+        $user->setId(1);
+        $options = ['owners' => [], 'businessUnits' => []];
+        $widgetOptions = new WidgetOptionBag($options);
+
+        $this->opportunityRepository->expects($this->any())
+            ->method('getForecastOfOpporunitiesData')
+            ->with([], null, $this->aclHelper)
+            ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
+
+        $result = $this->provider
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'getInProgressValues', 'integer', false);
+        $this->assertEquals(['value' => 5], $result);
+
+        $result = $this->provider
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'getTotalForecastValues', 'currency', false);
+        $this->assertEquals(['value' => 1000], $result);
+
+        $result = $this->provider
+            ->getForecastOfOpportunitiesValues($widgetOptions, 'getWeightedForecastValues', 'currency', false);
+        $this->assertEquals(['value' => 500], $result);
     }
 
     public function testForecastOfOpportunitiesValues()

@@ -31,7 +31,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
     {
         if ($this->isInitialSync()) {
             $initialId = $this->getInitialId();
-            if ($this->initialId) {
+            if ($initialId) {
                 $this->filter->addComplexFilter(
                     $this->getIdFieldName(),
                     [
@@ -113,7 +113,7 @@ class NewsletterSubscriberBridgeIterator extends AbstractBridgeIterator
 
             $subscriber = [];
             if (array_key_exists(0, $subscribers)) {
-                $subscriber = reset($subscribers);
+                $subscriber = $subscribers[0];
             }
 
             if (array_key_exists($this->getIdFieldName(), $subscriber)) {

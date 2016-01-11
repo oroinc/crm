@@ -14,7 +14,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\LocaleBundle\Model\NameInterface;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Model\ExtendAccount;
@@ -31,7 +30,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-suitcase",
- *              "context-grid"="accounts-for-context-grid"
+ *              "context-grid"="accounts-for-context-grid",
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -42,10 +41,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          },
  *          "merge"={
  *              "enable"=true
@@ -56,11 +52,14 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
  */
-class Account extends ExtendAccount implements Taggable, EmailHolderInterface, NameInterface
+class Account extends ExtendAccount implements EmailHolderInterface, NameInterface
 {
     /**
      * @ORM\Id
@@ -200,18 +199,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      * )
      */
     protected $updatedAt;
-
-    /**
-     * @var ArrayCollection $tags
-     * @ConfigField(
-     *      defaultValues={
-     *          "merge"={
-     *              "display"=true
-     *          }
-     *      }
-     * )
-     */
-    protected $tags;
 
     /**
      * @var Organization
@@ -404,34 +391,6 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
     public function doPreUpdate()
     {
         $this->updatedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTags()
-    {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
-        return $this->tags;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace OroCRM\Bundle\ChannelBundle\Entity\Manager;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\ResultSetMapping;
@@ -40,20 +41,26 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
     /**
      * Gets search result
      *
-     * @param int    $page   Page number
-     * @param int    $limit  Number of items per page
-     * @param string $search The search string.
+     * @param int           $page   Page number
+     * @param int           $limit  Number of items per page
+     * @param string        $search The search string.
+     * @param Criteria|null $criteria
      *
      * @return array
      */
-    public function getSearchResult($page = 1, $limit = 10, $search = '')
+    public function getSearchResult($page = 1, $limit = 10, $search = '', $criteria = null)
     {
-        $searchQuery  = $this->searchIndexer->getSimpleSearchQuery(
+        $searchQuery = $this->searchIndexer->getSimpleSearchQuery(
             $search,
             $this->getOffset($page, $limit),
             $limit,
             $this->getCustomerSearchAliases()
         );
+
+        if ($criteria && $expression = $criteria->getWhereExpression()) {
+            $searchQuery->getCriteria()->andWhere($expression);
+        }
+
         $searchResult = $this->searchIndexer->query($searchQuery);
 
         $result = [

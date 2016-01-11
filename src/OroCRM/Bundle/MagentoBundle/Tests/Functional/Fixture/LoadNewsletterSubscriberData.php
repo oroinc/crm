@@ -39,6 +39,13 @@ class LoadNewsletterSubscriberData extends AbstractFixture implements
             'status' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
             'originId' => '1234567',
             'reference' => 'newsletter_subscriber2'
+        ],
+        [
+            'customer' => 'customer',
+            'email' => 'subscriber3@example.com',
+            'status' => NewsletterSubscriber::STATUS_UNSUBSCRIBED,
+            'originId' => '1234567',
+            'reference' => 'newsletter_subscriber3'
         ]
     ];
 

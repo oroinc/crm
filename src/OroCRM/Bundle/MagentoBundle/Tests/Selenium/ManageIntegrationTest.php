@@ -98,6 +98,6 @@ class ManageIntegrationTest extends Selenium2TestCase
             ->filterBy('Name', $name)
             ->open(array($name))
             ->scheduleSync()
-            ->checkAddQueueMessage();
+            ->assertMessage('A sync job has been added to the queue.');
     }
 }

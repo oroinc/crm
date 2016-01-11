@@ -1,9 +1,9 @@
 datagrid:
     orocrm_report-accounts-life_time_value:
         pageTitle: orocrm.report.accounts_life_time_value
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - a.id
@@ -67,12 +67,13 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-accounts-by_opportunities:
         pageTitle: orocrm.report.accounts_by_opportunities
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
@@ -168,12 +169,13 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-leads-by_date:
         pageTitle: orocrm.report.leads_by_date
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - COUNT(l.id) as leadsCount
@@ -209,12 +211,13 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-by_status:
         pageTitle: orocrm.report.opportunities_by_status
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
@@ -292,12 +295,13 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-won_by_period:
         pageTitle: orocrm.report.opportunities_won_by_period
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - CONCAT(MONTH(o.closeDate), ' / ', YEAR(o.closeDate)) as monthPeriod
@@ -385,12 +389,13 @@ datagrid:
         options:
             entityHint: report data
             export: true
+            entity_pagination: true
 
     orocrm_report-opportunities-total_forecast:
         pageTitle: orocrm.report.opportunities.total_forecast
+        acl_resource: oro_report_view
         source:
             type: orm
-            acl_resource: oro_report_view
             query:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
@@ -407,6 +412,8 @@ datagrid:
                     and:
                         - o.probability <> 0
                         - o.probability <> 1
+                    or:
+                        - o.probability is NULL
                 groupBy: oo.id
         totals:
             total:
@@ -426,7 +433,7 @@ datagrid:
                         expr: SUM( o.budgetAmount )
                         formatter: currency
                     weightedForecast:
-                        expr: AVG( o.budgetAmount * o.probability )
+                        expr: SUM( o.budgetAmount * o.probability )
                         formatter: currency
         columns:
             ownerName:        { label: orocrm.report.datagrid.columns.ownerName,        frontend_type: string }
@@ -442,8 +449,10 @@ datagrid:
         filters:
             columns:
                 ownerName:
-                    type:      string
-                    data_name: ownerName
+                    type: choice-tree
+                    data_name: o.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
                 inProgressCount:
                     type:      number
                     data_name: inProgressCount
@@ -465,3 +474,4 @@ datagrid:
         options:
             entityHint: report data
             export: true
+        entity_pagination: true

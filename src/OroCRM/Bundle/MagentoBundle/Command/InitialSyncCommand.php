@@ -47,6 +47,12 @@ class InitialSyncCommand extends ContainerAwareCommand
                 InputOption::VALUE_NONE,
                 'Skip dictionaries synchronization'
             )
+            ->addOption(
+                'connector',
+                'con',
+                InputOption::VALUE_OPTIONAL,
+                'If option exists sync will be performed for given connector name'
+            )
             ->setDescription('Run initial synchronization for magento channel.');
     }
 
@@ -58,6 +64,7 @@ class InitialSyncCommand extends ContainerAwareCommand
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
         $logger = $this->getLogger($output);
+        $this->getContainer()->get('oro_integration.logger.strategy')->setLogger($logger);
         $this->initEntityManager();
 
         if ($this->isJobRunning($integrationId)) {
@@ -77,18 +84,19 @@ class InitialSyncCommand extends ContainerAwareCommand
             return self::STATUS_SUCCESS;
         }
 
+        $this->scheduleAnalyticRecalculation($integration);
+
         $processor = $this->getSyncProcessor($logger);
         try {
             $logger->notice(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
-            $result = $processor->process($integration, null, ['skip-dictionary' => $skipDictionary]);
+            $connector = $input->getOption('connector');
+            $result = $processor->process($integration, $connector, ['skip-dictionary' => $skipDictionary]);
             $exitCode = $result ?: self::STATUS_FAILED;
         } catch (\Exception $e) {
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
         }
-
-        $this->scheduleAnalyticRecalculation($integration);
 
         $logger->notice('Completed');
 

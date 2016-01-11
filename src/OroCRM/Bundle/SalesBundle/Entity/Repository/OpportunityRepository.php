@@ -113,12 +113,23 @@ class OpportunityRepository extends EntityRepository
             SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
             SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
-        $qb->select($select)
-            ->join('opportunity.owner', 'owner')
-            ->where('owner.id IN(:ownerIds)')
-            ->andWhere('opportunity.probability <> 0')
-            ->andWhere('opportunity.probability <> 1')
-            ->setParameter('ownerIds', $ownerIds);
+        $qb->select($select);
+
+        if (!empty($ownerIds)) {
+            $qb->join('opportunity.owner', 'owner')
+                ->where('owner.id IN(:ownerIds)')
+                ->setParameter('ownerIds', $ownerIds);
+        }
+
+        $probabilityCondition = $qb->expr()->orX(
+            $qb->expr()->andX(
+                'opportunity.probability <> 0',
+                'opportunity.probability <> 1'
+            ),
+            'opportunity.probability is NULL'
+        );
+
+        $qb->andWhere($probabilityCondition);
 
         return $aclHelper->apply($qb)->getOneOrNullResult();
     }

@@ -65,15 +65,6 @@ class AccountType extends AbstractType
             )
         );
 
-        // tags
-        $builder->add(
-            'tags',
-            'oro_tag_select',
-            array(
-                'label' => 'oro.tag.entity_plural_label'
-            )
-        );
-
         if ($this->canViewContact) {
             $builder->add(
                 'default_contact',

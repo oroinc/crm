@@ -38,10 +38,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          },
  *          "grouping"={
  *              "groups"={"activity"}
