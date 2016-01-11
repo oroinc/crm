@@ -16,7 +16,7 @@
         {{ ui.renderProperty('orocrm.call.call_date_time.label'|trans, entity.callDateTime|oro_format_datetime) }}
     </div>
     <div class="responsive-block">
-        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhoneWithActions(entity.phoneNumber)) }}
+        {{ ui.renderHtmlProperty('orocrm.call.phone_number.label'|trans, ui.renderPhoneWithActions(entity.phoneNumber, entity)) }}
         {{ ui.renderProperty('orocrm.call.direction.label'|trans, entity.direction ? entity.direction.label : null) }}
         {# Don't use time formatting here because it's a time interval #}
         {{ ui.renderProperty('orocrm.call.duration.label'|trans, entity.duration|oro_format_duration) }}

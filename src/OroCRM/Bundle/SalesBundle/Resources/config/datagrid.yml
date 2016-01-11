@@ -5,9 +5,9 @@ datagrid:
             entityHint: opportunities
             export: true
             entity_pagination: true
+        acl_resource: orocrm_sales_opportunity_view
         source:
             type: orm
-            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
                     - o.id
@@ -196,9 +196,9 @@ datagrid:
             entityHint: leads
             export: true
             entity_pagination: true
+        acl_resource: orocrm_sales_lead_view
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
             query:
                 select:
                     - l.id
@@ -405,9 +405,9 @@ datagrid:
         options:
             entityHint: sales process
             entity_pagination: true
+        acl_resource: orocrm_sales_salesfunnel_view
         source:
             type: orm
-            acl_resource: orocrm_sales_salesfunnel_view
             query:
                 select:
                     - salesFunnel.id
@@ -569,9 +569,9 @@ datagrid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
         options:
             entityHint: leads
+        acl_resource: orocrm_sales_lead_view
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
             query:
                 select:
                     - lead.id
@@ -686,9 +686,9 @@ datagrid:
         extended_entity_name: %orocrm_sales.opportunity.class%
         options:
             entityHint: opportunities
+        acl_resource: orocrm_sales_opportunity_view
         source:
             type: orm
-            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
                     - opportunity.id
@@ -751,9 +751,9 @@ datagrid:
 
     orocrm-sales-b2bcustomers-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        acl_resource: orocrm_sales_b2bcustomer_view
         source:
             type: orm
-            acl_resource: orocrm_sales_b2bcustomer_view
             query:
                 select:
                     - c.id
@@ -852,9 +852,9 @@ datagrid:
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
+        acl_resource: orocrm_sales_lead_view
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
             query:
                 select:
                     - l.id
@@ -987,9 +987,9 @@ datagrid:
 
     base-sales-b2bcustomer-opportunities-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
+        acl_resource: orocrm_sales_opportunity_view
         source:
             type: orm
-            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
                     - o.id as id
@@ -1108,10 +1108,9 @@ datagrid:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
-
+        acl_resource: orocrm_sales_lead_view
         source:
             type: orm
-            acl_resource: orocrm_sales_lead_view
             query:
                 select:
                     - l.id
@@ -1202,10 +1201,9 @@ datagrid:
                 pageSize:
                     default_per_page: 10
             routerEnabled: false
-
+        acl_resource: orocrm_sales_opportunity_view
         source:
             type: orm
-            acl_resource: orocrm_sales_opportunity_view
             query:
                 select:
                     - o.id
@@ -1288,9 +1286,9 @@ datagrid:
 
     orocrm-sales-b2bcustomers-for-context-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
+        acl_resource: orocrm_sales_b2bcustomer_view
         source:
             type: orm
-            acl_resource: orocrm_sales_b2bcustomer_view
             query:
                 select:
                     - c.id

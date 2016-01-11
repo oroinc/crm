@@ -1,49 +1,42 @@
 <?php
 
-namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
+namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\DashboardBundle\Migrations\Data\ORM\AbstractDashboardFixture;
 use Oro\Bundle\DashboardBundle\Model\WidgetModel;
-use Oro\Bundle\MigrationBundle\Fixture\VersionedFixtureInterface;
 
-class AddECommerceDashboard extends AbstractDashboardFixture implements
-    DependentFixtureInterface,
-    VersionedFixtureInterface
+class LoadECommerceDashboard extends AbstractDashboardFixture implements DependentFixtureInterface
 {
     /** @var array */
     protected $widgets = [
         [
-            'name' => 'average_order_amount_chart',
-            'layout' => [0, 0],
+            'name'     => 'average_order_amount_chart',
+            'position' => [0, 0],
         ],
         [
-            'name' => 'new_magento_customers_chart',
-            'layout' => [1, 0],
+            'name'     => 'new_magento_customers_chart',
+            'position' => [1, 0],
         ],
         [
-            'name' => 'revenue_over_time_chart',
-            'layout' => [0, 1],
+            'name'     => 'average_lifetime_sales_chart',
+            'position' => [0, 1]
         ],
         [
-            'name' => 'orders_over_time_chart',
-            'layout' => [0, 1],
+            'name'     => 'revenue_over_time_chart',
+            'position' => [0, 1],
         ],
         [
-            'name' => 'purchase_chart',
-            'layout' => [0, 1],
+            'name'     => 'orders_over_time_chart',
+            'position' => [0, 1],
+        ],
+        [
+            'name'     => 'purchase_chart',
+            'position' => [0, 1],
         ],
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getVersion()
-    {
-        return '1.0';
-    }
 
     /**
      * {@inheritdoc}
@@ -73,7 +66,7 @@ class AddECommerceDashboard extends AbstractDashboardFixture implements
                 continue;
             }
 
-            $dashboard->addWidget($this->createWidgetModel($widgetData['name'], $widgetData['layout']));
+            $dashboard->addWidget($this->createWidgetModel($widgetData['name'], $widgetData['position']));
         }
 
         $manager->flush();
