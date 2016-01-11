@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
+use DateTime;
+
 use OroCRM\Bundle\MagentoBundle\Provider\BatchFilterBag;
 
 class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
@@ -12,6 +14,39 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->filter = new BatchFilterBag();
+    }
+
+    public function testGetAppliedFiltersShouldReturnFiltersWithUniqueKeysBecauseOfMagento1_7Workaround()
+    {
+        $from = new DateTime('2015-01-01');
+        $to = new DateTime('2015-01-07');
+
+        $this->filter->addDateFilter('created_at', 'from', $from, 'Y-m-d');
+        $this->filter->addDateFilter('created_at', 'to', $to, 'Y-m-d');
+
+        $this->assertEquals(
+            [
+                'filters' => [
+                    BatchFilterBag::FILTER_TYPE_COMPLEX => [
+                        [
+                            'key' => 'created_at',
+                            'value' => [
+                                'key' => 'from',
+                                'value' => '2015-01-01',
+                            ],
+                        ],
+                        [
+                            'key' => 'Created_at',
+                            'value' => [
+                                'key' => 'to',
+                                'value' => '2015-01-07',
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $this->filter->getAppliedFilters()
+        );
     }
 
     public function testFilters()
