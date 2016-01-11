@@ -1,12 +1,13 @@
 {{ UI.clientLink({
-    'dataUrl': path(
-        'orocrm_call_create', {
+    'dataUrl': entity is not empty
+        ? path('orocrm_call_create', {
             entityClass: oro_class_name(entity, true),
-            entityId: entity.id
-    }),
+            entityId: entity.id,
+        })
+        : null,
     'aCss': 'no-hash',
     'iCss': 'icon-phone-sign',
-    'dataId': entity.id,
+    'dataId': entity is not empty ? entity.id : null,
     'label' : 'orocrm.call.log_call'|trans,
     'widget' : {
         'type' : 'dialog',
