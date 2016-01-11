@@ -10,6 +10,7 @@ use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_9\AddActivityAssociations;
 
 class OroCRMTaskBundleInstaller implements
     Installation,
@@ -43,7 +44,7 @@ class OroCRMTaskBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_8';
+        return 'v1_9';
     }
 
     /**
@@ -64,6 +65,8 @@ class OroCRMTaskBundleInstaller implements
 
         /** Add comment relation */
         $this->comment->addCommentAssociation($schema, 'orocrm_task');
+
+        AddActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**
