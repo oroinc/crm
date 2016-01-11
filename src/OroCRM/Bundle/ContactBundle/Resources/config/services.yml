@@ -230,10 +230,3 @@ services:
             - orocrm_add_contact_link
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
-
-    oro_email.listener.datagrid.context.contact:
-        class: %oro_email.listener.datagrid.context.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }

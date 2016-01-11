@@ -474,15 +474,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
-    oro_email.listener.datagrid.context.magento:
-        class: %oro_email.listener.datagrid.context.class%
-        arguments:
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cart-for-context-grid, method: onBuildAfter }
-
     orocrm_magento.service.magento_url_generator:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]

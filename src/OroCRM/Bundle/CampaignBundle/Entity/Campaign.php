@@ -38,6 +38,9 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  *          "form"={
  *              "form_type"="orocrm_campaign_select",
  *              "grid_name"="orocrm-campaign-grid",
+ *          },
+ *          "grid"={
+ *              "default"="orocrm-campaign-grid"
  *          }
  *      }
  * )

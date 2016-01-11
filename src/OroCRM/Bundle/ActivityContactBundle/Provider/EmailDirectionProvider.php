@@ -115,7 +115,7 @@ class EmailDirectionProvider implements DirectionProviderInterface
                 ->setParameter('skipId', $skipId);
         }
 
-        if ($direction) {
+        if ($direction && $target instanceof EmailHolderInterface) {
             $operator = '!=';
             if ($direction === DirectionProviderInterface::DIRECTION_OUTGOING) {
                 $operator = '=';
