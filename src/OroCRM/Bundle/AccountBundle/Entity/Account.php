@@ -427,6 +427,12 @@ class Account extends ExtendAccount implements EmailHolderInterface, NameInterfa
             return $this;
         }
 
+        /**
+         * As resolving of $this->defaultContact->getDefaultInAccounts() lazy collection will
+         * overwrite $this->defaultContact to value from db, make sure the collection is resolved
+         */
+        $this->defaultContact && $this->defaultContact->getDefaultInAccounts()->toArray();
+
         $originalContact = $this->defaultContact;
         $this->defaultContact = $defaultContact;
 
