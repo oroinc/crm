@@ -141,7 +141,10 @@ orocrm:
                 view:     View
                 update:   Update
                 delete:   Delete
-                columns.metric_name: Metric Name
+                columns:
+                    metric_name: Metric Name
+                    days_since_last_contact.label: Days since the last contact
+
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
