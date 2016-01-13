@@ -967,6 +967,12 @@ datagrid:
                     - c.rating
                     - c.ticker_symbol as tickerSymbol
                     - c.website
+                    - c.ac_contact_count as timesContacted
+                    - c.ac_contact_count_in as timesContactedIn
+                    - c.ac_contact_count_out as timesContactedOut
+                    - c.ac_last_contact_date as lastContactedDate
+                    - c.ac_last_contact_date_in as lastContactedDateIn
+                    - c.ac_last_contact_date_out as lastContactedDateOut
                 join:
                     left:
                         - { join: c.owner, alias: owner }
@@ -981,78 +987,129 @@ datagrid:
         columns:
             ownerName:
                 label: orocrm.sales.b2bcustomer.owner.label
+                renderable: false
             accountName:
                 label: orocrm.sales.b2bcustomer.account.label
+                renderable: false
             contactName:
                 label: orocrm.sales.b2bcustomer.contact.label
+                renderable: false
             baCountryName:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_country.label
+                renderable: false
             baRegionLabel:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_region.label
+                renderable: false
             baCity:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_city.label
+                renderable: false
             baStreet:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_street.label
+                renderable: false
             baPostalCode:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_postal_code.label
+                renderable: false
             saCountryName:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_country.label
+                renderable: false
             saRegionLabel:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_region.label
+                renderable: false
             saCity:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_city.label
+                renderable: false
             saStreet:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_street.label
+                renderable: false
             saPostalCode:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
+                renderable: false
             employees:
                 label: orocrm.sales.b2bcustomer.employees.label
                 frontend_type: integer
+                renderable: false
             ownership:
                 label: orocrm.sales.b2bcustomer.ownership.label
+                renderable: false
             rating:
                 label: orocrm.sales.b2bcustomer.rating.label
+                renderable: false
             tickerSymbol:
                 label: orocrm.sales.b2bcustomer.ticker_symbol.label
+                renderable: false
             website:
                 label: orocrm.sales.b2bcustomer.website.label
+                renderable: false
+            timesContacted:
+                label: orocrm.activity_contact.ac_contact_count.label
+                frontend_type: integer
+                renderable: false
+            timesContactedIn:
+                label: orocrm.activity_contact.ac_contact_count_in.label
+                frontend_type: integer
+                renderable: false
+            timesContactedOut:
+                label: orocrm.activity_contact.ac_contact_count_out.label
+                frontend_type: integer
+                renderable: false
+            lastContactedDate:
+                label: orocrm.activity_contact.ac_last_contact_date.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateIn:
+                label: orocrm.activity_contact.ac_last_contact_date_in.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateOut:
+                label: orocrm.activity_contact.ac_last_contact_date_out.label
+                frontend_type: datetime
+                renderable: false
         sorters:
             columns:
-                ownerName:       { data_name: ownerName }
-                accountName:     { data_name: accountName }
-                contactName:     { data_name: contactName }
-                baCountryName:   { data_name: baCountryName }
-                baRegionLabel:   { data_name: baRegionLabel }
-                baCity:          { data_name: baCity }
-                baStreet:        { data_name: baStreet }
-                baPostalCode:    { data_name: baPostalCode }
-                saCountryName:   { data_name: saCountryName }
-                saRegionLabel:   { data_name: saRegionLabel }
-                saCity:          { data_name: saCity }
-                saStreet:        { data_name: saStreet }
-                saPostalCode:    { data_name: saPostalCode }
-                employees:       { data_name: c.employees }
-                ownership:       { data_name: c.ownership }
-                rating:          { data_name: c.rating }
-                tickerSymbol:    { data_name: tickerSymbol }
-                website:         { data_name: c.website }
+                ownerName:            { data_name: ownerName }
+                accountName:          { data_name: accountName }
+                contactName:          { data_name: contactName }
+                baCountryName:        { data_name: baCountryName }
+                baRegionLabel:        { data_name: baRegionLabel }
+                baCity:               { data_name: baCity }
+                baStreet:             { data_name: baStreet }
+                baPostalCode:         { data_name: baPostalCode }
+                saCountryName:        { data_name: saCountryName }
+                saRegionLabel:        { data_name: saRegionLabel }
+                saCity:               { data_name: saCity }
+                saStreet:             { data_name: saStreet }
+                saPostalCode:         { data_name: saPostalCode }
+                employees:            { data_name: c.employees }
+                ownership:            { data_name: c.ownership }
+                rating:               { data_name: c.rating }
+                tickerSymbol:         { data_name: tickerSymbol }
+                website:              { data_name: c.website }
+                timesContacted:       { data_name: timesContacted }
+                timesContactedIn:     { data_name: timesContactedIn }
+                timesContactedOut:    { data_name: timesContactedOut }
+                lastContactedDate:    { data_name: lastContactedDate }
+                lastContactedDateIn:  { data_name: lastContactedDateIn }
+                lastContactedDateOut: { data_name: lastContactedDateOut }
         filters:
             columns:
                 ownerName:
                     type: choice-tree
                     data_name: c.owner
+                    enabled: false                    
                     options:
                         data: @oro_user.provider.filter.user_choice_tree->getList
                 accountName:
                     type: string
                     data_name: accountName
+                    enabled: false                    
                 contactName:
                     type: string
                     data_name: contactName
+                    enabled: false                    
                 baCountryName:
                     type: entity
                     data_name: ba.country
-                    #enabled: false
+                    enabled: false
                     options:
                         field_options:
                             class: OroAddressBundle:Country
@@ -1062,23 +1119,23 @@ datagrid:
                 baRegionLabel:
                     type: string
                     data_name: baRegionLabel
-                    #enabled: false
+                    enabled: false
                 baCity:
                     type: string
                     data_name: baCity
-                    #enabled: false
+                    enabled: false
                 baStreet:
                     type: string
                     data_name: baStreet
-                    #enabled: false
+                    enabled: false
                 baPostalCode:
                     type: string
                     data_name: baPostalCode
-                    #enabled: false
+                    enabled: false
                 saCountryName:
                     type: entity
                     data_name: sa.country
-                    #enabled: false
+                    enabled: false
                     options:
                         field_options:
                             class: OroAddressBundle:Country
@@ -1088,39 +1145,63 @@ datagrid:
                 saRegionLabel:
                     type: string
                     data_name: saRegionLabel
-                    #enabled: false
+                    enabled: false
                 saCity:
                     type: string
                     data_name: saCity
-                    #enabled: false
+                    enabled: false
                 saStreet:
                     type: string
                     data_name: saStreet
-                    #enabled: false
+                    enabled: false
                 saPostalCode:
                     type: string
                     data_name: saPostalCode
-                    #enabled: false
+                    enabled: false
                 employees:
                     type: number
                     data_name: c.employees
-                    #enabled: false
+                    enabled: false
                 ownership:
                     type: string
                     data_name: c.ownership
-                    #enabled: false
+                    enabled: false
                 rating:
                     type: string
                     data_name: c.rating
-                    #enabled: false
+                    enabled: false
                 tickerSymbol:
                     type: string
                     data_name: tickerSymbol
-                    #enabled: false
+                    enabled: false
                 website:
                     type: string
                     data_name: c.website
-                    #enabled: false
+                    enabled: false
+                timesContacted:
+                    type: number
+                    data_name: timesContacted
+                    enabled: false
+                timesContactedIn:
+                    type: number
+                    data_name: timesContactedIn
+                    enabled: false
+                timesContactedOut:
+                    type: number
+                    data_name: timesContactedOut
+                    enabled: false
+                lastContactedDate:
+                    type: datetime
+                    data_name: lastContactedDate
+                    enabled: false
+                lastContactedDateIn:
+                    type: datetime
+                    data_name: lastContactedDateIn
+                    enabled: false
+                lastContactedDateOut:
+                    type: datetime
+                    data_name: lastContactedDateOut
+                    enabled: false
         properties:
             id: ~
             view_link:

@@ -264,7 +264,11 @@ orocrm:
                     shipping_address_city.label:      Shipping Address City
                     shipping_address_street.label:      Shipping Address Street
                     shipping_address_postal_code.label:      Shipping Address Postal Code
-
+                    count_won_opportunities.label: Number Of Won Opportunities
+                    count_open_opportunities.label: Number Of Open Opportunities
+                    budget_in_progress_opportunities.label: Total Budget of Opportunities In Progress
+                    last_opportunity_close_date.label: Last Opportunity Close Date
+                    days_since_last_opportunity_closed.label: Days Since Last Opportunity Closed
             import: Import
         widgets:
             b2bcustomer_information: B2B Customer Information
