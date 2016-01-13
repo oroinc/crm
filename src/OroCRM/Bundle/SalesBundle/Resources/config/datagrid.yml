@@ -820,6 +820,181 @@ datagrid:
 
     orocrm-sales-b2bcustomers-grid:
         extends: base-sales-b2bcustomers-grid
+        source:
+            query:
+                select:
+                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - account.name as accountName
+                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - baCountry.name as baCountryName
+                    - CONCAT(CASE WHEN ba.regionText IS NOT NULL THEN ba.regionText ELSE baRegion.name END, '') as baRegionLabel
+                    - ba.city as baCity
+                    - ba.street as baStreet
+                    - ba.postalCode as baPostalCode
+                    - saCountry.name as saCountryName
+                    - CONCAT(CASE WHEN sa.regionText IS NOT NULL THEN sa.regionText ELSE saRegion.name END, '') as saRegionLabel
+                    - sa.city as saCity
+                    - sa.street as saStreet
+                    - sa.postalCode as saPostalCode
+                    - c.employees
+                    - c.ownership
+                    - c.rating
+                    - c.ticker_symbol as tickerSymbol
+                    - c.website
+                join:
+                    left:
+                        - { join: c.owner, alias: owner }
+                        - { join: c.account, alias: account }
+                        - { join: c.contact, alias: contact }
+                        - { join: c.billingAddress, alias: ba }
+                        - { join: c.shippingAddress, alias: sa }
+                        - { join: ba.country, alias: baCountry }
+                        - { join: sa.country, alias: saCountry }
+                        - { join: ba.region, alias: baRegion }
+                        - { join: sa.region, alias: saRegion }
+        columns:
+            ownerName:
+                label: orocrm.sales.b2bcustomer.owner.label
+            accountName:
+                label: orocrm.sales.b2bcustomer.account.label
+            contactName:
+                label: orocrm.sales.b2bcustomer.contact.label
+            baCountryName:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_country.label
+            baRegionLabel:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_region.label
+            baCity:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_city.label
+            baStreet:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_street.label
+            baPostalCode:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_postal_code.label
+            saCountryName:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_country.label
+            saRegionLabel:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_region.label
+            saCity:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_city.label
+            saStreet:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_street.label
+            saPostalCode:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
+            employees:
+                label: orocrm.sales.b2bcustomer.employees.label
+                frontend_type: integer
+            ownership:
+                label: orocrm.sales.b2bcustomer.ownership.label
+            rating:
+                label: orocrm.sales.b2bcustomer.rating.label
+            tickerSymbol:
+                label: orocrm.sales.b2bcustomer.ticker_symbol.label
+            website:
+                label: orocrm.sales.b2bcustomer.website.label
+        sorters:
+            columns:
+                ownerName:       { data_name: ownerName }
+                accountName:     { data_name: accountName }
+                contactName:     { data_name: contactName }
+                baCountryName:   { data_name: baCountryName }
+                baRegionLabel:   { data_name: baRegionLabel }
+                baCity:          { data_name: baCity }
+                baStreet:        { data_name: baStreet }
+                baPostalCode:    { data_name: baPostalCode }
+                saCountryName:   { data_name: saCountryName }
+                saRegionLabel:   { data_name: saRegionLabel }
+                saCity:          { data_name: saCity }
+                saStreet:        { data_name: saStreet }
+                saPostalCode:    { data_name: saPostalCode }
+                employees:       { data_name: c.employees }
+                ownership:       { data_name: c.ownership }
+                rating:          { data_name: c.rating }
+                tickerSymbol:    { data_name: tickerSymbol }
+                website:         { data_name: c.website }
+        filters:
+            columns:
+                ownerName:
+                    type: choice-tree
+                    data_name: c.owner
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
+                accountName:
+                    type: string
+                    data_name: accountName
+                contactName:
+                    type: string
+                    data_name: contactName
+                baCountryName:
+                    type: entity
+                    data_name: ba.country
+                    #enabled: false
+                    options:
+                        field_options:
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
+                baRegionLabel:
+                    type: string
+                    data_name: baRegionLabel
+                    #enabled: false
+                baCity:
+                    type: string
+                    data_name: baCity
+                    #enabled: false
+                baStreet:
+                    type: string
+                    data_name: baStreet
+                    #enabled: false
+                baPostalCode:
+                    type: string
+                    data_name: baPostalCode
+                    #enabled: false
+                saCountryName:
+                    type: entity
+                    data_name: sa.country
+                    #enabled: false
+                    options:
+                        field_options:
+                            class: OroAddressBundle:Country
+                            property: name
+                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            translatable_options: false
+                saRegionLabel:
+                    type: string
+                    data_name: saRegionLabel
+                    #enabled: false
+                saCity:
+                    type: string
+                    data_name: saCity
+                    #enabled: false
+                saStreet:
+                    type: string
+                    data_name: saStreet
+                    #enabled: false
+                saPostalCode:
+                    type: string
+                    data_name: saPostalCode
+                    #enabled: false
+                employees:
+                    type: number
+                    data_name: c.employees
+                    #enabled: false
+                ownership:
+                    type: string
+                    data_name: c.ownership
+                    #enabled: false
+                rating:
+                    type: string
+                    data_name: c.rating
+                    #enabled: false
+                tickerSymbol:
+                    type: string
+                    data_name: tickerSymbol
+                    #enabled: false
+                website:
+                    type: string
+                    data_name: c.website
+                    #enabled: false
         properties:
             id: ~
             view_link:
