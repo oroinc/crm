@@ -1,0 +1,55 @@
+{% form_theme form with ['OroCRMSalesBundle:Form:fields.html.twig'] %}
+
+<div class="widget-content">
+    {% block transition_widget %}
+    {% block transition_js %}
+        {% if saved %}
+        <script type="text/javascript">
+            require(['oroui/js/widget-manager'],
+                    function(widgetManager){
+                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                            widget.trigger(
+                                    'formSave',
+                                    {% if data is defined and data %}
+                                    {{ data|json_encode|raw }}
+                                    {% else %}
+                                    null
+                                    {% endif %}
+                            );
+                        });
+                    });
+        </script>
+        {% elseif form.vars.errors|length > 0 %}
+        <script type="text/javascript">
+            require(['oroui/js/widget-manager'],
+                    function(widgetManager){
+                        widgetManager.getWidgetInstance({{ app.request.get('_wid')|json_encode|raw }}, function(widget) {
+                            widget.trigger('formSaveError');
+                        });
+                    });
+        </script>
+        <div class="alert alert-error">
+            {{ form_errors(form) }}
+        </div>
+        {% endif %}
+    {% endblock transition_js %}
+
+    {% block transition_form %}
+        {% if transition.message %}
+        <div class="alert">{{ transition.message|trans }}</div>
+        {% endif %}
+        <form method="post"
+              data-nohash="true"
+              data-disable-autofocus="true"
+              {% if transition.displayType != 'dialog' %}data-collect="true"{% endif %}
+              id="{{ form.vars.id }}"
+              name="{{ form.vars.name }}"
+              action="{{ app.request.uri }}"
+              class="form-dialog"
+        >
+            {{ form_row(form) }}
+        </form>
+        {{ oro_form_js_validation(form) }}
+    {% endblock transition_form %}
+    {% endblock transition_widget %}
+</div>

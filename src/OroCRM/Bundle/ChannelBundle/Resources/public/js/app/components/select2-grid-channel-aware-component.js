@@ -45,12 +45,14 @@ define(function(require) {
         },
         _getAdditionalParams: function() {
             var result = {};
-
             var $channel = this.findChannelSelectorElement();
             var channelIds = [$channel.val()];
+
             if (this.channelId) {
                 channelIds.push(this.channelId);
             }
+
+            result['channelIds'] = channelIds.join(',');
 
             result[this.gridName + '[channelIds]'] = channelIds.join(',');
 
