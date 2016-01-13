@@ -149,7 +149,7 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      *
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", inversedBy="defaultInAccounts")
      * @ORM\JoinColumn(name="default_contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @ConfigField(
      *      defaultValues={
@@ -461,7 +461,28 @@ class Account extends ExtendAccount implements Taggable, EmailHolderInterface, N
      */
     public function setDefaultContact($defaultContact)
     {
+        if ($this->defaultContact === $defaultContact) {
+            return $this;
+        }
+
+        /**
+         * As resolving of $this->defaultContact->getDefaultInAccounts() lazy collection will
+         * overwrite $this->defaultContact to value from db, make sure the collection is resolved
+         */
+        if ($this->defaultContact) {
+            $this->defaultContact->getDefaultInAccounts()->toArray();
+        }
+
+        $originalContact = $this->defaultContact;
         $this->defaultContact = $defaultContact;
+
+        if ($defaultContact) {
+            $defaultContact->addDefaultInAccount($this);
+        }
+
+        if ($originalContact) {
+            $originalContact->removeDefaultInAccount($this);
+        }
 
         if ($defaultContact && !$this->contacts->contains($defaultContact)) {
             $this->addContact($defaultContact);
