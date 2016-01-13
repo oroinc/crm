@@ -31,9 +31,7 @@
             {% if contact.primaryPhone %}
                 {{ UI.renderPhoneWithActions(contact.primaryPhone, contact) }}
             {% else %}
-                <span class="contact-element contact-element-no-actions">
-                    <span class="contact-element-wrapper">{{ 'N/A'|trans }}</span>
-                </span>
+                {{ 'N/A'|trans }}
             {% endif %}
         </div>
         <div class="contact-box-row">
@@ -41,9 +39,7 @@
             {% if contact.primaryEmail %}
                 {{ Email.renderEmailWithActions(contact.primaryEmail.email, contact) }}
             {% else %}
-                <span class="contact-element contact-element-no-actions">
-                    <span class="contact-element-wrapper">{{ 'N/A'|trans }}</span>
-                </span>
+                {{ 'N/A'|trans }}
             {% endif %}
         </div>
     </div>
