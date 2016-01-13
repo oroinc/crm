@@ -153,6 +153,7 @@ datagrid:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
                             translatable_options: false
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -748,7 +749,7 @@ datagrid:
                     type: string
                     data_name: email.email
 
-    orocrm-sales-b2bcustomers-grid:
+    base-sales-b2bcustomers-grid:
         extended_entity_name: %orocrm_sales.b2bcustomer.entity.class%
         acl_resource: orocrm_sales_b2bcustomer_view
         source:
@@ -813,6 +814,14 @@ datagrid:
                     data_name: c.updatedAt
         properties:
             id: ~
+        options:
+            entity_pagination: true
+            export: true
+
+    orocrm-sales-b2bcustomers-grid:
+        extends: base-sales-b2bcustomers-grid
+        properties:
+            id: ~
             view_link:
                 type:   url
                 route:  orocrm_sales_b2bcustomer_view
@@ -845,9 +854,9 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
-        options:
-            entity_pagination: true
-            export: true
+
+    orocrm-sales-b2bcustomers-select-grid:
+        extends: base-sales-b2bcustomers-grid
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -1031,9 +1040,25 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email
+
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_opportunity_view
+                params:     [ id ]
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_opportunity_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
 
     sales-b2bcustomer-opportunities-grid:
         extends: base-sales-b2bcustomer-opportunities-grid
@@ -1253,6 +1278,7 @@ datagrid:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
                             translatable_options: false
+                            multiple: true
                 primaryEmail:
                     type: string
                     data_name: email.email

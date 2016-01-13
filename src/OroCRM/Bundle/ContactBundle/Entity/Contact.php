@@ -51,8 +51,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                  "phone"={
  *                      {"fieldName"="primaryPhone"}
  *                  }
- *              },
- *              "context-grid"="contacts-for-context-grid"
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -71,6 +70,10 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="contacts-grid",
+ *              "context"="contacts-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true
