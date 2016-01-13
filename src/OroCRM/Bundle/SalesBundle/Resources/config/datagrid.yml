@@ -105,7 +105,7 @@ datagrid:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
             daysSinceLastContact:
-                label: orocrm.sales.opportunity.datagrid.columns.days_since_last_contact.label
+                label: orocrm.activity_contact.days_since_last_contact.label
                 frontend_type: integer
                 renderable: false
             timesContacted:
