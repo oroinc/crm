@@ -254,21 +254,18 @@ orocrm:
                 update: Update
                 delete: Delete
                 columns:
+                    account_name.label: Account Name
+                    contact_name.label: Contact Name
                     billing_address_country.label:      Billing Address Country
-                    billing_address_region.label:      Billing Address Region
-                    billing_address_city.label:      Billing Address City
-                    billing_address_street.label:      Billing Address Street
-                    billing_address_postal_code.label:      Billing Address Postal Code
+                    billing_address_region.label:       Billing Address Region
+                    billing_address_city.label:         Billing Address City
+                    billing_address_street.label:       Billing Address Street
+                    billing_address_postal_code.label:  Billing Address Postal Code
                     shipping_address_country.label:     Shipping Address Country
                     shipping_address_region.label:      Shipping Address Region
-                    shipping_address_city.label:      Shipping Address City
+                    shipping_address_city.label:        Shipping Address City
                     shipping_address_street.label:      Shipping Address Street
-                    shipping_address_postal_code.label:      Shipping Address Postal Code
-                    count_won_opportunities.label: Number Of Won Opportunities
-                    count_open_opportunities.label: Number Of Open Opportunities
-                    budget_in_progress_opportunities.label: Total Budget of Opportunities In Progress
-                    last_opportunity_close_date.label: Last Opportunity Close Date
-                    days_since_last_opportunity_closed.label: Days Since Last Opportunity Closed
+                    shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
         widgets:
             b2bcustomer_information: B2B Customer Information

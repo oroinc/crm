@@ -989,10 +989,10 @@ datagrid:
                 label: orocrm.sales.b2bcustomer.owner.label
                 renderable: false
             accountName:
-                label: orocrm.sales.b2bcustomer.account.label
+                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
                 renderable: false
             contactName:
-                label: orocrm.sales.b2bcustomer.contact.label
+                label: orocrm.sales.b2bcustomer.datagrid.columns.contact_name.label
                 renderable: false
             baCountryName:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.billing_address_country.label
