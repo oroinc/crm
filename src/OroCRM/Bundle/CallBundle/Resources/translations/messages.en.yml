@@ -40,6 +40,7 @@ orocrm:
         delete_call: Delete {{ entity }} log
         created_by:  logged by {{ user }}
         changed_by:  added by {{ user }}, updated by {{ editor }}
+        view:        View call log
 
         #
         # OroCRM/Bundle/CallBundle/Entity/Call
