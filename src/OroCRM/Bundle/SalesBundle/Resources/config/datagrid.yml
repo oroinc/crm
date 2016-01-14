@@ -26,7 +26,7 @@ datagrid:
                     - channel.name as channelName
                     - own.id as owner
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
-                    - customer.name as cutomerName
+                    - customer.name as customerName
                     - o.ac_contact_count as timesContacted
                     - o.ac_contact_count_in as timesContactedIn
                     - o.ac_contact_count_out as timesContactedOut
@@ -70,7 +70,7 @@ datagrid:
                     autocomplete_api_accessor:
                         search_handler_name: contacts
                         label_field_name: fullName
-            cutomerName:
+            customerName:
                 label: orocrm.sales.opportunity.customer.label
                 renderable: false
             closeRevenue:
@@ -160,8 +160,8 @@ datagrid:
                     data_name: o.updatedAt
                 contactName:
                     data_name: contactName
-                cutomerName:
-                    data_name: cutomerName
+                customerName:
+                    data_name: customerName
                 closeRevenue:
                     data_name: o.closeRevenue
                 closeReasonLabel:
@@ -217,9 +217,9 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                cutomerName:
+                customerName:
                     type: string
-                    data_name: cutomerName
+                    data_name: customerName
                     enabled: false
                 closeRevenue:
                     type: currency
@@ -342,7 +342,7 @@ datagrid:
                     - l.numberOfEmployees
                     - campaign.name as campaignName
                     - source.name as sourceName
-                    - customer.name as cutomerName
+                    - customer.name as customerName
                     - status.label as statusLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
@@ -424,7 +424,7 @@ datagrid:
             sourceName:
                 label:         orocrm.sales.lead.source.label
                 renderable: false
-            cutomerName:
+            customerName:
                 label: orocrm.sales.lead.customer.label
                 renderable: false
             email:
@@ -532,8 +532,8 @@ datagrid:
                     data_name: campaign.name
                 sourceName:
                     data_name: source.name
-                cutomerName:
-                    data_name: cutomerName
+                customerName:
+                    data_name: customerName
                 email:
                     data_name: l.email
                 phoneNumber:
@@ -657,9 +657,9 @@ datagrid:
                     type: string
                     data_name: sourceName
                     enabled: false
-                cutomerName:
+                customerName:
                     type: string
-                    data_name: cutomerName
+                    data_name: customerName
                     enabled: false
                 email:
                     type: string
