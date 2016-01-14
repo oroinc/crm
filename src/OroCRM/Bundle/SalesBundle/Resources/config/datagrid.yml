@@ -654,8 +654,9 @@ datagrid:
                             property: name
                             translatable_options: false
                 sourceName:
-                    type: string
-                    data_name: sourceName
+                    type: enum
+                    enum_code: lead_source
+                    data_name: source.id
                     enabled: false
                 customerName:
                     type: string
