@@ -237,14 +237,6 @@ datagrid:
                 frontend_type: select
                 choices: @oro_user.gender_provider->getChoices
                 renderable: false
-            ownerName:
-                label:         orocrm.contact.owner.label
-            assignedName:
-                label:         orocrm.contact.assigned_to.label
-                renderable: false
-            reportsName:
-                label:         orocrm.contact.reports_to.label
-                renderable: false
             email:
                 label:         orocrm.contact.email.label
                 inline_editing:
@@ -298,12 +290,12 @@ datagrid:
                 label:         orocrm.contact.facebook.label
                 frontend_type: string
                 renderable:    false
-            googlePlus:
-                label:         orocrm.contact.google_plus.label
-                frontend_type: string
-                renderable:    false
             linkedIn:
                 label:         orocrm.contact.linked_in.label
+                frontend_type: string
+                renderable:    false
+            googlePlus:
+                label:         orocrm.contact.google_plus.label
                 frontend_type: string
                 renderable:    false
             source:
@@ -329,6 +321,15 @@ datagrid:
             pictureFilename:
                 label:         orocrm.contact.picture.label
                 renderable:    false
+            ownerName:
+                label:         orocrm.contact.owner.label
+                renderable: false
+            assignedName:
+                label:         orocrm.contact.assigned_to.label
+                renderable: false
+            reportsName:
+                label:         orocrm.contact.reports_to.label
+                renderable: false
             daysSinceLastContact:
                 label: orocrm.activity_contact.days_since_last_contact.label
                 frontend_type: integer
@@ -383,12 +384,6 @@ datagrid:
                     data_name: c.birthday
                 gender:
                     data_name: c.gender
-                ownerName:
-                    data_name: ownerName
-                assignedName:
-                    data_name: assignedName
-                reportsName:
-                    data_name: reportsName
                 email:
                     data_name: email.email
                 phone:
@@ -423,6 +418,12 @@ datagrid:
                     data_name: c.updatedAt
                 pictureFilename:
                     data_name: pictureFilename
+                ownerName:
+                    data_name: ownerName
+                assignedName:
+                    data_name: assignedName
+                reportsName:
+                    data_name: reportsName
                 daysSinceLastContact:
                     data_name: daysSinceLastContact
                 timesContacted:
