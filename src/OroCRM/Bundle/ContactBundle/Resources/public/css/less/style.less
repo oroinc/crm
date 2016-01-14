@@ -3,8 +3,14 @@
 }
 .contact-box-row {
   padding: 5px 0;
-  span:first-of-type {
+  &:empty {
+    display: none;
+  }
+  .contact-element-label {
     padding-right: 5px;
+    + .inline-actions-element {
+      top: 0;
+    }
   }
 }
 .contact-box {
@@ -39,10 +45,4 @@
       font-weight: bold;
     }
   }
-}
-
-.contact-element-label {
-  position: relative;
-  top: -4px;
-  padding-top: 4px;
 }
