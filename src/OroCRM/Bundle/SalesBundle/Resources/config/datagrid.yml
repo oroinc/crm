@@ -26,7 +26,7 @@ datagrid:
                     - channel.name as channelName
                     - own.id as owner
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
-                    - customer.name as cutomerName
+                    - customer.name as customerName
                     - o.ac_contact_count as timesContacted
                     - o.ac_contact_count_in as timesContactedIn
                     - o.ac_contact_count_out as timesContactedOut
@@ -70,7 +70,7 @@ datagrid:
                     autocomplete_api_accessor:
                         search_handler_name: contacts
                         label_field_name: fullName
-            cutomerName:
+            customerName:
                 label: orocrm.sales.opportunity.customer.label
                 renderable: false
             closeRevenue:
@@ -160,8 +160,8 @@ datagrid:
                     data_name: o.updatedAt
                 contactName:
                     data_name: contactName
-                cutomerName:
-                    data_name: cutomerName
+                customerName:
+                    data_name: customerName
                 closeRevenue:
                     data_name: o.closeRevenue
                 closeReasonLabel:
@@ -217,9 +217,9 @@ datagrid:
                 contactName:
                     type: string
                     data_name: contactName
-                cutomerName:
+                customerName:
                     type: string
-                    data_name: cutomerName
+                    data_name: customerName
                     enabled: false
                 closeRevenue:
                     type: currency
@@ -332,11 +332,22 @@ datagrid:
                     - l.firstName
                     - l.lastName
                     - l.createdAt
+                    - l.updatedAt
                     - l.email
                     - l.phoneNumber
+                    - l.jobTitle
+                    - l.companyName
+                    - l.industry
+                    - l.website
+                    - l.numberOfEmployees
+                    - campaign.name as campaignName
+                    - source.name as sourceName
+                    - customer.name as customerName
                     - status.label as statusLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
+                    - address.city as addressCity
+                    - address.street as addressStreet
                     - >
                         CONCAT(
                             CASE WHEN address.regionText IS NOT NULL
@@ -346,7 +357,15 @@ datagrid:
                         ) as regionLabel
                     - channel.name as channelName
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
                     - own.id as owner
+                    - l.ac_contact_count as timesContacted
+                    - l.ac_contact_count_in as timesContactedIn
+                    - l.ac_contact_count_out as timesContactedOut
+                    - l.ac_last_contact_date as lastContactedDate
+                    - l.ac_last_contact_date_in as lastContactedDateIn
+                    - l.ac_last_contact_date_out as lastContactedDateOut
+                    - DATE_DIFF(CURRENT_DATE(), l.ac_last_contact_date) as daysSinceLastContact
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
@@ -357,6 +376,10 @@ datagrid:
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
                         - { join: l.owner, alias: own }
+                        - { join: l.contact, alias: c }
+                        - { join: l.customer, alias: customer }
+                        - { join: l.source, alias: source }
+                        - { join: l.campaign, alias: campaign }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -375,6 +398,35 @@ datagrid:
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
+            updatedAt:
+                label:         oro.ui.updated_at
+                frontend_type: datetime
+                renderable: false
+            jobTitle:
+                label:         orocrm.sales.lead.job_title.label
+                renderable: false
+            companyName:
+                label:         orocrm.sales.lead.company_name.label
+                renderable: false
+            industry:
+                label:         orocrm.sales.lead.industry.label
+                renderable: false
+            website:
+                label:         orocrm.sales.lead.website.label
+                renderable: false
+            numberOfEmployees:
+                label:         orocrm.sales.lead.datagrid.number_of_employees
+                frontend_type: integer
+                renderable: false
+            campaignName:
+                label:         orocrm.sales.lead.campaign.label
+                renderable: false
+            sourceName:
+                label:         orocrm.sales.lead.source.label
+                renderable: false
+            customerName:
+                label: orocrm.sales.lead.customer.label
+                renderable: false
             email:
                 label:         orocrm.sales.lead.email.label
             phoneNumber:
@@ -386,6 +438,12 @@ datagrid:
                 label:         orocrm.sales.lead.datagrid.region
             addressPostalCode:
                 label:         orocrm.sales.lead.datagrid.postal_code
+            addressCity:
+                label:        orocrm.sales.lead.datagrid.city
+                renderable:    false
+            addressStreet:
+                label:         orocrm.sales.lead.datagrid.street
+                renderable:    false
             ownerName:
                 label:         orocrm.sales.lead.owner.label
                 inline_editing:
@@ -397,6 +455,37 @@ datagrid:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Lead
+            contactName:
+                label:         orocrm.sales.lead.contact.label
+                renderable: false
+            daysSinceLastContact:
+                label: orocrm.activity_contact.days_since_last_contact.label
+                frontend_type: integer
+                renderable: false
+            timesContacted:
+                label: orocrm.activity_contact.ac_contact_count.label
+                frontend_type: integer
+                renderable: false
+            timesContactedIn:
+                label: orocrm.activity_contact.ac_contact_count_in.label
+                frontend_type: integer
+                renderable: false
+            timesContactedOut:
+                label: orocrm.activity_contact.ac_contact_count_out.label
+                frontend_type: integer
+                renderable: false
+            lastContactedDate:
+                label: orocrm.activity_contact.ac_last_contact_date.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateIn:
+                label: orocrm.activity_contact.ac_last_contact_date_in.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateOut:
+                label: orocrm.activity_contact.ac_last_contact_date_out.label
+                frontend_type: datetime
+                renderable: false
 
         properties:
             id: ~
@@ -427,6 +516,24 @@ datagrid:
                     data_name: l.lastName
                 createdAt:
                     data_name: l.createdAt
+                updatedAt:
+                    data_name: l.updatedAt
+                jobTitle:
+                    data_name: l.jobTitle
+                companyName:
+                    data_name: l.companyName
+                industry:
+                    data_name: l.industry
+                website:
+                    data_name: l.website
+                numberOfEmployees:
+                    data_name: l.numberOfEmployees
+                campaignName:
+                    data_name: campaign.name
+                sourceName:
+                    data_name: source.name
+                customerName:
+                    data_name: customerName
                 email:
                     data_name: l.email
                 phoneNumber:
@@ -437,8 +544,28 @@ datagrid:
                     data_name: regionLabel
                 addressPostalCode:
                     data_name: addressPostalCode
+                addressCity:
+                    data_name: address.city
+                addressStreet:
+                    data_name: address.street
                 ownerName:
                     data_name: ownerName
+                contactName:
+                    data_name: contactName
+                daysSinceLastContact:
+                    data_name: daysSinceLastContact
+                timesContacted:
+                    data_name: timesContacted
+                timesContactedIn:
+                    data_name: timesContactedIn
+                timesContactedOut:
+                    data_name: timesContactedOut
+                lastContactedDate:
+                    data_name: lastContactedDate
+                lastContactedDateIn:
+                    data_name: lastContactedDateIn
+                lastContactedDateOut:
+                    data_name: lastContactedDateOut
             default:
                 createdAt:  DESC
         actions:
@@ -463,10 +590,10 @@ datagrid:
                 link:          delete_link
         filters:
             columns:
-                 name:
+                name:
                     type: string
                     data_name: l.name
-                 channelName:
+                channelName:
                     type:      entity
                     data_name: channel.id
                     options:
@@ -474,7 +601,7 @@ datagrid:
                             class: OroCRMChannelBundle:Channel
                             property: name
                             translatable_options: false
-                 statusLabel:
+                statusLabel:
                     type: entity
                     data_name: status.name
                     enabled: false
@@ -483,19 +610,65 @@ datagrid:
                             class: OroCRMSalesBundle:LeadStatus
                             property: label
                             translatable_options: false
-                 firstName:
+                firstName:
                     type: string
                     data_name: l.firstName
-                 lastName:
+                lastName:
                     type: string
                     data_name: l.lastName
-                 email:
+                createdAt:
+                     type: datetime
+                     data_name: l.createdAt
+                     enabled: false
+                updatedAt:
+                    type: datetime
+                    data_name: l.updatedAt
+                    enabled: false
+                jobTitle:
+                    type: string
+                    data_name: l.jobTitle
+                    enabled: false
+                companyName:
+                    type: string
+                    data_name: l.companyName
+                    enabled: false
+                industry:
+                    type: string
+                    data_name: l.industry
+                    enabled: false
+                website:
+                    type: string
+                    data_name: l.website
+                    enabled: false
+                numberOfEmployees:
+                    type: number
+                    data_name: l.numberOfEmployees
+                    enabled: false
+                campaignName:
+                    type: entity
+                    data_name: campaign.id
+                    enabled: false
+                    options:
+                        field_options:
+                            class: OroCRMCampaignBundle:Campaign
+                            property: name
+                            translatable_options: false
+                sourceName:
+                    type: enum
+                    enum_code: lead_source
+                    data_name: source.id
+                    enabled: false
+                customerName:
+                    type: string
+                    data_name: customerName
+                    enabled: false
+                email:
                     type: string
                     data_name: l.email
-                 phoneNumber:
+                phoneNumber:
                     type: string
                     data_name: l.phoneNumber
-                 countryName:
+                countryName:
                     type: entity
                     data_name: address.country
                     enabled: false
@@ -505,26 +678,66 @@ datagrid:
                             property: name
                             query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
                             translatable_options: false
-                 regionLabel:
+                regionLabel:
                     type: string
                     data_name: regionLabel
                     enabled: false
-                 addressPostalCode:
+                addressPostalCode:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
-                 owner:
+                addressCity:
+                    type: string
+                    data_name: addressCity
+                    enabled: false
+                addressStreet:
+                    type: string
+                    data_name: addressStreet
+                    enabled: false
+                owner:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: l.owner
                     options:
                         data: @oro_user.provider.filter.user_choice_tree->getList
-                 businessUnitId:
+                contactName:
+                    type: string
+                    data_name: contactName
+                    enabled: false
+                businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: l.owner
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                daysSinceLastContact:
+                    type: number
+                    data_name: daysSinceLastContact
+                    enabled: false
+                timesContacted:
+                    type: number
+                    data_name: timesContacted
+                    enabled: false
+                timesContactedIn:
+                    type: number
+                    data_name: timesContactedIn
+                    enabled: false
+                timesContactedOut:
+                    type: number
+                    data_name: timesContactedOut
+                    enabled: false
+                lastContactedDate:
+                    type: datetime
+                    data_name: lastContactedDate
+                    enabled: false
+                lastContactedDateIn:
+                    type: datetime
+                    data_name: lastContactedDateIn
+                    enabled: false
+                lastContactedDateOut:
+                    type: datetime
+                    data_name: lastContactedDateOut
+                    enabled: false
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%

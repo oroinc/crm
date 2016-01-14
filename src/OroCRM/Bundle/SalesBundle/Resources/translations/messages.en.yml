@@ -195,9 +195,12 @@ orocrm:
                 none:             None
 
             datagrid:
+                number_of_employees: '# of employees'
                 country: Country
                 region: State
                 postal_code: Postal Code
+                city: City
+                street: Street
                 view: View
                 update: Update
                 delete: Delete
