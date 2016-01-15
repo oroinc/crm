@@ -684,6 +684,13 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account",
      *    mappedBy="defaultContact", cascade={"persist"}
      * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=240
+     *          }
+     *      }
+     * )
      */
     protected $defaultInAccounts;
 
