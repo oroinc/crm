@@ -27,8 +27,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      routeName="orocrm_call_index",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone-sign",
- *              "context-grid"="call-for-context-grid"
+ *              "icon"="icon-phone-sign"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -49,6 +48,10 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *              "acl"="orocrm_call_view",
  *              "action_button_widget"="orocrm_log_call_button",
  *              "action_link_widget"="orocrm_log_call_link"
+ *          },
+ *          "grid"={
+ *              "default"="calls-grid",
+ *              "context"="call-for-context-grid"
  *          }
  *      }
  * )
