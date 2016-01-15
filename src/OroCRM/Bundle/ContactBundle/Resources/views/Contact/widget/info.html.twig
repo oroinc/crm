@@ -1,5 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
     {% import 'OroUIBundle::macros.html.twig' as ui %}
@@ -126,6 +127,7 @@
                     {% else %}
                         {{ fullname }}
                     {% endif %}
+                    {{ U.user_business_unit_name(entity.assignedTo) }}
                 {%- endif -%}
             {%- endset -%}
 
