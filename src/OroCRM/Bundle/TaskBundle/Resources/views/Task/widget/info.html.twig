@@ -1,5 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import "OroActivityBundle::macros.html.twig" as AC %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
 
 <div class="widget-content form-horizontal box-content row-fluid">
     <div class="responsive-block">
@@ -13,6 +14,9 @@
         {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
         {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
         {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
-        {{ UI.renderProperty('orocrm.task.owner.label'|trans, entity.owner|oro_format_name|escape) }}
+        {% if entity.owner %}
+            {% set ownerInfo = entity.owner|oro_format_name|escape ~ U.user_business_unit_name(entity.owner) %}
+            {{ UI.renderProperty('orocrm.task.owner.label'|trans, ownerInfo) }}
+        {% endif %}
     </div>
 </div>
