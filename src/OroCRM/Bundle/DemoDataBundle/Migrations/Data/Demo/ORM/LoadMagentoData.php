@@ -408,7 +408,7 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
             $cartItem->setRowTotal($price + $taxAmount);
             $cartItem->setPriceInclTax($price + $taxAmount);
             $cartItem->setTaxAmount($taxAmount);
-            $cartItem->setSku('sku-' . $product);
+            $cartItem->setSku('sku-' . strtolower(str_replace(" ", "_", $product)));
             $cartItem->setProductType('simple');
             $cartItem->setName($product);
             $cartItem->setQty(1);
