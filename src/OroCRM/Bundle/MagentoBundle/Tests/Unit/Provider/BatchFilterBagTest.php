@@ -14,7 +14,11 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->filter = new BatchFilterBag();
     }
 
-    public function testGetAppliedFiltersShouldReturnFiltersWithUniqueKeysBecauseOfMagento17Workaround()
+    /**
+     * Make sure it works with magento 1.7 where only one filter from these using the same key are used
+     * @link https://magecore.atlassian.net/browse/CRM-4690
+     */
+    public function testGetAppliedFilters()
     {
         $from = new \DateTime('2015-01-01');
         $to = new \DateTime('2015-01-07');
