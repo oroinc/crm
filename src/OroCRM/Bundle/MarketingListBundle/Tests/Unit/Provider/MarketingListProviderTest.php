@@ -108,6 +108,16 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getQueryBuilder();
         $dataGrid = $this->getDataGrid();
+        $config = $this->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $config->expects($this->once())
+            ->method('offsetGetByPath')
+            ->with(DatagridConfiguration::DATASOURCE_SKIP_COUNT_WALKER_PATH)
+            ->will($this->returnValue(true));
+        $dataGrid->expects($this->once())
+            ->method('getConfig')
+            ->will($this->returnValue($config));
 
         $this->assertGetQueryBuilder(
             $marketingList,

@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Model;
 
+use Oro\Component\PhpUtils\ArrayUtil;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 use Oro\Bundle\QueryDesignerBundle\Model\AbstractQueryDesigner;
 use Oro\Bundle\QueryDesignerBundle\QueryDesigner\JoinIdentifierHelper;
-use Oro\Bundle\UIBundle\Tools\ArrayUtils;
 
 class ContactInformationFieldHelper
 {
@@ -157,7 +158,7 @@ class ContactInformationFieldHelper
 
             if ($entityContactInformation) {
                 foreach ($entityContactInformation as $contactInfoType => $contactInfoFields) {
-                    $entityColumns = ArrayUtils::arrayColumn($contactInfoFields, 'fieldName');
+                    $entityColumns = ArrayUtil::arrayColumn($contactInfoFields, 'fieldName');
                     foreach ($entityColumns as $entityColumn) {
                         $contactInfoColumns[$entityColumn] = $contactInfoType;
                     }
