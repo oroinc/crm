@@ -20,28 +20,66 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAppliedFilters()
     {
-        $from = new \DateTime('2015-01-01');
-        $to = new \DateTime('2015-01-07');
-
-        $this->filter->addDateFilter('created_at', 'from', $from, 'Y-m-d');
-        $this->filter->addDateFilter('created_at', 'to', $to, 'Y-m-d');
+        $this->filter
+            ->addComplexFilter(
+                'id-gt',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'gt', 'value' => 1],
+                ]
+            )
+            ->addComplexFilter(
+                'id-ge',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'ge', 'value' => 2],
+                ]
+            )
+            ->addComplexFilter(
+                'id-lt',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'lt', 'value' => 11],
+                ]
+            )
+            ->addComplexFilter(
+                'id-le',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'le', 'value' => 10],
+                ]
+            );
 
         $this->assertEquals(
             [
                 'filters' => [
                     BatchFilterBag::FILTER_TYPE_COMPLEX => [
                         [
-                            'key' => 'created_at',
+                            'key' => 'id',
                             'value' => [
-                                'key' => 'from',
-                                'value' => '2015-01-01',
+                                'key' => 'gt',
+                                'value' => 1,
                             ],
                         ],
                         [
-                            'key' => 'Created_at',
+                            'key' => 'iD',
                             'value' => [
-                                'key' => 'to',
-                                'value' => '2015-01-07',
+                                'key' => 'ge',
+                                'value' => 2,
+                            ],
+                        ],
+                        [
+                            'key' => 'Id',
+                            'value' => [
+                                'key' => 'lt',
+                                'value' => 11,
+                            ],
+                        ],
+                        [
+                            'key' => 'ID',
+                            'value' => [
+                                'key' => 'le',
+                                'value' => 10,
                             ],
                         ],
                     ],

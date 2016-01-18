@@ -99,11 +99,21 @@ class BatchFilterBag
      */
     private function createUniqueKey(array $usedKeys, $key)
     {
+        $functions = [
+            0 => 'strtolower',
+            1 => 'strtoupper',
+        ];
+
         $keyLength = strlen($key);
-        $i = 0;
-        while (in_array($key, $usedKeys) && $i < $keyLength) {
-            $key[$i] = strtoupper($key[$i]);
-            $i++;
+        $steps = pow($keyLength, 2);
+
+        $step = 0;
+        while (in_array($key, $usedKeys) && $step < $steps) {
+            $functionArray = array_pad(str_split(decbin($step)), -$keyLength, 0);
+            foreach ($functionArray as $i => $fnc) {
+                $key[$i] = call_user_func($functions[$fnc], $key[$i]);
+            }
+            $step++;
         }
 
         return $key;
