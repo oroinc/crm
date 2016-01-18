@@ -28,8 +28,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
- *              "context-grid"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "icon"="icon-user-md"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -47,6 +46,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_b2bcustomer_select"
+ *          },
+ *          "grid"={
+ *              "default"="orocrm-sales-b2bcustomers-grid",
+ *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
  *          },
  *         "tag"={
  *              "enabled"=true

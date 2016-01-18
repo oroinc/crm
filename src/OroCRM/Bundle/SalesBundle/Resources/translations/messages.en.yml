@@ -195,9 +195,12 @@ orocrm:
                 none:             None
 
             datagrid:
+                number_of_employees: '# of employees'
                 country: Country
                 region: State
                 postal_code: Postal Code
+                city: City
+                street: Street
                 view: View
                 update: Update
                 delete: Delete
@@ -253,6 +256,19 @@ orocrm:
                 view:   View
                 update: Update
                 delete: Delete
+                columns:
+                    account_name.label: Account Name
+                    contact_name.label: Contact Name
+                    billing_address_country.label:      Billing Address Country
+                    billing_address_region.label:       Billing Address Region
+                    billing_address_city.label:         Billing Address City
+                    billing_address_street.label:       Billing Address Street
+                    billing_address_postal_code.label:  Billing Address Postal Code
+                    shipping_address_country.label:     Shipping Address Country
+                    shipping_address_region.label:      Shipping Address Region
+                    shipping_address_city.label:        Shipping Address City
+                    shipping_address_street.label:      Shipping Address Street
+                    shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
         widgets:
             b2bcustomer_information: B2B Customer Information

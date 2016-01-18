@@ -34,6 +34,9 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
+ *          "grid"={
+ *              "default"="orocrm-email-campaign-grid"
+ *          },
  *          "tag"={
  *              "enabled"=true
  *          }

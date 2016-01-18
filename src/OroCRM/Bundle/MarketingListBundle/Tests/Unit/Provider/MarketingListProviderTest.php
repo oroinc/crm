@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 use Doctrine\ORM\Query\Expr\Select;
 
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
+use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\TagBundle\Grid\TagsExtension;
 use Oro\Bundle\DataGridBundle\Datagrid\Manager;
@@ -108,6 +109,8 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
         $marketingList = $this->getMarketingList($type);
         $queryBuilder = $this->getQueryBuilder();
         $dataGrid = $this->getDataGrid();
+        $config = $dataGrid->getConfig();
+        $config->offsetSetByPath(DatagridConfiguration::DATASOURCE_SKIP_COUNT_WALKER_PATH, true);
 
         $this->assertGetQueryBuilder(
             $marketingList,
@@ -258,7 +261,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject|DatagridInterface
      */
     protected function getDataGrid()
     {
