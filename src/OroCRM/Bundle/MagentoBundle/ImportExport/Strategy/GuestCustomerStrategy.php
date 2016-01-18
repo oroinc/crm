@@ -17,7 +17,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             return null;
         }
 
-        $this->cachedEntities = array();
+        $this->cachedEntities = [];
         $entity = $this->beforeProcessEntity($entity);
         $entity = $this->processEntity($entity, true, true, $this->context->getValue('itemData'));
         $entity = $this->afterProcessEntity($entity);
@@ -51,6 +51,8 @@ class GuestCustomerStrategy extends AbstractImportStrategy
     }
 
     /**
+     * @param Customer $entity
+     *
      * {@inheritdoc}
      */
     protected function afterProcessEntity($entity)
@@ -70,7 +72,6 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         }
 
         $entity->setWebsite($entity->getStore()->getWebsite());
-        $entity->setCreatedIn($entity->getStore()->getName());
         $this->setDefaultGroup($entity);
     }
 
@@ -79,8 +80,8 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function setDefaultGroup(Customer $entity)
     {
-        $em = $this->databaseHelper->getRegistry()->getManager();
         if (!$entity->getGroup() && $entity->getWebsite()->getDefaultGroupId()) {
+            $em = $this->strategyHelper->getEntityManager('OroCRMMagentoBundle:CustomerGroup');
             $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
                 ->findOneBy(
                     [

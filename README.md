@@ -7,7 +7,7 @@ This document contains information on how to download, install, and start
 using OroCRM. For a more detailed explanation, see the [Installation]
 chapter.
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/orocrm/crm/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/orocrm/crm/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/orocrm/crm/badges/quality-score.png?b=1.9)](https://scrutinizer-ci.com/g/orocrm/crm/?branch=1.9) [![Travis CI build status](https://travis-ci.org/orocrm/crm.svg?branch=1.9)](https://travis-ci.org/orocrm/platform/branches)
 
 Requirements
 ------------

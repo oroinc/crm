@@ -35,6 +35,7 @@ services:
             - @oro_entity.doctrine_helper
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
+            - { name: kernel.event_listener, event: oro_activity.remove_activity, method: onRemoveActivity }
             - { name: doctrine.event_listener, event: onFlush }
             - { name: doctrine.event_listener, event: postFlush }
 
@@ -61,8 +62,4 @@ services:
 
     orocrm_activity_contact.placeholder.filter:
         class: %orocrm_activity_contact.placeholder.filter.class%
-        arguments:
-            - @oro_activity_list.provider.chain
-            - @doctrine
-            - @oro_entity.doctrine_helper
-            - @oro_entity_config.provider.activity
+        parent: oro_activity_list.placeholder.filter
