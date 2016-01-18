@@ -5,11 +5,17 @@ namespace OroCRM\Bundle\ActivityContactBundle\Model;
 class TargetExcludeList
 {
     /**
-     * To skipp User entity recalculate to hot fix bug CRM-4767
+     * To skipp User and activities entities recalculate to hot fix bug CRM-4767
      *
      * @var array
      */
-    protected static $excludeTargets = ['Oro\Bundle\UserBundle\Entity\User'];
+    protected static $excludeTargets = [
+        'Oro\Bundle\UserBundle\Entity\User',
+        'OroCRM\Bundle\TaskBundle\Entity\Task',
+        'Oro\Bundle\CalendarBundle\Entity\CalendarEvent',
+        'OroCRM\Bundle\CallBundle\Entity\Call',
+        'Oro\Bundle\EmailBundle\Entity\Email',
+    ];
 
     /**
      * @param string $className

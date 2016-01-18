@@ -19,6 +19,9 @@ orocrm:
             label: Total number of outgoing contact attempts
             description: Represents total number of outgoing contact attempts
 
+        days_since_last_contact:
+            label: Days since the last contact
+
         info_title_times: Times Contacted: {{ total_contacted }}
         info_title_last:  Last Contacted: {{ direction }} {{ last_datetime }}
         info_title_no_data: Not contacted yet

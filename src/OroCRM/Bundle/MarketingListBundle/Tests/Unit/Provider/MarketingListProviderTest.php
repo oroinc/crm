@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Provider;
 
-use Oro\Bundle\DataGridBundle\Datagrid\Builder;
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Extension\Pager\PagerInterface;
 use Oro\Bundle\TagBundle\Grid\TagsExtension;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
@@ -100,7 +100,7 @@ class MarketingListProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $config->expects($this->once())
             ->method('offsetGetByPath')
-            ->with(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH)
+            ->with(DatagridConfiguration::DATASOURCE_SKIP_COUNT_WALKER_PATH)
             ->will($this->returnValue(true));
         $dataGrid->expects($this->once())
             ->method('getConfig')
