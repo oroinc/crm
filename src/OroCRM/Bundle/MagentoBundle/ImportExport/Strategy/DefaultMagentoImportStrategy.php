@@ -2,12 +2,15 @@
 
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ConfigurableAddOrReplaceStrategy;
-use Doctrine\Common\Util\ClassUtils;
 
 class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    const TARGET_TRAIT = 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationEntityTrait';
+    /** @var PropertyAccessor */
+    protected $propertyAccessor;
 
     /**
      * {@inheritdoc}
@@ -28,42 +31,23 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     /**
      * {@inheritdoc}
      */
-    protected function findExistingEntity($entity, array $searchContext = [])
+    protected function findEntityByIdentityValues($entityName, array $identityValues)
     {
-        $entityName = ClassUtils::getClass($entity);
-        $identifier = $this->databaseHelper->getIdentifier($entity);
-        $existingEntity = null;
-
-        // find by identifier
-        if ($identifier) {
-            $existingEntity = $this->databaseHelper->find($entityName, $identifier);
+        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
+            $identityValues['channel'] = $this->context->getOption('channel');
         }
 
-        // find by identity fields
-        if (!$existingEntity
-            && (!$searchContext || $this->databaseHelper->getIdentifier(current($searchContext)))
-        ) {
-            $identityValues = $searchContext;
+        return parent::findEntityByIdentityValues($entityName, $identityValues);
+    }
 
-            $usedTraits = class_uses($entityName);
-            if ($this->context->hasOption('channel') && in_array(self::TARGET_TRAIT, $usedTraits)) {
-                $channel = $this->databaseHelper->findOneBy(
-                    'Oro\Bundle\IntegrationBundle\Entity\Channel',
-                    ['id' => $this->context->getOption('channel')]
-                );
-                $identityValues['channel'] = $channel;
-            }
-
-            $identityValues += $this->fieldHelper->getIdentityValues($entity);
-            $existingEntity = $this->findEntityByIdentityValues($entityName, $identityValues);
+    /**
+     * @return PropertyAccessor
+     */
+    protected function getPropertyAccessor()
+    {
+        if (!$this->propertyAccessor) {
+            $this->propertyAccessor = PropertyAccess::createPropertyAccessor();
         }
-
-        if ($existingEntity && !$identifier) {
-            $identifier = $this->databaseHelper->getIdentifier($existingEntity);
-            $identifierName = $this->databaseHelper->getIdentifierFieldName($entity);
-            $this->fieldHelper->setObjectValue($entity, $identifierName, $identifier);
-        }
-
-        return $existingEntity;
+        return $this->propertyAccessor;
     }
 }

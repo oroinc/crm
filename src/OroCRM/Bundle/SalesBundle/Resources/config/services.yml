@@ -118,16 +118,6 @@ services:
         tags:
             - { name: oro_email.mailbox_process, type: lead }
 
-    oro_activity.listener.datagrid.context.sales:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.orocrm-sales-b2bcustomers-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-lead-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.sales-opportunity-for-context-grid, method: onBuildAfter }
-
     orocrm_sales.provider.forecast_of_opportunities:
         class: %orocrm_sales.provider.forecast_of_opportunity.class%
         arguments:
@@ -136,7 +126,6 @@ services:
             - @oro_locale.formatter.date_time
             - @oro_security.acl_helper
             - @translator
-            - @oro_security.security_facade
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%

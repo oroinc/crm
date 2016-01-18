@@ -1,8 +1,8 @@
 datagrid:
     orcrm-contact-requests-grid:
         extended_entity_name: %orocrm_contact_us.contactrequest.entity.class%
+        acl_resource: orocrm_contactus_request_view
         source:
-            acl_resource: orocrm_contactus_request_view
             type: orm
             query:
                 select:

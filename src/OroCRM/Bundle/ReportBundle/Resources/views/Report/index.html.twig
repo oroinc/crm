@@ -7,5 +7,15 @@
 
 {% block content %}
     {% set buttons = [] %}
+    {% set renderParams = {'enableViews': false}|merge(renderParams|default({})) %}
+    {% set params = params|default({})|merge({
+            '_grid_view': {
+                '_disabled': true
+            },
+            '_tags': {
+                '_disabled': true
+            }
+        })
+    %}
     {{ parent() }}
 {% endblock %}
