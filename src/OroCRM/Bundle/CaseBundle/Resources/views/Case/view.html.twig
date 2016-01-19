@@ -69,13 +69,7 @@
 
                 {%- set owner -%}
                     {%- if entity.owner -%}
-                        {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
-                                {{ entity.owner|oro_format_name|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.owner|oro_format_name|escape }}
-                        {% endif %}
+                        {{ U.render_user_name(entity.owner) }}
                         {{ U.user_business_unit_name(entity.owner) }}
                     {%- endif -%}
                 {%- endset -%}
@@ -83,13 +77,7 @@
 
                 {%- set assignedTo -%}
                     {%- if entity.assignedTo -%}
-                        {% if resource_granted('oro_user_user_view') %}
-                            <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                                {{ entity.assignedTo|oro_format_name|escape }}
-                            </a>
-                        {% else %}
-                            {{ entity.assignedTo|oro_format_name|escape }}
-                        {% endif %}
+                        {{ U.render_user_name(entity.assignedTo) }}
                         {{ U.user_business_unit_name(entity.assignedTo) }}
                     {%- endif -%}
                 {%- endset -%}

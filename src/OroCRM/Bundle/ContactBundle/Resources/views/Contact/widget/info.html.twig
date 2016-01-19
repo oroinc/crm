@@ -116,17 +116,9 @@
                 {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
 
-            {% set fullname = entity.assignedTo|oro_format_name %}
-
             {%- set assignedToData -%}
                 {%- if entity.assignedTo -%}
-                    {% if resource_granted('oro_user_user_view') %}
-                        <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                            {{ fullname }}
-                        </a>
-                    {% else %}
-                        {{ fullname }}
-                    {% endif %}
+                    {{ U.render_user_name(entity.assignedTo) }}
                     {{ U.user_business_unit_name(entity.assignedTo) }}
                 {%- endif -%}
             {%- endset -%}

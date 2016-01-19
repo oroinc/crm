@@ -14,9 +14,12 @@
         {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
         {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
         {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
-        {% if entity.owner %}
-            {% set ownerInfo = entity.owner|oro_format_name|escape ~ U.user_business_unit_name(entity.owner)|raw %}
-            {{ UI.renderHtmlProperty('orocrm.task.owner.label'|trans, ownerInfo) }}
-        {% endif %}
+        {% set ownerData %}
+            {% if entity.owner %}
+                {{ U.render_user_name(entity.owner) }}
+                {{ U.user_business_unit_name(entity.owner) }}
+            {% endif %}
+        {% endset %}
+        {{ UI.renderHtmlProperty('orocrm.task.owner.label'|trans, ownerData) }}
     </div>
 </div>
