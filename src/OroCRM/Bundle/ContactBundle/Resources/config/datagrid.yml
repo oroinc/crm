@@ -166,6 +166,9 @@ datagrid:
     # contacts main grid show on orocrm_contact_index route
     contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        mixins:
+            - activity-contact-data-hidden-mixin
+            - activity-contact-days-since-last-contact-hidden-mixin
         acl_resource: orocrm_contact_view
         source:
             type: orm
@@ -198,13 +201,6 @@ datagrid:
                     - CONCAT(o.firstName, CONCAT(' ', o.lastName)) as ownerName
                     - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedName
                     - CONCAT(reportsTo.firstName, CONCAT(' ', reportsTo.lastName)) as reportsName
-                    - c.ac_contact_count as timesContacted
-                    - c.ac_contact_count_in as timesContactedIn
-                    - c.ac_contact_count_out as timesContactedOut
-                    - c.ac_last_contact_date as lastContactedDate
-                    - c.ac_last_contact_date_in as lastContactedDateIn
-                    - c.ac_last_contact_date_out as lastContactedDateOut
-                    - DATE_DIFF(CURRENT_DATE(), c.ac_last_contact_date) as daysSinceLastContact
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -330,34 +326,6 @@ datagrid:
             reportsName:
                 label:         orocrm.contact.reports_to.label
                 renderable: false
-            daysSinceLastContact:
-                label: orocrm.activity_contact.days_since_last_contact.label
-                frontend_type: integer
-                renderable: false
-            timesContacted:
-                label: orocrm.activity_contact.ac_contact_count.label
-                frontend_type: integer
-                renderable: false
-            timesContactedIn:
-                label: orocrm.activity_contact.ac_contact_count_in.label
-                frontend_type: integer
-                renderable: false
-            timesContactedOut:
-                label: orocrm.activity_contact.ac_contact_count_out.label
-                frontend_type: integer
-                renderable: false
-            lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateIn:
-                label: orocrm.activity_contact.ac_last_contact_date_in.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateOut:
-                label: orocrm.activity_contact.ac_last_contact_date_out.label
-                frontend_type: datetime
-                renderable: false
         properties:
             id: ~
             emailId: ~
@@ -424,20 +392,6 @@ datagrid:
                     data_name: assignedName
                 reportsName:
                     data_name: reportsName
-                daysSinceLastContact:
-                    data_name: daysSinceLastContact
-                timesContacted:
-                    data_name: timesContacted
-                timesContactedIn:
-                    data_name: timesContactedIn
-                timesContactedOut:
-                    data_name: timesContactedOut
-                lastContactedDate:
-                    data_name: lastContactedDate
-                lastContactedDateIn:
-                    data_name: lastContactedDateIn
-                lastContactedDateOut:
-                    data_name: lastContactedDateOut
             default:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
@@ -558,34 +512,6 @@ datagrid:
                     data_name: c.owner
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
-                daysSinceLastContact:
-                    type: number
-                    data_name: daysSinceLastContact
-                    enabled: false
-                timesContacted:
-                    type: number
-                    data_name: timesContacted
-                    enabled: false
-                timesContactedIn:
-                    type: number
-                    data_name: timesContactedIn
-                    enabled: false
-                timesContactedOut:
-                    type: number
-                    data_name: timesContactedOut
-                    enabled: false
-                lastContactedDate:
-                    type: datetime
-                    data_name: lastContactedDate
-                    enabled: false
-                lastContactedDateIn:
-                    type: datetime
-                    data_name: lastContactedDateIn
-                    enabled: false
-                lastContactedDateOut:
-                    type: datetime
-                    data_name: lastContactedDateOut
-                    enabled: false
         actions:
             view:
                 type: navigate
