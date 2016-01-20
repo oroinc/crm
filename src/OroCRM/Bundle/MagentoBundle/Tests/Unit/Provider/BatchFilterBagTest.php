@@ -14,6 +14,81 @@ class BatchFilterBagTest extends \PHPUnit_Framework_TestCase
         $this->filter = new BatchFilterBag();
     }
 
+    /**
+     * Make sure it works with magento 1.7 where only one filter from these using the same key are used
+     * @link https://magecore.atlassian.net/browse/CRM-4690
+     */
+    public function testGetAppliedFilters()
+    {
+        $this->filter
+            ->addComplexFilter(
+                'id-gt',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'gt', 'value' => 1],
+                ]
+            )
+            ->addComplexFilter(
+                'id-ge',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'ge', 'value' => 2],
+                ]
+            )
+            ->addComplexFilter(
+                'id-lt',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'lt', 'value' => 11],
+                ]
+            )
+            ->addComplexFilter(
+                'id-le',
+                [
+                    'key' => 'id',
+                    'value' => ['key' => 'le', 'value' => 10],
+                ]
+            );
+
+        $this->assertEquals(
+            [
+                'filters' => [
+                    BatchFilterBag::FILTER_TYPE_COMPLEX => [
+                        [
+                            'key' => 'id',
+                            'value' => [
+                                'key' => 'gt',
+                                'value' => 1,
+                            ],
+                        ],
+                        [
+                            'key' => 'iD',
+                            'value' => [
+                                'key' => 'ge',
+                                'value' => 2,
+                            ],
+                        ],
+                        [
+                            'key' => 'Id',
+                            'value' => [
+                                'key' => 'lt',
+                                'value' => 11,
+                            ],
+                        ],
+                        [
+                            'key' => 'ID',
+                            'value' => [
+                                'key' => 'le',
+                                'value' => 10,
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            $this->filter->getAppliedFilters()
+        );
+    }
+
     public function testFilters()
     {
         // add only last id filter

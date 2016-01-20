@@ -50,8 +50,8 @@ class LoadSourceData extends AbstractTranslatableEntityFixture
                 // save
                 $manager->persist($caseSource);
             }
-        }
 
-        $manager->flush();
+            $manager->flush();
+        }
     }
 }

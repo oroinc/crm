@@ -3,9 +3,11 @@
 namespace OroCRM\Bundle\ContactBundle\Handler;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Oro\Bundle\EntityBundle\Form\EntityField\Handler\Processor\AbstractEntityApiHandler;
 use Oro\Bundle\EntityBundle\ORM\OroEntityManager;
+use Oro\Bundle\SecurityBundle\SecurityFacade;
 
 /**
  * Class ContactPhoneApiHandler
@@ -21,11 +23,29 @@ class ContactPhoneApiHandler extends AbstractEntityApiHandler
     protected $entityManager;
 
     /**
-     * @param OroEntityManager $entityManager
+     * @var SecurityFacade
      */
-    public function __construct(OroEntityManager $entityManager)
+    protected $securityFacade;
+
+    /**
+     * @param OroEntityManager $entityManager
+     * @param SecurityFacade $securityFacade
+     */
+    public function __construct(OroEntityManager $entityManager, SecurityFacade $securityFacade)
     {
         $this->entityManager = $entityManager;
+        $this->securityFacade = $securityFacade;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function beforeProcess($entity)
+    {
+        //check owner (Contact) entity with 'edit' permission
+        if (!$this->securityFacade->isGranted('EDIT', $entity->getOwner())) {
+            throw new AccessDeniedException();
+        }
     }
 
     /**
