@@ -20,7 +20,6 @@ class LeadEntityNameProvider implements EntityNameProviderInterface
     public function getName($format, $locale, $entity)
     {
         if ($format === EntityNameProviderInterface::FULL && is_a($entity, self::CLASS_NAME)) {
-
             return $entity->getName();
         }
 
@@ -33,7 +32,6 @@ class LeadEntityNameProvider implements EntityNameProviderInterface
     public function getNameDQL($format, $locale, $className, $alias)
     {
         if ($format === EntityNameProviderInterface::FULL && $className === self::CLASS_NAME) {
-
             return sprintf('%s.name', $alias);
         }
 
