@@ -368,7 +368,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => -1],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -379,7 +379,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => -1],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -390,7 +390,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => -1],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -401,7 +401,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => -1],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -412,7 +412,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => -1],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
