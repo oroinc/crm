@@ -241,18 +241,11 @@ services:
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
 
-    oro_activity.listener.datagrid.context.contact:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }
-
     orocrm_contact.handler.contact_email_api:
         class: %orocrm_contact.handler.contact_email_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -260,6 +253,7 @@ services:
         class: %orocrm_contact.handler.contact_phone_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
 

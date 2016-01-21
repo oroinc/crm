@@ -28,6 +28,13 @@
     {% set actions = [action] %}
 
     {% set action %}
+        <a href="<%= routing.generate('orocrm_task_view', {'id': relatedActivityId}) %>"
+           title="{{ 'orocrm.task.view'|trans|raw }}"><i
+                class="icon-eye-open hide-text">{{ 'orocrm.task.view'|trans|raw }}</i></a>
+    {% endset %}
+    {% set actions = actions|merge([action]) %}
+
+    {% set action %}
         <% if (editable) { %>
         <a href="#" class="action item-edit-button"
            title="{{ 'orocrm.task.update_task'|trans({'{{ entity }}': entityName})|raw }}">

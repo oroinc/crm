@@ -139,7 +139,7 @@ class CallController extends Controller
      *      requirements={"id"="\d+", "renderContexts"="\d+"},
      *      defaults={"renderContexts"=true}
      * )
-     * @Template
+     * @Template("OroCRMCallBundle:Call/widget:info.html.twig")
      * @AclAncestor("orocrm_call_view")
      */
     public function infoAction(Call $entity, $renderContexts)

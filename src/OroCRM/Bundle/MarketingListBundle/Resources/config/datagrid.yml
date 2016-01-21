@@ -93,7 +93,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_marketing_list_view
+                acl_resource: orocrm_marketing_list_view
                 rowAction:    true
             update:
                 type:          navigate
@@ -208,13 +208,13 @@ datagrid:
                 label:        orocrm.marketinglist.action.subscribe
                 link:         subscribe_link
                 icon:         plus
-                acl_recource: orocrm_marketinglist_unsubscribed_item_delete
+                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
             unsubscribe:
                 type:         ajax
                 label:        orocrm.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
-                acl_recource: orocrm_marketinglist_unsubscribed_item_create
+                acl_resource: orocrm_marketinglist_unsubscribed_item_create
 
     orocrm-marketing-list-items-mixin:
         extends: orocrm-marketing-list-items-base-unsubscribe-mixin
@@ -234,7 +234,7 @@ datagrid:
                 label:        orocrm.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
-                acl_recource: orocrm_marketing_list_removed_item_create
+                acl_resource: orocrm_marketing_list_removed_item_create
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
@@ -260,7 +260,7 @@ datagrid:
                 label:        orocrm.marketinglist.action.unremove
                 link:         unremove_link
                 icon:         undo
-                acl_recource: orocrm_marketing_list_removed_item_delete
+                acl_resource: orocrm_marketing_list_removed_item_delete
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
@@ -384,13 +384,13 @@ datagrid:
                 label:        orocrm.marketinglist.action.subscribe
                 link:         subscribe_link
                 icon:         plus
-                acl_recource: orocrm_marketinglist_unsubscribed_item_delete
+                acl_resource: orocrm_marketinglist_unsubscribed_item_delete
             unsubscribe:
                 type:         ajax
                 label:        orocrm.marketinglist.action.unsubscribe
                 link:         unsubscribe_link
                 icon:         minus
-                acl_recource: orocrm_marketinglist_unsubscribed_item_create
+                acl_resource: orocrm_marketinglist_unsubscribed_item_create
 
     orocrm-marketing-list-manual-items-mixin:
         extends: orocrm-marketing-list-manual-items-base-unsubscribe-mixin
@@ -410,7 +410,7 @@ datagrid:
                 label:        orocrm.marketinglist.action.remove
                 link:         remove_link
                 icon:         remove
-                acl_recource: orocrm_marketing_list_removed_item_create
+                acl_resource: orocrm_marketing_list_removed_item_create
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.remove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.remove_dialog.confirm_ok
@@ -436,7 +436,7 @@ datagrid:
                 label:        orocrm.marketinglist.action.unremove
                 link:         unremove_link
                 icon:         undo
-                acl_recource: orocrm_marketing_list_removed_item_delete
+                acl_resource: orocrm_marketing_list_removed_item_delete
                 defaultMessages:
                     confirm_title:   orocrm.marketinglist.unremove_dialog.confirm_title
                     confirm_ok:      orocrm.marketinglist.unremove_dialog.confirm_ok
