@@ -106,7 +106,9 @@ class ActivityListener
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
-                if ($this->activityContactProvider->isSupportedEntity($class) && !isset($this->deletedEntities[$key])) {
+                if (!isset($this->deletedEntities[$key])
+                    && $this->activityContactProvider->isSupportedEntity($class)
+                ) {
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
@@ -131,8 +133,8 @@ class ActivityListener
                 $class = $this->doctrineHelper->getEntityClass($entity);
                 $id    = $this->doctrineHelper->getSingleEntityIdentifier($entity);
                 $key   = $class . '_' . $id;
-                if ($this->activityContactProvider->isSupportedEntity($class)
-                    && !isset($this->updatedEntities[$key])
+                if (!isset($this->updatedEntities[$key])
+                    && $this->activityContactProvider->isSupportedEntity($class)
                 ) {
                     $changes            = $args->getEntityManager()->getUnitOfWork()->getEntityChangeSet($entity);
                     $isDirectionChanged = $this->activityContactProvider
