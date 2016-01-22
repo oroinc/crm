@@ -10,6 +10,7 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
@@ -368,7 +369,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => -1],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -379,7 +380,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => -1],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -390,7 +391,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => -1],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -401,7 +402,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => -1],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -412,7 +413,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => -1],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
