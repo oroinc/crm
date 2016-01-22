@@ -52,8 +52,15 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_order');
+        $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', 'orocrm_magento_order');
+        if (!$schema->hasTable($associationTableName)) {
+            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_order');
+        }
+
+        $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', 'orocrm_magento_order');
+        if (!$schema->hasTable($associationTableName)) {
+            $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_order');
+        }
     }
 
     /**
@@ -64,6 +71,9 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
      */
     public static function addNoteAssociations(Schema $schema, NoteExtension $noteExtension)
     {
-        $noteExtension->addNoteAssociation($schema, 'orocrm_magento_order');
+        $table = $schema->getTable('oro_note');
+        if (!$table->hasColumn($noteExtension->getAssociationColumnName('orocrm_magento_order'))) {
+            $noteExtension->addNoteAssociation($schema, 'orocrm_magento_order');
+        }
     }
 }
