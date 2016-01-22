@@ -61,62 +61,7 @@ class BatchFilterBag
             $filters[self::FILTER_TYPE_COMPLEX] = array_values($this->filters[self::FILTER_TYPE_COMPLEX]);
         }
 
-        return ['filters' => $this->fixFilters($filters)];
-    }
-
-    /**
-     * Fixes issues with magento 1.7 where only one filter from these using the same key are used
-     * @link https://magecore.atlassian.net/browse/CRM-4690
-     *
-     * @param array $filters
-     */
-    private function fixFilters(array $filters)
-    {
-        $fixedFilters = [];
-        $usedKeys = [];
-
-        foreach ($filters as $key => $filter) {
-            if (is_array($filter)) {
-                foreach ($filter as $subKey => $subFilter) {
-                    if (isset($subFilter['key'])) {
-                        $subFilter['key'] = $this->createUniqueKey($usedKeys, $subFilter['key']);
-                        $usedKeys[] = $subFilter['key'];
-                    }
-
-                    $fixedFilters[$key][$subKey] = $subFilter;
-                }
-            } else {
-                $fixedFilters[$key] = $filter;
-            }
-        }
-
-        return $fixedFilters;
-    }
-
-    /**
-     * @param array $usedKeys
-     * @param string $key
-     */
-    private function createUniqueKey(array $usedKeys, $key)
-    {
-        $functions = [
-            0 => 'strtolower',
-            1 => 'strtoupper',
-        ];
-
-        $keyLength = strlen($key);
-        $steps = pow($keyLength, 2);
-
-        $step = 0;
-        while (in_array($key, $usedKeys) && $step < $steps) {
-            $functionArray = array_pad(str_split(decbin($step)), -$keyLength, 0);
-            foreach ($functionArray as $i => $fnc) {
-                $key[$i] = call_user_func($functions[$fnc], $key[$i]);
-            }
-            $step++;
-        }
-
-        return $key;
+        return ['filters' => $filters];
     }
 
     /**

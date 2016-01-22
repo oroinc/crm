@@ -135,3 +135,9 @@ services:
             - @oro_dashboard.provider.big_number.date_helper
         tags:
             - { name: oro_dashboard.big_number.provider, alias: b2b }
+
+    orocrm_sales.provider.lead_entity_name:
+        class: OroCRM\Bundle\SalesBundle\Provider\LeadEntityNameProvider
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
