@@ -192,7 +192,7 @@ services:
     orocrm_contact.email.owner.provider:
         class: %orocrm_contact.email.owner.provider.class%
         tags:
-            - { name: oro_email.owner.provider, order: 2 }
+            - { name: oro_email.owner.provider, order: 3 }
 
     orocrm_contact.subscriber.contact_listener:
         class: %orocrm_contact.subscriber.contact_listener.class%
