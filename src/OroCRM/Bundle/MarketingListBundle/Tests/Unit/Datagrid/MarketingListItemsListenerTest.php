@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
@@ -69,7 +70,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
         $parameters = [];
         if ($hasParameter) {
-            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+            $parameters = [MixinListener::GRID_MIXIN => self::MIXIN_NAME];
         }
 
         $datagrid
@@ -178,7 +179,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
         $parameters = [];
         if ($hasParameter) {
-            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+            $parameters = [MixinListener::GRID_MIXIN => self::MIXIN_NAME];
 
             $this->marketingListHelper
                 ->expects($this->once())

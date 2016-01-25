@@ -140,7 +140,7 @@ services:
             - @orocrm_marketing_list.model.helper
             - @doctrine
         tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: 10 }
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: 300 }
 
     orocrm_campaign.listener.email_campaign_statistic_groupping:
         class: %orocrm_campaign.listener.email_campaign_statistic_groupping.class%
