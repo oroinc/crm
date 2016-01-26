@@ -20,10 +20,9 @@
 
 {% block activityActions %}
     {% set action %}
-        {# Add button for add context in the activity list item #}
-        {% if resource_granted('orocrm_call_update') %}
+        <% if (editable) { %>
             {{ AC.activity_context_link() }}
-        {% endif %}
+        <% } %>
     {% endset %}
     {% set actions = [action] %}
 
