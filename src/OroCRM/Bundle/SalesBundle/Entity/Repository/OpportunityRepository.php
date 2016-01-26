@@ -93,6 +93,14 @@ class OpportunityRepository extends EntityRepository
      */
     public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper)
     {
+        if (!$ownerIds) {
+            return [
+                'inProgressCount' => 0,
+                'budgetAmount' => 0,
+                'weightedForecast' => 0,
+            ];
+        }
+
         if ($date === null) {
             return $this->getForecastOfOpporunitiesCurrentData($ownerIds, $aclHelper);
         }

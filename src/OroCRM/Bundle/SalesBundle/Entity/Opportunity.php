@@ -32,8 +32,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd",
- *              "context-grid"="sales-opportunity-for-context-grid"
+ *              "icon"="icon-usd"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -52,6 +51,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="sales-opportunity-grid",
+ *              "context"="sales-opportunity-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true

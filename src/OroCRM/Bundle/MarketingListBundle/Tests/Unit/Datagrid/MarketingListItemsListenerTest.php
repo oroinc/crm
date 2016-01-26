@@ -3,10 +3,10 @@
 namespace OroCRM\Bundle\MarketingListBundle\Tests\Unit\Datagrid;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 use Oro\Bundle\SegmentBundle\Entity\Segment;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
 
 class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -20,101 +20,16 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $dataGridHelper;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $marketingListHelper;
 
     protected function setUp()
     {
-        $this->dataGridHelper = $this
-            ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->marketingListHelper = $this
             ->getMockBuilder('OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->listener = new MarketingListItemsListener($this->dataGridHelper, $this->marketingListHelper);
-    }
-
-    /**
-     * @param string $gridName
-     * @param bool   $hasParameter
-     * @param bool   $isApplicable
-     *
-     * @dataProvider preBuildDataProvider
-     */
-    public function testOnPreBuild($gridName, $hasParameter, $isApplicable)
-    {
-        $event = $this
-            ->getMockBuilder('Oro\Bundle\DataGridBundle\Event\PreBuild')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $config = $this
-            ->getMockBuilder('Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $event
-            ->expects($this->once())
-            ->method('getConfig')
-            ->will($this->returnValue($config));
-
-        $config
-            ->expects($this->once())
-            ->method('getName')
-            ->will($this->returnValue($gridName));
-
-        $parameters = [];
-        if ($hasParameter) {
-            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
-        }
-
-        $event
-            ->expects($this->once())
-            ->method('getParameters')
-            ->will($this->returnValue(new ParameterBag($parameters)));
-
-        if ($hasParameter) {
-            $this->marketingListHelper->expects($this->once())
-                ->method('getMarketingListIdByGridName')
-                ->with($gridName)
-                ->will($this->returnValue(intval($isApplicable)));
-        }
-
-        if ($hasParameter && $isApplicable) {
-            $this->dataGridHelper
-                ->expects($this->once())
-                ->method('extendConfiguration')
-                ->with($this->equalTo($config), $this->equalTo(self::MIXIN_NAME));
-        } else {
-            $this->dataGridHelper
-                ->expects($this->never())
-                ->method('extendConfiguration');
-        }
-
-        $this->listener->onPreBuild($event);
-    }
-
-    /**
-     * @return array
-     */
-    public function preBuildDataProvider()
-    {
-        return [
-            'incorrect grid no parameters' => ['gridName', false, false],
-            'incorrect grid with parameters' => ['gridName', true, false],
-            'incorrect id no parameters' => [ConfigurationProvider::GRID_PREFIX, false, false],
-            'incorrect id with parameters' => [ConfigurationProvider::GRID_PREFIX, true, false],
-            'correct grid no parameters' => [ConfigurationProvider::GRID_PREFIX . '1', false, false],
-            'correct grid with parameters' => [ConfigurationProvider::GRID_PREFIX . '1', true, true],
-        ];
+        $this->listener = new MarketingListItemsListener($this->marketingListHelper);
     }
 
     /**
@@ -155,7 +70,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
         $parameters = [];
         if ($hasParameter) {
-            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+            $parameters = [MixinListener::GRID_MIXIN => self::MIXIN_NAME];
         }
 
         $datagrid
@@ -264,7 +179,7 @@ class MarketingListItemsListenerTest extends \PHPUnit_Framework_TestCase
 
         $parameters = [];
         if ($hasParameter) {
-            $parameters = [MarketingListItemsListener::MIXIN => self::MIXIN_NAME];
+            $parameters = [MixinListener::GRID_MIXIN => self::MIXIN_NAME];
 
             $this->marketingListHelper
                 ->expects($this->once())

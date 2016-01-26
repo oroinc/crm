@@ -68,6 +68,10 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *          },
  *          "tag"={
  *              "enabled"=true
+ *          },
+ *          "grid"={
+ *              "default"="tasks-grid",
+ *              "context"="task-for-context-grid"
  *          }
  *      }
  * )

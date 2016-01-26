@@ -6,7 +6,7 @@ use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
-use Oro\Bundle\DataGridBundle\Datagrid\Builder;
+use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\DatagridInterface;
 use Oro\Bundle\DataGridBundle\Datagrid\Manager;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
@@ -76,7 +76,10 @@ class MarketingListProvider
         $queryBuilder = $this->getMarketingListQueryBuilder($marketingList, $mixin);
         $dataGridConfig = $this->getMarketingListDataGrid($marketingList, $mixin)->getConfig();
 
-        $skipCountWalker = $dataGridConfig->offsetGetByPath(Builder::DATASOURCE_SKIP_COUNT_WALKER_PATH, false);
+        $skipCountWalker = $dataGridConfig->offsetGetByPath(
+            DatagridConfiguration::DATASOURCE_SKIP_COUNT_WALKER_PATH,
+            false
+        );
         $iterator = new BufferedQueryResultIterator($queryBuilder, !$skipCountWalker);
 
         return $iterator;

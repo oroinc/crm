@@ -34,7 +34,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *      },
  *      "form"={
  *            "form_type"="orocrm_channel_select_type"
- *      }
+ *      },
+ *      "grid"={
+ *          "default"="orocrm-channels-grid"
+ *     }
  *  }
  * )
  */
