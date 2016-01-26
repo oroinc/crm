@@ -76,7 +76,8 @@ class EmailTransport implements TransportInterface
             ->setEntityId($entityId)
             ->setTo($to)
             ->setSubject($subjectRendered)
-            ->setBody($templateRendered);
+            ->setBody($templateRendered)
+            ->setCampaignOwner($campaign->getOwner());
 
         $this->processor->process($emailModel);
     }

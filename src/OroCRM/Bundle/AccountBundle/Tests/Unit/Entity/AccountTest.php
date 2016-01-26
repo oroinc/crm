@@ -97,4 +97,23 @@ class AccountTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('email@example.com'));
         $this->assertEquals('email@example.com', $account->getEmail());
     }
+
+    public function testSetDefaultContact()
+    {
+        $account = new Account();
+        $this->assertNull($account->getDefaultContact());
+
+        $contact = new Contact();
+        $account->setDefaultContact($contact);
+        $this->assertSame($contact, $account->getDefaultContact());
+        $this->assertCount(1, $contact->getDefaultInAccounts());
+        $this->assertSame($account, $contact->getDefaultInAccounts()->first());
+
+        $contact2 = new Contact();
+        $account->setDefaultContact($contact2);
+        $this->assertCount(0, $contact->getDefaultInAccounts());
+        $this->assertCount(1, $contact2->getDefaultInAccounts());
+        $this->assertSame($contact2, $account->getDefaultContact());
+        $this->assertSame($account, $contact2->getDefaultInAccounts()->first());
+    }
 }

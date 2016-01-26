@@ -2,6 +2,7 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
 {% import "OroActivityBundle::macros.html.twig" as AC %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
 
 {% oro_title_set({params : {"%entity.subject%": entity.subject|default('N/A') }}) %}
 
@@ -53,15 +54,10 @@
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
                 {%- set ownerData -%}
-                {%- if entity.owner -%}
-                    {% if resource_granted('oro_user_user_view') %}
-                        <a href="{{ path('oro_user_view', {'id': entity.owner.id}) }}">
-                            {{ entity.owner|oro_format_name|escape }}
-                        </a>
-                    {% else %}
-                        {{ entity.owner|oro_format_name|escape }}
-                    {% endif %}
-                {%- endif -%}
+                    {%- if entity.owner -%}
+                        {{ U.render_user_name(entity.owner) }}
+                        {{ U.user_business_unit_name(entity.owner) }}
+                    {%- endif -%}
                 {%- endset -%}
                 {{ UI.renderHtmlProperty('orocrm.task.owner.label'|trans, ownerData) }}
             </div>

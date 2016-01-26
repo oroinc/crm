@@ -276,6 +276,7 @@ datagrid:
                         field_options:
                             class: OroCRMSalesBundle:OpportunityStatus
                             property: label
+                            multiple: true
                 numberOfOpportunities:
                     type: number
                     data_name: numberOfOpportunities
