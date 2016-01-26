@@ -46,7 +46,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user",
- *              "context-grid"="magento-customers-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -61,6 +60,10 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",
+ *          },
+ *          "grid"={
+ *              "default"="magento-customers-grid",
+ *              "context"="magento-customers-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true

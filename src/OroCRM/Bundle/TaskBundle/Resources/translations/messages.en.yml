@@ -39,6 +39,7 @@ orocrm:
         delete_task: Delete {{ entity }}
         created_by:  assigned by {{ user }}
         changed_by:  assigned by {{ user }}, updated by {{ editor }}
+        view:        View task
 
         taskpriority:
             entity_label: Task Priority

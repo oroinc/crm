@@ -51,8 +51,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                  "phone"={
  *                      {"fieldName"="primaryPhone"}
  *                  }
- *              },
- *              "context-grid"="contacts-for-context-grid"
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -71,6 +70,10 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="contacts-grid",
+ *              "context"="contacts-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true
@@ -675,6 +678,22 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      */
     protected $organization;
 
+    /**
+     * @var Account[]|Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\AccountBundle\Entity\Account",
+     *    mappedBy="defaultContact", cascade={"persist"}
+     * )
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=240
+     *          }
+     *      }
+     * )
+     */
+    protected $defaultInAccounts;
+
     public function __construct()
     {
         parent::__construct();
@@ -683,6 +702,7 @@ class Contact extends ExtendContact implements EmailOwnerInterface
         $this->accounts = new ArrayCollection();
         $this->emails   = new ArrayCollection();
         $this->phones   = new ArrayCollection();
+        $this->defaultInAccounts = new ArrayCollection();
     }
 
     public function __clone()
@@ -700,6 +720,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
         }
         if ($this->phones) {
             $this->phones = clone $this->phones;
+        }
+        if ($this->defaultInAccounts) {
+            $this->defaultInAccounts = clone $this->defaultInAccounts;
         }
     }
 
@@ -1526,5 +1549,43 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function addDefaultInAccount(Account $account)
+    {
+        if (!$this->defaultInAccounts->contains($account)) {
+            $this->defaultInAccounts->add($account);
+            $account->setDefaultContact($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param Account $account
+     *
+     * @return $this
+     */
+    public function removeDefaultInAccount(Account $account)
+    {
+        $this->defaultInAccounts->removeElement($account);
+        if ($account->getDefaultContact() === $this) {
+            $account->setDefaultContact(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Account[]|Collection
+     */
+    public function getDefaultInAccounts()
+    {
+        return $this->defaultInAccounts;
     }
 }
