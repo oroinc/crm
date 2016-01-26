@@ -49,10 +49,7 @@ class CaseMailboxProcessSettingsTagSubscriber extends TagSubscriber
         }
 
         /** @var Tag[] $tags */
-        $tags = array_merge(
-            $event->getForm()->get('all')->getData(),
-            $event->getForm()->get('owner')->getData()
-        );
+        $tags = $event->getForm()->get('autocomplete')->getData();
 
         foreach ($tags as $tag) {
             $tag->setOrganization($entity->getMailbox()->getOrganization());
