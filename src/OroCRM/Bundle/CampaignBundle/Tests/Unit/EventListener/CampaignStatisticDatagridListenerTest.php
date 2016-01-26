@@ -5,9 +5,9 @@ namespace OroCRM\Bundle\CampaignBundle\Tests\Unit\EventListener;
 use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 use OroCRM\Bundle\CampaignBundle\EventListener\CampaignStatisticDatagridListener;
 use OroCRM\Bundle\MarketingListBundle\Datagrid\ConfigurationProvider;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
 
 class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
 {
@@ -120,7 +120,7 @@ class CampaignStatisticDatagridListenerTest extends \PHPUnit_Framework_TestCase
             $this->assertEmpty($config->offsetGetByPath(CampaignStatisticDatagridListener::PATH_DATAGRID_WHERE));
         }
 
-        $this->assertEquals($expectedMixin, $parameters->get(MarketingListItemsListener::MIXIN));
+        $this->assertEquals($expectedMixin, $parameters->get(MixinListener::GRID_MIXIN));
     }
 
     /**
