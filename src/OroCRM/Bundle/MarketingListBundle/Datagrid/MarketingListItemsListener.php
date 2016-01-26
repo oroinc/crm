@@ -6,8 +6,8 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-
 use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
+
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
