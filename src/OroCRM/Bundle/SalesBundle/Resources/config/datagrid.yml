@@ -269,7 +269,6 @@ datagrid:
                     - l.industry
                     - l.website
                     - l.numberOfEmployees
-                    - campaign.name as campaignName
                     - source.name as sourceName
                     - customer.name as customerName
                     - status.label as statusLabel
@@ -301,7 +300,6 @@ datagrid:
                         - { join: l.contact, alias: c }
                         - { join: l.customer, alias: customer }
                         - { join: l.source, alias: source }
-                        - { join: l.campaign, alias: campaign }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -339,9 +337,6 @@ datagrid:
             numberOfEmployees:
                 label:         orocrm.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
-                renderable: false
-            campaignName:
-                label:         orocrm.sales.lead.campaign.label
                 renderable: false
             sourceName:
                 label:         orocrm.sales.lead.source.label
@@ -421,8 +416,6 @@ datagrid:
                     data_name: l.website
                 numberOfEmployees:
                     data_name: l.numberOfEmployees
-                campaignName:
-                    data_name: campaign.name
                 sourceName:
                     data_name: source.name
                 customerName:
@@ -523,15 +516,6 @@ datagrid:
                     type: number
                     data_name: l.numberOfEmployees
                     enabled: false
-                campaignName:
-                    type: entity
-                    data_name: campaign.id
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMCampaignBundle:Campaign
-                            property: name
-                            translatable_options: false
                 sourceName:
                     type: enum
                     enum_code: lead_source
@@ -1027,11 +1011,6 @@ datagrid:
                     - sa.city as saCity
                     - sa.street as saStreet
                     - sa.postalCode as saPostalCode
-                    - c.employees
-                    - c.ownership
-                    - c.rating
-                    - c.ticker_symbol as tickerSymbol
-                    - c.website
                 join:
                     left:
                         - { join: c.owner, alias: owner }
@@ -1083,22 +1062,6 @@ datagrid:
             saPostalCode:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
                 renderable: false
-            employees:
-                label: orocrm.sales.b2bcustomer.employees.label
-                frontend_type: integer
-                renderable: false
-            ownership:
-                label: orocrm.sales.b2bcustomer.ownership.label
-                renderable: false
-            rating:
-                label: orocrm.sales.b2bcustomer.rating.label
-                renderable: false
-            tickerSymbol:
-                label: orocrm.sales.b2bcustomer.ticker_symbol.label
-                renderable: false
-            website:
-                label: orocrm.sales.b2bcustomer.website.label
-                renderable: false
         sorters:
             columns:
                 ownerName:            { data_name: ownerName }
@@ -1114,11 +1077,6 @@ datagrid:
                 saCity:               { data_name: saCity }
                 saStreet:             { data_name: saStreet }
                 saPostalCode:         { data_name: saPostalCode }
-                employees:            { data_name: c.employees }
-                ownership:            { data_name: c.ownership }
-                rating:               { data_name: c.rating }
-                tickerSymbol:         { data_name: tickerSymbol }
-                website:              { data_name: c.website }
         filters:
             columns:
                 ownerName:
@@ -1186,26 +1144,6 @@ datagrid:
                 saPostalCode:
                     type: string
                     data_name: saPostalCode
-                    enabled: false
-                employees:
-                    type: number
-                    data_name: c.employees
-                    enabled: false
-                ownership:
-                    type: string
-                    data_name: c.ownership
-                    enabled: false
-                rating:
-                    type: string
-                    data_name: c.rating
-                    enabled: false
-                tickerSymbol:
-                    type: string
-                    data_name: tickerSymbol
-                    enabled: false
-                website:
-                    type: string
-                    data_name: c.website
                     enabled: false
         properties:
             id: ~
