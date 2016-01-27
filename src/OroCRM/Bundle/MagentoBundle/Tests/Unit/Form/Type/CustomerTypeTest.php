@@ -57,9 +57,9 @@ class CustomerTypeTest extends \PHPUnit_Framework_TestCase
             ->
             will($this->returnSelf());
 
-        $builder->expects($this->exactly(2))
+        $builder->expects($this->once())
             ->method('addEventListener')
-            ->withConsecutive([FormEvents::SUBMIT], [FormEvents::PRE_SUBMIT]);
+            ->with(FormEvents::SUBMIT);
 
         $this->type->buildForm($builder, []);
     }

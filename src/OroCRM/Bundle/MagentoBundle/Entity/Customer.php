@@ -205,6 +205,22 @@ class Customer extends ExtendCustomer implements
     protected $updatedAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="imported_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $importedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="synced_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $syncedAt;
+
+    /**
      * @var Website
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Website")
@@ -847,13 +863,16 @@ class Customer extends ExtendCustomer implements
      */
     public function prePersist()
     {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        }
+        $this->importedAt = new \DateTime('now', new \DateTimeZone('UTC'));
+        $this->syncedAt = $this->importedAt;
+    }
 
-        if (!$this->updatedAt) {
-            $this->updatedAt = $this->createdAt;
-        }
+    /**
+     * @ORM\PreUpdate
+     */
+    public function preUpdate()
+    {
+        $this->syncedAt = new \DateTime('now', new \DateTimeZone('UTC'));
     }
 
     /**
@@ -927,6 +946,44 @@ class Customer extends ExtendCustomer implements
         }
 
         return false;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSyncedAt()
+    {
+        return $this->syncedAt;
+    }
+
+    /**
+     * @param \DateTime $syncedAt
+     * @return Customer
+     */
+    public function setSyncedAt(\DateTime $syncedAt)
+    {
+        $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt()
+    {
+        return $this->importedAt;
+    }
+
+    /**
+     * @param \DateTime $importedAt
+     * @return Customer
+     */
+    public function setImportedAt(\DateTime $importedAt)
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
     }
 
     /**

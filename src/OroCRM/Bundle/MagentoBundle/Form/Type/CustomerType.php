@@ -185,15 +185,5 @@ class CustomerType extends AbstractType
                 }
             }
         );
-
-        //change updatedAt value here, to avoid confusion situations with preUpdate on importing data
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
-                /** @var Customer $entity */
-                $entity = $event->getForm()->getData();
-                $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
-            }
-        );
     }
 }
