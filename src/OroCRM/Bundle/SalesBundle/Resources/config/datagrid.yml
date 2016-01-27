@@ -737,6 +737,35 @@ datagrid:
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
 
+    sales-funnel-lead-with-data-channel-grid:
+        extends: sales-funnel-lead-grid
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            query:
+                join:
+                    left:
+                        - { join: lead.dataChannel, alias: dataChannel }
+                where:
+                    and:
+                        - IDENTITY(lead.dataChannel) in (:channelIds)
+            bind_parameters:
+                - channelIds
+
+    sales-funnel-opportunity-with-data-channel-grid:
+        extends: sales-funnel-opportunity-grid
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            query:
+                join:
+                    left:
+                        - { join: opportunity.dataChannel, alias: dataChannel }
+                where:
+                    and:
+                        - IDENTITY(opportunity.dataChannel) in (:channelIds)
+            bind_parameters:
+                - channelIds
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
