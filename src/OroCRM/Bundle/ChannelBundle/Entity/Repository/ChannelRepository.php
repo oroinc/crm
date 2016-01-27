@@ -27,7 +27,7 @@ class ChannelRepository extends EntityRepository
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
         if (null !== $type) {
-            $qb->andWhere('c.channelType = :type');
+            $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));
             $qb->setParameter('type', $type);
         }
 
@@ -54,9 +54,9 @@ class ChannelRepository extends EntityRepository
             ->join('visit.trackingWebsite', 'site')
             ->leftJoin('site.channel', 'channel')
             ->where($qb->expr()->orX(
-                'channel.id IS NULL',
+                $qb->expr()->isNull('channel.id'),
                 $qb->expr()->andX(
-                    'channel.channelType = :type',
+                    $qb->expr()->eq('channel.channelType', ':type'),
                     $qb->expr()->eq('channel.status', ':status')
                 )
             ))
