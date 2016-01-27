@@ -6,7 +6,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Datagrid\MarketingListItemsListener;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class CampaignStatisticDatagridListener
@@ -61,7 +61,7 @@ class CampaignStatisticDatagridListener
             $mixin = self::MIXIN_UNSENT_NAME;
         }
 
-        $parameters->set(MarketingListItemsListener::MIXIN, $mixin);
+        $parameters->set(MixinListener::GRID_MIXIN, $mixin);
     }
 
     /**
