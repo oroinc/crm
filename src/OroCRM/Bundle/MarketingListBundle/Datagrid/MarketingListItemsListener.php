@@ -6,13 +6,12 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
 
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
 {
-    const MIXIN = 'grid-mixin';
-
     /**
      * @var MarketingListHelper
      */
@@ -77,7 +76,7 @@ class MarketingListItemsListener
      */
     public function isApplicable($gridName, $parameters)
     {
-        if (!$parameters->get(self::MIXIN, false)) {
+        if (!$parameters->get(MixinListener::GRID_MIXIN, false)) {
             return false;
         }
 

@@ -52,6 +52,8 @@ services:
 
     orocrm_call.placeholder.log_call.filter:
         class: %orocrm_call.placeholder.log_call.filter.class%
+        arguments:
+            - @oro_activity.manager
 
     orocrm_call.twig.call_extension:
         class: %orocrm_call.twig.class%
