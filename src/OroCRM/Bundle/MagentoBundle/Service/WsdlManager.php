@@ -43,7 +43,10 @@ class WsdlManager
      */
     public function loadWsdl($url)
     {
-        $response = $this->guzzleClient->get($url)->send();
+        $clientOptions = [
+            'verify' => false
+        ];
+        $response = $this->guzzleClient->get($url, null, $clientOptions)->send();
 
         $cacheFilePath = $this->getCachedWsdlPath($url);
         $this->fs->dumpFile($cacheFilePath, $response->getBody(true));
