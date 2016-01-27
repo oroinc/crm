@@ -52,7 +52,7 @@ define(function(require) {
                 channelIds.push(this.channelId);
             }
 
-            result['channelIds'] = channelIds.join(',');
+            result.channelIds = channelIds.join(',');
 
             result[this.gridName + '[channelIds]'] = channelIds.join(',');
 
