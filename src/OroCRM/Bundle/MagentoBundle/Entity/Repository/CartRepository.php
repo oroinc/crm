@@ -235,9 +235,9 @@ class CartRepository extends ChannelAwareEntityRepository
             ->setParameter('dateEnd', $end);
         $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
-        $allCards = $allCards['val'] ?: null;
+        $allCards = (int)$allCards['val'];
 
-        if (null !== $allCards && 0 !== $allCards) {
+        if (0 !== $allCards) {
             $abandonedCartsCount = $this->getAbandonedCountByPeriod($start, $end, $aclHelper);
 
             $result = $abandonedCartsCount / $allCards;
