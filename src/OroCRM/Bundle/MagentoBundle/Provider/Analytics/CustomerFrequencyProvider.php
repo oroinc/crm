@@ -17,10 +17,9 @@ class CustomerFrequencyProvider extends AbstractCustomerRFMProvider
     }
 
     /**
-     * @param Channel $dataChannel
-     * @return array
+     * {@inheritdoc}
      */
-    protected function getValues(Channel $dataChannel)
+    protected function getScalarValues(Channel $channel, array $ids = [])
     {
         $qb = $this->doctrineHelper
             ->getEntityRepository($this->className)
@@ -34,13 +33,18 @@ class CustomerFrequencyProvider extends AbstractCustomerRFMProvider
                 $qb->expr()->andX(
                     $qb->expr()->neq($qb->expr()->lower('o.status'), ':status'),
                     $qb->expr()->gte('o.createdAt', ':date'),
-                    $qb->expr()->gte('c.dataChannel', ':dataChannel')
+                    $qb->expr()->gte('c.dataChannel', ':channel')
                 )
             )
             ->groupBy('c.id')
             ->setParameter('status', Order::STATUS_CANCELED)
-            ->setParameter('dataChannel', $dataChannel)
+            ->setParameter('channel', $channel)
             ->setParameter('date', $date->sub(new \DateInterval('P365D')));
+
+        if (!empty($ids)) {
+            $qb->andWhere($qb->expr()->in('c.id', ':ids'))
+                ->setParameter('ids', $ids);
+        }
 
         return $qb->getQuery()->getScalarResult();
     }

@@ -3,10 +3,10 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Analytics;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
 {
@@ -21,11 +21,6 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     protected $className;
 
     /**
-     * @var array
-     */
-    protected $cache;
-
-    /**
      * @param DoctrineHelper $doctrineHelper
      * @param string $className
      */
@@ -38,37 +33,29 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($entity)
+    public function supports(Channel $channel)
     {
-        return $entity instanceof RFMAwareInterface
-            && $entity instanceof CustomerIdentityInterface
-            && $entity instanceof $this->className;
+        $entityFQCN = $channel->getCustomerIdentity();
+        return is_a($entityFQCN, 'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true)
+            && is_a($entityFQCN, 'OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface', true)
+            && is_a($entityFQCN, $this->className, true);
     }
 
     /**
-     * @param RFMAwareInterface $entity
-     *
      * {@inheritdoc}
      */
-    public function getValue(RFMAwareInterface $entity)
+    public function getValues(Channel $channel, array $ids = [])
     {
-        $dataChannel = $entity->getDataChannel();
-        $channelId = $dataChannel->getId();
-        if (!isset($this->cache[$channelId])) {
-            $this->cache[$channelId] = array_reduce($this->getValues($dataChannel), function ($result, array $sum) {
-                $result[$sum['id']] = $sum['value'];
-                return $result;
-            }, []);
-        }
-
-        $id = $this->doctrineHelper->getSingleEntityIdentifier($entity);
-
-        return isset($this->cache[$channelId][$id]) ? $this->cache[$channelId][$id] : null;
+        return array_reduce($this->getScalarValues($channel, $ids), function ($result, array $value) {
+            $result[$value['id']] = $value['value'];
+            return $result;
+        }, []);
     }
 
     /**
-     * @param Channel $dataChannel
+     * @param Channel $channel
+     * @param array $ids
      * @return mixed
      */
-    abstract protected function getValues(Channel $dataChannel);
+    abstract protected function getScalarValues(Channel $channel, array $ids = []);
 }

@@ -4,15 +4,18 @@ namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
 use Doctrine\Common\Collections\Criteria;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
 
 class RFMBuilder implements AnalyticsBuilderInterface
 {
+    const BATCH_SIZE = 200;
+
     /**
      * @var DoctrineHelper
      */
@@ -27,6 +30,21 @@ class RFMBuilder implements AnalyticsBuilderInterface
      * @var array categories by channel
      */
     protected $categories = [];
+
+    /**
+     * @var array
+     */
+    protected $tablesNames = [];
+
+    /**
+     * @var array
+     */
+    protected $classesMetadata = [];
+
+    /**
+     * @var array
+     */
+    protected $tablesColumns = [];
 
     /**
      * @param DoctrineHelper $doctrineHelper
@@ -63,70 +81,154 @@ class RFMBuilder implements AnalyticsBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($entity)
+    public function supports(Channel $channel)
     {
-        return $entity instanceof RFMAwareInterface;
+        return is_a($channel->getCustomerIdentity(), 'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true);
     }
 
     /**
-     * @param RFMAwareInterface $entity
-     *
      * {@inheritdoc}
      */
-    public function build(AnalyticsAwareInterface $entity)
+    public function build(Channel $channel)
     {
-        $status = false;
-
-        $channel = $entity->getDataChannel();
-        if (!$channel) {
-            return $status;
-        }
-
         $data = $channel->getData();
-        if (empty($data[RFMAwareInterface::RFM_STATE_KEY])) {
-            return $status;
+        if (empty($data[RFMAwareInterface::RFM_STATE_KEY])
+            || !filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN)
+        ) {
+            return;
         }
 
-        if (!filter_var($data[RFMAwareInterface::RFM_STATE_KEY], FILTER_VALIDATE_BOOLEAN)) {
-            return $status;
+        $iterator = $this->getEntityIdsByChannel($channel);
+
+        $values = [];
+        $count = 0;
+        foreach ($iterator as $value) {
+            $values[$value['id']] = $value;
+            unset($values[$value['id']]['id']);
+            $count++;
+            if ($count % self::BATCH_SIZE === 0) {
+                $this->processBatch($channel, $values);
+                $values = [];
+            }
         }
+        $this->processBatch($channel, $values);
+    }
 
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
-
+    /**
+     * @param Channel $channel
+     * @param array $values
+     */
+    protected function processBatch(Channel $channel, array $values)
+    {
+        $toUpdate = [];
         foreach ($this->providers as $provider) {
-            if ($provider->supports($entity)) {
-                $value = $provider->getValue($entity);
+            if (!$provider->supports($channel)) {
+                continue;
+            }
+            $providerValues = $provider->getValues($channel, array_keys($values));
 
-                $type = $provider->getType();
-                $entityIndex = $propertyAccessor->getValue($entity, $type);
-                $index = $this->getIndex($entity, $type, $value);
+            $type = $provider->getType();
 
-                if ($index === $entityIndex) {
+            foreach ($values as $id => $value) {
+                $metric = isset($providerValues[$id]) ? $providerValues[$id] : null;
+                $index = $this->getIndex($channel, $type, $metric);
+                if ($index !== $value[$type]) {
+                    $toUpdate[$id][$type] = $index;
+                }
+            }
+        }
+        $this->updateValues($channel, $toUpdate);
+    }
+
+    /**
+     * @param Channel $channel
+     * @param $values
+     * @throws \Doctrine\DBAL\ConnectionException
+     * @throws \Exception
+     */
+    protected function updateValues(Channel $channel, $values)
+    {
+        if (empty($values)) {
+            return;
+        }
+        $entityFQCN = $channel->getCustomerIdentity();
+
+        $em = $this->doctrineHelper->getEntityManager($entityFQCN);
+        $connection = $em->getConnection();
+        $connection->beginTransaction();
+        try {
+            foreach ($values as $id => $value) {
+                $metrics = $this->filterMetrics($entityFQCN, $value);
+                if (empty($metrics)) {
                     continue;
                 }
+                $qb = $connection->createQueryBuilder();
+                $qb->update($this->getTableName($entityFQCN), 'e');
+                foreach ($metrics as $metricName => $metricValue) {
+                    $qb->set($metricName, $metricValue);
+                }
+                $qb->where($qb->expr()->eq('e.id', '?'));
+                $connection->executeUpdate($qb->getSQL(), [$id]);
+            }
+            $connection->commit();
+        } catch (\Exception $e) {
+            $connection->rollBack();
+            throw $e;
+        }
+    }
 
-                $propertyAccessor->setValue($entity, $type, $index);
-                $status = true;
+    /**
+     * @param $entityFQCN
+     * @param $value
+     * @return array
+     */
+    protected function filterMetrics($entityFQCN, $value)
+    {
+        $metricNames = array_keys($value);
+        $columnAliases = array_combine($this->getColumns($entityFQCN, $metricNames), array_values($value));
+        return array_filter($columnAliases);
+    }
+
+    /**
+     * @param Channel $channel
+     *
+     * @return BufferedQueryResultIterator|array[]
+     */
+    protected function getEntityIdsByChannel(Channel $channel)
+    {
+        $entityFQCN = $channel->getCustomerIdentity();
+
+        $qb = $this->doctrineHelper->getEntityRepository($entityFQCN)->createQueryBuilder('e');
+
+        $metrics = [];
+        foreach ($this->providers as $provider) {
+            if ($provider->supports($channel)) {
+                $metrics[] = $provider->getType();
             }
         }
 
-        return $status;
+        if (empty($metrics)) {
+            return new \ArrayIterator();
+        }
+
+        $qb->select(preg_filter('/^/', 'e.', $metrics))
+            ->addSelect('e.id')
+            ->andWhere('e.dataChannel = :dataChannel')
+            ->orderBy(sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN)))
+            ->setParameter('dataChannel', $channel);
+
+        return (new BufferedQueryResultIterator($qb))->setBufferSize(self::BATCH_SIZE);
     }
 
     /**
-     * @param AnalyticsAwareInterface $entity
+     * @param Channel $channel
      * @param string $type
      * @param int $value
      *
      * @return int|null
      */
-    protected function getIndex(AnalyticsAwareInterface $entity, $type, $value)
+    protected function getIndex(Channel $channel, $type, $value)
     {
-        $channel = $entity->getDataChannel();
-        if (!$channel) {
-            return null;
-        }
-
         $channelId = $this->doctrineHelper->getSingleEntityIdentifier($channel);
         if (!$channelId) {
             return null;
@@ -185,4 +287,50 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         return $categories;
     }
+
+    /**
+     * @param string $className
+     * @return string
+     */
+    protected function getTableName($className)
+    {
+        if (!isset($this->tablesNames[$className])) {
+            $this->tablesNames[$className] = $this->getClassMetadata($className)->table['name'];
+        }
+        return $this->tablesNames[$className];
+    }
+
+    /**
+     * @param string $className
+     * @param array $fields
+     * @return string
+     */
+    protected function getColumns($className, array $fields)
+    {
+        $result = [];
+
+        foreach ($fields as $field) {
+            if (!isset($this->tablesColumns[$className][$field])) {
+                $this->tablesColumns[$className][$field] = $this->getClassMetadata($className)->getColumnName($field);
+            }
+            $result[] = $this->tablesColumns[$className][$field];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $className
+     * @return ClassMetadata
+     */
+    protected function getClassMetadata($className)
+    {
+        if (!isset($this->classesMetadata[$className])) {
+            $this->classesMetadata[$className] = $this->doctrineHelper->getEntityManager($className)
+                ->getClassMetadata($className);
+        }
+
+        return $this->classesMetadata[$className];
+    }
+
 }

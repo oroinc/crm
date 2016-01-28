@@ -2,21 +2,18 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 interface AnalyticsBuilderInterface
 {
     /**
-     * @param object $entity
-     *
+     * @param Channel $entity
      * @return bool
      */
-    public function supports($entity);
+    public function supports(Channel $entity);
 
     /**
-     * @param AnalyticsAwareInterface $entity
-     *
-     * @return bool
+     * @param Channel $entity
      */
-    public function build(AnalyticsAwareInterface $entity);
+    public function build(Channel $entity);
 }
