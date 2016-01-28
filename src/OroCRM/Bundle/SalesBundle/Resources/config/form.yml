@@ -22,6 +22,10 @@ parameters:
     orocrm_sales.mailbox_process.lead.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
     orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
+    orocrm_sales.lead_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
+    orocrm_sales.entity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\EntityDataChannelAwareSelectType
+    orocrm_sales.opportunity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
+
 services:
     orocrm_sales.opportunity.form.type:
         class: %orocrm_sales.opportunity.form.type.class%
@@ -222,3 +226,13 @@ services:
             - @request
             - @doctrine.orm.entity_manager
             - @orocrm_channel.provider.request_channel
+
+    orocrm_sales.lead_data_channel_aware_select.type:
+        class: %orocrm_sales.lead_data_channel_aware_select.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_sales_lead_data_channel_aware_select }
+
+    orocrm_sales.opportunity_data_channel_aware_select.type:
+        class: %orocrm_sales.opportunity_data_channel_aware_select.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_sales_opportunity_data_channel_aware_select }

@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\CampaignBundle\Model\Data\Transformer;
 
+use Oro\Component\PhpUtils\ArrayUtil;
+
 use Oro\Bundle\ChartBundle\Model\Data\ArrayData;
 use Oro\Bundle\ChartBundle\Model\Data\DataInterface;
 use Oro\Bundle\ChartBundle\Model\Data\MappedData;
 use Oro\Bundle\ChartBundle\Model\Data\Transformer\TransformerInterface;
 
-use Oro\Bundle\UIBundle\Tools\ArrayUtils;
 use OroCRM\Bundle\CampaignBundle\Entity\Campaign;
 
 class MultiLineDataTransformer implements TransformerInterface
@@ -76,7 +77,7 @@ class MultiLineDataTransformer implements TransformerInterface
             return new ArrayData([]);
         }
 
-        $keys   = array_unique(ArrayUtils::arrayColumn($this->sourceData, $this->groupingOption));
+        $keys   = array_unique(ArrayUtil::arrayColumn($this->sourceData, $this->groupingOption));
         $values = array_combine($keys, array_fill(0, sizeof($keys), $this->getLabels()));
 
         foreach ($values as $group => &$value) {

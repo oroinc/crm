@@ -1,9 +1,9 @@
 datagrid:
     orocrm-campaign-grid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\Campaign
+        acl_resource: orocrm_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 select:
                     - c.id
@@ -76,7 +76,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_campaign_view
+                acl_resource: orocrm_campaign_view
                 rowAction:    true
             update:
                 type:          navigate
@@ -94,9 +94,9 @@ datagrid:
             entity_pagination: true
 
     campaign-tracking-total-report-grid-basic:
+        acl_resource: orocrm_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 where:
                     and:
@@ -153,9 +153,9 @@ datagrid:
                     - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
 
     campaign-tracking-detailed-report-hour-grid:
+        acl_resource: orocrm_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 select:
                     - e.name
@@ -180,9 +180,9 @@ datagrid:
                 frontend_type: datetime
 
     campaign-tracking-detailed-report-day-grid-basic:
+        acl_resource: orocrm_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 where:
                     and:
@@ -223,9 +223,9 @@ datagrid:
                     - { table: %orocrm_campaign.tracking_event_summary.class%, alias: e }
 
     campaign-tracking-detailed-report-month-grid-basic:
+        acl_resource: orocrm_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_campaign_view
             query:
                 where:
                     and:
@@ -271,9 +271,9 @@ datagrid:
 
     orocrm-email-campaign-grid:
         extended_entity_name: OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign
+        acl_resource: orocrm_email_campaign_view
         source:
             type: orm
-            acl_resource: orocrm_email_campaign_view
             query:
                 select:
                     - ec.id
@@ -400,7 +400,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_email_campaign_view
+                acl_resource: orocrm_email_campaign_view
                 rowAction:    true
             update:
                 type:          navigate

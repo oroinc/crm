@@ -40,8 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_cart_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart",
- *              "context-grid"="magento-cart-for-context-grid"
+ *              "icon"="icon-shopping-cart"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -59,6 +58,10 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *          },
+ *          "grid"={
+ *              "default"="magento-cart-grid",
+ *              "context"="magento-cart-for-context-grid"
  *          },
  *          "tag"={
  *              "enabled"=true

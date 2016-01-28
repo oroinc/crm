@@ -1,8 +1,8 @@
 datagrid:
     dashboard-my-contacts-activity-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -50,9 +50,9 @@ datagrid:
 
     # contact groups grid, shown on orocrm_contact_group_index
     contact-groups-grid:
+        acl_resource: orocrm_contact_group_view
         source:
             type: orm
-            acl_resource: orocrm_contact_group_view
             query:
                 select:
                     - g.id
@@ -101,9 +101,9 @@ datagrid:
 
     # contacts assigned to group, shown on orocrm_contact_group_update route
     contact-group-contacts-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -163,12 +163,15 @@ datagrid:
                     included: '#groupAppendContacts'
                     excluded: '#groupRemoveContacts'
 
-    # contacts main grid show on  orocrm_contact_index route
+    # contacts main grid show on orocrm_contact_index route
     contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        mixins:
+            - activity-contact-data-hidden-mixin
+            - activity-contact-days-since-last-contact-hidden-mixin
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -176,6 +179,15 @@ datagrid:
                     - c.lastName
                     - c.createdAt
                     - c.updatedAt
+                    - c.fax
+                    - c.skype
+                    - c.twitter
+                    - c.facebook
+                    - c.googlePlus
+                    - c.linkedIn
+                    - c.birthday
+                    - c.gender
+                    - picture.originalFilename as pictureFilename
                     - contactSource.name as source
                     - email.email
                     - email.id as emailId
@@ -184,7 +196,11 @@ datagrid:
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
+                    - address.city as addressCity
+                    - address.street as addressStreet
                     - CONCAT(o.firstName, CONCAT(' ', o.lastName)) as ownerName
+                    - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedName
+                    - CONCAT(reportsTo.firstName, CONCAT(' ', reportsTo.lastName)) as reportsName
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -196,6 +212,9 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.owner, alias: o }
+                        - { join: c.assignedTo, alias: assignedTo }
+                        - { join: c.reportsTo, alias: reportsTo }
+                        - { join: c.picture, alias: picture }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -205,6 +224,15 @@ datagrid:
                 label:         orocrm.contact.first_name.label
             lastName:
                 label:         orocrm.contact.last_name.label
+            birthday:
+                label:         orocrm.contact.birthday.label
+                frontend_type: date
+                renderable: false
+            gender:
+                label:         orocrm.contact.gender.label
+                frontend_type: select
+                choices: @oro_user.gender_provider->getChoices
+                renderable: false
             email:
                 label:         orocrm.contact.email.label
                 inline_editing:
@@ -242,6 +270,30 @@ datagrid:
                             className: OroCRM_Bundle_ContactBundle_Entity_ContactPhone
                         route_parameters_rename_map:
                             phoneId: id
+            fax:
+                label:         orocrm.contact.fax.label
+                frontend_type: phone
+                renderable:    false
+            skype:
+                label:         orocrm.contact.skype.label
+                frontend_type: string
+                renderable:    false
+            twitter:
+                label:         orocrm.contact.twitter.label
+                frontend_type: string
+                renderable:    false
+            facebook:
+                label:         orocrm.contact.facebook.label
+                frontend_type: string
+                renderable:    false
+            linkedIn:
+                label:         orocrm.contact.linked_in.label
+                frontend_type: string
+                renderable:    false
+            googlePlus:
+                label:         orocrm.contact.google_plus.label
+                frontend_type: string
+                renderable:    false
             source:
                 label:         orocrm.contact.source.label
             countryName:
@@ -250,12 +302,30 @@ datagrid:
                 label:         orocrm.contact.contactaddress.region.label
             addressPostalCode:
                 label:         orocrm.contact.contactaddress.postal_code.label
+            addressCity:
+                label:         orocrm.contact.contactaddress.city.label
+                renderable:    false
+            addressStreet:
+                label:         orocrm.contact.contactaddress.street.label
+                renderable:    false
             createdAt:
                 label:         oro.ui.created_at
                 frontend_type: datetime
             updatedAt:
                 label:         oro.ui.updated_at
                 frontend_type: datetime
+            pictureFilename:
+                label:         orocrm.contact.picture.label
+                renderable:    false
+            ownerName:
+                label:         orocrm.contact.owner.label
+                renderable: false
+            assignedName:
+                label:         orocrm.contact.assigned_to.label
+                renderable: false
+            reportsName:
+                label:         orocrm.contact.reports_to.label
+                renderable: false
         properties:
             id: ~
             emailId: ~
@@ -278,10 +348,26 @@ datagrid:
                     data_name: c.firstName
                 lastName:
                     data_name: c.lastName
+                birthday:
+                    data_name: c.birthday
+                gender:
+                    data_name: c.gender
                 email:
                     data_name: email.email
                 phone:
                     data_name: phone.phone
+                fax:
+                    data_name: c.fax
+                skype:
+                    data_name: c.skype
+                twitter:
+                    data_name: c.twitter
+                facebook:
+                    data_name: c.facebook
+                linkedIn:
+                    data_name: c.linkedIn
+                googlePlus:
+                    data_name: c.googlePlus
                 source:
                     data_name: contactSource.label
                 countryName:
@@ -290,10 +376,22 @@ datagrid:
                     data_name: regionLabel
                 addressPostalCode:
                     data_name: address.postalCode
+                addressCity:
+                    data_name: address.city
+                addressStreet:
+                    data_name: address.street
                 createdAt:
                     data_name: c.createdAt
                 updatedAt:
                     data_name: c.updatedAt
+                pictureFilename:
+                    data_name: pictureFilename
+                ownerName:
+                    data_name: ownerName
+                assignedName:
+                    data_name: assignedName
+                reportsName:
+                    data_name: reportsName
             default:
                 lastName:  %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
                 firstName: %oro_datagrid.extension.orm_sorter.class%::DIRECTION_ASC
@@ -305,13 +403,48 @@ datagrid:
                 lastName:
                     type: string
                     data_name: c.lastName
+                birthday:
+                    type: date
+                    data_name: c.birthday
+                    enabled: false
+                gender:
+                    type: choice
+                    data_name: c.gender
+                    options:
+                        field_options:
+                            choices: @oro_user.gender_provider->getChoices
+                    enabled: false
                 email:
                     type: string
                     data_name: email.email
                 phone:
                     type: string
                     data_name: phone.phone
-                contactSourceLabel:
+                fax:
+                    type: string
+                    data_name: c.fax
+                    enabled: false
+                skype:
+                    type: string
+                    data_name: c.skype
+                    enabled: false
+                twitter:
+                    type: string
+                    data_name: c.twitter
+                    enabled: false
+                facebook:
+                    type: string
+                    data_name: c.facebook
+                    enabled: false
+                linkedIn:
+                    type: string
+                    data_name: c.linkedIn
+                    enabled: false
+                googlePlus:
+                    type: string
+                    data_name: c.googlePlus
+                    enabled: false
+                source:
                     type: entity
                     data_name: contactSource.name
                     enabled: false
@@ -338,6 +471,14 @@ datagrid:
                     type: string
                     data_name: addressPostalCode
                     enabled: false
+                addressCity:
+                    type: string
+                    data_name: addressCity
+                    enabled: false
+                addressStreet:
+                    type: string
+                    data_name: addressStreet
+                    enabled: false
                 createdAt:
                     type:      datetime
                     data_name: c.createdAt
@@ -345,12 +486,26 @@ datagrid:
                     type:      datetime
                     data_name: c.updatedAt
                     enabled: false
+                pictureFilename:
+                    type:      string
+                    data_name: pictureFilename
+                    enabled: false
                 owner:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: c.owner
                     options:
                         data: @oro_user.provider.filter.user_choice_tree->getList
+                assignedName:
+                    type: choice-tree
+                    data_name: c.assignedTo
+                    options:
+                        data: @oro_user.provider.filter.user_choice_tree->getList
+                    enabled: false
+                reportsName:
+                    type: string
+                    data_name: reportsName
+                    enabled: false
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
@@ -377,14 +532,6 @@ datagrid:
                 label: oro.grid.action.delete
                 icon: trash
                 link: delete_link
-        mass_actions:
-            delete:
-                type: delete
-                entity_name: %orocrm_contact.entity.class%
-                data_identifier: c.id
-                acl_resource: orocrm_contact_delete
-                label: oro.grid.action.delete
-                icon: trash
         options:
             entityHint: contact
             export: true
@@ -392,9 +539,9 @@ datagrid:
 
     # assigned accounts grid
     contact-accounts-grid:
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - a.id
@@ -515,9 +662,9 @@ datagrid:
     # contacts select grid used for contact selection in dialog
     contacts-select-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -629,9 +776,9 @@ datagrid:
     # contacts grid for context
     contacts-for-context-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id

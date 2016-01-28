@@ -39,13 +39,13 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         lead:
-                            form_type: orocrm_sales_lead_select
+                            form_type: orocrm_sales_lead_data_channel_aware_select
                             options:
-                                grid_name: 'sales-funnel-lead-grid'
+                                grid_name: 'sales-funnel-lead-with-data-channel-grid'
                                 configs:
                                     component: 'grid'
                                     grid:
-                                        name: 'sales-funnel-lead-grid'
+                                        name: 'sales-funnel-lead-with-data-channel-grid'
                                 required: true
                                 constraints:
                                     - NotBlank:
@@ -94,13 +94,13 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                         opportunity:
-                            form_type: orocrm_sales_opportunity_select
+                            form_type: orocrm_sales_opportunity_data_channel_aware_select
                             options:
-                                grid_name: 'sales-funnel-opportunity-grid'
+                                grid_name: 'sales-funnel-opportunity-with-data-channel-grid'
                                 configs:
                                     component: 'grid'
                                     grid:
-                                        name: 'sales-funnel-opportunity-grid'
+                                        name: 'sales-funnel-opportunity-with-data-channel-grid'
                                 required: true
                                 constraints:
                                     - NotBlank:

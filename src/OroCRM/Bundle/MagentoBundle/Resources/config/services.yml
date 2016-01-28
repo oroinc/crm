@@ -65,6 +65,7 @@ parameters:
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
     orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_magento.event_listener.customer_datagrid_listener.class:         OroCRM\Bundle\MagentoBundle\EventListener\CustomerDataGridListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -467,16 +468,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.writer_error, method: handleError }
 
-    oro_activity.listener.datagrid.context.magento:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-customers-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-order-for-context-grid, method: onBuildAfter }
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.magento-cart-for-context-grid, method: onBuildAfter }
-
     orocrm_magento.service.magento_url_generator:
         class: %orocrm_magento.magento_url_generator.class%
         arguments: [@router]
@@ -486,6 +477,13 @@ services:
         class: %orocrm_magento.event_listener.integration_sync_after.class%
         tags:
             - { name: kernel.event_listener, event: oro_integration.event.sync_after, method: process }
+
+    orocrm_magento.event_listener.customer_datagrid_listener:
+        class: %orocrm_magento.event_listener.customer_datagrid_listener.class%
+        arguments:
+            - @request_stack
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
     # Customer API
     orocrm_magento.customer_address.manager.api:

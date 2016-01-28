@@ -93,6 +93,14 @@ class OpportunityRepository extends EntityRepository
      */
     public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper)
     {
+        if (!$ownerIds) {
+            return [
+                'inProgressCount' => 0,
+                'budgetAmount' => 0,
+                'weightedForecast' => 0,
+            ];
+        }
+
         if ($date === null) {
             return $this->getForecastOfOpporunitiesCurrentData($ownerIds, $aclHelper);
         }
@@ -109,16 +117,17 @@ class OpportunityRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('opportunity');
 
-        $weightedForecastFunction = count($ownerIds) > 1 ? 'AVG' : 'SUM';
-
         $select = "
             SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
-            {$weightedForecastFunction}( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
-        $qb->select($select)
-            ->join('opportunity.owner', 'owner')
-            ->where('owner.id IN(:ownerIds)')
-            ->setParameter('ownerIds', $ownerIds);
+            SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
+        $qb->select($select);
+
+        if (!empty($ownerIds)) {
+            $qb->join('opportunity.owner', 'owner')
+                ->where('owner.id IN(:ownerIds)')
+                ->setParameter('ownerIds', $ownerIds);
+        }
 
         $probabilityCondition = $qb->expr()->orX(
             $qb->expr()->andX(

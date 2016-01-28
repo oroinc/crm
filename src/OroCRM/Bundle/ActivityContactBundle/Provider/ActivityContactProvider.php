@@ -75,7 +75,7 @@ class ActivityContactProvider
      */
     public function isSupportedEntity($activityClass)
     {
-        return in_array($activityClass, array_keys($this->providers));
+        return isset($this->providers[$activityClass]);
     }
 
     /**
@@ -161,7 +161,7 @@ class ActivityContactProvider
     public function getActivityDirectionProvider($activity)
     {
         $activityClass = ClassUtils::getClass($activity);
-        if (in_array($activityClass, array_keys($this->providers))) {
+        if (isset($this->providers[$activityClass])) {
             return $this->providers[$activityClass];
         }
 
