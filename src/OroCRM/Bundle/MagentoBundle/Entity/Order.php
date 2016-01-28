@@ -619,9 +619,6 @@ class Order extends ExtendOrder implements
      */
     public function beforeSave()
     {
-        $this->importedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->syncedAt = $this->importedAt;
-
         $this->updateNames();
     }
 
@@ -632,8 +629,6 @@ class Order extends ExtendOrder implements
      */
     public function doPreUpdate()
     {
-        $this->syncedAt = new \DateTime('now', new \DateTimeZone('UTC'));
-
         $this->updateNames();
     }
 
