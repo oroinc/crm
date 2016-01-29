@@ -88,6 +88,7 @@ class OrderAddressApiEntityManager extends ApiEntityManager
     {
         return [
             'fields' => [
+                'types'   => ['fields' => 'name'],
                 'owner'   => ['fields' => 'id'],
                 'channel' => ['fields' => 'id'],
             ],
