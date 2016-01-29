@@ -310,5 +310,4 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         return $this->classesMetadata[$className];
     }
-
 }
