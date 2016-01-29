@@ -6,59 +6,23 @@ use Oro\Bundle\DataGridBundle\Datagrid\ParameterBag;
 use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 use Oro\Bundle\DataGridBundle\Event\BuildAfter;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
-use Oro\Bundle\DataGridBundle\Event\PreBuild;
-use OroCRM\Bundle\MarketingListBundle\Model\DataGridConfigurationHelper;
+use Oro\Bundle\DataGridBundle\EventListener\MixinListener;
+
 use OroCRM\Bundle\MarketingListBundle\Model\MarketingListHelper;
 
 class MarketingListItemsListener
 {
-    const MIXIN = 'grid-mixin';
-
-    /**
-     * @var DataGridConfigurationHelper
-     */
-    protected $dataGridConfigurationHelper;
-
     /**
      * @var MarketingListHelper
      */
     protected $marketingListHelper;
 
     /**
-     * @var array
-     */
-    protected $appliedFor = [];
-
-    /**
-     * @param DataGridConfigurationHelper $dataGridConfigurationHelper
      * @param MarketingListHelper $marketingListHelper
      */
-    public function __construct(
-        DataGridConfigurationHelper $dataGridConfigurationHelper,
-        MarketingListHelper $marketingListHelper
-    ) {
-        $this->dataGridConfigurationHelper = $dataGridConfigurationHelper;
-        $this->marketingListHelper = $marketingListHelper;
-    }
-
-    /**
-     * Apply marketing list grid mixin.
-     *
-     * @param PreBuild $event
-     */
-    public function onPreBuild(PreBuild $event)
+    public function __construct(MarketingListHelper $marketingListHelper)
     {
-        $config     = $event->getConfig();
-        $parameters = $event->getParameters();
-        $gridName   = $config->getName();
-        if (!$this->isApplicable($gridName, $parameters)) {
-            return;
-        }
-        $gridMixin = $parameters->get(self::MIXIN);
-        if (empty($this->appliedFor[$gridName . $gridMixin])) {
-            $this->dataGridConfigurationHelper->extendConfiguration($config, $gridMixin);
-            $this->appliedFor[$gridName . $gridMixin] = true;
-        }
+        $this->marketingListHelper = $marketingListHelper;
     }
 
     /**
@@ -112,7 +76,7 @@ class MarketingListItemsListener
      */
     public function isApplicable($gridName, $parameters)
     {
-        if (!$parameters->get(self::MIXIN, false)) {
+        if (!$parameters->get(MixinListener::GRID_MIXIN, false)) {
             return false;
         }
 

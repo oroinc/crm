@@ -18,7 +18,7 @@ class ContactPaginationTest extends Selenium2TestCase
         /** @var Contacts $login */
         $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->massDelete()
-            ->assertNoDataMessage('No records found');
+            ->assertNoDataMessageAndDisplayed('No records found');
     }
 
     /**
