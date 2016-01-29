@@ -14,6 +14,8 @@ interface AnalyticsBuilderInterface
 
     /**
      * @param Channel $entity
+     * @param array $ids
+     * @return mixed
      */
-    public function build(Channel $entity);
+    public function build(Channel $entity, array $ids = []);
 }

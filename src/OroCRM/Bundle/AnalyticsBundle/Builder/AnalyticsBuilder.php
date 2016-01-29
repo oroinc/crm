@@ -29,12 +29,13 @@ class AnalyticsBuilder
 
     /**
      * @param Channel $channel
+     * @param array $ids
      */
-    public function build(Channel $channel)
+    public function build(Channel $channel, array $ids = [])
     {
         foreach ($this->builders as $builder) {
             if ($builder->supports($channel)) {
-                $builder->build($channel);
+                $builder->build($channel, $ids);
             }
         }
     }

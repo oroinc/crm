@@ -89,7 +89,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function build(Channel $channel)
+    public function build(Channel $channel, array $ids = [])
     {
         $data = $channel->getData();
         if (empty($data[RFMAwareInterface::RFM_STATE_KEY])
@@ -98,7 +98,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
             return;
         }
 
-        $iterator = $this->getEntityIdsByChannel($channel);
+        $iterator = $this->getEntityIdsByChannel($channel, $ids);
 
         $values = [];
         $count = 0;
@@ -191,10 +191,10 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
     /**
      * @param Channel $channel
-     *
-     * @return BufferedQueryResultIterator|array[]
+     * @param array $ids
+     * @return \ArrayIterator|BufferedQueryResultIterator
      */
-    protected function getEntityIdsByChannel(Channel $channel)
+    protected function getEntityIdsByChannel(Channel $channel, array $ids = [])
     {
         $entityFQCN = $channel->getCustomerIdentity();
 
@@ -216,6 +216,11 @@ class RFMBuilder implements AnalyticsBuilderInterface
             ->andWhere('e.dataChannel = :dataChannel')
             ->orderBy(sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN)))
             ->setParameter('dataChannel', $channel);
+
+        if (!empty($ids)) {
+            $qb->where($qb->expr()->in('c.id', ':ids'))
+                ->setParameter('ids', $ids);
+        }
 
         return (new BufferedQueryResultIterator($qb))->setBufferSize(self::BATCH_SIZE);
     }

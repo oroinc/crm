@@ -36,7 +36,13 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         $this
             ->setName(self::COMMAND_NAME)
             ->setDescription('Calculate all registered analytic metrics')
-            ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process');
+            ->addOption('channel', null, InputOption::VALUE_OPTIONAL, 'Data Channel id to process')
+            ->addOption(
+                'ids',
+                null,
+                InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
+                'Customer identity ids for given channel'
+            );
     }
 
     /**
@@ -44,12 +50,27 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $connection = $this->getContainer()->get('doctrine')->getConnection();
+        $connection->beginTransaction();
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelper('formatter');
 
         $channel = $input->getOption('channel');
+        $ids = $input->getOption('ids');
 
-        if ($this->getStateManager()->isJobRunning($channel ? sprintf('--channel=%s', $channel) : null)) {
+        if (!$channel && $ids) {
+            $output->writeln('<error>Option "ids" does not work without "channel"</error>');
+
+            return;
+        }
+
+        if ($this->getStateManager()->isJobRunning()) {
+            $output->writeln('<error>Job already running. Terminating....</error>');
+
+            return;
+        }
+
+        if ($channel && !$ids && $this->getStateManager()->isJobRunning(sprintf('--channel=%s', $channel))) {
             $output->writeln('<error>Job already running. Terminating....</error>');
 
             return;
@@ -59,10 +80,11 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
         foreach ($channels as $channel) {
             $output->writeln($formatter->formatSection('Process', sprintf('Channel: %s', $channel->getName())));
 
-            $this->getAnalyticBuilder()->build($channel);
+            $this->getAnalyticBuilder()->build($channel, $ids);
 
             $output->writeln($formatter->formatSection('Done', sprintf('Channel: %s updated', $channel->getName())));
         }
+        $connection->rollBack();
     }
 
     /**
