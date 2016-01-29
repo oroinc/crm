@@ -94,3 +94,16 @@
 .customer-info ul.inline li.magento-customer-info > div {
   float: none;
 }
+#orderPlaceFrame.loaded {
+    width: 100%;
+    height: 100%;
+}
+.mobile-version #orderPlaceFrame {
+    position: fixed;
+    padding-top: 44px;
+    top: 0;
+    left: 0;
+}
+.desktop-version #orderPlaceFrame {
+    padding-top: 0 !important;
+}
