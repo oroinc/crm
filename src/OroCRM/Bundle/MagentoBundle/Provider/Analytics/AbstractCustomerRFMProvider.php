@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Analytics;
 
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
-
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -55,7 +54,7 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     /**
      * @param Channel $channel
      * @param array $ids
-     * @return mixed
+     * @return array
      */
     abstract protected function getScalarValues(Channel $channel, array $ids = []);
 }
