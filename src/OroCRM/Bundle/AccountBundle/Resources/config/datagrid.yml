@@ -1,8 +1,8 @@
 datagrid:
     dashboard-my-accounts-activity-grid:
+        acl_resource: orocrm_account_view
         source:
             type: orm
-            acl_resource: orocrm_account_view
             query:
                 select:
                     - a.id
@@ -26,7 +26,7 @@ datagrid:
                 where:
                     and:
                       - history.user = @oro_security.security_facade->getLoggedUserId
-                groupBy:  a.id, a.name, contactEmail, contactPhone
+                groupBy:  a.id
                 orderBy:
                     - column: visitDate
                       dir: desc
@@ -55,10 +55,9 @@ datagrid:
         extended_entity_name: %orocrm_account.account.entity.class%
         inline_editing:
             enable: true
-            entity_name: %orocrm_account.account.entity.class%
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id
@@ -105,10 +104,10 @@ datagrid:
                 frontend_type: phone
             ownerName:
                 label:         orocrm.account.owner.label
+                frontend_type: relation
                 inline_editing:
                     enable: true
                     editor:
-                        view: orodatagrid/js/app/views/editor/related-id-relation-editor-view
                         view_options:
                             value_field_name: owner
                     autocomplete_api_accessor:
@@ -200,9 +199,9 @@ datagrid:
 
     base-account-contacts-grid:
         extended_entity_name: %orocrm_contact.entity.class%
+        acl_resource: orocrm_contact_view
         source:
             type: orm
-            acl_resource: orocrm_contact_view
             query:
                 select:
                     - c.id
@@ -338,9 +337,9 @@ datagrid:
 
     accounts-select-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id
@@ -414,9 +413,9 @@ datagrid:
 
     accounts-for-context-grid:
         extended_entity_name: %orocrm_account.account.entity.class%
+        acl_resource: orocrm_account_view
         source:
-            type:           orm
-            acl_resource:   orocrm_account_view
+            type: orm
             query:
                 select:
                     - a.id

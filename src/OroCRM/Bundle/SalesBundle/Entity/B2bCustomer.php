@@ -10,7 +10,6 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
@@ -29,8 +28,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
- *              "context-grid"="orocrm-sales-b2bcustomers-for-context-grid"
+ *              "icon"="icon-user-md"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -48,12 +46,18 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_b2bcustomer_select"
+ *          },
+ *          "grid"={
+ *              "default"="orocrm-sales-b2bcustomers-grid",
+ *              "context"="orocrm-sales-b2bcustomers-for-context-grid"
+ *          },
+ *         "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    Taggable,
     EmailHolderInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
@@ -220,11 +224,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * @ORM\JoinColumn(name="organization_id", referencedColumnName="id", onDelete="SET NULL")
      */
     protected $organization;
-
-    /**
-     * @var ArrayCollection $tags
-     */
-    protected $tags;
 
     /**
      * @var \DateTime $created
@@ -462,32 +461,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function setOwner(User $owner = null)
     {
         $this->owner = $owner;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTags()
-    {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
-        return $this->tags;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
     }
 
     /**

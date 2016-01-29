@@ -118,9 +118,6 @@ class ContactType extends AbstractType
             )
         );
 
-        // tags
-        $builder->add('tags', 'oro_tag_select', array('label' => 'oro.tag.entity_plural_label'));
-
         // addresses, emails and phones
         $builder->add(
             'addresses',

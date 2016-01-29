@@ -37,6 +37,7 @@ class OrderApiEntityManager extends ApiEntityManager
     {
         return [
             'fields' => [
+                'types'   => ['fields' => 'name'],
                 'country' => ['fields' => 'iso2Code'],
                 'region'  => ['fields' => 'combinedCode'],
                 'owner'   => ['fields' => 'id'],

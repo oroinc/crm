@@ -100,7 +100,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
 
         // Collect initial connectors
         $postProcessConnectorTypes = array_keys($this->postProcessors);
-        $connectors = $this->getConnectorsToSync($integration, $this->getConnectorsFilterFunction($callback));
+        $connectors = $this->getTypesOfConnectorsToProcess($integration, $this->getConnectorsFilterFunction($callback));
         $postProcessConnectors = array_intersect($connectors, $postProcessConnectorTypes);
         $connectors = array_diff($connectors, $postProcessConnectorTypes);
 
@@ -133,15 +133,17 @@ class InitialSyncProcessor extends AbstractInitialProcessor
                             $parameters,
                             [self::INITIAL_SYNCED_TO => clone $connectorsSyncedTo[$connector]]
                         );
-                        $result = $this->processIntegrationConnector(
+
+                        $realConnector = $this->getRealConnector($integration, $connector);
+                        $status = $this->processIntegrationConnector(
                             $integration,
-                            $connector,
+                            $realConnector,
                             $parameters
                         );
                         // Move sync date into past by interval value
                         $connectorsSyncedTo[$connector]->sub($interval);
 
-                        $isSuccess = $isSuccess && $result;
+                        $isSuccess = $isSuccess && $this->isIntegrationConnectorProcessSuccess($status);
 
                         if ($isSuccess) {
                             // Save synced to date for connector
@@ -204,7 +206,7 @@ class InitialSyncProcessor extends AbstractInitialProcessor
         $statusData[self::INITIAL_SYNCED_TO] = $formattedSyncedTo;
         $lastStatus->setData($statusData);
 
-        $this->getChannelRepository()->addStatus($integration, $lastStatus);
+        $this->addConnectorStatusAndFlush($integration, $lastStatus);
     }
 
     /**

@@ -1,14 +1,21 @@
 parameters:
     orocrm_contact.entity.class:                      OroCRM\Bundle\ContactBundle\Entity\Contact
+    orocrm_contact.entity.phone.class:                OroCRM\Bundle\ContactBundle\Entity\ContactPhone
+    orocrm_contact.entity.email.class:                OroCRM\Bundle\ContactBundle\Entity\ContactEmail
     orocrm_contact.type.contact.class:                OroCRM\Bundle\ContactBundle\Form\Type\ContactType
     orocrm_contact.type.group.class:                  OroCRM\Bundle\ContactBundle\Form\Type\GroupType
     orocrm_contact.handler.contact.class:             OroCRM\Bundle\ContactBundle\Form\Handler\ContactHandler
     orocrm_contact.form.type.contact_select.class:    OroCRM\Bundle\ContactBundle\Form\Type\ContactSelectType
     orocrm_contact.handler.group.class:               OroCRM\Bundle\ContactBundle\Form\Handler\GroupHandler
 
+    #manager
     orocrm_contact.contact.manager.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
     orocrm_contact.contact.manager.api.class:         OroCRM\Bundle\ContactBundle\Entity\Manager\ContactApiEntityManager
     orocrm_contact.contact_address.manager.api.class: Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.contact_phone.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_contact.contact_email.manager.api.class:   Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    #type
     orocrm_contact.form.type.contact.api.class:       OroCRM\Bundle\ContactBundle\Form\Type\ContactApiType
 
     orocrm_contact.group.entity.class:                OroCRM\Bundle\ContactBundle\Entity\Group
@@ -31,6 +38,10 @@ parameters:
 
     orocrm_contact.handler.contact_email_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactEmailApiHandler
     orocrm_contact.handler.contact_phone_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactPhoneApiHandler
+
+    #validator
+    orocrm_contact.validator.contact_email_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator
+    orocrm_contact.validator.contact_phone_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator
 
 services:
     orocrm_contact.form.contact:
@@ -60,8 +71,6 @@ services:
             - @orocrm_contact.form.contact
             - @request
             - @doctrine.orm.entity_manager
-        tags:
-            - { name: oro_tag.tag_manager }
 
     orocrm_contact.contact.manager:
         class: %orocrm_contact.contact.manager.class%
@@ -126,8 +135,6 @@ services:
             - @orocrm_contact.form.contact.api
             - @request
             - @doctrine.orm.entity_manager
-        tags:
-            - { name: oro_tag.tag_manager }
 
     # Group API
     orocrm_contact.group.manager.api:
@@ -185,7 +192,7 @@ services:
     orocrm_contact.email.owner.provider:
         class: %orocrm_contact.email.owner.provider.class%
         tags:
-            - { name: oro_email.owner.provider, order: 2 }
+            - { name: oro_email.owner.provider, order: 3 }
 
     orocrm_contact.subscriber.contact_listener:
         class: %orocrm_contact.subscriber.contact_listener.class%
@@ -234,18 +241,11 @@ services:
         tags:
             - { name: oro_ui.view_action_provider, group: activity }
 
-    oro_activity.listener.datagrid.context.contact:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.contacts-for-context-grid, method: onBuildAfter }
-
     orocrm_contact.handler.contact_email_api:
         class: %orocrm_contact.handler.contact_email_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -253,5 +253,26 @@ services:
         class: %orocrm_contact.handler.contact_phone_api.class%
         arguments:
             - @doctrine.orm.entity_manager
+            - @oro_security.security_facade
         tags:
             - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_contact.contact_phone.manager.api:
+        class: %orocrm_contact.contact_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_contact.entity.phone.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_contact.contact_email.manager.api:
+        class: %orocrm_contact.contact_email.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_contact.entity.email.class%
+            - @doctrine.orm.entity_manager
+
+    orocrm_contact.validator.contact_email_delete:
+        class: %orocrm_contact.validator.contact_email_delete.class%
+
+    orocrm_contact.validator.contact_phone_delete:
+        class: %orocrm_contact.validator.contact_phone_delete.class%

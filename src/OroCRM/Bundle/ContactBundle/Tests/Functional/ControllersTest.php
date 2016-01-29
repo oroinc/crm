@@ -154,7 +154,7 @@ class ControllersTest extends WebTestCase
         }
         $id = implode(',', $id);
         $this->client->request(
-            'GET',
+            'DELETE',
             $this->getUrl(
                 'oro_datagrid_mass_action',
                 array('gridName' => 'contacts-grid', 'actionName' => 'delete', 'values' => $id, 'inset' => 1)
@@ -164,7 +164,7 @@ class ControllersTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertTrue($result['successful']);
-        $this->assertEquals("5 entities were removed", $result['message']);
+        $this->assertEquals("5 entities were deleted", $result['message']);
         $this->assertEquals(5, $result['count']);
 
         $response = $this->client->requestGrid(

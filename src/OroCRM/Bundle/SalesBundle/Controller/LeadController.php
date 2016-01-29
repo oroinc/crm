@@ -3,15 +3,18 @@
 namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 /**
  * @Route("/lead")
@@ -117,6 +120,49 @@ class LeadController extends Controller
     public function accountLeadsAction(Account $account)
     {
         return array('entity' => $account);
+    }
+
+    /**
+     * Create lead form with data channel
+     *
+     * @Route("/create/{channelIds}", name="orocrm_sales_lead_data_channel_aware_create")
+     * @Template("OroCRMSalesBundle:Lead:update.html.twig")
+     * @AclAncestor("orocrm_sales_lead_view")
+     *
+     * @ParamConverter(
+     *      "channel",
+     *      class="OroCRMChannelBundle:Channel",
+     *      options={"id" = "channelIds"}
+     * )
+     */
+    public function leadWithDataChannelCreateAction(Channel $channel)
+    {
+        $lead = new Lead();
+        $lead->setDataChannel($channel);
+
+        return $this->update($lead);
+    }
+
+    /**
+     * @Route("/datagrid/lead-with-datachannel/{channelIds}", name="orocrm_sales_datagrid_lead_datachannel_aware")
+     * @Template("OroCRMSalesBundle:Widget:entityWithDataChannelGrid.html.twig")
+     * @AclAncestor("orocrm_sales_lead_view")
+     */
+    public function leadWithDataChannelGridAction($channelIds, Request $request)
+    {
+        $gridName = $request->query->get('gridName');
+
+        if (!$gridName) {
+            return $this->createNotFoundException('`gridName` Should be defined.');
+        }
+
+        return [
+            'channelId'    => $channelIds,
+            'gridName'     => $gridName,
+            'params'       => $request->query->get('params', []),
+            'renderParams' => $request->query->get('renderParams', []),
+            'multiselect'  => $request->query->get('multiselect', false)
+        ];
     }
 
     /**

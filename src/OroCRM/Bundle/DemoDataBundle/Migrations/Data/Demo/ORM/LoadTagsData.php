@@ -1,68 +1,53 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
-
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Tag;
-use Oro\Bundle\TagBundle\Entity\TagManager;
-use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
-
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
 
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+
+use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\TagBundle\Entity\Tag;
+use Oro\Bundle\TagBundle\Entity\TagManager;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
-    /**
-     * @var ContainerInterface
-     */
+    /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @var Account[]
-     */
+    /** @var EntityRepository */
     protected $accountsRepository;
 
-    /**
-     * @var User[]
-     */
+    /** @var EntityRepository */
     protected $usersRepository;
 
-    /**
-     * @var Contact[]
-     */
+    /* @var EntityRepository */
     protected $contactsRepository;
 
-    /** @var  TagManager */
+    /** @var TagManager */
     protected $tagManager;
-
-    /** @var EntityRepository */
-    protected $tagsRepository;
 
     /** @var Tag[] */
     protected $tagsUser;
-    protected $randomUser;
-    protected $randomUserTag;
 
     /** @var Tag[] */
     protected $tagsAccount;
-    protected $randomAccountTag;
 
-    /** @var  EntityManager */
+    /** @var EntityManager */
     protected $em;
 
-    /**
-     * @var Organization
-     */
+    /** @var Organization */
     protected $organization;
 
     /**
@@ -78,7 +63,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setContainer(ContainerInterface $container = null)
     {
@@ -86,7 +71,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
@@ -101,31 +86,39 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
      */
     protected function initSupportingEntities(ObjectManager $manager = null)
     {
-
         if ($manager) {
             $this->em = $manager;
         } else {
             $this->em = $this->container->get('doctrine.orm.entity_manager');
         }
 
-        $this->usersRepository = $this->em->getRepository('OroUserBundle:User')->findAll();
+        $this->usersRepository    = $this->em->getRepository('OroUserBundle:User')->findAll();
         $this->accountsRepository = $this->em->getRepository('OroCRMAccountBundle:Account')->findAll();
         $this->contactsRepository = $this->em->getRepository('OroCRMContactBundle:Contact')->findAll();
-        $this->tagsRepository = $this->em->getRepository('OroTagBundle:Tag')->findAll();
 
-        $this->randomUser = count($this->usersRepository)-1;
-        $this->randomUserTag = count($this->tagsUser)-1;
-        $this->tagManager = $this->container->get('oro_tag.tag.manager');
+        $this->tagManager   = $this->container->get('oro_tag.tag.manager');
         $this->organization = $this->getReference('default_organization');
+
+        /** @var User $adminUser */
+        $adminUser    = $this->em->getRepository('OroUserBundle:User')->find(1);
+        $token        = new UsernamePasswordOrganizationToken(
+            $adminUser,
+            $adminUser->getUsername(),
+            'main',
+            $this->organization
+        );
+        $tokenStorage = $this->container->get('security.token_storage');
+        $tokenStorage->setToken($token);
     }
 
     /**
      * @param $tagsNames
+     *
      * @return Tag[]
      */
     protected function createTags($tagsNames)
     {
-        $tags = array();
+        $tags = [];
         foreach ($tagsNames as $tagName) {
             $tag = new Tag($tagName);
             $tag->setOrganization($this->organization);
@@ -137,20 +130,18 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
 
     public function loadUsersTags()
     {
-        $this->tagsUser = $this->createTags(array('Friends', 'Developer', 'Wholesale'));
-        foreach ($this->usersRepository as $user) {
-            $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-            $securityContext->setToken($token);
+        $this->tagsUser = $this->createTags(['Friends', 'Developer', 'Wholesale']);
+        $userTagsCount  = count($this->tagsUser);
 
-            $ownTag = array($this->tagsUser[rand(0, $this->randomUserTag)]);
-            $user->setTags(
-                array(
-                    'owner' => $ownTag,
-                    'all' => array()
+        foreach ($this->usersRepository as $user) {
+            $this->tagManager->setTags(
+                $user,
+                new ArrayCollection(
+                    [
+                        $this->tagsUser[rand(0, $userTagsCount - 1)]
+                    ]
                 )
             );
-            $this->persist($this->em, $user);
             $this->tagManager->saveTagging($user, false);
         }
         $this->flush($this->em);
@@ -159,7 +150,7 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
     public function loadAccountsTags()
     {
         $this->tagsAccount = $this->createTags(
-            array(
+            [
                 'Commercial',
                 'Business',
                 'Vendor',
@@ -170,71 +161,46 @@ class LoadTagsData extends AbstractFixture implements ContainerAwareInterface, D
                 '#popular',
                 '#call',
                 '#discontinued',
-                'Premium')
+                'Premium'
+            ]
         );
-        $this->randomAccountTag = count($this->tagsAccount)-1;
+        $userTagsCount     = count($this->tagsUser);
+        $accountTagsCount  = count($this->tagsAccount);
 
         foreach ($this->accountsRepository as $account) {
-            $user = $this->usersRepository[rand(0, $this->randomUser)];
-
-            $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-            $securityContext->setToken($token);
-
-            $ownTags = array(
-                $this->tagsUser[rand(0, $this->randomUserTag)],
-                $this->tagsAccount[rand(0, $this->randomAccountTag)]
-            );
-
-            $account->setTags(
-                array(
-                    'owner' => $ownTags ,
-                    'all' => array()
+            $this->tagManager->setTags(
+                $account,
+                new ArrayCollection(
+                    [
+                        $this->tagsUser[rand(0, $userTagsCount - 1)],
+                        $this->tagsAccount[rand(0, $accountTagsCount - 1)]
+                    ]
                 )
             );
-            $this->persist($this->em, $account);
             $this->tagManager->saveTagging($account, false);
         }
         $this->flush($this->em);
-        $this->em->clear('Oro\\Bundle\\AccountBundle\\Entity\\Account');
     }
 
     public function loadContactsTags()
     {
+        $userTagsCount    = count($this->tagsUser);
+        $accountTagsCount = count($this->tagsAccount);
+
         foreach ($this->contactsRepository as $contact) {
-            $user = $this->usersRepository[rand(0, $this->randomUser)];
-
-            $securityContext = $this->container->get('security.context');
-            $token = new UsernamePasswordOrganizationToken($user, $user->getUsername(), 'main', $this->organization);
-            $securityContext->setToken($token);
-
-            $ownTags = array(
-                $this->tagsUser[rand(0, $this->randomUserTag)],
-                $this->tagsAccount[rand(0, $this->randomAccountTag-1)]
-            );
-
-            $contact->setTags(
-                array(
-                    'owner' => $ownTags,
-                    'all' => array()
+            $this->tagManager->setTags(
+                $contact,
+                new ArrayCollection(
+                    [
+                        $this->tagsUser[rand(0, $userTagsCount - 1)],
+                        $this->tagsAccount[rand(0, $accountTagsCount - 1)]
+                    ]
                 )
             );
-            $this->persist($this->em, $contact);
+
             $this->tagManager->saveTagging($contact, false);
         }
         $this->flush($this->em);
-        $this->em->clear('Oro\\Bundle\\ContactBundle\\Entity\\Contact');
-    }
-
-    /**
-     * Persist object
-     *
-     * @param mixed $manager
-     * @param mixed $object
-     */
-    private function persist($manager, $object)
-    {
-        $manager->persist($object);
     }
 
     /**

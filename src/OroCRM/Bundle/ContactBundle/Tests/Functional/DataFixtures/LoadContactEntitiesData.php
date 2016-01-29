@@ -52,7 +52,7 @@ class LoadContactEntitiesData extends AbstractFixture
             $contact->setOrganization($organization);
             $contact->setFirstName($contactData['firstName']);
             $contact->setLastName($contactData['lastName']);
-
+            $this->setReference('Contact_' . $contactData['firstName'], $contact);
             $manager->persist($contact);
         }
 
