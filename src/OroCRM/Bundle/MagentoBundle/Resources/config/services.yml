@@ -160,8 +160,10 @@ services:
         arguments:
             - @oro_security.encoder.mcrypt
             - @orocrm_magento.wsdl_manager
+            - []
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 2 }
         calls:
             - [setLogger, ["@oro_integration.logger.strategy"]]
 
@@ -752,6 +754,9 @@ services:
             - @filesystem
             - @orocrm_magento.wsdl.guzzle_client
             - %kernel.cache_dir%
+            - []
+        tags:
+            - { name: orocrm_magento.bundle_config.aware, argument_number: 3 }
 
     orocrm_magento.wsdl.cache_clearer:
         public: false
