@@ -20,14 +20,6 @@ class AnalyticsBuilder
     }
 
     /**
-     * @return AnalyticsBuilderInterface[]
-     */
-    public function getBuilders()
-    {
-        return $this->builders;
-    }
-
-    /**
      * @param Channel $channel
      * @param array $ids
      */

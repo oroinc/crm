@@ -71,14 +71,6 @@ class RFMBuilder implements AnalyticsBuilderInterface
     }
 
     /**
-     * @return RFMProviderInterface[]
-     */
-    public function getProviders()
-    {
-        return $this->providers;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function supports(Channel $channel)
@@ -142,11 +134,11 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
     /**
      * @param Channel $channel
-     * @param $values
+     * @param array $values
      * @throws \Doctrine\DBAL\ConnectionException
      * @throws \Exception
      */
-    protected function updateValues(Channel $channel, $values)
+    protected function updateValues(Channel $channel, array $values)
     {
         if (empty($values)) {
             return;
@@ -158,35 +150,19 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $connection->beginTransaction();
         try {
             foreach ($values as $id => $value) {
-                $metrics = $this->filterMetrics($entityFQCN, $value);
-                if (empty($metrics)) {
-                    continue;
-                }
                 $qb = $connection->createQueryBuilder();
                 $qb->update($this->getTableName($entityFQCN), 'e');
-                foreach ($metrics as $metricName => $metricValue) {
-                    $qb->set($metricName, $metricValue);
+                foreach ($this->getColumns($entityFQCN, array_keys($value)) as $columnName) {
+                    $qb->set($columnName, '?');
                 }
                 $qb->where($qb->expr()->eq('e.id', '?'));
-                $connection->executeUpdate($qb->getSQL(), [$id]);
+                $connection->executeUpdate($qb->getSQL(), array_merge(array_values($value), [$id]));
             }
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();
             throw $e;
         }
-    }
-
-    /**
-     * @param $entityFQCN
-     * @param $value
-     * @return array
-     */
-    protected function filterMetrics($entityFQCN, $value)
-    {
-        $metricNames = array_keys($value);
-        $columnAliases = array_combine($this->getColumns($entityFQCN, $metricNames), array_values($value));
-        return array_filter($columnAliases);
     }
 
     /**
@@ -213,12 +189,12 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         $qb->select(preg_filter('/^/', 'e.', $metrics))
             ->addSelect('e.id')
-            ->andWhere('e.dataChannel = :dataChannel')
+            ->where('e.dataChannel = :dataChannel')
             ->orderBy(sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN)))
             ->setParameter('dataChannel', $channel);
 
         if (!empty($ids)) {
-            $qb->where($qb->expr()->in('c.id', ':ids'))
+            $qb->andWhere($qb->expr()->in('e.id', ':ids'))
                 ->setParameter('ids', $ids);
         }
 
@@ -246,10 +222,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         // null value must be ranked with worse index
         if ($value === null) {
-            /** @var RFMMetricCategory $category */
-            $category = end($categories);
-            reset($categories);
-            return $category->getCategoryIndex();
+            return array_pop($categories)->getCategoryIndex();
         }
 
         // Search for RFM category that match current value
@@ -260,7 +233,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
             }
 
             $minValue = $category->getMinValue();
-            if ($minValue !== null && $value <= $category->getMinValue()) {
+            if ($minValue !== null && $value <= $minValue) {
                 continue;
             }
 
@@ -308,7 +281,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
     /**
      * @param string $className
      * @param array $fields
-     * @return string
+     * @return array
      */
     protected function getColumns($className, array $fields)
     {

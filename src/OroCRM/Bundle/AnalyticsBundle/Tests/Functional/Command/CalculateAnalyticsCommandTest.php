@@ -71,7 +71,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                 ],
                 [
                     '[Process] Channel: CustomerChannel',
-                    '[Done] 2/2 updated.',
+                    '[Done] Channel: CustomerChannel updated.',
                 ]
             ],
             'non existing id' => [
@@ -81,7 +81,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                 ],
                 [
                     '[Process] Channel: CustomerChannel',
-                    '[Done] 0/0 updated.',
+                    '[Done] Channel: CustomerChannel updated.',
                 ]
             ],
             'existing entity' => [
@@ -91,7 +91,7 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                 ],
                 [
                     '[Process] Channel: CustomerChannel',
-                    '[Done] 1/1 updated.',
+                    '[Done] Channel: CustomerChannel updated.',
                 ]
             ],
             'ids with wrong channel' => [
@@ -121,9 +121,9 @@ class CalculateAnalyticsCommandTest extends WebTestCase
                 [],
                 [
                     '[Process] Channel: CustomerChannel',
-                    '[Done] 2/2 updated.',
+                    '[Done] Channel: CustomerChannel updated.',
                     '[Process] Channel: CustomerChannel2',
-                    '[Done] 1/1 updated.',
+                    '[Done] Channel: CustomerChannel2 updated.',
                 ]
             ]
         ];

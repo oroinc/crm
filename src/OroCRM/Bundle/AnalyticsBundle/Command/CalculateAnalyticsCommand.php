@@ -82,7 +82,7 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
 
             $this->getAnalyticBuilder()->build($channel, $ids);
 
-            $output->writeln($formatter->formatSection('Done', sprintf('Channel: %s updated', $channel->getName())));
+            $output->writeln($formatter->formatSection('Done', sprintf('Channel: %s updated.', $channel->getName())));
         }
         $connection->rollBack();
     }
