@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
+use JMS\JobQueueBundle\Entity\Job;
+
 use Psr\Log\LoggerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -13,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -27,6 +30,11 @@ class InitialSyncCommand extends ContainerAwareCommand
 
     const STATUS_SUCCESS = 0;
     const STATUS_FAILED = 255;
+
+    protected $disabledListeners = [
+        'oro_search.index_listener',
+        'oro_entity.event_listener.entity_modify_created_updated_properties_listener'
+    ];
 
     /**
      * {@inheritdoc}
@@ -61,6 +69,8 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->disableOptionalListeners();
+
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
         $logger = $this->getLogger($output);
@@ -96,6 +106,10 @@ class InitialSyncCommand extends ContainerAwareCommand
         } catch (\Exception $e) {
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
+        }
+
+        if ($exitCode === self::STATUS_SUCCESS) {
+            $this->runReindex();
         }
 
         $logger->notice('Completed');
@@ -196,5 +210,30 @@ class InitialSyncCommand extends ContainerAwareCommand
         return $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMChannelBundle:Channel')
             ->findOneBy(['dataSource' => $integration]);
+    }
+
+    protected function disableOptionalListeners()
+    {
+        $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
+        $knownListeners = $listenerManager->getListeners();
+        foreach ($this->disabledListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $listenerManager->disableListener($listenerId);
+            }
+        }
+    }
+
+    protected function runReindex()
+    {
+        $running = $this->getIntegrationChannelRepository()
+            ->getExistingSyncJobsCount(ReindexCommand::COMMAND_NAME);
+
+        if (!$running) {
+            /** @var EntityManager $em */
+            $em = $this->getContainer()->get('doctrine')->getManagerForClass('JMSJobQueueBundle:Job');
+            $job = new Job(ReindexCommand::COMMAND_NAME);
+            $em->persist($job);
+            $em->flush($job);
+        }
     }
 }
