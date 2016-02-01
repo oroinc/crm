@@ -196,6 +196,10 @@ OroCRM\Bundle\MagentoBundle\Entity\Customer:
             target_type:            text
             target_fields:          [storeName]
         -
+            name:                   email
+            target_type:            text
+            target_fields:          [email]
+        -
             name:                  dataChannel
             relation_type:         many-to-one
             relation_fields:
