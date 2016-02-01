@@ -7,10 +7,10 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 interface AnalyticsBuilderInterface
 {
     /**
-     * @param Channel $entity
+     * @param Channel $channel
      * @return bool
      */
-    public function supports(Channel $entity);
+    public function supports(Channel $channel);
 
     /**
      * @param Channel $entity
