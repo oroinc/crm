@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
 use Doctrine\Common\Collections\Criteria;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
-
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
@@ -30,21 +28,6 @@ class RFMBuilder implements AnalyticsBuilderInterface
      * @var array categories by channel
      */
     protected $categories = [];
-
-    /**
-     * @var array
-     */
-    protected $tablesNames = [];
-
-    /**
-     * @var array
-     */
-    protected $classesMetadata = [];
-
-    /**
-     * @var array
-     */
-    protected $tablesColumns = [];
 
     /**
      * @param DoctrineHelper $doctrineHelper
@@ -95,8 +78,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $values = [];
         $count = 0;
         foreach ($iterator as $value) {
-            $values[$value['id']] = $value;
-            unset($values[$value['id']]['id']);
+            $values[] = $value;
             $count++;
             if ($count % self::BATCH_SIZE === 0) {
                 $this->processBatch($channel, $values);
@@ -117,15 +99,17 @@ class RFMBuilder implements AnalyticsBuilderInterface
             if (!$provider->supports($channel)) {
                 continue;
             }
-            $providerValues = $provider->getValues($channel, array_keys($values));
+            $providerValues = $provider->getValues($channel, array_map(function ($value) {
+                return $value['id'];
+            }, $values));
 
             $type = $provider->getType();
 
-            foreach ($values as $id => $value) {
-                $metric = isset($providerValues[$id]) ? $providerValues[$id] : null;
+            foreach ($values as $value) {
+                $metric = isset($providerValues[$value['id']]) ? $providerValues[$value['id']] : null;
                 $index = $this->getIndex($channel, $type, $metric);
                 if ($index !== $value[$type]) {
-                    $toUpdate[$id][$type] = $index;
+                    $toUpdate[$value['id']][$type] = $index;
                 }
             }
         }
@@ -140,23 +124,26 @@ class RFMBuilder implements AnalyticsBuilderInterface
      */
     protected function updateValues(Channel $channel, array $values)
     {
-        if (empty($values)) {
+        if (count($values) === 0) {
             return;
         }
         $entityFQCN = $channel->getCustomerIdentity();
 
         $em = $this->doctrineHelper->getEntityManager($entityFQCN);
+        $idField = $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN);
         $connection = $em->getConnection();
         $connection->beginTransaction();
         try {
             foreach ($values as $id => $value) {
-                $qb = $connection->createQueryBuilder();
-                $qb->update($this->getTableName($entityFQCN), 'e');
-                foreach ($this->getColumns($entityFQCN, array_keys($value)) as $columnName) {
-                    $qb->set($columnName, '?');
+                $qb = $em->createQueryBuilder();
+                $qb->update($entityFQCN, 'e');
+                foreach ($value as $metricName => $metricValue) {
+                    $qb->set('e.' . $metricName, ':' . $metricName);
+                    $qb->setParameter($metricName, $metricValue);
                 }
-                $qb->where($qb->expr()->eq('e.id', '?'));
-                $connection->executeUpdate($qb->getSQL(), array_merge(array_values($value), [$id]));
+                $qb->where($qb->expr()->eq('e.' . $idField, ':id'));
+                $qb->setParameter('id', $id);
+                $qb->getQuery()->execute();
             }
             $connection->commit();
         } catch (\Exception $e) {
@@ -176,25 +163,27 @@ class RFMBuilder implements AnalyticsBuilderInterface
 
         $qb = $this->doctrineHelper->getEntityRepository($entityFQCN)->createQueryBuilder('e');
 
+        $metadata = $this->doctrineHelper->getEntityMetadataForClass($entityFQCN);
         $metrics = [];
         foreach ($this->providers as $provider) {
-            if ($provider->supports($channel)) {
+            if ($provider->supports($channel) && $metadata->hasField($provider->getType())) {
                 $metrics[] = $provider->getType();
             }
         }
 
-        if (empty($metrics)) {
+        if (count($metrics) === 0) {
             return new \ArrayIterator();
         }
 
+        $idField = sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN));
         $qb->select(preg_filter('/^/', 'e.', $metrics))
-            ->addSelect('e.id')
+            ->addSelect($idField . ' as id')
             ->where('e.dataChannel = :dataChannel')
-            ->orderBy(sprintf('e.%s', $this->doctrineHelper->getSingleEntityIdentifierFieldName($entityFQCN)))
+            ->orderBy($idField)
             ->setParameter('dataChannel', $channel);
 
-        if (!empty($ids)) {
-            $qb->andWhere($qb->expr()->in('e.id', ':ids'))
+        if (count($ids) !== 0) {
+            $qb->andWhere($qb->expr()->in($idField, ':ids'))
                 ->setParameter('ids', $ids);
         }
 
@@ -264,50 +253,5 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $this->categories[$channelId][$type] = $categories;
 
         return $categories;
-    }
-
-    /**
-     * @param string $className
-     * @return string
-     */
-    protected function getTableName($className)
-    {
-        if (!isset($this->tablesNames[$className])) {
-            $this->tablesNames[$className] = $this->getClassMetadata($className)->table['name'];
-        }
-        return $this->tablesNames[$className];
-    }
-
-    /**
-     * @param string $className
-     * @param array $fields
-     * @return array
-     */
-    protected function getColumns($className, array $fields)
-    {
-        $result = [];
-
-        foreach ($fields as $field) {
-            if (!isset($this->tablesColumns[$className][$field])) {
-                $this->tablesColumns[$className][$field] = $this->getClassMetadata($className)->getColumnName($field);
-            }
-            $result[] = $this->tablesColumns[$className][$field];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $className
-     * @return ClassMetadata
-     */
-    protected function getClassMetadata($className)
-    {
-        if (!isset($this->classesMetadata[$className])) {
-            $this->classesMetadata[$className] = $this->doctrineHelper->getEntityManager($className)
-                ->getClassMetadata($className);
-        }
-
-        return $this->classesMetadata[$className];
     }
 }

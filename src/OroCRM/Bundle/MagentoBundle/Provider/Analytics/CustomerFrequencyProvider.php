@@ -33,7 +33,7 @@ class CustomerFrequencyProvider extends AbstractCustomerRFMProvider
                 $qb->expr()->andX(
                     $qb->expr()->neq($qb->expr()->lower('o.status'), ':status'),
                     $qb->expr()->gte('o.createdAt', ':date'),
-                    $qb->expr()->gte('c.dataChannel', ':channel')
+                    $qb->expr()->eq('c.dataChannel', ':channel')
                 )
             )
             ->groupBy('c.id')

@@ -50,8 +50,6 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $connection = $this->getContainer()->get('doctrine')->getConnection();
-        $connection->beginTransaction();
         /** @var FormatterHelper $formatter */
         $formatter = $this->getHelper('formatter');
 
@@ -84,7 +82,6 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
 
             $output->writeln($formatter->formatSection('Done', sprintf('Channel: %s updated.', $channel->getName())));
         }
-        $connection->rollBack();
     }
 
     /**
