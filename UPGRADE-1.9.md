@@ -12,6 +12,7 @@ UPGRADE FROM 1.8 to 1.9
 - Methods definitions of `OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface` was updated:
     - `supports($entity)` was changed to `supports(Channel $channel)`,
     - `build(AnalyticsAwareInterface $entity)` was changed to `build(Channel $entity, array $ids = [])`.
-- `supports` and `getValues` methods definitions of `OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface` was updated:
-    - `supports($entity)` was changed to `supports(Channel $entity)`,
-    - `getValue(RFMAwareInterface $entity)` was changed to `getValues(Channel $entity, array $ids = [])`. 
+- `OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface` was updated:
+    - `supports($entity)` method definition was changed to `supports(Channel $entity)`,
+    - `getValue(RFMAwareInterface $entity)` method was removed, 
+    - new `getValues(Channel $entity, array $ids = [])` method was added. 
