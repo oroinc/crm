@@ -25,15 +25,7 @@ class CustomerAddressApiEntityManager extends ApiEntityManager
      */
     public function getAllSerializedItems($orderId)
     {
-        /** @var QueryBuilder $qb */
-        $qb = $this->getBaseQB($orderId);
-
-        $addresses = $this->serialize($qb);
-
-        foreach ($addresses as &$address) {
-            $address['types'] = $this->getSerializedAddressTypes($address['types']);
-        }
-        return $addresses;
+        return $this->serialize($this->getBaseQB($orderId));
     }
 
     /**
@@ -55,10 +47,7 @@ class CustomerAddressApiEntityManager extends ApiEntityManager
             return null;
         }
 
-        $customerAddress          = $result[0];
-        $customerAddress['types'] = $this->getSerializedAddressTypes($customerAddress['types']);
-
-        return $customerAddress;
+        return $result[0];
     }
 
     /**
@@ -85,26 +74,8 @@ class CustomerAddressApiEntityManager extends ApiEntityManager
         if (empty($customerAddresses[0])) {
             return null;
         }
-        $customerAddress          = $customerAddresses[0];
-        $customerAddress['types'] = $this->getSerializedAddressTypes($entity->getTypes()->toArray());
 
-        return $customerAddress;
-    }
-
-    /**
-     * @param array $types
-     *
-     * @return array
-     */
-    protected function getSerializedAddressTypes(array $types)
-    {
-        $result = [];
-
-        foreach ($types as $type) {
-            $result[] = $type['name'];
-        }
-
-        return $result;
+        return $customerAddresses[0];
     }
 
     /**
@@ -115,6 +86,7 @@ class CustomerAddressApiEntityManager extends ApiEntityManager
         $config = [
             'fields' => [
                 'owner'        => ['fields' => 'id'],
+                'types'        => ['fields' => 'name'],
                 'country'      => ['fields' => 'iso2Code'],
                 'region'       => ['fields' => 'combinedCode'],
                 'organization' => ['fields' => 'id']
