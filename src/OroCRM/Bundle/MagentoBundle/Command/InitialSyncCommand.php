@@ -31,11 +31,6 @@ class InitialSyncCommand extends ContainerAwareCommand
     const STATUS_SUCCESS = 0;
     const STATUS_FAILED = 255;
 
-    protected $disabledListeners = [
-        'oro_search.index_listener',
-        'oro_entity.event_listener.entity_modify_created_updated_properties_listener'
-    ];
-
     /**
      * {@inheritdoc}
      */
@@ -69,7 +64,9 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->disableOptionalListeners();
+        // disable search listener on-fly processing
+        $searchListener = $this->getContainer()->get('oro_search.index_listener');
+        $searchListener->setRealTimeUpdate(false);
 
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
@@ -108,9 +105,8 @@ class InitialSyncCommand extends ContainerAwareCommand
             $exitCode = self::STATUS_FAILED;
         }
 
-        if ($exitCode === self::STATUS_SUCCESS) {
-            $this->runReindex();
-        }
+        // Restore search listener configuration
+        $searchListener->setRealTimeUpdate($this->getContainer()->getParameter('oro_search.realtime_update'));
 
         $logger->notice('Completed');
 
@@ -210,30 +206,5 @@ class InitialSyncCommand extends ContainerAwareCommand
         return $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMChannelBundle:Channel')
             ->findOneBy(['dataSource' => $integration]);
-    }
-
-    protected function disableOptionalListeners()
-    {
-        $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
-        $knownListeners = $listenerManager->getListeners();
-        foreach ($this->disabledListeners as $listenerId) {
-            if (in_array($listenerId, $knownListeners, true)) {
-                $listenerManager->disableListener($listenerId);
-            }
-        }
-    }
-
-    protected function runReindex()
-    {
-        $running = $this->getIntegrationChannelRepository()
-            ->getExistingSyncJobsCount(ReindexCommand::COMMAND_NAME);
-
-        if (!$running) {
-            /** @var EntityManager $em */
-            $em = $this->getContainer()->get('doctrine')->getManagerForClass('JMSJobQueueBundle:Job');
-            $job = new Job(ReindexCommand::COMMAND_NAME);
-            $em->persist($job);
-            $em->flush($job);
-        }
     }
 }
