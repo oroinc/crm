@@ -517,6 +517,7 @@ datagrid:
                     data_name: l.numberOfEmployees
                     enabled: false
                 sourceName:
+                    class: Extend\Entity\EV_Lead_Source
                     type: enum
                     enum_code: lead_source
                     data_name: source.id
