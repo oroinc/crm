@@ -61,6 +61,13 @@ class Configuration implements ConfigurationInterface
                             ->info('This interval will be used to sync regions')
                             ->example('14 days')
                         ->end()
+                        ->booleanNode('skip_ssl_verification')
+                            ->defaultValue(false)
+                            ->info(
+                                'Enabling this options will turn off SSL certificate validation and allow self ' .
+                                'signed certificates'
+                            )
+                        ->end()
                     ->end()
                 ->end()
                 ->arrayNode(self::DISCOVERY_NODE)

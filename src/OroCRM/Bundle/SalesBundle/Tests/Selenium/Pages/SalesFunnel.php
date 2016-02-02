@@ -54,7 +54,10 @@ class SalesFunnel extends AbstractPageEntity
         $this->opportunity->click();
         $this->waitPageToLoad();
         $this->waitForAjax();
-        $this->test->byXpath("//div[@class='filter-container']//*[contains(@class,'filter-criteria-selector')][contains(., '{$type} name')]")->click();
+        $this->test->byXpath(
+            "//div[@class='filter-container']//*[contains(@class,'filter-criteria-selector')]"
+            . "[contains(., '{$type} name')]"
+        )->click();
         $filter = $this->test->byXpath(
             "//div[contains(@class, 'filter-item oro-drop open-filter' )]//input[@name='value']"
         );
