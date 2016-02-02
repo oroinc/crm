@@ -15,6 +15,7 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
                 'mistiming_assumption_interval' => '10 minutes',
                 'initial_import_step_interval' => '1 day',
                 'region_sync_interval' => '1 day',
+                'skip_ssl_verification' => false
             ]
         ];
 
@@ -25,9 +26,11 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
 
         $tagged = $container->findTaggedServiceIds('orocrm_magento.bundle_config.aware');
 
+        $missedConfigDefinitions = [];
         foreach (array_keys($tagged) as $serviceId) {
             $definition = $container->getDefinition($serviceId);
 
+            $definition->getArguments();
             $configArguments = array_filter(
                 $definition->getArguments(),
                 function ($arg) use ($config) {
@@ -35,8 +38,12 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
-            $this->assertNotEmpty($configArguments, "$serviceId should contain config array");
+            if (!$configArguments) {
+                $missedConfigDefinitions[] = $serviceId;
+            }
         }
+
+        $this->assertEquals([], $missedConfigDefinitions, 'Should contain config array');
     }
 
     /**
