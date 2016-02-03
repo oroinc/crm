@@ -780,6 +780,10 @@ class Customer extends ExtendCustomer implements
             $address->setOwner($this);
         }
 
+        if ($address->getOwner() !== $this) {
+            $address->setOwner($this);
+        }
+
         return $this;
     }
 

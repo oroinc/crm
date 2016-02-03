@@ -71,11 +71,11 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             );
         }
 
+        $remoteData = $this->normalize($remoteData);
         if (!$changeSet) {
             return $remoteData;
         }
 
-        $remoteData = $this->normalize($remoteData);
         $oldValues = $this->getChangeSetValues($changeSet, 'old');
         $oldValues = $this->fillEmptyValues($oldValues, $this->getChangeSetValues($changeSet, 'new'));
         $snapshot = $this->getSnapshot($localData, $oldValues);
