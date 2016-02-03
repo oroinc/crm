@@ -61,7 +61,7 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // disable search listener on-fly processing
+        // Disable search listener on-fly processing to increase the performance
         $searchListener = $this->getContainer()->get('oro_search.index_listener');
         $searchListener->setRealTimeUpdate(false);
 
