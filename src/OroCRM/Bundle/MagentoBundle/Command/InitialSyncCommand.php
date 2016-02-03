@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Command;
 
 use Doctrine\ORM\EntityManager;
 
-use JMS\JobQueueBundle\Entity\Job;
-
 use Psr\Log\LoggerInterface;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -15,7 +13,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
-use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
