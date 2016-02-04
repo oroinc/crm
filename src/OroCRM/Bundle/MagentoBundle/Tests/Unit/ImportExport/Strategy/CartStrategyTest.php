@@ -80,7 +80,6 @@ class CartStrategyTest extends AbstractStrategyTest
      */
     public function contactInfoDataProvider()
     {
-        $date = new \DateTime();
         return [
             'items count' => [null, $this->getEntity()],
             'without contact info' => [null, $this->getEntity(['itemsCount' => 1])],

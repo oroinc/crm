@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -14,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerType extends AbstractType
 {

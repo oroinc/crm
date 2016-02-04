@@ -2,12 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
+
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerApiType extends AbstractType
 {
