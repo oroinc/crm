@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -111,6 +112,7 @@ class CustomerType extends AbstractType
         }
 
         $this->initFormEvents($builder);
+        $builder->addEventSubscriber(new CustomerTypeSubscriber());
     }
 
     /**
