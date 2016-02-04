@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Address;
 
 class CustomerTest extends AbstractEntityTestCase
 {
@@ -96,5 +97,24 @@ class CustomerTest extends AbstractEntityTestCase
             ->will($this->returnValue($expectedValue));
 
         $this->assertEquals($expectedValue, $website->getStoreName());
+    }
+
+    /**
+     * This is necessary to work that way due to way import works
+     *
+     * @see https://magecore.atlassian.net/browse/CRM-4985
+     */
+    public function testAddressShouldHaveOwnerWhoLastAddedIt()
+    {
+        $address = new Address();
+
+        $existingCustomer = new Customer();
+        $existingCustomer->addAddress($address);
+
+        $customer = new Customer();
+        $customer->addAddress($address);
+
+        $existingCustomer->addAddress($address);
+        $this->assertSame($address->getOwner(), $existingCustomer);
     }
 }
