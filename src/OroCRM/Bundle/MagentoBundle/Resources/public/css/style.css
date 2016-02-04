@@ -94,16 +94,16 @@
 .customer-info ul.inline li.magento-customer-info > div {
   float: none;
 }
-#orderPlaceFrame.loaded {
-    width: 100%;
+.place-order-transaction-dialog #orderPlaceFrame.loaded {
     height: 100%;
+    width: 100%;
 }
-.mobile-version #orderPlaceFrame {
+.mobile-version .place-order-transaction-dialog .order-form-widget.widget-content {
     position: fixed;
-    padding-top: 44px;
     top: 0;
+    bottom: 0;
     left: 0;
-}
-.desktop-version #orderPlaceFrame {
-    padding-top: 0 !important;
+    right: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
 }
