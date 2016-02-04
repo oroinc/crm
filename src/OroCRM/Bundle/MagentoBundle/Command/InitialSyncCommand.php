@@ -61,6 +61,10 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
+        // Disable search listener on-fly processing to increase the performance
+        $searchListener = $this->getContainer()->get('oro_search.index_listener');
+        $searchListener->setRealTimeUpdate(false);
+
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
         $logger = $this->getLogger($output);
@@ -97,6 +101,9 @@ class InitialSyncCommand extends ContainerAwareCommand
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
         }
+
+        // Restore search listener configuration
+        $searchListener->setRealTimeUpdate($this->getContainer()->getParameter('oro_search.realtime_update'));
 
         $logger->info('Completed');
 
