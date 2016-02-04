@@ -85,8 +85,8 @@ class CartStrategyTest extends AbstractStrategyTest
             'items count' => [null, $this->getEntity()],
             'without contact info' => [null, $this->getEntity(['itemsCount' => 1])],
             'email' => [
-                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com', 'importedAt'=> $date, 'syncedAt' => $date]),
-                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com', 'importedAt'=> $date, 'syncedAt' => $date]),
+                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com']),
+                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com']),
 
             ],
             'dont change status' => [
