@@ -164,7 +164,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
      */
     protected function normalize(array $data)
     {
-        $this->normalizedObject = $this->importProcessor->process($data);;
+        $this->normalizedObject = $this->importProcessor->process($data);
 
         return $this->exportProcessor->process($this->normalizedObject);
     }
