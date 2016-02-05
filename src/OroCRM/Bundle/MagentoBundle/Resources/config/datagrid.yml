@@ -139,12 +139,6 @@ datagrid:
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
                     type: boolean
-                    options:
-                        field_options:
-                            choices:
-                                # in boolean filter type, 1 = yes, 2 = false
-                                2: orocrm.magento.datagrid.columns.customer_is_guest.no
-                                1: orocrm.magento.datagrid.columns.customer_is_guest.yes
                     data_name: c.guest
                 createdAt:
                     type:      datetime
@@ -837,12 +831,7 @@ datagrid:
                             workflow_entity_class: %orocrm_magento.order.entity.class%
                 guest:
                     label: orocrm.magento.datagrid.columns.order_is_guest.label
-                    type: choice
-                    options:
-                        field_options:
-                            choices:
-                                'false': orocrm.magento.datagrid.columns.order_is_guest.no
-                                'true': orocrm.magento.datagrid.columns.order_is_guest.yes
+                    type: boolean
                     data_name: o.isGuest
                 createdAt:
                     type:             datetime

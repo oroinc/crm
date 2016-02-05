@@ -104,15 +104,9 @@ orocrm:
                 billing_country:  Billing country
                 billing_region:   Billing state
                 customer_is_guest:
-                    label: Magento customer type
-                    yes: Guest
-                    no: Registered
-                    all: All
+                    label: Is Guest
                 order_is_guest:
-                    label: Magento order type
-                    yes: Guest
-                    no: Registered
-                    all: All
+                    label: Is Guest
                 is_subscriber:
                     label: Is a Subscriber
                     yes: Yes
@@ -173,9 +167,7 @@ orocrm:
             website.label:       Website
             store.label:         Store
             guest:
-                label:             Magento Customer Type
-                yes:               Guest
-                no:                Registered
+                label:             Is Guest
             group.label:         Customer Group
             contact.label:       Contact
             account.label:       Account
@@ -389,9 +381,7 @@ orocrm:
             items.label:            Order items
             is_virtual.label:       Is virtual
             is_guest:
-                label:              Magento order type
-                yes:                Guest
-                no:                 Registered
+                label:              Is Guest
             channel.label:          Integration
             data_channel.label:     Channel
             notes.label:            Additional comments
