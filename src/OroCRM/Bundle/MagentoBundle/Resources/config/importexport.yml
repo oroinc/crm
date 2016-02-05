@@ -281,6 +281,8 @@ services:
     orocrm_magento.import_strategy.default_magento_import:
         class: %orocrm_magento.import_strategy.default_magento_import.class%
         parent: oro_importexport.strategy.configurable_add_or_replace
+        calls:
+            - [setPropertyAccessor, [@property_accessor]]
 
     orocrm_magento.import.strategy.abstract:
         class: %orocrm_magento.import.strategy.abstract.class%

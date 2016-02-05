@@ -30,7 +30,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
- * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
@@ -203,6 +202,22 @@ class Customer extends ExtendCustomer implements
      * )
      */
     protected $updatedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="imported_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $importedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="synced_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $syncedAt;
 
     /**
      * @var Website
@@ -843,20 +858,6 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        }
-
-        if (!$this->updatedAt) {
-            $this->updatedAt = $this->createdAt;
-        }
-    }
-
-    /**
      * @return string
      */
     public function getPassword()
@@ -927,6 +928,44 @@ class Customer extends ExtendCustomer implements
         }
 
         return false;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSyncedAt()
+    {
+        return $this->syncedAt;
+    }
+
+    /**
+     * @param \DateTime $syncedAt
+     * @return Customer
+     */
+    public function setSyncedAt(\DateTime $syncedAt)
+    {
+        $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt()
+    {
+        return $this->importedAt;
+    }
+
+    /**
+     * @param \DateTime $importedAt
+     * @return Customer
+     */
+    public function setImportedAt(\DateTime $importedAt)
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
     }
 
     /**
