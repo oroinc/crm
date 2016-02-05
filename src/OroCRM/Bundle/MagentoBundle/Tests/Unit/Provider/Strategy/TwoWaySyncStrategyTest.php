@@ -74,7 +74,15 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->strategy = new TwoWaySyncStrategy($this->importProcessor, $this->exportProcessor);
+        $doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->strategy = new TwoWaySyncStrategy(
+            $this->importProcessor,
+            $this->exportProcessor,
+            $doctrineHelper
+        );
     }
 
     protected function tearDown()
