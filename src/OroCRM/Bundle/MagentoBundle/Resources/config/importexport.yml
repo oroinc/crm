@@ -666,9 +666,11 @@ services:
         arguments:
             - @orocrm_magento.importexport.processor.import_customer
             - @orocrm_magento.importexport.processor.customer_export
+            - @oro_entity.doctrine_helper
 
     orocrm_magento.provider.strategy.two_way_sync.customer_address:
         class: %orocrm_magento.provider.strategy.two_way_sync.class%
         arguments:
             - @orocrm_magento.importexport.processor.import_customer_address
             - @orocrm_magento.importexport.processor.customer_address_export
+            - @oro_entity.doctrine_helper
