@@ -22,13 +22,8 @@
     ],
     "require": {
         "php": ">=5.4.9",
-        "oro/platform": "@dev"
+        "oro/platform": "self.version"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true,
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.x-dev"
-        }
-    }
+    "prefer-stable": true
 }
