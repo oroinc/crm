@@ -94,3 +94,16 @@
 .customer-info ul.inline li.magento-customer-info > div {
   float: none;
 }
+.place-order-transaction-dialog #orderPlaceFrame.loaded {
+    height: 100%;
+    width: 100%;
+}
+.mobile-version .place-order-transaction-dialog .order-form-widget.widget-content {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+}
