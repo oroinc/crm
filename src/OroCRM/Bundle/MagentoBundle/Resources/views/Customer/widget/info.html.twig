@@ -24,6 +24,8 @@
             {%- if entity.guest -%}
                 {{ ui.renderProperty('orocrm.magento.customer.guest.label'|trans, 'orocrm.magento.customer.guest.yes'|trans) }}
             {%- endif -%}
+            {{ ui.renderProperty('orocrm.magento.customer.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('orocrm.magento.customer.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
 
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>

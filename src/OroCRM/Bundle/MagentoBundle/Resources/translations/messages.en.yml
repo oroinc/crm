@@ -195,6 +195,8 @@ orocrm:
             newsletter_subscribers.label: Newsletter Subscribers
             confirmed.label: Confirmed
             created_in.label: Created In
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -255,6 +257,8 @@ orocrm:
             website.label:             Website
             status_message.label:      Status message
             organization.label:        Organization
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         cartitem:
             entity_label:              Magento Shopping Cart Item
@@ -397,6 +401,8 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         product:
             entity_label:         Magento Product

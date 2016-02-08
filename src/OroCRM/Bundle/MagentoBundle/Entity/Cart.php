@@ -303,6 +303,20 @@ class Cart extends ExtendCart implements
     protected $organization;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="imported_at", nullable=true)
+     */
+    protected $importedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="synced_at", nullable=true)
+     */
+    protected $syncedAt;
+
+    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Cart
@@ -798,6 +812,44 @@ class Cart extends ExtendCart implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSyncedAt()
+    {
+        return $this->syncedAt;
+    }
+
+    /**
+     * @param \DateTime $syncedAt
+     * @return Customer
+     */
+    public function setSyncedAt(\DateTime $syncedAt)
+    {
+        $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt()
+    {
+        return $this->importedAt;
+    }
+
+    /**
+     * @param \DateTime $importedAt
+     * @return Customer
+     */
+    public function setImportedAt(\DateTime $importedAt)
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
     }
 
     /**
