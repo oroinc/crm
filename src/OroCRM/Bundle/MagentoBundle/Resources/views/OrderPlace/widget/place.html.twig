@@ -1,7 +1,7 @@
 {% block page_container %}
     <div class="order-form-widget widget-content">
         {% if not error %}
-            <iframe id="orderPlaceFrame" src="{{ sourceUrl }}" width="1" height="1" frameborder="0"></iframe>
+            <iframe id="orderPlaceFrame" data-src="{{ sourceUrl }}" src="" width="1" height="1" frameborder="0"></iframe>
 
             <script type="text/javascript">
                 var ORO_ORDER_EMBED_API = {};
@@ -9,6 +9,7 @@
                 require(['jquery', 'underscore', 'oroui/js/mediator', 'oroui/js/widget-manager', 'oroui/js/messenger',
                     'orotranslation/js/translator'], function ($, _, mediator, widgetManager, messenger, __) {
                     var $frame = $('#orderPlaceFrame'),
+                        src = $frame.data('src'),
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
@@ -22,6 +23,7 @@
                             }
                         );
                     });
+                    $frame.attr('src', src.replace(/^https?:/gi, ''));
                     ORO_ORDER_EMBED_API.success = function () {
                         var showMessage = function(data) {
                                 var message = data.message;
