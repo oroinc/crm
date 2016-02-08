@@ -167,7 +167,9 @@ orocrm:
             website.label:       Website
             store.label:         Store
             guest:
-                label:             Is Guest
+                label:           Is Guest
+                yes:             Yes
+                no:              No
             group.label:         Customer Group
             contact.label:       Contact
             account.label:       Account
@@ -386,6 +388,8 @@ orocrm:
             is_virtual.label:       Is virtual
             is_guest:
                 label:              Is Guest
+                yes:                Yes
+                no:                 No
             channel.label:          Integration
             data_channel.label:     Channel
             notes.label:            Additional comments
