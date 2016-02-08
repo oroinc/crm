@@ -1,6 +1,9 @@
 datagrid:
     sales-opportunity-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
+        mixins:
+            - activity-contact-data-hidden-mixin
+            - activity-contact-days-since-last-contact-hidden-mixin
         options:
             entityHint: opportunities
             export: true
@@ -27,13 +30,6 @@ datagrid:
                     - own.id as owner
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
                     - customer.name as customerName
-                    - o.ac_contact_count as timesContacted
-                    - o.ac_contact_count_in as timesContactedIn
-                    - o.ac_contact_count_out as timesContactedOut
-                    - o.ac_last_contact_date as lastContactedDate
-                    - o.ac_last_contact_date_in as lastContactedDateIn
-                    - o.ac_last_contact_date_out as lastContactedDateOut
-                    - DATE_DIFF(CURRENT_DATE(), o.ac_last_contact_date) as daysSinceLastContact
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:
@@ -104,34 +100,6 @@ datagrid:
                     autocomplete_api_accessor:
                         class: orouser/js/tools/acl-users-search-api-accessor
                         permission_check_entity_name: OroCRM_Bundle_SalesBundle_Entity_Opportunity
-            daysSinceLastContact:
-                label: orocrm.activity_contact.days_since_last_contact.label
-                frontend_type: integer
-                renderable: false
-            timesContacted:
-                label: orocrm.activity_contact.ac_contact_count.label
-                frontend_type: integer
-                renderable: false
-            timesContactedIn:
-                label: orocrm.activity_contact.ac_contact_count_in.label
-                frontend_type: integer
-                renderable: false
-            timesContactedOut:
-                label: orocrm.activity_contact.ac_contact_count_out.label
-                frontend_type: integer
-                renderable: false
-            lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateIn:
-                label: orocrm.activity_contact.ac_last_contact_date_in.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateOut:
-                label: orocrm.activity_contact.ac_last_contact_date_out.label
-                frontend_type: datetime
-                renderable: false
         properties:
             id: ~
             owner: ~
@@ -178,20 +146,6 @@ datagrid:
                     data_name: email.email
                 ownerName:
                     data_name: ownerName
-                daysSinceLastContact:
-                    data_name: daysSinceLastContact
-                timesContacted:
-                    data_name: timesContacted
-                timesContactedIn:
-                    data_name: timesContactedIn
-                timesContactedOut:
-                    data_name: timesContactedOut
-                lastContactedDate:
-                    data_name: lastContactedDate
-                lastContactedDateIn:
-                    data_name: lastContactedDateIn
-                lastContactedDateOut:
-                    data_name: lastContactedDateOut
             default:
                 createdAt: DESC
         filters:
@@ -267,34 +221,6 @@ datagrid:
                     data_name: o.owner
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
-                daysSinceLastContact:
-                    type: number
-                    data_name: daysSinceLastContact
-                    enabled: false
-                timesContacted:
-                    type: number
-                    data_name: timesContacted
-                    enabled: false
-                timesContactedIn:
-                    type: number
-                    data_name: timesContactedIn
-                    enabled: false
-                timesContactedOut:
-                    type: number
-                    data_name: timesContactedOut
-                    enabled: false
-                lastContactedDate:
-                    type: datetime
-                    data_name: lastContactedDate
-                    enabled: false
-                lastContactedDateIn:
-                    type: datetime
-                    data_name: lastContactedDateIn
-                    enabled: false
-                lastContactedDateOut:
-                    type: datetime
-                    data_name: lastContactedDateOut
-                    enabled: false
         actions:
             view:
                 type:          navigate
@@ -318,6 +244,9 @@ datagrid:
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
+        mixins:
+            - activity-contact-data-hidden-mixin
+            - activity-contact-days-since-last-contact-hidden-mixin
         options:
             entityHint: leads
             export: true
@@ -340,7 +269,6 @@ datagrid:
                     - l.industry
                     - l.website
                     - l.numberOfEmployees
-                    - campaign.name as campaignName
                     - source.name as sourceName
                     - customer.name as customerName
                     - status.label as statusLabel
@@ -359,13 +287,6 @@ datagrid:
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
                     - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
                     - own.id as owner
-                    - l.ac_contact_count as timesContacted
-                    - l.ac_contact_count_in as timesContactedIn
-                    - l.ac_contact_count_out as timesContactedOut
-                    - l.ac_last_contact_date as lastContactedDate
-                    - l.ac_last_contact_date_in as lastContactedDateIn
-                    - l.ac_last_contact_date_out as lastContactedDateOut
-                    - DATE_DIFF(CURRENT_DATE(), l.ac_last_contact_date) as daysSinceLastContact
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
@@ -379,7 +300,6 @@ datagrid:
                         - { join: l.contact, alias: c }
                         - { join: l.customer, alias: customer }
                         - { join: l.source, alias: source }
-                        - { join: l.campaign, alias: campaign }
             hints:
                 - HINT_TRANSLATABLE
         inline_editing:
@@ -418,9 +338,6 @@ datagrid:
                 label:         orocrm.sales.lead.datagrid.number_of_employees
                 frontend_type: integer
                 renderable: false
-            campaignName:
-                label:         orocrm.sales.lead.campaign.label
-                renderable: false
             sourceName:
                 label:         orocrm.sales.lead.source.label
                 renderable: false
@@ -458,35 +375,6 @@ datagrid:
             contactName:
                 label:         orocrm.sales.lead.contact.label
                 renderable: false
-            daysSinceLastContact:
-                label: orocrm.activity_contact.days_since_last_contact.label
-                frontend_type: integer
-                renderable: false
-            timesContacted:
-                label: orocrm.activity_contact.ac_contact_count.label
-                frontend_type: integer
-                renderable: false
-            timesContactedIn:
-                label: orocrm.activity_contact.ac_contact_count_in.label
-                frontend_type: integer
-                renderable: false
-            timesContactedOut:
-                label: orocrm.activity_contact.ac_contact_count_out.label
-                frontend_type: integer
-                renderable: false
-            lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateIn:
-                label: orocrm.activity_contact.ac_last_contact_date_in.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateOut:
-                label: orocrm.activity_contact.ac_last_contact_date_out.label
-                frontend_type: datetime
-                renderable: false
-
         properties:
             id: ~
             owner: ~
@@ -528,8 +416,6 @@ datagrid:
                     data_name: l.website
                 numberOfEmployees:
                     data_name: l.numberOfEmployees
-                campaignName:
-                    data_name: campaign.name
                 sourceName:
                     data_name: source.name
                 customerName:
@@ -552,20 +438,6 @@ datagrid:
                     data_name: ownerName
                 contactName:
                     data_name: contactName
-                daysSinceLastContact:
-                    data_name: daysSinceLastContact
-                timesContacted:
-                    data_name: timesContacted
-                timesContactedIn:
-                    data_name: timesContactedIn
-                timesContactedOut:
-                    data_name: timesContactedOut
-                lastContactedDate:
-                    data_name: lastContactedDate
-                lastContactedDateIn:
-                    data_name: lastContactedDateIn
-                lastContactedDateOut:
-                    data_name: lastContactedDateOut
             default:
                 createdAt:  DESC
         actions:
@@ -644,15 +516,6 @@ datagrid:
                     type: number
                     data_name: l.numberOfEmployees
                     enabled: false
-                campaignName:
-                    type: entity
-                    data_name: campaign.id
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMCampaignBundle:Campaign
-                            property: name
-                            translatable_options: false
                 sourceName:
                     type: enum
                     enum_code: lead_source
@@ -710,34 +573,6 @@ datagrid:
                     data_name: l.owner
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
-                daysSinceLastContact:
-                    type: number
-                    data_name: daysSinceLastContact
-                    enabled: false
-                timesContacted:
-                    type: number
-                    data_name: timesContacted
-                    enabled: false
-                timesContactedIn:
-                    type: number
-                    data_name: timesContactedIn
-                    enabled: false
-                timesContactedOut:
-                    type: number
-                    data_name: timesContactedOut
-                    enabled: false
-                lastContactedDate:
-                    type: datetime
-                    data_name: lastContactedDate
-                    enabled: false
-                lastContactedDateIn:
-                    type: datetime
-                    data_name: lastContactedDateIn
-                    enabled: false
-                lastContactedDateOut:
-                    type: datetime
-                    data_name: lastContactedDateOut
-                    enabled: false
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -902,6 +737,35 @@ datagrid:
                     options:
                         data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
 
+    sales-funnel-lead-with-data-channel-grid:
+        extends: sales-funnel-lead-grid
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            query:
+                join:
+                    left:
+                        - { join: lead.dataChannel, alias: dataChannel }
+                where:
+                    and:
+                        - IDENTITY(lead.dataChannel) in (:channelIds)
+            bind_parameters:
+                - channelIds
+
+    sales-funnel-opportunity-with-data-channel-grid:
+        extends: sales-funnel-opportunity-grid
+        channel_limitation:
+            channel_relation_path: dataChannel
+        source:
+            query:
+                join:
+                    left:
+                        - { join: opportunity.dataChannel, alias: dataChannel }
+                where:
+                    and:
+                        - IDENTITY(opportunity.dataChannel) in (:channelIds)
+            bind_parameters:
+                - channelIds
 
     # leads with "New" status for Sales Funnel flow
     sales-funnel-lead-grid:
@@ -1159,6 +1023,7 @@ datagrid:
 
     orocrm-sales-b2bcustomers-grid:
         extends: base-sales-b2bcustomers-grid
+        mixins: activity-contact-data-hidden-mixin
         source:
             query:
                 select:
@@ -1175,17 +1040,6 @@ datagrid:
                     - sa.city as saCity
                     - sa.street as saStreet
                     - sa.postalCode as saPostalCode
-                    - c.employees
-                    - c.ownership
-                    - c.rating
-                    - c.ticker_symbol as tickerSymbol
-                    - c.website
-                    - c.ac_contact_count as timesContacted
-                    - c.ac_contact_count_in as timesContactedIn
-                    - c.ac_contact_count_out as timesContactedOut
-                    - c.ac_last_contact_date as lastContactedDate
-                    - c.ac_last_contact_date_in as lastContactedDateIn
-                    - c.ac_last_contact_date_out as lastContactedDateOut
                 join:
                     left:
                         - { join: c.owner, alias: owner }
@@ -1237,46 +1091,6 @@ datagrid:
             saPostalCode:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.shipping_address_postal_code.label
                 renderable: false
-            employees:
-                label: orocrm.sales.b2bcustomer.employees.label
-                frontend_type: integer
-                renderable: false
-            ownership:
-                label: orocrm.sales.b2bcustomer.ownership.label
-                renderable: false
-            rating:
-                label: orocrm.sales.b2bcustomer.rating.label
-                renderable: false
-            tickerSymbol:
-                label: orocrm.sales.b2bcustomer.ticker_symbol.label
-                renderable: false
-            website:
-                label: orocrm.sales.b2bcustomer.website.label
-                renderable: false
-            timesContacted:
-                label: orocrm.activity_contact.ac_contact_count.label
-                frontend_type: integer
-                renderable: false
-            timesContactedIn:
-                label: orocrm.activity_contact.ac_contact_count_in.label
-                frontend_type: integer
-                renderable: false
-            timesContactedOut:
-                label: orocrm.activity_contact.ac_contact_count_out.label
-                frontend_type: integer
-                renderable: false
-            lastContactedDate:
-                label: orocrm.activity_contact.ac_last_contact_date.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateIn:
-                label: orocrm.activity_contact.ac_last_contact_date_in.label
-                frontend_type: datetime
-                renderable: false
-            lastContactedDateOut:
-                label: orocrm.activity_contact.ac_last_contact_date_out.label
-                frontend_type: datetime
-                renderable: false
         sorters:
             columns:
                 ownerName:            { data_name: ownerName }
@@ -1292,17 +1106,6 @@ datagrid:
                 saCity:               { data_name: saCity }
                 saStreet:             { data_name: saStreet }
                 saPostalCode:         { data_name: saPostalCode }
-                employees:            { data_name: c.employees }
-                ownership:            { data_name: c.ownership }
-                rating:               { data_name: c.rating }
-                tickerSymbol:         { data_name: tickerSymbol }
-                website:              { data_name: c.website }
-                timesContacted:       { data_name: timesContacted }
-                timesContactedIn:     { data_name: timesContactedIn }
-                timesContactedOut:    { data_name: timesContactedOut }
-                lastContactedDate:    { data_name: lastContactedDate }
-                lastContactedDateIn:  { data_name: lastContactedDateIn }
-                lastContactedDateOut: { data_name: lastContactedDateOut }
         filters:
             columns:
                 ownerName:
@@ -1370,50 +1173,6 @@ datagrid:
                 saPostalCode:
                     type: string
                     data_name: saPostalCode
-                    enabled: false
-                employees:
-                    type: number
-                    data_name: c.employees
-                    enabled: false
-                ownership:
-                    type: string
-                    data_name: c.ownership
-                    enabled: false
-                rating:
-                    type: string
-                    data_name: c.rating
-                    enabled: false
-                tickerSymbol:
-                    type: string
-                    data_name: tickerSymbol
-                    enabled: false
-                website:
-                    type: string
-                    data_name: c.website
-                    enabled: false
-                timesContacted:
-                    type: number
-                    data_name: timesContacted
-                    enabled: false
-                timesContactedIn:
-                    type: number
-                    data_name: timesContactedIn
-                    enabled: false
-                timesContactedOut:
-                    type: number
-                    data_name: timesContactedOut
-                    enabled: false
-                lastContactedDate:
-                    type: datetime
-                    data_name: lastContactedDate
-                    enabled: false
-                lastContactedDateIn:
-                    type: datetime
-                    data_name: lastContactedDateIn
-                    enabled: false
-                lastContactedDateOut:
-                    type: datetime
-                    data_name: lastContactedDateOut
                     enabled: false
         properties:
             id: ~

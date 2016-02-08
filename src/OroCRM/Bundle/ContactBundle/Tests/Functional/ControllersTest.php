@@ -164,7 +164,7 @@ class ControllersTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertTrue($result['successful']);
-        $this->assertEquals("5 entities were removed", $result['message']);
+        $this->assertEquals("5 entities were deleted", $result['message']);
         $this->assertEquals(5, $result['count']);
 
         $response = $this->client->requestGrid(

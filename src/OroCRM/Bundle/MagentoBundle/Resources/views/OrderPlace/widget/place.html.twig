@@ -12,14 +12,9 @@
                         modalWidgetAlias = 'transaction-dialog',
                         messageTemplate = _.template("<%= message %> <a href=\"<%= url %>\" class=\"order-link\"><%= urlLabel %></a> ");
 
-                    widgetManager.getWidgetInstanceByAlias(
-                        modalWidgetAlias,
-                        function (widget) {
-                            widget.getWidget().dialog('maximize');
-                        }
-                    );
                     $frame.load(function () {
-                        $frame.css({'height': '100%', 'width': '100%'});
+                        var offset = $frame.closest('.ui-dialog').find('.ui-dialog-titlebar').outerHeight() || 0;
+                        $frame.addClass('loaded').parent().css({'top': offset});
                         widgetManager.getWidgetInstance(
                             {{ app.request.get('_wid')|json_encode|raw }},
                             function(widget) {

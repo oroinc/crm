@@ -8,6 +8,8 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use Oro\Bundle\SoapBundle\Form\EventListener\PatchSubscriber;
 
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
+
 class CustomerApiType extends AbstractType
 {
     const NAME = 'api_customer_type';
@@ -87,6 +89,7 @@ class CustomerApiType extends AbstractType
         );
 
         $builder->addEventSubscriber(new PatchSubscriber());
+        $builder->addEventSubscriber(new CustomerTypeSubscriber());
     }
 
     /**

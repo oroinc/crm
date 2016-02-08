@@ -22,6 +22,8 @@
             {{ ui.renderProperty('orocrm.magento.order.total_canceled_amount.label'|trans, entity.totalCanceledAmount|oro_format_currency({'currency': entity.currency})) }}
             {{ ui.renderProperty('orocrm.magento.order.payment_method.label'|trans, entity.paymentMethod|trans|capitalize) }}
             {{ ui.renderProperty('orocrm.magento.order.payment_details.label'|trans, entity.paymentDetails) }}
+            {{ ui.renderProperty('orocrm.magento.order.imported_at.label'|trans, entity.importedAt|oro_format_datetime) }}
+            {{ ui.renderProperty('orocrm.magento.order.synced_at.label'|trans, entity.syncedAt|oro_format_datetime) }}
             {%- if entity.isGuest -%}
                 {{ ui.renderProperty('orocrm.magento.order.is_guest.label'|trans, 'orocrm.magento.order.is_guest.yes'|trans) }}
             {%- endif -%}

@@ -109,6 +109,12 @@ class RestContactApiTest extends WebTestCase
             array_intersect_key($selectedContact, array_flip($fields))
         );
 
+        $this->assertArrayNotHasKey(
+            'defaultInAccounts',
+            $selectedContact,
+            'Internal relationship to accounts must not be returned'
+        );
+
         // assert addresses
         $this->assertArrayHasKey('addresses', $selectedContact);
         $this->assertAddresses($selectedContact['addresses']);
