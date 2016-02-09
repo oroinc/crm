@@ -69,7 +69,7 @@ class ActivityContactRecalculateCommand extends ContainerAwareCommand
      */
     public function recalculate(AbstractLogger $logger)
     {
-        $logger->notice('Recalculating contacting activities...');
+        $logger->info('Recalculating contacting activities...');
         $logger->info(sprintf('<info>Processing started at %s</info>', date('Y-m-d H:i:s')));
 
         /** @var ConfigProvider $activityConfigProvider */

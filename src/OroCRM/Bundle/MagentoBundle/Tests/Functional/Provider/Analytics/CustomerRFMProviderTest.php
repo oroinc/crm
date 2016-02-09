@@ -3,9 +3,8 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Provider\Analytics;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
-use OroCRM\Bundle\AnalyticsBundle\Builder\RFMBuilder;
 use OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerFrequencyProvider;
 use OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerMonetaryProvider;
 use OroCRM\Bundle\MagentoBundle\Provider\Analytics\CustomerRecencyProvider;
@@ -26,48 +25,33 @@ class CustomerRFMProviderTest extends WebTestCase
 
     /**
      * @dataProvider dataValue
-     * @param string $ref
+     * @param string $dataChannelRef
      * @param array $expectedValue
      */
-    public function testAnalyticsProviderValues($ref, array $expectedValue)
+    public function testAnalyticsProviderValues($dataChannelRef, array $expectedValue)
     {
         $doctrineHelper = $this->getContainer()->get('oro_entity.doctrine_helper');
-        $customer = $this->getReference($ref);
+        /** @var Channel $dataChannel */
+        $dataChannel = $this->getReference($dataChannelRef);
         $className = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
         $recencyProvider = new CustomerRecencyProvider($doctrineHelper, $className);
         $frequencyProvider = new CustomerFrequencyProvider($doctrineHelper, $className);
         $monetaryProvider = new CustomerMonetaryProvider($doctrineHelper, $className);
 
-        $this->assertEquals($expectedValue['recency'], $recencyProvider->getValue($customer));
-        $this->assertEquals($expectedValue['frequency'], $frequencyProvider->getValue($customer));
-        $this->assertEquals($expectedValue['monetary'], $monetaryProvider->getValue($customer));
-    }
+        $recencyData = $recencyProvider->getValues($dataChannel);
+        $this->assertCount(1, $recencyData);
+        $frequencyData = $frequencyProvider->getValues($dataChannel);
+        $this->assertCount(1, $frequencyData);
+        $monetaryData = $monetaryProvider->getValues($dataChannel);
+        $this->assertCount(1, $monetaryData);
 
-    /**
-     * @dataProvider dataAnalytics
-     * @param string $ref
-     * @param array $expectedIndex
-     */
-    public function testAnalyticsMetrics($ref, array $expectedIndex)
-    {
-        $doctrineHelper = $this->getContainer()->get('oro_entity.doctrine_helper');
-        /** @var Customer $customer */
-        $customer = $this->getReference($ref);
-        $className = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
-        $recencyProvider = new CustomerRecencyProvider($doctrineHelper, $className);
-        $frequencyProvider = new CustomerFrequencyProvider($doctrineHelper, $className);
-        $monetaryProvider = new CustomerMonetaryProvider($doctrineHelper, $className);
-        $rfmBuilder = new RFMBuilder($doctrineHelper);
-        $rfmBuilder->addProvider($recencyProvider);
-        $rfmBuilder->addProvider($frequencyProvider);
-        $rfmBuilder->addProvider($monetaryProvider);
-        $analitycs = new AnalyticsBuilder();
-        $analitycs->addBuilder($rfmBuilder);
-        $analitycs->build($customer);
-
-        $this->assertEquals($expectedIndex['recency'], $customer->getRecency());
-        $this->assertEquals($expectedIndex['frequency'], $customer->getFrequency());
-        $this->assertEquals($expectedIndex['monetary'], $customer->getMonetary());
+        foreach ($expectedValue as $customerReference => $data) {
+            /** @var Customer $customer */
+            $customer = $this->getReference($customerReference);
+            $this->assertEquals($data['recency'], $recencyData[$customer->getId()]);
+            $this->assertEquals($data['frequency'], $frequencyData[$customer->getId()]);
+            $this->assertEquals($data['monetary'], $monetaryData[$customer->getId()]);
+        }
     }
 
     /**
@@ -77,30 +61,15 @@ class CustomerRFMProviderTest extends WebTestCase
     {
         return [
             'Providers Customer 1' => [
-                'customerRef' => 'customer',
+                'dataChannelRef' => 'default_channel',
                 'expectedValue' => [
-                    'recency' => 2,
-                    'frequency' => 2,
-                    'monetary' => 22.2 // (15.5 - 4.40) + (15.5 - 4.40)
+                    'customer' => [
+                        'recency' => 2,
+                        'frequency' => 2,
+                        'monetary' => 22.2, // (15.5 - 4.40) + (15.5 - 4.40)]
+                    ],
                 ]
             ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function dataAnalytics()
-    {
-        return [
-            'Analytics Customer 1' => [
-                'customerRef' => 'customer',
-                'expectedIndex' => [
-                    'recency' => 1,
-                    'frequency' => 1,
-                    'monetary' => 2
-                ]
-            ]
         ];
     }
 }

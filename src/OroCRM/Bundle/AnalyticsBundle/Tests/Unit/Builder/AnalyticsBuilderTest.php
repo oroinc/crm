@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Builder;
 
 use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilder;
 use OroCRM\Bundle\AnalyticsBundle\Builder\AnalyticsBuilderInterface;
-use OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,39 +18,21 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
         $this->builder = new AnalyticsBuilder();
     }
 
-    public function testAddAndGetBuilders()
-    {
-        $builders = [$this->getBuilderMock(), $this->getBuilderMock()];
-
-        foreach ($builders as $builder) {
-            $this->builder->addBuilder($builder);
-        }
-
-        $this->assertEquals(
-            $builders,
-            $this->builder->getBuilders()
-        );
-    }
-
     /**
      * @param array $builders
-     * @param bool $expected
      *
      * @dataProvider buildDataProvider
      */
-    public function testBuild(array $builders, $expected)
+    public function testBuild(array $builders)
     {
-        /** @var \PHPUnit_Framework_MockObject_MockObject|AnalyticsAwareInterface $entity */
-        $entity = $this->getMock('OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface');
+        /** @var Channel|\PHPUnit_Framework_MockObject_MockObject $entity */
+        $entity = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
 
         foreach ($builders as $builder) {
             $this->builder->addBuilder($builder);
         }
 
-        $this->assertEquals(
-            $expected,
-            $this->builder->build($entity)
-        );
+        $this->builder->build($entity);
     }
 
     /**
@@ -59,38 +41,39 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
     public function buildDataProvider()
     {
         return [
-            [[$this->getNotSupportedBuilder()], false],
-            [[$this->getSupportedBuilder(false)], false],
-            [[$this->getSupportedBuilder(true)], true],
-            [[$this->getNotSupportedBuilder(), $this->getNotSupportedBuilder()], false],
-            [[$this->getNotSupportedBuilder(), $this->getSupportedBuilder(false)], false],
-            [[$this->getNotSupportedBuilder(), $this->getSupportedBuilder(true)], true],
-            [[$this->getSupportedBuilder(false), $this->getNotSupportedBuilder()], false],
-            [[$this->getSupportedBuilder(true), $this->getNotSupportedBuilder()], true],
-            [[$this->getSupportedBuilder(false), $this->getSupportedBuilder(false)], false],
-            [[$this->getSupportedBuilder(false), $this->getSupportedBuilder(true)], true],
-            [[$this->getSupportedBuilder(true), $this->getSupportedBuilder(false)], true],
-            [[$this->getSupportedBuilder(true), $this->getSupportedBuilder(true)], true],
+            [[$this->getNotSupportedBuilder()]],
+            [[$this->getSupportedBuilder()]],
+            [[$this->getSupportedBuilder()]],
+            [[$this->getNotSupportedBuilder(), $this->getNotSupportedBuilder()]],
+            [[$this->getNotSupportedBuilder(), $this->getSupportedBuilder()]],
+            [[$this->getNotSupportedBuilder(), $this->getSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getNotSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getNotSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getSupportedBuilder()]],
+            [[$this->getSupportedBuilder(), $this->getSupportedBuilder()]],
         ];
     }
 
     /**
-     * @param bool $result
-     * @return \PHPUnit_Framework_MockObject_MockObject|AnalyticsBuilderInterface
+     * @param bool $supported
+     * @return AnalyticsBuilderInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getSupportedBuilder($result)
+    protected function getSupportedBuilder($supported = true)
     {
         $supportedBuilder = $this->getBuilderMock();
 
         $supportedBuilder
             ->expects($this->any())
             ->method('supports')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue($supported));
 
-        $supportedBuilder
-            ->expects($this->once())
-            ->method('build')
-            ->will($this->returnValue($result));
+        if ($supported) {
+            $supportedBuilder
+                ->expects($this->once())
+                ->method('build');
+        }
 
         return $supportedBuilder;
     }
@@ -100,18 +83,7 @@ class AnalyticsBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getNotSupportedBuilder()
     {
-        $notSupportedBuilder = $this->getBuilderMock();
-
-        $notSupportedBuilder
-            ->expects($this->any())
-            ->method('supports')
-            ->will($this->returnValue(false));
-
-        $notSupportedBuilder
-            ->expects($this->never())
-            ->method('build');
-
-        return $notSupportedBuilder;
+        return $this->getSupportedBuilder(false);
     }
 
     /**

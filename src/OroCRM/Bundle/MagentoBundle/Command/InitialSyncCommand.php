@@ -92,7 +92,7 @@ class InitialSyncCommand extends ContainerAwareCommand
 
         $processor = $this->getSyncProcessor($logger);
         try {
-            $logger->notice(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
+            $logger->info(sprintf('Run initial sync for "%s" integration.', $integration->getName()));
 
             $connector = $input->getOption('connector');
             $result = $processor->process($integration, $connector, ['skip-dictionary' => $skipDictionary]);
