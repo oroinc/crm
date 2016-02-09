@@ -57,10 +57,10 @@ oro_titles:
     orocrm_magento_customer_create: oro.ui.create_entity
 
     orocrm_magento_cart_index:     ~
-    orocrm_magento_cart_view:      Cart %%cart.id%%
+    orocrm_magento_cart_view:      'Cart #%%cart.id%%'
 
     orocrm_magento_order_index:    ~
-    orocrm_magento_order_view:     Order %%order.incrementId%%
+    orocrm_magento_order_view:     'Order #%%order.incrementId%%'
 
     orocrm_magento_product_index:  'orocrm.magento.product.entity_plural_label'
     orocrm_magento_product_view:   %%product.name%%
