@@ -1,0 +1,6 @@
+oro_api:
+    entities:
+        OroCRM\Bundle\CampaignBundle\Entity\Campaign: ~
+        OroCRM\Bundle\CampaignBundle\Entity\EmailCampaign: ~
+        OroCRM\Bundle\CampaignBundle\Entity\EmailCampaignStatistics: ~
+        OroCRM\Bundle\CampaignBundle\Entity\TrackingEventSummary: ~
