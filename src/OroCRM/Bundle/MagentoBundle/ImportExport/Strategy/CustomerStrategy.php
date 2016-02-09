@@ -53,6 +53,12 @@ class CustomerStrategy extends AbstractImportStrategy
     {
         $this->processAddresses($entity);
 
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$entity->getImportedAt()) {
+            $entity->setImportedAt($now);
+        }
+        $entity->setSyncedAt($now);
+
         $this->appendDataToContext(ContextCustomerReader::CONTEXT_POST_PROCESS_CUSTOMERS, $entity->getOriginId());
 
         return parent::afterProcessEntity($entity);
@@ -67,7 +73,6 @@ class CustomerStrategy extends AbstractImportStrategy
             /** @var Address $address */
             foreach ($entity->getAddresses() as $address) {
                 if ($address->getSyncState() !== Address::SYNC_TO_MAGENTO) {
-                    $address->setOwner($entity);
                     $originId = $address->getOriginId();
                     if (array_key_exists($originId, $this->importingAddresses)) {
                         $remoteAddress = $this->importingAddresses[$originId];
@@ -82,6 +87,7 @@ class CustomerStrategy extends AbstractImportStrategy
                         }
                     }
                 }
+                $address->setOwner($entity);
             }
         }
     }

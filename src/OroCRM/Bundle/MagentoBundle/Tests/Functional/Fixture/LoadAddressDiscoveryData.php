@@ -92,6 +92,8 @@ class LoadAddressDiscoveryData extends AbstractFixture
             $customer->setEmail($item['email']);
             $customer->setFirstName($item['firstName']);
             $customer->setLastName($item['lastName']);
+            $customer->setCreatedAt(new \DateTime());
+            $customer->setUpdatedAt($customer->getCreatedAt());
 
             foreach ($item['addresses'] as $addressData) {
                 $address = new Address();
