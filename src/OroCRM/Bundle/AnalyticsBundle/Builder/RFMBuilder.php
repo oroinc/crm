@@ -179,7 +179,7 @@ class RFMBuilder implements AnalyticsBuilderInterface
         $qb->select(preg_filter('/^/', 'e.', $metrics))
             ->addSelect($idField . ' as id')
             ->where('e.dataChannel = :dataChannel')
-            ->orderBy($idField)
+            ->orderBy($qb->expr()->asc($idField))
             ->setParameter('dataChannel', $channel);
 
         if (count($ids) !== 0) {

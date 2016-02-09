@@ -92,10 +92,9 @@ class CalculateAnalyticsCommand extends ContainerAwareCommand implements CronCom
     protected function getChannels($channelId = null)
     {
         $className = $this->getContainer()->getParameter('orocrm_channel.entity.class');
-        $qb        = $this->getDoctrineHelper()->getEntityRepository($className)
-            ->createQueryBuilder('c');
+        $qb = $this->getDoctrineHelper()->getEntityRepository($className)->createQueryBuilder('c');
 
-        $qb->orderBy('c.id');
+        $qb->orderBy($qb->expr()->asc('c.id'));
         $qb->andWhere('c.status = :status');
         $qb->setParameter('status', Channel::STATUS_ACTIVE);
 

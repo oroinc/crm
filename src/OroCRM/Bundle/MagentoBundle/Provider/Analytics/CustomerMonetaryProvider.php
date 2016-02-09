@@ -40,6 +40,7 @@ class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
                 )
             )
             ->groupBy('c.id')
+            ->orderBy($qb->expr()->asc('c.id'))
             ->setParameter('status', Order::STATUS_CANCELED)
             ->setParameter('channel', $channel)
             ->setParameter('date', $date->sub(new \DateInterval('P365D')));
