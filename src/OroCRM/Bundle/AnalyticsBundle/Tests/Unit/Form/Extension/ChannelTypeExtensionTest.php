@@ -124,7 +124,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
                 $this->getChannelMock('\stdClass')
             ],
             'supported identity' => [
-                $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 1,
                 1
             ],
@@ -155,7 +155,7 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
      */
     public function testPreSetData(array $categories)
     {
-        $channel = $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub');
+        $channel = $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|FormEvent $event */
         $event = $this->getMockBuilder('Symfony\Component\Form\FormEvent')->disableOriginalConstructor()->getMock();
@@ -326,29 +326,32 @@ class ChannelTypeExtensionTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'empty customer identity' => [$this->getChannelMock(), false],
-            'has not state form' => [$this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'), false],
+            'has not state form' => [
+                $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
+                false,
+            ],
             'empty data' => [
-                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => [],
                 'expectedData' => ['rfm_enabled' => false],
             ],
             'data was not changed' => [
-                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => false],
             ],
             'enable' => [
-                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => true,
                 'actualData' => ['rfm_enabled' => false],
                 'expectedData' => ['rfm_enabled' => true],
             ],
             'disable' => [
-                'channel' => $this->getChannelMock(__NAMESPACE__ . '\Stub\RFMAwareStub'),
+                'channel' => $this->getChannelMock('OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub\RFMAwareStub'),
                 'hasStateForm' => true,
                 'isEnabled' => false,
                 'actualData' => ['rfm_enabled' => true],
