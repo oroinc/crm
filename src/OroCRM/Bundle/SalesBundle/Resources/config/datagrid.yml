@@ -517,7 +517,6 @@ datagrid:
                     data_name: l.numberOfEmployees
                     enabled: false
                 sourceName:
-                    class: @oro_entity_extend.tools.extend_helper->buildEnumValueClassName('lead_source')
                     type: enum
                     enum_code: lead_source
                     data_name: source.id

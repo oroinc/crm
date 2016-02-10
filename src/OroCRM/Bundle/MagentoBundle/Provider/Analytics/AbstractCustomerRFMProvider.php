@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Provider\Analytics;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use OroCRM\Bundle\AnalyticsBundle\Builder\RFMProviderInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
-use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
 {
@@ -32,10 +32,29 @@ abstract class AbstractCustomerRFMProvider implements RFMProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports($entity)
+    public function supports(Channel $channel)
     {
-        return $entity instanceof RFMAwareInterface
-            && $entity instanceof CustomerIdentityInterface
-            && $entity instanceof $this->className;
+        $entityFQCN = $channel->getCustomerIdentity();
+        return is_a($entityFQCN, 'OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface', true)
+            && is_a($entityFQCN, 'OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface', true)
+            && is_a($entityFQCN, $this->className, true);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getValues(Channel $channel, array $ids = [])
+    {
+        return array_reduce($this->getScalarValues($channel, $ids), function ($result, array $value) {
+            $result[$value['id']] = $value['value'];
+            return $result;
+        }, []);
+    }
+
+    /**
+     * @param Channel $channel
+     * @param array $ids
+     * @return array
+     */
+    abstract protected function getScalarValues(Channel $channel, array $ids = []);
 }

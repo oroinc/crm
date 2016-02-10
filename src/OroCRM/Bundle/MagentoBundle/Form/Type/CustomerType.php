@@ -13,6 +13,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use OroCRM\Bundle\MagentoBundle\Entity\Address;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
+use OroCRM\Bundle\MagentoBundle\Form\EventListener\CustomerTypeSubscriber;
 
 class CustomerType extends AbstractType
 {
@@ -111,6 +112,7 @@ class CustomerType extends AbstractType
         }
 
         $this->initFormEvents($builder);
+        $builder->addEventSubscriber(new CustomerTypeSubscriber());
     }
 
     /**
@@ -183,16 +185,6 @@ class CustomerType extends AbstractType
                         }
                     }
                 }
-            }
-        );
-
-        //change updatedAt value here, to avoid confusion situations with preUpdate on importing data
-        $builder->addEventListener(
-            FormEvents::PRE_SUBMIT,
-            function (FormEvent $event) {
-                /** @var Customer $entity */
-                $entity = $event->getForm()->getData();
-                $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             }
         );
     }
