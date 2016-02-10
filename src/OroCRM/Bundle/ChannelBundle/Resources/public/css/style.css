@@ -19,7 +19,9 @@
 .entities-component .grid-container .grid .action-cell {
     text-align: right;
 }
-
+.orocrm-channel-datasource-field {
+    padding-top: 3px;
+}
 .orocrm-channel-datasource-field.error {
     border: none;
     box-shadow: none;
