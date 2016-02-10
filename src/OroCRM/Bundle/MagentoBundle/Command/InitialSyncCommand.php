@@ -31,11 +31,17 @@ class InitialSyncCommand extends ContainerAwareCommand
     const STATUS_SUCCESS = 0;
     const STATUS_FAILED  = 255;
 
-    protected $disabledListeners = [
+    /**
+     * List of listeners what will be disabled during sync
+     */
+    protected $disabledOptionalListeners = [
         'oro_search.index_listener',
         'oro_entity.event_listener.entity_modify_created_updated_properties_listener'
     ];
 
+    /**
+     * List of entities we need to reindex after sync
+     */
     protected $indexedEntities = [
         'OroCRM\Bundle\MagentoBundle\Entity\Order',
         'OroCRM\Bundle\MagentoBundle\Entity\Cart',
@@ -226,7 +232,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     {
         $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
         $knownListeners  = $listenerManager->getListeners();
-        foreach ($this->disabledListeners as $listenerId) {
+        foreach ($this->disabledOptionalListeners as $listenerId) {
             if (in_array($listenerId, $knownListeners, true)) {
                 $listenerManager->disableListener($listenerId);
             }
