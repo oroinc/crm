@@ -13,6 +13,14 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     protected $propertyAccessor;
 
     /**
+     * @param PropertyAccessor $propertyAccessor
+     */
+    public function setPropertyAccessor(PropertyAccessor $propertyAccessor)
+    {
+        $this->propertyAccessor = $propertyAccessor;
+    }
+
+    /**
      * {@inheritdoc}
      */
     protected function updateContextCounters($entity)

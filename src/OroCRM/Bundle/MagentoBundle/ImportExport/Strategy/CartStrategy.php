@@ -58,6 +58,12 @@ class CartStrategy extends AbstractImportStrategy
             ->updateCartItems($entity)
             ->updateCartStatus($entity);
 
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$entity->getImportedAt()) {
+            $entity->setImportedAt($now);
+        }
+        $entity->setSyncedAt($now);
+
         $this->existingEntity = null;
         $this->existingCartItems = null;
 

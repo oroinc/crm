@@ -44,6 +44,12 @@ class OrderStrategy extends AbstractImportStrategy
             $entity->setUpdatedAt($entity->getCreatedAt());
         }
 
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$entity->getImportedAt()) {
+            $entity->setImportedAt($now);
+        }
+        $entity->setSyncedAt($now);
+
         /** @var Order $order */
         $this->processCart($entity);
         $this->processItems($entity);

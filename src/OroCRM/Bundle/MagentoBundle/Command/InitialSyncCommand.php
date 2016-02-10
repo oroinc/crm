@@ -11,8 +11,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use JMS\JobQueueBundle\Entity\Job;
+
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\IntegrationBundle\Entity\Repository\ChannelRepository;
+use Oro\Bundle\SearchBundle\Command\ReindexCommand;
 use Oro\Component\Log\OutputLogger;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMMetricStateManager;
@@ -26,7 +29,24 @@ class InitialSyncCommand extends ContainerAwareCommand
     const SYNC_PROCESSOR = 'orocrm_magento.provider.initial_sync_processor';
 
     const STATUS_SUCCESS = 0;
-    const STATUS_FAILED = 255;
+    const STATUS_FAILED  = 255;
+
+    /**
+     * List of listeners what will be disabled during sync
+     */
+    protected $disabledOptionalListeners = [
+        'oro_search.index_listener',
+        'oro_entity.event_listener.entity_modify_created_updated_properties_listener'
+    ];
+
+    /**
+     * List of entities we need to reindex after sync
+     */
+    protected $indexedEntities = [
+        'OroCRM\Bundle\MagentoBundle\Entity\Order',
+        'OroCRM\Bundle\MagentoBundle\Entity\Cart',
+        'OroCRM\Bundle\MagentoBundle\Entity\Customer'
+    ];
 
     /**
      * {@inheritdoc}
@@ -61,9 +81,8 @@ class InitialSyncCommand extends ContainerAwareCommand
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        // Disable search listener on-fly processing to increase the performance
-        $searchListener = $this->getContainer()->get('oro_search.index_listener');
-        $searchListener->setRealTimeUpdate(false);
+        // Disable search listeners to increase the performance
+        $$this->disableOptionalListeners();
 
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
@@ -102,10 +121,11 @@ class InitialSyncCommand extends ContainerAwareCommand
             $exitCode = self::STATUS_FAILED;
         }
 
-        // Restore search listener configuration
-        $searchListener->setRealTimeUpdate($this->getContainer()->getParameter('oro_search.realtime_update'));
+        if ($exitCode === self::STATUS_SUCCESS) {
+            $this->runReindex();
+        }
 
-        $logger->info('Completed');
+        $logger->notice('Completed');
 
         return $exitCode;
     }
@@ -203,5 +223,35 @@ class InitialSyncCommand extends ContainerAwareCommand
         return $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMChannelBundle:Channel')
             ->findOneBy(['dataSource' => $integration]);
+    }
+
+    /**
+     * Turn off listeners to increase the performance
+     */
+    protected function disableOptionalListeners()
+    {
+        $listenerManager = $this->getContainer()->get('oro_platform.optional_listeners.manager');
+        $knownListeners  = $listenerManager->getListeners();
+        foreach ($this->disabledOptionalListeners as $listenerId) {
+            if (in_array($listenerId, $knownListeners, true)) {
+                $listenerManager->disableListener($listenerId);
+            }
+        }
+    }
+
+    /**
+     * Add jobs to reindex magento entities
+     */
+    protected function runReindex()
+    {
+        /** @var EntityManager $em */
+        $em  = $this->getContainer()->get('doctrine')->getManagerForClass('JMSJobQueueBundle:Job');
+        $jobs = [];
+        foreach ($this->indexedEntities as $entityClass) {
+            $job = new Job(ReindexCommand::COMMAND_NAME, ['class' => $entityClass]);
+            $em->persist($job);
+            $jobs[] = $job;
+        }
+        $em->flush($jobs);
     }
 }
