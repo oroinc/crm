@@ -3,7 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Provider\Analytics;
 
 use OroCRM\Bundle\AnalyticsBundle\Entity\RFMMetricCategory;
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
@@ -17,40 +17,39 @@ class CustomerMonetaryProvider extends AbstractCustomerRFMProvider
     }
 
     /**
-     * @param RFMAwareInterface $entity
-     *
      * {@inheritdoc}
      */
-    public function getValue(RFMAwareInterface $entity)
+    protected function getScalarValues(Channel $channel, array $ids = [])
     {
+        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $qb = $this->doctrineHelper
             ->getEntityRepository($this->className)
             ->createQueryBuilder('c');
 
-        $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $qb
             ->select('SUM(
                 CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
                 CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
-                )')
+                ) as value', 'c.id')
             ->join('c.orders', 'o')
             ->where(
                 $qb->expr()->andX(
                     $qb->expr()->neq($qb->expr()->lower('o.status'), ':status'),
-                    $qb->expr()->eq('c.id', ':id'),
-                    $qb->expr()->gte('o.createdAt', ':date')
+                    $qb->expr()->gte('o.createdAt', ':date'),
+                    $qb->expr()->eq('c.dataChannel', ':channel')
                 )
             )
+            ->groupBy('c.id')
+            ->orderBy($qb->expr()->asc('c.id'))
             ->setParameter('status', Order::STATUS_CANCELED)
-            ->setParameter('id', $this->doctrineHelper->getSingleEntityIdentifier($entity))
+            ->setParameter('channel', $channel)
             ->setParameter('date', $date->sub(new \DateInterval('P365D')));
 
-        $sum = $qb->getQuery()->getSingleScalarResult();
-
-        if (!$sum) {
-            return null;
+        if (!empty($ids)) {
+            $qb->andWhere($qb->expr()->in('c.id', ':ids'))
+                ->setParameter('ids', $ids);
         }
 
-        return $sum;
+        return $qb->getQuery()->getScalarResult();
     }
 }
