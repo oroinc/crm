@@ -82,7 +82,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         // Disable search listeners to increase the performance
-        $$this->disableOptionalListeners();
+        $this->disableOptionalListeners();
 
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
