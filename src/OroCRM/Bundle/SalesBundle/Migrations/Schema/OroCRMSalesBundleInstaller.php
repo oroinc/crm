@@ -369,7 +369,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -380,7 +380,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -391,7 +391,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -402,7 +402,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -413,7 +413,7 @@ class OroCRMSalesBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_HIDDEN],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
