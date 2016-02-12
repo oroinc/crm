@@ -34,7 +34,7 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
     /**
      * @param StepExecutionAwareImportProcessor $importProcessor
      * @param StepExecutionAwareExportProcessor $exportProcessor
-     * @param DoctrineHelper
+     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(
         StepExecutionAwareImportProcessor $importProcessor,
