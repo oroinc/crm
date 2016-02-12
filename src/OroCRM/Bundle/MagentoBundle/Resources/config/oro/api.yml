@@ -1,0 +1,17 @@
+oro_api:
+    entities:
+        OroCRM\Bundle\MagentoBundle\Entity\Address: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Cart: ~
+        OroCRM\Bundle\MagentoBundle\Entity\CartAddress: ~
+        OroCRM\Bundle\MagentoBundle\Entity\CartItem: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Customer: ~
+        OroCRM\Bundle\MagentoBundle\Entity\CustomerGroup: ~
+        OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport: ~
+        OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Order: ~
+        OroCRM\Bundle\MagentoBundle\Entity\OrderAddress: ~
+        OroCRM\Bundle\MagentoBundle\Entity\OrderItem: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Product: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Region: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Store: ~
+        OroCRM\Bundle\MagentoBundle\Entity\Website: ~
