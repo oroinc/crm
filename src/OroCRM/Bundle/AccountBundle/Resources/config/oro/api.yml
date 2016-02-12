@@ -1,0 +1,3 @@
+oro_api:
+    entities:
+        OroCRM\Bundle\AccountBundle\Entity\Account: ~
