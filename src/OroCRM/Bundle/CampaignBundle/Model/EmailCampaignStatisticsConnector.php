@@ -26,6 +26,11 @@ class EmailCampaignStatisticsConnector
     protected $marketingListItemCache = [];
 
     /**
+     * @var EmailCampaignStatistics[]
+     */
+    protected $statisticRecordsCache = [];
+
+    /**
      * @var string
      */
     protected $entityName;
@@ -78,6 +83,7 @@ class EmailCampaignStatisticsConnector
         }
         /** @var MarketingListItem $marketingListItem */
         $marketingListItem = $this->marketingListItemCache[$marketingList->getName()][$entityId];
+        $marketingListItemHash = spl_object_hash($marketingListItem);
 
         $manager = $this->doctrineHelper->getEntityManager($this->entityName);
 
@@ -85,6 +91,8 @@ class EmailCampaignStatisticsConnector
         if ($marketingListItem->getId() !== null) {
             $statisticsRecord = $manager->getRepository($this->entityName)
                 ->findOneBy(['emailCampaign' => $emailCampaign, 'marketingListItem' => $marketingListItem]);
+        } elseif (!empty($this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash])) {
+            $statisticsRecord = $this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash];
         }
 
         if (!$statisticsRecord) {
@@ -95,6 +103,7 @@ class EmailCampaignStatisticsConnector
                 ->setOwner($emailCampaign->getOwner())
                 ->setOrganization($emailCampaign->getOrganization());
 
+            $this->statisticRecordsCache[$emailCampaign->getId()][$marketingListItemHash] = $statisticsRecord;
             $manager->persist($statisticsRecord);
         }
 
@@ -108,5 +117,6 @@ class EmailCampaignStatisticsConnector
     public function clearMarketingListItemCache()
     {
         $this->marketingListItemCache = [];
+        $this->statisticRecordsCache = [];
     }
 }
