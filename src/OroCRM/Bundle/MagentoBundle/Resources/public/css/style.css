@@ -26,20 +26,24 @@
 #magento-without-border-tabs{
     padding-left: 0;
 }
+#magento-without-border-tabs.responsive-cell {
+    margin-top: -1px;
+}
 
-#magento-without-border-tabs .oro-tabs .tab-content{
-    border: none;
+#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a,
+#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a:hover,
+#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a:focus {
+    border-left: none;
+}
+
+#magento-without-border-tabs .oro-tabs {
     padding-left: 1px;
 }
-#magento-without-border-tabs .oro-tabs ul li.active a:hover,
-#magento-without-border-tabs .oro-tabs ul li.active a:focus,
-#magento-without-border-tabs .oro-tabs ul li.active a {
+
+#magento-without-border-tabs .oro-tabs .tab-content{
     border-left: none;
-}
-#magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a,
-#magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:hover,
-#magento-without-border-tabs .oro-tabs .nav-tabs > li:first-child > a:focus {
-    border-left: none;
+    border-right: none;
+    border-bottom: none;
 }
 
 .mess-pos {
@@ -81,18 +85,18 @@
     display: none;
 }
 .customer-info ul.inline li.magento-customer-info {
-  border-left: 0 none;
-  vertical-align: middle;
-  padding-left: 0;
-  margin-top: 4px;
-  margin-bottom: 4px;
+    border-left: 0 none;
+    vertical-align: middle;
+    padding-left: 0;
+    margin-top: 4px;
+    margin-bottom: 4px;
 }
 .customer-info ul.inline li.magento-customer-info .orocrm-channel-lifetime-value-label {
-  margin-left: 0;
-  margin-right: 10px;
+    margin-left: 0;
+    margin-right: 10px;
 }
 .customer-info ul.inline li.magento-customer-info > div {
-  float: none;
+    float: none;
 }
 .place-order-transaction-dialog #orderPlaceFrame.loaded {
     height: 100%;
