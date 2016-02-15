@@ -27,7 +27,7 @@ class ChannelRepository extends EntityRepository
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
         if (null !== $type) {
-            $qb->andWhere('c.channelType = :type');
+            $qb->andWhere($qb->expr()->eq('c.channelType', ':type'));
             $qb->setParameter('type', $type);
         }
 
@@ -52,9 +52,14 @@ class ChannelRepository extends EntityRepository
         $qb->select('COUNT(visit.id)')
             ->from('OroTrackingBundle:TrackingVisit', 'visit')
             ->join('visit.trackingWebsite', 'site')
-            ->join('site.channel', 'channel')
-            ->where('channel.channelType = :type')
-            ->andWhere($qb->expr()->eq('channel.status', ':status'))
+            ->leftJoin('site.channel', 'channel')
+            ->where($qb->expr()->orX(
+                $qb->expr()->isNull('channel.id'),
+                $qb->expr()->andX(
+                    $qb->expr()->eq('channel.channelType', ':type'),
+                    $qb->expr()->eq('channel.status', ':status')
+                )
+            ))
             ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
             ->setParameter('dateStart', $start)

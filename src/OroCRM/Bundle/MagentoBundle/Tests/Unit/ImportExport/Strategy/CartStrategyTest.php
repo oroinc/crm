@@ -64,7 +64,13 @@ class CartStrategyTest extends AbstractStrategyTest
         $this->databaseHelper->expects($this->once())->method('getEntityReference')->will($this->returnArgument(0));
         $this->databaseHelper->expects($this->once())->method('findOneByIdentity')->willReturn($databaseEntity);
 
-        $this->assertEquals($expected, $strategy->process($entity));
+        $actualEntity = $strategy->process($entity);
+        if ($actualEntity) {
+            $expected->setImportedAt($actualEntity->getImportedAt());
+            $expected->setSyncedAt($actualEntity->getSyncedAt());
+        }
+
+        $this->assertEquals($expected, $actualEntity);
     }
 
     /**
@@ -79,7 +85,8 @@ class CartStrategyTest extends AbstractStrategyTest
             'without contact info' => [null, $this->getEntity(['itemsCount' => 1])],
             'email' => [
                 $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com']),
-                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com'])
+                $this->getEntity(['itemsCount' => 1, 'email' => 'user@example.com']),
+
             ],
             'dont change status' => [
                 $this->getEntity(

@@ -50,9 +50,9 @@ class CustomerExportWriter extends AbstractExportWriter
 
         $this->transport->init($this->getChannel()->getTransport());
         if (empty($item[self::CUSTOMER_ID_KEY])) {
-            $this->writeNewItem($item);
+            $this->writeNewItem($item, $entity);
         } else {
-            $this->writeExistingItem($item);
+            $this->writeExistingItem($item, $entity);
         }
 
         // Clear temporary saved password
@@ -62,11 +62,10 @@ class CustomerExportWriter extends AbstractExportWriter
 
     /**
      * @param array $item
+     * @param Customer $entity
      */
-    protected function writeNewItem(array $item)
+    protected function writeNewItem(array $item, Customer $entity)
     {
-        /** @var Customer $entity */
-        $entity = $this->getEntity();
         try {
             $customerId = $this->transport->createCustomer($item);
             $entity->setOriginId($customerId);
@@ -76,6 +75,8 @@ class CustomerExportWriter extends AbstractExportWriter
             $this->logger->info(
                 sprintf('Customer with id %s successfully created with data %s', $customerId, json_encode($item))
             );
+            $entity->setCreatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
+            $entity->setUpdatedAt($entity->getCreatedAt());
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
             $this->stepExecution->addFailureException($e);
@@ -84,12 +85,10 @@ class CustomerExportWriter extends AbstractExportWriter
 
     /**
      * @param array $item
+     * @param Customer $entity
      */
-    protected function writeExistingItem(array $item)
+    protected function writeExistingItem(array $item, Customer $entity)
     {
-        /** @var Customer $entity */
-        $entity = $this->getEntity();
-
         $customerId = $item[self::CUSTOMER_ID_KEY];
 
         try {
@@ -113,6 +112,7 @@ class CustomerExportWriter extends AbstractExportWriter
                 $this->logger->info(
                     sprintf('Customer with id %s successfully updated with data %s', $customerId, json_encode($item))
                 );
+                $entity->setUpdatedAt(new \DateTime('now', new \DateTimeZone('UTC')));
             } else {
                 $this->logger->error(sprintf('Customer with id %s was not updated', $customerId));
             }

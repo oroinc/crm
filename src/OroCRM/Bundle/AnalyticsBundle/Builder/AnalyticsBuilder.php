@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\AnalyticsAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class AnalyticsBuilder
 {
@@ -20,28 +20,15 @@ class AnalyticsBuilder
     }
 
     /**
-     * @return AnalyticsBuilderInterface[]
+     * @param Channel $channel
+     * @param array $ids
      */
-    public function getBuilders()
+    public function build(Channel $channel, array $ids = [])
     {
-        return $this->builders;
-    }
-
-    /**
-     * @param AnalyticsAwareInterface $entity
-     *
-     * @return bool Build was performed
-     */
-    public function build(AnalyticsAwareInterface $entity)
-    {
-        $update = false;
-
         foreach ($this->builders as $builder) {
-            if ($builder->supports($entity)) {
-                $update = $update || $builder->build($entity);
+            if ($builder->supports($channel)) {
+                $builder->build($channel, $ids);
             }
         }
-
-        return $update;
     }
 }

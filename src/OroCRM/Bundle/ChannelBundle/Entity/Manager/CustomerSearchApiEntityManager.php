@@ -1,6 +1,8 @@
 <?php
 namespace OroCRM\Bundle\ChannelBundle\Entity\Manager;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
@@ -12,6 +14,7 @@ use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
 use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
 use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
+use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class CustomerSearchApiEntityManager extends ApiEntityManager
@@ -25,17 +28,23 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
     /** @var SearchIndexer */
     protected $searchIndexer;
 
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
+
     /**
      * {@inheritdoc}
-     * @param SearchIndexer $searchIndexer
+     * @param SearchIndexer            $searchIndexer
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         $class,
         ObjectManager $om,
-        SearchIndexer $searchIndexer
+        SearchIndexer $searchIndexer,
+        EventDispatcherInterface $dispatcher
     ) {
         parent::__construct($class, $om);
         $this->searchIndexer = $searchIndexer;
+        $this->dispatcher   = $dispatcher;
     }
 
     /**
@@ -94,6 +103,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
         /** @var SearchResultItem $item */
         foreach ($searchResult as $item) {
+            $this->dispatcher->dispatch(PrepareResultItemEvent::EVENT_NAME, new PrepareResultItemEvent($item));
+
             $id        = $item->getRecordId();
             $className = $item->getEntityName();
 

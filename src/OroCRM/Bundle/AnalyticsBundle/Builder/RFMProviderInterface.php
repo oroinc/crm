@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\AnalyticsBundle\Builder;
 
-use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 interface RFMProviderInterface
 {
@@ -12,16 +12,15 @@ interface RFMProviderInterface
     public function getType();
 
     /**
-     * @param object $entity
-     *
+     * @param Channel $channel
      * @return bool
      */
-    public function supports($entity);
+    public function supports(Channel $channel);
 
     /**
-     * @param RFMAwareInterface $entity
-     *
-     * @return int
+     * @param Channel $channel
+     * @param array $ids
+     * @return array
      */
-    public function getValue(RFMAwareInterface $entity);
+    public function getValues(Channel $channel, array $ids = []);
 }

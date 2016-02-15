@@ -1,0 +1,97 @@
+datagrid:
+    activity-contact-data-hidden-mixin:
+        source:
+            query:
+                select:
+                    - __root_entity__.ac_contact_count as timesContacted
+                    - __root_entity__.ac_contact_count_in as timesContactedIn
+                    - __root_entity__.ac_contact_count_out as timesContactedOut
+                    - __root_entity__.ac_last_contact_date as lastContactedDate
+                    - __root_entity__.ac_last_contact_date_in as lastContactedDateIn
+                    - __root_entity__.ac_last_contact_date_out as lastContactedDateOut
+        columns:
+            timesContacted:
+                label: orocrm.activity_contact.ac_contact_count.label
+                frontend_type: integer
+                renderable: false
+            timesContactedIn:
+                label: orocrm.activity_contact.ac_contact_count_in.label
+                frontend_type: integer
+                renderable: false
+            timesContactedOut:
+                label: orocrm.activity_contact.ac_contact_count_out.label
+                frontend_type: integer
+                renderable: false
+            lastContactedDate:
+                label: orocrm.activity_contact.ac_last_contact_date.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateIn:
+                label: orocrm.activity_contact.ac_last_contact_date_in.label
+                frontend_type: datetime
+                renderable: false
+            lastContactedDateOut:
+                label: orocrm.activity_contact.ac_last_contact_date_out.label
+                frontend_type: datetime
+                renderable: false
+        sorters:
+            columns:
+                timesContacted:
+                    data_name: timesContacted
+                timesContactedIn:
+                    data_name: timesContactedIn
+                timesContactedOut:
+                    data_name: timesContactedOut
+                lastContactedDate:
+                    data_name: lastContactedDate
+                lastContactedDateIn:
+                    data_name: lastContactedDateIn
+                lastContactedDateOut:
+                    data_name: lastContactedDateOut
+        filters:
+            columns:
+                timesContacted:
+                    type: number
+                    data_name: timesContacted
+                    enabled: false
+                timesContactedIn:
+                    type: number
+                    data_name: timesContactedIn
+                    enabled: false
+                timesContactedOut:
+                    type: number
+                    data_name: timesContactedOut
+                    enabled: false
+                lastContactedDate:
+                    type: datetime
+                    data_name: lastContactedDate
+                    enabled: false
+                lastContactedDateIn:
+                    type: datetime
+                    data_name: lastContactedDateIn
+                    enabled: false
+                lastContactedDateOut:
+                    type: datetime
+                    data_name: lastContactedDateOut
+                    enabled: false
+
+    activity-contact-days-since-last-contact-hidden-mixin:
+        source:
+            query:
+                select:
+                    - DATE_DIFF(CURRENT_DATE(), __root_entity__.ac_last_contact_date) as daysSinceLastContact
+        columns:
+            daysSinceLastContact:
+                label: orocrm.activity_contact.days_since_last_contact.label
+                frontend_type: integer
+                renderable: false
+        sorters:
+            columns:
+                daysSinceLastContact:
+                    data_name: daysSinceLastContact
+        filters:
+            columns:
+                daysSinceLastContact:
+                    type: number
+                    data_name: daysSinceLastContact
+                    enabled: false

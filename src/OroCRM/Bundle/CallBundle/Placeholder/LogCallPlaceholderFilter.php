@@ -2,17 +2,29 @@
 
 namespace OroCRM\Bundle\CallBundle\Placeholder;
 
-use OroCRM\Bundle\CallBundle\Entity\Call;
 use Doctrine\Common\Util\ClassUtils;
+
+use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
+
+use OroCRM\Bundle\CallBundle\Entity\Call;
 
 class LogCallPlaceholderFilter
 {
     /** @var Call */
     protected $call;
 
-    public function __construct()
+    /**
+     * @var ActivityManager
+     */
+    protected $activityManager;
+
+    /**
+     * @param ActivityManager $activityManager
+     */
+    public function __construct(ActivityManager $activityManager)
     {
         $this->call  = new Call();
+        $this->activityManager = $activityManager;
     }
 
     /**
@@ -23,6 +35,12 @@ class LogCallPlaceholderFilter
      */
     public function isApplicable($entity = null)
     {
-        return is_object($entity) && $this->call->supportActivityTarget(ClassUtils::getClass($entity));
+        return
+            is_object($entity) &&
+            $this->call->supportActivityTarget(ClassUtils::getClass($entity)) &&
+            $this->activityManager->hasActivityAssociation(
+                ClassUtils::getClass($entity),
+                ClassUtils::getClass($this->call)
+            );
     }
 }
