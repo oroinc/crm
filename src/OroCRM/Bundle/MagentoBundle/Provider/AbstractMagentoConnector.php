@@ -87,9 +87,16 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $item = parent::read();
 
         if (null !== $item) {
+            $lastSyncDate = $this->getMaxUpdatedDate(
+                $this->getUpdatedDate($item),
+                $this->getStatusData(self::LAST_SYNC_KEY)
+            );
+
+            $lastSyncDate = ($lastSyncDate > date('Y-m-d H:i:s') ? date('Y-m-d H:i:s') : $lastSyncDate );
+
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
-                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
+                $lastSyncDate
             );
         }
         $iterator = $this->getSourceIterator();
@@ -97,9 +104,12 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             // cover case, when no one item was synced
             // then just take point from what it was started
             $dateFromReadStarted = $iterator->getStartDate() ? $iterator->getStartDate()->format('Y-m-d H:i:s') : null;
+            $lastSyncDate = $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted);
+            $lastSyncDate = ($lastSyncDate > date('Y-m-d H:i:s') ? date('Y-m-d H:i:s') : $lastSyncDate );
+
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
-                $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted)
+                $lastSyncDate
             );
         }
 
