@@ -82,7 +82,7 @@ class InitialSyncCommand extends ContainerAwareCommand
     public function execute(InputInterface $input, OutputInterface $output)
     {
         // Disable search listeners to increase the performance
-        $$this->disableOptionalListeners();
+        $this->disableOptionalListeners();
 
         $skipDictionary = (bool)$input->getOption('skip-dictionary');
         $integrationId = $input->getOption('integration-id');
@@ -115,7 +115,7 @@ class InitialSyncCommand extends ContainerAwareCommand
 
             $connector = $input->getOption('connector');
             $result = $processor->process($integration, $connector, ['skip-dictionary' => $skipDictionary]);
-            $exitCode = $result ?: self::STATUS_FAILED;
+            $exitCode = $result ? self::STATUS_SUCCESS : self::STATUS_FAILED;
         } catch (\Exception $e) {
             $logger->critical($e->getMessage(), ['exception' => $e]);
             $exitCode = self::STATUS_FAILED;
