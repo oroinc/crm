@@ -71,7 +71,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
             if ($aclManager->isAclEnabled()) {
                 $sid = $aclManager->getSid($role);
                 foreach ($roleConfigData['permissions'] as $permission => $acls) {
-                    $this->processPermission($aclManager, $sid. $permission, $acls);
+                    $this->processPermission($aclManager, $sid, $permission, $acls);
                 }
             }
         }
@@ -86,8 +86,12 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
      * @param string $permission
      * @param array $acls
      */
-    protected function processPermission(AclManager $aclManager, $sid, $permission, array $acls)
-    {
+    protected function processPermission(
+        AclManager $aclManager,
+        SecurityIdentityInterface $sid,
+        $permission,
+        array $acls
+    ) {
         $oid = $aclManager->getOid(str_replace('|', ':', $permission));
 
         $extension = $aclManager->getExtensionSelector()->select($oid);
