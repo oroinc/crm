@@ -43,13 +43,15 @@ class Contacts extends AbstractPageFilteredGrid
                 )->click();
                 $this->waitForAjax();
                 $this->test->byXPath(
-                    "//div[@class='grid-container']//div[@class='btn-group dropdown open']//a[text() ='All']"
+                    "//ul[contains(@class,'dropdown-menu__select-all-header-cell')]" .
+                    "[contains(@class,'dropdown-menu__floating')]//a[text() ='All']"
                 )->click();
                 $this->waitForAjax();
                 $massActions->click();
                 $this->waitForAjax();
                 $this->test->byXPath(
-                    "//div[@class='grid-container']//div[@class='dropdown btn-group open']//a[@title ='Delete']"
+                    "//ul[contains(@class,'dropdown-menu__action-column')]" .
+                    "[contains(@class,'dropdown-menu__floating')]//a[@title ='Delete']"
                 )->click();
                 $this->waitForAjax();
                 $this->test
