@@ -45,7 +45,6 @@ class CartAddressApiEntityManager extends ApiEntityManager
                 'fields' => [
                     'country'      => ['fields' => 'iso2Code'],
                     'region'       => ['fields' => 'combinedCode'],
-                    'organization' => ['fields' => 'id'],
                     'channel'      => ['fields' => 'id']
                 ]
             ]
