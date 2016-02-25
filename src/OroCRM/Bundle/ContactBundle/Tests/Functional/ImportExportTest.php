@@ -205,8 +205,35 @@ class ImportExportTest extends WebTestCase
         $this->assertCollectionData($expected, $actual, ['Phones 2 Phone', 'Phones 3 Phone']);
         $this->assertCollectionData($expected, $actual, ['Addresses 2 Street', 'Addresses 3 Street']);
         $this->assertCollectionData($expected, $actual, ['Addresses 2 Zip/postal code', 'Addresses 3 Zip/postal code']);
+        $this->assertArrayData($expected, $actual, 'Tags');
 
         $this->assertEquals($expected, $actual);
+    }
+
+    /**
+     * @param array $expected
+     * @param array $actual
+     * @param string $key
+     */
+    protected function assertArrayData(array &$expected, array &$actual, $key)
+    {
+        $this->assertArrayHasKey($key, $expected);
+        $this->assertArrayHasKey($key, $actual);
+
+        $e = $this->stringToArray($expected[$key]);
+        $a = $this->stringToArray($actual[$key]);
+        sort($e);
+        sort($a);
+
+        $this->assertEquals($e, $a);
+
+        unset($expected[$key]);
+        unset($actual[$key]);
+    }
+
+    protected function stringToArray($string)
+    {
+        return explode(', ', $string);
     }
 
     /**
