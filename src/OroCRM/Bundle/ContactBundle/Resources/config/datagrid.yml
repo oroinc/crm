@@ -495,12 +495,14 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: c.owner
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 assignedName:
                     type: choice-tree
                     data_name: c.assignedTo
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                     enabled: false
                 reportsName:
                     type: string
@@ -511,7 +513,8 @@ datagrid:
                     type: choice-business-unit
                     data_name: c.owner
                     options:
-                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
+                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
         actions:
             view:
                 type: navigate
@@ -635,13 +638,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: a.owner
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
                     options:
-                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
+                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
