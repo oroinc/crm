@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Model\Action;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
+use Oro\Component\Action\Model\ContextAccessor;
 
 use OroCRM\Bundle\MagentoBundle\Model\Action\AutomaticDiscoveryAction;
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
@@ -58,7 +58,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
     public function testInitializeErrors(array $options, $expectedExceptionMessage)
     {
         $this->setExpectedException(
-            'Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException',
+            'Oro\Component\Action\Exception\InvalidParameterException',
             $expectedExceptionMessage
         );
         $this->action->initialize($options);
@@ -95,7 +95,7 @@ class AutomaticDiscoveryActionTest extends \PHPUnit_Framework_TestCase
     public function testExecuteExceptions(array $options, $context, $expectedExceptionMessage)
     {
         $this->setExpectedException(
-            'Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException',
+            'Oro\Component\Action\Exception\InvalidParameterException',
             $expectedExceptionMessage
         );
 
