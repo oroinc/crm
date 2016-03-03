@@ -40,6 +40,8 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 
 # Prevent required values for all child of AbstractAddress
 OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
     properties:
         street:
             - NotBlank: ~
@@ -47,6 +49,3 @@ OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
             - NotBlank: ~
         postalCode:
             - NotBlank: ~
-    constraints:
-        - Callback:
-            methods: [isRegionValid]

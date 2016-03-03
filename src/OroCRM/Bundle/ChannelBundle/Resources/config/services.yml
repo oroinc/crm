@@ -155,6 +155,7 @@ services:
             - %orocrm_channel.entity.class%
             - @doctrine.orm.entity_manager
             - @oro_search.index
+            - @event_dispatcher
 
     # Providers
     orocrm_channel.provider.settings_provider:

@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Form\Extension\Stub;
+namespace OroCRM\Bundle\AnalyticsBundle\Tests\Unit\Model\Stub;
 
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareInterface;
 use OroCRM\Bundle\AnalyticsBundle\Model\RFMAwareTrait;

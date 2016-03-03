@@ -104,15 +104,9 @@ orocrm:
                 billing_country:  Billing country
                 billing_region:   Billing state
                 customer_is_guest:
-                    label: Magento customer type
-                    yes: Guest
-                    no: Registered
-                    all: All
+                    label: Is Guest
                 order_is_guest:
-                    label: Magento order type
-                    yes: Guest
-                    no: Registered
-                    all: All
+                    label: Is Guest
                 is_subscriber:
                     label: Is a Subscriber
                     yes: Yes
@@ -173,9 +167,9 @@ orocrm:
             website.label:       Website
             store.label:         Store
             guest:
-                label:             Magento Customer Type
-                yes:               Guest
-                no:                Registered
+                label:           Is Guest
+                yes:             Yes
+                no:              No
             group.label:         Customer Group
             contact.label:       Contact
             account.label:       Account
@@ -203,6 +197,8 @@ orocrm:
             newsletter_subscribers.label: Newsletter Subscribers
             confirmed.label: Confirmed
             created_in.label: Created In
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         customergroup:
             entity_label:        Magento Customer Group
@@ -263,6 +259,8 @@ orocrm:
             website.label:             Website
             status_message.label:      Status message
             organization.label:        Organization
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         cartitem:
             entity_label:              Magento Shopping Cart Item
@@ -389,9 +387,9 @@ orocrm:
             items.label:            Order items
             is_virtual.label:       Is virtual
             is_guest:
-                label:              Magento order type
-                yes:                Guest
-                no:                 Registered
+                label:              Is Guest
+                yes:                Yes
+                no:                 No
             channel.label:          Integration
             data_channel.label:     Channel
             notes.label:            Additional comments
@@ -407,6 +405,8 @@ orocrm:
             sync_state:
                 label: Sync State
                 info: Partially synced
+            imported_at.label: Imported At
+            synced_at.label: Last Synced At
 
         product:
             entity_label:         Magento Product

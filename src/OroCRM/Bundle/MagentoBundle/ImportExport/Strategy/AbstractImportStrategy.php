@@ -6,7 +6,6 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 use Akeneo\Bundle\BatchBundle\Item\ExecutionContext;
 use Akeneo\Bundle\BatchBundle\Step\StepExecutionAwareInterface;
 
-use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 

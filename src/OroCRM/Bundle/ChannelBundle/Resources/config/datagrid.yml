@@ -88,3 +88,6 @@ datagrid:
                 label:        oro.grid.action.delete
         options:
             entity_pagination: true
+            mass_actions:
+                delete:
+                    enabled: false
