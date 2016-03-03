@@ -87,16 +87,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
         $item = parent::read();
 
         if (null !== $item) {
-            $lastSyncDate = $this->getMaxUpdatedDate(
-                $this->getUpdatedDate($item),
-                $this->getStatusData(self::LAST_SYNC_KEY)
-            );
-
-            $lastSyncDate = ($lastSyncDate > date('Y-m-d H:i:s') ? date('Y-m-d H:i:s') : $lastSyncDate );
-
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
-                $lastSyncDate
+                $this->getMaxUpdatedDate($this->getUpdatedDate($item), $this->getStatusData(self::LAST_SYNC_KEY))
             );
         }
         $iterator = $this->getSourceIterator();
@@ -104,12 +97,9 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
             // cover case, when no one item was synced
             // then just take point from what it was started
             $dateFromReadStarted = $iterator->getStartDate() ? $iterator->getStartDate()->format('Y-m-d H:i:s') : null;
-            $lastSyncDate = $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted);
-            $lastSyncDate = ($lastSyncDate > date('Y-m-d H:i:s') ? date('Y-m-d H:i:s') : $lastSyncDate );
-
             $this->addStatusData(
                 self::LAST_SYNC_KEY,
-                $lastSyncDate
+                $this->getMaxUpdatedDate($this->getStatusData(self::LAST_SYNC_KEY), $dateFromReadStarted)
             );
         }
 
@@ -249,12 +239,33 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     protected function getMaxUpdatedDate($currDateToCompare, $prevDateToCompare)
     {
         if (!$prevDateToCompare) {
-            return $currDateToCompare;
+            $date = $currDateToCompare;
         } elseif (!$currDateToCompare) {
-            return $prevDateToCompare;
+            $date = $prevDateToCompare;
+        } else {
+            $date = strtotime($currDateToCompare) > strtotime($prevDateToCompare)
+                ? $currDateToCompare
+                : $prevDateToCompare;
         }
 
-        return strtotime($currDateToCompare) > strtotime($prevDateToCompare) ? $currDateToCompare : $prevDateToCompare;
+        return $date ? $this->getMinUpdatedDate($date) : $date;
+    }
+
+    /**
+     * Compares maximum updated date with current date and returns the smallest.
+     *
+     * @param string $updatedDate
+     *
+     * @return string
+     */
+    protected function getMinUpdatedDate($updatedDate)
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($currentDate->getTimestamp() > strtotime($updatedDate)) {
+            return $updatedDate;
+        }
+
+        return $currentDate->format('Y-m-d H:i:s');
     }
 
     /**
