@@ -239,12 +239,33 @@ abstract class AbstractMagentoConnector extends AbstractConnector implements Mag
     protected function getMaxUpdatedDate($currDateToCompare, $prevDateToCompare)
     {
         if (!$prevDateToCompare) {
-            return $currDateToCompare;
+            $date = $currDateToCompare;
         } elseif (!$currDateToCompare) {
-            return $prevDateToCompare;
+            $date = $prevDateToCompare;
+        } else {
+            $date = strtotime($currDateToCompare) > strtotime($prevDateToCompare)
+                ? $currDateToCompare
+                : $prevDateToCompare;
         }
 
-        return strtotime($currDateToCompare) > strtotime($prevDateToCompare) ? $currDateToCompare : $prevDateToCompare;
+        return $date ? $this->getMinUpdatedDate($date) : $date;
+    }
+
+    /**
+     * Compares maximum updated date with current date and returns the smallest.
+     *
+     * @param string $updatedDate
+     *
+     * @return string
+     */
+    protected function getMinUpdatedDate($updatedDate)
+    {
+        $currentDate = new \DateTime('now', new \DateTimeZone('UTC'));
+        if ($currentDate->getTimestamp() > strtotime($updatedDate)) {
+            return $updatedDate;
+        }
+
+        return $currentDate->format('Y-m-d H:i:s');
     }
 
     /**
