@@ -21,9 +21,7 @@ class B2bCustomerApiEntityManager extends ApiEntityManager
                 'leads'           => ['fields' => 'id'],
                 'opportunities'   => ['fields' => 'id'],
                 'owner'           => ['fields' => 'id'],
-                'organization'    => ['fields' => 'name'],
-                'createdBy'       => ['fields' => 'id'],
-                'updatedBy'       => ['fields' => 'id']
+                'organization'    => ['fields' => 'name']
             ]
         ];
 
