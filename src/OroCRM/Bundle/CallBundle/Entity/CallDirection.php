@@ -4,13 +4,26 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+
 /**
  * CallDirection
  *
  * @ORM\Table(name="orocrm_call_direction")
  * @ORM\Entity
+ * @Config(
+ *      defaultValues={
+ *          "grouping"={
+ *              "groups"={"dictionary"}
+ *          },
+ *          "dictionary"={
+ *              "virtual_fields"={"label"},
+ *              "search_fields"={"label"},
+ *              "representation_field"="label",
+ *          }
+ *      }
+ * )
  */
-
 class CallDirection
 {
     /**
