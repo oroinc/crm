@@ -17,9 +17,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *              "groups"={"dictionary"}
  *          },
  *          "dictionary"={
- *              "virtual_fields"={"name", "label"},
- *              "search_fields"={"name"},
- *              "representation_field"="name",
+ *              "virtual_fields"={"label"},
+ *              "search_fields"={"label"},
+ *              "representation_field"="label",
  *          }
  *      }
  * )

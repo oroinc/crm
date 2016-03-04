@@ -58,14 +58,7 @@ orocrm:
         call_status.label:     Call status
         call_date_time.label:  Call date & time
         organization.label:    Organization
-        direction_name.label:  Direction Name
-        direction_label.label:  Direction Label
+        direction_label.label: Direction
 
         block:
             additional: Additional
-
-        calldirection:
-            entity_label: Call Direction
-            entity_plural_label: Calls Direction
-            name.label: Name
-            label.label: Label
