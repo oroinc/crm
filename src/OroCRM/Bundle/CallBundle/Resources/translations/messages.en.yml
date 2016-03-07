@@ -59,5 +59,11 @@ orocrm:
         organization.label:    Organization
         direction_label.label: Direction
 
+        calldirection:
+            entity_label: Direction
+            entity_plural_label: Directions
+            label.label: Label
+            name.label: Name
+
         block:
             additional: Additional
