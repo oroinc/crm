@@ -78,8 +78,20 @@ class FillActivityAssociationTables implements
 
         // Remove orocrm_contactus_req_emails
         $table = $schema->getTable('orocrm_contactus_req_emails');
-        $table->removeForeignKey('FK_E494F7AE427EB8A5');
-        $table->removeForeignKey('FK_E494F7AEA832C1C9');
+        if ($table->hasForeignKey('FK_E494F7AE427EB8A5')) {
+            $table->removeForeignKey('FK_E494F7AE427EB8A5');
+        }
+        if ($table->hasForeignKey('FK_E494F7AEA832C1C9')) {
+            $table->removeForeignKey('FK_E494F7AEA832C1C9');
+        }
+        // Delete foreign keys for orocrm_contactus_request_emails table,
+        // that was renamed to orocrm_contactus_req_emails
+        if ($table->hasForeignKey('FK_4DEF4058427EB8A5')) {
+            $table->removeForeignKey('FK_4DEF4058427EB8A5');
+        }
+        if ($table->hasForeignKey('FK_4DEF4058A832C1C9')) {
+            $table->removeForeignKey('FK_4DEF4058A832C1C9');
+        }
         $schema->dropTable('orocrm_contactus_req_emails');
 
         // Remove orocrm_contactus_request_calls
