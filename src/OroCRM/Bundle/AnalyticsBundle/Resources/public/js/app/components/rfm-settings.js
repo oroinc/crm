@@ -189,6 +189,11 @@ define(function(require) {
             rows++;
         };
 
+        var refresh = function() {
+            $el.find('input').trigger('keyup');
+            recalculateIdx();
+        };
+
         var adoptExistingRecords = function() {
             var existingRRows = rfmElements.recency.el.find('.rfm-settings-row');
             var existingFRows = rfmElements.frequency.el.find('.rfm-settings-row');
@@ -219,11 +224,6 @@ define(function(require) {
             }
 
             refresh();
-        };
-
-        var refresh = function() {
-            $el.find('input').trigger('keyup');
-            recalculateIdx();
         };
 
         $el.on('click', '.action-add', function() {
