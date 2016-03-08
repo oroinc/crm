@@ -3,7 +3,6 @@
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Address;
 
 class CustomerTest extends AbstractEntityTestCase
 {
