@@ -145,6 +145,13 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'strategy' => 'local',
                 'expected' => ['prop' => 'new value']
             ],
+            'no local changes normalization' => [
+                'changeSet' => [],
+                'localData' => ['user_name' => 'john'],
+                'remoteData' => ['userName' => 'john'],
+                'strategy' => 'local',
+                'expected' => ['user_name' => 'john']
+            ],
             'local changes without conflict remote wins' => [
                 'changeSet' => [
                     'prop2' => [
