@@ -792,6 +792,7 @@ class Customer extends ExtendCustomer implements
         /** @var Address $address */
         if (!$this->addresses->contains($address)) {
             $this->addresses->add($address);
+            $address->setOwner($this);
         }
 
         return $this;
