@@ -47,7 +47,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
      */
     public function load(ObjectManager $manager)
     {
-        /** @var AclManager $manager */
+        /** @var AclManager $aclManager */
         $aclManager = $this->container->get('oro_security.acl.manager');
 
         $fileName = $this->container
