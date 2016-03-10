@@ -74,7 +74,15 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $this->strategy = new TwoWaySyncStrategy($this->importProcessor, $this->exportProcessor);
+        $doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->strategy = new TwoWaySyncStrategy(
+            $this->importProcessor,
+            $this->exportProcessor,
+            $doctrineHelper
+        );
     }
 
     protected function tearDown()
@@ -136,6 +144,13 @@ class TwoWaySyncStrategyTest extends \PHPUnit_Framework_TestCase
                 'remoteData' => ['prop' => 'new value'],
                 'strategy' => 'local',
                 'expected' => ['prop' => 'new value']
+            ],
+            'no local changes normalization' => [
+                'changeSet' => [],
+                'localData' => ['user_name' => 'john'],
+                'remoteData' => ['userName' => 'john'],
+                'strategy' => 'local',
+                'expected' => ['user_name' => 'john']
             ],
             'local changes without conflict remote wins' => [
                 'changeSet' => [
