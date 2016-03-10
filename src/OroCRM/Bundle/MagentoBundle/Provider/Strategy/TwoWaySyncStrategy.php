@@ -6,40 +6,44 @@ use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareExportProcessor;
 use Oro\Bundle\IntegrationBundle\ImportExport\Processor\StepExecutionAwareImportProcessor;
 use Oro\Bundle\IntegrationBundle\Provider\TwoWaySyncConnectorInterface;
 
 class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $supportedStrategies = [
         TwoWaySyncConnectorInterface::REMOTE_WINS,
         TwoWaySyncConnectorInterface::LOCAL_WINS
     ];
 
-    /**
-     * @var StepExecutionAwareImportProcessor
-     */
+    /** @var StepExecutionAwareImportProcessor */
     protected $importProcessor;
 
-    /**
-     * @var StepExecutionAwareExportProcessor
-     */
+    /** @var StepExecutionAwareExportProcessor */
     protected $exportProcessor;
+
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
+    /** @var object|null */
+    protected $normalizedObject;
 
     /**
      * @param StepExecutionAwareImportProcessor $importProcessor
      * @param StepExecutionAwareExportProcessor $exportProcessor
+     * @param DoctrineHelper $doctrineHelper
      */
     public function __construct(
         StepExecutionAwareImportProcessor $importProcessor,
-        StepExecutionAwareExportProcessor $exportProcessor
+        StepExecutionAwareExportProcessor $exportProcessor,
+        DoctrineHelper $doctrineHelper
     ) {
         $this->importProcessor = $importProcessor;
         $this->exportProcessor = $exportProcessor;
+        $this->doctrineHelper = $doctrineHelper;
     }
 
     /**
@@ -71,11 +75,13 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
             );
         }
 
+        $remoteData = $this->normalize($remoteData);
         if (!$changeSet) {
+            $this->refreshNormalizedObject();
+
             return $remoteData;
         }
 
-        $remoteData = $this->normalize($remoteData);
         $oldValues = $this->getChangeSetValues($changeSet, 'old');
         $oldValues = $this->fillEmptyValues($oldValues, $this->getChangeSetValues($changeSet, 'new'));
         $snapshot = $this->getSnapshot($localData, $oldValues);
@@ -101,6 +107,8 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
         foreach ($localDataForUpdate as $property) {
             $remoteData[$property] = $localData[$property];
         }
+
+        $this->refreshNormalizedObject();
 
         return $remoteData;
     }
@@ -156,9 +164,27 @@ class TwoWaySyncStrategy implements TwoWaySyncStrategyInterface
      */
     protected function normalize(array $data)
     {
-        $object = $this->importProcessor->process($data);
+        $this->normalizedObject = $this->importProcessor->process($data);
 
-        return $this->exportProcessor->process($object);
+        return $this->exportProcessor->process($this->normalizedObject);
+    }
+
+    /**
+     * Since object normalization does unwanted changes to the object,
+     * it's necessary to revert it into original value
+     *
+     * This can be reproduced by refreshing page after changing magento customer address (e.g. first name)
+     * with enabled 2 way sync.
+     */
+    protected function refreshNormalizedObject()
+    {
+        if (!$this->normalizedObject) {
+            return;
+        }
+
+        $this->doctrineHelper->refreshIncludingUnitializedRelations($this->normalizedObject);
+
+        $this->normalizedObject = null;
     }
 
     /**
