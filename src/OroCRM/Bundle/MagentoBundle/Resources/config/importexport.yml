@@ -277,6 +277,14 @@ services:
         tags:
             - { name: oro_importexport.normalizer }
 
+    orocrm_magento.importexport.denormalizer.default_configurable_entity:
+        class: OroCRM\Bundle\MagentoBundle\ImportExport\Serializer\DefaultConfigurableEntityDenormalizer
+        arguments:
+            - @oro_importexport.field.field_helper
+            - @logger
+        tags:
+            - { name: oro_importexport.normalizer, priority: -200 }
+
     # Strategies
     orocrm_magento.import_strategy.default_magento_import:
         class: %orocrm_magento.import_strategy.default_magento_import.class%
@@ -668,9 +676,11 @@ services:
         arguments:
             - @orocrm_magento.importexport.processor.import_customer
             - @orocrm_magento.importexport.processor.customer_export
+            - @oro_entity.doctrine_helper
 
     orocrm_magento.provider.strategy.two_way_sync.customer_address:
         class: %orocrm_magento.provider.strategy.two_way_sync.class%
         arguments:
             - @orocrm_magento.importexport.processor.import_customer_address
             - @orocrm_magento.importexport.processor.customer_address_export
+            - @oro_entity.doctrine_helper
