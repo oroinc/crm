@@ -6,7 +6,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\EntityBundle\ORM\QueryUtils;
@@ -169,7 +168,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             }
         }
 
-        $rsm = new ResultSetMapping();
+        $rsm = QueryUtils::createResultSetMapping($em->getConnection()->getDatabasePlatform());
         $rsm
             ->addScalarResult('channelId', 'channelId', 'integer')
             ->addScalarResult('entityId', 'id', 'integer')

@@ -214,13 +214,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: o.owner
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
                     options:
-                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
+                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
         actions:
             view:
                 type:          navigate
@@ -562,7 +564,8 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: l.owner
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 contactName:
                     type: string
                     data_name: contactName
@@ -572,7 +575,8 @@ datagrid:
                     type: choice-business-unit
                     data_name: l.owner
                     options:
-                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
+                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -729,13 +733,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
                     options:
-                        data: @oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
+                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
@@ -1113,7 +1119,8 @@ datagrid:
                     data_name: c.owner
                     enabled: false                    
                     options:
-                        data: @oro_user.provider.filter.user_choice_tree->getList
+                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
+                        data: @?oro_user.provider.filter.user_choice_tree->getList
                 accountName:
                     type: string
                     data_name: accountName

@@ -8,11 +8,7 @@
 {% set showImage = false %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% if entity %}
-    {% set title = 'orocrm.sales.salesfunnel.hint'|trans({'%id%' : entity.id}) %}
-{% else %}
-    {% set title = indexer_item.recordTitle %}
-{% endif %}
+{% set title = indexer_item.recordTitle %}
 
 {% set entityType = 'orocrm.sales.salesfunnel.entity_label'|trans %}
 
