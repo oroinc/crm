@@ -538,6 +538,7 @@ datagrid:
                     data_name: address.country
                     enabled: false
                     options:
+                        lazy: true
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
@@ -876,6 +877,7 @@ datagrid:
                      data_name: address.country
                      enabled: false
                      options:
+                         lazy: true
                          field_options:
                              class: OroAddressBundle:Country
                              property: name
@@ -1134,6 +1136,7 @@ datagrid:
                     data_name: ba.country
                     enabled: false
                     options:
+                        lazy: true
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
@@ -1160,6 +1163,7 @@ datagrid:
                     data_name: sa.country
                     enabled: false
                     options:
+                        lazy: true
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
@@ -1340,6 +1344,7 @@ datagrid:
                     data_name: address.country
                     enabled: false
                     options:
+                        lazy: true
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
