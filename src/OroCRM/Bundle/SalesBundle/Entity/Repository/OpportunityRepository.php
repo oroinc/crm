@@ -10,6 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -124,9 +125,8 @@ class OpportunityRepository extends EntityRepository
         $qb->select($select);
 
         if (!empty($ownerIds)) {
-            $qb->join('opportunity.owner', 'owner')
-                ->where('owner.id IN(:ownerIds)')
-                ->setParameter('ownerIds', $ownerIds);
+            $qb->join('opportunity.owner', 'owner');
+            QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
         }
 
         $probabilityCondition = $qb->expr()->orX(
