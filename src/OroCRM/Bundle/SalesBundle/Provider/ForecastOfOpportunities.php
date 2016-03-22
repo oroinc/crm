@@ -242,7 +242,7 @@ class ForecastOfOpportunities
     protected function getOwnerIds(WidgetOptionBag $widgetOptions)
     {
         $key = md5(serialize($widgetOptions));
-        if (!isset($this->ownerIds[$key])) {;
+        if (!isset($this->ownerIds[$key])) {
             $owners = $widgetOptions->get('owners');
             $owners = is_array($owners) ? $owners : [$owners];
 
@@ -255,7 +255,7 @@ class ForecastOfOpportunities
 
             $businessUnitIds = $this->getBusinessUnitsIds($widgetOptions);
 
-            $this->ownerIds[$key] = $this->getUserOwnerIds($businessUnitIds);
+            $this->ownerIds[$key] = array_unique(array_merge($this->getUserOwnerIds($businessUnitIds), $ownerIds));
         }
 
         return $this->ownerIds[$key];
