@@ -241,7 +241,7 @@ class ForecastOfOpportunities
      */
     protected function getOwnerIds(WidgetOptionBag $widgetOptions)
     {
-        $key = md5(serialize($widgetOptions));
+        $key = spl_object_hash($widgetOptions);
         if (!isset($this->ownerIds[$key])) {
             $owners = $widgetOptions->get('owners');
             $owners = is_array($owners) ? $owners : [$owners];
