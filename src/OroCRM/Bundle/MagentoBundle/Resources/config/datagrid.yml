@@ -678,17 +678,16 @@ datagrid:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                        - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: address_type }
+                        -
+                            join: o.addresses
+                            alias: address
+                            conditionType: WITH
+                            condition: "address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa INNER JOIN oa.types type WHERE type.name = 'billing')"
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
-                where:
-                    or:
-                        - address_type.name = 'billing'
-                        - address.id IS NULL
         columns:
             channelName:
                 label:            orocrm.magento.order.data_channel.label
