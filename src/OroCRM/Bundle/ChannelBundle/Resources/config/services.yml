@@ -54,6 +54,7 @@ parameters:
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
     orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
     orocrm_channel.event_listener.timezone_change.class:               OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
+    orocrm_channel.event_listener.job_execution.class:                 OroCRM\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -313,6 +314,14 @@ services:
           - @doctrine
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
+
+    orocrm_channel.event_listener.job_execution:
+        class: %orocrm_channel.event_listener.job_execution.class%
+        arguments:
+            - @oro_entity.doctrine_helper
+            - @security.token_storage
+        tags:
+            - { name: kernel.event_subscriber }
 
     #twig
     orocrm_channel.twig.metadata_extension:

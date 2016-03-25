@@ -126,7 +126,8 @@ services:
 
     orocrm_magento.importexport.data_converter.customer:
         class: %orocrm_magento.importexport.data_converter.customer.class%
-        parent: oro_importexport.data_converter.configurable
+        arguments:
+            - @oro_importexport.field.field_helper
         calls:
             - [addNodeDataConverter, ['addresses', @orocrm_magento.importexport.data_converter.customer_address, true]]
             - [addNodeDataConverter, ['group', @orocrm_magento.importexport.data_converter.customer_group]]
