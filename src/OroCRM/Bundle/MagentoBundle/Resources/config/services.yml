@@ -422,6 +422,13 @@ services:
         lazy: true
 
     # event listeners
+    orocrm_magento.event_listener.order_grid:
+        class: OroCRM\Bundle\MagentoBundle\EventListener\OrderGridListener
+        arguments:
+            - @orocrm_magento.country.datagrid_helper
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.magento-order-grid, method: onBuildBefore }
+
     orocrm_magento.event_listener.customer_currency:
         class: %orocrm_magento.event_listener.customer_currency.class%
         calls:
