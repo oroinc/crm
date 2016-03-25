@@ -665,30 +665,31 @@ datagrid:
                     - o.totalAmount as grandTotal
                     - step.label as stepLabel
                     - o.customerEmail as email
-                    - country.name as countryName
-                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - channel.name as channelName
                     - cw.name as websiteName
                     - o.discountAmount
                     - o.discountPercent
                     - o.couponCode
+                    - >
+                        (SELECT country.name FROM OroCRMMagentoBundle:OrderAddress address_c
+                        LEFT JOIN address_c.country country
+                        LEFT JOIN address_c.types types_c
+                        WHERE address_c.owner = o AND (types_c.name = 'billing' OR types_c.name IS NULL)) as countryName
+                    - >
+                        (SELECT CONCAT(CASE WHEN address_r.regionText IS NOT NULL THEN address_r.regionText ELSE region.name END, '')
+                        FROM OroCRMMagentoBundle:OrderAddress address_r
+                        LEFT JOIN address_r.region region
+                        LEFT JOIN address_r.types types_r
+                        WHERE address_r.owner = o AND (types_r.name = 'billing' OR types_r.name IS NULL)) as regionName
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                        - { join: o.addresses, alias: address }
-                        - { join: address.types, alias: address_type }
-                        - { join: address.country, alias: country }
-                        - { join: address.region, alias: region }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
-                where:
-                    or:
-                        - address_type.name = 'billing'
-                        - address.id IS NULL
         columns:
             channelName:
                 label:            orocrm.magento.order.data_channel.label
@@ -749,7 +750,7 @@ datagrid:
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 grandTotal:             { data_name: grandTotal }
                 subTotal:               { data_name: subTotal }
-                countryName:            { data_name: country.name }
+                countryName:            { data_name: countryName }
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 channelName:            { data_name: channelName }
@@ -790,6 +791,14 @@ datagrid:
                 email:
                     type:             string
                     data_name:        email
+                createdAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                    enabled:          false
+                updatedAt:
+                    type:             datetime
+                    data_name:        o.updatedAt
+                    enabled:          false
                 totalPaidAmount:
                     type:             currency
                     data_name:        o.totalPaidAmount
@@ -805,20 +814,6 @@ datagrid:
                     data_name:        subTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                countryName:
-                    type:      entity
-                    data_name: address.country
-                    enabled:   false
-                    options:
-                        field_options:
-                            class: OroAddressBundle:Country
-                            property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
-                            translatable_options: false
-                regionName:
-                    type:      string
-                    data_name: regionName
-                    enabled:   false
                 status:
                     type:             string
                     data_name:        o.status
@@ -834,14 +829,6 @@ datagrid:
                     label: orocrm.magento.datagrid.columns.order_is_guest.label
                     type: boolean
                     data_name: o.isGuest
-                createdAt:
-                    type:             datetime
-                    data_name:        o.createdAt
-                    enabled:          false
-                updatedAt:
-                    type:             datetime
-                    data_name:        o.updatedAt
-                    enabled:          false
                 discountAmount:
                     label:            orocrm.magento.datagrid.columns.discount_amount
                     type:             currency
