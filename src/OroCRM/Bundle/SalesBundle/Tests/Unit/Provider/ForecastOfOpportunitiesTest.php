@@ -52,6 +52,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockBuilder
      */
+    protected $userRepository;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockBuilder
+     */
     protected $securityFacade;
 
     protected function setUp()
@@ -67,23 +72,21 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->userRepository = $this->getMockBuilder('Oro\Bundle\UserBundle\Entity\Repository\UserRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->doctrine = $this->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $doctrineResult = function ($repository) {
-            if ($repository == 'OroCRMSalesBundle:Opportunity') {
-                return $this->opportunityRepository;
-            } elseif ($repository == 'OroOrganizationBundle:BusinessUnit') {
-                return $this->businessUnitRepository;
-            }
-
-            return null;
-        };
-
         $this->doctrine->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnCallback($doctrineResult));
+            ->will($this->returnValueMap([
+                ['OroCRMSalesBundle:Opportunity', null, $this->opportunityRepository],
+                ['OroOrganizationBundle:BusinessUnit', null, $this->businessUnitRepository],
+                ['OroUserBundle:User', null, $this->userRepository],
+            ]));
 
         $this->translator = $this->getMockBuilder('Oro\Bundle\TranslationBundle\Translation\Translator')
             ->disableOriginalConstructor()
@@ -251,6 +254,36 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->method('getForecastOfOpporunitiesData')
             ->with([$user->getId()], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
+
+
+        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
+            ->disableOriginalConstructor()
+            ->setMethods(['getResult'])
+            ->getMockForAbstractClass();
+
+        $expr = $this->getMockBuilder('Doctrine\ORM\Query\Expr')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $qb->expects($this->once())
+            ->method('select')
+            ->will($this->returnSelf());
+        $qb->expects($this->any())
+            ->method('expr')
+            ->will($this->returnValue($expr));
+        $qb->expects($this->once())
+            ->method('getQuery')
+            ->will($this->returnValue($query));
+        $query->expects($this->once())
+            ->method('getResult')
+            ->will($this->returnValue([['id' => $user->getId()]]));
+
+        $this->userRepository->expects($this->once())
+            ->method('createQueryBuilder')
+            ->will($this->returnValue($qb));
 
         $this->businessUnitRepository->expects($this->any())
             ->method('findById')
