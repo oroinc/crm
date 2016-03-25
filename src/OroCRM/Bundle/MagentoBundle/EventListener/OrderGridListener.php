@@ -11,6 +11,11 @@ use Oro\Bundle\DataGridBundle\Datagrid\Common\DatagridConfiguration;
 use Oro\Bundle\DataGridBundle\Event\BuildBefore;
 use Oro\Bundle\FilterBundle\Grid\Extension\OrmFilterExtension;
 
+/**
+ * The aim of this listener is to replace sub-selects of country and region of order's billing addresses
+ * with corresponding joins in case when address or region filters is activated.
+ * Because of slow performance of the "magento-order-grid" grid query with joins without filtering by these columns.
+ */
 class OrderGridListener
 {
     /** @var CountryDatagridHelper */
