@@ -13,6 +13,8 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block navButtons %}{% endblock navButtons %}
+
 {% block content_data %}
     {% set productInformationWidget %}
         {{ oro_widget_render({

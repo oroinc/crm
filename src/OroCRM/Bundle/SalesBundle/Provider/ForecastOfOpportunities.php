@@ -9,6 +9,7 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 /**
  * Class ForecastOfOpportunities
@@ -33,6 +34,9 @@ class ForecastOfOpportunities
 
     /** @var  array */
     protected $ownersValues;
+
+    /** @var array */
+    protected $ownerIds = [];
 
     /**
      * @param RegistryInterface   $doctrine
@@ -237,35 +241,46 @@ class ForecastOfOpportunities
      */
     protected function getOwnerIds(WidgetOptionBag $widgetOptions)
     {
-        $owners = $widgetOptions->get('owners');
-        $owners = is_array($owners) ? $owners : [$owners];
+        $key = spl_object_hash($widgetOptions);
+        if (!isset($this->ownerIds[$key])) {
+            $owners = $widgetOptions->get('owners');
+            $owners = is_array($owners) ? $owners : [$owners];
 
-        $ownerIds = [];
-        foreach ($owners as $owner) {
-            if (is_object($owner)) {
-                $ownerIds[] = $owner->getId();
-            }
-        }
-
-        $businessUnitIds = $this->getBusinessUnitsIds($widgetOptions);
-
-        if (!empty($businessUnitIds)) {
-            //need to load from repository, because it returns unserialized object without users from widget options
-            $businessUnits = $this->doctrine
-                ->getRepository('OroOrganizationBundle:BusinessUnit')
-                ->findById($businessUnitIds);
-
-            foreach ($businessUnits as $businessUnit) {
-                $users = $businessUnit->getUsers();
-                foreach ($users as $user) {
-                    $ownerIds[] = $user->getId();
+            $ownerIds = [];
+            foreach ($owners as $owner) {
+                if (is_object($owner)) {
+                    $ownerIds[] = $owner->getId();
                 }
             }
 
-            $ownerIds = array_unique($ownerIds);
+            $businessUnitIds = $this->getBusinessUnitsIds($widgetOptions);
+
+            $this->ownerIds[$key] = array_unique(array_merge($this->getUserOwnerIds($businessUnitIds), $ownerIds));
         }
 
-        return $ownerIds;
+        return $this->ownerIds[$key];
+    }
+
+    /**
+     * @param int[] $businessUnitIds
+     *
+     * @return int[]
+     */
+    protected function getUserOwnerIds(array $businessUnitIds)
+    {
+        if (!$businessUnitIds) {
+            return [];
+        }
+
+        $qb = $this->doctrine->getRepository('OroUserBundle:User')
+            ->createQueryBuilder('u');
+
+        $qb
+            ->select('DISTINCT(u.id)')
+            ->join('u.businessUnits', 'bu');
+        QueryUtils::applyOptimizedIn($qb, 'bu.id', $businessUnitIds);
+
+        return array_map('current', $qb->getQuery()->getResult());
     }
 
     /**

@@ -5,3 +5,4 @@ orocrm:
         assigned_tasks_widget:
             settings: Task Widget Settings
             number_of_tasks: Number of tasks to show
+            description: "This widget allows you to see tasks assigned to you"
