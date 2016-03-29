@@ -35,11 +35,12 @@ class Contacts extends AbstractPageFilteredGrid
      */
     public function massDelete()
     {
-        if ($this->isElementPresent("//thead[not(@class)]//*[@title='Mass Actions']")) {
-            $massActions = $this->test->byXPath("//thead[not(@class)]//*[@title='Mass Actions']");
+        $gridHeader = "//thead[contains(@class, 'grid-header')][not(contains(@class, 'thead-sizing'))]";
+        if ($this->isElementPresent("{$gridHeader}//*[@title='Mass Actions']")) {
+            $massActions = $this->test->byXPath("{$gridHeader}//*[@title='Mass Actions']");
             if ($massActions->displayed()) {
                 $this->test->byXPath(
-                    "//thead[not(@class)]//button[@class='btn btn-default btn-small dropdown-toggle' and not(@type)]"
+                    "{$gridHeader}//button[@class='btn btn-default btn-small dropdown-toggle' and not(@type)]"
                 )->click();
                 $this->waitForAjax();
                 $this->test->byXPath(
