@@ -28,39 +28,4 @@ class Contacts extends AbstractPageFilteredGrid
     {
         return new Contact($this->test);
     }
-
-    /**
-     * Method check if grid of Contacts not empty and do mass delete
-     * @return $this
-     */
-    public function massDelete()
-    {
-        if ($this->isElementPresent("//thead[not(@class)]//*[@title='Mass Actions']")) {
-            $massActions = $this->test->byXPath("//thead[not(@class)]//*[@title='Mass Actions']");
-            if ($massActions->displayed()) {
-                $this->test->byXPath(
-                    "//thead[not(@class)]//button[@class='btn btn-default btn-small dropdown-toggle' and not(@type)]"
-                )->click();
-                $this->waitForAjax();
-                $this->test->byXPath(
-                    "//ul[contains(@class,'dropdown-menu__select-all-header-cell')]" .
-                    "[contains(@class,'dropdown-menu__floating')]//a[text() ='All']"
-                )->click();
-                $this->waitForAjax();
-                $massActions->click();
-                $this->waitForAjax();
-                $this->test->byXPath(
-                    "//ul[contains(@class,'dropdown-menu__action-column')]" .
-                    "[contains(@class,'dropdown-menu__floating')]//a[@title ='Delete']"
-                )->click();
-                $this->waitForAjax();
-                $this->test
-                    ->byXpath("//div[div[contains(., 'Delete Confirmation')]]//a[text()='Yes, Delete']")
-                    ->click();
-                $this->waitForAjax();
-                $this->waitPageToLoad();
-            }
-        }
-        return $this;
-    }
 }
