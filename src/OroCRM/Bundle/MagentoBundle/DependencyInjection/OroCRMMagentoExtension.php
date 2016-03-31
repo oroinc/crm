@@ -14,13 +14,7 @@ class OroCRMMagentoExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        /*
-         * Because configs merge in Symfony\Component\DependencyInjection\ContainerBuilder::prependExtensionConfig()
-         * with array_unshift that build config in way newest - first. But merge strategy `performNoDeepMerging()`
-         * works in the opposite direction. That`s why we should invert config here.
-         */
-        $configs = array_reverse($configs, false);
-        $loader  = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('orm.yml');
         $loader->load('importexport.yml');

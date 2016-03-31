@@ -149,13 +149,13 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
                 'config'       => [
                     [
                         'account_discovery' => [
-                            'fields'  => ['field1' => null],
+                            'fields'  => ['field1' => null, 'field2' => null, 'field3' => null],
                             'options' => ['match' => 'first', 'empty' => false]
                         ]
                     ],
                     [
                         'account_discovery' => [
-                            'fields'  => ['field1' => null, 'field2' => null, 'field3' => null],
+                            'fields'  => ['field1' => null],
                             'options' => ['match' => 'first', 'empty' => false]
                         ]
                     ],
