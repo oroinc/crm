@@ -21,7 +21,7 @@ class OroCRMMagentoExtension extends Extension
         $loader->load('orm.yml');
         $loader->load('importexport.yml');
 
-        $config   = $this->processConfiguration(new Configuration(), $configs);
+        $config  = $this->processConfiguration(new Configuration(), $configs);
         $services = $container->findTaggedServiceIds('orocrm_magento.bundle_config.aware');
 
         foreach ($services as $serviceId => $tagAttributes) {

@@ -71,7 +71,6 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode(self::DISCOVERY_NODE)
-                    ->performNoDeepMerging()
                     ->children()
                         ->arrayNode(self::DISCOVERY_FIELDS_KEY)
                             ->prototype('variable')
