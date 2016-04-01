@@ -1,3 +1,16 @@
+CHANGELOG for 1.9.0
+===================
+This changelog references the relevant changes (new features, changes and bugs) done in 1.9.0 versions.
+* 1.9.0 (2016-02-15)
+ * Filter records by teams
+ * Pipeline forecast widget and report
+ * Contexts for all activities
+ * Account activities
+ * Unread email widget for the sidebar panel
+ * Activities are available in the Merge Accounts dialog, allowing you to specify merge strategy for every type of activity
+ * Filter emails by correspondent on the My Emails page
+ * Segment Magento customers by coupons and discounts applied to their orders
+
 CHANGELOG for 1.8.0
 ===================
 This changelog references the relevant changes (new features, changes and bugs) done in 1.8.0 versions.
