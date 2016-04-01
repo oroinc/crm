@@ -8,6 +8,7 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
@@ -142,7 +143,7 @@ class OroCRMAccountBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'merge'     => ['display' => true],
                     'dataaudit' => ['auditable' => true]
                 ]
