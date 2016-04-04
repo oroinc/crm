@@ -102,21 +102,9 @@ class EmailCampaignController extends Controller
      */
     protected function update(EmailCampaign $entity)
     {
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
+        return $this->get('oro_form.model.update_handler')->handleEntityUpdateRequest(
             $entity,
             $this->get('orocrm_campaign.email_campaign.form'),
-            function (EmailCampaign $entity) {
-                return array(
-                    'route' => 'orocrm_email_campaign_update',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
-            function (EmailCampaign $entity) {
-                return array(
-                    'route' => 'orocrm_email_campaign_view',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
             $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message'),
             $this->get('orocrm_campaign.form.handler.email_campaign'),
             function (EmailCampaign $entity, FormInterface $form, Request $request) {
