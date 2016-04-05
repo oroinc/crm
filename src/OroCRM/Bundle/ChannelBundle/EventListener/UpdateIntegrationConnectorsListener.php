@@ -4,15 +4,15 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
 
-class ChannelSaveSucceedListener
+class UpdateIntegrationConnectorsListener
 {
     /** @var SettingsProvider */
     protected $settingsProvider;
@@ -33,7 +33,7 @@ class ChannelSaveSucceedListener
     /**
      * @param ChannelSaveEvent $event
      */
-    public function onChannelSucceedSave(ChannelSaveEvent $event)
+    public function onChannelSave(ChannelSaveEvent $event)
     {
         /** @var Channel $channel */
         $channel    = $event->getChannel();
@@ -44,8 +44,6 @@ class ChannelSaveSucceedListener
             $connectors = $this->getConnectors($entities);
 
             $dataSource->setConnectors($connectors);
-            $dataSource->setEnabled(Channel::STATUS_ACTIVE === $channel->getStatus());
-            $dataSource->setEditMode(Integration::EDIT_MODE_DISALLOW);
 
             $this->getManager()->persist($dataSource);
             $this->getManager()->flush();
