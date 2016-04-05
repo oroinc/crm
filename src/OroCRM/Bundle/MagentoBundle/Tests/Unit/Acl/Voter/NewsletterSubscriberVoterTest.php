@@ -188,7 +188,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
         if ($hasCustomer) {
             $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
 
-            $newsletterSubscriber->expects($this->atLeastOnce())
+            $newsletterSubscriber->expects($this->any())
                 ->method('getCustomer')
                 ->will($this->returnValue($customer));
 

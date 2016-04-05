@@ -129,7 +129,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
             ->will($this->returnValue($channel));
 
         if ($originId) {
-            $customer->expects($this->once())
+            $customer->expects($this->any())
                 ->method('getOriginId')
                 ->will($this->returnValue($originId));
         }
