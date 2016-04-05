@@ -12,16 +12,16 @@ services:
     orocrm_activiy_contact.listener.activity_contact_migration:
         class: %orocrm_activiy_contact.listener.activity_contact_migration.class%
         arguments:
-            - @oro_entity_extend.migration.entity_metadata_helper
-            - @orocrm_activity_contact.provider
+            - "@oro_entity_extend.migration.entity_metadata_helper"
+            - "@orocrm_activity_contact.provider"
         tags:
             - { name: kernel.event_listener, event: oro_migration.post_up, method: onPostUp, priority: -100 }
 
     orocrm_activity_contact.entity_config_dumper.extension:
         class: %orocrm_activity_contact.entity_config_dumper.extension.class%
         arguments:
-            - @oro_entity_config.config_manager
-            - @orocrm_activity_contact.provider
+            - "@oro_entity_config.config_manager"
+            - "@orocrm_activity_contact.provider"
         tags:
             - { name: oro_entity_extend.entity_config_dumper_extension }
 
@@ -31,8 +31,8 @@ services:
     orocrm_activity_contact.listener.activity_listener:
         class: %orocrm_activity_contact.listener.activity_listener.class%
         arguments:
-            - @orocrm_activity_contact.provider
-            - @oro_entity.doctrine_helper
+            - "@orocrm_activity_contact.provider"
+            - "@oro_entity.doctrine_helper"
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
             - { name: kernel.event_listener, event: oro_activity.remove_activity, method: onRemoveActivity }
@@ -42,23 +42,23 @@ services:
     orocrm_activity_contact.email_activity_direction.provider:
         class: %orocrm_activity_contact.email_activity_direction.provider.class%
         arguments:
-            - @oro_entity_config.provider.entity
-            - @oro_entity.doctrine_helper
-            - @oro_email.email_holder_helper
+            - "@oro_entity_config.provider.entity"
+            - "@oro_entity.doctrine_helper"
+            - "@oro_email.email_holder_helper"
         tags:
             - {name: orocrm_activity_direction.provider}
 
     orocrm_activity_contact.call_activity_direction.provider:
         class: %orocrm_activity_contact.call_activity_direction.provider.class%
         arguments:
-            - @oro_activity.manager
+            - "@oro_activity.manager"
         tags:
            - {name: orocrm_activity_direction.provider}
 
     orocrm_activity_contact.entity_activity_contact_data_provider:
         class: %orocrm_activity_contact.entity_activity_contact_data_provider.class%
         arguments:
-            - @oro_entity_config.config_manager
+            - "@oro_entity_config.config_manager"
 
     orocrm_activity_contact.placeholder.filter:
         class: %orocrm_activity_contact.placeholder.filter.class%

@@ -25,9 +25,9 @@ services:
         class: %orocrm_contact_us.contact_request.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_contact_us.contact_request.form
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact_us.contact_request.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact_us.provider.phone.abstract_contact_request:
         class: %orocrm_contact_us.provider.phone.abstract_contact_request.class%

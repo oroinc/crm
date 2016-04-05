@@ -5,92 +5,92 @@ definitions:
         entity: Oro\Bundle\EmailBundle\Entity\EmailBody
         order: 150
         actions_configuration:
-            - @find_entity:
+            - '@find_entity':
                 class: Oro\Bundle\EmailBundle\Entity\Email
                 attribute: $.email
                 where:
                     emailBody: $id
-            - @find_mailboxes:
+            - '@find_mailboxes':
                 attribute: $.mailboxes
                 process_type: 'lead'
                 email: $.email
-            - @tree:
+            - '@tree':
                 conditions:
-                    @not_empty: [$.mailboxes]
+                    '@not_empty': [$.mailboxes]
                 actions:
                     # Assign notes
-                    - @strip_html_tags:
+                    - '@strip_html_tags':
                         attribute: $.leadNotes
                         html: $bodyContent
-                    - @assign_value:
+                    - '@assign_value':
                         attribute: $.leadName
                         value: $.email.subject
-                    - @trans:
+                    - '@trans':
                         conditions:
-                            @empty: [$.leadName]
+                            '@empty': [$.leadName]
                         parameters:
                             id: 'oro.email.subject.no_subject.label'
                             attribute: $.leadName
-            - @traverse:
+            - '@traverse':
                 array: $.mailboxes
                 value: $.mailbox
                 actions:
-                    - @tree:
+                    - '@tree':
                         conditions:
-                            @gt: [$.email.sentAt, $.mailbox.updatedAt]
+                            '@gt': [$.email.sentAt, $.mailbox.updatedAt]
                         actions:
                             # Assign related contact
-                            - @tree:
+                            - '@tree':
                                 conditions:
-                                    @and:
-                                        - @equal:      [$.email.fromEmailAddress.hasOwner, true]
-                                        - @instanceof: [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
-                                        - @equal:      [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
+                                    '@and':
+                                        - '@equal':      [$.email.fromEmailAddress.hasOwner, true]
+                                        - '@instanceof': [$.email.fromEmailAddress.owner, OroCRM\Bundle\ContactBundle\Entity\Contact]
+                                        - '@equal':      [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
                                 actions:
-                                    - @assign_value:
+                                    - '@assign_value':
                                         attribute: $.leadContact
                                         value: $.email.fromEmailAddress.owner
                             # Assign names
-                            - @tree:
+                            - '@tree':
                                 conditions:
-                                    @and:
-                                        - @equal: [$.email.fromEmailAddress.hasOwner, true]
-                                        - @equal: [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
+                                    '@and':
+                                        - '@equal': [$.email.fromEmailAddress.hasOwner, true]
+                                        - '@equal': [$.email.fromEmailAddress.owner.organization, $.mailbox.organization]
                                 actions:
-                                    - @tree:
+                                    - '@tree':
                                         conditions:
-                                            @instanceof: [$.email.fromEmailAddress.owner, Oro\Bundle\LocaleBundle\Model\FirstNameInterface]
+                                            '@instanceof': [$.email.fromEmailAddress.owner, Oro\Bundle\LocaleBundle\Model\FirstNameInterface]
                                         actions:
-                                            - @assign_value:
+                                            - '@assign_value':
                                                 attribute: $.leadFirstName
                                                 value: $.email.fromEmailAddress.owner.firstName
-                                    - @tree:
+                                    - '@tree':
                                         conditions:
-                                            @instanceof: [$.email.fromEmailAddress.owner, Oro\Bundle\LocaleBundle\Model\LastNameInterface]
+                                            '@instanceof': [$.email.fromEmailAddress.owner, Oro\Bundle\LocaleBundle\Model\LastNameInterface]
                                         actions:
-                                            - @assign_value:
+                                            - '@assign_value':
                                                 attribute: $.leadLastName
                                                 value: $.email.fromEmailAddress.owner.lastName
                             #assign names if no owner exists for address
-                            - @tree:
+                            - '@tree':
                                 conditions:
-                                    @empty: [$.leadFirstName]
+                                    '@empty': [$.leadFirstName]
                                 actions:
-                                    - @parse_first_name_from_email_address:
+                                    - '@parse_first_name_from_email_address':
                                         attribute: $.leadFirstName
                                         email_address: $.email.fromName
-                            - @tree:
+                            - '@tree':
                                 conditions:
-                                    @empty: [$.leadLastName]
+                                    '@empty': [$.leadLastName]
                                 actions:
-                                    - @parse_last_name_from_email_address:
+                                    - '@parse_last_name_from_email_address':
                                         attribute: $.leadLastName
                                         email_address: $.email.fromName
-                            - @find_entity:
+                            - '@find_entity':
                                 attribute: $.leadSource
                                 class: Extend\Entity\EV_Lead_Source
                                 identifier: $.mailbox.processSettings.source
-                            - @create_entity:
+                            - '@create_entity':
                                 class: OroCRM\Bundle\SalesBundle\Entity\Lead
                                 attribute: $.leadEntity
                                 flush: false
@@ -105,6 +105,6 @@ definitions:
                                     firstName:      $.leadFirstName
                                     lastName:       $.leadLastName
                                     email:          $.email.fromEmailAddress.email
-                            - @add_email_activity_target:
+                            - '@add_email_activity_target':
                                 email:              $.email
                                 target_entity:      $.leadEntity

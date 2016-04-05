@@ -17,17 +17,17 @@ items:
 
     orocrm_user_tasks:
         template: OroCRMTaskBundle:Task:userTasks.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)"
         acl: orocrm_task_view
 
     orocrm_assign_task_button:
         template: OroCRMTaskBundle:Task:assignTaskButton.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)"
         acl: orocrm_task_create
 
     orocrm_assign_task_link:
         template: OroCRMTaskBundle:Task:assignTaskLink.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)"
         acl: orocrm_task_create
 
     orocrm_add_task_button:
@@ -40,5 +40,5 @@ items:
 
     orocrm_my_tasks_button:
         template: OroCRMTaskBundle:Task:myTasksButton.html.twig
-        applicable: @orocrm_task.placeholder.filter->isCalendarTasksVisible($entity$)
+        applicable: "@orocrm_task.placeholder.filter->isCalendarTasksVisible($entity$)"
         acl: orocrm_task_view

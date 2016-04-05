@@ -10,8 +10,8 @@ placeholders:
 items:
     orocrm_channel_additional_block_rfm:
         template: OroCRMAnalyticsBundle:Form:form.html.twig
-        applicable: @orocrm_analytics.placeholder.rfm_filter->isApplicable($entity$)
+        applicable: "@orocrm_analytics.placeholder.rfm_filter->isApplicable($entity$)"
 
     orocrm_channel_view_additional_block_rfm:
         action: OroCRMAnalyticsBundle:RFMCategory:channelView
-        applicable: @orocrm_analytics.placeholder.rfm_filter->isViewApplicable($entity$)
+        applicable: "@orocrm_analytics.placeholder.rfm_filter->isViewApplicable($entity$)"
