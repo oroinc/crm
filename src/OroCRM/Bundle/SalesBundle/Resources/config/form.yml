@@ -57,19 +57,19 @@ services:
         class: %orocrm_sales.opportunity.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.opportunity.form
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.opportunity.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.opportunity.form.handler.api:
         class: %orocrm_sales.opportunity.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.opportunity.form.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.opportunity.form.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.lead.form.type:
         class: %orocrm_sales.lead.form.type.class%
@@ -101,19 +101,19 @@ services:
         class: %orocrm_sales.lead.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.lead.form
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.lead.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.lead.form.handler.api:
         class: %orocrm_sales.lead.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.lead.form.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.lead.form.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.form.type.opportunity_select:
         class: %orocrm_sales.form.type.opportunity_select.class%
@@ -160,17 +160,17 @@ services:
         class: %orocrm_sales.salesfunnel.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.salesfunnel.form
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_sales.salesfunnel.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_sales.salesfunnel.form.handler.api:
         class: %orocrm_sales.salesfunnel.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.salesfunnel.form.api
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_sales.salesfunnel.form.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_sales.b2bcustomer.form.type:
         class: %orocrm_sales.b2bcustomer.form.type.class%
@@ -189,7 +189,7 @@ services:
 
     orocrm_sales.lead_mailbox_process_source.type:
         class: %orocrm_sales.lead_mailbox_process_source.type.class%
-        arguments: [@oro_entity_extend.enum_value_provider]
+        arguments:  ["@oro_entity_extend.enum_value_provider"]
         tags:
             - { name: form.type, alias: orocrm_sales_lead_mailbox_process_source }
 
@@ -213,19 +213,19 @@ services:
         class: %orocrm_sales.b2bcustomer.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.b2bcustomer.form
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.b2bcustomer.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.b2bcustomer.form.handler.api:
         class: %orocrm_sales.b2bcustomer.form.handler.class%
         scope: request
         arguments:
-            - @orocrm_sales.b2bcustomer.form.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @orocrm_channel.provider.request_channel
+            - "@orocrm_sales.b2bcustomer.form.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
 
     orocrm_sales.lead_data_channel_aware_select.type:
         class: %orocrm_sales.lead_data_channel_aware_select.type.class%

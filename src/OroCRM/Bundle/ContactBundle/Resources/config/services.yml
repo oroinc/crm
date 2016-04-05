@@ -68,16 +68,16 @@ services:
         class: %orocrm_contact.handler.contact.class%
         scope: request
         arguments:
-            - @orocrm_contact.form.contact
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact.form.contact"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.contact.manager:
         class: %orocrm_contact.contact.manager.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     # Form type
     orocrm_contact.form.type.contact_select:
@@ -89,9 +89,9 @@ services:
         class: %orocrm_contact.handler.group.class%
         scope: request
         arguments:
-            - @orocrm_contact.form.group
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact.form.group"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.form.type.group:
         class: %orocrm_contact.type.group.class%
@@ -104,15 +104,15 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.class%
-            - @doctrine.orm.entity_manager
-            - @oro_attachment.manager
+            - "@doctrine.orm.entity_manager"
+            - "@oro_attachment.manager"
 
     orocrm_contact.contact_address.manager.api:
         class: %orocrm_contact.contact_address.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.contact_address.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.form.type.contact.api:
         class: %orocrm_contact.form.type.contact.api.class%
@@ -132,9 +132,9 @@ services:
         class: %orocrm_contact.handler.contact.class%
         scope: request
         arguments:
-            - @orocrm_contact.form.contact.api
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact.form.contact.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     # Group API
     orocrm_contact.group.manager.api:
@@ -142,7 +142,7 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.group.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.form.type.group.api:
         class: %orocrm_contact.form.type.group.api.class%
@@ -159,9 +159,9 @@ services:
         class: %orocrm_contact.handler.group.class%
         scope: request
         arguments:
-            - @orocrm_contact.form.group.api
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact.form.group.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.contact_address.form:
         class: Symfony\Component\Form\Form
@@ -177,9 +177,9 @@ services:
         class: %oro_address.form.handler.address.class%
         scope: request
         arguments:
-            - @orocrm_contact.contact_address.form
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_contact.contact_address.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.form.autocomplete.contact.search_handler:
         parent: oro_form.autocomplete.full_name.search_handler
@@ -197,7 +197,7 @@ services:
     orocrm_contact.subscriber.contact_listener:
         class: %orocrm_contact.subscriber.contact_listener.class%
         arguments:
-            - @service_container
+            - "@service_container"
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -213,8 +213,8 @@ services:
     orocrm_contact.activity_widget_provider:
         class: %orocrm_contact.activity_widget_provider.class%
         arguments:
-           - @oro_entity.entity_identifier_accessor
-           - @oro_ui.twig.tab_extension
+           - "@oro_entity.entity_identifier_accessor"
+           - "@oro_ui.twig.tab_extension"
            - 'contact_activity_tab_panel'
            - %orocrm_contact.entity.class%
         tags:
@@ -228,8 +228,8 @@ services:
     orocrm_contact.provider.email_recipients:
         class: %orocrm_contact.provider.email_recipients.class%
         arguments:
-            - @doctrine
-            - @oro_email.provider.email_recipients.helper
+            - "@doctrine"
+            - "@oro_email.provider.email_recipients.helper"
         tags:
             - { name: oro_email.recipients_provider, priority: 20 }
 
@@ -244,16 +244,16 @@ services:
     orocrm_contact.handler.contact_email_api:
         class: %orocrm_contact.handler.contact_email_api.class%
         arguments:
-            - @doctrine.orm.entity_manager
-            - @oro_security.security_facade
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
     orocrm_contact.handler.contact_phone_api:
         class: %orocrm_contact.handler.contact_phone_api.class%
         arguments:
-            - @doctrine.orm.entity_manager
-            - @oro_security.security_facade
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
         tags:
             - { name: oro_entity.form.entity_field.handler }
 
@@ -262,14 +262,14 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.phone.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.contact_email.manager.api:
         class: %orocrm_contact.contact_email.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_contact.entity.email.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_contact.validator.contact_email_delete:
         class: %orocrm_contact.validator.contact_email_delete.class%

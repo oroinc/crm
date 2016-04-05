@@ -30,7 +30,7 @@ services:
         parent: oro_form.type.api
         arguments:
             - 'orocrm_marketing_list_removed_item_api'
-            - @orocrm_marketing_list.form.type.marketing_list_removed_item
+            - "@orocrm_marketing_list.form.type.marketing_list_removed_item"
         tags:
             - { name: form.type, alias: orocrm_marketing_list_removed_item_api }
 
@@ -46,7 +46,7 @@ services:
         parent: oro_form.form_handler.api
         scope: request
         calls:
-            - [setForm, [@orocrm_marketing_list.form.marketing_list_removed_item]]
+            - [setForm, ['@orocrm_marketing_list.form.marketing_list_removed_item']]
 
     orocrm_marketing_list.form.type.marketing_list_unsubscribed_item:
         class: %orocrm_marketing_list.form.type.marketing_list_unsubscribed_item.class%
@@ -57,7 +57,7 @@ services:
         parent: oro_form.type.api
         arguments:
             - 'orocrm_marketing_list_unsubscribed_item_api'
-            - @orocrm_marketing_list.form.type.marketing_list_unsubscribed_item
+            - "@orocrm_marketing_list.form.type.marketing_list_unsubscribed_item"
         tags:
             - { name: form.type, alias: orocrm_marketing_list_unsubscribed_item_api }
 
@@ -73,22 +73,22 @@ services:
         parent: oro_form.form_handler.api
         scope: request
         calls:
-            - [setForm, [@orocrm_marketing_list.form.marketing_list_unsubscribed_item]]
+            - [setForm,  ["@orocrm_marketing_list.form.marketing_list_unsubscribed_item"]]
 
     orocrm_marketing_list.form.handler.marketing_list:
         class: %orocrm_marketing_list.form.handler.marketing_list.class%
         scope: request
         arguments:
-            - @orocrm_marketing_list.form.marketing_list
-            - @request
-            - @doctrine
-            - @validator
-            - @translator
+            - "@orocrm_marketing_list.form.marketing_list"
+            - "@request"
+            - "@doctrine"
+            - "@validator"
+            - "@translator"
 
     orocrm_marketing_list.form.type.entity_choice:
         class: %orocrm_marketing_list.form.type.entity_choice.class%
         arguments:
-            - @orocrm_marketing_list.entity_provider.contact_information
+            - "@orocrm_marketing_list.entity_provider.contact_information"
         tags:
             - { name: form.type, alias: orocrm_marketing_list_contact_information_entity_choice }
 

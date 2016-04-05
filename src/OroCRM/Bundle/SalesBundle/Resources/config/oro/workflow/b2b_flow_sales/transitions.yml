@@ -52,9 +52,9 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
-                        - @create_date:
+                        - '@create_date':
                             conditions:
-                                @empty: $close_date
+                                '@empty': $close_date
                             parameters:
                                 attribute: $close_date
             close_as_lost:
@@ -84,13 +84,13 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                     init_actions:
-                        - @assign_value:
+                        - '@assign_value':
                             conditions:
-                                @not_empty: $close_reason
+                                '@not_empty': $close_reason
                             parameters: [$close_reason_name, $close_reason.name]
-                        - @create_date:
+                        - '@create_date':
                             conditions:
-                                @empty: $close_date
+                                '@empty': $close_date
                             parameters:
                                 attribute: $close_date
             requalify_lost:
