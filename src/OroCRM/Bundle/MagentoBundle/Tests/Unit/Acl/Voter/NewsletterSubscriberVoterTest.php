@@ -80,9 +80,30 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
 
         return [
             // has not applicable channels
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['VIEW'], false, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['CREATE'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['EDIT'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['VIEW'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_ABSTAIN,
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['CREATE'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_DENIED,
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['EDIT'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_DENIED,
+            ],
             [
                 $this->getObjectIdentity($objectIdentityClass, $className),
                 $objectIdentityClass,
