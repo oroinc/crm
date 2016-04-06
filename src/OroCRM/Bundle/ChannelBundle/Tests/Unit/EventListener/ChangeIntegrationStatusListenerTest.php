@@ -46,19 +46,38 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
         unset($this->entity, $this->integration);
     }
 
-    public function testActivateIntegrationWhenChannelActivated()
+    public function testActivateIntegrationWhenChannelActivatedAndPreviousEnableNotDefined()
     {
         $this->prepareEvent();
 
         $this->entity->setStatus(true);
 
         $this->integration->setEnabled(false);
+        $this->integration->setPreviouslyEnabled(null);
         $this->integration->setEditMode(Integration::EDIT_MODE_DISALLOW);
 
         $channelSaveSucceedListener = $this->getListener();
         $channelSaveSucceedListener->onChannelStatusChange($this->event);
 
         $this->assertTrue($this->integration->isEnabled());
+        $this->assertEquals(Integration::EDIT_MODE_ALLOW, $this->integration->getEditMode());
+    }
+
+    public function testSetPreviousEnableIntegrationWhenChannelActivatedAndPreviousEnableDefined()
+    {
+        $this->prepareEvent();
+
+        $this->entity->setStatus(true);
+
+        $this->integration->setEnabled(false);
+        $this->integration->setPreviouslyEnabled(false);
+        $this->integration->setEditMode(Integration::EDIT_MODE_DISALLOW);
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelStatusChange($this->event);
+
+        $this->assertFalse($this->integration->isEnabled());
+        $this->assertFalse($this->integration->getPreviouslyEnabled());
         $this->assertEquals(Integration::EDIT_MODE_ALLOW, $this->integration->getEditMode());
     }
 
@@ -76,6 +95,22 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->integration->isEnabled());
         $this->assertEquals(Integration::EDIT_MODE_DISALLOW, $this->integration->getEditMode());
+    }
+
+    public function testUpdatePreviouslyEnabledWhenChannelDeactivated()
+    {
+        $this->prepareEvent();
+
+        $this->entity->setStatus(false);
+
+        $this->integration->setEnabled(true);
+        $this->integration->setPreviouslyEnabled(null);
+        $this->integration->setEditMode(Integration::EDIT_MODE_ALLOW);
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelStatusChange($this->event);
+
+        $this->assertTrue($this->integration->getPreviouslyEnabled());
     }
 
     protected function prepareEvent()
