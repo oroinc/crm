@@ -80,11 +80,45 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
 
         return [
             // has not applicable channels
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['VIEW'], false, false, CustomerVoter::ACCESS_ABSTAIN],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['CREATE'], false, false, CustomerVoter::ACCESS_DENIED],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['EDIT'], false, false, CustomerVoter::ACCESS_DENIED],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['DELETE'], false, false, CustomerVoter::ACCESS_ABSTAIN],
-            [$this->getObjectIdentity($objectIdentityClass, $className), $objectIdentityClass, ['ASSIGN'], false, false, CustomerVoter::ACCESS_ABSTAIN],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass, ['VIEW'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['CREATE'],
+                false,
+                false,
+                CustomerVoter::ACCESS_DENIED
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['EDIT'],
+                false,
+                false,
+                CustomerVoter::ACCESS_DENIED
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['DELETE'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['ASSIGN'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
             // channel not applicable
             [$this->getCustomer(), $className, ['VIEW'], true, false, CustomerVoter::ACCESS_ABSTAIN],
             [$this->getCustomer(), $className, ['CREATE'], true, false, CustomerVoter::ACCESS_DENIED],

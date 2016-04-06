@@ -9,11 +9,8 @@ class ChannelDeleteEventTest extends ChannelEventAbstractTest
 {
     public function testConstructorRequiresChannel()
     {
-        if($this->getPhpVersion() < self::PHP_VERSION_7) {
-            $this->setExpectedException('PHPUnit_Framework_Error');
-        } else {
-            $this->setExpectedException('TypeError');
-        }
+        $expectedException = $this->getExpectedExceptionCode();
+        $this->setExpectedException($expectedException);
 
         new ChannelDeleteEvent(null);
     }

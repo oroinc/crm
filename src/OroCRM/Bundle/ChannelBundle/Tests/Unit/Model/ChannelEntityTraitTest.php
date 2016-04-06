@@ -27,14 +27,11 @@ class ChannelEntityTraitTest extends ChannelEventAbstractTest
         $this->assertSame($channel, $stub->getDataChannel());
         $this->assertAttributeSame($channel, 'dataChannel', $stub);
     }
-    
+
     public function testSetterHasTypeHint()
     {
-        if($this->getPhpVersion() < self::PHP_VERSION_7) {
-            $this->setExpectedException('PHPUnit_Framework_Error');
-        } else {
-            $this->setExpectedException('TypeError');
-        }
+        $expectedException = $this->getExpectedExceptionCode();
+        $this->setExpectedException($expectedException);
 
         $stub = new StubChannelEntity();
         $stub->setDataChannel('testString');
