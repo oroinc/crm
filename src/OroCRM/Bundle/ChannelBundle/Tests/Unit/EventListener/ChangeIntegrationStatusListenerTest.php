@@ -113,6 +113,38 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->integration->getPreviouslyEnabled());
     }
 
+    public function testShouldNotUpdateEditModeIfIntegrationHasForcedOneOnDeactivated()
+    {
+        $this->prepareEvent();
+
+        $this->entity->setStatus(false);
+
+        $this->integration->setEnabled(true);
+        $this->integration->setPreviouslyEnabled(null);
+        $this->integration->setEditMode(Integration::EDIT_MODE_FORCED_ALLOW);
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelStatusChange($this->event);
+
+        $this->assertSame(Integration::EDIT_MODE_FORCED_ALLOW, $this->integration->getEditMode());
+    }
+
+    public function testShouldNotUpdateEditModeIfIntegrationHasForcedOneOnActivated()
+    {
+        $this->prepareEvent();
+
+        $this->entity->setStatus(true);
+
+        $this->integration->setEnabled(false);
+        $this->integration->setPreviouslyEnabled(null);
+        $this->integration->setEditMode(Integration::EDIT_MODE_FORCED_ALLOW);
+
+        $channelSaveSucceedListener = $this->getListener();
+        $channelSaveSucceedListener->onChannelStatusChange($this->event);
+
+        $this->assertSame(Integration::EDIT_MODE_FORCED_ALLOW, $this->integration->getEditMode());
+    }
+
     protected function prepareEvent()
     {
         $this->event->expects($this->atLeastOnce())

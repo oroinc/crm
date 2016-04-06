@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
 use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -41,11 +42,12 @@ class ChangeIntegrationStatusListener
                 ;
 
                 $dataSource->setEnabled($enabled);
-                $dataSource->setEditMode(Integration::EDIT_MODE_ALLOW);
+
+                EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_ALLOW);
             } else {
                 $dataSource->setPreviouslyEnabled($dataSource->isEnabled());
                 $dataSource->setEnabled(false);
-                $dataSource->setEditMode(Integration::EDIT_MODE_DISALLOW);
+                EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_DISALLOW);
             }
 
             $this->getManager()->persist($dataSource);
