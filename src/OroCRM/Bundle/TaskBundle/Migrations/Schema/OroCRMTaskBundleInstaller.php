@@ -8,6 +8,8 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_9\AddActivityAssociations;
@@ -15,13 +17,19 @@ use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_9\AddActivityAssociations;
 class OroCRMTaskBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    CommentExtensionAwareInterface
+    CommentExtensionAwareInterface,
+    ExtendExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
     /** @var CommentExtension */
     protected $comment;
+
+    /**
+     * @var ExtendExtension
+     */
+    protected $extendExtension;
 
     /**
      * @param ActivityExtension $activityExtension
@@ -40,11 +48,19 @@ class OroCRMTaskBundleInstaller implements
     }
 
     /**
+     * @param ExtendExtension $extendExtension
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v2_0';
     }
 
     /**
@@ -62,6 +78,14 @@ class OroCRMTaskBundleInstaller implements
         /** Add activity association */
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
+
+        /** Add status extended field **/
+        $this->extendExtension->addEnumField(
+            $schema,
+            'orocrm_task',
+            'status',
+            'task_status'
+        );
 
         /** Add comment relation */
         $this->comment->addCommentAssociation($schema, 'orocrm_task');
