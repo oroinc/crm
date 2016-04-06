@@ -3,8 +3,9 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Model;
 
 use OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Model\StubChannelEntity;
+use OroCRM\Bundle\ChannelBundle\Tests\Unit\Event\ChannelEventAbstractTest;
 
-class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
+class ChannelEntityTraitTest extends ChannelEventAbstractTest
 {
     public function testConstruction()
     {
@@ -26,12 +27,15 @@ class ChannelEntityTraitTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($channel, $stub->getDataChannel());
         $this->assertAttributeSame($channel, 'dataChannel', $stub);
     }
-
-    /**
-     * @expectedException \TypeError
-     */
+    
     public function testSetterHasTypeHint()
     {
+        if($this->getPhpVersion() < self::PHP_VERSION_7) {
+            $this->setExpectedException('PHPUnit_Framework_Error');
+        } else {
+            $this->setExpectedException('TypeError');
+        }
+
         $stub = new StubChannelEntity();
         $stub->setDataChannel('testString');
     }

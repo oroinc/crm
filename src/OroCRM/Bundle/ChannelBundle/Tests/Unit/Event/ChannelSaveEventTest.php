@@ -5,13 +5,16 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelSaveEventTest extends \PHPUnit_Framework_TestCase
+class ChannelSaveEventTest extends ChannelEventAbstractTest
 {
-    /**
-     * @expectedException \TypeError
-     */
     public function testConstructorRequiresChannel()
     {
+        if($this->getPhpVersion() < self::PHP_VERSION_7) {
+            $this->setExpectedException('PHPUnit_Framework_Error');
+        } else {
+            $this->setExpectedException('TypeError');
+        }
+
         new ChannelSaveEvent(null);
     }
 

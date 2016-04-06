@@ -5,13 +5,16 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelDeleteEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelDeleteEventTest extends \PHPUnit_Framework_TestCase
+class ChannelDeleteEventTest extends ChannelEventAbstractTest
 {
-    /**
-     * @expectedException \TypeError
-     */
     public function testConstructorRequiresChannel()
     {
+        if($this->getPhpVersion() < self::PHP_VERSION_7) {
+            $this->setExpectedException('PHPUnit_Framework_Error');
+        } else {
+            $this->setExpectedException('TypeError');
+        }
+
         new ChannelDeleteEvent(null);
     }
 
