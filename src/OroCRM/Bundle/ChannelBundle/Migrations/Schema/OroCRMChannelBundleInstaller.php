@@ -5,13 +5,14 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
-use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -322,7 +323,7 @@ class OroCRMChannelBundleInstaller implements Installation, ExtendExtensionAware
                     'owner'     => ExtendScope::OWNER_CUSTOM
                 ],
                 'datagrid' => [
-                    'is_visible' => false
+                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE
                 ],
                 'form' => [
                     'is_enabled' => true,
