@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
+use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
 use OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
@@ -40,7 +40,7 @@ class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
     /**
      * {@inheritdoc}
      */
-    public function onChannelSave(ChannelSaveEvent $event)
+    public function onChannelSave(AbstractEvent $event)
     {
         $channel = $event->getChannel();
 
