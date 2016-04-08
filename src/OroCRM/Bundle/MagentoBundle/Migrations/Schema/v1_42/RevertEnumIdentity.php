@@ -22,7 +22,7 @@ class RevertEnumIdentity implements Migration
             new UpdateEntityConfigFieldValueQuery($entityName, 'id', 'importexport', 'identity', true)
         );
         $queries->addPostQuery(
-            new UpdateEntityConfigFieldValueQuery($entityName, 'name', 'importexport', 'identity', null)
+            new UpdateEntityConfigFieldValueQuery($entityName, 'name', 'importexport', 'identity', false)
         );
     }
 }
