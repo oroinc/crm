@@ -24,8 +24,8 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
      * Modifies the given schema to apply necessary changes of a database
      * The given query bag can be used to apply additional SQL queries before and after schema changes
      *
-     * @param \Doctrine\DBAL\Schema\Schema $schema
-     * @param \Oro\Bundle\MigrationBundle\Migration\QueryBag $queries
+     * @param Schema $schema
+     * @param QueryBag $queries
      * @return void
      */
     public function up(Schema $schema, QueryBag $queries)

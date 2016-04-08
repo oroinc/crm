@@ -2,39 +2,35 @@
 
 namespace OroCRM\Bundle\TaskBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 
-class LoadTaskStatusData extends AbstractFixture
+class LoadTaskStatusData extends AbstractEnumFixture
 {
-    /** @var array */
-    protected $data = [
-        'Open' => true,
-        'In Progress' => false,
-        'Closed' => false
-    ];
+    /**
+     * Returns an array of possible enum values, where array key is an id and array value is an English translation
+     *
+     * @return array
+     */
+    protected function getData()
+    {
+        return [
+            'Open' => true,
+            'In Progress' => false,
+            'Closed' => false
+        ];
+    }
 
     /**
-     * Load data fixtures with the passed EntityManager
+     * Returns an enum code of an extend entity
      *
-     * @param ObjectManager $manager
+     * @return string
      */
-    public function load(ObjectManager $manager)
+    protected function getEnumCode()
     {
-        $className = ExtendHelper::buildEnumValueClassName('task_status');
-
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
-
-        $priority = 1;
-        foreach ($this->data as $name => $isDefault) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, $isDefault);
-            $manager->persist($enumOption);
-        }
-
-        $manager->flush();
+        return 'task_status';
     }
 }
