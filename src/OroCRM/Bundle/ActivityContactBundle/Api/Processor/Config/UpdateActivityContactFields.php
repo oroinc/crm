@@ -13,7 +13,6 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
- * Excludes these fields from "create" and "update" actions because it is computed fields.
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
@@ -113,12 +112,6 @@ class UpdateActivityContactFields implements ProcessorInterface
         foreach ($renameMap as $fieldName => $resultFieldName) {
             if ($definition->hasField($fieldName) && !$definition->hasField($resultFieldName)) {
                 $field = $definition->getField($fieldName);
-                if (!$field->isExcluded()
-                    && !$field->hasExcluded()
-                    && in_array($targetAction, $this->excludedActions, true)
-                ) {
-                    $field->setExcluded();
-                }
                 if (!$field->hasPropertyPath()) {
                     $definition->removeField($fieldName);
                     $field->setPropertyPath($fieldName);
