@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Utils\EditModeUtils;
-use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -26,9 +26,9 @@ class ChangeIntegrationStatusListener
     }
 
     /**
-     * @param AbstractEvent $event
+     * @param ChannelChangeStatusEvent $event
      */
-    public function onChannelStatusChange(AbstractEvent $event)
+    public function onChannelStatusChange(ChannelChangeStatusEvent $event)
     {
         /** @var Channel $channel */
         $channel    = $event->getChannel();
@@ -38,8 +38,7 @@ class ChangeIntegrationStatusListener
             if (Channel::STATUS_ACTIVE === $channel->getStatus()) {
                 $enabled = null !== $dataSource->getPreviouslyEnabled() ?
                     $dataSource->getPreviouslyEnabled() :
-                    true
-                ;
+                    true;
 
                 $dataSource->setEnabled($enabled);
 

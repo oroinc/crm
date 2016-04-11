@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
 use Doctrine\ORM\EntityManager;
 
-use OroCRM\Bundle\ChannelBundle\Event\AbstractEvent;
+use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
@@ -31,9 +31,9 @@ class UpdateIntegrationConnectorsListener
     }
 
     /**
-     * @param AbstractEvent $event
+     * @param ChannelSaveEvent $event
      */
-    public function onChannelSave(AbstractEvent $event)
+    public function onChannelSave(ChannelSaveEvent $event)
     {
         /** @var Channel $channel */
         $channel    = $event->getChannel();
