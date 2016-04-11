@@ -13,6 +13,7 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
+ * Excludes these fields from "create" and "update" actions because it is computed fields.
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
@@ -22,14 +23,22 @@ class UpdateActivityContactFields implements ProcessorInterface
     /** @var  ActivityContactProvider */
     protected $activityContactProvider;
 
+    /** @var string[] */
+    protected $excludedActions;
+
     /**
      * @param ConfigManager           $configManager
      * @param ActivityContactProvider $activityContactProvider
+     * @param string                  $excludedActions
      */
-    public function __construct(ConfigManager $configManager, ActivityContactProvider $activityContactProvider)
-    {
+    public function __construct(
+        ConfigManager $configManager,
+        ActivityContactProvider $activityContactProvider,
+        $excludedActions
+    ) {
         $this->configManager = $configManager;
         $this->activityContactProvider = $activityContactProvider;
+        $this->excludedActions = $excludedActions;
     }
 
     /**
@@ -51,7 +60,7 @@ class UpdateActivityContactFields implements ProcessorInterface
             return;
         }
 
-        $this->updateFields($definition);
+        $this->updateFields($definition, $context->getTargetAction());
     }
 
     /**
@@ -89,8 +98,9 @@ class UpdateActivityContactFields implements ProcessorInterface
 
     /**
      * @param EntityDefinitionConfig $definition
+     * @param string|null            $targetAction
      */
-    protected function updateFields(EntityDefinitionConfig $definition)
+    protected function updateFields(EntityDefinitionConfig $definition, $targetAction)
     {
         $renameMap = [
             ActivityScope::LAST_CONTACT_DATE     => 'lastContactedDate',
@@ -103,6 +113,12 @@ class UpdateActivityContactFields implements ProcessorInterface
         foreach ($renameMap as $fieldName => $resultFieldName) {
             if ($definition->hasField($fieldName) && !$definition->hasField($resultFieldName)) {
                 $field = $definition->getField($fieldName);
+                if (!$field->isExcluded()
+                    && !$field->hasExcluded()
+                    && in_array($targetAction, $this->excludedActions, true)
+                ) {
+                    $field->setExcluded();
+                }
                 if (!$field->hasPropertyPath()) {
                     $definition->removeField($fieldName);
                     $field->setPropertyPath($fieldName);
