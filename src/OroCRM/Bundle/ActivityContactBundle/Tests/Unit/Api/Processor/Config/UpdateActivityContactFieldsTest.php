@@ -5,10 +5,10 @@ namespace OroCRM\Bundle\ActivityContactBundle\Bundle\Tests\Unit\Api\Processor\Co
 use Oro\Bundle\ApiBundle\Tests\Unit\Processor\Config\ConfigProcessorTestCase;
 use Oro\Bundle\EntityConfigBundle\Config\Config;
 use Oro\Bundle\EntityConfigBundle\Config\Id\EntityConfigId;
-use OroCRM\Bundle\ActivityContactBundle\Api\Processor\Config\RenameActivityContactFields;
+use OroCRM\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields;
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 
-class RenameActivityContactFieldsTest extends ConfigProcessorTestCase
+class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $configManager;
@@ -31,7 +31,7 @@ class RenameActivityContactFieldsTest extends ConfigProcessorTestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->processor = new RenameActivityContactFields(
+        $this->processor = new UpdateActivityContactFields(
             $this->configManager,
             $this->activityContactProvider
         );

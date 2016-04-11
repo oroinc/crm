@@ -14,7 +14,7 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
  */
-class RenameActivityContactFields implements ProcessorInterface
+class UpdateActivityContactFields implements ProcessorInterface
 {
     /** @var ConfigManager */
     protected $configManager;
@@ -51,7 +51,7 @@ class RenameActivityContactFields implements ProcessorInterface
             return;
         }
 
-        $this->renameFields($definition);
+        $this->updateFields($definition);
     }
 
     /**
@@ -90,7 +90,7 @@ class RenameActivityContactFields implements ProcessorInterface
     /**
      * @param EntityDefinitionConfig $definition
      */
-    protected function renameFields(EntityDefinitionConfig $definition)
+    protected function updateFields(EntityDefinitionConfig $definition)
     {
         $renameMap = [
             ActivityScope::LAST_CONTACT_DATE     => 'lastContactedDate',
