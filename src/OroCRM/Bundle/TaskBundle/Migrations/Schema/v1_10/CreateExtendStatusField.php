@@ -33,8 +33,8 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
         $this->extendExtension->addEnumField(
             $schema,
             'orocrm_task',
-            'status', // field name
-            'task_status' // enum code
+            'status',
+            'task_status'
         );
 
         $queries->addPostQuery(
