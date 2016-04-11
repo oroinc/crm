@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
+use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -19,6 +20,8 @@ use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
+use Symfony\Component\Translation\DataCollectorTranslator;
+use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,6 +75,16 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $logger;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChainEntityClassNameProvider
+     */
+    protected $chainEntityClassNameProvider;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DataCollectorTranslator
+     */
+    protected $translator;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -122,6 +135,14 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 
         $this->stepExecution->expects($this->any())->method('getJobExecution')
             ->will($this->returnValue($this->jobExecution));
+
+        $this->chainEntityClassNameProvider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translator = $this->getMockBuilder('Symfony\Component\Translation\DataCollectorTranslator')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->logger = new NullLogger();
     }
