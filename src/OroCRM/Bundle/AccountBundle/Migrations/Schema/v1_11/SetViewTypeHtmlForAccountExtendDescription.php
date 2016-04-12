@@ -4,30 +4,26 @@ namespace OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class SetViewTypeHtmlForAccountExtendDescription implements Migration, ContainerAwareInterface
+class MakeRichAccountExtendDescription implements Migration
 {
-    use ContainerAwareTrait;
-
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        /** @var ConfigManager $configManager */
-        $configManager = $this->container->get('oro_entity_config.config_manager');
-
-        $formProvider = $configManager->getProvider('view');
-        $config = $formProvider->getConfig('OroCRM\Bundle\AccountBundle\Entity\Account', 'extend_description');
-
-        $config->set('type', 'html');
-
-        $configManager->persist($config);
-        $configManager->flush();
+        $table = $schema->getTable('orocrm_account');
+        $column = $table->getColumn('extend_description');
+        $column->setOptions(
+            [
+                OroOptions::KEY => [
+                    'form' => ['type' => 'oro_resizeable_rich_text'],
+                    'view' => ['type' => 'html']
+                ]
+            ]
+        );
     }
 }
