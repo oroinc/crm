@@ -136,7 +136,8 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
         $this->stepExecution->expects($this->any())->method('getJobExecution')
             ->will($this->returnValue($this->jobExecution));
 
-        $this->chainEntityClassNameProvider = $this->getMockBuilder('Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider')
+        $this->chainEntityClassNameProvider = $this
+            ->getMockBuilder('Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider')
             ->disableOriginalConstructor()
             ->getMock();
 
