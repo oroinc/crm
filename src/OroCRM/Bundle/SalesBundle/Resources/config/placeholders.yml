@@ -15,11 +15,11 @@ placeholders:
 items:
     leads_launchpad:
         template:   OroCRMSalesBundle:Dashboard:leadsLaunchpad.html.twig
-        applicable: @orocrm_sales.provider.enitity_state->isEntityLeadEnabled()
+        applicable: "@orocrm_sales.provider.enitity_state->isEntityLeadEnabled()"
 
     opportunities_launchpad:
         template:   OroCRMSalesBundle:Dashboard:opportunitiesLaunchpad.html.twig
-        applicable: @orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()
+        applicable: "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
 
     orocrm_sales_account_channel_info:
         action: OroCRMSalesBundle:B2bCustomer:accountCustomersInfo

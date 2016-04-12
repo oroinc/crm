@@ -214,15 +214,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: o.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
         actions:
             view:
                 type:          navigate
@@ -542,7 +542,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -565,8 +565,8 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: l.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 contactName:
                     type: string
                     data_name: contactName
@@ -576,8 +576,8 @@ datagrid:
                     type: choice-business-unit
                     data_name: l.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -734,15 +734,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
@@ -881,7 +881,7 @@ datagrid:
                          field_options:
                              class: OroAddressBundle:Country
                              property: name
-                             query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                             query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
                  regionLabel:
                      type: string
@@ -1121,8 +1121,8 @@ datagrid:
                     data_name: c.owner
                     enabled: false                    
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 accountName:
                     type: string
                     data_name: accountName
@@ -1140,7 +1140,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 baRegionLabel:
                     type: string
@@ -1167,7 +1167,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 saRegionLabel:
                     type: string
@@ -1348,7 +1348,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
                     type: string

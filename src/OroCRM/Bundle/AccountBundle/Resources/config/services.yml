@@ -21,9 +21,9 @@ services:
     orocrm_account.form.type.account:
         class:                                      %orocrm_account.type.account.class%
         arguments:
-            - @router
-            - @oro_entity.entity_name_resolver
-            - @oro_security.security_facade
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_security.security_facade"
         tags:
             - { name: form.type, alias: orocrm_account }
 
@@ -31,9 +31,9 @@ services:
         class:                                      %orocrm_account.handler.account.class%
         scope: request
         arguments:
-            - @orocrm_account.form.account
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_account.form.account"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     # Form type
     orocrm_account.form.type.account_select:
@@ -47,14 +47,14 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_account.account.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_account.form.type.account.api:
         class:                                      %orocrm_account.type.account.api.class%
         arguments:
-            - @router
-            - @oro_entity.entity_name_resolver
-            - @oro_security.security_facade
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_security.security_facade"
         tags:
             - { name: form.type, alias: account }
 
@@ -68,9 +68,9 @@ services:
         class: %orocrm_account.handler.account.class%
         scope: request
         arguments:
-            - @orocrm_account.form.account.api
-            - @request
-            - @doctrine.orm.entity_manager
+            - "@orocrm_account.form.account.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler
@@ -83,8 +83,8 @@ services:
     orocrm_account.activity_widget_provider:
         class: %orocrm_account.activity_widget_provider.class%
         arguments:
-           - @oro_entity.entity_identifier_accessor
-           - @oro_ui.twig.tab_extension
+           - "@oro_entity.entity_identifier_accessor"
+           - "@oro_ui.twig.tab_extension"
            - 'account_activity_tab_panel'
            - %orocrm_account.account.entity.class%
         tags:
