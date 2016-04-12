@@ -298,17 +298,17 @@ services:
         parent: orocrm_magento.import_strategy.default_magento_import
         absract: true
         calls:
-            - [setLogger,  ["@oro_integration.logger.strategy"]]
-            - [setOwnerHelper,  ["@oro_integration.helper.default_owner_helper"]]
-            - [setAddressHelper,  ["@orocrm_magento.importexport.address_import_helper"]]
-            - [setChannelHelper,  ["@orocrm_channel.importexport.helper.channel"]]
+            - [setLogger, ["@oro_integration.logger.strategy"]]
+            - [setOwnerHelper, ["@oro_integration.helper.default_owner_helper"]]
+            - [setAddressHelper, ["@orocrm_magento.importexport.address_import_helper"]]
+            - [setChannelHelper, ["@orocrm_channel.importexport.helper.channel"]]
 
     orocrm_magento.import.strategy.customer.add_or_update:
         parent: orocrm_magento.import.strategy.abstract
         class: %orocrm_magento.import_strategy.customer.add_or_update.class%
         calls:
-            - [setChannelHelper,  ["@orocrm_channel.importexport.helper.channel"]]
-            - [setAddressHelper,  ["@orocrm_magento.importexport.address_import_helper"]]
+            - [setChannelHelper, ["@orocrm_channel.importexport.helper.channel"]]
+            - [setAddressHelper, ["@orocrm_magento.importexport.address_import_helper"]]
 
     orocrm_magento.import.strategy.newsletter_subscriber.add_or_update:
         parent: orocrm_magento.import.strategy.abstract
@@ -322,7 +322,7 @@ services:
         class: %orocrm_magento.import_strategy.region.add_or_update.class%
         parent: orocrm_magento.import.strategy.abstract
         calls:
-            - [setDoctrineHelper,  ["@orocrm_magento.importexport.doctrine_helper"]]
+            - [setDoctrineHelper, ["@orocrm_magento.importexport.doctrine_helper"]]
 
     orocrm_magento.import.strategy.store:
         parent: orocrm_magento.import_strategy.default_magento_import
@@ -361,8 +361,8 @@ services:
     orocrm_magento.importexport.processor.import_newsletter_subscriber:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.newsletter_subscriber.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.newsletter_subscriber.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.newsletter_subscriber.class%, alias: orocrm_magento.add_or_update_newsletter_subscriber }
@@ -370,8 +370,8 @@ services:
     orocrm_magento.importexport.processor.import_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.customer"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.customer.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.customer"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.customer.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.add_or_update_customer }
@@ -379,8 +379,8 @@ services:
     orocrm_magento.importexport.processor.import_guest_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.guest_customer"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.guest_customer.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.guest_customer"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.guest_customer.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.customer.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.customer.entity.class%, alias: orocrm_magento.import_guest_customer }
@@ -388,8 +388,8 @@ services:
     orocrm_magento.importexport.processor.import_customer_address:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.customer_address"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.customer_address.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.customer_address"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.customer_address.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.address.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.address.class%, alias: orocrm_magento.add_or_update_customer_address }
@@ -397,16 +397,16 @@ services:
     orocrm_magento.importexport.processor.import_region:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@oro_importexport.data_converter.default"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.region.add_or_update"]]
+            - [setDataConverter, ["@oro_importexport.data_converter.default"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.region.add_or_update"]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.region.entity.class%, alias: orocrm_magento.add_or_update_region }
 
     orocrm_magento.importexport.processor.import_cart:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.cart"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.cart.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.cart"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.cart.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.cart.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.cart.entity.class%, alias: orocrm_magento.add_or_update_cart }
@@ -414,8 +414,8 @@ services:
     orocrm_magento.importexport.processor.import_order:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.order"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.order.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.order"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.order.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.order.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.order.entity.class%, alias: orocrm_magento.add_or_update_order }
@@ -423,26 +423,26 @@ services:
     orocrm_magento.importexport.processor.import_order_with_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.order"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.order_with_customer.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.order"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.order_with_customer.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.order.class%]]
-            - [setContextRegistry,  ["@oro_importexport.context_registry"]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     orocrm_magento.importexport.processor.import_cart_with_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.cart"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.cart_with_customer.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.cart"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.cart_with_customer.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.cart.class%]]
-            - [setContextRegistry,  ["@oro_importexport.context_registry"]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     orocrm_magento.importexport.processor.import_newsletter_subscriber_with_customer:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
-            - [setStrategy,  ["@orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
+            - [setStrategy, ["@orocrm_magento.import_strategy.newsletter_subscriber_with_customer.add_or_update"]]
             - [setEntityName, [%orocrm_magento.entity.newsletter_subscriber.class%]]
-            - [setContextRegistry,  ["@oro_importexport.context_registry"]]
+            - [setContextRegistry, ["@oro_importexport.context_registry"]]
 
     orocrm_magento.importexport.normalizer.datetime:
         class: %orocrm_magento.importexport.normalizer.datetime.class%
@@ -472,7 +472,7 @@ services:
         class: %orocrm_magento.provider.initial_schedule_processor.class%
         parent: orocrm_magento.provider.initial_processor
         calls:
-            - [setDoctrineHelper,  ["@oro_entity.doctrine_helper"]]
+            - [setDoctrineHelper, ["@oro_entity.doctrine_helper"]]
         tags:
             - { name: oro_integration.sync_processor, integration: magento }
 
@@ -483,23 +483,23 @@ services:
     orocrm_magento.importexport.processor.context_order:
         parent: orocrm_magento.importexport.processor.context
         calls:
-            - [setStrategy,  ["@orocrm_magento.import.strategy.order.add_or_update"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.order.add_or_update"]]
 
     orocrm_magento.importexport.processor.context_cart:
         parent: orocrm_magento.importexport.processor.context
         calls:
-            - [setStrategy,  ["@orocrm_magento.import.strategy.cart.add_or_update"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.cart.add_or_update"]]
 
     orocrm_magento.importexport.processor.context_newsletter_subscriber:
         parent: orocrm_magento.importexport.processor.context
         calls:
-            - [setStrategy,  ["@orocrm_magento.import.strategy.newsletter_subscriber.add_or_update"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.newsletter_subscriber.add_or_update"]]
 
     orocrm_magento.importexport.processor.store:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.store"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.store"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.store"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.store"]]
             - [setEntityName, [%orocrm_magento.entity.store.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.store.class%, alias: orocrm_magento.store }
@@ -507,8 +507,8 @@ services:
     orocrm_magento.importexport.processor.website:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.website"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.website"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.website"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.website"]]
             - [setEntityName, [%orocrm_magento.entity.website.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.website.class%, alias: orocrm_magento.website }
@@ -516,8 +516,8 @@ services:
     orocrm_magento.importexport.processor.customer_group:
         parent: oro_integration.importexport.processor.import
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.customer_group"]]
-            - [setStrategy,  ["@orocrm_magento.import.strategy.customer_group"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.customer_group"]]
+            - [setStrategy, ["@orocrm_magento.import.strategy.customer_group"]]
             - [setEntityName, [%orocrm_magento.entity.customer_group.class%]]
         tags:
             - { name: oro_importexport.processor, type: import, entity: %orocrm_magento.entity.customer_group.class%, alias: orocrm_magento.customer_group }
@@ -526,21 +526,21 @@ services:
     orocrm_magento.importexport.processor.customer_export:
         parent: oro_integration.importexport.processor.export
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.customer"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.customer"]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.customer.class%, alias: orocrm_magento.customer_export }
 
     orocrm_magento.importexport.processor.customer_address_export:
         parent: oro_integration.importexport.processor.export
         calls:
-             - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.customer_address"]]
+             - [setDataConverter, ["@orocrm_magento.importexport.data_converter.customer_address"]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.address.class%, alias: orocrm_magento.customer_address_export }
 
     orocrm_magento.importexport.processor.newsletter_subscriber_export:
         parent: oro_integration.importexport.processor.export
         calls:
-            - [setDataConverter,  ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
+            - [setDataConverter, ["@orocrm_magento.importexport.data_converter.newsletter_subscriber"]]
         tags:
             - { name: oro_importexport.processor, type: export, entity: %orocrm_magento.entity.newsletter_subscriber.class%, alias: orocrm_magento.newsletter_subscriber_export }
 
@@ -551,30 +551,30 @@ services:
             - "@oro_integration.writer.persistent_batch_writer"
             - "@oro_importexport.field.database_helper"
         calls:
-            - [setLogger,  ["@oro_integration.logger.strategy"]]
+            - [setLogger, ["@oro_integration.logger.strategy"]]
 
     orocrm_magento.importexport.writer.abstract_export:
         class: %orocrm_magento.importexport.writer.abstract_export.class%
         parent: oro_integration.writer.persistent_batch_writer
         abstract: true
         calls:
-            - [setTransport,  ["@orocrm_magento.transport.soap_transport"]]
+            - [setTransport, ["@orocrm_magento.transport.soap_transport"]]
             - [setChannelClassName, [%oro_integration.entity.class%]]
 
     orocrm_magento.importexport.writer.customer:
         class: %orocrm_magento.importexport.writer.customer.class%
         parent: orocrm_magento.importexport.writer.abstract_export
         calls:
-            - [setStrategy,  ["@orocrm_magento.provider.strategy.two_way_sync.customer"]]
-            - [setStateHandler,  ["@orocrm_magento.customer_state_handler"]]
+            - [setStrategy, ["@orocrm_magento.provider.strategy.two_way_sync.customer"]]
+            - [setStateHandler, ["@orocrm_magento.customer_state_handler"]]
 
     orocrm_magento.importexport.writer.customer_address:
         class: %orocrm_magento.importexport.writer.customer_address.class%
         parent: orocrm_magento.importexport.writer.abstract_export
         calls:
             - [setMagentoRegionClass, [%orocrm_magento.entity.region.class%]]
-            - [setStrategy,  ["@orocrm_magento.provider.strategy.two_way_sync.customer_address"]]
-            - [setStateHandler,  ["@orocrm_magento.customer_state_handler"]]
+            - [setStrategy, ["@orocrm_magento.provider.strategy.two_way_sync.customer_address"]]
+            - [setStateHandler, ["@orocrm_magento.customer_state_handler"]]
 
     orocrm_magento.importexport.writer.newsletter_subscriber:
         class: %orocrm_magento.importexport.writer.newsletter_subscriber.class%
