@@ -453,8 +453,8 @@ datagrid:
                     type: choice-tree
                     data_name: o.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 inProgressCount:
                     type:      number
                     data_name: inProgressCount

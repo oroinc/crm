@@ -3,68 +3,68 @@ workflows:
         transition_definitions:
             start_from_lead:
                 pre_conditions:
-                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Lead']]
+                    '@channel_entity_availiable': [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Lead']]
                 post_actions:
-                    - @create_related_entity: # create Sales Funnel if it not exist yet
+                    - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
-                            @empty: [$sales_funnel.id]
+                            '@empty': [$sales_funnel.id]
                         parameters: ~
-                    - @redirect: # redirect to Sales funnel view page
+                    - '@redirect': # redirect to Sales funnel view page
                         route: 'orocrm_sales_salesfunnel_view'
                         route_parameters:
                             id: $sales_funnel.id
             start_from_opportunity:
                 pre_conditions:
-                    @channel_entity_availiable: [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
+                    '@channel_entity_availiable': [['OroCRM\Bundle\SalesBundle\Entity\SalesFunnel', 'OroCRM\Bundle\SalesBundle\Entity\Opportunity']]
                 post_actions:
-                    - @create_related_entity: # create Sales Funnel if it not exist yet
+                    - '@create_related_entity': # create Sales Funnel if it not exist yet
                         conditions:
-                            @empty: [$sales_funnel.id]
+                            '@empty': [$sales_funnel.id]
                         parameters: ~
-                    - @redirect: # redirect to Sales funnel view page
+                    - '@redirect': # redirect to Sales funnel view page
                         route: 'orocrm_sales_salesfunnel_view'
                         route_parameters:
                             id: $sales_funnel.id
             disqualify_definition:
                 conditions: # if lead.status = "new"
-                    @equal: [$lead.status.name, 'new']
+                    '@equal': [$lead.status.name, 'new']
                 post_actions: # set lead.status = "canceled"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                         identifier: 'canceled'
                         attribute: $lead.status
             follow_up_definition:
                 conditions: # if lead.status = "canceled"
-                    @equal: [$lead.status.name, 'canceled']
+                    '@equal': [$lead.status.name, 'canceled']
             reactivate_definition:
                 conditions: # if lead.status = "canceled"
-                    @equal: [$lead.status.name, 'canceled']
+                    '@equal': [$lead.status.name, 'canceled']
                 post_actions: # set lead.status = "new"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                         identifier: 'new'
                         attribute: $lead.status
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
-                    @and:
-                        - @equal: [$lead.status.name, 'new']
-                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                    '@and':
+                        - '@equal': [$lead.status.name, 'new']
+                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
-                    @or:
+                    '@or':
                         parameters:
-                            - @not_empty: $new_company_name
-                            - @not_empty: $new_b2bcustomer
+                            - '@not_empty': $new_company_name
+                            - '@not_empty': $new_b2bcustomer
                         message: "Company name or customer must be selected."
                 post_actions: # set lead.status = "qualified"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
                         identifier: 'qualified'
                         attribute: $lead.status
-                    - @tree: # create Contact entity
+                    - '@tree': # create Contact entity
                         conditions: # if contact not specified
-                            @empty: $lead.contact
+                            '@empty': $lead.contact
                         actions:
-                            - @create_entity: # create Contact based on Lead
+                            - '@create_entity': # create Contact based on Lead
                                 class: OroCRM\Bundle\ContactBundle\Entity\Contact
                                 attribute: $lead.contact
                                 data:
@@ -75,11 +75,11 @@ workflows:
                                     nameSuffix: $lead.nameSuffix
                                     jobTitle: $lead.jobTitle
                                     description: $lead.name
-                            - @tree: # set Contact Address
+                            - '@tree': # set Contact Address
                                 conditions: # if lead has address
-                                    @not_empty: $lead.address
+                                    '@not_empty': $lead.address
                                 actions:
-                                    - @create_entity: # create Contact Address based on Lead address
+                                    - '@create_entity': # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
                                         attribute: $.result.address
                                         data:
@@ -97,79 +97,79 @@ workflows:
                                             lastName: $lead.lastName
                                             nameSuffix: $lead.nameSuffix
                                             primary: true
-                                    - @call_method: # add Address to Contact
+                                    - '@call_method': # add Address to Contact
                                         object: $lead.contact
                                         method: addAddress
                                         method_parameters: [$.result.address]
-                                    - @unset_value: # unset temporary property
+                                    - '@unset_value': # unset temporary property
                                         [$.result.address]
-                            - @tree: # set Contact Email
+                            - '@tree': # set Contact Email
                                 conditions: # if lead has email
-                                    @not_empty: $lead.email
+                                    '@not_empty': $lead.email
                                 actions:
-                                    - @create_entity: # create Contact Address based on Lead address
+                                    - '@create_entity': # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
                                         attribute: $.result.email
                                         data:
                                             email: $lead.email
                                             owner: $lead.contact
                                             primary: true
-                                    - @call_method: # add Email to Contact
+                                    - '@call_method': # add Email to Contact
                                         object: $lead.contact
                                         method: addEmail
                                         method_parameters: [$.result.email]
-                                    - @unset_value: # unset temporary property
+                                    - '@unset_value': # unset temporary property
                                         [$.result.email]
-                            - @tree: # set Contact Phone
+                            - '@tree': # set Contact Phone
                                 conditions: # if lead has phone
-                                    @not_empty: $lead.phoneNumber
+                                    '@not_empty': $lead.phoneNumber
                                 actions:
-                                    - @create_entity: # create Contact Address based on Lead address
+                                    - '@create_entity': # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
                                         attribute: $.result.phone
                                         data:
                                             phone: $lead.phoneNumber
                                             primary: true
-                                    - @call_method: # add Phone to Contact
+                                    - '@call_method': # add Phone to Contact
                                         object: $lead.contact
                                         method: addPhone
                                         method_parameters: [$.result.phone]
-                                    - @unset_value: # unset temporary property
+                                    - '@unset_value': # unset temporary property
                                         [$.result.phone]
-                    - @tree:
+                    - '@tree':
                         conditions:
-                            @and: # if customer not selected and company name is selected
-                                - @empty:     $new_b2bcustomer
-                                - @not_empty: $new_company_name
+                            '@and': # if customer not selected and company name is selected
+                                - '@empty':     $new_b2bcustomer
+                                - '@not_empty': $new_company_name
                         actions:
-                            - @find_entity: # try to find b2bcustomer by company name
+                            - '@find_entity': # try to find b2bcustomer by company name
                                 class: OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                 attribute: $new_b2bcustomer
                                 where:
                                     name: $new_company_name
                                 case_insensitive: true
-                            - @find_entity: # try to find account by company name
+                            - '@find_entity': # try to find account by company name
                                 conditions:
-                                    @empty: $new_b2bcustomer
+                                    '@empty': $new_b2bcustomer
                                 parameters:
                                     class: OroCRM\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     where:
                                         name: $new_company_name
                                 case_insensitive: true
-                            - @create_entity: # if b2bcustomer not found - create new one
+                            - '@create_entity': # if b2bcustomer not found - create new one
                                 conditions:
-                                    @and:
-                                        - @empty: $new_account
-                                        - @empty: $new_b2bcustomer
+                                    '@and':
+                                        - '@empty': $new_account
+                                        - '@empty': $new_b2bcustomer
                                 parameters:
                                     class:     OroCRM\Bundle\AccountBundle\Entity\Account
                                     attribute: $new_account
                                     data:
                                         name: $new_company_name
-                            - @create_entity: # if b2bcustomer not found - create new one
+                            - '@create_entity': # if b2bcustomer not found - create new one
                                 conditions:
-                                    @empty: $new_b2bcustomer
+                                    '@empty': $new_b2bcustomer
                                 parameters:
                                     class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                     attribute: $new_b2bcustomer
@@ -179,14 +179,14 @@ workflows:
                                         website:   $lead.website
                                         employees: $lead.numberOfEmployees
                                         dataChannel: $dataChannel
-                    - @call_method: # connect customer with Contact
+                    - '@call_method': # connect customer with Contact
                         conditions:
-                            @empty: $new_b2bcustomer.contact
+                            '@empty': $new_b2bcustomer.contact
                         parameters:
                             object: $new_b2bcustomer
                             method: setContact
                             method_parameters: [$lead.contact]
-                    - @create_entity: # create an opportunity
+                    - '@create_entity': # create an opportunity
                         class:     OroCRM\Bundle\SalesBundle\Entity\Opportunity
                         attribute: $opportunity
                         flush:     true
@@ -197,95 +197,95 @@ workflows:
                             dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
-                    - @find_entity: # set status "In progress" to opportunity
+                    - '@find_entity': # set status "In progress" to opportunity
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
-                    - @unset_value:
+                    - '@unset_value':
                         [$new_account, $new_customer]
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @and:
-                        - @equal:
+                    '@and':
+                        - '@equal':
                             message: 'Opportunity must be in status "In progress"'
                             parameters: [$opportunity.status.name, 'in_progress']
-                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "in_progress"
-                    @and:
-                        - @greater_or_equal:
+                    '@and':
+                        - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
                             parameters: [$budget_amount, 0]
-                        - @and:
+                        - '@and':
                             message: 'Probality must be between 0 and 100 percents'
                             parameters:
-                                - @greater_or_equal: [$probability, 0]
-                                - @less_or_equal: [$probability, 1]
+                                - '@greater_or_equal': [$probability, 0]
+                                - '@less_or_equal': [$probability, 1]
             close_as_won_definition:
                 pre_conditions:
-                    @equal:
+                    '@equal':
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
                 conditions: # if opportunity.status = "in_progress" and required data is entered
-                    @and:
-                        - @not_empty:
+                    '@and':
+                        - '@not_empty':
                             message: 'Close date must be set'
                             parameters: $close_date
-                        - @not_empty:
+                        - '@not_empty':
                             message: 'Close revenue must be set'
                             parameters: $close_revenue
-                        - @greater_or_equal:
+                        - '@greater_or_equal':
                             message: 'Close revenue must be greater or equal to 0'
                             parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
                         attribute: $opportunity.status
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: 'won'
                         attribute: $close_reason
-                    - @assign_value:
+                    - '@assign_value':
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
                 pre_conditions: # opportunity.status = "in_progress" and required data is entered
-                    @equal:
+                    '@equal':
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
                 conditions:
-                    @and:
-                        - @not_empty:
+                    '@and':
+                        - '@not_empty':
                             message: 'Close date must be set'
                             parameters: $close_date
-                        - @not_empty:
+                        - '@not_empty':
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'
                         attribute: $opportunity.status
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
                         attribute: $close_reason
-                    - @assign_value:
+                    - '@assign_value':
                         - [$probability, 0]
                         - [$close_revenue, 0]
             reopen_definition:
                 conditions:
-                    @or:
+                    '@or':
                         message: 'Opportunity must be in status "Won" or "Lost"'
                         parameters:
-                            - @equal: [$opportunity.status.name, 'won']
-                            - @equal: [$opportunity.status.name, 'lost']
+                            - '@equal': [$opportunity.status.name, 'won']
+                            - '@equal': [$opportunity.status.name, 'lost']
                 post_actions:
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
-                    - @assign_value:
+                    - '@assign_value':
                         - [$budget_amount, ~]
                         - [$customer_need, ~]
                         - [$proposed_solution, ~]

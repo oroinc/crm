@@ -6,8 +6,8 @@ services:
     orocrm_report.report.filter.period:
         class: %orocrm_report.report.filter.period.class%
         arguments:
-            - @form.factory
-            - @oro_filter.filter_utility
+            - '@form.factory'
+            - '@oro_filter.filter_utility'
         tags:
             - { name:oro_filter.extension.orm_filter.filter, type: orocrm_period_filter }
 

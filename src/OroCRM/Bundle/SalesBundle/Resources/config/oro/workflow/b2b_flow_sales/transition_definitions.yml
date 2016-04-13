@@ -3,86 +3,86 @@ workflows:
         transition_definitions:
             qualify_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @equal: [$opportunity.status.name, 'in_progress']
+                    '@equal': [$opportunity.status.name, 'in_progress']
             develop_definition:
                 pre_conditions: # if opportunity.status = "in_progress"
-                    @and:
-                        - @equal:
+                    '@and':
+                        - '@equal':
                             message: 'Opportunity must be in status "In progress"'
                             parameters: [$opportunity.status.name, 'in_progress']
-                        - @channel_entity_availiable: [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
+                        - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "in_progress"
-                    @and:
-                        - @greater_or_equal:
+                    '@and':
+                        - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
                             parameters: [$budget_amount, 0]
-                        - @and:
+                        - '@and':
                             message: 'Probality must be between 0 and 100 percents'
                             parameters:
-                                - @greater_or_equal: [$probability, 0]
-                                - @less_or_equal: [$probability, 1]
+                                - '@greater_or_equal': [$probability, 0]
+                                - '@less_or_equal': [$probability, 1]
             close_as_won_definition:
                 pre_conditions:
-                    @equal:
+                    '@equal':
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
                 conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
-                    @and:
-                        - @not_empty:
+                    '@and':
+                        - '@not_empty':
                             message: 'Close date must be set'
                             parameters: $close_date
-                        - @not_empty:
+                        - '@not_empty':
                             message: 'Close revenue must be set'
                             parameters: $close_revenue
-                        - @greater_or_equal:
+                        - '@greater_or_equal':
                             message: 'Close revenue must be greater or equal to 0'
                             parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'won'
                         attribute: $opportunity.status
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: 'won'
                         attribute: $close_reason
-                    - @assign_value:
+                    - '@assign_value':
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
                 pre_conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
-                    @equal:
+                    '@equal':
                         message: 'Opportunity must be in status "In progress"'
                         parameters: [$opportunity.status.name, 'in_progress']
                 conditions:
-                    @and:
-                        - @not_empty:
+                    '@and':
+                        - '@not_empty':
                             message: 'Close date must be set'
                             parameters: $close_date
-                        - @not_empty:
+                        - '@not_empty':
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'lost'
                         attribute: $opportunity.status
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
                         attribute: $close_reason
-                    - @assign_value:
+                    - '@assign_value':
                         - [$probability, 0]
                         - [$close_revenue, 0]
             requalify_lost_definition:
                 conditions:
-                    @equal: [$opportunity.status.name, 'lost']
+                    '@equal': [$opportunity.status.name, 'lost']
                 post_actions:
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
-                    - @assign_value:
+                    - '@assign_value':
                         - [$budget_amount, ~]
                         - [$probability, ~]
                         - [$close_reason, ~]
@@ -90,9 +90,9 @@ workflows:
                         - [$close_revenue, ~]
             requalify_won_definition:
                 conditions:
-                    @equal: [$opportunity.status.name, 'won']
+                    '@equal': [$opportunity.status.name, 'won']
                 post_actions:
-                    - @find_entity:
+                    - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
                         identifier: 'in_progress'
                         attribute: $opportunity.status
