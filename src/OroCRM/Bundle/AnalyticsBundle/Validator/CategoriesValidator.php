@@ -131,9 +131,13 @@ class CategoriesValidator extends ConstraintValidator
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
         $isIncreasing = $this->isIncreasing($orderedByIndex);
 
+        $orderIsValid = false;
+
         if ($isIncreasing) {
+            $orderIsValid = $this->validateOrderAsk($orderedByIndex->toArray());
             $criteria = Criteria::ASC;
         } else {
+            $orderIsValid = $this->validateOrderDesc($orderedByIndex->toArray());
             $criteria = Criteria::DESC;
         }
 
@@ -141,7 +145,7 @@ class CategoriesValidator extends ConstraintValidator
             new Criteria(null, ['minValue' => $criteria])
         );
 
-        if ($orderedByValue->toArray() !== $orderedByIndex->toArray()) {
+        if (!$orderIsValid) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
 
             return;
@@ -165,6 +169,62 @@ class CategoriesValidator extends ConstraintValidator
         if (!$invalidItems->isEmpty()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
         }
+    }
+
+    /**
+     * @param array $orderedData
+     * @return bool
+     */
+    protected function validateOrderAsk(array $orderedData)
+    {
+        $lastValue = 0;
+
+        foreach ($orderedData as $item) {
+            if (!($item instanceof RFMMetricCategory)) {
+
+                return false;
+            }
+
+            $maxValue = $item->getMaxValue();
+
+            if ($lastValue >= $maxValue) {
+
+                return false;
+            }
+
+            $lastValue = $maxValue;
+
+        }
+
+        return true;
+    }
+
+    /**
+     * @param array $orderedData
+     * @return bool
+     */
+    protected function validateOrderDesc(array $orderedData)
+    {
+        $lastValue = PHP_INT_MAX;
+
+        foreach ($orderedData as $item) {
+            if (!($item instanceof RFMMetricCategory)) {
+
+                return false;
+            }
+
+            $minValue = $item->getMinValue();
+
+            if ($lastValue <= $minValue) {
+
+                return false;
+            }
+
+            $lastValue = $minValue;
+
+        }
+
+        return true;
     }
 
     /**
