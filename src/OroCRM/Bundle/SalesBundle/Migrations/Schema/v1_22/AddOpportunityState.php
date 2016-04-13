@@ -9,6 +9,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterf
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 
 class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
 {
@@ -44,7 +45,8 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
             false,
             false,
             [
-                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM]
+                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE]
             ]
         );
     }
