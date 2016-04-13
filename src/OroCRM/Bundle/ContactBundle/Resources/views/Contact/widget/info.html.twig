@@ -85,7 +85,7 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderHtmlProperty('orocrm.contact.description.label'|trans, entity.description|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.description.label'|trans, entity.description) }}
             {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}

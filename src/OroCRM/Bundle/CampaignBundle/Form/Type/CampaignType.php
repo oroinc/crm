@@ -51,7 +51,7 @@ class CampaignType extends AbstractType
                 ]
             )->add(
                 'description',
-                'textarea',
+                'oro_resizeable_rich_text',
                 [
                     'label'    => 'orocrm.campaign.description.label',
                     'required' => false,

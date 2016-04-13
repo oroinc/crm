@@ -49,7 +49,14 @@ class ContactType extends AbstractType
             ->add('nameSuffix', 'text', array('required' => false, 'label' => 'orocrm.contact.name_suffix.label'))
             ->add('gender', 'oro_gender', array('required' => false, 'label' => 'orocrm.contact.gender.label'))
             ->add('birthday', 'oro_date', array('required' => false, 'label' => 'orocrm.contact.birthday.label'))
-            ->add('description', 'textarea', array('required' => false, 'label' => 'orocrm.contact.description.label'));
+            ->add(
+                'description',
+                'oro_resizeable_rich_text',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.contact.description.label'
+                )
+            );
 
         $builder
             ->add('jobTitle', 'text', array('required' => false, 'label' => 'orocrm.contact.job_title.label'))
