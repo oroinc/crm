@@ -23,6 +23,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesN
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityState;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -104,7 +105,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_21';
+        return 'v1_22';
     }
 
     /**
@@ -149,6 +150,7 @@ class OroCRMSalesBundleInstaller implements
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
+        AddOpportunityState::addStateField($schema, $this->extendExtension);
     }
 
     /**
