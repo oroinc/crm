@@ -34,20 +34,4 @@ class LoadOpportunityStateData extends AbstractEnumFixture
     {
         return Opportunity::INTERNAL_STATE_CODE;
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function load(ObjectManager $manager)
-    {
-        parent::load($manager);
-
-        $className = ExtendHelper::buildEnumValueClassName($this->getEnumCode());
-        /** @var AbstractEnumValue[] $enumData */
-        $enumData = $manager->getRepository($className)->findAll();
-
-        foreach ($enumData as $enumItem) {
-            $this->addReference($enumItem->getName(), $enumItem);
-        }
-    }
 }
