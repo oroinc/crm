@@ -9,6 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 
 class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterface
 {
@@ -32,12 +33,17 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->extendExtension->addEnumField(
+        $enumTable = $this->extendExtension->addEnumField(
             $schema,
             'orocrm_task',
             'status',
             'task_status'
         );
+
+        $options = new OroOptions();
+        $options->set('enum_codes', 'immutable', ['open', 'in_progress', 'closed']);
+
+        $enumTable->addOption(OroOptions::KEY, $options);
 
         $queries->addPostQuery(
             'UPDATE orocrm_task AS t
