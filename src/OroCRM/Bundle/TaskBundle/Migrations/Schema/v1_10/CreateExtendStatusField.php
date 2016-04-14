@@ -15,6 +15,9 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
     /** @var ExtendExtension $extendExtension */
     protected $extendExtension;
 
+    /**
+     * {@inheritDoc}
+     */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
         $this->extendExtension = $extendExtension;
@@ -26,7 +29,6 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
      *
      * @param Schema $schema
      * @param QueryBag $queries
-     * @return void
      */
     public function up(Schema $schema, QueryBag $queries)
     {
@@ -35,14 +37,6 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
             'orocrm_task',
             'status',
             'task_status'
-        );
-
-        $queries->addPostQuery(
-            sprintf(
-                'UPDATE oro_entity_config_field SET mode=\'%s\' WHERE field_name=\'%s\'',
-                ConfigModel::MODE_HIDDEN,
-                'extend_status'
-            )
         );
     }
 }

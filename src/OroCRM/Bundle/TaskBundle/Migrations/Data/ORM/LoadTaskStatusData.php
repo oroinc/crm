@@ -11,26 +11,30 @@ use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 class LoadTaskStatusData extends AbstractEnumFixture
 {
     /**
-     * Returns an array of possible enum values, where array key is an id and array value is an English translation
-     *
-     * @return array
+     * {@inheritDoc}
      */
     protected function getData()
     {
         return [
-            'Open' => true,
-            'In Progress' => false,
-            'Closed' => false
+            'open' => 'Open',
+            'in_progress' => 'In Progress',
+            'closed' => 'Closed'
         ];
     }
 
     /**
-     * Returns an enum code of an extend entity
-     *
-     * @return string
+     * {@inheritDoc}
      */
     protected function getEnumCode()
     {
         return 'task_status';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getDefaultValue()
+    {
+        return 'open';
     }
 }
