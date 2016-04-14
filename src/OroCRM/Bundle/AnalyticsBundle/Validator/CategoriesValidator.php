@@ -181,14 +181,12 @@ class CategoriesValidator extends ConstraintValidator
 
         foreach ($orderedData as $item) {
             if (!($item instanceof RFMMetricCategory)) {
-
                 return false;
             }
 
             $maxValue = $item->getMaxValue();
 
             if ($lastValue >= $maxValue) {
-
                 return false;
             }
 
@@ -209,14 +207,12 @@ class CategoriesValidator extends ConstraintValidator
 
         foreach ($orderedData as $item) {
             if (!($item instanceof RFMMetricCategory)) {
-
                 return false;
             }
 
             $minValue = $item->getMinValue();
 
             if ($lastValue <= $minValue) {
-
                 return false;
             }
 
