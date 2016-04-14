@@ -16,7 +16,7 @@ datagrid:
                     - own.id as owner
                     - task.createdAt
                     - task.updatedAt
-                    - ts.id as taskStatus
+                    - ts.id as status
                     - ts.name as statusLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
@@ -33,8 +33,11 @@ datagrid:
             dueDate:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
-            statusLabel:
+            status:
                 label:         orocrm.task.status.label
+                choices: @oro_entity_extend.enum_value_provider->getEnumChoicesByCode('task_status')
+                inline_editing:
+                    enable: true
             taskPriority:
                 label:         orocrm.task.task_priority.label
                 frontend_type: select
@@ -61,7 +64,7 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
-                statusLabel:
+                status:
                     data_name: ts.priority
                 taskPriority:
                     data_name: tp.order
@@ -81,9 +84,9 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
-                statusLabel:
+                status:
                     type:      enum
-                    data_name: taskStatus
+                    data_name: task.status
                     enum_code: task_status
                 priorityLabel:
                     label: orocrm.task.task_priority.label
