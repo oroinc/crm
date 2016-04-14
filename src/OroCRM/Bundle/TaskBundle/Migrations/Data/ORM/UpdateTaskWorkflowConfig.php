@@ -5,13 +5,12 @@ namespace OroCRM\Bundle\TaskBundle\Migrations\Data\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class UpdateTaskWorkflowConfig extends AbstractFixture implements ContainerAwareInterface
 {
-    /** @var ContainerInterface */
-    protected $container;
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -28,13 +27,5 @@ class UpdateTaskWorkflowConfig extends AbstractFixture implements ContainerAware
         );
         $configManager->persist($config);
         $configManager->flush();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 }
