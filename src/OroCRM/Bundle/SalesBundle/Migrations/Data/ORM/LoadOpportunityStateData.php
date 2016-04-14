@@ -2,10 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\Persistence\ObjectManager;
-
-use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
