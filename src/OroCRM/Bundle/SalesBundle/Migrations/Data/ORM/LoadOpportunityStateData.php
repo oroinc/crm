@@ -2,40 +2,52 @@
 
 namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 
-class LoadOpportunityStateData extends AbstractFixture
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
+class LoadOpportunityStateData extends AbstractEnumFixture
 {
-    /** @var array */
-    protected $data = [
-        'Identification & Alignment' => 'identification_alignment',
-        'Needs Analysis' => 'needs_analysis',
-        'Solution Development' => 'solution_development',
-        'Negotiation' => 'negotiation',
-        'Closed Won' => 'won',
-        'Closed Lost' => 'lost'
-    ];
+    /**
+     * @return array
+     */
+    protected function getData()
+    {
+        return [
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost'
+        ];
+    }
 
     /**
-     * @param ObjectManager $manager
+     * @return string
+     */
+    protected function getEnumCode()
+    {
+        return Opportunity::INTERNAL_STATE_CODE;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function load(ObjectManager $manager)
     {
-        $className = ExtendHelper::buildEnumValueClassName('opportunity_state');
+        parent::load($manager);
 
-        /** @var EnumValueRepository $enumRepo */
-        $enumRepo = $manager->getRepository($className);
+        $className = ExtendHelper::buildEnumValueClassName($this->getEnumCode());
+        /** @var AbstractEnumValue[] $enumData */
+        $enumData = $manager->getRepository($className)->findAll();
 
-        $priority = 1;
-        foreach ($this->data as $name => $id) {
-            $enumOption = $enumRepo->createEnumValue($name, $priority++, false, $id);
-            $manager->persist($enumOption);
+        foreach ($enumData as $enumItem) {
+            $this->addReference($enumItem->getName(), $enumItem);
         }
-
-        $manager->flush();
     }
 }

@@ -71,6 +71,8 @@ class Opportunity extends ExtendOpportunity implements
 {
     use ChannelEntityTrait;
 
+    const INTERNAL_STATE_CODE = 'opportunity_state';
+
     /**
      * @var int
      *
