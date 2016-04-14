@@ -69,7 +69,7 @@ class LeadType extends AbstractType
                     'enum_code' => 'lead_source'
                 )
             )
-            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));
+            ->add('notes', 'oro_resizeable_rich_text', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));
     }
 
     /**
