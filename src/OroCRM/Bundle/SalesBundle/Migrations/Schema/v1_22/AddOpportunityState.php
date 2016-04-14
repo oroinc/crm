@@ -10,6 +10,7 @@ use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
 {
@@ -41,7 +42,7 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
             $schema,
             'orocrm_sales_opportunity',
             'state',
-            'opportunity_state',
+            Opportunity::INTERNAL_STATE_CODE,
             false,
             false,
             [
