@@ -11,7 +11,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 class LoadTaskStatusData extends AbstractEnumFixture
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getData()
     {
@@ -23,7 +23,7 @@ class LoadTaskStatusData extends AbstractEnumFixture
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getEnumCode()
     {
@@ -31,7 +31,7 @@ class LoadTaskStatusData extends AbstractEnumFixture
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getDefaultValue()
     {

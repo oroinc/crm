@@ -6,7 +6,6 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
@@ -17,7 +16,7 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
     protected $extendExtension;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setExtendExtension(ExtendExtension $extendExtension)
     {
@@ -25,11 +24,7 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
     }
 
     /**
-     * Modifies the given schema to apply necessary changes of a database
-     * The given query bag can be used to apply additional SQL queries before and after schema changes
-     *
-     * @param Schema $schema
-     * @param QueryBag $queries
+     * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
