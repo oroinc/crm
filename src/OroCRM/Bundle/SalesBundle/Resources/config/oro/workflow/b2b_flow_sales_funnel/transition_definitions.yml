@@ -205,13 +205,13 @@ workflows:
                     - '@unset_value':
                         [$new_account, $new_customer]
             develop_definition:
-                pre_conditions: # if opportunity.status = "in_progress"
+                pre_conditions: # if opportunity.status = "solution_development"
                     '@and':
                         - '@equal':
-                            message: 'Opportunity must be in status "In progress"'
+                            message: 'Opportunity must be in status "Solution Development"'
                             parameters: [$opportunity.state.id, 'solution_development']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
-                conditions: # if opportunity.status = "in_progress"
+                conditions: # if opportunity.status = "solution_development"
                     '@and':
                         - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
@@ -224,9 +224,9 @@ workflows:
             close_as_won_definition:
                 pre_conditions:
                     '@equal':
-                        message: 'Opportunity must be in status "In progress"'
+                        message: 'Opportunity must be in status "Solution Development"'
                         parameters: [$opportunity.state.id, 'solution_development']
-                conditions: # if opportunity.status = "in_progress" and required data is entered
+                conditions: # if opportunity.status = "solution_development" and required data is entered
                     '@and':
                         - '@not_empty':
                             message: 'Close date must be set'
@@ -250,9 +250,9 @@ workflows:
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
-                pre_conditions: # opportunity.status = "in_progress" and required data is entered
+                pre_conditions: # opportunity.status = "solution_development" and required data is entered
                     '@equal':
-                        message: 'Opportunity must be in status "In progress"'
+                        message: 'Opportunity must be in status "Solution Development"'
                         parameters: [$opportunity.state.id, 'solution_development']
                 conditions:
                     '@and':

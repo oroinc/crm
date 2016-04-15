@@ -157,7 +157,7 @@ workflows:
                             dataChannel: $lead.dataChannel
                             lead:        $lead
                             notes:       $notes
-                    - '@find_entity': # set status "In progress" to opportunity
+                    - '@find_entity': # set status "Solution Development" to opportunity
                         class: Extend\Entity\EV_Opportunity_State
                         identifier: 'solution_development'
                         attribute: $.result.opportunity.state
