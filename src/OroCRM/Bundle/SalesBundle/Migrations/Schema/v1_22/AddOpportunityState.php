@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -48,7 +49,7 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
             false,
             false,
             [
-                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE]
             ]
         );
