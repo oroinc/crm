@@ -157,8 +157,8 @@ workflows:
                             dataChannel: $lead.dataChannel
                             lead:        $lead
                             notes:       $notes
-                    - '@find_entity': # set status "Solution Development" to opportunity
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity': # set status "Solution Development" to opportunity
+                        enum_code: opportunity_state
                         identifier: 'solution_development'
                         attribute: $.result.opportunity.state
                     - '@unset_value':

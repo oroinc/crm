@@ -197,9 +197,8 @@ workflows:
                             dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
-                    - '@find_entity': # set status "In progress" to opportunity
-                        class: Extend\Entity\EV_Opportunity_State
-#                        class: @oro_entity_extend.tools.extend_helper->buildEnumValueClassName('opportunity_state')
+                    - '@request_enum_entity': # set status "In progress" to opportunity
+                        enum_code: opportunity_state
                         identifier: 'solution_development'
                         attribute: $opportunity.state
                     - '@unset_value':
@@ -238,8 +237,8 @@ workflows:
                             message: 'Close revenue must be greater or equal to 0'
                             parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'won'
                         attribute: $opportunity.state
                     - '@find_entity':
@@ -263,8 +262,8 @@ workflows:
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'lost'
                         attribute: $opportunity.state
                     - '@find_entity':
@@ -282,8 +281,8 @@ workflows:
                             - '@equal': [$opportunity.state.id, 'won']
                             - '@equal': [$opportunity.state.id, 'lost']
                 post_actions:
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'solution_development'
                         attribute: $opportunity.state
                     - '@assign_value':

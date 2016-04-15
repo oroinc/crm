@@ -38,8 +38,8 @@ workflows:
                             message: 'Close revenue must be greater or equal to 0'
                             parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'won'
                         attribute: $opportunity.state
                     - '@find_entity':
@@ -63,8 +63,8 @@ workflows:
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'lost'
                         attribute: $opportunity.state
                     - '@find_entity':
@@ -78,8 +78,8 @@ workflows:
                 conditions:
                     '@equal': [$opportunity.state.id, 'lost']
                 post_actions:
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'solution_development'
                         attribute: $opportunity.state
                     - '@assign_value':
@@ -92,7 +92,7 @@ workflows:
                 conditions:
                     '@equal': [$opportunity.state.id, 'won']
                 post_actions:
-                    - '@find_entity':
-                        class: Extend\Entity\EV_Opportunity_State
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'solution_development'
                         attribute: $opportunity.state
