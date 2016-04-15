@@ -23,7 +23,7 @@ datagrid:
                     - o.closeRevenue
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
@@ -35,7 +35,7 @@ datagrid:
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: status }
+                        - { join: o.state, alias: status }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
