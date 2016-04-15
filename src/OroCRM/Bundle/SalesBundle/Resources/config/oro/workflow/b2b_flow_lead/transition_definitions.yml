@@ -158,9 +158,9 @@ workflows:
                             lead:        $lead
                             notes:       $notes
                     - '@find_entity': # set status "In progress" to opportunity
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'in_progress'
-                        attribute: $.result.opportunity.status
+                        class: Extend\Entity\EV_Opportunity_State
+                        identifier: 'solution_development'
+                        attribute: $.result.opportunity.state
                     - '@unset_value':
                         [$account, $b2bcustomer]
                     - '@redirect': # redirect to workflow item edit page
