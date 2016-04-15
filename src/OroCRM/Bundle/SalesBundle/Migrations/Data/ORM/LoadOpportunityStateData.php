@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -15,6 +14,15 @@ class LoadOpportunityStateData extends AbstractEnumFixture
      * @var ObjectManager
      */
     protected $manager;
+
+    /**
+     * @var array
+     */
+    protected $statusMapping = [
+        'won' => 'won',
+        'lost' => 'lost',
+        'in_progress' => 'solution_development'
+    ];
 
     /**
      * @return array
@@ -44,27 +52,14 @@ class LoadOpportunityStateData extends AbstractEnumFixture
      */
     public function load(ObjectManager $manager)
     {
-        $stateClassName = ExtendHelper::buildEnumValueClassName($this->getEnumCode());
         $this->manager = $manager;
+        $repository = $manager->getRepository('OroCRMSalesBundle:Opportunity');
+        $connection = $repository->createQueryBuilder('o')->getEntityManager()->getConnection();
+        $query = 'UPDATE orocrm_sales_opportunity as o SET o.state_id= ? WHERE o.status_name = ?';
         parent::load($manager);
 
-        $data = $this->getData();
-        $opportunityList = $manager->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
-
-        $isNeedFlush = false;
-        foreach ($opportunityList as $opportunity) {
-            $status = $opportunity->getStatus()->getName();
-            if ($status && array_key_exists($status, $data)) {
-                $opportunity->setState($manager->getReference($stateClassName, $status));
-                $isNeedFlush = true;
-            } elseif ($status === 'in_progress') {
-                $opportunity->setState($manager->getReference($stateClassName, 'solution_development'));
-                $isNeedFlush = true;
-            }
-        }
-
-        if ($isNeedFlush) {
-            $manager->flush();
+        foreach ($this->statusMapping as $status => $state) {
+            $connection->executeQuery($query, [$state, $status]);
         }
     }
 }
