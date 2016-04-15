@@ -128,7 +128,9 @@ orocrm:
                 unsubscribe.label: Unsubscribe
 
         acl:
-            send_emails: Send campaign emails
+            send_emails:
+                label: Send campaign emails
+                description: Manually send emails within an email campaign
 
         emailcampaignstatistics:
             entity_label: Email Campaign Statistics
