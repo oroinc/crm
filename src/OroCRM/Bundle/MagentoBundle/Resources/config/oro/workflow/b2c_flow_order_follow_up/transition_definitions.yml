@@ -3,7 +3,7 @@ workflows:
         transition_definitions:
             __start___definition:
                 pre_conditions:
-                    @not_empty: $order.id
+                    '@not_empty': $order.id
             record_feedback_definition:
                 pre_conditions:
-                    @not_empty: $order.id
+                    '@not_empty': $order.id

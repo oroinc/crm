@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema\v1_4;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
@@ -46,7 +47,7 @@ class OroCRMChannelBundle implements Migration, ExtendExtensionAwareInterface
                     'owner'     => ExtendScope::OWNER_CUSTOM
                 ],
                 'datagrid' => [
-                    'is_visible' => false
+                    'is_visible' => DatagridScope::IS_VISIBLE_FALSE
                 ],
                 'form' => [
                     'is_enabled' => true,

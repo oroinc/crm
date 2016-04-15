@@ -15,7 +15,7 @@ services:
     orocrm_call.event_listener.datagrid.call:
         class: %orocrm_call.event_listener.datagrid.call.class%
         arguments:
-          - @doctrine.orm.entity_manager
+          - "@doctrine.orm.entity_manager"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.widget-base-calls-grid, method: onBuildBefore }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.widget-base-calls-grid, method: onBuildAfter }
@@ -23,41 +23,41 @@ services:
     orocrm_call.listener.datagrid.activity:
         class: %orocrm_call.listener.datagrid.activity.class%
         arguments:
-            - @oro_activity.manager
-            - @oro_entity.routing_helper
+            - "@oro_activity.manager"
+            - "@oro_entity.routing_helper"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-call-grid, method: onBuildAfter }
 
     orocrm_call.listener.entity_listener:
         class: %orocrm_call.listener.entity_listener.class%
         arguments:
-            - @orocrm_call.call.activity.manager
+            - "@orocrm_call.call.activity.manager"
         tags:
             - { name: doctrine.event_listener, event: onFlush }
 
     orocrm_call.call.activity.manager:
         class: %orocrm_call.call.activity.manager.class%
         arguments:
-            - @oro_activity.manager
+            - "@oro_activity.manager"
 
     orocrm_call.activity_list.provider:
         class: %orocrm_call.activity_list.provider.class%
         arguments:
-           - @oro_entity.doctrine_helper
-           - @oro_security.owner.entity_owner_accessor.link
-           - @oro_activity.association_helper
-           - @oro_comment.association_helper
+           - "@oro_entity.doctrine_helper"
+           - "@oro_security.owner.entity_owner_accessor.link"
+           - "@oro_activity.association_helper"
+           - "@oro_comment.association_helper"
         tags:
            - {name: oro_activity_list.provider, priority: 10 }
 
     orocrm_call.placeholder.log_call.filter:
         class: %orocrm_call.placeholder.log_call.filter.class%
         arguments:
-            - @oro_activity.manager
+            - "@oro_activity.manager"
 
     orocrm_call.twig.call_extension:
         class: %orocrm_call.twig.class%
         arguments:
-            - @orocrm_call.placeholder.log_call.filter
+            - "@orocrm_call.placeholder.log_call.filter"
         tags:
             - { name: twig.extension }

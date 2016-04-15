@@ -227,7 +227,7 @@ class Workflow extends AbstractPageEntity
 
     public function checkStep($step)
     {
-        $this->assertElementPresent("//div[@class='widget-content']//li[contains (.,'{$step}')]");
+        $this->assertElementPresent("//ul[contains(@class, 'workflow-step-list')]//li[contains (.,'{$step}')]");
 
         return $this;
     }

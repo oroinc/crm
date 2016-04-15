@@ -44,33 +44,33 @@ services:
         class: %orocrm_task.form.handler.task.class%
         scope: request
         arguments:
-            - @orocrm_task.form
-            - @request
-            - @doctrine.orm.entity_manager
-            - @oro_activity.manager
-            - @oro_entity.routing_helper
+            - "@orocrm_task.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_activity.manager"
+            - "@oro_entity.routing_helper"
 
     orocrm_task.form.handler.task_api:
         class: %orocrm_task.form.handler.task_api.class%
         scope: request
         arguments:
-            - @orocrm_task.form.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @oro_entity.routing_helper
+            - "@orocrm_task.form.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_entity.routing_helper"
 
     orocrm_task.form.handler.task_api.soap:
         class: %orocrm_task.form.handler.task_api.class%
         scope: request
         arguments:
-            - @orocrm_task.form.api.soap
-            - @request
-            - @doctrine.orm.entity_manager
-            - @oro_entity.routing_helper
+            - "@orocrm_task.form.api.soap"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_entity.routing_helper"
 
     orocrm_task.manager.api:
         class: %orocrm_task.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_task.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"

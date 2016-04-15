@@ -37,11 +37,11 @@ workflows:
                         company_name: $lead.companyName
                         notes: $lead.notes
                     init_actions:
-                        - @find_entity: # try to find customer by company name
+                        - '@find_entity': # try to find customer by company name
                             conditions:
-                                @and: # if customer is empty and company name is specified
-                                    - @empty:     $b2bcustomer
-                                    - @not_empty: $company_name
+                                '@and': # if customer is empty and company name is specified
+                                    - '@empty':     $b2bcustomer
+                                    - '@not_empty': $company_name
                             parameters:
                                 class:     OroCRM\Bundle\SalesBundle\Entity\B2bCustomer
                                 attribute: $b2bcustomer
