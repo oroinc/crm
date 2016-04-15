@@ -16,5 +16,5 @@ items:
     orocrm_account_orders_grid:
         template: OroCRMMagentoBundle:Order:accountOrdersPlaceholder.html.twig
     orocrm_magento_customer_stats:
-        applicable: @orocrm_magento.placeholder.filter->isApplicable($entity$)
+        applicable: "@orocrm_magento.placeholder.filter->isApplicable($entity$)"
         template: OroCRMMagentoBundle:Customer:customerStats.html.twig

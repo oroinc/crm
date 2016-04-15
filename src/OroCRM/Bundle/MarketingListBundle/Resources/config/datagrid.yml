@@ -28,11 +28,11 @@ datagrid:
                 template:       OroEntityBundle:Datagrid:Property/entity.html.twig
                 frontend_type:  html
                 context:
-                    entity_provider: @orocrm_marketing_list.entity_provider
+                    entity_provider: '@orocrm_marketing_list.entity_provider'
             listType:
                 label:          orocrm.marketinglist.type.label
                 type:           twig
-                choices:        @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices
+                choices:        '@orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
                 frontend_type:  html
                 template:       OroCRMMarketingListBundle:MarketingList:Datagrid/Property/listType.html.twig
             createdAt:
@@ -52,14 +52,14 @@ datagrid:
                     options:
                         field_options:
                             multiple:          true
-                            choices:           @oro_entity.datagrid_helper->getEntityNames
+                            choices:           '@oro_entity.datagrid_helper->getEntityNames'
                             translatable_options: false
                 listType:
                     type:               choice
                     data_name:          ml.type
                     options:
                         field_options:
-                            choices:    @orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices
+                            choices:    '@orocrm_marketing_list.datagrid.marketing_list_type.provider->getListTypeChoices'
                 createdAt:
                     type:       datetime
                     data_name:  ml.createdAt
@@ -165,7 +165,7 @@ datagrid:
                 lastContactedAt: { data_name: mli.lastContactedAt }
         properties:
             marketingList: ~
-        action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
+        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
         options:
             skip_count_walker: true
             mixin: true
@@ -341,7 +341,7 @@ datagrid:
                 lastContactedAt: { data_name: mli.lastContactedAt }
         properties:
             marketingList: ~
-        action_configuration: [@orocrm_marketing_list.datagrid.action_permission_provider, "getMarketingListItemPermissions"]
+        action_configuration: ['@orocrm_marketing_list.datagrid.action_permission_provider', "getMarketingListItemPermissions"]
         options:
             skip_count_walker: true
             mixin: true

@@ -159,8 +159,8 @@ services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
         arguments:
-            - @oro_security.encoder.mcrypt
-            - @orocrm_magento.wsdl_manager
+            - "@oro_security.encoder.mcrypt"
+            - "@orocrm_magento.wsdl_manager"
             - []
         tags:
             - { name: oro_integration.transport, type: magento_soap, channel_type: magento }
@@ -177,27 +177,27 @@ services:
     orocrm_magento.provider.cart_expiration_processor:
         class: %orocrm_magento.provider.cart_expiration_processor.class%
         arguments:
-            - @oro_integration.provider.connector_context_mediator
-            - @doctrine.orm.entity_manager
+            - "@oro_integration.provider.connector_context_mediator"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.provider.tracking_visit:
         class: %orocrm_magento.provider.tracking_visit.class%
         arguments:
-            - @doctrine
-            - @oro_security.acl_helper
+            - "@doctrine"
+            - "@oro_security.acl_helper"
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
         class: %orocrm_magento.form.subscriber.soap_transport_setting.class%
         arguments:
-            - @oro_security.encoder.mcrypt
+            - "@oro_security.encoder.mcrypt"
 
     orocrm_magento.form.type.soap_transport_setting:
         class: %orocrm_magento.form.type.soap_transport_setting.class%
         arguments:
-            - @orocrm_magento.transport.soap_transport
-            - @orocrm_magento.form.subscriber.soap_transport_setting
-            - @oro_integration.manager.types_registry
+            - "@orocrm_magento.transport.soap_transport"
+            - "@orocrm_magento.form.subscriber.soap_transport_setting"
+            - "@oro_integration.manager.types_registry"
         tags:
             - { name: form.type, alias: orocrm_magento_soap_transport_setting_form_type }
 
@@ -266,7 +266,7 @@ services:
         parent: oro_form.model.update_handler
         scope: request
         calls:
-            - [setStateHandler, [@orocrm_magento.customer_state_handler]]
+            - [setStateHandler,  ["@orocrm_magento.customer_state_handler"]]
 
     orocrm_magento.form.cart.api:
         class: Symfony\Component\Form\Form
@@ -425,7 +425,7 @@ services:
     orocrm_magento.event_listener.order_grid:
         class: OroCRM\Bundle\MagentoBundle\EventListener\OrderGridListener
         arguments:
-            - @orocrm_magento.country.datagrid_helper
+            - "@orocrm_magento.country.datagrid_helper"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.magento-order-grid, method: onBuildBefore }
 
@@ -439,7 +439,7 @@ services:
     orocrm_magento.event_listener.order:
         class: %orocrm_magento.event_listener.order.class%
         arguments:
-            - @orocrm_channel.event_listener.doctrine
+            - "@orocrm_channel.event_listener.doctrine"
         tags:
             - { name: doctrine.event_listener, event: prePersist }
             - { name: doctrine.event_listener, event: preUpdate }
@@ -458,17 +458,17 @@ services:
     orocrm_magento.event_listener.channel_owner_set:
         class: %orocrm_magento.event_listener.channel_owner_set.class%
         arguments:
-            - @doctrine.orm.default_entity_manager
+            - "@doctrine.orm.default_entity_manager"
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
 
     orocrm_magento.event_listener.channel_save_succeed:
         class: %orocrm_magento.event_listener.channel_save_succeed.class%
         arguments:
-            - @orocrm_channel.provider.settings_provider
-            - @doctrine
+            - "@orocrm_channel.provider.settings_provider"
+            - "@doctrine"
         calls:
-            - [setConnectorsTypeRegistry, [@oro_integration.manager.types_registry]]
+            - [setConnectorsTypeRegistry,  ["@oro_integration.manager.types_registry"]]
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave, priority: -10 }
 
@@ -479,7 +479,8 @@ services:
 
     orocrm_magento.service.magento_url_generator:
         class: %orocrm_magento.magento_url_generator.class%
-        arguments: [@router]
+        arguments:
+            - "@router"
         scope: prototype
 
     orocrm_magento.event_listener.after_job_execution:
@@ -490,7 +491,7 @@ services:
     orocrm_magento.event_listener.customer_datagrid_listener:
         class: %orocrm_magento.event_listener.customer_datagrid_listener.class%
         arguments:
-            - @request_stack
+            - "@request_stack"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
 
@@ -500,14 +501,14 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.address.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.customer.manager.api:
         class: %orocrm_magento.customer.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.customer.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.customer_birthday_type_transformer:
         class: OroCRM\Bundle\MagentoBundle\Form\DataTransformer\BirthdayTypeApiTransformer
@@ -521,45 +522,45 @@ services:
     orocrm_magento.manager.magento_delete_provider:
         class: %orocrm_magento.manager.magento_delete_provider.class%
         arguments:
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
         tags:
             - { name: oro_integration.delete_provider }
 
     orocrm_magento.importexport.address_import_helper:
         class: %orocrm_magento.importexport.address_import_helper.class%
         arguments:
-            - @orocrm_magento.importexport.doctrine_helper
+            - "@orocrm_magento.importexport.doctrine_helper"
 
     orocrm_magento.importexport.doctrine_helper:
         class: %orocrm_magento.importexport.doctrine_helper.class%
         arguments:
-            - @oro_importexport.strategy.import.helper
+            - "@oro_importexport.strategy.import.helper"
 
     orocrm_magento.dashboard.data_provider.order:
         class: %orocrm_magento.dashboard.data_provider.order.class%
         arguments:
-            - @doctrine
-            - @oro_security.acl_helper
-            - @oro_chart.config_provider
-            - @oro_locale.formatter.date_time
-            - @oro_dashboard.datetime.helper
+            - "@doctrine"
+            - "@oro_security.acl_helper"
+            - "@oro_chart.config_provider"
+            - "@oro_locale.formatter.date_time"
+            - "@oro_dashboard.datetime.helper"
 
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
         arguments:
-            - @doctrine
-            - @oro_security.acl_helper
-            - @oro_chart.config_provider
-            - @oro_dashboard.datetime.helper
+            - "@doctrine"
+            - "@oro_security.acl_helper"
+            - "@oro_chart.config_provider"
+            - "@oro_dashboard.datetime.helper"
 
     orocrm_magento.dashboard.data_provider.purchase:
         class: %orocrm_magento.dashboard.data_provider.purchase.class%
         arguments:
-            - @doctrine
-            - @oro_chart.config_provider
-            - @orocrm_magento.provider.tracking_visit
-            - @translator
-            - @oro_security.acl_helper
+            - "@doctrine"
+            - "@oro_chart.config_provider"
+            - "@orocrm_magento.provider.tracking_visit"
+            - "@translator"
+            - "@oro_security.acl_helper"
 
     orocrm_magento.placeholder.filter:
         class: %orocrm_magento.placeholder.filter.class%
@@ -592,7 +593,7 @@ services:
     orocrm_magento.provider.analytics.customer_recency:
         class: %orocrm_magento.provider.analytics.customer_recency.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
@@ -600,7 +601,7 @@ services:
     orocrm_magento.provider.analytics.customer_frequency:
         class: %orocrm_magento.provider.analytics.customer_frequency.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
@@ -609,7 +610,7 @@ services:
 
         class: %orocrm_magento.provider.analytics.customer_monetary.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
             - %orocrm_magento.entity.customer.class%
         tags:
             - { name: orocrm_analytics.builder.rfm }
@@ -617,9 +618,9 @@ services:
     orocrm_magento.provider.tracking_customer_identificator:
         class: %orocrm_magento.provider.tracking_customer_identificator.class%
         arguments:
-           - @doctrine
-           - @oro_entity_config.provider.extend
-           - @orocrm_channel.provider.settings_provider
+           - "@doctrine"
+           - "@oro_entity_config.provider.extend"
+           - "@orocrm_channel.provider.settings_provider"
         tags:
            - {name: oro_tracking.provider.identification, priority: 10}
 
@@ -630,7 +631,7 @@ services:
             - %orocrm_magento.entity.customer_group.class%
             - ["name"]
         calls:
-            - [initDoctrinePropertiesByManagerRegistry, [@doctrine]]
+            - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%orocrm_channel.entity.class%]]
         tags:
@@ -642,7 +643,7 @@ services:
             - %orocrm_magento.entity.store.class%
             - ["name"]
         calls:
-            - [initDoctrinePropertiesByManagerRegistry, [@doctrine]]
+            - [initDoctrinePropertiesByManagerRegistry,  ["@doctrine"]]
             - [setAclHelper,["@oro_security.acl_helper"]]
             - [setDataChannelClass, [%orocrm_channel.entity.class%]]
         tags:
@@ -651,14 +652,14 @@ services:
     orocrm_magento.validator.unique_customer_email:
         class: %orocrm_magento.validator.unique_customer_email.class%
         arguments:
-            - @orocrm_magento.transport.soap_transport
+            - "@orocrm_magento.transport.soap_transport"
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.unique_customer_email }
 
     orocrm_magento.validator.start_sync_date:
         class: %orocrm_magento.validator.start_sync_date.class%
         arguments:
-            - @doctrine
+            - "@doctrine"
         tags:
             - { name: validator.constraint_validator, alias: orocrm_magento.validator.start_sync_date }
 
@@ -666,9 +667,9 @@ services:
         class: %orocrm_magento.security.acl.voter.two_way_sync.class%
         abstract: true
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
         calls:
-            - [setSettingsProvider, [@orocrm_magento.model.channel_settings_provider]]
+            - [setSettingsProvider,  ["@orocrm_magento.model.channel_settings_provider"]]
 
     orocrm_magento.security.acl.voter.customer:
         class: %orocrm_magento.security.acl.voter.customer.class%
@@ -698,7 +699,7 @@ services:
         class: %orocrm_magento.datagrid.customer_actions_provider.class%
         parent: orocrm_magento.datagrid.newsletter_subscriber_provider
         arguments:
-            - @orocrm_magento.model.channel_settings_provider
+            - "@orocrm_magento.model.channel_settings_provider"
 
     orocrm_magento.state_manager:
         class: %orocrm_magento.state_manager.class%
@@ -706,19 +707,19 @@ services:
     orocrm_magento.customer_state_handler:
         class: %orocrm_magento.customer_state_handler.class%
         arguments:
-            - @orocrm_magento.state_manager
+            - "@orocrm_magento.state_manager"
 
     orocrm_magento.datagrid.newsletter_subscriber_provider:
         class: %orocrm_magento.datagrid.newsletter_subscriber_provider.class%
         arguments:
-            - @orocrm_magento.model.channel_settings_provider
+            - "@orocrm_magento.model.channel_settings_provider"
         calls:
-            - [setSecurityFacade, [@oro_security.security_facade]]
+            - [setSecurityFacade,  ["@oro_security.security_facade"]]
 
     orocrm_magento.model.newsletter_subscriber_manager:
         class: %orocrm_magento.model.newsletter_subscriber_manager.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
 
     orocrm_magento.strategy.automatic_discovery.default:
         class: %orocrm_magento.strategy.automatic_discovery.default.class%
@@ -729,21 +730,21 @@ services:
     orocrm_magento.service.automatic_discovery:
         class: %orocrm_magento.service.automatic_discovery.class%
         arguments:
-            - @oro_entity.doctrine_helper
-            - @orocrm_magento.strategy.automatic_discovery.default
-            - @oro_security.owner.ownership_metadata_provider
+            - "@oro_entity.doctrine_helper"
+            - "@orocrm_magento.strategy.automatic_discovery.default"
+            - "@oro_security.owner.ownership_metadata_provider"
             - %orocrm_magento.customer.entity.class%
             - []
         calls:
-            - [addStrategy, ['addresses', @orocrm_magento.strategy.automatic_discovery.addresses]]
+            - [addStrategy, ['addresses', "@orocrm_magento.strategy.automatic_discovery.addresses"]]
         tags:
             - { name: orocrm_magento.bundle_config.aware, argument_number: 4 }
 
     orocrm_magento.action.automatic_discovery:
         class: %orocrm_magento.action.automatic_discovery.class%
         arguments:
-            - @oro_workflow.context_accessor
-            - @orocrm_magento.service.automatic_discovery
+            - "@oro_workflow.context_accessor"
+            - "@orocrm_magento.service.automatic_discovery"
         tags:
             - { name: oro_workflow.action, alias: automatic_discovery }
 
@@ -754,8 +755,8 @@ services:
     orocrm_magento.wsdl_manager:
         class: %orocrm_magento.wsdl_manager.class%
         arguments:
-            - @filesystem
-            - @orocrm_magento.wsdl.guzzle_client
+            - "@filesystem"
+            - "@orocrm_magento.wsdl.guzzle_client"
             - %kernel.cache_dir%
             - []
         tags:
@@ -765,44 +766,44 @@ services:
         public: false
         class: %orocrm_magento.wsdl.cache_clearer.class%
         arguments:
-            - @orocrm_magento.wsdl_manager
+            - "@orocrm_magento.wsdl_manager"
         tags:
             - { name: kernel.cache_clearer,  priority: 30 }
 
     orocrm_magento.integration_entity.remove_listener:
         class: %orocrm_magento.integration_entity.remove_listener.class%
         arguments:
-            - @orocrm_magento.wsdl_manager
+            - "@orocrm_magento.wsdl_manager"
         tags:
             - { name: doctrine.event_listener, event: preRemove }
 
     orocrm_magento.model.channel_settings_provider:
         class: %orocrm_magento.model.channel_settings_provider.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - "@oro_entity.doctrine_helper"
             - %oro_integration.entity.class%
 
     orocrm_magento.provider.big_number:
         class: %orocrm_magento.provider.big_number.class%
         arguments:
-            - @doctrine
-            - @oro_security.acl_helper
-            - @oro_dashboard.provider.big_number.date_helper
+            - "@doctrine"
+            - "@oro_security.acl_helper"
+            - "@oro_dashboard.provider.big_number.date_helper"
         tags:
             - { name: oro_dashboard.big_number.provider, alias: magento }
 
     orocrm_magento.service.order.information_loader:
         class: %orocrm_magento.service.information_loader.class%
         arguments:
-            - @oro_importexport.job_executor
-            - @orocrm_magento.mage.order_connector
+            - "@oro_importexport.job_executor"
+            - "@orocrm_magento.mage.order_connector"
             - "orocrm_magento.add_or_update_order"
 
     orocrm_magento.service.cart.information_loader:
         class: %orocrm_magento.service.information_loader.class%
         arguments:
-            - @oro_importexport.job_executor
-            - @orocrm_magento.mage.cart_connector
+            - "@oro_importexport.job_executor"
+            - "@orocrm_magento.mage.cart_connector"
             - "orocrm_magento.add_or_update_cart"
 
     # manager
@@ -811,110 +812,110 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.cart.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.cart_address.manager.api:
         class: %orocrm_magento.cart_address.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.cart_address.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.cart_item.manager.api:
         class: %orocrm_magento.cart_item.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.cart_item.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.order.manager.api:
         class: %orocrm_magento.order.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.order.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.order_item.manager.api:
         class: %orocrm_magento.order_item.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.order_item.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_magento.order_address.manager.api:
         class: %orocrm_magento.order_address.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_magento.entity.order_address.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     # handler
     orocrm_magento.form.handler.cart.api:
         class: %orocrm_magento.form.handler.cart.api.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.cart.api
-            - @request
-            - @doctrine
-            - @security.context
+            - "@orocrm_magento.form.cart.api"
+            - "@request"
+            - "@doctrine"
+            - "@security.context"
 
     orocrm_magento.form.handler.cart_address:
         class: %orocrm_magento.form.handler.cart_address.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.cart_address.api
-            - @request
-            - @doctrine
-            - @security.context
+            - "@orocrm_magento.form.cart_address.api"
+            - "@request"
+            - "@doctrine"
+            - "@security.context"
 
     orocrm_magento.form.handler.cart_item:
         class: %orocrm_magento.form.handler.cart_item.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.cart_item.api
-            - @request
-            - @doctrine
+            - "@orocrm_magento.form.cart_item.api"
+            - "@request"
+            - "@doctrine"
 
     orocrm_magento.form.handler.order.api:
         class: %orocrm_magento.form.handler.order.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.order.api
-            - @request
-            - @doctrine
-            - @security.context
+            - "@orocrm_magento.form.order.api"
+            - "@request"
+            - "@doctrine"
+            - "@security.context"
 
     orocrm_magento.form.handler.order_item:
         class: %orocrm_magento.form.handler.order_item.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.order_item.api
-            - @request
-            - @doctrine
+            - "@orocrm_magento.form.order_item.api"
+            - "@request"
+            - "@doctrine"
 
     orocrm_magento.form.handler.order_address.api:
         class: %orocrm_magento.form.handler.order_address.api.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.order_address.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @security.context
+            - "@orocrm_magento.form.order_address.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@security.context"
 
     orocrm_magento.form.handler.customer.api:
         class: %orocrm_magento.form.api.handler.customer.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.customer.api
-            - @request
-            - @doctrine
-            - @security.context
+            - "@orocrm_magento.form.customer.api"
+            - "@request"
+            - "@doctrine"
+            - "@security.context"
 
     orocrm_magento.form.api.handler.customer_address:
         class: %orocrm_magento.form.handler.customer_address.class%
         scope: request
         arguments:
-            - @orocrm_magento.form.customer_address.api
-            - @request
-            - @doctrine
-            - @security.context
+            - "@orocrm_magento.form.customer_address.api"
+            - "@request"
+            - "@doctrine"
+            - "@security.context"

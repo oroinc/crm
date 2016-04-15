@@ -12,7 +12,7 @@ services:
     orocrm_task.listener.datagrid.user_tasks:
         class: %orocrm_task.listener.datagrid.user_tasks.class%
         arguments:
-            - @oro_security.security_facade
+            - "@oro_security.security_facade"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.before.user-tasks-grid, method: onBuildBefore }
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.user-tasks-grid, method: onBuildAfter }
@@ -20,8 +20,8 @@ services:
     orocrm_task.listener.datagrid.activity:
         class: %orocrm_task.listener.datagrid.activity.class%
         arguments:
-            - @oro_activity.manager
-            - @oro_entity.routing_helper
+            - "@oro_activity.manager"
+            - "@oro_entity.routing_helper"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.activity-tasks-grid, method: onBuildAfter }
 
@@ -36,10 +36,10 @@ services:
     orocrm_task.calendar_provider:
         class: %orocrm_task.calendar_provider.class%
         arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_security.acl_helper
-            - @orocrm_task.task.normalizer
-            - @translator
+            - "@oro_entity.doctrine_helper"
+            - "@oro_security.acl_helper"
+            - "@orocrm_task.task.normalizer"
+            - "@translator"
             - %orocrm_task.calendar_provider.my_tasks.enabled%
         tags:
             - { name: oro_calendar.calendar_provider, alias: tasks }
@@ -47,7 +47,7 @@ services:
     orocrm_task.task.normalizer:
         class: %orocrm_task.task.normalizer.class%
         arguments:
-            - @oro_reminder.entity.manager
+            - "@oro_reminder.entity.manager"
 
     orocrm_task.placeholder.filter:
         class: %orocrm_task.placeholder.filter.class%
@@ -57,10 +57,10 @@ services:
     orocrm_task.activity_list.provider:
         class: %orocrm_task.activity_list.provider.class%
         arguments:
-           - @oro_entity.doctrine_helper
-           - @oro_security.owner.entity_owner_accessor.link
-           - @oro_activity.association_helper
-           - @oro_comment.association_helper
+           - "@oro_entity.doctrine_helper"
+           - "@oro_security.owner.entity_owner_accessor.link"
+           - "@oro_activity.association_helper"
+           - "@oro_comment.association_helper"
         tags:
            - {name: oro_activity_list.provider, priority: 20}
 
