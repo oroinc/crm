@@ -3,13 +3,13 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Data\ORM;
 
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class LoadOpportunityStateData extends AbstractEnumFixture implements DependentFixtureInterface
+class LoadOpportunityStateData extends AbstractEnumFixture
 {
     /**
      * @var ObjectManager
@@ -17,19 +17,11 @@ class LoadOpportunityStateData extends AbstractEnumFixture implements DependentF
     protected $manager;
 
     /**
-     * {@inheritdoc}
-     */
-    public function getDependencies()
-    {
-        return ['OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\LoadOpportunityStatusData'];
-    }
-
-    /**
      * @return array
      */
     protected function getData()
     {
-        $statuses = [
+        return [
             'identification_alignment' => 'Identification & Alignment',
             'needs_analysis' => 'Needs Analysis',
             'solution_development' => 'Solution Development',
@@ -37,21 +29,6 @@ class LoadOpportunityStateData extends AbstractEnumFixture implements DependentF
             'won' => 'Closed Won',
             'lost' => 'Closed Lost'
         ];
-
-        $oldStatuses = $this->manager
-            ->getRepository('OroCRMSalesBundle:OpportunityStatus')
-            ->findAll();
-
-        foreach ($oldStatuses as $oldStatus) {
-            $oldName = $oldStatus->getName();
-            $oldLabel = $oldStatus->getLabel();
-
-            if (!array_key_exists($oldName, $statuses)) {
-                $statuses[$oldName] = $oldLabel;
-            }
-        }
-
-        return $statuses;
     }
 
     /**
@@ -67,7 +44,27 @@ class LoadOpportunityStateData extends AbstractEnumFixture implements DependentF
      */
     public function load(ObjectManager $manager)
     {
+        $stateClassName = ExtendHelper::buildEnumValueClassName($this->getEnumCode());
         $this->manager = $manager;
         parent::load($manager);
+
+        $data = $this->getData();
+        $opportunityList = $manager->getRepository('OroCRMSalesBundle:Opportunity')->findAll();
+
+        $isNeedFlush = false;
+        foreach ($opportunityList as $opportunity) {
+            $status = $opportunity->getStatus()->getName();
+            if ($status && array_key_exists($status, $data)) {
+                $opportunity->setState($manager->getReference($stateClassName, $status));
+                $isNeedFlush = true;
+            } elseif ($status === 'in_progress') {
+                $opportunity->setState($manager->getReference($stateClassName, 'solution_development'));
+                $isNeedFlush = true;
+            }
+        }
+
+        if ($isNeedFlush) {
+            $manager->flush();
+        }
     }
 }
