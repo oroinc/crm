@@ -400,9 +400,12 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->andWhere('o.closeDate IS NULL')
+            ->andWhere('o.status = :status')
+            ->andWhere('o.probability != 0')
+            ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->setParameter('end', $end)
+            ->setParameter('status', 'in_progress');
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }

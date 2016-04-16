@@ -64,7 +64,7 @@ parameters:
     orocrm_magento.event_listener.channel_owner_set.class:                  OroCRM\Bundle\MagentoBundle\EventListener\ChannelOwnerSetListener
     orocrm_magento.event_listener.writer_error.class:                       OroCRM\Bundle\MagentoBundle\EventListener\IntegrationWriteErrorListener
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
-    orocrm_magento.event_listener.channel_save_succeed.class:               OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_magento.event_listener.update_integration_connectors.class:      OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener
     orocrm_magento.event_listener.customer_datagrid_listener.class:         OroCRM\Bundle\MagentoBundle\EventListener\CustomerDataGridListener
 
     # generator
@@ -462,15 +462,15 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_integration.default_owner.set, method: onSet }
 
-    orocrm_magento.event_listener.channel_save_succeed:
-        class: %orocrm_magento.event_listener.channel_save_succeed.class%
+    orocrm_magento.event_listener.update_integration_connectors:
+        class: %orocrm_magento.event_listener.update_integration_connectors.class%
         arguments:
             - "@orocrm_channel.provider.settings_provider"
             - "@doctrine"
         calls:
             - [setConnectorsTypeRegistry,  ["@oro_integration.manager.types_registry"]]
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave, priority: -10 }
+            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSave, priority: -10 }
 
     orocrm_magento.event_listener.writer_error:
         class: %orocrm_magento.event_listener.writer_error.class%
