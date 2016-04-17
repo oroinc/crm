@@ -5,13 +5,13 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\EventListener;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
-use OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener\ChannelSaveSucceedListenerTest as BaseTestCase;
+use OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener\UpdateIntegrationConnectorsListenerTest as BaseTestCase;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
-use OroCRM\Bundle\MagentoBundle\EventListener\ChannelSaveSucceedListener;
+use OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
-class ChannelSaveSucceedListenerTest extends BaseTestCase
+class UpdateIntegrationConnectorsListenerTest extends BaseTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|TypesRegistry */
     protected $typesRegistry;
@@ -24,44 +24,14 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
     }
 
     /**
-     * @return ChannelSaveSucceedListener
+     * @return UpdateIntegrationConnectorsListener
      */
     protected function getListener()
     {
-        $listener = new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
+        $listener = new UpdateIntegrationConnectorsListener($this->settingProvider, $this->registry);
         $listener->setConnectorsTypeRegistry($this->typesRegistry);
 
         return $listener;
-    }
-
-    public function assertConnectorsEmptyIfTransportEmptyAndTypeNotMatched()
-    {
-        $this->assertEmpty($this->integration->getConnectors());
-    }
-
-    public function assertConnectorsEmptyIfTransportEmpty()
-    {
-        $this->entity->setChannelType(ChannelType::TYPE);
-
-        $this->event->expects($this->once())
-            ->method('getChannel')
-            ->will($this->returnValue($this->entity));
-        $this->getListener()->onChannelSucceedSave($this->event);
-
-        $this->assertEmpty($this->integration->getConnectors());
-    }
-
-    public function assertSuccessWithNotMatchedConnectors()
-    {
-        $this->entity->setChannelType(ChannelType::TYPE);
-        $this->integration->setTransport(new MagentoSoapTransport());
-
-        $this->event->expects($this->once())
-            ->method('getChannel')
-            ->will($this->returnValue($this->entity));
-        $this->getListener()->onChannelSucceedSave($this->event);
-
-        $this->assertEmpty($this->integration->getConnectors());
     }
 
     /**
@@ -70,7 +40,7 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
      *
      * @dataProvider extensionDataProvider
      */
-    public function testOnChannelSucceedSaveWithExtension($isExtensionInstalled, array $expectedConnectors)
+    public function testOnChannelSaveWithExtension($isExtensionInstalled, array $expectedConnectors)
     {
         $this->entity->setChannelType(ChannelType::TYPE);
         $transport = new MagentoSoapTransport();
@@ -113,7 +83,7 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
             ->willReturn(new ArrayCollection(['dictionaryConnector' => $dictionaryConnector]));
 
         $this->prepareEvent();
-        $this->getListener()->onChannelSucceedSave($this->event);
+        $this->getListener()->onChannelSave($this->event);
 
         $this->assertEquals($expectedConnectors, $this->integration->getConnectors());
     }
@@ -167,7 +137,7 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
             ->willReturn(new ArrayCollection());
 
         $this->prepareEvent();
-        $this->getListener()->onChannelSucceedSave($this->event);
+        $this->getListener()->onChannelSave($this->event);
 
         $this->assertEquals($expectedConnectors, $this->integration->getConnectors());
     }
@@ -194,7 +164,7 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         ];
     }
 
-    public function testOnChannelSucceedSave()
+    public function testOnChannelSave()
     {
         $this->entity->setChannelType(ChannelType::TYPE);
         $transport = new MagentoSoapTransport();
@@ -206,7 +176,7 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
             ->willReturn(new ArrayCollection([]));
 
         $this->prepareEvent();
-        $this->getListener()->onChannelSucceedSave($this->event);
+        $this->getListener()->onChannelSave($this->event);
     }
 
     /**
@@ -239,6 +209,6 @@ class ChannelSaveSucceedListenerTest extends BaseTestCase
         $this->em->expects($this->never())
             ->method($this->anything());
 
-        $this->getListener()->onChannelSucceedSave($this->event);
+        $this->getListener()->onChannelSave($this->event);
     }
 }

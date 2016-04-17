@@ -4,12 +4,15 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
@@ -38,7 +41,7 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
      */
     public static function addStateField(Schema $schema, ExtendExtension $extendExtension)
     {
-        $extendExtension->addEnumField(
+        $enumTable = $extendExtension->addEnumField(
             $schema,
             'orocrm_sales_opportunity',
             'state',
@@ -46,9 +49,25 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
             false,
             false,
             [
-                'extend' => ['owner' => ExtendScope::OWNER_CUSTOM],
+                'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
                 'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE]
             ]
         );
+
+        $options = new OroOptions();
+        $options->set(
+            'enum_codes',
+            'immutable',
+            [
+                'identification_alignment',
+                'needs_analysis',
+                'solution_development',
+                'negotiation',
+                'won',
+                'lost'
+            ]
+        );
+
+        $enumTable->addOption(OroOptions::KEY, $options);
     }
 }
