@@ -48,8 +48,8 @@ parameters:
     # event listener
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
-    orocrm_channel.event_listener.channel_change_status.class:         OroCRM\Bundle\ChannelBundle\EventListener\ChangeChannelStatusListener
-    orocrm_channel.event_listener.channel_save_succeed.class:          OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener
+    orocrm_channel.event_listener.update_integration_connectors.class: OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
+    orocrm_channel.event_listener.change_integration_status.class:     OroCRM\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
     orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
     orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
@@ -270,20 +270,20 @@ services:
         arguments:
             - "@orocrm_channel.provider.settings_provider"
 
-    orocrm_channel.event_listener.channel_change_status:
-        class: %orocrm_channel.event_listener.channel_change_status.class%
+    orocrm_channel.event_listener.change_integration_status:
+        class: %orocrm_channel.event_listener.change_integration_status.class%
         arguments:
             - "@doctrine"
         tags:
             - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
 
-    orocrm_channel.event_listener.channel_save_succeed:
-        class: %orocrm_channel.event_listener.channel_save_succeed.class%
+    orocrm_channel.event_listener.update_integration_connectors:
+        class: %orocrm_channel.event_listener.update_integration_connectors.class%
         arguments:
             - "@orocrm_channel.provider.settings_provider"
             - "@doctrine"
         tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSucceedSave }
+            - { name: kernel.event_listener, event: orocrm_channel.channel.save_succeed, method: onChannelSave }
 
     orocrm_channel.event_listener.channel_succeed_deleted:
         class: %orocrm_channel.event_listener.channel_before_deleted.class%
