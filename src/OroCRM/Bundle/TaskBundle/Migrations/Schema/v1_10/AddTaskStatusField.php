@@ -9,6 +9,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigEntityValueQuery;
 
 class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
 {
@@ -29,6 +30,15 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
     public function up(Schema $schema, QueryBag $queries)
     {
         static::addTaskStatusField($schema, $this->extendExtension);
+
+        $queries->addQuery(
+            new UpdateEntityConfigEntityValueQuery(
+                'OroCRM\Bundle\TaskBundle\Entity\Task',
+                'workflow',
+                'show_step_in_grid',
+                false
+            )
+        );
 
         $queries->addPostQuery(
             'UPDATE orocrm_task AS t
