@@ -5,12 +5,13 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 use Akeneo\Bundle\BatchBundle\Entity\JobExecution;
 use Akeneo\Bundle\BatchBundle\Entity\StepExecution;
 
-use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -20,8 +21,6 @@ use Oro\Bundle\IntegrationBundle\ImportExport\Helper\DefaultOwnerHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\StrategyHelper\AddressImportHelper;
 use OroCRM\Bundle\ChannelBundle\ImportExport\Helper\ChannelHelper;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\AbstractImportStrategy;
-use Symfony\Component\Translation\DataCollectorTranslator;
-use Symfony\Component\Translation\TranslatorInterface;
 
 abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +80,7 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
     protected $chainEntityClassNameProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|DataCollectorTranslator
+     * @var \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
      */
     protected $translator;
 
@@ -141,7 +140,7 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->translator = $this->getMockBuilder('Symfony\Component\Translation\DataCollectorTranslator')
+        $this->translator = $this->getMockBuilder('Symfony\Component\Translation\TranslatorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
