@@ -52,7 +52,7 @@
         {% elseif entity.status.id == 'in_progress' %}
             <div class="badge badge-tentatively status-tentatively"><i class="icon-status-tentatively icon-circle"></i>{{ entity.status.name }}</div>
         {% else %}
-            <div class="badge badge-disabled status-unknown"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+            <div class="badge badge-disabled status-unknown"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.name }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
