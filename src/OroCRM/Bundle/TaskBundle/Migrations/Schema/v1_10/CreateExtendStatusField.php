@@ -36,7 +36,7 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
         );
 
         $options = new OroOptions();
-        $options->set('enum_codes', 'immutable', ['open', 'in_progress', 'closed']);
+        $options->set('enum', 'immutable_codes', ['open', 'in_progress', 'closed']);
 
         $enumTable->addOption(OroOptions::KEY, $options);
 
