@@ -3,16 +3,16 @@
 namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\EventListener;
 
 use Doctrine\ORM\EntityManager;
+use OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 
 use OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider;
-use OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
+class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|RegistryInterface */
     protected $registry;
@@ -52,12 +52,12 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
         unset($this->entity, $this->integration);
     }
 
-    public function testOnChannelSucceedSave()
+    public function testOnChannelSave()
     {
         $this->prepareEvent();
 
         $channelSaveSucceedListener = $this->getListener();
-        $channelSaveSucceedListener->onChannelSucceedSave($this->event);
+        $channelSaveSucceedListener->onChannelSave($this->event);
 
         $this->assertConnectors();
     }
@@ -93,11 +93,11 @@ class ChannelSaveSucceedListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return ChannelSaveSucceedListener
+     * @return UpdateIntegrationConnectorsListener
      */
     protected function getListener()
     {
-        return new ChannelSaveSucceedListener($this->settingProvider, $this->registry);
+        return new UpdateIntegrationConnectorsListener($this->settingProvider, $this->registry);
     }
 
     public function assertConnectors()
