@@ -40,12 +40,7 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
             )
         );
 
-        $queries->addPostQuery(
-            'UPDATE orocrm_task AS t
-                LEFT JOIN `oro_workflow_step` ws ON t.`workflow_step_id` = ws.id
-                INNER JOIN `oro_enum_task_status` ts ON ws.name = ts.id
-            SET t.`status_id` = ts.id'
-        );
+        $queries->addPostQuery(new UpdateTaskStatusQuery());
     }
 
     /**
