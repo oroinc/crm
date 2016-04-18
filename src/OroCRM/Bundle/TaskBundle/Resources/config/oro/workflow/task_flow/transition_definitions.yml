@@ -3,25 +3,37 @@ workflows:
         transition_definitions:
             start_progress_definition:
               post_actions:
-                  - @find_entity:
-                      class: Extend\Entity\EV_Task_Status
-                      identifier: 'in_progress'
+                  - @call_service_method:
+                      service: oro_entity_extend.enum_value_provider
+                      method: getEnumValueByCode
+                      method_parameters:
+                          - 'task_status'
+                          - 'in_progress'
                       attribute: $task.status
             stop_progress_definition:
               post_actions:
-                  - @find_entity:
-                      class: Extend\Entity\EV_Task_Status
-                      identifier: 'open'
+                  - @call_service_method:
+                      service: oro_entity_extend.enum_value_provider
+                      method: getEnumValueByCode
+                      method_parameters:
+                          - 'task_status'
+                          - 'open'
                       attribute: $task.status
             closed_definition:
               post_actions:
-                  - @find_entity:
-                      class: Extend\Entity\EV_Task_Status
-                      identifier: 'closed'
+                  - @call_service_method:
+                      service: oro_entity_extend.enum_value_provider
+                      method: getEnumValueByCode
+                      method_parameters:
+                          - 'task_status'
+                          - 'closed'
                       attribute: $task.status
             reopen_definition:
               post_actions:
-                  - @find_entity:
-                      class: Extend\Entity\EV_Task_Status
-                      identifier: 'open'
+                  - @call_service_method:
+                      service: oro_entity_extend.enum_value_provider
+                      method: getEnumValueByCode
+                      method_parameters:
+                          - 'task_status'
+                          - 'open'
                       attribute: $task.status
