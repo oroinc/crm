@@ -57,12 +57,12 @@
 {% block breadcrumbs %}
     {{ parent() }}
     <div class="pull-left">
-        {% if entity.status.name != 'lost' %}
+        {% if entity.state.id != 'lost' %}
             <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
+                <i class="icon-status-enabled icon-circle"></i>{{ entity.state.name }}</div>
         {% else %}
             <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
+                <i class="icon-status-disabled icon-circle"></i>{{ entity.state.name  }}</div>
         {% endif %}
     </div>
 {% endblock breadcrumbs %}
