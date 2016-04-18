@@ -22,7 +22,6 @@ datagrid:
                     - o.budgetAmount
                     - o.closeRevenue
                     - status.id as state
-                    - status.name as statusLabel
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
