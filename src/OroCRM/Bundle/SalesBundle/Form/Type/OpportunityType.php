@@ -92,7 +92,8 @@ class OpportunityType extends AbstractType
                 'state',
                 'oro_enum_select',
                 array(
-                    'label'    => 'orocrm.sales.opportunity.state.label',
+                    'required' => false,
+                    'label' => 'orocrm.sales.opportunity.state.label',
                     'enum_code' => Opportunity::INTERNAL_STATE_CODE
                 )
             );

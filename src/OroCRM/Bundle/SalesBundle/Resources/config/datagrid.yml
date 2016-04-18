@@ -21,9 +21,10 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - o.closeRevenue
+                    - status.id as state
+                    - status.name as statusLabel
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
-                    - status.name as statusLabel
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
@@ -85,8 +86,10 @@ datagrid:
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            statusLabel:
+            state:
+                frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_state')"
             primaryEmail:
                 label:         orocrm.contact.email.label
             ownerName:
@@ -140,8 +143,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: status.label
+                state:
+                    data_name: status.id
                 primaryEmail:
                     data_name: email.email
                 ownerName:
@@ -197,15 +200,10 @@ datagrid:
                 probability:
                     type: percent
                     data_name: o.probability
-                statusLabel:
-                    type: entity
+                state:
+                    type:      enum
                     data_name: status.name
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            translatable_options: false
-                            multiple: true
+                    enum_code: opportunity_state
                 primaryEmail:
                     type: string
                     data_name: email.email
