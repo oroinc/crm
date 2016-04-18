@@ -10,7 +10,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
 
-class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterface
+class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
 {
     /** @var ExtendExtension $extendExtension */
     protected $extendExtension;
@@ -28,7 +28,23 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $enumTable = $this->extendExtension->addEnumField(
+        static::addTaskStatusField($schema, $this->extendExtension);
+
+        $queries->addPostQuery(
+            'UPDATE orocrm_task AS t
+                LEFT JOIN `oro_workflow_step` ws ON t.`workflow_step_id` = ws.id
+                INNER JOIN `oro_enum_task_status` ts ON ws.name = ts.id
+            SET t.`status_id` = ts.id'
+        );
+    }
+
+    /**
+     * @param Schema $schema
+     * @param ExtendExtension $extendExtension
+     */
+    public static function addTaskStatusField(Schema $schema, ExtendExtension $extendExtension)
+    {
+        $enumTable = $extendExtension->addEnumField(
             $schema,
             'orocrm_task',
             'status',
@@ -39,12 +55,5 @@ class CreateExtendedStatusField implements Migration, ExtendExtensionAwareInterf
         $options->set('enum', 'immutable_codes', ['open', 'in_progress', 'closed']);
 
         $enumTable->addOption(OroOptions::KEY, $options);
-
-        $queries->addPostQuery(
-            'UPDATE orocrm_task AS t
-                LEFT JOIN `oro_workflow_step` ws ON t.`workflow_step_id` = ws.id
-                INNER JOIN `oro_enum_task_status` ts ON ws.name = ts.id
-            SET t.`status_id` = ts.id'
-        );
     }
 }

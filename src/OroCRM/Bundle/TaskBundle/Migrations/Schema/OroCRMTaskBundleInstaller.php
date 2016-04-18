@@ -13,6 +13,7 @@ use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterf
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_9\AddActivityAssociations;
+use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_10\AddTaskStatusField;
 
 class OroCRMTaskBundleInstaller implements
     Installation,
@@ -26,9 +27,7 @@ class OroCRMTaskBundleInstaller implements
     /** @var CommentExtension */
     protected $comment;
 
-    /**
-     * @var ExtendExtension
-     */
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**
@@ -79,18 +78,11 @@ class OroCRMTaskBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_contact');
 
-        /** Add status extended field **/
-        $this->extendExtension->addEnumField(
-            $schema,
-            'orocrm_task',
-            'status',
-            'task_status'
-        );
-
         /** Add comment relation */
         $this->comment->addCommentAssociation($schema, 'orocrm_task');
 
         AddActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
+        AddTaskStatusField::addTaskStatusField($schema, $this->extendExtension);
     }
 
     /**
