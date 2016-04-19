@@ -127,14 +127,14 @@ orocrm:
             proposed_solution.label: Proposed solution
             status.label:         Status
             close_reason.label:   Close reason
-            contact.label:        Potential Customer
+            contact.label:        Contact
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       B2B Customer
+            customer.label:       Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
             state.label:          Status

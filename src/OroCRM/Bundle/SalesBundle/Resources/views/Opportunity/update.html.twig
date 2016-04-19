@@ -79,10 +79,10 @@
     {% endif %}
 
     {% set formFields = formFields|merge([
-        form_row(form.name),
+        form_row(form.name, {attr: {autofocus: true}}),
         form_row(form.dataChannel),
-        form_row(form.contact),
         form_row(form.customer),
+        form_row(form.contact),
         form_row(form.state),
         form_row(form.probability),
         form_row(form.budgetAmount),
@@ -94,6 +94,13 @@
         form_row(form.notes)
     ]) %}
 
+   {# <script>
+        require(['jquery'], function ($) {
+            $('[name="orocrm_sales_opportunity_form[name]"]').on('blur', function() {
+                throw new Error('here it comes');
+            });
+        });
+    </script>#}
     {% set dataBlocks = [{
         'title': 'General'|trans,
         'class': 'active',
