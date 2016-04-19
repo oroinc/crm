@@ -16,6 +16,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
+    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT = 'Solution Development';
+    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE = 'solution_development';
+    
     /**
      * @var WorkflowStep[]
      */
@@ -215,9 +218,9 @@ class OpportunityRepository extends EntityRepository
     protected function isStatusOk($opportunityHistory, $opportunity)
     {
         if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'state')) {
-            $isStatusOk = $oldStatus === 'Solution Development';
+            $isStatusOk = $oldStatus === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT;
         } else {
-            $isStatusOk = $opportunity->getState()->getName() === 'solution_development';
+            $isStatusOk = $opportunity->getState()->getName() === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE;
         }
 
         return $isStatusOk;
@@ -330,7 +333,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('state', 'solution_development');
+            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -357,7 +360,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'solution_development');
+            ->setParameter('status', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -401,7 +404,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('state', 'solution_development');
+            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
