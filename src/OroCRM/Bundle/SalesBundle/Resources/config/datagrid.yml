@@ -201,7 +201,7 @@ datagrid:
                     data_name: o.probability
                 state:
                     type:      enum
-                    data_name: status.name
+                    data_name: status.id
                     enum_code: opportunity_state
                 primaryEmail:
                     type: string
