@@ -55,7 +55,7 @@ class LoadOpportunityStateData extends AbstractEnumFixture
         $this->manager = $manager;
         $repository = $manager->getRepository('OroCRMSalesBundle:Opportunity');
         $connection = $repository->createQueryBuilder('o')->getEntityManager()->getConnection();
-        $query = 'UPDATE orocrm_sales_opportunity as o SET o.state_id= ? WHERE o.status_name = ?';
+        $query = 'UPDATE orocrm_sales_opportunity SET state_id = ? WHERE status_name = ?';
         parent::load($manager);
 
         foreach ($this->statusMapping as $status => $state) {
