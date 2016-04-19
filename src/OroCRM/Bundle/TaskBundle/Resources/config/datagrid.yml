@@ -35,7 +35,7 @@ datagrid:
                 frontend_type: datetime
             status:
                 label:         orocrm.task.status.label
-                choices: @oro_entity_extend.enum_value_provider->getEnumChoicesByCode('task_status')
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('task_status')"
                 inline_editing:
                     enable: true
             taskPriority:
