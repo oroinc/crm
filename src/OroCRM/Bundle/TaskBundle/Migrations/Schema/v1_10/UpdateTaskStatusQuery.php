@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_10;
 
-use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 
 use Psr\Log\LoggerInterface;
@@ -19,7 +19,7 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
     {
         $logger = new ArrayLogger();
         $logger->info(
-            'Update task status field from workflow step on PostgreSQL >= 9.2 and MySQL >= 5.0'
+            'Update task status field from workflow step.'
         );
         $this->doExecute($logger, true);
 
@@ -40,11 +40,11 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
         $platform = $this->connection->getDatabasePlatform();
-        if ($platform instanceof PostgreSQL92Platform) {
-            $updateSql = 'UPDATE orocrm_task AS t
+        if ($platform instanceof PostgreSqlPlatform) {
+            $updateSql = "UPDATE orocrm_task AS t
                 SET status_id = ts.id
                 FROM oro_workflow_step AS ws, oro_enum_task_status AS ts
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id';
+                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = 'task_flow'";
 
             $this->logQuery($logger, $updateSql);
             if (!$dryRun) {
@@ -53,9 +53,9 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
         }
 
         if ($platform instanceof MySqlPlatform) {
-            $updateSql = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
+            $updateSql = "UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
                 SET t.status_id = ts.id
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id';
+                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = 'task_flow'";
 
             $this->logQuery($logger, $updateSql);
             if (!$dryRun) {
