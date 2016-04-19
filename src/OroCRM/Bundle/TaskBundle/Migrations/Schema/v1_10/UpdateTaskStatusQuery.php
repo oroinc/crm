@@ -41,34 +41,40 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
     {
         $platform = $this->connection->getDatabasePlatform();
         if ($platform instanceof PostgreSqlPlatform) {
-            $updateSql = "UPDATE orocrm_task AS t
+            $updateSql = 'UPDATE orocrm_task AS t
                 SET status_id = ts.id
                 FROM oro_workflow_step AS ws, oro_enum_task_status AS ts
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = 'task_flow'";
+                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+            $params = ['workflow_name' => 'task_flow'];
+            $types  = ['workflow_name' => 'string'];
 
-            $this->logQuery($logger, $updateSql);
+            $this->logQuery($logger, $updateSql, $params, $types);
             if (!$dryRun) {
-                $this->connection->executeUpdate($updateSql);
+                $this->connection->executeUpdate($updateSql, $params, $types);
             }
         }
 
         if ($platform instanceof MySqlPlatform) {
-            $updateSql = "UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
+            $updateSql = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
                 SET t.status_id = ts.id
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = 'task_flow'";
+                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+            $params = ['workflow_name' => 'task_flow'];
+            $types  = ['workflow_name' => 'string'];
 
-            $this->logQuery($logger, $updateSql);
+            $this->logQuery($logger, $updateSql, $params, $types);
             if (!$dryRun) {
-                $this->connection->executeUpdate($updateSql);
+                $this->connection->executeUpdate($updateSql, $params, $types);
             }
         }
 
         // set task status to open on tasks that had no assigned workflow steps
-        $updateSql = "UPDATE orocrm_task SET status_id = 'open' WHERE status_id IS NULL";
+        $updateSql = 'UPDATE orocrm_task SET status_id = :status_id WHERE status_id IS NULL';
+        $params = ['status_id' => 'open'];
+        $types  = ['status_id' => 'string'];
 
-        $this->logQuery($logger, $updateSql);
+        $this->logQuery($logger, $updateSql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($updateSql);
+            $this->connection->executeUpdate($updateSql, $params, $types);
         }
     }
 }
