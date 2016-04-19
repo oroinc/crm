@@ -50,7 +50,7 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
             false,
             [
                 'extend' => ['owner' => ExtendScope::OWNER_SYSTEM],
-                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE]
+                'datagrid' => ['is_visible' => DatagridScope::IS_VISIBLE_TRUE, 'auditable' => true]
             ]
         );
 
