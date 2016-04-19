@@ -56,8 +56,8 @@ class AddOpportunityState implements Migration, ExtendExtensionAwareInterface
 
         $options = new OroOptions();
         $options->set(
-            'enum_codes',
-            'immutable',
+            'enum',
+            'immutable_codes',
             [
                 'identification_alignment',
                 'needs_analysis',
