@@ -1,11 +1,14 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
+    constraints:
+        #- OroCRM\Bundle\ContactBundle\Validator\Constraints\AtLeastOneField:
+        - Expression:
+            expression: 'this.getFirstName() || this.getLastName() || this.getEmails().count() > 0 || this.getPhones().count() > 0 || this.getAddresses().count() > 0'
+            message: First name or Last name should be filled or at least one email or phone or address should be added.
     properties:
         firstName:
-            - NotBlank: ~
             - Length:
                 max: 100
         lastName:
-            - NotBlank: ~
             - Length:
                 max: 100
         gender:
