@@ -71,6 +71,8 @@ class Opportunity extends ExtendOpportunity implements
 {
     use ChannelEntityTrait;
 
+    const INTERNAL_STATE_CODE = 'opportunity_state';
+
     /**
      * @var int
      *
@@ -89,6 +91,7 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * @var OpportunityStatus
+     * @deprecated 1.12.0:1.14.0 Will be renamed to state
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
@@ -595,6 +598,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @param  OpportunityStatus $status
      * @return Opportunity
+     * @deprecated 1.12.0:1.14.0 Use $this->setState() instead
      */
     public function setStatus($status)
     {
@@ -605,6 +609,7 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * @return OpportunityStatus
+     * @deprecated 1.12.0:1.14.0 Use $this->getState() instead
      */
     public function getStatus()
     {

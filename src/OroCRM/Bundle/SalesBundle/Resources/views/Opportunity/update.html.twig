@@ -56,15 +56,18 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status.name != 'lost' %}
-            <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
-        {% endif %}
-    </div>
+    {% if entity.state %}
+        <div class="pull-left">
+            {% if entity.state.id != 'lost' %}
+                <div class="badge badge-enabled status-enabled">
+                    <i class="icon-status-enabled icon-circle"></i>{{ entity.state.name }}</div>
+            {% else %}
+                <div class="badge badge-disabled status-disabled">
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.state.name  }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+
 {% endblock breadcrumbs %}
 
 {% block content_data %}
@@ -80,6 +83,7 @@
         form_row(form.dataChannel),
         form_row(form.contact),
         form_row(form.customer),
+        form_row(form.state),
         form_row(form.probability),
         form_row(form.budgetAmount),
         form_row(form.customerNeed),
