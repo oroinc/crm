@@ -77,6 +77,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "tag"={
  *              "enabled"=true
+ *          },
+ *          "merge"={
+ *              "enable"=true
  *          }
  *      }
  * )
@@ -116,6 +119,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=20
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -136,6 +142,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "identity"=true,
      *              "order"=30
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -155,6 +164,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=40
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -175,6 +187,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "identity"=true,
      *              "order"=50
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -194,6 +209,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=60
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -213,6 +231,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=70
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -232,6 +253,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=160
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -251,6 +275,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=80
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -270,6 +297,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=170
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -289,6 +319,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=180
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -310,6 +343,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "order"=190,
      *              "short"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -330,6 +366,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "order"=200,
      *              "short"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -349,6 +388,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "excluded"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -368,6 +410,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=90
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -386,6 +431,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "entity"={
      *              "contact_information"="email"
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -407,6 +455,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -428,6 +479,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -447,6 +501,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=100
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -466,6 +523,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=110
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -485,6 +545,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=120
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -504,6 +567,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=130
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -523,6 +589,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=140
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -542,6 +611,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "importexport"={
      *              "order"=150
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -563,6 +635,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "dataaudit"={
      *              "auditable"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -582,6 +657,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "order"=230,
      *              "short"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
@@ -598,6 +676,9 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          "importexport"={
      *              "order"=240,
      *              "short"=true
+     *          },
+     *          "merge"={
+     *              "display"=true
      *          }
      *      }
      * )
