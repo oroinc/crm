@@ -85,7 +85,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'notes',
-                'textarea',
+                'oro_resizeable_rich_text',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.notes.label')
             )
             ->add(
