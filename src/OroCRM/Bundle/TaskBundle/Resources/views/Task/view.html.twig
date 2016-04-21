@@ -44,6 +44,19 @@
     {{ parent() }}
 {% endblock pageHeader %}
 
+{% block breadcrumbs %}
+    {{ parent() }}
+    <div class="pull-left">
+        {% if entity.status.id == 'closed' %}
+            <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
+        {% elseif entity.status.id == 'in_progress' %}
+            <div class="badge badge-tentatively status-tentatively"><i class="icon-status-tentatively icon-circle"></i>{{ entity.status.name }}</div>
+        {% else %}
+            <div class="badge badge-disabled status-unknown"><i class="icon-status-disabled icon-circle"></i>{{ entity.status.name }}</div>
+        {% endif %}
+    </div>
+{% endblock breadcrumbs %}
+
 {% block content_data %}
     {%- set taskInformation -%}
         <div class="row-fluid form-horizontal">
@@ -51,6 +64,7 @@
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
                 {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
                 {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
+                {{ UI.renderProperty('orocrm.task.status.label'|trans, entity.status.name) }}
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
                 {%- set ownerData -%}
