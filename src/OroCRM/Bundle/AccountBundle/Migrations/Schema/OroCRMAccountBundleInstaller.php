@@ -79,7 +79,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_11';
     }
 
     /**
@@ -145,7 +145,9 @@ class OroCRMAccountBundleInstaller implements
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'merge'     => ['display' => true],
-                    'dataaudit' => ['auditable' => true]
+                    'dataaudit' => ['auditable' => true],
+                    'form'      => ['type' => 'oro_resizeable_rich_text'],
+                    'view'      => ['type' => 'html'],
                 ]
             ]
         );

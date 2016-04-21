@@ -62,7 +62,7 @@
         <div class="row-fluid form-horizontal">
             <div class="responsive-block">
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
-                {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
+                {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description) }}
                 {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
                 {{ UI.renderProperty('orocrm.task.status.label'|trans, entity.status.name) }}
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
