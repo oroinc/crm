@@ -15,7 +15,9 @@ class B2bCustomerSelectType extends AbstractType
         $resolver->setDefaults(
             array(
                 'configs'            => array(
-                    'placeholder' => 'orocrm.sales.form.choose_b2bcustomer'
+                    'placeholder' => 'orocrm.sales.form.choose_b2bcustomer',
+                    'result_template_twig'    => 'OroFormBundle:Autocomplete:default/result.html.twig',
+                    'propertyNameForNewItem' => 'name',
                 ),
                 'autocomplete_alias' => 'b2b_customers',
                 'grid_name'          => 'orocrm-sales-b2bcustomers-select-grid',
