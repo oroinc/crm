@@ -1,7 +1,7 @@
 {% extends 'OroUIBundle:actions:view.html.twig' %}
 {% import 'OroUIBundle::macros.html.twig' as macros %}
 
-{% set fullname = entity|oro_format_name|default('N/A'|trans) %}
+{% set fullname = entity|oro_format_name|default('oro.entity.item'|trans({'%id%': entity.id})) %}
 {% oro_title_set({params : {"%contact.name%": fullname} }) %}
 
 {% block navButtons %}

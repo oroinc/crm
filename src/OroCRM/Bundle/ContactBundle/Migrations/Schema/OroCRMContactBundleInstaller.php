@@ -73,7 +73,7 @@ class OroCRMContactBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_13';
+        return 'v1_14';
     }
 
     /**
@@ -126,9 +126,9 @@ class OroCRMContactBundleInstaller implements
         $table->addColumn('method_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('source_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('first_name', 'string', ['length' => 255]);
+        $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('last_name', 'string', ['length' => 255]);
+        $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('gender', 'string', ['notnull' => false, 'length' => 8]);
         $table->addColumn('birthday', 'date', ['notnull' => false]);
