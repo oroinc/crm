@@ -83,6 +83,7 @@ class OroCRMTaskBundleInstaller implements
 
         AddActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
         AddTaskStatusField::addTaskStatusField($schema, $this->extendExtension);
+        AddTaskStatusField::addEnumValues($queries, $this->extendExtension);
     }
 
     /**
