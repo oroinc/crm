@@ -31,10 +31,10 @@ class HasContactInformationValidator extends ConstraintValidator
         }
 
         if (!$value instanceof Contact) {
-            throw new \InvalidArgumentException(
+            throw new \InvalidArgumentException(sprintf(
                 'Validator expects $value to be instance of "%s"',
                 'OroCRM\Bundle\ContactBundle\Entity\Contact'
-            );
+            ));
         }
 
         if (
