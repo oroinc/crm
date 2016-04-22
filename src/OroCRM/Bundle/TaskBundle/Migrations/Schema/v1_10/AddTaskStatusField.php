@@ -39,8 +39,6 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
                 false
             )
         );
-
-        $queries->addPostQuery(new UpdateTaskStatusQuery());
     }
 
     /**
