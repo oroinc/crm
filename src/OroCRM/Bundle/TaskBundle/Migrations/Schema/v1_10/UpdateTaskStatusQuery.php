@@ -9,9 +9,21 @@ use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 
 class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
 {
+    /** @var $extendExtension */
+    protected $extendExtension;
+
+    /**
+     * @param ExtendExtension $extendExtension
+     */
+    public function __construct(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -36,7 +48,7 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
 
     /**
      * @param LoggerInterface $logger
-     * @param bool $dryRun
+     * @param bool            $dryRun
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
@@ -54,14 +66,18 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
 
     /**
      * @param LoggerInterface $logger
-     * @param bool $dryRun
+     * @param bool            $dryRun
      */
     protected function updatePostgres(LoggerInterface $logger, $dryRun)
     {
-        $sql = 'UPDATE orocrm_task AS t
-            SET status_id = ts.id
-            FROM oro_workflow_step AS ws, oro_enum_task_status AS ts
-            WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $tableName = $this->extendExtension->getNameGenerator()->generateEnumTableName('task_status');
+
+        $sql = 'UPDATE orocrm_task AS t' .
+               ' SET status_id = ts.id' .
+               ' FROM oro_workflow_step AS ws, %s AS ts' .
+               ' WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $sql = sprintf($sql, $tableName);
+
         $params = ['workflow_name' => 'task_flow'];
         $types  = ['workflow_name' => 'string'];
 
@@ -73,13 +89,17 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
 
     /**
      * @param LoggerInterface $logger
-     * @param bool $dryRun
+     * @param bool            $dryRun
      */
     protected function updateMysql(LoggerInterface $logger, $dryRun)
     {
-        $sql = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
-            SET t.status_id = ts.id
-            WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $tableName = $this->extendExtension->getNameGenerator()->generateEnumTableName('task_status');
+
+        $sql    = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, %s AS ts' .
+                  ' SET t.status_id = ts.id' .
+                  ' WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $sql = sprintf($sql, $tableName);
+
         $params = ['workflow_name' => 'task_flow'];
         $types  = ['workflow_name' => 'string'];
 
@@ -93,12 +113,12 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
      * Set task status to open on tasks that had no assigned workflow steps
      *
      * @param LoggerInterface $logger
-     * @param bool $dryRun
-     * @param string $defaultStatus
+     * @param bool            $dryRun
+     * @param string          $defaultStatus
      */
     protected function updateDefaultTaskStatus(LoggerInterface $logger, $dryRun, $defaultStatus)
     {
-        $sql = 'UPDATE orocrm_task SET status_id = :status_id WHERE status_id IS NULL';
+        $sql    = 'UPDATE orocrm_task SET status_id = :status_id WHERE status_id IS NULL';
         $params = ['status_id' => $defaultStatus];
         $types  = ['status_id' => 'string'];
 

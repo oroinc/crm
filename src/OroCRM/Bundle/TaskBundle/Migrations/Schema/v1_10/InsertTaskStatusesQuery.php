@@ -6,9 +6,21 @@ use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 
 class InsertTaskStatusesQuery extends ParametrizedMigrationQuery
 {
+    /** @var $extendExtension */
+    protected $extendExtension;
+
+    /**
+     * @param ExtendExtension $extendExtension
+     */
+    public function __construct(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -37,8 +49,10 @@ class InsertTaskStatusesQuery extends ParametrizedMigrationQuery
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $sql = 'INSERT INTO oro_enum_task_status (id, name, priority, is_default) 
-            VALUES (:id, :name, :priority, :is_default)';
+        $tableName = $this->extendExtension->getNameGenerator()->generateEnumTableName('task_status');
+
+        $sql = 'INSERT INTO %s (id, name, priority, is_default) VALUES (:id, :name, :priority, :is_default)';
+        $sql = sprintf($sql, $tableName);
 
         $statuses = [
             [
