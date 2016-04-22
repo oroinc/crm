@@ -136,7 +136,7 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
         $this->configProvider
             ->method('is')
             ->with('is_extend')
-            ->will($this->returnValue(true));
+            ->will($this->returnValue(false));
 
         $this->listener->onAddActivity($event);
         $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
