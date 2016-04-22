@@ -30,6 +30,6 @@ class PrepareResultItemListener
     {
         return $contact->getFirstName() || $contact->getLastName()
             ? null
-            : trim(implode(' ', [$contact->getPrimaryPhone(), $contact->getPrimaryEmail()]));
+            : (string) ($contact->getPrimaryPhone() ?: $contact->getPrimaryEmail());
     }
 }

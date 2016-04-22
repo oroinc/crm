@@ -163,7 +163,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                         ),
                         'OroCRM\Bundle\ContactBundle\Entity\Contact',
                         1,
-                        '5432345 contact@example.com'
+                        '5432345'
                     )
                 ),
             ],
