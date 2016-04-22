@@ -167,6 +167,32 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                     )
                 ),
             ],
+            'contact with phone and email with existing title' => [
+                new PrepareResultItemEvent(
+                    new Item(
+                        $this->getObjectManager(
+                            (new Contact())
+                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
+                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
+                        ),
+                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        1,
+                        'existing title'
+                    )
+                ),
+                new PrepareResultItemEvent(
+                    new Item(
+                        $this->getObjectManager(
+                            (new Contact())
+                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
+                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
+                        ),
+                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        1,
+                        'existing title'
+                    )
+                ),
+            ],
         ];
     }
     

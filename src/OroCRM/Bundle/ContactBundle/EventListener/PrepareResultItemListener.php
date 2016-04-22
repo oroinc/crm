@@ -13,7 +13,9 @@ class PrepareResultItemListener
      */
     public function prepareEmailItemDataEvent(PrepareResultItemEvent $event)
     {
-        if ($event->getResultItem()->getEntityName() !== 'OroCRM\Bundle\ContactBundle\Entity\Contact') {
+        if (trim($event->getResultItem()->getRecordTitle()) ||
+            $event->getResultItem()->getEntityName() !== 'OroCRM\Bundle\ContactBundle\Entity\Contact'
+        ) {
             return;
         }
 
@@ -28,8 +30,6 @@ class PrepareResultItemListener
      */
     protected function getContactTitle(Contact $contact)
     {
-        return $contact->getFirstName() || $contact->getLastName()
-            ? null
-            : (string) ($contact->getPrimaryPhone() ?: $contact->getPrimaryEmail());
+        return (string) ($contact->getPrimaryPhone() ?: $contact->getPrimaryEmail());
     }
 }
