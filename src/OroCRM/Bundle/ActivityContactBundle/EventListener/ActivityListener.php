@@ -45,8 +45,7 @@ class ActivityListener
         ActivityContactProvider $activityContactProvider,
         DoctrineHelper $doctrineHelper,
         ConfigManager $configManager
-    )
-    {
+    ) {
         $this->activityContactProvider = $activityContactProvider;
         $this->doctrineHelper          = $doctrineHelper;
         $this->configManager           = $configManager;
