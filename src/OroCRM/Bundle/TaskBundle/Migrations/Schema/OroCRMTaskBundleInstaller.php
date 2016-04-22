@@ -82,7 +82,8 @@ class OroCRMTaskBundleInstaller implements
         $this->comment->addCommentAssociation($schema, 'orocrm_task');
 
         AddActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
-        AddTaskStatusField::addTaskStatusField($schema, $queries, $this->extendExtension);
+        AddTaskStatusField::addTaskStatusField($schema, $this->extendExtension);
+        AddTaskStatusField::addEnumValues($queries);
     }
 
     /**

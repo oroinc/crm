@@ -40,8 +40,6 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $this->insertStatuses($logger, $dryRun);
-
         $platform = $this->connection->getDatabasePlatform();
         if ($platform instanceof PostgreSqlPlatform) {
             $this->updatePostgres($logger, $dryRun);
@@ -52,51 +50,6 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
         }
 
         $this->updateDefaultTaskStatus($logger, $dryRun, 'open');
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     * @param bool $dryRun
-     */
-    protected function insertStatuses(LoggerInterface $logger, $dryRun)
-    {
-        $sql = 'INSERT INTO oro_enum_task_status (id, name, priority, is_default) 
-            VALUES (:id, :name, :priority, :is_default)';
-
-        $statuses = [
-            [
-                ':id' => 'open',
-                ':name' => 'Open',
-                ':priority' => 1,
-                ':is_default' => true,
-            ],
-            [
-                ':id' => 'in_progress',
-                ':name' => 'In Progress',
-                ':priority' => 2,
-                ':is_default' => false,
-            ],
-            [
-                ':id' => 'closed',
-                ':name' => 'Closed',
-                ':priority' => 3,
-                ':is_default' => false,
-            ],
-        ];
-
-        $types = [
-            'id' => 'string',
-            'name' => 'string',
-            'priority' => 'integer',
-            'is_default' => 'boolean'
-        ];
-
-        foreach ($statuses as $status) {
-            $this->logQuery($logger, $sql, $status, $types);
-            if (!$dryRun) {
-                $this->connection->executeUpdate($sql, $status, $types);
-            }
-        }
     }
 
     /**
