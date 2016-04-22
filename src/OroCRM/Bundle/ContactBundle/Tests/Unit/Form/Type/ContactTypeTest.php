@@ -40,7 +40,7 @@ class ContactTypeTest extends \PHPUnit_Framework_TestCase
             'nameSuffix' => 'text',
             'gender' => 'oro_gender',
             'birthday' => 'oro_date',
-            'description' => 'textarea',
+            'description' => 'oro_resizeable_rich_text',
             'jobTitle' => 'text',
             'fax' => 'text',
             'skype' => 'text',
