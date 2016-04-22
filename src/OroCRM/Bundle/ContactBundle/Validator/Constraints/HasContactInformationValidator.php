@@ -37,8 +37,7 @@ class HasContactInformationValidator extends ConstraintValidator
             ));
         }
 
-        if (
-            $value->getFirstName() ||
+        if ($value->getFirstName() ||
             $value->getLastName() ||
             $value->getEmails()->count() > 0 ||
             $value->getPhones()->count()
