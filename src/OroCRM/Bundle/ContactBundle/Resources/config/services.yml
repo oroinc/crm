@@ -24,6 +24,7 @@ parameters:
 
     orocrm_contact.contact_address.entity.class:      OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.subscriber.contact_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactListener
+    orocrm_conact.listener.prepare_result_item_listener.class: OroCRM\Bundle\ContactBundle\EventListener\PrepareResultItemListener
 
     orocrm_contact.email.owner.provider.class:        OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
@@ -42,6 +43,7 @@ parameters:
     #validator
     orocrm_contact.validator.contact_email_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactEmailDeleteValidator
     orocrm_contact.validator.contact_phone_delete.class: OroCRM\Bundle\ContactBundle\Validator\ContactPhoneDeleteValidator
+    orocrm_contact.validator.has_contact_information.class: OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformationValidator
 
 services:
     orocrm_contact.form.contact:
@@ -276,3 +278,15 @@ services:
 
     orocrm_contact.validator.contact_phone_delete:
         class: %orocrm_contact.validator.contact_phone_delete.class%
+
+    orocrm_contact.validator.has_contact_information:
+        class:  %orocrm_contact.validator.has_contact_information.class%
+        arguments:
+            - @translator
+        tags:
+            - { name: validator.constraint_validator, alias: orocrm_contact.has_contact_information }
+
+    orocrm_conact.listener.prepare_result_item_listener:
+        class: %orocrm_conact.listener.prepare_result_item_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }

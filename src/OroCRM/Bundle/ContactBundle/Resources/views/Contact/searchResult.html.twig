@@ -6,7 +6,7 @@
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% set title = entity ? entity|oro_format_name : indexer_item.recordTitle %}
+{% set title = indexer_item.recordTitle ?: (entity ? entity|oro_format_name : '') %}
 {% set title = title ? : 'N/A'|trans %}
 {% set entityType = 'orocrm.contact.entity_label'|trans %}
 {% set showImage = true %}
