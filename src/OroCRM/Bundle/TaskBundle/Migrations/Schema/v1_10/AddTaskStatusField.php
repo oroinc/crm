@@ -29,7 +29,7 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        static::addTaskStatusField($schema, $this->extendExtension);
+        static::addTaskStatusField($schema, $queries, $this->extendExtension);
 
         $queries->addQuery(
             new UpdateEntityConfigEntityValueQuery(
@@ -43,10 +43,14 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
 
     /**
      * @param Schema $schema
+     * @param QueryBag $queries
      * @param ExtendExtension $extendExtension
      */
-    public static function addTaskStatusField(Schema $schema, ExtendExtension $extendExtension)
-    {
+    public static function addTaskStatusField(
+        Schema $schema,
+        QueryBag $queries,
+        ExtendExtension $extendExtension
+    ) {
         $enumTable = $extendExtension->addEnumField(
             $schema,
             'orocrm_task',
@@ -58,5 +62,7 @@ class AddTaskStatusField implements Migration, ExtendExtensionAwareInterface
         $options->set('enum', 'immutable_codes', ['open', 'in_progress', 'closed']);
 
         $enumTable->addOption(OroOptions::KEY, $options);
+
+        $queries->addPostQuery(new UpdateTaskStatusQuery());
     }
 }

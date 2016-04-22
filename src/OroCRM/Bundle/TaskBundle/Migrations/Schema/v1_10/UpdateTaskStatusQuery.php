@@ -35,46 +35,123 @@ class UpdateTaskStatusQuery extends ParametrizedMigrationQuery
     }
 
     /**
-     * {@inheritdoc}
+     * @param LoggerInterface $logger
+     * @param bool $dryRun
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
+        $this->insertStatuses($logger, $dryRun);
+
         $platform = $this->connection->getDatabasePlatform();
         if ($platform instanceof PostgreSqlPlatform) {
-            $updateSql = 'UPDATE orocrm_task AS t
-                SET status_id = ts.id
-                FROM oro_workflow_step AS ws, oro_enum_task_status AS ts
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
-            $params = ['workflow_name' => 'task_flow'];
-            $types  = ['workflow_name' => 'string'];
-
-            $this->logQuery($logger, $updateSql, $params, $types);
-            if (!$dryRun) {
-                $this->connection->executeUpdate($updateSql, $params, $types);
-            }
+            $this->updatePostgres($logger, $dryRun);
         }
 
         if ($platform instanceof MySqlPlatform) {
-            $updateSql = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
-                SET t.status_id = ts.id
-                WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
-            $params = ['workflow_name' => 'task_flow'];
-            $types  = ['workflow_name' => 'string'];
-
-            $this->logQuery($logger, $updateSql, $params, $types);
-            if (!$dryRun) {
-                $this->connection->executeUpdate($updateSql, $params, $types);
-            }
+            $this->updateMysql($logger, $dryRun);
         }
 
-        // set task status to open on tasks that had no assigned workflow steps
-        $updateSql = 'UPDATE orocrm_task SET status_id = :status_id WHERE status_id IS NULL';
-        $params = ['status_id' => 'open'];
+        $this->updateDefaultTaskStatus($logger, $dryRun, 'open');
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @param bool $dryRun
+     */
+    protected function insertStatuses(LoggerInterface $logger, $dryRun)
+    {
+        $sql = 'INSERT INTO oro_enum_task_status (id, name, priority, is_default) 
+            VALUES (:id, :name, :priority, :is_default)';
+
+        $statuses = [
+            [
+                ':id' => 'open',
+                ':name' => 'Open',
+                ':priority' => 1,
+                ':is_default' => true,
+            ],
+            [
+                ':id' => 'in_progress',
+                ':name' => 'In Progress',
+                ':priority' => 2,
+                ':is_default' => false,
+            ],
+            [
+                ':id' => 'closed',
+                ':name' => 'Closed',
+                ':priority' => 3,
+                ':is_default' => false,
+            ],
+        ];
+
+        $types = [
+            'id' => 'string',
+            'name' => 'string',
+            'priority' => 'integer',
+            'is_default' => 'boolean'
+        ];
+
+        foreach ($statuses as $status) {
+            $this->logQuery($logger, $sql, $status, $types);
+            if (!$dryRun) {
+                $this->connection->executeUpdate($sql, $status, $types);
+            }
+        }
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @param bool $dryRun
+     */
+    protected function updatePostgres(LoggerInterface $logger, $dryRun)
+    {
+        $sql = 'UPDATE orocrm_task AS t
+            SET status_id = ts.id
+            FROM oro_workflow_step AS ws, oro_enum_task_status AS ts
+            WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $params = ['workflow_name' => 'task_flow'];
+        $types  = ['workflow_name' => 'string'];
+
+        $this->logQuery($logger, $sql, $params, $types);
+        if (!$dryRun) {
+            $this->connection->executeUpdate($sql, $params, $types);
+        }
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @param bool $dryRun
+     */
+    protected function updateMysql(LoggerInterface $logger, $dryRun)
+    {
+        $sql = 'UPDATE orocrm_task AS t, oro_workflow_step AS ws, oro_enum_task_status AS ts
+            SET t.status_id = ts.id
+            WHERE t.workflow_step_id = ws.id AND ws.name = ts.id AND ws.workflow_name = :workflow_name';
+        $params = ['workflow_name' => 'task_flow'];
+        $types  = ['workflow_name' => 'string'];
+
+        $this->logQuery($logger, $sql, $params, $types);
+        if (!$dryRun) {
+            $this->connection->executeUpdate($sql, $params, $types);
+        }
+    }
+
+    /**
+     * Set task status to open on tasks that had no assigned workflow steps
+     *
+     * @param LoggerInterface $logger
+     * @param bool $dryRun
+     * @param string $defaultStatus
+     */
+    protected function updateDefaultTaskStatus(LoggerInterface $logger, $dryRun, $defaultStatus)
+    {
+        $sql = 'UPDATE orocrm_task SET status_id = :status_id WHERE status_id IS NULL';
+        $params = ['status_id' => $defaultStatus];
         $types  = ['status_id' => 'string'];
 
-        $this->logQuery($logger, $updateSql, $params, $types);
+        $this->logQuery($logger, $sql, $params, $types);
         if (!$dryRun) {
-            $this->connection->executeUpdate($updateSql, $params, $types);
+            $this->connection->executeUpdate($sql, $params, $types);
         }
     }
 }
