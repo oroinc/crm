@@ -11,7 +11,7 @@
             </div>
         {% endif %}
         {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
-        {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description|nl2br) }}
+        {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description) }}
         {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
         {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
         {% set ownerData %}

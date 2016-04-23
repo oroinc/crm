@@ -34,6 +34,10 @@ orocrm:
                 wonCount:          Number Won
                 lostCount:         Number Lost
                 inProgressCount:   Opportunities In Progress
+                identificationAlignmentCount: Opportunities Identification Alignment
+                needsAnalysisCount: Opportunities Needs Analysis
+                solutionDevelopmentCount: Opportunities Solution Development
+                negotiationCount:  Opportunities Negotiation
                 totalOps:          Total
                 probability:       Probability
                 budgetAmount:      Budget Forecast

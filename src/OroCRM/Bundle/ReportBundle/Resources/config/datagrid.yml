@@ -80,15 +80,18 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) ) as wonCount
-                    - SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) ) as lostCount
-                    - SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                    - SUM( (CASE WHEN (s.id='won') THEN 1 ELSE 0 END) ) as wonCount
+                    - SUM( (CASE WHEN (s.id='lost') THEN 1 ELSE 0 END) ) as lostCount
+                    - SUM( (CASE WHEN (s.id='identification_alignment') THEN 1 ELSE 0 END) ) as identificationAlignmentCount
+                    - SUM( (CASE WHEN (s.id='needs_analysis') THEN 1 ELSE 0 END) ) as needsAnalysisCount
+                    - SUM( (CASE WHEN (s.id='solution_development') THEN 1 ELSE 0 END) ) as solutionDevelopmentCount
+                    - SUM( (CASE WHEN (s.id='negotiation') THEN 1 ELSE 0 END) ) as negotiationCount
                     - COUNT(o.id) as totalOps
                 join:
                     inner:
                         - { join: o.customer, alias: c }
                         - { join: c.account, alias: a }
-                        - { join: o.status, alias: s }
+                        - { join: o.state, alias: s }
                 groupBy:  a.id
         properties:
             id: ~
@@ -117,25 +120,37 @@ datagrid:
                     name:
                         label: orocrm.magento.datagrid.columns.grand_total
                     wonCount:
-                        expr: SUM( (CASE WHEN (s.name='won') THEN 1 ELSE 0 END) )
+                        expr: SUM( (CASE WHEN (s.id='won') THEN 1 ELSE 0 END) )
                     lostCount:
-                        expr: SUM( (CASE WHEN (s.name='lost') THEN 1 ELSE 0 END) )
-                    inProgressCount:
-                        expr: SUM( (CASE WHEN (s.name='in_progress') THEN 1 ELSE 0 END) )
+                        expr: SUM( (CASE WHEN (s.id='lost') THEN 1 ELSE 0 END) )
+                    identificationAlignmentCount:
+                        expr: SUM( (CASE WHEN (s.id='identification_alignment') THEN 1 ELSE 0 END) )
+                    needsAnalysisCount:
+                        expr: SUM( (CASE WHEN (s.id='needs_analysis') THEN 1 ELSE 0 END) )
+                    solutionDevelopmentCount:
+                        expr: SUM( (CASE WHEN (s.id='solution_development') THEN 1 ELSE 0 END) )
+                    negotiationCount:
+                        expr: SUM( (CASE WHEN (s.id='negotiation') THEN 1 ELSE 0 END) )
                     totalOps:
                         expr: COUNT(o.id)
         columns:
             name:             { label: orocrm.report.datagrid.columns.account_name }
-            wonCount:         { label: orocrm.report.datagrid.columns.wonCount,  frontend_type: integer }
-            lostCount:        { label: orocrm.report.datagrid.columns.lostCount,  frontend_type: integer }
-            inProgressCount:  { label: orocrm.report.datagrid.columns.inProgressCount,  frontend_type: integer }
-            totalOps:         { label: orocrm.report.datagrid.columns.totalOps,  frontend_type: integer }
+            wonCount:         { label: orocrm.report.datagrid.columns.wonCount, frontend_type: integer }
+            lostCount:        { label: orocrm.report.datagrid.columns.lostCount, frontend_type: integer }
+            identificationAlignmentCount: { label: orocrm.report.datagrid.columns.identificationAlignmentCount, frontend_type: integer }
+            needsAnalysisCount: { label: orocrm.report.datagrid.columns.needsAnalysisCount, frontend_type: integer }
+            solutionDevelopmentCount: { label: orocrm.report.datagrid.columns.solutionDevelopmentCount, frontend_type: integer }
+            negotiationCount: { label: orocrm.report.datagrid.columns.negotiationCount, frontend_type: integer }
+            totalOps:         { label: orocrm.report.datagrid.columns.totalOps, frontend_type: integer }
         sorters:
             columns:
                 name:              { data_name: a.name }
                 wonCount:          { data_name: wonCount }
                 lostCount:         { data_name: lostCount }
-                inProgressCount:   { data_name: inProgressCount }
+                identificationAlignmentCount: { data_name: identificationAlignmentCount }
+                needsAnalysisCount: { data_name: needsAnalysisCount }
+                solutionDevelopmentCount: { data_name: solutionDevelopmentCount }
+                negotiationCount:  { data_name: negotiationCount }
                 totalOps:          { data_name: totalOps }
         filters:
             columns:
@@ -223,13 +238,13 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
                 join:
                     inner:
-                        - { join: opportunity.status, alias: status }
+                        - { join: opportunity.state, alias: status }
                 select:
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
-                        CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END
+                        CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END
                       ) as closeRevenue
                     - >
                       SUM(
@@ -251,7 +266,7 @@ datagrid:
                     numberOfOpportunities:
                         expr: COUNT(opportunity.id)
                     closeRevenue:
-                        expr: SUM(CASE WHEN status.name IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
+                        expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
                         formatter: currency
                     budgetAmount:
                         expr: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
@@ -318,11 +333,11 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.status, alias: s }
+                        - { join: o.state, alias: s }
                 groupBy: o.closeDate # will be overridden in ReportGridListener with selected period name (monthly or quarterly or yearly)
                 where:
                     and:
-                        - s.name = 'won'
+                        - s.id = 'won'
                         - o.closeDate IS NOT NULL
         properties:
             monthPeriod: ~
@@ -400,14 +415,14 @@ datagrid:
             query:
                 select:
                     - CONCAT(oo.firstName, CONCAT(' ', oo.lastName)) as ownerName
-                    - SUM( (CASE WHEN (s.name = 'in_progress') THEN 1 ELSE 0 END) ) as inProgressCount
+                    - SUM( (CASE WHEN (s.id IN ('identification_alignment', 'needs_analysis', 'solution_development', 'negotiation')) THEN 1 ELSE 0 END) ) as inProgressCount
                     - SUM( o.budgetAmount ) as budgetAmount
                     - SUM( o.budgetAmount * o.probability ) as weightedForecast
                 from:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.status, alias: s }
+                        - { join: o.state, alias: s }
                         - { join: o.owner, alias: oo }
                 where:
                     and:
@@ -429,7 +444,7 @@ datagrid:
                     ownerName:
                         label: orocrm.magento.datagrid.columns.grand_total
                     inProgressCount:
-                        expr: SUM( (CASE WHEN (s.name = 'in_progress') THEN 1 ELSE 0 END) )
+                        expr: SUM( (CASE WHEN (s.id IN ('identification_alignment', 'needs_analysis', 'solution_development', 'negotiation')) THEN 1 ELSE 0 END) )
                     budgetAmount:
                         expr: SUM( o.budgetAmount )
                         formatter: currency

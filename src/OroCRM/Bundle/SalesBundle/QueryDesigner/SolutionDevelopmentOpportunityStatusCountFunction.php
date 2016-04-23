@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\QueryDesigner;
 
-class InProgressOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
+class SolutionDevelopmentOpportunityStatusCountFunction extends AbstractOpportunityStatusCountFunction
 {
     /**
      * @return string
      */
     protected function getStatus()
     {
-        return 'in_progress';
+        return 'solution_development';
     }
 }

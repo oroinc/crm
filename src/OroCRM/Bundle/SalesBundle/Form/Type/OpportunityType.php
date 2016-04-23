@@ -6,6 +6,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
 
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
@@ -73,18 +75,27 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customerNeed',
-                'textarea',
+                'oro_resizeable_rich_text',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.customer_need.label')
             )
             ->add(
                 'proposedSolution',
-                'textarea',
+                'oro_resizeable_rich_text',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.proposed_solution.label')
             )
             ->add(
                 'notes',
-                'textarea',
+                'oro_resizeable_rich_text',
                 array('required' => false, 'label' => 'orocrm.sales.opportunity.notes.label')
+            )
+            ->add(
+                'state',
+                'oro_enum_select',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.opportunity.state.label',
+                    'enum_code' => Opportunity::INTERNAL_STATE_CODE
+                )
             );
     }
 
@@ -96,7 +107,7 @@ class OpportunityType extends AbstractType
         $resolver->setDefaults(
             array(
                 'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
-                'intention'  => 'opportunity',
+                'intention'  => 'opportunity'
             )
         );
     }

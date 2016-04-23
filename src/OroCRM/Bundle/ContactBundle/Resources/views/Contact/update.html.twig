@@ -2,7 +2,7 @@
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
 {% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
-{% set fullname = entity|oro_format_name|default('N/A') %}
+{% set fullname = entity|oro_format_name|default('oro.entity.item'|trans({'%id%': entity.id})) %}
 {% oro_title_set({ params : {"%contact.name%": fullname} }) %}
 
 {% set gridName = 'contact-accounts-grid' %}

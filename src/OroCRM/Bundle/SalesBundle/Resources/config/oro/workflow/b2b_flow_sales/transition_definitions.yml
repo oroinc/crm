@@ -2,16 +2,16 @@ workflows:
     b2b_flow_sales:
         transition_definitions:
             qualify_definition:
-                pre_conditions: # if opportunity.status = "in_progress"
-                    '@equal': [$opportunity.status.name, 'in_progress']
+                pre_conditions: # if opportunity.status = "solution_development"
+                    '@equal': [$opportunity.state.id, 'solution_development']
             develop_definition:
-                pre_conditions: # if opportunity.status = "in_progress"
+                pre_conditions: # if opportunity.status = "solution_development"
                     '@and':
                         - '@equal':
                             message: 'Opportunity must be in status "In progress"'
-                            parameters: [$opportunity.status.name, 'in_progress']
+                            parameters: [$opportunity.state.id, 'solution_development']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
-                conditions: # if opportunity.status = "in_progress"
+                conditions: # if opportunity.status = "solution_development"
                     '@and':
                         - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
@@ -24,9 +24,9 @@ workflows:
             close_as_won_definition:
                 pre_conditions:
                     '@equal':
-                        message: 'Opportunity must be in status "In progress"'
-                        parameters: [$opportunity.status.name, 'in_progress']
-                conditions: # if opportunity.status = "in_progress", required data is entered and reason = "won"
+                        message: 'Opportunity must be in status "Solution Development"'
+                        parameters: [$opportunity.state.id, 'solution_development']
+                conditions: # if opportunity.status = "solution_development", required data is entered and reason = "won"
                     '@and':
                         - '@not_empty':
                             message: 'Close date must be set'
@@ -38,10 +38,10 @@ workflows:
                             message: 'Close revenue must be greater or equal to 0'
                             parameters: [$close_revenue, 0]
                 post_actions: # update opportunity properties, set opportunity.status = "won"
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'won'
-                        attribute: $opportunity.status
+                        attribute: $opportunity.state
                     - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: 'won'
@@ -50,10 +50,10 @@ workflows:
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
-                pre_conditions: # opportunity.status = "in_progress", required data is entered and reason = "cancelled"
+                pre_conditions: # opportunity.status = "solution_development", required data is entered and reason = "cancelled"
                     '@equal':
-                        message: 'Opportunity must be in status "In progress"'
-                        parameters: [$opportunity.status.name, 'in_progress']
+                        message: 'Opportunity must be in status "Solution Development"'
+                        parameters: [$opportunity.state.id, 'solution_development']
                 conditions:
                     '@and':
                         - '@not_empty':
@@ -63,10 +63,10 @@ workflows:
                             message: 'Close reason must be set'
                             parameters: $close_reason_name
                 post_actions: # update opportunity properties, set opportunity.status = "lost"
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
                         identifier: 'lost'
-                        attribute: $opportunity.status
+                        attribute: $opportunity.state
                     - '@find_entity':
                         class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
                         identifier: $close_reason_name
@@ -76,12 +76,12 @@ workflows:
                         - [$close_revenue, 0]
             requalify_lost_definition:
                 conditions:
-                    '@equal': [$opportunity.status.name, 'lost']
+                    '@equal': [$opportunity.state.id, 'lost']
                 post_actions:
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'in_progress'
-                        attribute: $opportunity.status
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
+                        identifier: 'solution_development'
+                        attribute: $opportunity.state
                     - '@assign_value':
                         - [$budget_amount, ~]
                         - [$probability, ~]
@@ -90,9 +90,9 @@ workflows:
                         - [$close_revenue, ~]
             requalify_won_definition:
                 conditions:
-                    '@equal': [$opportunity.status.name, 'won']
+                    '@equal': [$opportunity.state.id, 'won']
                 post_actions:
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
-                        identifier: 'in_progress'
-                        attribute: $opportunity.status
+                    - '@request_enum_entity':
+                        enum_code: opportunity_state
+                        identifier: 'solution_development'
+                        attribute: $opportunity.state

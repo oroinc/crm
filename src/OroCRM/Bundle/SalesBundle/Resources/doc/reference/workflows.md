@@ -98,7 +98,8 @@ of the process.
 ### Attributes
 
 * **Opportunity** - entity that encapsulates following properties:
-    * _status_ - used to find allowed transitions (can be "In progress", "Won" or "Lost");
+    * _state_ - used to find allowed transitions (can be "Identification & Alignment", "Needs Analysis",
+                "Solution Development", "Negotiation", "Closed Won", "Closed Lost");
     * _name_ - name of current entity, required data;
     * _contact_ - related contact entity;
     * _customer_ - related customer entity, required data;
