@@ -2,9 +2,9 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\Form\AbstractType;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -38,7 +38,7 @@ class OpportunityType extends AbstractType
             )
             ->add(
                 'customer',
-                'orocrm_sales_b2bcustomer_select',
+                'orocrm_sales_b2bcustomer_with_channel_select',
                 array('required' => true, 'label' => 'orocrm.sales.opportunity.customer.label')
             )
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.opportunity.name.label'))
@@ -46,7 +46,7 @@ class OpportunityType extends AbstractType
                 'dataChannel',
                 'orocrm_channel_select_type',
                 array(
-                    'required' => true,
+                    'required' => false,
                     'label' => 'orocrm.sales.opportunity.data_channel.label',
                     'entities' => [
                         'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'

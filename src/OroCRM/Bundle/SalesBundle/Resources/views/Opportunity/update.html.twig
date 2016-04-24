@@ -2,6 +2,12 @@
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 
+{% set pageComponent = {
+    'module': 'oroui/js/app/components/view-component',
+    'options': {'view': 'orocrmsales/js/app/views/update-page-view'},
+    'layout': 'separate'
+} %}
+
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
