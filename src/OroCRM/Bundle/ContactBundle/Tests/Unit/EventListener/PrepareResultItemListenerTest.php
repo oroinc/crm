@@ -8,18 +8,34 @@ use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SearchBundle\Query\Result\Item;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
-use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use OroCRM\Bundle\ContactBundle\EventListener\PrepareResultItemListener;
 
 class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var ContactNameFormatter */
+    protected $nameFormatter;
+
+    public function setUp()
+    {
+        $this->nameFormatter = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->nameFormatter->expects($this->any())
+            ->method('format')
+            ->will($this->returnCallback(function (Contact $contact) {
+                return trim(implode(' ', [$contact->getFirstName(), $contact->getLastName()]));
+            }));
+    }
+
     /**
      * @dataProvider prepareEmailItemDataEventProvider
      */
     public function testPrepareEmailItemDataEvent($event, $expectedEvent)
     {
-        $listener = new PrepareResultItemListener();
+        $listener = new PrepareResultItemListener($this->nameFormatter);
         $listener->prepareEmailItemDataEvent($event);
 
         $this->assertEquals($expectedEvent, $event);
@@ -28,7 +44,7 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
     public function prepareEmailItemDataEventProvider()
     {
         return [
-            'contact with first name' => [
+            'event with contact without title' => [
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
@@ -46,42 +62,21 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                                 ->setFirstName('first')
                         ),
                         'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
+                        1,
+                        'first'
                     )
                 ),
             ],
-            'contact with last name' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->setLastName('last')
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->setLastName('last')
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
-                    )
-                ),
-            ],
-            'contact with first and last names' => [
+            'event with contact with title' => [
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
                             (new Contact())
                                 ->setFirstName('first')
-                                ->setLastName('last')
                         ),
                         'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
+                        1,
+                        'preset title'
                     )
                 ),
                 new PrepareResultItemEvent(
@@ -89,107 +84,56 @@ class PrepareResultItemListenerTest extends \PHPUnit_Framework_TestCase
                         $this->getObjectManager(
                             (new Contact())
                                 ->setFirstName('first')
-                                ->setLastName('last')
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
-                    )
-                ),
-            ],
-            'contact with email' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1
-                    )
-                ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
                         ),
                         'OroCRM\Bundle\ContactBundle\Entity\Contact',
                         1,
-                        'contact@example.com'
+                        'preset title'
                     )
                 ),
             ],
-            'contact with phone' => [
+            'event without contact without title' => [
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
+                            (new ContactPhone())
+                                ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
                         1
                     )
                 ),
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
+                            (new ContactPhone())
+                                ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1,
-                        '5432345'
-                    )
-                ),
-            ],
-            'contact with phone and email' => [
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
                         1
                     )
                 ),
-                new PrepareResultItemEvent(
-                    new Item(
-                        $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
-                        ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
-                        1,
-                        '5432345'
-                    )
-                ),
             ],
-            'contact with phone and email with existing title' => [
+            'event without contact with title' => [
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
+                            (new ContactPhone())
+                                ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
                         1,
-                        'existing title'
+                        'preset title'
                     )
                 ),
                 new PrepareResultItemEvent(
                     new Item(
                         $this->getObjectManager(
-                            (new Contact())
-                                ->addPhone((new ContactPhone('5432345'))->setPrimary(true))
-                                ->addEmail((new ContactEmail('contact@example.com'))->setPrimary(true))
+                            (new ContactPhone())
+                                ->setPhone('53582379475')
                         ),
-                        'OroCRM\Bundle\ContactBundle\Entity\Contact',
+                        'OroCRM\Bundle\ContactBundle\Entity\ContactPhone',
                         1,
-                        'existing title'
+                        'preset title'
                     )
                 ),
             ],

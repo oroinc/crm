@@ -24,11 +24,12 @@ parameters:
 
     orocrm_contact.contact_address.entity.class:      OroCRM\Bundle\ContactBundle\Entity\ContactAddress
     orocrm_contact.subscriber.contact_listener.class: OroCRM\Bundle\ContactBundle\EventListener\ContactListener
-    orocrm_conact.listener.prepare_result_item_listener.class: OroCRM\Bundle\ContactBundle\EventListener\PrepareResultItemListener
+    orocrm_contact.listener.prepare_result_item_listener.class: OroCRM\Bundle\ContactBundle\EventListener\PrepareResultItemListener
 
     orocrm_contact.email.owner.provider.class:        OroCRM\Bundle\ContactBundle\Entity\Provider\EmailOwnerProvider
 
-    orocrm_contact.social_url_formatter.class:        OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
+    orocrm_contact.social_url_formatter.class:          OroCRM\Bundle\ContactBundle\Formatter\SocialUrlFormatter
+    orocrm_contact.formatter.contact_entity_name.class: OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter
 
     orocrm_contact.contact.datagrid_helper.class:     Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
@@ -36,6 +37,7 @@ parameters:
 
     orocrm_contact.provider.phone.contact.class:      OroCRM\Bundle\ContactBundle\Provider\ContactPhoneProvider
     orocrm_contact.provider.email_recipients.class:   OroCRM\Bundle\ContactBundle\Provider\EmailRecipientsProvider
+    orocrm_contact.provider.contact_entity_name.class: OroCRM\Bundle\ContactBundle\Provider\ContactEntityNameProvider
 
     orocrm_contact.handler.contact_email_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactEmailApiHandler
     orocrm_contact.handler.contact_phone_api.class:   OroCRM\Bundle\ContactBundle\Handler\ContactPhoneApiHandler
@@ -286,7 +288,27 @@ services:
         tags:
             - { name: validator.constraint_validator, alias: orocrm_contact.has_contact_information }
 
-    orocrm_conact.listener.prepare_result_item_listener:
-        class: %orocrm_conact.listener.prepare_result_item_listener.class%
+    orocrm_contact.listener.prepare_result_item_listener:
+        class: %orocrm_contact.listener.prepare_result_item_listener.class%
+        arguments:
+            - @orocrm_contact.formatter.contact_entity_name
         tags:
             - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
+
+    orocrm_contact.formatter.contact_entity_name:
+        class: %orocrm_contact.formatter.contact_entity_name.class%
+        arguments:
+            - '@oro_locale.formatter.name'
+
+    orocrm_contact.formatter.contact_entity_name.link:
+        tags:
+            - { name: oro_service_link, service: orocrm_contact.formatter.contact_entity_name }
+
+    orocrm_contact.provider.contact_entity_name:
+        class: %orocrm_contact.provider.contact_entity_name.class%
+        arguments:
+            - '@orocrm_contact.formatter.contact_entity_name.link'
+            - '@oro_locale.dql.formatter.name.link'
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }

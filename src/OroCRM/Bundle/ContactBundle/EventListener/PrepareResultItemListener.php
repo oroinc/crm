@@ -4,10 +4,21 @@ namespace OroCRM\Bundle\ContactBundle\EventListener;
 
 use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 
 class PrepareResultItemListener
 {
+    /** @var ContactNameFormatter */
+    protected $nameFormatter;
+
+    /**
+     * @param ContactNameFormatter $nameFormatter
+     */
+    public function __construct(ContactNameFormatter $nameFormatter)
+    {
+        $this->nameFormatter = $nameFormatter;
+    }
+
     /**
      * @param PrepareResultItemEvent $event
      */
@@ -19,17 +30,7 @@ class PrepareResultItemListener
             return;
         }
 
-        $contact = $event->getResultItem()->getEntity();
-        $event->getResultItem()->setRecordTitle($this->getContactTitle($contact));
-    }
-
-    /**
-     * @param Contact $contact
-     *
-     * @return string
-     */
-    protected function getContactTitle(Contact $contact)
-    {
-        return (string) ($contact->getPrimaryPhone() ?: $contact->getPrimaryEmail());
+        $resultItem = $event->getResultItem();
+        $resultItem->setRecordTitle($this->nameFormatter->format($resultItem->getEntity()));
     }
 }

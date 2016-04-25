@@ -40,7 +40,7 @@ class HasContactInformationValidator extends ConstraintValidator
         if ($value->getFirstName() ||
             $value->getLastName() ||
             $value->getEmails()->count() > 0 ||
-            $value->getPhones()->count()
+            $value->getPhones()->count() > 0
         ) {
             return;
         }
