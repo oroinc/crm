@@ -120,6 +120,7 @@ orocrm:
             id.label:             Id
             name.label:           Opportunity name
             close_date.label:     Close date
+            expected_close_date.label: Expected close date
             probability.label:    Probability
             budget_amount.label:  Budget amount
             close_revenue.label:  Close revenue
