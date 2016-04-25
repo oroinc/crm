@@ -2,15 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\FormBundle\Form\EventListener\NewEntityFormListener;
-use OroCRM\Bundle\AccountBundle\Entity\Account;
-use OroCRM\Bundle\SalesBundle\Form\EventListener\SetChannelListener;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Form\AbstractType;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityType extends AbstractType
@@ -45,6 +43,9 @@ class OpportunityType extends AbstractType
                     'new_item_property_name'  => 'firstName',
                     'configs'            => [
                         'propertyNameForNewItem'  => 'fullName',
+                        'placeholder'             => 'orocrm.contact.form.choose_contact',
+                        'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
+                        'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                     ],
                 ]
             )

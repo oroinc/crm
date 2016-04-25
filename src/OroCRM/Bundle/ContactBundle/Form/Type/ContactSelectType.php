@@ -18,8 +18,7 @@ class ContactSelectType extends AbstractType
                 'configs'            => [
                     'placeholder'             => 'orocrm.contact.form.choose_contact',
                     'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
-                    'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig',
-                    'propertyNameForNewItem'  => 'fullName',
+                    'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                 ],
             ]
         );
