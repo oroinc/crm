@@ -282,21 +282,21 @@ services:
         class: %orocrm_contact.validator.contact_phone_delete.class%
 
     orocrm_contact.validator.has_contact_information:
-        class:  %orocrm_contact.validator.has_contact_information.class%
+        class:  '%orocrm_contact.validator.has_contact_information.class%'
         arguments:
-            - @translator
+            - '@translator'
         tags:
             - { name: validator.constraint_validator, alias: orocrm_contact.has_contact_information }
 
     orocrm_contact.listener.prepare_result_item_listener:
-        class: %orocrm_contact.listener.prepare_result_item_listener.class%
+        class: '%orocrm_contact.listener.prepare_result_item_listener.class%'
         arguments:
-            - @orocrm_contact.formatter.contact_entity_name
+            - '@orocrm_contact.formatter.contact_entity_name'
         tags:
             - { name: kernel.event_listener, event: oro_search.prepare_result_item, method: prepareEmailItemDataEvent }
 
     orocrm_contact.formatter.contact_entity_name:
-        class: %orocrm_contact.formatter.contact_entity_name.class%
+        class: '%orocrm_contact.formatter.contact_entity_name.class%'
         arguments:
             - '@oro_locale.formatter.name'
 
@@ -305,7 +305,7 @@ services:
             - { name: oro_service_link, service: orocrm_contact.formatter.contact_entity_name }
 
     orocrm_contact.provider.contact_entity_name:
-        class: %orocrm_contact.provider.contact_entity_name.class%
+        class: '%orocrm_contact.provider.contact_entity_name.class%'
         arguments:
             - '@orocrm_contact.formatter.contact_entity_name.link'
             - '@oro_locale.dql.formatter.name.link'
