@@ -16,6 +16,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
+    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT = 'Solution Development';
+    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE = 'solution_development';
+    
     /**
      * @var WorkflowStep[]
      */
@@ -26,46 +29,42 @@ class OpportunityRepository extends EntityRepository
      *
      * @param $aclHelper AclHelper
      * @param  array     $dateRange
+     * @param  array     $states
      * @return array
      */
-    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange)
+    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states)
     {
         $dateEnd = $dateRange['end'];
         $dateStart = $dateRange['start'];
 
-        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
+        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states);
     }
 
     /**
      * @param  AclHelper $aclHelper
      * @param $dateStart
      * @param $dateEnd
+     * @param array $states
      * @return array
      */
-    protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
-    {
-        // select statuses
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('status.name, status.label')
-            ->from('OroCRMSalesBundle:OpportunityStatus', 'status')
-            ->orderBy('status.name', 'ASC');
-
-        $resultData = array();
-        $data = $qb->getQuery()->getArrayResult();
-        foreach ($data as $status) {
-            $name = $status['name'];
-            $label = $status['label'];
-            $resultData[$name] = array(
-                'name' => $name,
-                'label' => $label,
+    protected function getOpportunitiesDataByStatus(
+        AclHelper $aclHelper,
+        $dateStart = null,
+        $dateEnd = null,
+        $states = []
+    ) {
+        foreach ($states as $key => $name) {
+            $resultData[$key] = array(
+                'name' => $key,
+                'label' => $name,
                 'budget' => 0,
             );
         }
 
         // select opportunity data
         $qb = $this->createQueryBuilder('opportunity');
-        $qb->select('IDENTITY(opportunity.status) as name, SUM(opportunity.budgetAmount) as budget')
-            ->groupBy('opportunity.status');
+        $qb->select('IDENTITY(opportunity.state) as name, SUM(opportunity.budgetAmount) as budget')
+            ->groupBy('opportunity.state');
 
         if ($dateStart && $dateEnd) {
             $qb->where($qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo'))
@@ -119,7 +118,7 @@ class OpportunityRepository extends EntityRepository
         $qb = $this->createQueryBuilder('opportunity');
 
         $select = "
-            SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
+            SUM( (CASE WHEN (opportunity.state='solution_development') THEN 1 ELSE 0 END) ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
             SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
         $qb->select($select);
@@ -218,10 +217,10 @@ class OpportunityRepository extends EntityRepository
      */
     protected function isStatusOk($opportunityHistory, $opportunity)
     {
-        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'status')) {
-            $isStatusOk = $oldStatus === 'In Progress';
+        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'state')) {
+            $isStatusOk = $oldStatus === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT;
         } else {
-            $isStatusOk = $opportunity->getStatus()->getName() === 'in_progress';
+            $isStatusOk = $opportunity->getState()->getName() === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE;
         }
 
         return $isStatusOk;
@@ -329,12 +328,12 @@ class OpportunityRepository extends EntityRepository
             ->select('SUM(o.budgetAmount)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
             ->andWhere('o.closeDate IS NULL')
-            ->andWhere('o.status = :status')
+            ->andWhere('o.state = :state')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -356,12 +355,12 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->andWhere('o.status = :status')
+            ->andWhere('o.state = :state')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('status', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -400,12 +399,12 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->andWhere('o.status = :status')
+            ->andWhere('o.state = :state')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }

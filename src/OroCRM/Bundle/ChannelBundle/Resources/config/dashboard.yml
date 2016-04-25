@@ -2,18 +2,3 @@ oro_dashboard_config:
     dashboards:
         e_commerce:
             twig: OroDashboardBundle:Index:default.html.twig
-
-    widgets:
-        average_lifetime_sales_chart:
-            label:       orocrm.channel.dashboard.average_lifetime_sales_chart.title
-            route:       orocrm_channel_dashboard_average_lifetime_sales_chart
-            acl:         orocrm_channel_view
-            description: orocrm.channel.dashboard.average_lifetime_sales_chart.description
-            icon:        bundles/orocrmchannel/img/average_lifetime_sales_chart.png
-            applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
-            configuration:
-                dateRange:
-                    type: oro_type_widget_date_range
-                    options:
-                        label: oro.dashboard.date_range.label
-                    show_on_widget: true

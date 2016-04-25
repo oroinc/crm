@@ -21,7 +21,9 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->eventDispatcher,
             $this->strategyHelper,
             $this->fieldHelper,
-            $this->databaseHelper
+            $this->databaseHelper,
+            $this->chainEntityClassNameProvider,
+            $this->translator
         );
     }
 
