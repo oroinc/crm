@@ -311,4 +311,4 @@ services:
             - '@oro_locale.dql.formatter.name.link'
         public: false
         tags:
-            - { name: oro_entity.name_provider, priority: 100 }
+            - { name: oro_entity.name_provider, priority: -50 }
