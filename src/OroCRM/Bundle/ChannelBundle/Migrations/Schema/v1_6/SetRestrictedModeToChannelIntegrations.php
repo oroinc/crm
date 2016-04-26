@@ -10,6 +10,9 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 class SetRestrictedModeToChannelIntegrations implements Migration
 {
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery(new UpdateChannelIntegrationsMode(Channel::EDIT_MODE_RESTRICTED));
