@@ -27,7 +27,7 @@ class OpportunityControllersTest extends WebTestCase
             ['debug' => false],
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
-
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 

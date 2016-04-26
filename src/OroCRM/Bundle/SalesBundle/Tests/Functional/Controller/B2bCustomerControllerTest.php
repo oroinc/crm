@@ -31,7 +31,7 @@ class B2bCustomerControllerTest extends WebTestCase
             [],
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
-
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 

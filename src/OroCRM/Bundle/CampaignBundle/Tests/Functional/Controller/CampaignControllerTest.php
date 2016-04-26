@@ -16,6 +16,7 @@ class CampaignControllerTest extends WebTestCase
     public function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
+        $this->client->useHashNavigation(true);
     }
 
     public function testCreate()

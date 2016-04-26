@@ -13,6 +13,7 @@ abstract class AbstractController extends WebTestCase
     protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
+        $this->client->useHashNavigation(true);
 
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel']);
     }

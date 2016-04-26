@@ -23,6 +23,7 @@ class ChannelControllerTest extends WebTestCase
             ['debug' => false],
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
+        $this->client->useHashNavigation(true);
     }
 
     public function testCreateChannel()
