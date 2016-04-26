@@ -9,7 +9,9 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Translation\TranslatorInterface;
 
+use Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider;
 use Oro\Bundle\ImportExportBundle\Field\DatabaseHelper;
 use Oro\Bundle\ImportExportBundle\Field\FieldHelper;
 use Oro\Bundle\ImportExportBundle\Strategy\Import\ImportStrategyHelper;
@@ -72,6 +74,16 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
      */
     protected $logger;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ChainEntityClassNameProvider
+     */
+    protected $chainEntityClassNameProvider;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|TranslatorInterface
+     */
+    protected $translator;
+
     protected function setUp()
     {
         $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
@@ -122,6 +134,15 @@ abstract class AbstractStrategyTest extends \PHPUnit_Framework_TestCase
 
         $this->stepExecution->expects($this->any())->method('getJobExecution')
             ->will($this->returnValue($this->jobExecution));
+
+        $this->chainEntityClassNameProvider = $this
+            ->getMockBuilder('Oro\Bundle\EntityBundle\Provider\ChainEntityClassNameProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->translator = $this->getMockBuilder('Symfony\Component\Translation\TranslatorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->logger = new NullLogger();
     }

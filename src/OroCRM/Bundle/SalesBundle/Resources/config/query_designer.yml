@@ -3,9 +3,12 @@ query_designer:
         opportunity_status:
             applicable: [{entity: OroCRMSalesBundle:Opportunity, field: status_label }]
             functions:
-                - { name: WonCount,        return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
-                - { name: LostCount,       return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
-                - { name: InProgressCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\InProgressOpportunityStatusCountFunction' }
+                - { name: WonCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
+                - { name: LostCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
+                - { name: IdentificationAlignmentCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\IdentificationAlignmentOpportunityStatusCountFunction' }
+                - { name: NeedsAnalysisCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\NeedsAnalysisOpportunityStatusCountFunction' }
+                - { name: NegotiationCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\NegotiationOpportunityStatusCountFunction' }
+                - { name: SolutionDevelopmentCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
             query_type: [report]
         opportunity:
             applicable: [{entity: OroCRMSalesBundle:Opportunity, field: closeRevenue}]

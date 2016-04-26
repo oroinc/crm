@@ -103,7 +103,7 @@ class EmailCampaignType extends AbstractType
             )
             ->add(
                 'description',
-                'textarea',
+                'oro_resizeable_rich_text',
                 [
                     'label'    => 'orocrm.campaign.emailcampaign.description.label',
                     'required' => false,

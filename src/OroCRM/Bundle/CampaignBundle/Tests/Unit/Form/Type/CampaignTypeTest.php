@@ -43,7 +43,7 @@ class CampaignTypeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
         $builder->expects($this->at(4))
             ->method('add')
-            ->with('description', 'textarea')
+            ->with('description', 'oro_resizeable_rich_text')
             ->will($this->returnSelf());
         $builder->expects($this->at(5))
             ->method('add')

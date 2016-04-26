@@ -1,3 +1,4 @@
 "One of addresses must be set as primary.": "One of addresses must be set as primary."
 "One of emails must be set as primary.": "One of emails must be set as primary."
 "One of phones must be set as primary.": "One of phones must be set as primary."
+"At least one of the fields First name, Last name, email, phone or address must be defined.": "At least one of the fields First name, Last name, email, phone or address must be defined."

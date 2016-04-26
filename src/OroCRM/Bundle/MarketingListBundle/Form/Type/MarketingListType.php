@@ -22,7 +22,7 @@ class MarketingListType extends AbstractQueryDesignerType
         $builder
             ->add('name', 'text', ['required' => true])
             ->add('entity', 'orocrm_marketing_list_contact_information_entity_choice', ['required' => true])
-            ->add('description', 'textarea', ['required' => false]);
+            ->add('description', 'oro_resizeable_rich_text', ['required' => false]);
 
         // TODO: remove this listener after full support of manual marketing lists CRM-1878
         $builder->addEventListener(
