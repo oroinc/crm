@@ -8,6 +8,9 @@ use Oro\Bundle\EntityExtendBundle\Migration\Fixture\AbstractEnumFixture;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * New status using enum
+ */
 class LoadOpportunityStateData extends AbstractEnumFixture
 {
     /**
@@ -44,7 +47,7 @@ class LoadOpportunityStateData extends AbstractEnumFixture
      */
     protected function getEnumCode()
     {
-        return Opportunity::INTERNAL_STATE_CODE;
+        return Opportunity::INTERNAL_STATUS_CODE;
     }
 
     /**
@@ -55,11 +58,11 @@ class LoadOpportunityStateData extends AbstractEnumFixture
         $this->manager = $manager;
         $repository = $manager->getRepository('OroCRMSalesBundle:Opportunity');
         $connection = $repository->createQueryBuilder('o')->getEntityManager()->getConnection();
-        $query = 'UPDATE orocrm_sales_opportunity SET state_id = ? WHERE status_name = ?';
+        $query = 'UPDATE orocrm_sales_opportunity SET status_id = ? WHERE status_name = ?';
         parent::load($manager);
 
-        foreach ($this->statusMapping as $status => $state) {
-            $connection->executeQuery($query, [$state, $status]);
+        foreach ($this->statusMapping as $status => $statusNew) {
+            $connection->executeQuery($query, [$statusNew, $status]);
         }
     }
 }

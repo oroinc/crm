@@ -23,7 +23,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesN
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityState;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -150,7 +150,8 @@ class OroCRMSalesBundleInstaller implements
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
-        AddOpportunityState::addStateField($schema, $this->extendExtension);
+        AddOpportunityStatus::addStatusField($schema, $this->extendExtension);
+        AddOpportunityStatus::hideRenamedStatusField($queries);
     }
 
     /**

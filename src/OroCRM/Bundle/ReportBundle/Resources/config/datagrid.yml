@@ -91,7 +91,7 @@ datagrid:
                     inner:
                         - { join: o.customer, alias: c }
                         - { join: c.account, alias: a }
-                        - { join: o.state, alias: s }
+                        - { join: o.status, alias: s }
                 groupBy:  a.id
         properties:
             id: ~
@@ -238,7 +238,7 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: opportunity }
                 join:
                     inner:
-                        - { join: opportunity.state, alias: status }
+                        - { join: opportunity.status, alias: status }
                 select:
                     - status.name as statusLabel
                     - COUNT(opportunity.id) as numberOfOpportunities
@@ -333,7 +333,7 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.state, alias: s }
+                        - { join: o.status, alias: s }
                 groupBy: o.closeDate # will be overridden in ReportGridListener with selected period name (monthly or quarterly or yearly)
                 where:
                     and:
@@ -422,7 +422,7 @@ datagrid:
                     - { table: OroCRMSalesBundle:Opportunity, alias: o }
                 join:
                     inner:
-                        - { join: o.state, alias: s }
+                        - { join: o.status, alias: s }
                         - { join: o.owner, alias: oo }
                 where:
                     and:

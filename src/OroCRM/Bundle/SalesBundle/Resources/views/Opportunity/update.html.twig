@@ -56,14 +56,14 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    {% if entity.state %}
+    {% if entity.status %}
         <div class="pull-left">
-            {% if entity.state.id != 'lost' %}
+            {% if entity.status.id != 'lost' %}
                 <div class="badge badge-enabled status-enabled">
-                    <i class="icon-status-enabled icon-circle"></i>{{ entity.state.name }}</div>
+                    <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
             {% else %}
                 <div class="badge badge-disabled status-disabled">
-                    <i class="icon-status-disabled icon-circle"></i>{{ entity.state.name  }}</div>
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
             {% endif %}
         </div>
     {% endif %}
@@ -83,7 +83,7 @@
         form_row(form.dataChannel),
         form_row(form.contact),
         form_row(form.customer),
-        form_row(form.state),
+        form_row(form.status),
         form_row(form.probability),
         form_row(form.budgetAmount),
         form_row(form.customerNeed),
