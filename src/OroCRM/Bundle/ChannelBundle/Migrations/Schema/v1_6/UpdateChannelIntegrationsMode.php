@@ -12,13 +12,20 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
 class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
 {
+    /** @var int */
     protected $mode;
 
+    /**
+     * @param int $mode
+     */
     public function __construct($mode)
     {
         $this->mode = $mode;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDescription()
     {
         $logger = new ArrayLogger();
@@ -29,6 +36,9 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
         return $logger->getMessages();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute(LoggerInterface $logger)
     {
         $this->updateChannelIntegrationsMode($logger, false);
@@ -49,6 +59,11 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
         }
     }
 
+    /**
+     * @param LoggerInterface $logger
+     *
+     * @return array
+     */
     protected function getChannelIntegrations(LoggerInterface $logger)
     {
         $sql = 'SELECT i.id FROM oro_integration_channel i '
@@ -63,7 +78,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
 
         return array_reduce(
             $integrations,
-            function($ids, $integration) {
+            function ($ids, $integration) {
                 $ids[] = $integration['id'];
                 return $ids;
             },
