@@ -1,0 +1,12 @@
+{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+
+<div class="widget-content">
+    {{
+        dataGrid.renderGrid(
+            'magento-customer-tracking-events-widget',
+            {
+                'customerIds': customerIds
+            }
+        )
+    }}
+</div>
