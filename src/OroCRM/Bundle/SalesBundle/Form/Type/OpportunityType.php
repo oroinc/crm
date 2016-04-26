@@ -56,7 +56,7 @@ class OpportunityType extends AbstractType
             ->add(
                 'closeDate',
                 'oro_date',
-                array('required' => false, 'label' => 'orocrm.sales.opportunity.expected_close_date.label')
+                array('required' => false, 'label' => 'orocrm.sales.opportunity.close_date.label')
             )
             ->add(
                 'probability',
