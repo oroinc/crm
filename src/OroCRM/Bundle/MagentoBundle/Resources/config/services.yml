@@ -29,6 +29,10 @@ parameters:
     orocrm_magento.provider.channel_type.class:                             OroCRM\Bundle\MagentoBundle\Provider\ChannelType
     orocrm_magento.provider.cart_expiration_processor.class:                OroCRM\Bundle\MagentoBundle\Provider\CartExpirationProcessor
     orocrm_magento.provider.tracking_visit.class:                           OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitProvider
+    orocrm_magento.provider.tracking_visit_event.class:                     OroCRM\Bundle\MagentoBundle\Provider\TrackingVisitEventProvider
+    orocrm_magento.provider.website_metrics.class:                          OroCRM\Bundle\MagentoBundle\Provider\WebsiteMetricsProvider
+    orocrm_magento.provider.website_events_chart.class:                     OroCRM\Bundle\MagentoBundle\Provider\WebsiteEventsChartProvider
+    orocrm_magento.provider.website_channel_chart.class:                    OroCRM\Bundle\MagentoBundle\Provider\WebsiteChannelChartProvider
 
     # forms
     orocrm_magento.form.type.order_place.class:                             OroCRM\Bundle\MagentoBundle\Form\Type\OrderPlaceType
@@ -66,6 +70,7 @@ parameters:
     orocrm_magento.event_listener.integration_sync_after.class:             OroCRM\Bundle\MagentoBundle\EventListener\IntegrationSyncAfterEventListener
     orocrm_magento.event_listener.update_integration_connectors.class:      OroCRM\Bundle\MagentoBundle\EventListener\UpdateIntegrationConnectorsListener
     orocrm_magento.event_listener.customer_datagrid_listener.class:         OroCRM\Bundle\MagentoBundle\EventListener\CustomerDataGridListener
+    orocrm_magento.event_listener.tracking_events_datagrid_listener.class:  OroCRM\Bundle\MagentoBundle\EventListener\TrackingEventsDataGridListener
 
     # generator
     orocrm_magento.magento_url_generator.class:                             OroCRM\Bundle\MagentoBundle\Service\MagentoUrlGenerator
@@ -185,6 +190,32 @@ services:
         arguments:
             - "@doctrine"
             - "@oro_security.acl_helper"
+
+    orocrm_magento.provider.tracking_visit_event:
+        class: %orocrm_magento.provider.tracking_visit_event.class%
+        arguments:
+            - "@doctrine"
+
+    orocrm_magento.provider.website_metrics:
+        class: %orocrm_magento.provider.website_metrics.class%
+        arguments:
+            - '@orocrm_magento.provider.tracking_visit'
+            - '@orocrm_magento.provider.tracking_visit_event'
+
+    orocrm_magento.provider.website_chart:
+        abstract: true
+        arguments:
+            - '@orocrm_magento.provider.tracking_visit_event'
+            - '@oro_chart.config_provider'
+            - '@service_container'
+
+    orocrm_magento.provider.website_events_chart:
+        class: %orocrm_magento.provider.website_events_chart.class%
+        parent: orocrm_magento.provider.website_chart
+
+    orocrm_magento.provider.website_channel_chart:
+        class: %orocrm_magento.provider.website_channel_chart.class%
+        parent: orocrm_magento.provider.website_chart
 
     # forms
     orocrm_magento.form.subscriber.soap_transport_setting:
@@ -496,6 +527,11 @@ services:
             - "@request_stack"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customers-grid, method: onPreBuild, priority: 255 }
+
+    orocrm_magento.event_listener.tracking_events_datagrid_listener:
+        class: %orocrm_magento.event_listener.tracking_events_datagrid_listener.class%
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre.magento-customer-tracking-events-widget, method: onPreBuild, priority: 255 }
 
     # Customer API
     orocrm_magento.customer_address.manager.api:
