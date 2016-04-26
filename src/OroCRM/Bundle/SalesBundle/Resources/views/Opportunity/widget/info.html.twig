@@ -35,7 +35,7 @@
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution|escape|nl2br) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.close_reason.label'|trans, entity.closeReason) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
+            {{ ui.renderProperty('orocrm.sales.opportunity.expected_close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.notes.label'|trans, entity.notes) }}
         </div>
     </div>
