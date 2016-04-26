@@ -91,25 +91,6 @@ class Opportunity extends ExtendOpportunity implements
     protected $id;
 
     /**
-     * @var OpportunityStatus
-     * @deprecated 1.12.0:1.14.0 Will be renamed to state
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus")
-     * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=90,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $statusOld;
-
-    /**
      * @var OpportunityCloseReason
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")

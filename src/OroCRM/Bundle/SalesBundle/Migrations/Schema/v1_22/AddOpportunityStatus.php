@@ -5,22 +5,40 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 
-use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\Migration\OroOptions;
+use Oro\Bundle\EntityExtendBundle\Migration\ExtendOptionsManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class AddOpportunityStatus implements Migration, ExtendExtensionAwareInterface
+class AddOpportunityStatus implements
+    Migration,
+    ExtendExtensionAwareInterface,
+    ContainerAwareInterface,
+    OrderedMigrationInterface
 {
+    /** @var ContainerInterface */
+    protected $container;
+
     protected $extendExtension;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 1;
+    }
 
     /**
      * @param ExtendExtension $extendExtension
@@ -33,18 +51,45 @@ class AddOpportunityStatus implements Migration, ExtendExtensionAwareInterface
     /**
      * {@inheritdoc}
      */
+    public function setContainer(ContainerInterface $container = null)
+    {
+        $this->container = $container;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::deleteOldStatusFieldConfig($queries);
-        self::addStatusField($schema, $this->extendExtension);
-        self::hideRenamedStatusField($queries);
+        /** @var ExtendOptionsManager $extendOptionsManager */
+        $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
+        $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
+
+        self::addStatusField($schema, $this->extendExtension, $queries);
+
+        $statusMapping = [
+            'won' => 'won',
+            'lost' => 'lost',
+            'in_progress' => 'solution_development'
+        ];
+        $query = 'UPDATE orocrm_sales_opportunity SET status_id = :status_id WHERE status_name = :status_name';
+        foreach ($statusMapping as $oldStatus => $newStatus) {
+            $migrationQuery = new ParametrizedSqlMigrationQuery();
+            $migrationQuery->addSql(
+                $query,
+                ['status_id' => $newStatus, 'status_name' => $oldStatus],
+                ['status_id' => Type::STRING, 'status_name' => Type::STRING]
+            );
+            $queries->addPostQuery($migrationQuery);
+        }
     }
 
     /**
      * @param Schema $schema
      * @param ExtendExtension $extendExtension
+     * @param QueryBag $queries
      */
-    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension)
+    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, QueryBag $queries)
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
@@ -76,47 +121,23 @@ class AddOpportunityStatus implements Migration, ExtendExtensionAwareInterface
         );
 
         $enumTable->addOption(OroOptions::KEY, $options);
-    }
-    
-    /**
-     * @param QueryBag $queries
-     */
-    public static function deleteOldStatusFieldConfig(QueryBag $queries)
-    {
-        $fieldName = 'status';
-        $entityClass = 'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity';
-        $dropFieldsSql = <<<EOF
-DELETE FROM oro_entity_config_field
-WHERE field_name = :field_name
-AND entity_id IN (SELECT id FROM oro_entity_config WHERE class_name = :class_name)
-EOF;
-
-        $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
-        $dropFieldsQuery->addSql(
-            $dropFieldsSql,
-            ['field_name' => $fieldName, 'class_name' => $entityClass],
-            ['field_name' => Type::STRING, 'class_name' => Type::STRING]
-        );
-        $queries->addPreQuery($dropFieldsQuery);
-    }
-    
-    /**
-     * @param QueryBag $queries
-     */
-    public static function hideRenamedStatusField(QueryBag $queries)
-    {
-        $updateFieldsSql = <<<EOF
-UPDATE oro_entity_config_field SET mode = :mode
-WHERE field_name = :field_name
-AND entity_id IN (SELECT id FROM oro_entity_config WHERE class_name = :class_name)
-EOF;
-        $entityClass = 'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity';
-        $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
-        $dropFieldsQuery->addSql(
-            $updateFieldsSql,
-            ['mode' => ConfigModel::MODE_HIDDEN, 'field_name' => 'statusOld', 'class_name' => $entityClass],
-            ['mode' => Type::STRING, 'field_name' => Type::STRING, 'class_name' => Type::STRING]
-        );
-        $queries->addPostQuery($dropFieldsQuery);
+        $statuses = [
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost'
+        ];
+        $query = 'INSERT INTO oro_enum_opportunity_status (id, name) VALUES (:id, :name)';
+        foreach ($statuses as $key => $value) {
+            $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
+            $dropFieldsQuery->addSql(
+                $query,
+                ['id' => $key, 'name' => $value],
+                ['id' => Type::STRING, 'name' => Type::STRING]
+            );
+            $queries->addQuery($dropFieldsQuery);
+        }
     }
 }

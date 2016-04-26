@@ -150,8 +150,7 @@ class OroCRMSalesBundleInstaller implements
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
-        AddOpportunityStatus::addStatusField($schema, $this->extendExtension);
-        AddOpportunityStatus::hideRenamedStatusField($queries);
+        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
     }
 
     /**
@@ -166,7 +165,6 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('contact_id', 'integer', ['notnull' => false]);
         $table->addColumn('close_reason_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
-        $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('lead_id', 'integer', ['notnull' => false]);
@@ -202,7 +200,6 @@ class OroCRMSalesBundleInstaller implements
         $table->addIndex(['customer_id'], 'IDX_C0FE4AAC9395C3F3', []);
         $table->addIndex(['data_channel_id'], 'IDX_C0FE4AACBDC09B73', []);
         $table->addIndex(['close_reason_name'], 'idx_c0fe4aacd81b931c', []);
-        $table->addIndex(['status_name'], 'idx_c0fe4aac6625d392', []);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['workflow_step_id'], 'idx_c0fe4aac71fe882c', []);
     }
@@ -461,12 +458,6 @@ class OroCRMSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_C0FE4AACBDC09B73'
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_opport_status'),
-            ['status_name'],
-            ['name'],
-            ['onUpdate' => null, 'onDelete' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_lead'),
