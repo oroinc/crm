@@ -121,7 +121,7 @@ class OpportunityType extends AbstractType
 
         $builder->addEventListener(
             FormEvents::SUBMIT,
-            function(FormEvent $event) {
+            function (FormEvent $event) {
                 $opportunity = $event->getData();
 
                 if ($opportunity instanceof Opportunity) {
