@@ -6,12 +6,11 @@
 {% extends 'OroSearchBundle:Search:searchResultItem.html.twig' %}
 
 {% set recordUrl = indexer_item.recordUrl %}
-{% set title = entity ? entity|oro_format_name : indexer_item.recordTitle %}
-
+{% set title = indexer_item.recordTitle ?: 'N/A'|trans %}
 {% set entityType = 'orocrm.contact.entity_label'|trans %}
 {% set showImage = true %}
 {% set image = entity ? entity.picture : null %}
 {% set entityInfo = [
-    {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'},
-    {'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'},
+    {'title': 'oro.ui.created_at'|trans, 'value': entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A'|trans},
+    {'title': 'oro.ui.updated_at'|trans, 'value': entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A'|trans},
 ] %}
