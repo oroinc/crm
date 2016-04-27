@@ -149,7 +149,7 @@ class AclOpportunityTest extends Selenium2TestCase
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
-            ->setType('B2B')
+            ->setType('Sales')
             ->setName($name)
             ->setStatus('Active')
             ->save()
