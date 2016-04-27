@@ -90,7 +90,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * Create new B2B customer.
      *
      * @ApiDoc(
-     *      description="Create new B2B customer",
+     *      description="Create new business customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_b2bcustomer_create")
