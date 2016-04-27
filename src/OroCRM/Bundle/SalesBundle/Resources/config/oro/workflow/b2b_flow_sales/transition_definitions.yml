@@ -8,7 +8,7 @@ workflows:
                 pre_conditions: # if opportunity.status = "solution_development"
                     '@and':
                         - '@equal':
-                            message: 'Opportunity must be in status "In progress"'
+                            message: 'Opportunity must be in status "Solution Development"'
                             parameters: [$opportunity.status.id, 'solution_development']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions: # if opportunity.status = "solution_development"

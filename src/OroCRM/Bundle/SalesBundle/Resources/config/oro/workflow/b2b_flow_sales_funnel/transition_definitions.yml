@@ -197,7 +197,7 @@ workflows:
                             dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
-                    - '@request_enum_entity': # set status "In progress" to opportunity
+                    - '@request_enum_entity': # set status "Solution Development" to opportunity
                         enum_code: opportunity_status
                         identifier: 'solution_development'
                         attribute: $opportunity.status
