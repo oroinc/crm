@@ -4,11 +4,13 @@ namespace OroCRM\Bundle\ChannelBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Type;
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+
 use Psr\Log\LoggerInterface;
 
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
+
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
 {
@@ -71,7 +73,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
            . 'WHERE c.status = :status';
 
         $params       = ['status' => Channel::STATUS_ACTIVE];
-        $types        = ['status' => Type::INTEGER];
+        $types        = ['status' => Type::BOOLEAN];
 
         $this->logQuery($logger, $sql, $params, $types);
         $integrations = $this->connection->fetchAll($sql, $params, $types);
