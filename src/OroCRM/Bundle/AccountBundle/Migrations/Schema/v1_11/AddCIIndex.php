@@ -17,4 +17,3 @@ class AddCIIndex implements Migration
         $queries->addPostQuery(new AccountNameExprIndexQuery());
     }
 }
-
