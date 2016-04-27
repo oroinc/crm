@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\CaseBundle\Tests\Selenium\Pages;
 
-use PHPUnit_Extensions_Selenium2TestCase_Keys as Keys;
-
 use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageEntity;
 
 /**
@@ -48,13 +46,7 @@ class CaseEntity extends AbstractPageEntity
 
     public function setDescription($description)
     {
-        $this->test->byXPath(
-            "//iframe[starts-with(@id,'orocrm_case_entity_form_description')]"
-        )->click();
-        $this->test->keys(KEYS::CONTROL + 'a');
-        $this->test->keys(KEYS::DELETE);
-        $this->test->keys($description);
-        return $this;
+        return $this->setContentToTinymceElement('orocrm_case_entity_form_description', $description);
     }
 
     public function getDescription()
