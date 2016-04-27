@@ -86,18 +86,15 @@
 
     {% set formFields = formFields|merge([
         form_row(form.name, {attr: {autofocus: true}}),
-        form_row(form.dataChannel),
         form_row(form.customer),
+        form_row(form.dataChannel),
         form_row(form.contact),
         form_row(form.state),
         form_row(form.probability),
         form_row(form.budgetAmount),
-        form_row(form.customerNeed),
-        form_row(form.proposedSolution),
         form_row(form.closeReason),
         form_row(form.closeRevenue),
-        form_row(form.closeDate),
-        form_row(form.notes)
+        form_row(form.closeDate)
     ]) %}
 
     {% set dataBlocks = [{
@@ -107,6 +104,14 @@
             {
                 'title': 'Opportunity Information'|trans,
                 'data': formFields
+            },
+            {
+                'data':
+                    [
+                        form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
+                        form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
+                        form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
+                    ]
             }
         ]
     }] %}

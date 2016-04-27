@@ -58,6 +58,7 @@ class OpportunityType extends AbstractType
                     'new_item_property_name'  => 'name',
                     'configs'            => [
                         'result_template_twig'   => 'OroFormBundle:Autocomplete:default/result.html.twig',
+                        'selection_template_twig' => 'OroFormBundle:Autocomplete:default/selection.html.twig',
                         'propertyNameForNewItem' => 'name',
                     ],
                 ]
