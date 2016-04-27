@@ -36,7 +36,7 @@ class CampaignManagementTest extends Selenium2TestCase
             ->addEntity('Opportunity')
             ->addEntity('Lead')
             ->addEntity('Sales Process')
-            ->addEntity('B2B customer')
+            ->addEntity('Business Customer')
             ->save()
             ->assertMessage('Channel saved');
 
