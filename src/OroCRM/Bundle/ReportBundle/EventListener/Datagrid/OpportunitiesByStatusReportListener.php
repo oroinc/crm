@@ -7,14 +7,14 @@ use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
-class OpportunitiesByStateReportListener
+class OpportunitiesByStatusReportListener
 {
     /**
      * @param BuildBefore $event
      */
     public function onBuildBefore(BuildBefore $event)
     {
-        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATE_CODE);
+        $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         $config = $event->getConfig();
         $from[] = [
             'table' => $className,

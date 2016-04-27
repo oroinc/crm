@@ -186,7 +186,7 @@ datagrid:
                 #from: generates by OpportunitiesByStateReportListener
                 join:
                     left:
-                        - { join: OroCRMSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.state = status" }
+                        - { join: OroCRMSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
                 select:
                     - status.name as statusLabel
                     - COUNT(opportunity.id) as numberOfOpportunities

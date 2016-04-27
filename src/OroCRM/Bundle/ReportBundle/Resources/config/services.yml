@@ -1,7 +1,7 @@
 parameters:
     orocrm_report.report.filter.period.class:             OroCRM\Bundle\ReportBundle\Filter\PeriodFilter
     orocrm_report.report.grid.listener.class:             OroCRM\Bundle\ReportBundle\EventListener\ReportGridListener
-    orocrm_report.opportunities.state.listener.class:     OroCRM\Bundle\ReportBundle\EventListener\Datagrid\OpportunitiesByStateReportListener
+    orocrm_report.opportunities.status.listener.class:     OroCRM\Bundle\ReportBundle\EventListener\Datagrid\OpportunitiesByStatusReportListener
     orocrm_report.accounts.opportunities.listener.class:  OroCRM\Bundle\ReportBundle\EventListener\Datagrid\AccountsByOpportunitiesReportListener
 
 services:
@@ -21,8 +21,8 @@ services:
                 event:  oro_datagrid.datagrid.build.before.orocrm_report-opportunities-won_by_period
                 method: onBuildBefore
 
-    orocrm_report.opportunities.state.listener:
-        class: %orocrm_report.opportunities.state.listener.class%
+    orocrm_report.opportunities.status.listener:
+        class: %orocrm_report.opportunities.status.listener.class%
         arguments:
             - '@oro_migration.db_id_name_generator'
         tags:

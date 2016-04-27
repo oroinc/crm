@@ -40,7 +40,7 @@ class AccountsByOpportunitiesReportListener
      */
     public function onBuildBefore(BuildBefore $event)
     {
-        $enumValues = $this->enumProvider->getEnumChoicesByCode(Opportunity::INTERNAL_STATE_CODE);
+        $enumValues = $this->enumProvider->getEnumChoicesByCode(Opportunity::INTERNAL_STATUS_CODE);
         $config = $event->getConfig();
 
         $selectTemplate = 'SUM( (CASE WHEN (s.id=\'%s\') THEN 1 ELSE 0 END) ) as %s';
