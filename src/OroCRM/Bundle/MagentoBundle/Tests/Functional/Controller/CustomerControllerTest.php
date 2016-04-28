@@ -24,17 +24,6 @@ class CustomerControllerTest extends AbstractController
         return self::$customer->getid();
     }
 
-    /**
-     * Moved here to fix order of executed tests, because create and update tests work with data same to fixture.
-     *
-     * @dataProvider gridProvider
-     * @param array $requestData
-     */
-    public function testGrid($requestData)
-    {
-        parent::testGrid($requestData);
-    }
-
     public function testView()
     {
         $this->client->request(
@@ -54,6 +43,17 @@ class CustomerControllerTest extends AbstractController
         $this->assertContains('Shopping Carts', $result->getContent());
         $this->assertContains('Demo Web store', $result->getContent());
         $this->assertContains('web site', $result->getContent());
+    }
+
+    /**
+     * Moved here to fix order of executed tests, because create and update tests work with data same to fixture.
+     *
+     * @dataProvider gridProvider
+     * @param array $requestData
+     */
+    public function testGrid($requestData)
+    {
+        parent::testGrid($requestData);
     }
 
     /**

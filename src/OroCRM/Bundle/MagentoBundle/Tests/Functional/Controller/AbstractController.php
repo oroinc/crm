@@ -10,6 +10,9 @@ abstract class AbstractController extends WebTestCase
     /** @var Integration */
     protected static $integration;
 
+    /** @var bool */
+    protected $isRealGridRequest = false;
+
     protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader());
@@ -68,8 +71,11 @@ abstract class AbstractController extends WebTestCase
                 $requestData['gridFilters']['magento-cart-grid[_filter][is_removed][value]'];
         }
 
-        $this->client->requestGrid($requestData['gridParameters'], $requestData['gridFilters']);
-        $response = $this->client->getResponse();
+        $response = $this->client->requestGrid(
+            $requestData['gridParameters'],
+            $requestData['gridFilters'],
+            $this->isRealGridRequest
+        );
         $result   = $this->getJsonResponseContent($response, 200);
 
         foreach ($result['data'] as $row) {

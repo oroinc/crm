@@ -5,21 +5,26 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
 use Symfony\Component\DomCrawler\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
 /**
  * @outputBuffering enabled
  * @dbIsolation
  */
-class OpportunityControllersTest extends WebTestCase
+class OpportunityControllersTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
 
     /** @var  Channel */
     protected static $dataChannel;
+
+    /** @var bool */
+    protected $isRealGridRequest = false;
 
     protected function setUp()
     {
@@ -169,5 +174,58 @@ class OpportunityControllersTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);
+    }
+
+    /**
+     * @return array
+     */
+    public function gridProvider()
+    {
+        return [
+            'Opportunity grid'                => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'sales-opportunity-grid'
+                    ],
+                    'gridFilters'         => [],
+                    'assert'              => [
+                        'name'         => 'opname',
+                        'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
+                        'budgetAmount' => 50.00,
+                        'probability'  => 10,
+                    ],
+                    'expectedResultCount' => 1
+                ],
+            ],
+            'Opportunity grid with filter'    => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'sales-opportunity-grid'
+                    ],
+                    'gridFilters'         => [
+                        'sales-opportunity-grid[_filter][budgetAmount][value]' => 50.00,
+                    ],
+                    'assert'              => [
+                        'name'         => 'opname',
+                        'channelName'  => LoadSalesBundleFixtures::CHANNEL_NAME,
+                        'budgetAmount' => 50.00,
+                        'probability'  => 10,
+                    ],
+                    'expectedResultCount' => 1
+                ]
+            ],
+            'Opportunity grid without result' => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'sales-opportunity-grid'
+                    ],
+                    'gridFilters'         => [
+                        'sales-opportunity-grid[_filter][budgetAmount][value]' => 150.00,
+                    ],
+                    'assert'              => [],
+                    'expectedResultCount' => 0
+                ],
+            ]
+        ];
     }
 }
