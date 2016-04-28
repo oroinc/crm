@@ -111,10 +111,7 @@ class AddOpportunityStatus implements
             'enum',
             'immutable_codes',
             [
-                'identification_alignment',
-                'needs_analysis',
                 'solution_development',
-                'negotiation',
                 'won',
                 'lost'
             ]
