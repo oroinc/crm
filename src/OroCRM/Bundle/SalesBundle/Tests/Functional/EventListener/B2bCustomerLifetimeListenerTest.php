@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\EventListner;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -46,7 +47,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
-        $opportunity2->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        $opportunity2->setStatus($em->getReference($enumClass, 'won'));
         $em->persist($opportunity2);
         $em->flush();
         $em->refresh($b2bCustomer);
@@ -67,7 +69,8 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     {
         $em          = $this->getEntityManager();
         $b2bCustomer = $opportunity->getCustomer();
-        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'lost'));
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        $opportunity->setStatus($em->getReference($enumClass, 'lost'));
 
         $em->persist($opportunity);
         $em->flush();
@@ -75,7 +78,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
 
         $this->assertEquals(0, $b2bCustomer->getLifetime());
 
-        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setCloseRevenue(100);
 
         $em->persist($opportunity);
@@ -146,13 +149,13 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     public function testRemoveOpportunityFromB2bCustomer()
     {
         $em = $this->getEntityManager();
-
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
         // add an opportunity to the database
         $opportunity = new Opportunity();
         $opportunity->setName('unset_b2bcustomer_test');
         $opportunity->setDataChannel($this->getReference('default_channel'));
         $opportunity->setCloseRevenue(50);
-        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        $opportunity->setStatus($em->getReference($enumClass, 'won'));
         /** @var B2bCustomer $b2bCustomer */
         $b2bCustomer = $this->getReference('default_b2bcustomer');
         $b2bCustomer->addOpportunity($opportunity);
@@ -178,6 +181,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
     {
         $em           = $this->getEntityManager();
         $organization = $em->getRepository('OroOrganizationBundle:Organization')->getFirst();
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
 
         $opportunity = new Opportunity();
         $opportunity->setName('remove_b2bcustomer_test');
@@ -185,7 +189,7 @@ class B2bCustomerLifetimeListenerTest extends WebTestCase
         $opportunity->setCloseRevenue(50);
         $opportunity->setBudgetAmount(50.00);
         $opportunity->setProbability(10);
-        $opportunity->setStatus($em->getReference('OroCRMSalesBundle:OpportunityStatus', 'won'));
+        $opportunity->setStatus($em->getReference($enumClass, 'won'));
         $opportunity->setOrganization($organization);
         $opportunity->setCustomer($this->getReference('default_b2bcustomer'));
 
