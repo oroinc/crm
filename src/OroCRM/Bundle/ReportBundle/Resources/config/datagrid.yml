@@ -233,13 +233,9 @@ datagrid:
         filters:
             columns:
                 statusLabel:
-                    type: entity
-                    data_name: opportunity.status
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            multiple: true
+                    type: enum
+                    data_name: status.id
+                    enum_code: opportunity_status
                 numberOfOpportunities:
                     type: number
                     data_name: numberOfOpportunities
@@ -249,13 +245,13 @@ datagrid:
                     data_name: closeRevenue
                     filter_by_having: true
                     options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
                 budgetAmount:
                     type: currency
                     data_name: budgetAmount
                     filter_by_having: true
                     options:
-                        data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                        data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
         options:
             entityHint: report data
             export: true
