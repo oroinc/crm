@@ -12,6 +12,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 use Oro\Bundle\ActivityBundle\Event\ActivityEvent;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 
 use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
@@ -32,14 +33,22 @@ class ActivityListener
     /** @var array */
     protected $updatedEntities = [];
 
+    /** @var ConfigManager */
+    protected $configManager;
+
     /**
      * @param ActivityContactProvider $activityContactProvider
      * @param DoctrineHelper          $doctrineHelper
+     * @param ConfigManager           $configManager
      */
-    public function __construct(ActivityContactProvider $activityContactProvider, DoctrineHelper $doctrineHelper)
-    {
+    public function __construct(
+        ActivityContactProvider $activityContactProvider,
+        DoctrineHelper $doctrineHelper,
+        ConfigManager $configManager
+    ) {
         $this->activityContactProvider = $activityContactProvider;
         $this->doctrineHelper          = $doctrineHelper;
+        $this->configManager           = $configManager;
     }
 
     /**
@@ -49,10 +58,13 @@ class ActivityListener
      */
     public function onAddActivity(ActivityEvent $event)
     {
-        $activity  = $event->getActivity();
-        $target    = $event->getTarget();
+        $activity        = $event->getActivity();
+        $target          = $event->getTarget();
+        $extendProvider  = $this->configManager->getProvider('extend');
+        $targetClassName = ClassUtils::getClass($target);
 
-        if (TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+        if (TargetExcludeList::isExcluded($targetClassName) ||
+            !$extendProvider->getConfig($targetClassName)->is('is_extend')) {
             return;
         }
 
@@ -101,8 +113,11 @@ class ActivityListener
     {
         $activity = $event->getActivity();
         $target = $event->getTarget();
+        $extendProvider  = $this->configManager->getProvider('extend');
+        $targetClassName = ClassUtils::getClass($target);
 
-        if (TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+        if (TargetExcludeList::isExcluded($targetClassName) ||
+            !$extendProvider->getConfig($targetClassName)->is('is_extend')) {
             return;
         }
 
@@ -131,6 +146,7 @@ class ActivityListener
     {
         $entitiesToDelete = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityDeletions();
         $entitiesToUpdate = $args->getEntityManager()->getUnitOfWork()->getScheduledEntityUpdates();
+        $extendProvider   = $this->configManager->getProvider('extend');
         if (!empty($entitiesToDelete) || !empty($entitiesToUpdate)) {
             foreach ($entitiesToDelete as $entity) {
                 $class = $this->doctrineHelper->getEntityClass($entity);
@@ -142,7 +158,9 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        if (!TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+                        $targetClassName = ClassUtils::getClass($target);
+                        if (!TargetExcludeList::isExcluded($targetClassName) &&
+                            $extendProvider->getConfig($targetClassName)->is('is_extend')) {
                             $targetsInfo[] = [
                                 'class' => $this->doctrineHelper->getEntityClass($target),
                                 'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
@@ -174,7 +192,9 @@ class ActivityListener
                     $targets     = $entity->getActivityTargetEntities();
                     $targetsInfo = [];
                     foreach ($targets as $target) {
-                        if (!TargetExcludeList::isExcluded(ClassUtils::getClass($target))) {
+                        $targetClassName = ClassUtils::getClass($target);
+                        if (!TargetExcludeList::isExcluded($targetClassName) &&
+                            $extendProvider->getConfig($targetClassName)->is('is_extend')) {
                             $targetsInfo[] = [
                                 'class' => $this->doctrineHelper->getEntityClass($target),
                                 'id' => $this->doctrineHelper->getSingleEntityIdentifier($target),
