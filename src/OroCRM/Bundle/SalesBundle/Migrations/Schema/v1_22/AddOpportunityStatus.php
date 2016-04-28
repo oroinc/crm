@@ -129,14 +129,20 @@ class AddOpportunityStatus implements
             'won' => 'Closed Won',
             'lost' => 'Closed Lost'
         ];
-        $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority) VALUES (:id, :name, :priority)';
+        $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority, is_default)
+                  VALUES (:id, :name, :priority, :is_default)';
         $i = 1;
         foreach ($statuses as $key => $value) {
             $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
             $dropFieldsQuery->addSql(
                 $query,
-                ['id' => $key, 'name' => $value, 'priority' => $i],
-                ['id' => Type::STRING, 'name' => Type::STRING, 'priority' => Type::INTEGER]
+                ['id' => $key, 'name' => $value, 'priority' => $i, 'is_default' => 0],
+                [
+                    'id' => Type::STRING,
+                    'name' => Type::STRING,
+                    'priority' => Type::INTEGER,
+                    'is_default' => Type::BOOLEAN
+                ]
             );
             $queries->addQuery($dropFieldsQuery);
             $i++;
