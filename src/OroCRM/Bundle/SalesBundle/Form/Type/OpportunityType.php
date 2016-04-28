@@ -42,7 +42,8 @@ class OpportunityType extends AbstractType
                     'label' => 'orocrm.sales.opportunity.contact.label',
                     'new_item_property_name'  => 'firstName',
                     'configs'            => [
-                        'propertyNameForNewItem'  => 'fullName',
+                        'allowCreateNew'        => true,
+                        'renderedPropertyName'  => 'fullName',
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                         'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
@@ -57,8 +58,7 @@ class OpportunityType extends AbstractType
                     'label' => 'orocrm.sales.opportunity.customer.label',
                     'new_item_property_name'  => 'name',
                     'configs'            => [
-                        'result_template_twig'   => 'OroFormBundle:Autocomplete:default/result.html.twig',
-                        'propertyNameForNewItem' => 'name',
+                        'allowCreateNew'        => true
                     ],
                 ]
             )
