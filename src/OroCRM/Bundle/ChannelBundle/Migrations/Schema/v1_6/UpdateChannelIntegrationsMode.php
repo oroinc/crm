@@ -49,8 +49,7 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
     protected function updateChannelIntegrationsMode(LoggerInterface $logger, $dryRun = true)
     {
         $ids = $this->getChannelIntegrations($logger);
-        $updateSql = 'UPDATE oro_integration_channel SET edit_mode = :edit_mode '
-            . 'WHERE id IN (:ids)';
+        $updateSql = 'UPDATE oro_integration_channel SET edit_mode = :edit_mode WHERE id IN (:ids)';
         $params = ['ids' => $ids, 'edit_mode' => $this->mode];
         $types  = ['ids' => Connection::PARAM_INT_ARRAY, 'edit_mode' => Type::INTEGER];
 
@@ -68,9 +67,9 @@ class UpdateChannelIntegrationsMode extends ParametrizedMigrationQuery
      */
     protected function getChannelIntegrations(LoggerInterface $logger)
     {
-        $sql = 'SELECT i.id FROM oro_integration_channel i '
-            . 'INNER JOIN orocrm_channel c ON c.data_source_id = i.id '
-           . 'WHERE c.status = :status';
+        $sql = 'SELECT i.id FROM oro_integration_channel i' .
+               ' INNER JOIN orocrm_channel c ON c.data_source_id = i.id ' .
+               ' WHERE c.status = :status';
 
         $params       = ['status' => Channel::STATUS_ACTIVE];
         $types        = ['status' => Type::BOOLEAN];
