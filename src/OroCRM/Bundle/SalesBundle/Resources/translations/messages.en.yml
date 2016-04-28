@@ -29,9 +29,9 @@ orocrm:
                 LostCount:
                     name: Lost Count
                     hint: Number of 'lost' items
-                InProgressCount:
-                    name: In Progress Count
-                    hint: Number of 'in progress' items
+                SolutionDevelopmentCount:
+                    name: In Solution Development Count
+                    hint: Number of 'Solution Development' items
             opportunity:
                 WonRevenueSumFunction:
                     name: Sum revenue won
