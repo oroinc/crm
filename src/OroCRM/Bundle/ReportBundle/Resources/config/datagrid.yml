@@ -258,6 +258,10 @@ datagrid:
                     filter_by_having: true
                     options:
                         data_type: Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
+                closeDate:
+                    label:     orocrm.sales.opportunity.close_date.label
+                    type:      date
+                    data_name: opportunity.closeDate
                 createdAt:
                     label:     orocrm.sales.opportunity.created_at.label
                     type:      datetime
@@ -266,10 +270,6 @@ datagrid:
                     label:     orocrm.sales.opportunity.updated_at.label
                     type:      datetime
                     data_name: opportunity.updatedAt
-                closeDate:
-                    label:     orocrm.sales.opportunity.close_date.label
-                    type:      date
-                    data_name: opportunity.closeDate
 
         options:
             entityHint: report data
