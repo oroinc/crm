@@ -29,9 +29,9 @@ orocrm:
                 LostCount:
                     name: Lost Count
                     hint: Number of 'lost' items
-                InProgressCount:
-                    name: In Progress Count
-                    hint: Number of 'in progress' items
+                SolutionDevelopmentCount:
+                    name: In Solution Development Count
+                    hint: Number of 'Solution Development' items
             opportunity:
                 WonRevenueSumFunction:
                     name: Sum revenue won
@@ -137,7 +137,8 @@ orocrm:
             customer.label:       B2B Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
-            state.label:          Status
+            created_at.label:     Created At
+            updated_at.label:     Updated At
             datagrid:
                 view:     View
                 update:   Update
