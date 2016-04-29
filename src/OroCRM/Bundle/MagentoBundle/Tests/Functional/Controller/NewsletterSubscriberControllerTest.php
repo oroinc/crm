@@ -24,6 +24,11 @@ class NewsletterSubscriberControllerTest extends AbstractController
     protected $baseJobExecutor;
 
     /**
+     * @var bool
+     */
+    protected $isRealGridRequest = true;
+
+    /**
      * {@inheritdoc}
      */
     protected function getMainEntityId()
@@ -73,19 +78,6 @@ class NewsletterSubscriberControllerTest extends AbstractController
         parent::tearDown();
     }
 
-    /**
-     * @param array $requestData
-     *
-     * @dataProvider gridProvider
-     */
-    public function testGrid($requestData)
-    {
-        parent::testGrid($requestData);
-    }
-
-    /**
-     * @depends testGrid
-     */
     public function testView()
     {
         $this->client->request(
@@ -99,6 +91,16 @@ class NewsletterSubscriberControllerTest extends AbstractController
         $this->assertContains($this->subscriber->getCustomer()->getLastName(), $result->getContent());
         $this->assertContains($this->subscriber->getEmail(), $result->getContent());
         $this->assertContains($this->subscriber->getStatus()->getName(), $result->getContent());
+    }
+
+    /**
+     * @param array $requestData
+     *
+     * @dataProvider gridProvider
+     */
+    public function testGrid($requestData)
+    {
+        parent::testGrid($requestData);
     }
 
     /**

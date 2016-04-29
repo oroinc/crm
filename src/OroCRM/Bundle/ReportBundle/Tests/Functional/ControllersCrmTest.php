@@ -17,6 +17,7 @@ class ControllersCrmTest extends BaseControllersTest
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(
             array(
                 'OroCRM\Bundle\ReportBundle\Tests\Functional\DataFixtures\LoadLeadSourceData',

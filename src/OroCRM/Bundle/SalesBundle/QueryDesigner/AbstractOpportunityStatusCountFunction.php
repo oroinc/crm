@@ -22,7 +22,7 @@ abstract class AbstractOpportunityStatusCountFunction implements FunctionInterfa
         list($statusTableAlias) = explode('.', $columnName);
 
         return sprintf(
-            "SUM(CASE WHEN %s.name = '%s' THEN 1 ELSE 0 END)",
+            "SUM(CASE WHEN %s.id = '%s' THEN 1 ELSE 0 END)",
             $statusTableAlias,
             $this->getStatus()
         );
