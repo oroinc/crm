@@ -1,0 +1,5 @@
+oro_entity:
+    entity_aliases:
+        Extend\Entity\EV_Opportunity_Status:
+            alias:        salesopportunitystatus
+            plural_alias: salesopportunitystatuses

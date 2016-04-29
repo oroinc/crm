@@ -13,7 +13,7 @@ class WonRevenueSumFunction implements FunctionInterface
     public function getExpression($tableAlias, $fieldName, $columnName, $columnAlias, AbstractQueryConverter $qc)
     {
         // Make sure status table joined
-        $opportunityStatusTableAlias = $qc->ensureChildTableJoined($tableAlias, 'state', 'left');
+        $opportunityStatusTableAlias = $qc->ensureChildTableJoined($tableAlias, 'status', 'left');
 
         return sprintf(
             "SUM(CASE WHEN (%s.id='won') THEN %s ELSE 0 END)",
