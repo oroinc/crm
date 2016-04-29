@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Provider;
 
+use Doctrine\ORM\QueryBuilder;
+
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -53,7 +55,7 @@ class ChannelsByEntitiesProvider
      * @param array $entities
      * @param bool  $status
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
     {

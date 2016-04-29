@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -84,7 +85,7 @@ class ChannelRepository extends EntityRepository
      * @param array $entities
      * @param bool  $status
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
     {
