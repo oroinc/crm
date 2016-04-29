@@ -189,6 +189,7 @@ datagrid:
                         - { join: OroCRMSalesBundle:Opportunity, alias: opportunity, conditionType: WITH, condition: "opportunity.status = status" }
                 select:
                     - status.name as statusLabel
+                    - status.priority as statusPriority
                     - COUNT(opportunity.id) as numberOfOpportunities
                     - >
                       SUM(
@@ -220,6 +221,7 @@ datagrid:
                         expr: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
                         formatter: currency
         columns:
+            statusPriority:        { label: statusPriority, renderable: false, manageable: false }
             statusLabel:           { label: orocrm.report.datagrid.columns.status }
             numberOfOpportunities: { label: orocrm.report.datagrid.columns.number_of_opportunities, frontend_type: integer }
             closeRevenue:          { label: orocrm.report.datagrid.columns.close_revenue, frontend_type: currency }
@@ -227,9 +229,13 @@ datagrid:
         sorters:
             columns:
                 statusLabel:           { data_name: statusLabel }
+                statusPriority:        { data_name: statusPriority }
                 numberOfOpportunities: { data_name: numberOfOpportunities }
                 closeRevenue:          { data_name: closeRevenue }
                 budgetAmount:          { data_name: budgetAmount }
+            default:
+                statusPriority: ASC
+
         filters:
             columns:
                 statusLabel:
