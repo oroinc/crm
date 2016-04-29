@@ -42,7 +42,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
         $channels = $this->channelsProvider->getChannelsByEntities($entities);
 
         if (count($channels) === 1) {
-            $channel = $channels[0];
+            $channel = reset($channels);
             $builder->addEventListener(
                 FormEvents::PRE_SET_DATA,
                 function(FormEvent $event) use ($channel) {

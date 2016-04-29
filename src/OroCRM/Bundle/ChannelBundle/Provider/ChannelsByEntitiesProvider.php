@@ -42,7 +42,7 @@ class ChannelsByEntitiesProvider
     {
         sort($entities);
         $hash = md5(serialize([$entities, $status]));
-        if (empty($this->channelsCache[$hash])) {
+        if (!isset($this->channelsCache[$hash])) {
             $this->channelsCache[$hash] = $this->getChannelRepository()->getChannelsByEntities($entities, $status);
         }
 
