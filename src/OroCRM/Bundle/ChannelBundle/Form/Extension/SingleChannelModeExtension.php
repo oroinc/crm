@@ -35,7 +35,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$options['single_b2b_channel_mode']) {
+        if (!$options['single_channel_mode']) {
             return;
         }
         $entities = $options['entities'];
@@ -45,7 +45,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
             $channel = reset($channels);
             $builder->addEventListener(
                 FormEvents::PRE_SET_DATA,
-                function(FormEvent $event) use ($channel) {
+                function (FormEvent $event) use ($channel) {
                     $event->setData($channel);
                 }
             );
@@ -57,7 +57,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        if (!$options['single_b2b_channel_mode']) {
+        if (!$options['single_channel_mode']) {
             return;
         }
         $entities = $options['entities'];
@@ -73,7 +73,7 @@ class SingleChannelModeExtension extends AbstractTypeExtension
      */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(['single_b2b_channel_mode' => true]);
+        $resolver->setDefaults(['single_channel_mode' => true]);
     }
 
     /**

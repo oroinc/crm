@@ -59,7 +59,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
                 ->with(FormEvents::PRE_SET_DATA, $callback);
         }
 
-        $this->extension->buildForm($builder, ['entities' => $entities, 'single_b2b_channel_mode' => true]);
+        $this->extension->buildForm($builder, ['entities' => $entities, 'single_channel_mode' => true]);
 
     }
 
@@ -71,7 +71,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         $view = new FormView();
 
         $form = $this->getMock('Symfony\Component\Form\FormInterface');
-        $options = ['entities' => $entities, 'single_b2b_channel_mode' => true];
+        $options = ['entities' => $entities, 'single_channel_mode' => true];
 
         $view->vars['read_only'] = false;
 
@@ -93,7 +93,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
         $resolver = $this->getMock('Symfony\Component\OptionsResolver\OptionsResolverInterface');
         $resolver->expects($this->once())
             ->method('setDefaults')
-            ->with(['single_b2b_channel_mode' => true]);
+            ->with(['single_channel_mode' => true]);
 
         $this->extension->setDefaultOptions($resolver);
     }
@@ -106,7 +106,7 @@ class SingleChannelModeExtensionTest extends \PHPUnit_Framework_TestCase
             'one channel' => [
                 ['Entity1'],
                 [$channel],
-                function(FormEvent $event) use ($channel) {
+                function (FormEvent $event) use ($channel) {
                     $event->setData($channel);
                 }
             ],

@@ -77,6 +77,17 @@ class ChannelRepository extends EntityRepository
      */
     public function getChannelsByEntities(array $entities = [], $status = Channel::STATUS_ACTIVE)
     {
+        return $this->getChannelsByEntitiesQB($entities, $status)->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $entities
+     * @param bool  $status
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
+    {
         $query = $this->createQueryBuilder('c');
         if (!empty($entities)) {
             $countDistinctName = $query->expr()->eq($query->expr()->countDistinct('e.name'), ':count');
@@ -91,6 +102,6 @@ class ChannelRepository extends EntityRepository
         $query->orderBy('c.name', 'ASC');
         $query->setParameter('status', $status);
 
-        return $query->getQuery()->getResult();
+        return $query;
     }
 }

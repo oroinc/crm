@@ -50,6 +50,17 @@ class ChannelsByEntitiesProvider
     }
 
     /**
+     * @param array $entities
+     * @param bool  $status
+     *
+     * @return \Doctrine\ORM\QueryBuilder
+     */
+    public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
+    {
+        return $this->getChannelRepository()->getChannelsByEntitiesQB($entities, $status);
+    }
+
+    /**
      * @return ChannelRepository
      */
     protected function getChannelRepository()
