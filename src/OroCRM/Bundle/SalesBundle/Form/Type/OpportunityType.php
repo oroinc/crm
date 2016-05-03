@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -113,9 +114,12 @@ class OpportunityType extends AbstractType
                 'status',
                 'oro_enum_select',
                 [
-                    'required'  => false,
+                    'required'  => true,
                     'label'     => 'orocrm.sales.opportunity.status.label',
-                    'enum_code' => Opportunity::INTERNAL_STATUS_CODE
+                    'enum_code' => Opportunity::INTERNAL_STATUS_CODE,
+                    'constraints' => [
+                        new NotNull()
+                    ]
                 ]
             );
 

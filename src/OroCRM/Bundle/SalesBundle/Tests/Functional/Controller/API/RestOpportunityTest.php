@@ -32,7 +32,7 @@ class RestOpportunityTest extends WebTestCase
                 'customer'    => $this->getReference('default_b2bcustomer')->getId(),
                 'contact'     => $this->getReference('default_contact')->getId(),
                 'dataChannel' => $this->getReference('default_channel')->getId(),
-                'status'      => 'solution_development'
+                'status'      => 'in_progress'
             ]
         ];
 

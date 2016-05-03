@@ -19,7 +19,7 @@ class AccountsByOpportunitiesReportListener
     protected $allowedFilterStates = [
         'won',
         'lost',
-        'solution_development'
+        'in_progress'
     ];
 
     /**
