@@ -27,4 +27,5 @@ workflows:
             close_revenue:
                 property_path: opportunity.closeRevenue
             close_date:
+                label: orocrm.sales.opportunity.workflow.close_date.label
                 property_path: opportunity.closeDate
