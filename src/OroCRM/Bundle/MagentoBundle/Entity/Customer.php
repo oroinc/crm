@@ -30,7 +30,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\CustomerRepository")
- * @ORM\HasLifecycleCallbacks()
  * @ORM\Table(
  *      name="orocrm_magento_customer",
  *      uniqueConstraints={@ORM\UniqueConstraint(name="magecustomer_oid_cid_unq", columns={"origin_id", "channel_id"})},
@@ -46,7 +45,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user",
- *              "context-grid"="magento-customers-for-context-grid"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -61,6 +59,13 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",
+ *          },
+ *          "grid"={
+ *              "default"="magento-customers-grid",
+ *              "context"="magento-customers-for-context-grid"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
@@ -197,6 +202,22 @@ class Customer extends ExtendCustomer implements
      * )
      */
     protected $updatedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="imported_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $importedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="synced_at", nullable=true)
+     * @Oro\Versioned
+     */
+    protected $syncedAt;
 
     /**
      * @var Website
@@ -443,11 +464,19 @@ class Customer extends ExtendCustomer implements
     protected $password;
 
     /**
-     * @var NewsletterSubscriber
+     * @var NewsletterSubscriber[]|Collection
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber", mappedBy="customer")
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber",
+     *      mappedBy="customer", cascade={"remove"}, orphanRemoval=true)
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
+     *      }
+     * )
      */
-    protected $newsletterSubscriber;
+    protected $newsletterSubscribers;
 
     /**
      * {@inheritdoc}
@@ -458,6 +487,7 @@ class Customer extends ExtendCustomer implements
 
         $this->carts  = new ArrayCollection();
         $this->orders = new ArrayCollection();
+        $this->newsletterSubscribers = new ArrayCollection();
     }
 
     /**
@@ -828,20 +858,6 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist()
-    {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTime('now', new \DateTimeZone('UTC'));
-        }
-
-        if (!$this->updatedAt) {
-            $this->updatedAt = $this->createdAt;
-        }
-    }
-
-    /**
      * @return string
      */
     public function getPassword()
@@ -882,11 +898,74 @@ class Customer extends ExtendCustomer implements
     }
 
     /**
-     * @return NewsletterSubscriber
+     * @return NewsletterSubscriber[]|Collection
      */
-    public function getNewsletterSubscriber()
+    public function getNewsletterSubscribers()
     {
-        return $this->newsletterSubscriber;
+        return $this->newsletterSubscribers;
+    }
+
+    /**
+     * @param Collection|NewsletterSubscriber[] $newsletterSubscribers
+     * @return Customer
+     */
+    public function setNewsletterSubscribers($newsletterSubscribers)
+    {
+        $this->newsletterSubscribers = $newsletterSubscribers;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribed()
+    {
+        foreach ($this->getNewsletterSubscribers() as $newsletterSubscriber) {
+            if ($newsletterSubscriber->isSubscribed()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSyncedAt()
+    {
+        return $this->syncedAt;
+    }
+
+    /**
+     * @param \DateTime $syncedAt
+     * @return Customer
+     */
+    public function setSyncedAt(\DateTime $syncedAt)
+    {
+        $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt()
+    {
+        return $this->importedAt;
+    }
+
+    /**
+     * @param \DateTime $importedAt
+     * @return Customer
+     */
+    public function setImportedAt(\DateTime $importedAt)
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
     }
 
     /**

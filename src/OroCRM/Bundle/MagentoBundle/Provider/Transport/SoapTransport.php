@@ -106,13 +106,20 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
     protected $auth = [];
 
     /**
+     * @var array
+     */
+    protected $bundleConfig;
+
+    /**
      * @param Mcrypt $encoder
      * @param WsdlManager $wsdlManager
+     * @param array $bundleConfig
      */
-    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager)
+    public function __construct(Mcrypt $encoder, WsdlManager $wsdlManager, array $bundleConfig = [])
     {
         $this->encoder = $encoder;
         $this->wsdlManager = $wsdlManager;
+        $this->bundleConfig = $bundleConfig;
     }
 
     /**
@@ -158,6 +165,7 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
 
         // revert initial state
         $this->isExtensionInstalled = null;
+        $this->adminUrl = null;
         $this->isWsiMode = $wsiMode;
 
         /** @var string sessionId returned by Magento API login method */
@@ -194,6 +202,19 @@ class SoapTransport extends BaseSOAPTransport implements MagentoTransportInterfa
         $options['cache_wsdl'] = WSDL_CACHE_NONE;
         if (!isset($options['login'], $options['password'])) {
             $options = array_merge($options, $this->auth);
+        }
+        if (!empty($this->bundleConfig['sync_settings']['skip_ssl_verification'])) {
+            $context = stream_context_create(
+                [
+                    'ssl' => [
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                    ]
+                ]
+            );
+
+            $options['stream_context'] = $context;
         }
 
         return parent::getSoapClient($wsdlUrl, $options);

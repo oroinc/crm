@@ -5,22 +5,22 @@ definitions:
         entity:  OroCRM\Bundle\ChannelBundle\Entity\Channel
         order:   30
         pre_conditions:
-            @and:
-                - @equal: [$status, true]
-                - @not_empty: $data
-                - @equal: ["$data[rfm_enabled]", true]
+            '@and':
+                - '@equal': [$status, true]
+                - '@not_empty': $data
+                - '@equal': ["$data[rfm_enabled]", true]
         actions_configuration:
-            - @assign_constant_value:
+            - '@assign_constant_value':
                 attribute: $.commandName
                 value: OroCRM\Bundle\AnalyticsBundle\Command\CalculateAnalyticsCommand::COMMAND_NAME
-            - @tree:
+            - '@tree':
                 actions:
-                    - @format_string:
+                    - '@format_string':
                         attribute: $.channelArguments
                         string: '--channel=%channel_id%'
                         arguments:
                             channel_id: $id
-                    - @create_entity:
+                    - '@create_entity':
                         class: JMS\JobQueueBundle\Entity\Job
                         attribute: $.syncJob
                         flush: true

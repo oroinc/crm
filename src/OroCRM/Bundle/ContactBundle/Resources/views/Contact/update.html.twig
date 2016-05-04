@@ -1,8 +1,8 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
 
-{% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig', 'OroTagBundle:Form:fields.html.twig'] %}
-{% set fullname = entity|oro_format_name|default('N/A') %}
+{% form_theme form with ['OroCRMContactBundle:Include:fields.html.twig', 'OroFormBundle:Form:fields.html.twig'] %}
+{% set fullname = entity|oro_format_name|default('oro.entity.item'|trans({'%id%': entity.id})) %}
 {% oro_title_set({ params : {"%contact.name%": fullname} }) %}
 
 {% set gridName = 'contact-accounts-grid' %}
@@ -80,7 +80,6 @@
                         form_row(form.birthday),
                         form_row(form.gender),
                         form_row(form.source),
-                        form_row(form.tags),
                         form_row(form.picture)
                     ]
                 },
@@ -135,7 +134,7 @@
                 'data' : [
                     form_widget(form.appendAccounts, {'id': 'appendAccounts'}),
                     form_widget(form.removeAccounts, {'id': 'removeAccounts'}),
-                    dataGrid.renderGrid(gridName, { contact: form.vars.value.id }, { cssClass: 'inner-grid' })
+                    dataGrid.renderGrid(gridName, { contact: form.vars.value.id ? : null }, { cssClass: 'inner-grid' })
                 ]
             }
         ]

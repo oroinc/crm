@@ -1,9 +1,11 @@
 <?php
 namespace OroCRM\Bundle\ChannelBundle\Entity\Manager;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Query\ResultSetMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
 
 use Oro\Bundle\EntityBundle\ORM\QueryUtils;
@@ -11,6 +13,7 @@ use Oro\Bundle\EntityBundle\ORM\SqlQueryBuilder;
 use Oro\Bundle\SearchBundle\Engine\Indexer as SearchIndexer;
 use Oro\Bundle\SearchBundle\Query\Result as SearchResult;
 use Oro\Bundle\SearchBundle\Query\Result\Item as SearchResultItem;
+use Oro\Bundle\SearchBundle\Event\PrepareResultItemEvent;
 use Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager;
 
 class CustomerSearchApiEntityManager extends ApiEntityManager
@@ -24,36 +27,48 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
     /** @var SearchIndexer */
     protected $searchIndexer;
 
+    /** @var EventDispatcherInterface */
+    protected $dispatcher;
+
     /**
      * {@inheritdoc}
-     * @param SearchIndexer $searchIndexer
+     * @param SearchIndexer            $searchIndexer
+     * @param EventDispatcherInterface $dispatcher
      */
     public function __construct(
         $class,
         ObjectManager $om,
-        SearchIndexer $searchIndexer
+        SearchIndexer $searchIndexer,
+        EventDispatcherInterface $dispatcher
     ) {
         parent::__construct($class, $om);
         $this->searchIndexer = $searchIndexer;
+        $this->dispatcher   = $dispatcher;
     }
 
     /**
      * Gets search result
      *
-     * @param int    $page   Page number
-     * @param int    $limit  Number of items per page
-     * @param string $search The search string.
+     * @param int           $page   Page number
+     * @param int           $limit  Number of items per page
+     * @param string        $search The search string.
+     * @param Criteria|null $criteria
      *
      * @return array
      */
-    public function getSearchResult($page = 1, $limit = 10, $search = '')
+    public function getSearchResult($page = 1, $limit = 10, $search = '', $criteria = null)
     {
-        $searchQuery  = $this->searchIndexer->getSimpleSearchQuery(
+        $searchQuery = $this->searchIndexer->getSimpleSearchQuery(
             $search,
             $this->getOffset($page, $limit),
             $limit,
             $this->getCustomerSearchAliases()
         );
+
+        if ($criteria && $expression = $criteria->getWhereExpression()) {
+            $searchQuery->getCriteria()->andWhere($expression);
+        }
+
         $searchResult = $this->searchIndexer->query($searchQuery);
 
         $result = [
@@ -87,6 +102,8 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
 
         /** @var SearchResultItem $item */
         foreach ($searchResult as $item) {
+            $this->dispatcher->dispatch(PrepareResultItemEvent::EVENT_NAME, new PrepareResultItemEvent($item));
+
             $id        = $item->getRecordId();
             $className = $item->getEntityName();
 
@@ -151,7 +168,7 @@ class CustomerSearchApiEntityManager extends ApiEntityManager
             }
         }
 
-        $rsm = new ResultSetMapping();
+        $rsm = QueryUtils::createResultSetMapping($em->getConnection()->getDatabasePlatform());
         $rsm
             ->addScalarResult('channelId', 'channelId', 'integer')
             ->addScalarResult('entityId', 'id', 'integer')

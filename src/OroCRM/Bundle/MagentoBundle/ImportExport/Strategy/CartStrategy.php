@@ -4,8 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Symfony\Component\PropertyAccess\PropertyAccess;
-
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartAddress;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
@@ -59,6 +57,12 @@ class CartStrategy extends AbstractImportStrategy
             ->updateAddresses($entity)
             ->updateCartItems($entity)
             ->updateCartStatus($entity);
+
+        $now = new \DateTime('now', new \DateTimeZone('UTC'));
+        if (!$entity->getImportedAt()) {
+            $entity->setImportedAt($now);
+        }
+        $entity->setSyncedAt($now);
 
         $this->existingEntity = null;
         $this->existingCartItems = null;
@@ -135,11 +139,10 @@ class CartStrategy extends AbstractImportStrategy
     protected function updateAddresses(Cart $entity)
     {
         $addresses = ['shippingAddress', 'billingAddress'];
-        $propertyAccessor = PropertyAccess::createPropertyAccessor();
 
         foreach ($addresses as $addressName) {
             /** @var CartAddress $address */
-            $address = $propertyAccessor->getValue($entity, $addressName);
+            $address = $this->getPropertyAccessor()->getValue($entity, $addressName);
 
             if (!$address) {
                 continue;
@@ -149,9 +152,9 @@ class CartStrategy extends AbstractImportStrategy
             $mageRegionId = $address->getRegion() ? $address->getRegion()->getCode() : null;
             $this->addressHelper->updateAddressCountryRegion($address, $mageRegionId);
             if ($address->getCountry()) {
-                $propertyAccessor->setValue($entity, $addressName, $address);
+                $this->getPropertyAccessor()->setValue($entity, $addressName, $address);
             } else {
-                $propertyAccessor->setValue($entity, $addressName, null);
+                $this->getPropertyAccessor()->setValue($entity, $addressName, null);
             }
         }
 

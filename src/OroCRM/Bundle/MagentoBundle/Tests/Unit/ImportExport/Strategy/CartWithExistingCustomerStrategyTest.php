@@ -20,7 +20,9 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->eventDispatcher,
             $this->strategyHelper,
             $this->fieldHelper,
-            $this->databaseHelper
+            $this->databaseHelper,
+            $this->chainEntityClassNameProvider,
+            $this->translator
         );
     }
 
@@ -31,6 +33,10 @@ class CartWithExistingCustomerStrategyTest extends AbstractStrategyTest
     public function testProcessFailed()
     {
         $strategy = $this->getStrategy();
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $strategy->setImportExportContext($context);
 
         $customer = new Customer();
         $customer->setOriginId(1);

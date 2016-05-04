@@ -12,7 +12,7 @@ class CustomerApiEntityManager extends ApiEntityManager
     protected function getSerializationConfig()
     {
         return [
-            'excluded_fields' => ['carts', 'orders', 'newsletterSubscriber'],
+            'excluded_fields' => ['carts', 'orders', 'newsletterSubscribers'],
             'fields'          => [
                 'birthday'     => [
                     'data_transformer' => 'orocrm_magento.customer_birthday_type_transformer'
@@ -37,7 +37,7 @@ class CustomerApiEntityManager extends ApiEntityManager
     protected function getAddressSerializationConfig()
     {
         return [
-            'excluded_fields' => ['newsletterSubscriber'],
+            'excluded_fields' => ['newsletterSubscribers'],
             'fields'          => [
                 'country' => ['fields' => 'iso2Code'],
                 'region'  => ['fields' => 'combinedCode'],

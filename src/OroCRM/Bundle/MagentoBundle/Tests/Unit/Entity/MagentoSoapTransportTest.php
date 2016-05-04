@@ -45,7 +45,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'guest_customer_sync'    => ['guestCustomerSync',    $guestCustomerSync, $guestCustomerSync],
             'admin_url'              => ['adminUrl',             $adminUrl, $adminUrl],
             'extension_version'      => ['extensionVersion',     '1.0.0', '1.0.0'],
-            'magento_version'        => ['magentoVersion',       '1.0.0', '1.0.0']
+            'magento_version'        => ['magentoVersion',       '1.0.0', '1.0.0'],
+            'newsletter_subscriber_synced_to_id' => ['newsletter_subscriber_synced_to_id', 10, 10]
         ];
     }
 
@@ -62,7 +63,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             'start_sync_date' => new \DateTime('now'),
             'initial_sync_start_date' => new \DateTime('now'),
             'extension_version' => '1.1.0',
-            'magento_version' => '1.8.0.0'
+            'magento_version' => '1.8.0.0',
+            'newsletter_subscriber_synced_to_id' => 10
         ];
 
         $this->entity
@@ -76,7 +78,8 @@ class MagentoSoapTransportTest extends AbstractEntityTestCase
             ->setSyncStartDate($data['start_sync_date'])
             ->setInitialSyncStartDate($data['initial_sync_start_date'])
             ->setExtensionVersion('1.1.0')
-            ->setMagentoVersion('1.8.0.0');
+            ->setMagentoVersion('1.8.0.0')
+            ->setNewsletterSubscriberSyncedToId(10);
 
         $settingsBag = $this->entity->getSettingsBag();
 

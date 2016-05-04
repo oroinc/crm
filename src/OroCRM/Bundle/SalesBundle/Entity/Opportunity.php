@@ -32,8 +32,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd",
- *              "context-grid"="sales-opportunity-for-context-grid"
+ *              "icon"="icon-usd"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -44,10 +43,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_opportunity_select",
@@ -55,8 +51,15 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="sales-opportunity-grid",
+ *              "context"="sales-opportunity-for-context-grid"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
- *      }
+ *     }
  * )
  *
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -67,6 +70,8 @@ class Opportunity extends ExtendOpportunity implements
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
+
+    const INTERNAL_STATE_CODE = 'opportunity_state';
 
     /**
      * @var int
@@ -86,6 +91,7 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * @var OpportunityStatus
+     * @deprecated 1.12.0:1.14.0 Will be renamed to state
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus")
      * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
@@ -592,6 +598,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @param  OpportunityStatus $status
      * @return Opportunity
+     * @deprecated 1.12.0:1.14.0 Use $this->setState() instead
      */
     public function setStatus($status)
     {
@@ -602,6 +609,7 @@ class Opportunity extends ExtendOpportunity implements
 
     /**
      * @return OpportunityStatus
+     * @deprecated 1.12.0:1.14.0 Use $this->getState() instead
      */
     public function getStatus()
     {

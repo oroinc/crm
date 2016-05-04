@@ -129,24 +129,6 @@ class B2bCustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($newCollection, $this->entity->getOpportunities());
     }
 
-    public function testTaggableInterface()
-    {
-        $this->assertInstanceOf('Oro\Bundle\TagBundle\Entity\Taggable', $this->entity);
-        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $this->entity->getTags());
-
-        $this->assertNull($this->entity->getTaggableId());
-
-        $ref = new \ReflectionProperty(ClassUtils::getClass($this->entity), 'id');
-        $ref->setAccessible(true);
-        $ref->setValue($this->entity, self::TEST_ID);
-
-        $this->assertSame(self::TEST_ID, $this->entity->getTaggableId());
-
-        $newCollection = new ArrayCollection();
-        $this->entity->setTags($newCollection);
-        $this->assertSame($newCollection, $this->entity->getTags());
-    }
-
     public function testToSting()
     {
         $this->entity->setName(self::TEST_NAME);

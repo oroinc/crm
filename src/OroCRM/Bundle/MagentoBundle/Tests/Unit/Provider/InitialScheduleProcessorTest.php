@@ -55,7 +55,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->em->expects($this->exactly(2))
             ->method('flush');
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
@@ -100,7 +100,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('flush')
             ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
@@ -136,10 +136,12 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
 
         $this->em->expects($this->never())
             ->method('persist');
+
+        /** Will be called once per connector to save connector's status */
         $this->em->expects($this->never())
             ->method('flush');
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
             ->will($this->returnValue(1));
 
@@ -193,7 +195,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
             ->method('flush')
             ->with($this->isInstanceOf('JMS\JobQueueBundle\Entity\Job'));
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId())
             ->will($this->returnValue(0));
 
@@ -246,7 +248,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->em->expects($this->never())
             ->method('flush');
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
@@ -321,7 +323,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->em->expects($this->atLeastOnce())
             ->method('flush');
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
@@ -369,7 +371,7 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $this->em->expects($this->exactly(2))
             ->method('flush');
         $this->repository->expects($this->once())
-            ->method('getRunningSyncJobsCount')
+            ->method('getExistingSyncJobsCount')
             ->with(InitialSyncCommand::COMMAND_NAME, $integration->getId());
 
         $this->assertReloadEntityCall($integration);
@@ -390,6 +392,9 @@ class InitialScheduleProcessorTest extends AbstractSyncProcessorTest
         $dictionaryConnector->expects($this->any())
             ->method('getType')
             ->willReturn('dictionary');
+        $dictionaryConnector->expects($this->any())
+            ->method('getImportJobName')
+            ->willReturn('test job');
 
         $this->typesRegistry->expects($this->any())
             ->method('getRegisteredConnectorsTypes')

@@ -1,15 +1,10 @@
 {% import 'OroUIBundle::macros.html.twig' as UI %}
-{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ UI.renderProperty('orocrm.account.name.label'|trans, account.name) }}
-
-            {% if resource_granted('oro_tag_view') %}
-                {{ UI.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(account)) }}
-            {% endif %}
         </div>
 
         <div class="responsive-block">

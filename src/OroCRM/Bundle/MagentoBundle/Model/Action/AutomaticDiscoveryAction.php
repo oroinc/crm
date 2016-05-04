@@ -4,9 +4,9 @@ namespace OroCRM\Bundle\MagentoBundle\Model\Action;
 
 use Doctrine\Common\Util\ClassUtils;
 
-use Oro\Bundle\WorkflowBundle\Exception\InvalidParameterException;
-use Oro\Bundle\WorkflowBundle\Model\Action\AbstractAction;
-use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
+use Oro\Component\Action\Action\AbstractAction;
+use Oro\Component\Action\Exception\InvalidParameterException;
+use Oro\Component\Action\Model\ContextAccessor;
 
 use OroCRM\Bundle\MagentoBundle\Service\AutomaticDiscovery;
 

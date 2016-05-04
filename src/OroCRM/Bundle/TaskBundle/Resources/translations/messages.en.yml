@@ -19,6 +19,7 @@ orocrm:
         id.label:                   Id
         workflow_item.label:        Workflow item
         organization.label:         Organization
+        status.label:               Status
 
         user_tasks: User Tasks
         info_widget_title: Task Information
@@ -39,6 +40,7 @@ orocrm:
         delete_task: Delete {{ entity }}
         created_by:  assigned by {{ user }}
         changed_by:  assigned by {{ user }}, updated by {{ editor }}
+        view:        View task
 
         taskpriority:
             entity_label: Task Priority

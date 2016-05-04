@@ -45,16 +45,14 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
- *              "type"="ACL",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "type"="ACL"
  *          },
  *          "dataaudit"={
  *              "auditable"=true
  *          },
  *          "workflow"={
- *              "active_workflow"="task_flow"
+ *              "active_workflow"="task_flow",
+ *              "show_step_in_grid"=false
  *          },
  *          "reminder"={
  *              "reminder_template_name"="task_reminder",
@@ -68,6 +66,13 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "acl"="orocrm_task_view",
  *              "action_button_widget"="orocrm_add_task_button",
  *              "action_link_widget"="orocrm_add_task_link"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
+ *          },
+ *          "grid"={
+ *              "default"="tasks-grid",
+ *              "context"="task-for-context-grid"
  *          }
  *      }
  * )

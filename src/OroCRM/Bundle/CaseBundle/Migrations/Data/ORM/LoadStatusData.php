@@ -50,8 +50,8 @@ class LoadStatusData extends AbstractTranslatableEntityFixture
                 // save
                 $manager->persist($caseStatus);
             }
-        }
 
-        $manager->flush();
+            $manager->flush();
+        }
     }
 }

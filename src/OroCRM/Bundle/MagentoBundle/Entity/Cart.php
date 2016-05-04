@@ -40,8 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_cart_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart",
- *              "context-grid"="magento-cart-for-context-grid"
+ *              "icon"="icon-shopping-cart"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -59,6 +58,13 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *          },
+ *          "grid"={
+ *              "default"="magento-cart-grid",
+ *              "context"="magento-cart-for-context-grid"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
@@ -297,6 +303,20 @@ class Cart extends ExtendCart implements
     protected $organization;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="imported_at", nullable=true)
+     */
+    protected $importedAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(type="datetime", name="synced_at", nullable=true)
+     */
+    protected $syncedAt;
+
+    /**
      * @param WorkflowItem $workflowItem
      *
      * @return Cart
@@ -317,7 +337,7 @@ class Cart extends ExtendCart implements
     }
 
     /**
-     * @param WorkflowItem $workflowStep
+     * @param WorkflowStep $workflowStep
      *
      * @return Cart
      */
@@ -792,6 +812,44 @@ class Cart extends ExtendCart implements
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getSyncedAt()
+    {
+        return $this->syncedAt;
+    }
+
+    /**
+     * @param \DateTime $syncedAt
+     * @return Customer
+     */
+    public function setSyncedAt(\DateTime $syncedAt)
+    {
+        $this->syncedAt = $syncedAt;
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getImportedAt()
+    {
+        return $this->importedAt;
+    }
+
+    /**
+     * @param \DateTime $importedAt
+     * @return Customer
+     */
+    public function setImportedAt(\DateTime $importedAt)
+    {
+        $this->importedAt = $importedAt;
+
+        return $this;
     }
 
     /**

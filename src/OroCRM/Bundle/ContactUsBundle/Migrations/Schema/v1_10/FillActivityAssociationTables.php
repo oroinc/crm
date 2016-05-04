@@ -10,31 +10,28 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-use Oro\Bundle\MigrationBundle\Migration\Extension\NameGeneratorAwareInterface;
-use Oro\Bundle\MigrationBundle\Tools\DbIdentifierNameGenerator;
-
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
-
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendDbIdentifierNameGenerator;
 
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 
-use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
-use Oro\Bundle\ActivityListBundle\Tools\ActivityListEntityConfigDumperExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
+use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 
 class FillActivityAssociationTables implements
     Migration,
     OrderedMigrationInterface,
-    NameGeneratorAwareInterface,
-    ExtendExtensionAwareInterface
+    ExtendExtensionAwareInterface,
+    ActivityExtensionAwareInterface,
+    ActivityListExtensionAwareInterface
 {
-    /** @var ExtendDbIdentifierNameGenerator */
-    protected $nameGenerator;
-
     /** @var ExtendExtension */
     protected $extendExtension;
+
+    /** @var ActivityExtension */
+    protected $activityExtension;
 
     /** @var ActivityListExtension */
     protected $activityListExtension;
@@ -42,17 +39,25 @@ class FillActivityAssociationTables implements
     /**
      * {@inheritdoc}
      */
-    public function setNameGenerator(DbIdentifierNameGenerator $nameGenerator)
+    public function setExtendExtension(ExtendExtension $extendExtension)
     {
-        $this->nameGenerator = $nameGenerator;
+        $this->extendExtension = $extendExtension;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setExtendExtension(ExtendExtension $extendExtension)
+    public function setActivityExtension(ActivityExtension $activityExtension)
     {
-        $this->extendExtension = $extendExtension;
+        $this->activityExtension = $activityExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setActivityListExtension(ActivityListExtension $activityListExtension)
+    {
+        $this->activityListExtension = $activityListExtension;
     }
 
     /**
@@ -73,8 +78,20 @@ class FillActivityAssociationTables implements
 
         // Remove orocrm_contactus_req_emails
         $table = $schema->getTable('orocrm_contactus_req_emails');
-        $table->removeForeignKey('FK_E494F7AE427EB8A5');
-        $table->removeForeignKey('FK_E494F7AEA832C1C9');
+        if ($table->hasForeignKey('FK_E494F7AE427EB8A5')) {
+            $table->removeForeignKey('FK_E494F7AE427EB8A5');
+        }
+        if ($table->hasForeignKey('FK_E494F7AEA832C1C9')) {
+            $table->removeForeignKey('FK_E494F7AEA832C1C9');
+        }
+        // Delete foreign keys for orocrm_contactus_request_emails table,
+        // that was renamed to orocrm_contactus_req_emails
+        if ($table->hasForeignKey('FK_4DEF4058427EB8A5')) {
+            $table->removeForeignKey('FK_4DEF4058427EB8A5');
+        }
+        if ($table->hasForeignKey('FK_4DEF4058A832C1C9')) {
+            $table->removeForeignKey('FK_4DEF4058A832C1C9');
+        }
         $schema->dropTable('orocrm_contactus_req_emails');
 
         // Remove orocrm_contactus_request_calls
@@ -128,7 +145,10 @@ class FillActivityAssociationTables implements
                ' SELECT email_id, request_id' .
                ' FROM orocrm_contactus_req_emails';
 
-        return sprintf($sql, $this->getAssociationTableName('oro_email', 'orocrm_contactus_request'));
+        return sprintf(
+            $sql,
+            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
+        );
     }
 
     /**
@@ -140,7 +160,10 @@ class FillActivityAssociationTables implements
                ' SELECT call_id, request_id' .
                ' FROM orocrm_contactus_request_calls';
 
-        return sprintf($sql, $this->getAssociationTableName('orocrm_call', 'orocrm_contactus_request'));
+        return sprintf(
+            $sql,
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
+        );
     }
 
     /**
@@ -156,8 +179,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->getAssociationActivityListTableName('orocrm_contactus_request'),
-            $this->getAssociationTableName('oro_email', 'orocrm_contactus_request')
+            $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
+            $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
         );
     }
 
@@ -174,56 +197,8 @@ class FillActivityAssociationTables implements
 
         return sprintf(
             $sql,
-            $this->getAssociationActivityListTableName('orocrm_contactus_request'),
-            $this->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
-        );
-    }
-
-    /**
-     * Gets a table name for many-to-many relation
-     *
-     * @param string $activityTableName Activity entity table name. It is owning side of the association.
-     * @param string $targetTableName   Target entity table name.
-     *
-     * @return string
-     */
-    protected function getAssociationTableName($activityTableName, $targetTableName)
-    {
-        $sourceClassName = $this->extendExtension->getEntityClassByTableName($activityTableName);
-        $targetClassName = $this->extendExtension->getEntityClassByTableName($targetTableName);
-
-        $associationName = ExtendHelper::buildAssociationName(
-            $targetClassName,
-            ActivityScope::ASSOCIATION_KIND
-        );
-
-        return $this->nameGenerator->generateManyToManyJoinTableName(
-            $sourceClassName,
-            $associationName,
-            $targetClassName
-        );
-    }
-
-    /**
-     * Gets an activity list table name for many-to-many relation
-     *
-     * @param string $targetTableName Target entity table name.
-     *
-     * @return string
-     */
-    protected function getAssociationActivityListTableName($targetTableName)
-    {
-        $targetClassName = $this->extendExtension->getEntityClassByTableName($targetTableName);
-
-        $associationName = ExtendHelper::buildAssociationName(
-            $targetClassName,
-            ActivityListEntityConfigDumperExtension::ASSOCIATION_KIND
-        );
-
-        return $this->nameGenerator->generateManyToManyJoinTableName(
-            ActivityListEntityConfigDumperExtension::ENTITY_CLASS,
-            $associationName,
-            $targetClassName
+            $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
         );
     }
 }

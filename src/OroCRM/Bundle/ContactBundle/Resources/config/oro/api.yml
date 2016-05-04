@@ -1,0 +1,10 @@
+oro_api:
+    entities:
+        OroCRM\Bundle\ContactBundle\Entity\Contact:
+            fields:
+                email:
+                    exclude: true
+        OroCRM\Bundle\ContactBundle\Entity\ContactAddress: ~
+        OroCRM\Bundle\ContactBundle\Entity\ContactEmail: ~
+        OroCRM\Bundle\ContactBundle\Entity\ContactPhone: ~
+        OroCRM\Bundle\ContactBundle\Entity\Group: ~

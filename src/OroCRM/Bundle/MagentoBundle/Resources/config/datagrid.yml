@@ -1,9 +1,10 @@
 datagrid:
+    # Newsletter subscribers filtering is added by CustomerDataGridListener
     magento-customers-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - c.id
@@ -19,9 +20,6 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-#                   Status is OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber::STATUS_SUBSCRIBED to avoid cast
-                    - CASE WHEN transport.isExtensionInstalled = true AND transport.extensionVersion IS NOT NULL THEN (CASE WHEN newsletterSubscriberStatus.id = '1' THEN 'yes' ELSE 'no' END) ELSE 'unknown' END as isSubscriber
-                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
@@ -31,13 +29,10 @@ datagrid:
                     left:
                         - { join: c.dataChannel, alias: dataChannel }
                         - { join: c.channel, alias: channel }
-                        - { join: %orocrm_magento.entity.soap_transport.class%, alias: transport, conditionType: WITH, condition: 'channel.transport = transport' }
                         - { join: c.addresses, alias: address,  conditionType: WITH, condition: "address.primary = true"}
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
-                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
             channelName:
                 label:            orocrm.magento.customer.data_channel.label
@@ -59,13 +54,6 @@ datagrid:
                 label:            orocrm.magento.datagrid.columns.billing_country
             regionName:
                 label:            orocrm.magento.datagrid.columns.billing_region
-            isSubscriber:
-                label:            orocrm.magento.datagrid.columns.is_subscriber.label
-                frontend_type: select
-                choices:
-                    unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
-                    no: orocrm.magento.datagrid.columns.is_subscriber.no
-                    yes: orocrm.magento.datagrid.columns.is_subscriber.yes
             createdAt:
                 label:            oro.ui.created_at
                 frontend_type:    datetime
@@ -102,7 +90,6 @@ datagrid:
                 countryName: { data_name: country.name }
                 lifetime:    { data_name: c.lifetime }
                 regionName:  { data_name: address.regionName }
-                isSubscriber:  { data_name: isSubscriber }
             default:
                 lastName:  ASC
                 firstName: ASC
@@ -141,7 +128,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type: string
@@ -149,25 +136,9 @@ datagrid:
                 lifetime:
                     type: number
                     data_name: c.lifetime
-                isSubscriber:
-                    label: orocrm.magento.datagrid.columns.is_subscriber.label
-                    type: single_choice
-                    options:
-                        field_options:
-                            choices:
-                                unknown: orocrm.magento.datagrid.columns.is_subscriber.unknown
-                                no: orocrm.magento.datagrid.columns.is_subscriber.no
-                                yes: orocrm.magento.datagrid.columns.is_subscriber.yes
-                    data_name: isSubscriber
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
                     type: boolean
-                    options:
-                        field_options:
-                            choices:
-                                # in boolean filter type, 1 = yes, 2 = false
-                                2: orocrm.magento.datagrid.columns.customer_is_guest.no
-                                1: orocrm.magento.datagrid.columns.customer_is_guest.yes
                     data_name: c.guest
                 createdAt:
                     type:      datetime
@@ -183,7 +154,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_customer_view
+                acl_resource: orocrm_magento_customer_view
                 rowAction:    true
             update:
                 type:         navigate
@@ -196,7 +167,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -209,7 +180,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -218,7 +189,7 @@ datagrid:
                     success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
                     error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
 
-        action_configuration: [@orocrm_magento.datagrid.customer_actions_provider, "getCustomerActionsPermissions"]
+        action_configuration: [ "@orocrm_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
         options:
             entityHint: customer
             export: true
@@ -226,9 +197,9 @@ datagrid:
 
     magento-cart-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -360,7 +331,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
@@ -396,7 +367,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
         options:
             entityHint: cart
@@ -405,9 +376,9 @@ datagrid:
 
     magento-cartitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\CartItem
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -575,9 +546,9 @@ datagrid:
 
     magento-products-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Product
+        acl_resource: orocrm_magento_product_view
         source:
             type: orm
-            acl_resource: orocrm_magento_product_view
             query:
                 select:
                     - p
@@ -669,16 +640,16 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_product_view
+                acl_resource: orocrm_magento_product_view
                 rowAction:    true
         options:
             entityHint: magento product
 
     magento-order-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -694,26 +665,28 @@ datagrid:
                     - o.totalAmount as grandTotal
                     - step.label as stepLabel
                     - o.customerEmail as email
-                    - country.name as countryName
-                    - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - channel.name as channelName
                     - cw.name as websiteName
                     - o.discountAmount
                     - o.discountPercent
                     - o.couponCode
+                    - >
+                        (SELECT country.name FROM OroCRMMagentoBundle:OrderAddress address_c
+                        LEFT JOIN address_c.country country
+                        LEFT JOIN address_c.types types_c
+                        WHERE address_c.owner = o AND (types_c.name = 'billing' OR types_c.name IS NULL)) as countryName
+                    - >
+                        (SELECT CONCAT(CASE WHEN address_r.regionText IS NOT NULL THEN address_r.regionText ELSE region.name END, '')
+                        FROM OroCRMMagentoBundle:OrderAddress address_r
+                        LEFT JOIN address_r.region region
+                        LEFT JOIN address_r.types types_r
+                        WHERE address_r.owner = o AND (types_r.name = 'billing' OR types_r.name IS NULL)) as regionName
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Order, alias: o }
                 join:
                     left:
                         - { join: o.workflowStep, alias: step }
                         - { join: o.customer, alias: customer }
-                        -
-                            join: o.addresses
-                            alias: address
-                            conditionType: WITH
-                            condition: "address.id IN (SELECT oa.id FROM OroCRMMagentoBundle:OrderAddress oa LEFT JOIN oa.types type WHERE type.name = 'billing')"
-                        - { join: address.country, alias: country }
-                        - { join: address.region, alias: region }
                         - { join: o.dataChannel, alias: channel }
                         - { join: o.store, alias: cs }
                         - { join: cs.website, alias: cw }
@@ -777,7 +750,7 @@ datagrid:
                 totalPaidAmount:        { data_name: o.totalPaidAmount }
                 grandTotal:             { data_name: grandTotal }
                 subTotal:               { data_name: subTotal }
-                countryName:            { data_name: country.name }
+                countryName:            { data_name: countryName }
                 regionName:             { data_name: regionName }
                 status:                 { data_name: o.status }
                 channelName:            { data_name: channelName }
@@ -818,6 +791,14 @@ datagrid:
                 email:
                     type:             string
                     data_name:        email
+                createdAt:
+                    type:             datetime
+                    data_name:        o.createdAt
+                    enabled:          false
+                updatedAt:
+                    type:             datetime
+                    data_name:        o.updatedAt
+                    enabled:          false
                 totalPaidAmount:
                     type:             currency
                     data_name:        o.totalPaidAmount
@@ -833,20 +814,6 @@ datagrid:
                     data_name:        subTotal
                     options:
                         data_type:    Oro\Bundle\FilterBundle\Form\Type\Filter\NumberFilterType::DATA_DECIMAL
-                countryName:
-                    type:      entity
-                    data_name: address.country
-                    enabled:   false
-                    options:
-                        field_options:
-                            class: OroAddressBundle:Country
-                            property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
-                            translatable_options: false
-                regionName:
-                    type:      string
-                    data_name: regionName
-                    enabled:   false
                 status:
                     type:             string
                     data_name:        o.status
@@ -860,21 +827,8 @@ datagrid:
                             workflow_entity_class: %orocrm_magento.order.entity.class%
                 guest:
                     label: orocrm.magento.datagrid.columns.order_is_guest.label
-                    type: choice
-                    options:
-                        field_options:
-                            choices:
-                                'false': orocrm.magento.datagrid.columns.order_is_guest.no
-                                'true': orocrm.magento.datagrid.columns.order_is_guest.yes
+                    type: boolean
                     data_name: o.isGuest
-                createdAt:
-                    type:             datetime
-                    data_name:        o.createdAt
-                    enabled:          false
-                updatedAt:
-                    type:             datetime
-                    data_name:        o.updatedAt
-                    enabled:          false
                 discountAmount:
                     label:            orocrm.magento.datagrid.columns.discount_amount
                     type:             currency
@@ -896,7 +850,7 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
         options:
             entityHint: order
@@ -905,9 +859,9 @@ datagrid:
 
     magento-orderitem-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\OrderItem
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - oi.id
@@ -1005,9 +959,9 @@ datagrid:
                     hide: true
 
     magento-customer-order-grid:
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1070,13 +1024,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-grid:
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -1150,13 +1104,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
 
     magento-customer-orders-widget-grid:
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1293,13 +1247,13 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_order_view
+                acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
     magento-customer-cart-widget-grid:
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id
@@ -1398,16 +1352,16 @@ datagrid:
                 label:        oro.grid.action.view
                 link:         view_link
                 icon:         eye-open
-                acl_recource: orocrm_magento_cart_view
+                acl_resource: orocrm_magento_cart_view
                 rowAction:    true
 
     magento-customers-group-by-channel-grid:
         extended_entity_name: %orocrm_magento.entity.customer_group.class%
         channel_limitation:
             channel_relation_path: dataChannel
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - g.id
@@ -1438,9 +1392,9 @@ datagrid:
         extended_entity_name: %orocrm_magento.entity.store.class%
         channel_limitation:
             channel_relation_path: dataChannel
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - s.id
@@ -1485,9 +1439,9 @@ datagrid:
 
     magento-newsletter-subscriber-grid:
         extended_entity_name: %orocrm_magento.entity.newsletter_subscriber.class%
+        acl_resource: orocrm_magento_newsletter_subscriber_view
         source:
             type: orm
-            acl_resource: orocrm_magento_newsletter_subscriber_view
             query:
                 select:
                     - newsletterSubscriber.id
@@ -1595,7 +1549,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.subscribe
                 link:  subscribe_link
                 icon: plus
-                acl_recource: orocrm_magento_newsletter_subscriber_subscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_subscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.subscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -1608,7 +1562,7 @@ datagrid:
                 label: orocrm.magento.newslettersubscriber.action.unsubscribe
                 link: unsubscribe_link
                 icon: minus
-                acl_recource: orocrm_magento_newsletter_subscriber_unsubscribe
+                acl_resource: orocrm_magento_newsletter_subscriber_unsubscribe
                 defaultMessages:
                     confirm_title:   orocrm.magento.newslettersubscriber.action.confirm_title.unsubscribe
                     confirm_ok:      orocrm.magento.newslettersubscriber.action.confirm_ok
@@ -1616,7 +1570,7 @@ datagrid:
                     confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
                     success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
                     error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
-        action_configuration: [@orocrm_magento.datagrid.newsletter_subscriber_provider, "getActionsPermissions"]
+        action_configuration: [ "@orocrm_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
         options:
             entityHint: newsletter subscriber
             export: true
@@ -1624,9 +1578,9 @@ datagrid:
 
     magento-customers-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Customer
+        acl_resource: orocrm_magento_customer_view
         source:
             type: orm
-            acl_resource: orocrm_magento_customer_view
             query:
                 select:
                     - c.id
@@ -1638,8 +1592,6 @@ datagrid:
                     - country.name as countryName
                     - CONCAT(CASE WHEN address.regionText IS NOT NULL THEN address.regionText ELSE region.name END, '') as regionName
                     - cw.name as websiteName
-                    - (CASE WHEN newsletterSubscriberStatus.id = '1' THEN true ELSE false END) as isSubscriber
-                    - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
                     - c.originId as customerOriginId
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
@@ -1651,8 +1603,6 @@ datagrid:
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: c.website, alias: cw }
-                        - { join: c.newsletterSubscriber, alias: newsletterSubscriber }
-                        - { join: newsletterSubscriber.status, alias: newsletterSubscriberStatus }
         columns:
             id:
                 label:            orocrm.magento.customer.id.label
@@ -1714,9 +1664,9 @@ datagrid:
 
     magento-order-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Order
+        acl_resource: orocrm_magento_order_view
         source:
             type: orm
-            acl_resource: orocrm_magento_order_view
             query:
                 select:
                     - o.id
@@ -1842,7 +1792,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
@@ -1877,9 +1827,9 @@ datagrid:
 
     magento-cart-for-context-grid:
         extended_entity_name: OroCRM\Bundle\MagentoBundle\Entity\Cart
+        acl_resource: orocrm_magento_cart_view
         source:
             type: orm
-            acl_resource: orocrm_magento_cart_view
             query:
                 select:
                     - c.id

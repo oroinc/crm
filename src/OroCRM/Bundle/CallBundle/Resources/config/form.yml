@@ -11,7 +11,7 @@ services:
     orocrm_call.call.form.type:
         class: %orocrm_call.call.form.type.class%
         arguments:
-            - @oro_address.provider.phone
+            - "@oro_address.provider.phone"
         tags:
             - { name: form.type, alias: orocrm_call_form }
 
@@ -40,25 +40,25 @@ services:
         arguments:
             - "orocrm_call_form"
             - "orocrm_call_form"
-            - @request
-            - @doctrine.orm.entity_manager
-            - @oro_address.provider.phone
-            - @oro_activity.manager
-            - @orocrm_call.call.activity.manager
-            - @oro_entity.routing_helper
-            - @form.factory
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_address.provider.phone"
+            - "@oro_activity.manager"
+            - "@orocrm_call.call.activity.manager"
+            - "@oro_entity.routing_helper"
+            - "@form.factory"
 
     orocrm_call.call.form.handler.api:
             class: %orocrm_call.call.form.api.handler.class%
             scope: request
             arguments:
-                - @orocrm_call.call.form.api
-                - @request
-                - @doctrine.orm.entity_manager
+                - "@orocrm_call.call.form.api"
+                - "@request"
+                - "@doctrine.orm.entity_manager"
 
     orocrm_call.call.manager.api:
         class: %orocrm_call.call.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_call.call.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"

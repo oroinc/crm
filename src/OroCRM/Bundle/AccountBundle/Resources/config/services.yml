@@ -21,9 +21,9 @@ services:
     orocrm_account.form.type.account:
         class:                                      %orocrm_account.type.account.class%
         arguments:
-            - @router
-            - @oro_entity.entity_name_resolver
-            - @oro_security.security_facade
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_security.security_facade"
         tags:
             - { name: form.type, alias: orocrm_account }
 
@@ -31,11 +31,9 @@ services:
         class:                                      %orocrm_account.handler.account.class%
         scope: request
         arguments:
-            - @orocrm_account.form.account
-            - @request
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: oro_tag.tag_manager }
+            - "@orocrm_account.form.account"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     # Form type
     orocrm_account.form.type.account_select:
@@ -49,14 +47,14 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_account.account.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_account.form.type.account.api:
         class:                                      %orocrm_account.type.account.api.class%
         arguments:
-            - @router
-            - @oro_entity.entity_name_resolver
-            - @oro_security.security_facade
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_security.security_facade"
         tags:
             - { name: form.type, alias: account }
 
@@ -67,14 +65,12 @@ services:
         arguments: ["account", "account", null]
 
     orocrm_account.form.handler.account.api:
-        class:                                      %orocrm_account.handler.account.class%
+        class: %orocrm_account.handler.account.class%
         scope: request
         arguments:
-            - @orocrm_account.form.account.api
-            - @request
-            - @doctrine.orm.entity_manager
-        tags:
-            - { name: oro_tag.tag_manager }
+            - "@orocrm_account.form.account.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_account.form.autocomplete.account.search_handler:
         parent: oro_form.autocomplete.search_handler
@@ -87,8 +83,8 @@ services:
     orocrm_account.activity_widget_provider:
         class: %orocrm_account.activity_widget_provider.class%
         arguments:
-           - @oro_entity.entity_identifier_accessor
-           - @oro_ui.twig.tab_extension
+           - "@oro_entity.entity_identifier_accessor"
+           - "@oro_ui.twig.tab_extension"
            - 'account_activity_tab_panel'
            - %orocrm_account.account.entity.class%
         tags:
@@ -98,12 +94,3 @@ services:
         class: %orocrm_account.provider.phone.account.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_account.account.entity.class% }
-
-    oro_activity.listener.datagrid.context.account:
-        class: %oro_activity.listener.datagrid.context.class%
-        arguments:
-            - @oro_entity.doctrine_helper
-            - @oro_entity.entity_class_name_helper
-        tags:
-            - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.after.accounts-for-context-grid, method: onBuildAfter }
-

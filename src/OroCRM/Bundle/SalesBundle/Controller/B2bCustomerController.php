@@ -181,7 +181,7 @@ class B2bCustomerController extends Controller
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
      * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_sales_b2bcustomer_view")
      * @Template
      */
     public function customerInfoAction(B2bCustomer $customer, Channel $channel)

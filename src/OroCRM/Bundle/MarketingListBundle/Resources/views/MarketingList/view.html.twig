@@ -58,7 +58,7 @@
             <div class="responsive-block">
                 {{ UI.renderProperty('orocrm.marketinglist.name.label'|trans, entity.name) }}
                 {{ UI.renderProperty('orocrm.marketinglist.type.label'|trans, entity.type.label|trans) }}
-                {{ UI.renderProperty('orocrm.marketinglist.description.label'|trans, entity.description) }}
+                {{ UI.renderHtmlProperty('orocrm.marketinglist.description.label'|trans, entity.description) }}
 
                 {%- set entityData -%}
                     <i class="{{ config.icon }} hide-text"></i>&nbsp;{{ config.label }}
@@ -102,7 +102,7 @@
     {%- set syncStatusData -%}
         {% placeholder marketing_list_sync_info with {marketingList: entity} %}
     {%- endset -%}
-    
+
     {% set itemsGridName = gridName ~ '_items' %}
     {% set removedItemsGridName = gridName ~ '_removed_items' %}
     {% set itemsMixin = 'orocrm-marketing-list-items-mixin' %}

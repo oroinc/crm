@@ -75,25 +75,6 @@ abstract class AbstractInitialProcessor extends SyncProcessor
     /**
      * @param Integration $integration
      * @param string $connector
-     * @param int|null $code
-     * @return null|Status
-     */
-    protected function getLastStatusForConnector(Integration $integration, $connector, $code = null)
-    {
-        $status = $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
-        if ($status) {
-            $statusData = $status->getData();
-            if (!empty($statusData[self::SKIP_STATUS])) {
-                return null;
-            }
-        }
-
-        return $status;
-    }
-
-    /**
-     * @param Integration $integration
-     * @param string $connector
      * @return bool|\DateTime
      */
     protected function getSyncedTo(Integration $integration, $connector)
@@ -111,6 +92,25 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         }
 
         return false;
+    }
+
+    /**
+     * @param Integration $integration
+     * @param string $connector
+     * @param int|null $code
+     * @return null|Status
+     */
+    protected function getLastStatusForConnector(Integration $integration, $connector, $code = null)
+    {
+        $status = $this->getChannelRepository()->getLastStatusForConnector($integration, $connector, $code);
+        if ($status) {
+            $statusData = $status->getData();
+            if (!empty($statusData[self::SKIP_STATUS])) {
+                return null;
+            }
+        }
+
+        return $status;
     }
 
     /**
@@ -139,7 +139,7 @@ abstract class AbstractInitialProcessor extends SyncProcessor
         )->toArray();
 
         foreach ($dictionaryConnectors as $connector) {
-            $this->processIntegrationConnector($integration, $connector->getType());
+            $this->processIntegrationConnector($integration, $connector);
         }
     }
 }

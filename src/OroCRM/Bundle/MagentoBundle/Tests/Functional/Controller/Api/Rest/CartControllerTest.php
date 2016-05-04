@@ -149,6 +149,8 @@ class CartControllerTest extends WebTestCase
             $cart['id'],
             $cart['createdAt'],
             $cart['updatedAt'],
+            $cart['importedAt'],
+            $cart['syncedAt'],
             $cart['originId'],
             $cart['billingAddress'],
             $cart['shippingAddress'],

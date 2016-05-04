@@ -17,12 +17,12 @@
     "repositories": [
        {
             "type": "composer",
-            "url": "http://packagist.orocrm.com"
+            "url": "https://packagist.orocrm.com"
         }
     ],
     "require": {
         "php": ">=5.4.9",
-        "oro/platform": "1.x-dev"
+        "oro/platform": "self.version"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider;
 
 use Doctrine\ORM\Query\Expr;
 
+use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\Connector\InitialNewsletterSubscriberConnector;
 use OroCRM\Bundle\MagentoBundle\Provider\NewsletterSubscriberInitialSyncProcessor;
 use OroCRM\Bundle\MagentoBundle\Tests\Unit\Provider\Stub\InitialConnector;
@@ -28,7 +29,6 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
         );
 
         $this->processor->setChannelClassName('Oro\IntegrationBundle\Entity\Channel');
-        $this->processor->setSubscriberClassName('OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber');
     }
 
     public function testProcess()
@@ -39,57 +39,23 @@ class NewsletterSubscriberInitialSyncProcessorTest extends AbstractSyncProcessor
         $realConnector = new InitialConnector();
         $integration = $this->getIntegration($connectors, $syncStartDate, $realConnector);
 
-        $status = $this->getMockBuilder('Oro\Bundle\IntegrationBundle\Entity\Status')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->repository->expects($this->atLeastOnce())
-            ->method('getLastStatusForConnector')
-            ->with($integration, InitialNewsletterSubscriberConnector::TYPE)
-            ->will($this->returnValue($status));
+        $transport = new MagentoSoapTransport();
+        $transport->setNewsletterSubscriberSyncedToId(42);
+        $integration->expects($this->any())
+            ->method('getTransport')
+            ->will($this->returnValue($transport));
 
         $this->assertProcessCalls();
         $this->assertExecuteJob(
             [
+                'initialSyncInterval' => '7 days',
                 'processorAlias' => false,
                 'entityName' => 'testEntity',
                 'channel' => 'testChannel',
                 'channelType' => 'testChannelType',
-                'initial_id' => 54321
+                'initial_id' => 42
             ]
         );
-
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $qb->expects($this->once())
-            ->method('select')
-            ->will($this->returnSelf());
-
-        $qb->expects($this->once())
-            ->method('where')
-            ->will($this->returnSelf());
-
-        $qb->expects($this->once())
-            ->method('expr')
-            ->will($this->returnValue(new Expr()));
-
-        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-            ->setMethods(['getSingleScalarResult'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
-        $query->expects($this->once())
-            ->method('getSingleScalarResult')
-            ->willReturn(54321);
-
-        $qb->expects($this->once())
-            ->method('getQuery')
-            ->will($this->returnValue($query));
-
-        $this->repository->expects($this->once())
-            ->method('createQueryBuilder')
-            ->willReturn($qb);
 
         $this->processor->process($integration);
     }

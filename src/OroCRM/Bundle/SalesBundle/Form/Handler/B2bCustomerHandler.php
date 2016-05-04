@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
-use Oro\Bundle\TagBundle\Entity\TagManager;
-
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\ChannelBundle\Provider\RequestChannelProvider;
 
@@ -22,9 +20,6 @@ class B2bCustomerHandler
 
     /** @var ObjectManager */
     protected $manager;
-
-    /** @var TagManager */
-    protected $tagManager;
 
     /** @var RequestChannelProvider */
     protected $requestChannelProvider;
@@ -81,16 +76,5 @@ class B2bCustomerHandler
     {
         $this->manager->persist($entity);
         $this->manager->flush();
-        $this->tagManager->saveTagging($entity);
-    }
-
-    /**
-     * Setter for tag manager
-     *
-     * @param TagManager $tagManager
-     */
-    public function setTagManager(TagManager $tagManager)
-    {
-        $this->tagManager = $tagManager;
     }
 }

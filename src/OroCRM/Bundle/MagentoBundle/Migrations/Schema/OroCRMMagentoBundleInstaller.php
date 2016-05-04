@@ -6,6 +6,8 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
@@ -21,6 +23,7 @@ use Oro\Bundle\TrackingBundle\Migration\Extension\VisitEventAssociationExtension
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_0\OroCRMMagentoBundle as IntegrationUpdate;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_37\CreateActivityAssociation;
 use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_38\InheritanceActivityTargets;
+use OroCRM\Bundle\MagentoBundle\Migrations\Schema\v1_40\CreateActivityAssociation as OrderActivityAssociation;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -33,10 +36,14 @@ class OroCRMMagentoBundleInstaller implements
     IdentifierEventExtensionAwareInterface,
     ExtendExtensionAwareInterface,
     VisitEventAssociationExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    NoteExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
+
+    /** @var NoteExtension */
+    protected $noteExtension;
 
     /** @var IdentifierEventExtension */
     protected $identifierEventExtension;
@@ -69,6 +76,14 @@ class OroCRMMagentoBundleInstaller implements
     /**
      * {@inheritdoc}
      */
+    public function setNoteExtension(NoteExtension $noteExtension)
+    {
+        $this->noteExtension = $noteExtension;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setIdentifierEventExtension(IdentifierEventExtension $identifierEventExtension)
     {
         $this->identifierEventExtension = $identifierEventExtension;
@@ -95,7 +110,7 @@ class OroCRMMagentoBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_39';
+        return 'v1_41';
     }
 
     /**
@@ -151,6 +166,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->addOrocrmMagentoNewslSubscrForeignKeys($schema);
 
         $this->addActivityAssociations($schema);
+        OrderActivityAssociation::addNoteAssociations($schema, $this->noteExtension);
         $this->addIdentifierEventAssociations($schema);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
     }
@@ -170,6 +186,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('extension_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('magento_version', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('guest_customer_sync', 'boolean', ['notnull' => false]);
+        $table->addColumn('mage_newsl_subscr_synced_to_id', 'integer', ['notnull' => false]);
     }
 
     /**
@@ -307,6 +324,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
         $table->addColumn('coupon_code', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
+        $table->addColumn('imported_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        $table->addColumn('synced_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
@@ -408,6 +427,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('created_in', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('is_confirmed', 'boolean', ['notnull' => false]);
         $table->addColumn('is_guest', 'boolean', ['notnull' => true, 'default' => false]);
+        $table->addColumn('imported_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        $table->addColumn('synced_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addIndex(['website_id'], 'IDX_2A61EE7D18F45C82', []);
         $table->addIndex(['store_id'], 'IDX_2A61EE7DB092A811', []);
         $table->addIndex(['customer_group_id'], 'IDX_2A61EE7DD2919A68', []);
@@ -691,6 +712,8 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255, 'precision' => 0]);
         $table->addColumn('organization_id', 'integer', ['notnull' => false]);
+        $table->addColumn('imported_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
+        $table->addColumn('synced_at', 'datetime', ['notnull' => false, 'comment' => '(DC2Type:datetime)']);
         $table->addIndex(['customer_id'], 'IDX_96661A809395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_96661A80B092A811', []);
         $table->addIndex(['shipping_address_id'], 'IDX_96661A804D4CFF2B', []);
@@ -846,13 +869,7 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('updated_at', 'datetime', ['comment' => '(DC2Type:datetime)']);
         $table->addColumn('origin_id', 'integer', ['notnull' => false, 'precision' => 0, 'unsigned' => true]);
         $table->addColumn('confirm_code', 'string', ['notnull' => false, 'length' => 32]);
-        $table->addIndex(['channel_id'], 'idx_7c8eaa72f5a1aa', []);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'idx_7c8eaa7e3c61f9', []);
-        $table->addIndex(['store_id'], 'idx_7c8eaab092a811', []);
-        $table->addIndex(['organization_id'], 'idx_7c8eaa32c8a3de', []);
-        $table->addIndex(['data_channel_id'], 'idx_7c8eaabdc09b73', []);
-        $table->addUniqueIndex(['customer_id'], 'uniq_7c8eaa9395c3f3');
 
         $this->extendExtension->addEnumField(
             $schema,
@@ -1532,6 +1549,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
 
         CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
+        OrderActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
     /**

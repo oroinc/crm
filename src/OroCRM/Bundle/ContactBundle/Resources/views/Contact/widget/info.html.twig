@@ -1,6 +1,6 @@
 {% import 'OroUIBundle::macros.html.twig' as ui %}
-{% import 'OroTagBundle::macros.html.twig' as tag %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
+{% import 'OroUserBundle::macros.html.twig' as U %}
 
 {% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
     {% import 'OroUIBundle::macros.html.twig' as ui %}
@@ -85,7 +85,7 @@
                 {%- endif -%}
             {%- endset -%}
 
-            {{ ui.renderHtmlProperty('orocrm.contact.description.label'|trans, entity.description|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.description.label'|trans, entity.description) }}
             {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.contact.fax.label'|trans, entity.fax ? ui.renderPhone(entity.fax) : null) }}
@@ -116,17 +116,10 @@
                 {% if entity.birthday is not empty %} ({{ entity.birthday|age_string({'default': 'N/A'}) }}){% endif %}
             {%- endset -%}
 
-            {% set fullname = entity.assignedTo|oro_format_name %}
-
             {%- set assignedToData -%}
                 {%- if entity.assignedTo -%}
-                    {% if resource_granted('oro_user_user_view') %}
-                        <a href="{{ path('oro_user_view', {'id': entity.assignedTo.id}) }}">
-                            {{ fullname }}
-                        </a>
-                    {% else %}
-                        {{ fullname }}
-                    {% endif %}
+                    {{ U.render_user_name(entity.assignedTo) }}
+                    {{ U.user_business_unit_name(entity.assignedTo) }}
                 {%- endif -%}
             {%- endset -%}
 
@@ -146,10 +139,6 @@
             {{ ui.renderHtmlProperty('orocrm.contact.assigned_to.label'|trans, assignedToData) }}
             {{ ui.renderHtmlProperty('orocrm.contact.reports_to.label'|trans, reportsToData) }}
             {{ ui.renderProperty('orocrm.contact.groups.label'|trans, entity.groups.count ? entity.groupLabels|join(', ') : null) }}
-
-            {% if resource_granted('oro_tag_view') %}
-                {{ ui.renderHtmlProperty('oro.tag.entity_plural_label'|trans, tag.renderView(entity)) }}
-            {% endif %}
         </div>
     </div>
 </div>

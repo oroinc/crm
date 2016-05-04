@@ -12,7 +12,6 @@ use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\TagBundle\Entity\Taggable;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -40,8 +39,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone",
- *              "context-grid"="sales-lead-for-context-grid"
+ *              "icon"="icon-phone"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -52,10 +50,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"="",
- *              "share_scopes"={
- *                  "user"
- *              }
+ *              "group_name"=""
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",
@@ -63,6 +58,13 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "dataaudit"={
  *              "auditable"=true
+ *          },
+ *          "grid"={
+ *              "default"="sales-lead-grid",
+ *              "context"="sales-lead-for-context-grid"
+ *          },
+ *          "tag"={
+ *              "enabled"=true
  *          }
  *      }
  * )
@@ -72,8 +74,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
-    ChannelAwareInterface,
-    Taggable
+    ChannelAwareInterface
 {
     use ChannelEntityTrait;
 
@@ -478,11 +479,6 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $customer;
-
-    /**
-     * @var ArrayCollection
-     */
-    protected $tags;
 
     /**
      * Constructor
@@ -1122,33 +1118,5 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTaggableId()
-    {
-        return $this->getId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setTags($tags)
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTags()
-    {
-        $this->tags = $this->tags ?: new ArrayCollection();
-
-        return $this->tags;
     }
 }

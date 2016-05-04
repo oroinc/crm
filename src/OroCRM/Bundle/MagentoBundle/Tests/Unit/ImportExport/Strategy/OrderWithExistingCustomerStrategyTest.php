@@ -21,7 +21,9 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
             $this->eventDispatcher,
             $this->strategyHelper,
             $this->fieldHelper,
-            $this->databaseHelper
+            $this->databaseHelper,
+            $this->chainEntityClassNameProvider,
+            $this->translator
         );
     }
 
@@ -40,7 +42,11 @@ class OrderWithExistingCustomerStrategyTest extends AbstractStrategyTest
         $order->setChannel($channel);
         $order->setCart($cart);
 
-        $this->assertNull($this->getStrategy()->process($order));
+        $strategy = $this->getStrategy();
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ContextInterface $context */
+        $context = $this->getMock('Oro\Bundle\ImportExportBundle\Context\ContextInterface');
+        $strategy->setImportExportContext($context);
+        $this->assertNull($strategy->process($order));
     }
 
     public function testProcess()

@@ -3,12 +3,15 @@
 }
 .contact-box-row {
   padding: 5px 0;
-  span:first-of-type {
-    padding-right: 5px;
+  &:empty {
+    display: none;
   }
-}
-.contact-box:hover {
-  background-color: #EDF1FA;
+  .contact-element-label {
+    padding-right: 5px;
+    + .inline-actions-element {
+      top: 0;
+    }
+  }
 }
 .contact-box {
   background-color: #F6F6F6;
@@ -16,7 +19,6 @@
   margin: 3px;
   padding: 10px 20px;
   width: calc(50% - 6px);
-  cursor: pointer;
 }
 .contact-widget-wrapper {
   padding: 0 0 0 20px;

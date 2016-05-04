@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Oro\Bundle\EmailBundle\Entity\Mailbox;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseMailboxProcessSettings;
+use OroCRM\Bundle\CaseBundle\Entity\CaseStatus;
+use OroCRM\Bundle\CaseBundle\Entity\CasePriority;
 
 class CaseMailboxProcessSettingsType extends AbstractType
 {
@@ -70,6 +72,9 @@ class CaseMailboxProcessSettingsType extends AbstractType
                 'constraints'   => [
                     new NotNull(),
                 ],
+                'preferred_choices' => function (CaseStatus $entity) {
+                    return $entity->getName() === CaseStatus::STATUS_OPEN;
+                },
             ]
         )->add(
             'priority',
@@ -84,6 +89,9 @@ class CaseMailboxProcessSettingsType extends AbstractType
                 'constraints'   => [
                     new NotNull(),
                 ],
+                'preferred_choices' => function (CasePriority $entity) {
+                    return $entity->getName() === CasePriority::PRIORITY_LOW;
+                },
             ]
         )->add(
             'tags',

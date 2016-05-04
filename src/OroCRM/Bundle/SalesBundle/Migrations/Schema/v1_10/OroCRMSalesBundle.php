@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_10;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
@@ -63,7 +64,7 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -74,7 +75,7 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -85,7 +86,7 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -96,7 +97,7 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]
@@ -107,7 +108,7 @@ class OroCRMSalesBundle implements Migration, OrderedMigrationInterface
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'dataaudit' => ['auditable' => true]
                 ]
             ]

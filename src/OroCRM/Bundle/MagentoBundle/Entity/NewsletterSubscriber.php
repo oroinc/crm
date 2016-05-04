@@ -30,6 +30,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
  *              "owner_column_name"="owner_id",
  *              "organization_field_name"="organization",
  *              "organization_column_name"="organization_id"
+ *          },
+ *          "grid"={
+ *              "default"="magento-newsletter-subscriber-grid"
  *          }
  *      }
  * )
@@ -86,7 +89,7 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
     /**
      * @var Customer
      *
-     * @ORM\OneToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscriber")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\MagentoBundle\Entity\Customer", inversedBy="newsletterSubscribers")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $customer;
@@ -346,6 +349,14 @@ class NewsletterSubscriber extends ExtendNewsletterSubscriber implements
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscribed()
+    {
+        return $this->getStatus()->getId() == self::STATUS_SUBSCRIBED;
     }
 
     /**

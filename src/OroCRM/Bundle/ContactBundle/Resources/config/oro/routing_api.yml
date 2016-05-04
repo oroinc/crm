@@ -15,3 +15,8 @@ orocrm_contact_phone_api:
     resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactPhoneController.php"
     type:         rest
     parent:       orocrm_contact_api
+
+orocrm_contact_email_api:
+    resource:     "@OroCRMContactBundle/Controller/Api/Rest/ContactEmailController.php"
+    type:         rest
+    parent:       orocrm_contact_api

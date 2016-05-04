@@ -1,11 +1,11 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
+    constraints:
+        - OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformation: ~
     properties:
         firstName:
-            - NotBlank: ~
             - Length:
                 max: 100
         lastName:
-            - NotBlank: ~
             - Length:
                 max: 100
         gender:
@@ -40,6 +40,8 @@ OroCRM\Bundle\ContactBundle\Entity\Group:
 
 # Prevent required values for all child of AbstractAddress
 OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
     properties:
         street:
             - NotBlank: ~
@@ -47,6 +49,3 @@ OroCRM\Bundle\ContactBundle\Entity\ContactAddress:
             - NotBlank: ~
         postalCode:
             - NotBlank: ~
-    constraints:
-        - Callback:
-            methods: [isRegionValid]

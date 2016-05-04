@@ -59,8 +59,6 @@ class LeadType extends AbstractType
                 )
             )
             ->add('industry', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.industry.label'))
-            // tags
-            ->add('tags', 'oro_tag_select', array('label' => 'oro.tag.entity_plural_label'))
             ->add('address', 'oro_address', array('required' => false))
             ->add(
                 'source',
@@ -71,7 +69,14 @@ class LeadType extends AbstractType
                     'enum_code' => 'lead_source'
                 )
             )
-            ->add('notes', 'textarea', array('required' => false, 'label' => 'orocrm.sales.lead.notes.label'));
+            ->add(
+                'notes',
+                'oro_resizeable_rich_text',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.lead.notes.label'
+                )
+            );
     }
 
     /**
