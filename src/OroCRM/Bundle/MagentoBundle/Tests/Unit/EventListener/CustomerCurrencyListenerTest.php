@@ -34,7 +34,11 @@ class CustomerCurrencyListenerTest extends \PHPUnit_Framework_TestCase
 
     public function testPrePersistIncorrectEntity()
     {
-        $entity = $this->getMock('\stdClass');
+        $entity = $this
+            ->getMockBuilder('\stdClass')
+            ->setMethods(['setCurrency'])
+            ->getMock()
+        ;
         $entity->expects($this->never())
             ->method('setCurrency');
 
