@@ -765,19 +765,6 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            $defaultStatus = $em->getReference($enumClass, 'solution_development');
-            $this->setStatus($defaultStatus);
-        }
-    }
-
-    /**
      * Set organization
      *
      * @param Organization $organization

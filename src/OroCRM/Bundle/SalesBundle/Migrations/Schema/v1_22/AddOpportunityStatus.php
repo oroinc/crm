@@ -68,9 +68,9 @@ class AddOpportunityStatus implements
         self::addStatusField($schema, $this->extendExtension, $queries);
 
         $statusMapping = [
+            'in_progress' => 'in_progress',
             'won' => 'won',
-            'lost' => 'lost',
-            'in_progress' => 'solution_development'
+            'lost' => 'lost'
         ];
         $query = 'UPDATE orocrm_sales_opportunity SET status_id = :status_id WHERE status_name = :status_name';
         foreach ($statusMapping as $oldStatus => $newStatus) {
@@ -111,7 +111,7 @@ class AddOpportunityStatus implements
             'enum',
             'immutable_codes',
             [
-                'solution_development',
+                'in_progress',
                 'won',
                 'lost'
             ]
@@ -123,9 +123,11 @@ class AddOpportunityStatus implements
             'needs_analysis' => 'Needs Analysis',
             'solution_development' => 'Solution Development',
             'negotiation' => 'Negotiation',
+            'in_progress' => 'In Progress',
             'won' => 'Closed Won',
             'lost' => 'Closed Lost'
         ];
+        $defaultValue = 'in_progress';
         $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority, is_default)
                   VALUES (:id, :name, :priority, :is_default)';
         $i = 1;
@@ -133,7 +135,7 @@ class AddOpportunityStatus implements
             $dropFieldsQuery = new ParametrizedSqlMigrationQuery();
             $dropFieldsQuery->addSql(
                 $query,
-                ['id' => $key, 'name' => $value, 'priority' => $i, 'is_default' => 0],
+                ['id' => $key, 'name' => $value, 'priority' => $i, 'is_default' => $defaultValue === $key],
                 [
                     'id' => Type::STRING,
                     'name' => Type::STRING,

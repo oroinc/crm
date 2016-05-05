@@ -197,20 +197,20 @@ workflows:
                             dataChannel: $dataChannel
                             lead:        $lead
                             notes:       $new_notes
-                    - '@request_enum_entity': # set status "Solution Development" to opportunity
+                    - '@request_enum_entity': # set status "In Progress" to opportunity
                         enum_code: opportunity_status
-                        identifier: 'solution_development'
+                        identifier: 'in_progress'
                         attribute: $opportunity.status
                     - '@unset_value':
                         [$new_account, $new_customer]
             develop_definition:
-                pre_conditions: # if opportunity.status = "solution_development"
+                pre_conditions: # if opportunity.status = "in_progress"
                     '@and':
                         - '@equal':
-                            message: 'Opportunity must be in status "Solution Development"'
-                            parameters: [$opportunity.status.id, 'solution_development']
+                            message: 'Opportunity must be in status "In Progress"'
+                            parameters: [$opportunity.status.id, 'in_progress']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
-                conditions: # if opportunity.status = "solution_development"
+                conditions: # if opportunity.status = "in_progress"
                     '@and':
                         - '@greater_or_equal':
                             message: 'Budget amout must be greater or equal to 0'
@@ -223,9 +223,9 @@ workflows:
             close_as_won_definition:
                 pre_conditions:
                     '@equal':
-                        message: 'Opportunity must be in status "Solution Development"'
-                        parameters: [$opportunity.status.id, 'solution_development']
-                conditions: # if opportunity.status = "solution_development" and required data is entered
+                        message: 'Opportunity must be in status "In Progress"'
+                        parameters: [$opportunity.status.id, 'in_progress']
+                conditions: # if opportunity.status = "in_progress" and required data is entered
                     '@and':
                         - '@not_empty':
                             message: 'Close date must be set'
@@ -249,10 +249,10 @@ workflows:
                         - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_as_lost_definition:
-                pre_conditions: # opportunity.status = "solution_development" and required data is entered
+                pre_conditions: # opportunity.status = "in_progress" and required data is entered
                     '@equal':
-                        message: 'Opportunity must be in status "Solution Development"'
-                        parameters: [$opportunity.status.id, 'solution_development']
+                        message: 'Opportunity must be in status "In Progress"'
+                        parameters: [$opportunity.status.id, 'in_progress']
                 conditions:
                     '@and':
                         - '@not_empty':
@@ -283,7 +283,7 @@ workflows:
                 post_actions:
                     - '@request_enum_entity':
                         enum_code: opportunity_status
-                        identifier: 'solution_development'
+                        identifier: 'in_progress'
                         attribute: $opportunity.status
                     - '@assign_value':
                         - [$budget_amount, ~]

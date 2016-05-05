@@ -912,7 +912,7 @@ datagrid:
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                 where:
                     and:
-                        - opportunity.status = 'solution_development'
+                        - opportunity.status = 'in_progress'
         columns:
             id:
                 label: orocrm.sales.opportunity.id.label
