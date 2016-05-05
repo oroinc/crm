@@ -98,7 +98,7 @@ class DashboardController extends Controller
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange'),
-                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_state')
+                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_status')
             );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);

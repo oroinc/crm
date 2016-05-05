@@ -130,6 +130,11 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_b2bcustomer_select }
 
+    orocrm_sales.form.type.b2bcustomer_with_channel_select:
+        class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelSelectType
+        tags:
+            - { name: form.type, alias: orocrm_sales_b2bcustomer_with_channel_select }
+
     orocrm_sales.salesfunnel.form.type:
         class: %orocrm_sales.salesfunnel.form.type.class%
         tags:

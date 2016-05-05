@@ -33,6 +33,7 @@ services:
         arguments:
             - "@orocrm_activity_contact.provider"
             - "@oro_entity.doctrine_helper"
+            - "@oro_entity_config.config_manager"
         tags:
             - { name: kernel.event_listener, event: oro_activity.add_activity, method: onAddActivity }
             - { name: kernel.event_listener, event: oro_activity.remove_activity, method: onRemoveActivity }

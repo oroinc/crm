@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
 
+use OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures;
 use Symfony\Component\DomCrawler\Form;
 
-use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
@@ -14,7 +15,7 @@ use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
  * @outputBuffering enabled
  * @dbIsolation
  */
-class B2bCustomerControllerTest extends WebTestCase
+class B2bCustomerControllerTest extends AbstractDatagridTestCase
 {
     /** @var B2bCustomer */
     protected static $customer;
@@ -25,13 +26,16 @@ class B2bCustomerControllerTest extends WebTestCase
     /** @var Channel */
     protected static $channel;
 
+    /** @var bool */
+    protected $isRealGridRequest = false;
+
     protected function setUp()
     {
         $this->initClient(
             [],
             array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
         );
-
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(['OroCRM\Bundle\SalesBundle\Tests\Functional\Fixture\LoadSalesBundleFixtures']);
     }
 
@@ -47,6 +51,15 @@ class B2bCustomerControllerTest extends WebTestCase
         $this->client->request('GET', $this->getUrl('orocrm_sales_b2bcustomer_index'));
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @dataProvider gridProvider
+     */
+    public function testGrid($requestData)
+    {
+        parent::testGrid($requestData);
     }
 
     public function testCreate()
@@ -174,5 +187,54 @@ class B2bCustomerControllerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 404);
+    }
+
+    /**
+     * @return array
+     */
+    public function gridProvider()
+    {
+        return [
+            'B2B Customer grid'              => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                    ],
+                    'gridFilters'         => [],
+                    'assert'              => [
+                        'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
+                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME
+                    ],
+                    'expectedResultCount' => 1
+                ],
+            ],
+            'B2B Customer grid with filter'  => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                    ],
+                    'gridFilters'         => [
+                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'b2bCustomer name',
+                    ],
+                    'assert'              => [
+                        'name'        => LoadSalesBundleFixtures::CUSTOMER_NAME,
+                        'channelName' => LoadSalesBundleFixtures::CHANNEL_NAME
+                    ],
+                    'expectedResultCount' => 1
+                ],
+            ],
+            'B2B Customer grid without data' => [
+                [
+                    'gridParameters'      => [
+                        'gridName' => 'orocrm-sales-b2bcustomers-grid'
+                    ],
+                    'gridFilters'         => [
+                        'orocrm-sales-b2bcustomers-grid[_filter][name][value]' => 'some other type',
+                    ],
+                    'assert'              => [],
+                    'expectedResultCount' => 0
+                ],
+            ],
+        ];
     }
 }
