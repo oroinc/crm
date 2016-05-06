@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\MagentoBundle\EventListener;
 use Oro\Bundle\IntegrationBundle\Manager\TypesRegistry;
 use Oro\Bundle\IntegrationBundle\Provider\ConnectorInterface;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent;
-use OroCRM\Bundle\ChannelBundle\EventListener\ChannelSaveSucceedListener as BaseChannelSaveSucceedListener;
+use OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener as BaseUpdateConnectorsListener;
 use OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\MagentoBundle\Provider\Connector\DictionaryConnectorInterface;
@@ -17,7 +17,7 @@ use OroCRM\Bundle\MagentoBundle\Provider\InitialSyncProcessor;
  * Add initial connectors to connectors list.
  * Skip connectors that require Oro Bridge extension in case when it does not installed.
  */
-class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
+class UpdateIntegrationConnectorsListener extends BaseUpdateConnectorsListener
 {
     /**
      * @var TypesRegistry
@@ -40,7 +40,7 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
     /**
      * {@inheritdoc}
      */
-    public function onChannelSucceedSave(ChannelSaveEvent $event)
+    public function onChannelSave(ChannelSaveEvent $event)
     {
         $channel = $event->getChannel();
 
@@ -49,7 +49,7 @@ class ChannelSaveSucceedListener extends BaseChannelSaveSucceedListener
         ) {
             $this->transportEntity = $channel->getDataSource()->getTransport();
 
-            parent::onChannelSucceedSave($event);
+            parent::onChannelSave($event);
         }
     }
 

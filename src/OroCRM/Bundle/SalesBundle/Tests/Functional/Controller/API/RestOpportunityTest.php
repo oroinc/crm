@@ -31,7 +31,8 @@ class RestOpportunityTest extends WebTestCase
                 'owner'       => '1',
                 'customer'    => $this->getReference('default_b2bcustomer')->getId(),
                 'contact'     => $this->getReference('default_contact')->getId(),
-                'dataChannel' => $this->getReference('default_channel')->getId()
+                'dataChannel' => $this->getReference('default_channel')->getId(),
+                'state'       => 'needs_analysis'
             ]
         ];
 
@@ -66,6 +67,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
+        $this->assertEquals('Needs Analysis', $result['state']);
         // TODO: incomplete CRM-816
         //$this->assertEquals($request['opportunity']['owner'], $result['owner']['id']);
         return $request;
@@ -100,6 +102,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
+        $this->assertEquals('Needs Analysis', $result['state']);
 
         return $request;
     }
@@ -120,6 +123,7 @@ class RestOpportunityTest extends WebTestCase
         $this->assertEquals($request['id'], $result['id']);
         $this->assertEquals($request['opportunity']['name'], $result['name']);
         $this->assertEquals('In Progress', $result['status']);
+        $this->assertEquals('Needs Analysis', $result['state']);
 
         $this->client->request('GET', $baseUrl . '?contactId=' . $request['opportunity']['contact']);
         $this->assertCount(1, $this->getJsonResponseContent($this->client->getResponse(), 200));

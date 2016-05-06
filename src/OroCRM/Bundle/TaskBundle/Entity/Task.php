@@ -51,7 +51,8 @@ use OroCRM\Bundle\TaskBundle\Model\ExtendTask;
  *              "auditable"=true
  *          },
  *          "workflow"={
- *              "active_workflow"="task_flow"
+ *              "active_workflow"="task_flow",
+ *              "show_step_in_grid"=false
  *          },
  *          "reminder"={
  *              "reminder_template_name"="task_reminder",

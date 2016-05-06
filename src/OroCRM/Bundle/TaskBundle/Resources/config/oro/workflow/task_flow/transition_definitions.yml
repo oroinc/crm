@@ -1,7 +1,27 @@
 workflows:
     task_flow:
         transition_definitions:
-            start_progress_definition: ~
-            stop_progress_definition: ~
-            closed_definition: ~
-            reopen_definition: ~
+            start_progress_definition:
+              post_actions:
+                  - '@request_enum_entity': # set status "In Progress" to task
+                      enum_code: task_status
+                      identifier: in_progress
+                      attribute: $task.status
+            stop_progress_definition:
+              post_actions:
+                  - '@request_enum_entity': # set status "Open" to task
+                      enum_code: task_status
+                      identifier: open
+                      attribute: $task.status
+            closed_definition:
+              post_actions:
+                  - '@request_enum_entity': # set status "Closed" to task
+                      enum_code: task_status
+                      identifier: closed
+                      attribute: $task.status
+            reopen_definition:
+              post_actions:
+                  - '@request_enum_entity': # set status "Open" to task
+                      enum_code: task_status
+                      identifier: open
+                      attribute: $task.status

@@ -21,9 +21,9 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - o.closeRevenue
+                    - status.id as state
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
-                    - status.label as statusLabel
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
@@ -35,7 +35,7 @@ datagrid:
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: status }
+                        - { join: o.state, alias: status }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
@@ -85,8 +85,10 @@ datagrid:
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            statusLabel:
+            state:
+                frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_state')"
             primaryEmail:
                 label:         orocrm.contact.email.label
             ownerName:
@@ -140,8 +142,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: status.label
+                state:
+                    data_name: status.id
                 primaryEmail:
                     data_name: email.email
                 ownerName:
@@ -197,15 +199,10 @@ datagrid:
                 probability:
                     type: percent
                     data_name: o.probability
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            translatable_options: false
-                            multiple: true
+                state:
+                    type:      enum
+                    data_name: status.id
+                    enum_code: opportunity_state
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -915,7 +912,7 @@ datagrid:
                         - { join: contact.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                 where:
                     and:
-                        - opportunity.status = 'in_progress'
+                        - opportunity.state = 'solution_development'
         columns:
             id:
                 label: orocrm.sales.opportunity.id.label
