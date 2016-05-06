@@ -134,7 +134,7 @@ datagrid:
                     type: string
                     data_name: regionName
                 lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
@@ -309,7 +309,7 @@ datagrid:
                             property: name
                     enabled:   false
                 originId:
-                    type: number
+                    type: number-range
                     data_name: c.originId
                 firstName:
                     type: string
@@ -1177,7 +1177,7 @@ datagrid:
                     type:        string
                     data_name:   o.incrementId
                 itemsCount:
-                    type:        number
+                    type:        number-range
                     data_name:   itemsCount
                     filter_by_having: true
                 createdAt:
@@ -1317,10 +1317,10 @@ datagrid:
         filters:
             columns:
                 originId:
-                    type:            number
+                    type:            number-range
                     data_name:       c.originId
                 itemsCount:
-                    type:             number
+                    type:             number-range
                     data_name:        itemsCount
                     filter_by_having: true
                 createdAt:
