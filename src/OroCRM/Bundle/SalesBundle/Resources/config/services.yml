@@ -146,8 +146,8 @@ services:
     orocrm_sales.forecast_widget.business_unit_autocomplete.listener:
         class: %orocrm_sales.forecast_widget.business_unit_autocomplete.listener.class%
         arguments:
-            - '@oro_security.security_facade'
-            - '@oro_organization.provider.busines_unit_acl'
+            - @oro_security.security_facade
+            - @oro_organization.provider.busines_unit_acl
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: kernel.event_listener, event: oro_search.before_search, method: onSearchBefore }
