@@ -59,19 +59,21 @@ class ImportExportTest extends WebTestCase
     public function strategyDataProvider()
     {
         return [
-            'add'            => ['orocrm_contact.add'],
-            'add or replace' => ['orocrm_contact.add_or_replace'],
+            'add'            => ['orocrm_contact.add', 1, 0],
+            'add or replace' => ['orocrm_contact.add_or_replace', 0, 1],
         ];
     }
 
     /**
      * @param string $strategy
+     * @param int $added
+     * @param int $replaced
      * @dataProvider strategyDataProvider
      */
-    public function testImportExport($strategy)
+    public function testImportExport($strategy, $added, $replaced)
     {
         $this->validateImportFile($strategy);
-        $this->doImport($strategy);
+        $this->doImport($strategy, $added, $replaced);
 
         $this->doExport();
         $this->validateExportResult();
@@ -124,8 +126,10 @@ class ImportExportTest extends WebTestCase
 
     /**
      * @param string $strategy
+     * @param int $added
+     * @param int $replaced
      */
-    protected function doImport($strategy)
+    protected function doImport($strategy, $added, $replaced)
     {
         // test import
         $this->client->followRedirects(false);
@@ -143,11 +147,12 @@ class ImportExportTest extends WebTestCase
         $data = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals(
-            array(
-                'success'   => true,
-                'message'   => 'File was successfully imported.',
-                'errorsUrl' => null
-            ),
+            [
+                'success'    => true,
+                'message'    => 'File was successfully imported.',
+                'errorsUrl'  => null,
+                'importInfo' => sprintf('%s entities were added, %s entities were updated', $added, $replaced)
+            ],
             $data
         );
     }
