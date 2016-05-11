@@ -63,7 +63,8 @@ class CustomerType extends AbstractType
                     'label' => 'orocrm.magento.customer.data_channel.label',
                     'entities' => [$this->customerClassName],
                     'required' => true,
-                    'disabled' => $isExisting
+                    'disabled' => $isExisting,
+                    'single_channel_mode' => false
                 ]
             )
             ->add(

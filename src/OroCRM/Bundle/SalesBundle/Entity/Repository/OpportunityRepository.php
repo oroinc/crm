@@ -16,8 +16,8 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
-    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT = 'Solution Development';
-    const OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE = 'solution_development';
+    const OPPORTUNITY_STATE_IN_PROGRESS = 'In Progress';
+    const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
     
     /**
      * @var WorkflowStep[]
@@ -63,8 +63,8 @@ class OpportunityRepository extends EntityRepository
 
         // select opportunity data
         $qb = $this->createQueryBuilder('opportunity');
-        $qb->select('IDENTITY(opportunity.state) as name, SUM(opportunity.budgetAmount) as budget')
-            ->groupBy('opportunity.state');
+        $qb->select('IDENTITY(opportunity.status) as name, SUM(opportunity.budgetAmount) as budget')
+            ->groupBy('opportunity.status');
 
         if ($dateStart && $dateEnd) {
             $qb->where($qb->expr()->between('opportunity.createdAt', ':dateFrom', ':dateTo'))
@@ -118,7 +118,7 @@ class OpportunityRepository extends EntityRepository
         $qb = $this->createQueryBuilder('opportunity');
 
         $select = "
-            SUM( (CASE WHEN (opportunity.state='solution_development') THEN 1 ELSE 0 END) ) as inProgressCount,
+            SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
             SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
         $qb->select($select);
@@ -217,10 +217,10 @@ class OpportunityRepository extends EntityRepository
      */
     protected function isStatusOk($opportunityHistory, $opportunity)
     {
-        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'state')) {
-            $isStatusOk = $oldStatus === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT;
+        if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'status')) {
+            $isStatusOk = $oldStatus === self::OPPORTUNITY_STATE_IN_PROGRESS;
         } else {
-            $isStatusOk = $opportunity->getState()->getName() === self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE;
+            $isStatusOk = $opportunity->getStatus()->getName() === self::OPPORTUNITY_STATE_IN_PROGRESS_CODE;
         }
 
         return $isStatusOk;
@@ -328,12 +328,12 @@ class OpportunityRepository extends EntityRepository
             ->select('SUM(o.budgetAmount)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
             ->andWhere('o.closeDate IS NULL')
-            ->andWhere('o.state = :state')
+            ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -355,12 +355,12 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->andWhere('o.state = :state')
+            ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -399,12 +399,12 @@ class OpportunityRepository extends EntityRepository
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
             ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->andWhere('o.state = :state')
+            ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('state', self::OPPORTUNITY_STATE_SOLUTION_DEVELOPMENT_CODE);
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }

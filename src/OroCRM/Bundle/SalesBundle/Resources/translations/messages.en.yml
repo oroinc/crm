@@ -31,7 +31,7 @@ orocrm:
                     hint: Number of 'lost' items
                 InProgressCount:
                     name: In Progress Count
-                    hint: Number of 'in progress' items
+                    hint: Number of 'In Progress' items
             opportunity:
                 WonRevenueSumFunction:
                     name: Sum revenue won
@@ -119,7 +119,7 @@ orocrm:
             add_entity:           Add opportunity
             id.label:             Id
             name.label:           Opportunity name
-            close_date.label:     Close date
+            close_date.label:     Expected close date
             probability.label:    Probability
             budget_amount.label:  Budget amount
             close_revenue.label:  Close revenue
@@ -127,17 +127,20 @@ orocrm:
             proposed_solution.label: Proposed solution
             status.label:         Status
             close_reason.label:   Close reason
-            contact.label:        Potential Customer
+            contact.label:        Contact
             owner.label:          Owner
             notes.label:          Additional comments
             lead.label:           Lead
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       B2B Customer
+            customer.label:       Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
-            state.label:          Status
+            created_at.label:     Created At
+            updated_at.label:     Updated At
+            workflow:
+                close_date.label: Close date
             datagrid:
                 view:     View
                 update:   Update
