@@ -38,6 +38,7 @@ class OrderPlaceControllerTest extends WebTestCase
     protected function setUp()
     {
         $this->initClient(['debug' => false], $this->generateBasicAuthHeader(), true);
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(['OroCRM\Bundle\MagentoBundle\Tests\Functional\Fixture\LoadMagentoChannel'], true);
 
         $this->soapTransport = $this->getMockBuilder('OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport')
