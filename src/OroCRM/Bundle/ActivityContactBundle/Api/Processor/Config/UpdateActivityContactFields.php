@@ -13,6 +13,8 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 
 /**
  * Renames "contacting activity" (ac_*) fields to have more readable names.
+ * Exclude these fields for "update" action because they are calculated automatically
+ * and should not be updated manually.
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
@@ -116,6 +118,9 @@ class UpdateActivityContactFields implements ProcessorInterface
                     $definition->removeField($fieldName);
                     $field->setPropertyPath($fieldName);
                     $definition->addField($resultFieldName, $field);
+                }
+                if ('update' === $targetAction && !$field->hasExcluded() && !$field->isExcluded()) {
+                    $field->setExcluded();
                 }
             }
         }

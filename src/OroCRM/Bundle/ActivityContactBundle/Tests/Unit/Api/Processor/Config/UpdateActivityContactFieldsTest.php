@@ -325,6 +325,84 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         );
     }
 
+    public function testProcessForUpdateAction()
+    {
+        $config = [
+            'exclusion_policy' => 'all',
+            'fields'           => [
+                ActivityScope::LAST_CONTACT_DATE     => null,
+                ActivityScope::LAST_CONTACT_DATE_IN  => [
+                    'exclude' => true
+                ],
+                ActivityScope::LAST_CONTACT_DATE_OUT => [
+                    'exclude' => false
+                ],
+                ActivityScope::CONTACT_COUNT         => null,
+                ActivityScope::CONTACT_COUNT_IN      => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null,
+            ]
+        ];
+
+        $expendConfig = new Config(new EntityConfigId('extend', self::TEST_CLASS_NAME));
+        $expendConfig->set('is_extend', true);
+        $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
+        $activityConfig->set('activities', ['Test\Activity1', 'Test\Activity2']);
+
+        $this->configManager->expects($this->once())
+            ->method('hasConfig')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
+        $this->configManager->expects($this->exactly(2))
+            ->method('getEntityConfig')
+            ->willReturnMap(
+                [
+                    ['extend', self::TEST_CLASS_NAME, $expendConfig],
+                    ['activity', self::TEST_CLASS_NAME, $activityConfig],
+                ]
+            );
+
+        $this->activityContactProvider->expects($this->once())
+            ->method('getSupportedActivityClasses')
+            ->willReturn(['Test\Activity2']);
+
+        $configObject = $this->createConfigObject($config);
+        $this->context->setResult($configObject);
+        $this->context->setTargetAction('update');
+        $this->processor->process($this->context);
+
+        $this->assertConfig(
+            [
+                'exclusion_policy' => 'all',
+                'fields'           => [
+                    'lastContactedDate'    => [
+                        'exclude'       => true,
+                        'property_path' => ActivityScope::LAST_CONTACT_DATE
+                    ],
+                    'lastContactedDateIn'  => [
+                        'exclude'       => true,
+                        'property_path' => ActivityScope::LAST_CONTACT_DATE_IN
+                    ],
+                    'lastContactedDateOut' => [
+                        'property_path' => ActivityScope::LAST_CONTACT_DATE_OUT
+                    ],
+                    'timesContacted'       => [
+                        'exclude'       => true,
+                        'property_path' => ActivityScope::CONTACT_COUNT
+                    ],
+                    'timesContactedIn'     => [
+                        'exclude'       => true,
+                        'property_path' => ActivityScope::CONTACT_COUNT_IN
+                    ],
+                    'timesContactedOut'    => [
+                        'exclude'       => true,
+                        'property_path' => ActivityScope::CONTACT_COUNT_OUT
+                    ],
+                ]
+            ],
+            $configObject
+        );
+    }
+
     public function testProcessForEntityWithSupportedActivitiesAndHasConflicts()
     {
         $config = [
