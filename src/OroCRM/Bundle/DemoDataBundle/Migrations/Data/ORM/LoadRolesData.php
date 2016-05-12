@@ -9,7 +9,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
-use Oro\Bundle\PlatformBundle\Yaml\Yaml;
+use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;

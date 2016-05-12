@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Command;
 
-use Oro\Bundle\PlatformBundle\Yaml\Yaml;
+use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
