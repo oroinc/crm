@@ -80,10 +80,6 @@ class ForecastWidgetBusinessUnitAutocompleteListenerTest extends \PHPUnit_Framew
             ->will($this->returnValue($this->criteria));
 
         $this->businessUnitAclProvider->expects($this->once())
-            ->method('addOneShotIsGrantedObserver')
-            ->will($this->returnValue($this->businessUnitAclProvider));
-
-        $this->businessUnitAclProvider->expects($this->once())
             ->method('getBusinessUnitIds')
             ->with(self::OPPORTUNITY_ENTITY, 'VIEW')
             ->will($this->returnValue([1, 2, 3]));
