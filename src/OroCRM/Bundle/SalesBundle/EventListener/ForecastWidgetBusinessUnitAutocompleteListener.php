@@ -42,13 +42,16 @@ class ForecastWidgetBusinessUnitAutocompleteListener
         $from  = $query->getFrom();
 
         if (in_array('oro_business_unit', $from, true)) {
-            $observer = new OneShotIsGrantedObserver();
             $criteria = $query->getCriteria();
             $expr = $criteria->expr();
             $businessUnitIds = $this
                 ->businessUnitAclProvider
-                ->addOneShotIsGrantedObserver($observer)
                 ->getBusinessUnitIds($this->opportunityClassName, 'VIEW');
+
+            if (!is_array($businessUnitIds) || count($businessUnitIds) === 0) {
+                $businessUnitIds = [0];
+            }
+
             $criteria->where($expr->eq('integer.organization', $this->securityFacade->getOrganizationId()));
             $criteria->andWhere($expr->in('integer.id', $businessUnitIds));
         }
