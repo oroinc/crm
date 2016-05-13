@@ -24,7 +24,7 @@ parameters:
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
 
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
-    orocrm_sales.forecast_widget.business_unit_autocomplete.listener.class: OroCRM\Bundle\SalesBundle\EventListener\ForecastWidgetBusinessUnitAutocompleteListener
+    orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -152,11 +152,13 @@ services:
         tags:
             - { name: oro_entity.name_provider, priority: 100 }
 
-    orocrm_sales.forecast_widget.business_unit_autocomplete.listener:
-        class: %orocrm_sales.forecast_widget.business_unit_autocomplete.listener.class%
+    orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler:
+        class: %orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class%
+        parent: oro_form.autocomplete.search_handler
         arguments:
-            - '@oro_security.security_facade'
-            - '@oro_organization.provider.busines_unit_acl'
+            - %oro_organization.business_unit.entity.class%
+            - ["name"]
+            - "@oro_organization.provider.busines_unit_acl"
             - %orocrm_sales.opportunity.class%
         tags:
-            - { name: kernel.event_listener, event: oro_search.before_search, method: onSearchBefore }
+            - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
