@@ -5,17 +5,8 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Event;
 use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
-class ChannelChangeStatusEventTest extends ChannelEventAbstractTest
+class ChannelChangeStatusEventTest extends \PHPUnit_Framework_TestCase
 {
-
-    public function testConstructorRequiresChannel()
-    {
-        $expectedException = $this->getExpectedExceptionCode();
-        $this->setExpectedException($expectedException);
-
-        $channel = new ChannelChangeStatusEvent(null);
-    }
-
     public function testGetter()
     {
         $channel = new Channel();

@@ -131,8 +131,6 @@ class CategoriesValidator extends ConstraintValidator
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
         $isIncreasing = $this->isIncreasing($orderedByIndex);
 
-        $orderIsValid = false;
-
         if ($isIncreasing) {
             $orderIsValid = $this->validateOrderAsk($orderedByIndex->toArray());
             $criteria = Criteria::ASC;
@@ -180,10 +178,6 @@ class CategoriesValidator extends ConstraintValidator
         $lastValue = 0;
 
         foreach ($orderedData as $item) {
-            if (!($item instanceof RFMMetricCategory)) {
-                return false;
-            }
-
             $maxValue = $item->getMaxValue();
 
             if ($lastValue >= $maxValue) {
@@ -206,10 +200,6 @@ class CategoriesValidator extends ConstraintValidator
         $lastValue = PHP_INT_MAX;
 
         foreach ($orderedData as $item) {
-            if (!($item instanceof RFMMetricCategory)) {
-                return false;
-            }
-
             $minValue = $item->getMinValue();
 
             if ($lastValue <= $minValue) {

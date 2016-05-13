@@ -27,13 +27,4 @@ class ChannelEntityTraitTest extends ChannelEventAbstractTest
         $this->assertSame($channel, $stub->getDataChannel());
         $this->assertAttributeSame($channel, 'dataChannel', $stub);
     }
-
-    public function testSetterHasTypeHint()
-    {
-        $expectedException = $this->getExpectedExceptionCode();
-        $this->setExpectedException($expectedException);
-
-        $stub = new StubChannelEntity();
-        $stub->setDataChannel('testString');
-    }
 }

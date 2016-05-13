@@ -49,8 +49,6 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function evaluateProvider()
     {
-
-
         return [
             'full occurrence'     => [
                 'options'        => [
