@@ -51,7 +51,7 @@ class CreateContactTest extends Selenium2TestCase
             ->setOwner('admin')
             ->setEmail($contactName . '@mail.com')
             ->setAddress($this->addressPrimary)
-            ->setAddress($this->addressSecondary, 1)
+            ->setAddress($this->addressSecondary, 2)
             ->save()
             ->assertMessage('Contact saved')
             ->toGrid()
