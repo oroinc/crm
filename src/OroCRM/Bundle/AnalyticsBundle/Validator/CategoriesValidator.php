@@ -131,61 +131,34 @@ class CategoriesValidator extends ConstraintValidator
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
         $isIncreasing = $this->isIncreasing($orderedByIndex);
 
+        $isValid = true;
+
         if ($isIncreasing) {
-            $orderIsValid = $this->validateOrderAsk($orderedByIndex->toArray());
+            $inversion = 1;
             $criteria = Criteria::ASC;
         } else {
-            $orderIsValid = $this->validateOrderDesc($orderedByIndex->toArray());
+            $inversion = -1;
             $criteria = Criteria::DESC;
         }
 
-        if (!$orderIsValid) {
+        $orderedByValueArray = usort(
+            $value->toArray(),
+            function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
+                $minValue1 = $item1->getMinValue();
+                $minValue2 = $item2->getMinValue();
+
+                if ($minValue1 === $minValue2 ||
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() < $minValue1)) {
+                    $isValid = false;
+                }
+
+                return (($minValue1 < $minValue2) ? 1 : -1) * $inversion;
+            }
+        );
+
+        if (!$isValid || $orderedByValueArray !== $orderedByIndex->toArray()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
         }
-    }
-
-    /**
-     * @param array $orderedData
-     * @return bool
-     */
-    protected function validateOrderAsk(array $orderedData)
-    {
-        $lastValue = 0;
-
-        /** @var RFMMetricCategory $item */
-        foreach ($orderedData as $item) {
-            $maxValue = $item->getMaxValue();
-
-            if ($lastValue >= $maxValue || $item->getMinValue() >= $maxValue) {
-                return false;
-            }
-
-            $lastValue = $maxValue;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param array $orderedData
-     * @return bool
-     */
-    protected function validateOrderDesc(array $orderedData)
-    {
-        $lastValue = PHP_INT_MAX;
-
-        /** @var RFMMetricCategory $item */
-        foreach ($orderedData as $item) {
-            $minValue = $item->getMinValue();
-
-            if ($lastValue <= $minValue) {
-                return false;
-            }
-
-            $lastValue = $minValue;
-        }
-
-        return true;
     }
 
     /**
