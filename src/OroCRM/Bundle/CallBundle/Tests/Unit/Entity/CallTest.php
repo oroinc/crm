@@ -35,6 +35,7 @@ class CallTest extends \PHPUnit_Framework_TestCase
                     ->getMock()
             ),
             array('duration', 1),
+            array('durationString', 1),
             array(
                 'direction',
                 $this->getMockBuilder('OroCRM\Bundle\CallBundle\Entity\CallDirection')

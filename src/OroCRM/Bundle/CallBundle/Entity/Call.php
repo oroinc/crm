@@ -126,6 +126,14 @@ class Call extends ExtendCall implements DatesAwareInterface
     protected $duration;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="duration_string", type="string", nullable=true)
+     * @Soap\ComplexType("string", nillable=true)
+     */
+    protected $durationString;
+
+    /**
      * @var CallDirection
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\CallBundle\Entity\CallDirection")
@@ -450,6 +458,22 @@ class Call extends ExtendCall implements DatesAwareInterface
     public function getOrganization()
     {
         return $this->organization;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDurationString()
+    {
+        return $this->durationString;
+    }
+
+    /**
+     * @param string $durationString
+     */
+    public function setDurationString($durationString)
+    {
+        $this->durationString = $durationString;
     }
 
     /**
