@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\EntityConfig;
 
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityConfigBundle\Entity\ConfigModel;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 
@@ -45,7 +46,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
@@ -65,7 +66,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
@@ -85,7 +86,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
@@ -105,7 +106,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
@@ -125,7 +126,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
@@ -145,7 +146,7 @@ class ActivityScope
                     'is_extend' => true
                 ],
                 'form'         => ['is_enabled' => false],
-                'datagrid'     => ['is_visible' => false],
+                'datagrid'     => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                 'view'         => ['is_displayable' => false],
                 'dataaudit'    => ['auditable' => false],
                 'importexport' => ['excluded' => true]
