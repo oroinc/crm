@@ -449,11 +449,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Changed Standup meeting');
-        $exception->setOriginalStart($day);
+        $exception->setOriginalStart(clone $day);
         $day->setTime(9, 15, 0);
         $exception->setEnd(clone $day);
         $day->setTime(9, 0, 0);
         $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
             ->setAllDay(true);
         $event->addRecurringEventException($exception);
 
@@ -461,11 +462,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Evening Standup meeting');
-        $exception->setOriginalStart($day);
+        $exception->setOriginalStart(clone $day);
         $day->setTime(19, 15, 0);
         $exception->setEnd(clone $day);
         $day->setTime(19, 0, 0);
         $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
             ->setAllDay(false);
         $event->addRecurringEventException($exception);
 
@@ -473,11 +475,12 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Late meeting');
-        $exception->setOriginalStart($day);
+        $exception->setOriginalStart(clone $day);
         $day->setTime(23, 15, 0);
         $exception->setEnd(clone $day);
         $day->setTime(23, 0, 0);
         $exception->setStart(clone $day)
+            ->setCalendar($event->getCalendar())
             ->setAllDay(false);
         $event->addRecurringEventException($exception);
 
