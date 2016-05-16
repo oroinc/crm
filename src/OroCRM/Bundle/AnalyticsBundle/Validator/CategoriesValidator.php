@@ -130,6 +130,7 @@ class CategoriesValidator extends ConstraintValidator
 
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
         $isIncreasing = $this->isIncreasing($orderedByIndex);
+        $orderedByValueArray = $value->toArray();
 
         $isValid = true;
 
@@ -141,8 +142,8 @@ class CategoriesValidator extends ConstraintValidator
             $criteria = Criteria::DESC;
         }
 
-        $orderedByValueArray = usort(
-            $value->toArray(),
+        usort(
+            $orderedByValueArray,
             function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
                 $minValue1 = $item1->getMinValue();
                 $minValue2 = $item2->getMinValue();
