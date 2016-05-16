@@ -14,16 +14,16 @@ class OroCRMMagentoExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configs = array_reverse($configs);
-        
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('orm.yml');
         $loader->load('importexport.yml');
 
+        //hotfix due incorrect merge of app.yml (CRM-5209)
+        $configs = array_reverse($configs);
         $config  = $this->processConfiguration(new Configuration(), $configs);
-        $services = $container->findTaggedServiceIds('orocrm_magento.bundle_config.aware');
 
+        $services = $container->findTaggedServiceIds('orocrm_magento.bundle_config.aware');
         foreach ($services as $serviceId => $tagAttributes) {
             $tagAttributes = reset($tagAttributes);
             if (isset($tagAttributes['argument_number'])) {

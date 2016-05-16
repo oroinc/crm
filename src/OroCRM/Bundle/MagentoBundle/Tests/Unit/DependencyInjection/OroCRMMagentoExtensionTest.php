@@ -121,13 +121,13 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
         return [
             'one config block' => [
                 'config'       => [
+                    null,
                     [
                         'account_discovery' => [
                             'fields'  => ['field1' => null, 'field2' => null, 'field3' => null,],
                             'options' => ['match' => 'first', 'empty' => false,]
                         ]
-                    ],
-                    null,
+                    ]
                 ],
                 'resultConfig' => [
                     'account_discovery' => [
@@ -139,19 +139,19 @@ class OroCRMMagentoExtensionTest extends \PHPUnit_Framework_TestCase
             ],
             'two config block' => [
                 'config'       => [
-                    [
-                        'account_discovery' => [
-                            'fields'  => ['field1' => null, 'field2' => null, 'field3' => null],
-                            'options' => ['match' => 'first', 'empty' => false]
-                        ]
-                    ],
+                    null,
                     [
                         'account_discovery' => [
                             'fields'  => ['field1' => null],
                             'options' => ['match' => 'first', 'empty' => false]
                         ]
                     ],
-                    null,
+                    [
+                        'account_discovery' => [
+                            'fields'  => ['field1' => null, 'field2' => null, 'field3' => null],
+                            'options' => ['match' => 'first', 'empty' => false]
+                        ]
+                    ]
                 ],
                 'resultConfig' => [
                     'account_discovery' => [
