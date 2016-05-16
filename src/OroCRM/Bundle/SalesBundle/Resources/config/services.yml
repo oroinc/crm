@@ -150,3 +150,9 @@ services:
         public: false
         tags:
             - { name: oro_entity.name_provider, priority: 100 }
+
+    orocrm_sales.provider.sales_funnel_entity_name:
+        class: OroCRM\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
