@@ -263,6 +263,7 @@ class ActivityListener
                 );
 
                 $activityDate = $this->activityContactProvider->getLastContactActivityDate(
+                    $em,
                     $target,
                     $direction,
                     $activityData['id'],
@@ -302,7 +303,8 @@ class ActivityListener
                     $oppositeDirection       = DirectionProviderInterface::DIRECTION_INCOMING;
                 }
 
-                $lastActivityDate = $this->activityContactProvider->getLastContactActivityDate($target, $direction);
+                $lastActivityDate = $this->activityContactProvider
+                    ->getLastContactActivityDate($em, $target, $direction);
                 if ($lastActivityDate) {
                     $accessor->setValue($target, ActivityScope::LAST_CONTACT_DATE, $lastActivityDate['all']);
                     $accessor->setValue($target, $contactDatePath, $lastActivityDate['direction']);
@@ -310,6 +312,7 @@ class ActivityListener
                         $target,
                         $oppositeContactDatePath,
                         $this->activityContactProvider->getLastContactActivityDate(
+                            $em,
                             $target,
                             $oppositeDirection
                         )['direction']

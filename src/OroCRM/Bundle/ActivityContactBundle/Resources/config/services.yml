@@ -27,8 +27,6 @@ services:
 
     orocrm_activity_contact.provider:
         class: %orocrm_activity_contact.provider.class%
-        arguments:
-             - '@doctrine.orm.entity_manager'
 
     orocrm_activity_contact.listener.activity_listener:
         class: %orocrm_activity_contact.listener.activity_listener.class%
@@ -48,7 +46,6 @@ services:
             - "@oro_entity_config.provider.entity"
             - "@oro_entity.doctrine_helper"
             - "@oro_email.email_holder_helper"
-            - '@doctrine.orm.entity_manager'
         tags:
             - {name: orocrm_activity_direction.provider}
 
@@ -56,7 +53,6 @@ services:
         class: %orocrm_activity_contact.call_activity_direction.provider.class%
         arguments:
             - "@oro_activity.manager"
-            - '@doctrine.orm.entity_manager'
         tags:
            - {name: orocrm_activity_direction.provider}
 

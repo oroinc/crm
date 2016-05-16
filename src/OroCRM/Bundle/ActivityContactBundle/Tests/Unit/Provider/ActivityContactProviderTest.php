@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
-use Doctrine\ORM\EntityManager;
-
 use OroCRM\Bundle\ActivityContactBundle\Direction\DirectionProviderInterface;
 use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
 use OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Fixture\TestActivity;
@@ -19,11 +17,7 @@ class ActivityContactProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $entityManager = $metadataMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->provider          = new ActivityContactProvider($entityManager);
+        $this->provider          = new ActivityContactProvider();
         $this->directionProvider = new TestDirectionProvider();
 
         $this->provider->addProvider($this->directionProvider);

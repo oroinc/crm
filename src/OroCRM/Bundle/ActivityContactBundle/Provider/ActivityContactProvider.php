@@ -12,17 +12,6 @@ class ActivityContactProvider
     /** @var DirectionProviderInterface[] */
     protected $providers;
 
-    /** @var EntityManager */
-    protected $em;
-
-    /**
-     * @param EntityManager $em
-     */
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * @param DirectionProviderInterface $provider
      */
@@ -92,6 +81,7 @@ class ActivityContactProvider
     /**
      * Get array with all and direction dates for given target
      *
+     * @param EntityManager $em
      * @param object        $targetEntity
      * @param string        $direction
      * @param integer       $skippedId
@@ -102,6 +92,7 @@ class ActivityContactProvider
      *   - direction: Last activity date for given direction
      */
     public function getLastContactActivityDate(
+        EntityManager $em,
         $targetEntity,
         $direction,
         $skippedId = null,
@@ -113,7 +104,7 @@ class ActivityContactProvider
         $directionDates = [];
         foreach ($this->providers as $supportedClass => $provider) {
             $skippedId = ($skippedId && $supportedClass === $class) ? $skippedId : null;
-            $result    = $provider->getLastActivitiesDateForTarget($targetEntity, $direction, $skippedId);
+            $result    = $provider->getLastActivitiesDateForTarget($em, $targetEntity, $direction, $skippedId);
             if (!empty($result)) {
                 $allDates[] = $result['all'];
                 if ($result['direction']) {

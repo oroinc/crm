@@ -43,7 +43,7 @@ class TestDirectionProvider implements DirectionProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastActivitiesDateForTarget($target, $direction, $skipId = null)
+    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
     {
         return [
             'all'       => $target->getCreated(),
