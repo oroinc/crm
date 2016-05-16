@@ -139,32 +139,7 @@ class CategoriesValidator extends ConstraintValidator
             $criteria = Criteria::DESC;
         }
 
-        $orderedByValue = $value->matching(
-            new Criteria(null, ['minValue' => $criteria])
-        );
-
         if (!$orderIsValid) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
-
-            return;
-        }
-
-        if (!$isIncreasing) {
-            return;
-        }
-
-        $invalidItems = $orderedByValue->filter(
-            function (RFMMetricCategory $category) {
-                $maxValue = $category->getMaxValue();
-                if (!$maxValue) {
-                    return false;
-                }
-
-                return $category->getMinValue() >= $maxValue;
-            }
-        );
-
-        if (!$invalidItems->isEmpty()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
         }
     }
@@ -177,15 +152,15 @@ class CategoriesValidator extends ConstraintValidator
     {
         $lastValue = 0;
 
+        /** @var RFMMetricCategory $item */
         foreach ($orderedData as $item) {
             $maxValue = $item->getMaxValue();
 
-            if ($lastValue >= $maxValue) {
+            if ($lastValue >= $maxValue || $item->getMinValue() >= $maxValue) {
                 return false;
             }
 
             $lastValue = $maxValue;
-
         }
 
         return true;
@@ -199,6 +174,7 @@ class CategoriesValidator extends ConstraintValidator
     {
         $lastValue = PHP_INT_MAX;
 
+        /** @var RFMMetricCategory $item */
         foreach ($orderedData as $item) {
             $minValue = $item->getMinValue();
 
@@ -207,7 +183,6 @@ class CategoriesValidator extends ConstraintValidator
             }
 
             $lastValue = $minValue;
-
         }
 
         return true;
