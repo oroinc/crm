@@ -78,7 +78,8 @@ class CallType extends AbstractType
                 'oro_time_interval',
                 [
                     'required' => false,
-                    'label'    => 'orocrm.call.duration.label'
+                    'label'    => 'orocrm.call.duration.label',
+                    'input_property_path' => 'durationString'
                 ]
             )
             ->add(
