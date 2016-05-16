@@ -137,6 +137,9 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             [
+                'error_mapping' => [
+                    'durationString' => 'duration',
+                ],
                 'data_class'        => 'OroCRM\Bundle\CallBundle\Entity\Call',
                 'phone_suggestions' => []
             ]

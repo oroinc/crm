@@ -8,6 +8,11 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - DateTime: ~
         callStatus:
             - NotBlank: ~
+        durationString:
+            - Oro\Bundle\FormBundle\Validator\Constraints\Duration:
+                message: "Format of '{{ value }}' does not match '#:#:#' or '#h #m #s'"
+            - Length:
+                max: 255
         direction:
             - NotBlank: ~
         phoneNumber:
