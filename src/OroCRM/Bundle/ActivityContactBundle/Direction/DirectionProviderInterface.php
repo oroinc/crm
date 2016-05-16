@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\Direction;
 
-use Doctrine\ORM\EntityManager;
-
 interface DirectionProviderInterface
 {
     const DIRECTION_INCOMING = 'incoming';
@@ -48,7 +46,6 @@ interface DirectionProviderInterface
     /**
      * Return array of last activities for given target
      *
-     * @param EntityManager $em
      * @param object        $target
      * @param string        $direction
      * @param integer       $skipId
@@ -57,5 +54,5 @@ interface DirectionProviderInterface
      *   - all: Last activity date without regard to the direction
      *   - direction:   Last activity date for given direction
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null);
+    public function getLastActivitiesDateForTarget($target, $direction, $skipId = null);
 }

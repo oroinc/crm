@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
 use Doctrine\Common\Inflector\Inflector;
+use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
 use Oro\Bundle\EmailBundle\Entity\EmailRecipient;
@@ -59,7 +60,16 @@ class EmailDirectionProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->provider = new EmailDirectionProvider($configProvider, $doctrineHelper, $emailHolderHelper);
+        $entityManager = $metadataMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new EmailDirectionProvider(
+            $configProvider,
+            $doctrineHelper,
+            $emailHolderHelper,
+            $entityManager
+        );
     }
 
     public function testGetSupportedClass()

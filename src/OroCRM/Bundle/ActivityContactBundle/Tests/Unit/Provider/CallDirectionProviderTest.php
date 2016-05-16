@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\ActivityContactBundle\Tests\Unit\Provider;
 
+use Doctrine\ORM\EntityManager;
+
 use OroCRM\Bundle\ActivityContactBundle\Provider\CallDirectionProvider;
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\CallDirection;
@@ -20,7 +22,11 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->provider = new CallDirectionProvider($this->activityManager);
+        $entityManager = $metadataMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider = new CallDirectionProvider($this->activityManager, $entityManager);
     }
 
     public function testGetSupportedClass()

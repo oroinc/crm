@@ -39,7 +39,11 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider    = new ActivityContactProvider();
+        $entityManager = $metadataMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->provider    = new ActivityContactProvider($entityManager);
         $directionProvider = new TestDirectionProvider();
         $this->provider->addProvider($directionProvider);
 
@@ -65,7 +69,11 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->will($this->returnValue($this->configProvider));
 
-        $this->listener = new ActivityListener($this->provider, $this->doctrineHelper, $this->configManager);
+        $this->listener = new ActivityListener(
+            $this->provider,
+            $this->doctrineHelper,
+            $this->configManager
+        );
     }
 
     /**

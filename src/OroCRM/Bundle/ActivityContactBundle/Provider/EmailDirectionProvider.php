@@ -33,18 +33,25 @@ class EmailDirectionProvider implements DirectionProviderInterface
      */
     protected $doctrineHelper;
 
+    /** @var EntityManager */
+    protected $em;
+
     /**
      * @param ConfigProvider $configProvider
      * @param DoctrineHelper $doctrineHelper
+     * @param EmailHolderHelper $emailHolderHelper
+     * @param EntityManager $em
      */
     public function __construct(
         ConfigProvider $configProvider,
         DoctrineHelper $doctrineHelper,
-        EmailHolderHelper $emailHolderHelper
+        EmailHolderHelper $emailHolderHelper,
+        EntityManager $em
     ) {
         $this->configProvider = $configProvider;
         $this->doctrineHelper = $doctrineHelper;
         $this->emailHolderHelper = $emailHolderHelper;
+        $this->em = $em;
     }
 
     /**
@@ -136,14 +143,14 @@ class EmailDirectionProvider implements DirectionProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
+    public function getLastActivitiesDateForTarget($target, $direction, $skipId = null)
     {
         $result         = [];
-        $resultActivity = $this->getLastActivity($em, $target, $skipId);
+        $resultActivity = $this->getLastActivity($target, $skipId);
         if ($resultActivity) {
             $result['all'] = $this->getDate($resultActivity);
             if ($this->getDirection($resultActivity, $target) !== $direction) {
-                $resultActivity = $this->getLastActivity($em, $target, $skipId, $direction);
+                $resultActivity = $this->getLastActivity($target, $skipId, $direction);
                 if ($resultActivity) {
                     $result['direction'] = $this->getDate($resultActivity);
                 } else {
@@ -158,16 +165,15 @@ class EmailDirectionProvider implements DirectionProviderInterface
     }
 
     /**
-     * @param EntityManager $em
      * @param object        $target
      * @param integer       $skipId
      * @param string        $direction
      *
      * @return Email
      */
-    protected function getLastActivity(EntityManager $em, $target, $skipId = null, $direction = null)
+    protected function getLastActivity($target, $skipId = null, $direction = null)
     {
-        $qb = $em->getRepository('Oro\Bundle\EmailBundle\Entity\Email')
+        $qb = $this->em->getRepository('Oro\Bundle\EmailBundle\Entity\Email')
             ->createQueryBuilder('email')
             ->select('email')
             ->innerJoin(

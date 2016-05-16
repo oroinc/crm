@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ActivityContactBundle\Provider;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 use Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
@@ -17,12 +18,17 @@ class CallDirectionProvider implements DirectionProviderInterface
     /** @var ActivityManager */
     protected $activityManager;
 
+    /** @var EntityManager */
+    protected $em;
+
     /**
      * @param ActivityManager $activityManager
+     * @param EntityManager $em
      */
-    public function __construct(ActivityManager $activityManager)
+    public function __construct(ActivityManager $activityManager, EntityManager $em)
     {
         $this->activityManager = $activityManager;
+        $this->em = $em;
     }
 
     /**
@@ -66,14 +72,14 @@ class CallDirectionProvider implements DirectionProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function getLastActivitiesDateForTarget(EntityManager $em, $target, $direction, $skipId = null)
+    public function getLastActivitiesDateForTarget($target, $direction, $skipId = null)
     {
         $result         = [];
-        $resultActivity = $this->getLastActivity($em, $target, $skipId);
+        $resultActivity = $this->getLastActivity($target, $skipId);
         if ($resultActivity) {
             $result['all'] = $this->getDate($resultActivity);
             if ($this->getDirection($resultActivity, $target) !== $direction) {
-                $resultActivity = $this->getLastActivity($em, $target, $skipId, $direction);
+                $resultActivity = $this->getLastActivity($target, $skipId, $direction);
                 if ($resultActivity) {
                     $result['direction'] = $this->getDate($resultActivity);
                 } else {
@@ -88,14 +94,13 @@ class CallDirectionProvider implements DirectionProviderInterface
     }
 
     /**
-     * @param EntityManager $em
      * @param object        $target
      * @param integer       $skipId
      * @param string        $direction
      *
      * @return Call
      */
-    protected function getLastActivity(EntityManager $em, $target, $skipId, $direction = null)
+    protected function getLastActivity($target, $skipId, $direction = null)
     {
         if (!$this->activityManager->hasActivityAssociation(
             ClassUtils::getClass($target),
@@ -104,7 +109,7 @@ class CallDirectionProvider implements DirectionProviderInterface
             return null;
         }
 
-        $qb = $em->getRepository('OroCRM\Bundle\CallBundle\Entity\Call')
+        $qb = $this->em->getRepository('OroCRM\Bundle\CallBundle\Entity\Call')
             ->createQueryBuilder('call')
             ->select('call')
             ->innerJoin(
