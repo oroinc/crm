@@ -38,7 +38,9 @@ class UpdateIntegrationConnectorsListenerTest extends \PHPUnit_Framework_TestCas
         $this->settingProvider = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\SettingsProvider')
             ->disableOriginalConstructor()->getMock();
         $this->event           = $this->getMockBuilder('OroCRM\Bundle\ChannelBundle\Event\ChannelSaveEvent')
-            ->disableOriginalConstructor()->getMock();
+            ->setMethods(['getDataSource', 'getChannel'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->em          = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()->getMock();
         $this->entity          = new Channel();
