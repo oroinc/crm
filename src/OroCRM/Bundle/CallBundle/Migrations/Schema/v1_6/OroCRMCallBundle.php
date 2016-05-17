@@ -7,7 +7,6 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
-
 class OroCRMCallBundle implements Migration
 {
     /**
