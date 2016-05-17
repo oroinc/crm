@@ -34,9 +34,9 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_Tes
     public function testApplyBusinessUnitAcl()
     {
         $actualElements = [
-            new SearchItem(1),
-            new SearchItem(2),
-            new SearchItem(3)
+            new SearchElement(1),
+            new SearchElement(2),
+            new SearchElement(3)
         ];
         $expectedIds = [1, 2];
 
