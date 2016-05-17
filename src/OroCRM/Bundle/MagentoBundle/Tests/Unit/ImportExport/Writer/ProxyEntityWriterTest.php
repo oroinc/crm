@@ -26,7 +26,10 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->wrapped = $this->getMock('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface');
+        $this->wrapped = $this
+            ->getMockBuilder('Akeneo\Bundle\BatchBundle\Item\ItemWriterInterface')
+            ->setMethods(['write'])
+            ->getMock();
 
         $this->databaseHelper = $this->getMockBuilder('Oro\Bundle\ImportExportBundle\Field\DatabaseHelper')
             ->disableOriginalConstructor()
@@ -131,5 +134,50 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->writer->setStepExecution($stepExecution);
+    }
+
+    public function testMergeGuestCustomers()
+    {
+        $channel = $this
+            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Entity\Channel')
+            ->setMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $channel
+            ->expects($this->exactly(2))
+            ->method('getId')
+            ->will($this->returnValue(100));
+
+        $customer1 = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->setMethods(['getChannel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customer1
+            ->expects($this->exactly(1))
+            ->method('getChannel')
+            ->will($this->returnValue($channel));
+
+        $customer2 = $this
+            ->getMockBuilder('OroCRM\Bundle\MagentoBundle\Entity\Customer')
+            ->setMethods(['getChannel'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customer2
+            ->expects($this->exactly(1))
+            ->method('getChannel')
+            ->will($this->returnValue($channel));
+
+        $customer1->setEmail('test1@test.com');
+        $customer1->setGuest(true);
+        $customer2->setEmail('test1@test.com');
+        $customer2->setGuest(true);
+
+        $this->wrapped
+            ->expects($this->once())
+            ->method('write')
+            ->with(['test1test.com100' => $customer1]);
+
+        $this->writer->write([$customer1, $customer2]);
     }
 }
