@@ -54,6 +54,7 @@ orocrm:
         owner.label:           Owner
         notes.label:           Additional comments
         duration.label:        Duration
+        duration_string.label: Duration
         direction.label:       Direction
         call_status.label:     Call status
         call_date_time.label:  Call date & time
