@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
-class SearchElement
+class SearchItem
 {
     /** @var int */
     protected $id;
