@@ -114,7 +114,10 @@ class CategoriesValidator extends ConstraintValidator
     }
 
     /**
-     * Check that collection is in right order.
+     * Check that collection is in right order in next way:
+     * 1) Compare elements that ordered by index with elements that ordered by min value
+     * 2) Check if equality doesn't exist between different categories in min values
+     * 3) Check if max value ( null value exclude from checking ) always greater than min value
      *
      * For increasing collection values must be in ascending order.
      * For decreasing collection value must be in descending order.
@@ -149,7 +152,7 @@ class CategoriesValidator extends ConstraintValidator
                 $minValue2 = $item2->getMinValue();
 
                 if ($minValue1 === $minValue2 ||
-                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() < $minValue1)) {
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
                     $isValid = false;
                 }
 
