@@ -42,13 +42,15 @@ class ContactActivityListTest extends Selenium2TestCase
 
         $login = $this->login();
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $call = $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open([$contactName])
             ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
             ->runActionInGroup('Log call')
-            /** @var Call $login */
-            ->openCall('OroCRM\Bundle\CallBundle')
+            ->openCall('OroCRM\Bundle\CallBundle');
+
+        /** @var Call $call */
+        $call
             ->setCallSubject($callSubject)
             ->setPhoneNumber($phoneNumber)
             ->logCall()
@@ -65,13 +67,16 @@ class ContactActivityListTest extends Selenium2TestCase
         $subject = 'Tasks_' . mt_rand();
 
         $login = $this->login();
+
         /** @var Contacts $login */
-        $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $task = $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open([$contactName])
             ->runActionInGroup('Add task')
-            /** @var Task $login */
-            ->openTask('OroCRM\Bundle\TaskBundle')
+            ->openTask('OroCRM\Bundle\TaskBundle');
+
+        /** @var Task $task */
+        $task
             ->setSubject($subject)
             ->setDescription($subject)
             ->createTask()
