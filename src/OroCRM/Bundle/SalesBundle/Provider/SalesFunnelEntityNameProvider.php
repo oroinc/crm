@@ -14,7 +14,7 @@ class SalesFunnelEntityNameProvider implements EntityNameProviderInterface
     public function getName($format, $locale, $entity)
     {
         if ($format === EntityNameProviderInterface::FULL && is_a($entity, self::CLASS_NAME)) {
-            return $entity->getFullName();
+            return $entity->getFirstName();
         }
 
         return false;
