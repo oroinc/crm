@@ -204,6 +204,7 @@ class AddOpportunityStatus implements
      * @param array $rows
      * @param string $key
      * @param string $value
+     *
      * @return array
      */
     protected function buildOneDimensionArray($rows, $key, $value)
