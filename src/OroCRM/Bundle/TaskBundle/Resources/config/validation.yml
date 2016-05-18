@@ -8,6 +8,8 @@ OroCRM\Bundle\TaskBundle\Entity\Task:
                 max: 255
         dueDate:
             - DateTime: ~
+        status:
+            - NotBlank: ~
         taskPriority:
             - NotBlank: ~
         owner:
