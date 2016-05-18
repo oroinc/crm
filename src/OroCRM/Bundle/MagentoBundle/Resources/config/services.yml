@@ -256,6 +256,8 @@ services:
 
     orocrm_magento.form.type.customer_channel_selector:
         class: %orocrm_magento.form.type.customer_channel_selector.class%
+        arguments:
+            - '@orocrm_channel.provider.channels_by_entities'
         calls:
             - [setChannelClass, [%orocrm_channel.entity.class%]]
         tags:

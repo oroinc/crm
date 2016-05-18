@@ -60,7 +60,7 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
         $channelSaveSucceedListener->onChannelStatusChange($this->event);
 
         $this->assertTrue($this->integration->isEnabled());
-        $this->assertEquals(Integration::EDIT_MODE_ALLOW, $this->integration->getEditMode());
+        $this->assertEquals(Integration::EDIT_MODE_RESTRICTED, $this->integration->getEditMode());
     }
 
     public function testSetPreviousEnableIntegrationWhenChannelActivatedAndPreviousEnableDefined()
@@ -78,7 +78,7 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertFalse($this->integration->isEnabled());
         $this->assertFalse($this->integration->getPreviouslyEnabled());
-        $this->assertEquals(Integration::EDIT_MODE_ALLOW, $this->integration->getEditMode());
+        $this->assertEquals(Integration::EDIT_MODE_RESTRICTED, $this->integration->getEditMode());
     }
 
     public function testDeactivateIntegrationWhenChannelDeactivated()
@@ -113,7 +113,7 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->integration->getPreviouslyEnabled());
     }
 
-    public function testShouldNotUpdateEditModeIfIntegrationHasForcedOneOnDeactivated()
+    public function testShouldNotUpdateEditModeIfIntegrationHasDiffEditMode()
     {
         $this->prepareEvent();
 
@@ -121,28 +121,12 @@ class ChangeIntegrationStatusListenerTest extends \PHPUnit_Framework_TestCase
 
         $this->integration->setEnabled(true);
         $this->integration->setPreviouslyEnabled(null);
-        $this->integration->setEditMode(Integration::EDIT_MODE_FORCED_ALLOW);
+        $this->integration->setEditMode(0);
 
         $channelSaveSucceedListener = $this->getListener();
         $channelSaveSucceedListener->onChannelStatusChange($this->event);
 
-        $this->assertSame(Integration::EDIT_MODE_FORCED_ALLOW, $this->integration->getEditMode());
-    }
-
-    public function testShouldNotUpdateEditModeIfIntegrationHasForcedOneOnActivated()
-    {
-        $this->prepareEvent();
-
-        $this->entity->setStatus(true);
-
-        $this->integration->setEnabled(false);
-        $this->integration->setPreviouslyEnabled(null);
-        $this->integration->setEditMode(Integration::EDIT_MODE_FORCED_ALLOW);
-
-        $channelSaveSucceedListener = $this->getListener();
-        $channelSaveSucceedListener->onChannelStatusChange($this->event);
-
-        $this->assertSame(Integration::EDIT_MODE_FORCED_ALLOW, $this->integration->getEditMode());
+        $this->assertSame(0, $this->integration->getEditMode());
     }
 
     protected function prepareEvent()

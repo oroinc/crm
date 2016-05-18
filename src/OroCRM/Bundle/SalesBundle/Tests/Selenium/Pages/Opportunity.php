@@ -45,10 +45,6 @@ class Opportunity extends AbstractPageEntity
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_probability']");
         $this->budget = $this->test
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_budgetAmount']");
-        $this->customerNeed = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_customerNeed']");
-        $this->proposedSolution = $this->test
-            ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_proposedSolution']");
         $this->closeReason = $this->test->select($this->test
             ->byXpath("//*[@data-ftid='orocrm_sales_opportunity_form_closeReason']"));
         $this->closeRevenue = $this->test
@@ -161,10 +157,7 @@ class Opportunity extends AbstractPageEntity
 
     public function setCustomerNeed($customerNeed)
     {
-        $this->customerNeed->clear();
-        $this->customerNeed->value($customerNeed);
-
-        return $this;
+        return $this->setContentToTinymceElement('orocrm_sales_opportunity_form_customerNeed', $customerNeed);
     }
 
     public function getCustomerNeed()
@@ -174,10 +167,7 @@ class Opportunity extends AbstractPageEntity
 
     public function setProposedSolution($proposedSolution)
     {
-        $this->proposedSolution->clear();
-        $this->proposedSolution->value($proposedSolution);
-
-        return $this;
+        return $this->setContentToTinymceElement('orocrm_sales_opportunity_form_proposedSolution', $proposedSolution);
     }
 
     public function getPhone()

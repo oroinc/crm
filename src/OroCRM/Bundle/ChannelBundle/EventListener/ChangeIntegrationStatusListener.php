@@ -41,8 +41,7 @@ class ChangeIntegrationStatusListener
                     true;
 
                 $dataSource->setEnabled($enabled);
-
-                EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_ALLOW);
+                EditModeUtils::attemptChangeEditMode($dataSource, Integration::EDIT_MODE_RESTRICTED);
             } else {
                 $dataSource->setPreviouslyEnabled($dataSource->isEnabled());
                 $dataSource->setEnabled(false);

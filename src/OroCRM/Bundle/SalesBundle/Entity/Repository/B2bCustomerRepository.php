@@ -25,7 +25,7 @@ class B2bCustomerRepository extends EntityRepository
         $qb->innerJoin('o.customer', 'c');
         $qb->innerJoin('o.status', 's');
         $qb->andWhere('c = :customer');
-        $qb->andWhere('s.name = :status');
+        $qb->andWhere('s.id = :status');
         $qb->setParameter('customer', $customer);
         $qb->setParameter('status', self::VALUABLE_STATUS);
 

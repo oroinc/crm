@@ -2,15 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Form\Type;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
-
-use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
+use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class CustomerChannelSelectType extends AbstractType
@@ -21,6 +18,19 @@ class CustomerChannelSelectType extends AbstractType
      * @var string
      */
     protected $channelClass;
+
+    /**
+     * @var ChannelsByEntitiesProvider
+     */
+    protected $channelsProvider;
+
+    /**
+     * @param ChannelsByEntitiesProvider $channelsProvider
+     */
+    public function __construct(ChannelsByEntitiesProvider $channelsProvider)
+    {
+        $this->channelsProvider = $channelsProvider;
+    }
 
     /**
      * @param string $channelClass
@@ -58,46 +68,42 @@ class CustomerChannelSelectType extends AbstractType
             throw new \InvalidArgumentException('Channel class is missing');
         }
 
-        $queryBuilderNormalizer = function (Options $options, $qb) {
-            /** @var EntityManager $em */
-            $em = $options['em'];
+        $resolver->setNormalizers(
+            [
+                'query_builder' => function (Options $options, $value) {
+                    $entities     = $options['entities'];
+                    $queryBuilder = $this->channelsProvider->getChannelsByEntitiesQB($entities);
 
-            /** @var EntityRepository $repository */
-            $repository = $em->getRepository($this->channelClass);
-            $entities = $options->get('entities');
+                    $queryBuilder
+                        ->join('c.dataSource', 'd')
+                        ->andWhere(
+                            $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq('d.type', ':type'),
+                                $queryBuilder->expr()->eq('d.enabled', ':enabled')
+                            )
+                        )
+                        ->setParameter('type', ChannelType::TYPE)
+                        ->setParameter('enabled', true);
 
-            /** @var QueryBuilder $queryBuilder */
-            $queryBuilder = $qb($repository, $entities);
-            $queryBuilder
-                ->join('c.dataSource', 'd')
-                ->andWhere(
-                    $queryBuilder->expr()->andX(
-                        $queryBuilder->expr()->eq('d.type', ':type'),
-                        $queryBuilder->expr()->eq('d.enabled', ':enabled')
-                    )
-                )
-                ->setParameter('type', ChannelType::TYPE)
-                ->setParameter('enabled', true);
+                    $filteredQb = clone $queryBuilder;
+                    /** @var Channel[] $channels */
+                    $channels     = $filteredQb->getQuery()->getResult();
+                    $skipEntities = [];
+                    foreach ($channels as $channel) {
+                        $dataSource = $channel->getDataSource();
+                        if (!(bool)$dataSource->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled')) {
+                            $skipEntities[] = $channel->getId();
+                        }
+                    }
 
-            $filteredQb = clone $queryBuilder;
-            /** @var Channel[] $channels */
-            $channels = $filteredQb->getQuery()->getResult();
-            $skipEntities = [];
-            foreach ($channels as $channel) {
-                $dataSource = $channel->getDataSource();
-                if (!(bool)$dataSource->getSynchronizationSettings()->offsetGetOr('isTwoWaySyncEnabled')) {
-                    $skipEntities[] = $channel->getId();
+                    if ($skipEntities) {
+                        $queryBuilder->andWhere($queryBuilder->expr()->notIn('c.id', ':skipEntities'))
+                            ->setParameter('skipEntities', $skipEntities);
+                    }
+
+                    return $queryBuilder;
                 }
-            }
-
-            if ($skipEntities) {
-                $queryBuilder->andWhere($queryBuilder->expr()->notIn('c.id', ':skipEntities'))
-                    ->setParameter('skipEntities', $skipEntities);
-            }
-
-            return $queryBuilder;
-        };
-
-        $resolver->setNormalizers(['query_builder' => $queryBuilderNormalizer]);
+            ]
+        );
     }
 }
