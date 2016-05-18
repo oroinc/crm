@@ -6,10 +6,9 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
-use Oro\Bundle\CalendarBundle\Entity\Recurrence;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\SecurityContext;
@@ -17,7 +16,9 @@ use Symfony\Component\Security\Core\SecurityContext;
 use Oro\Bundle\CalendarBundle\Entity\Calendar;
 use Oro\Bundle\CalendarBundle\Entity\CalendarEvent;
 use Oro\Bundle\CalendarBundle\Entity\CalendarProperty;
+use Oro\Bundle\CalendarBundle\Entity\Recurrence;
 use Oro\Bundle\CalendarBundle\Entity\Repository\CalendarRepository;
+use Oro\Bundle\CalendarBundle\Model;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -337,7 +338,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_DAILY);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_DAILY);
         $recurrence->setInterval(3)
             ->setStartTime($day)
             ->setOccurrences(12);
@@ -353,14 +354,14 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_WEEKLY);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_WEEKLY);
         $recurrence->setInterval(1)
             ->setDayOfWeek([
-                Recurrence::DAY_MONDAY,
-                Recurrence::DAY_TUESDAY,
-                Recurrence::DAY_WEDNESDAY,
-                Recurrence::DAY_THURSDAY,
-                Recurrence::DAY_FRIDAY
+                Model\Recurrence::DAY_MONDAY,
+                Model\Recurrence::DAY_TUESDAY,
+                Model\Recurrence::DAY_WEDNESDAY,
+                Model\Recurrence::DAY_THURSDAY,
+                Model\Recurrence::DAY_FRIDAY
             ])
             ->setStartTime($day);
         $event->setRecurrence($recurrence);
@@ -375,7 +376,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(false);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_MONTHLY);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTHLY);
         $recurrence->setInterval(2)
             ->setDayOfMonth(1)
             ->setStartTime($day)
@@ -392,10 +393,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_MONTH_N_TH);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTH_N_TH);
         $recurrence->setInterval(2)
-            ->setInstance(Recurrence::INSTANCE_THIRD)
-            ->setDayOfWeek([Recurrence::DAY_SATURDAY, Recurrence::DAY_SUNDAY])
+            ->setInstance(Model\Recurrence::INSTANCE_THIRD)
+            ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY, Model\Recurrence::DAY_SUNDAY])
             ->setStartTime($day)
             ->setOccurrences(6);
         $event->setRecurrence($recurrence);
@@ -410,7 +411,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_YEARLY);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEARLY);
         $recurrence->setInterval(12)
             ->setDayOfMonth(1)
             ->setMonthOfYear(4)
@@ -427,10 +428,10 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setStart(clone $day);
         $event->setAllDay(true);
         $recurrence = new Recurrence();
-        $recurrence->setRecurrenceType(Recurrence::TYPE_YEAR_N_TH);
+        $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEAR_N_TH);
         $recurrence->setInterval(12)
-            ->setInstance(Recurrence::INSTANCE_LAST)
-            ->setDayOfWeek([Recurrence::DAY_SATURDAY])
+            ->setInstance(Model\Recurrence::INSTANCE_LAST)
+            ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY])
             ->setMonthOfYear(12)
             ->setStartTime($day);
         $event->setRecurrence($recurrence);
