@@ -56,7 +56,7 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setOwner($userRepo->getEntity('John Doo'));
                 $entity->setBillingAddress($addressRepo->getEntity('Jerry Coleman'));
                 $entity->setShippingAddress($addressRepo->getEntity('Jerry Coleman'));
-                $entity->setDataChannel($channelRepo->getEntity('B2B channel|b2b'));
+                $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->addOpportunity($opportunityRepo->getEntity('Jerry Coleman'));
