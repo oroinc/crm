@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Provider;
+namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
@@ -9,7 +9,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 use OroCRM\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider;
 
-class ContactEntityNameProviderTest extends \PHPUnit_Framework_TestCase
+class SalesFunnelEntityNameProviderTest extends \PHPUnit_Framework_TestCase
 {
     /** @var SalesFunnelEntityNameProvider */
     protected $provider;
