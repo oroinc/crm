@@ -15,4 +15,12 @@ class ContactEntityNameProvider extends EntityNameProvider
     {
         return is_a($entity, static::CLASS_NAME) ? parent::getName($format, $locale, $entity) : false;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNameDQL($format, $locale, $className, $alias)
+    {
+        return $className === self::CLASS_NAME ? parent::getNameDQL($format, $locale, $className, $alias) : false;
+    }
 }
