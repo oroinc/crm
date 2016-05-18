@@ -114,7 +114,10 @@ class CategoriesValidator extends ConstraintValidator
     }
 
     /**
-     * Check that collection is in right order.
+     * Check that collection is in right order in next way:
+     * 1) Compare elements that ordered by index with elements that ordered by min value
+     * 2) Check if equality doesn't exist between different categories in min values
+     * 3) Check if max value ( null value exclude from checking ) always greater than min value
      *
      * For increasing collection values must be in ascending order.
      * For decreasing collection value must be in descending order.
@@ -130,39 +133,34 @@ class CategoriesValidator extends ConstraintValidator
 
         $orderedByIndex = $value->matching(new Criteria(null, ['categoryIndex' => Criteria::ASC]));
         $isIncreasing = $this->isIncreasing($orderedByIndex);
+        $orderedByValueArray = $value->toArray();
+
+        $isValid = true;
 
         if ($isIncreasing) {
+            $inversion = 1;
             $criteria = Criteria::ASC;
         } else {
+            $inversion = -1;
             $criteria = Criteria::DESC;
         }
 
-        $orderedByValue = $value->matching(
-            new Criteria(null, ['minValue' => $criteria])
-        );
+        usort(
+            $orderedByValueArray,
+            function (RFMMetricCategory $item1, RFMMetricCategory $item2) use (&$isValid, $inversion) {
+                $minValue1 = $item1->getMinValue();
+                $minValue2 = $item2->getMinValue();
 
-        if ($orderedByValue->toArray() !== $orderedByIndex->toArray()) {
-            $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
-
-            return;
-        }
-
-        if (!$isIncreasing) {
-            return;
-        }
-
-        $invalidItems = $orderedByValue->filter(
-            function (RFMMetricCategory $category) {
-                $maxValue = $category->getMaxValue();
-                if (!$maxValue) {
-                    return false;
+                if ($minValue1 === $minValue2 ||
+                    (!is_null($item1->getMaxValue()) && $item1->getMaxValue() <= $minValue1)) {
+                    $isValid = false;
                 }
 
-                return $category->getMinValue() >= $maxValue;
+                return (($minValue1 < $minValue2) ? 1 : -1) * $inversion;
             }
         );
 
-        if (!$invalidItems->isEmpty()) {
+        if (!$isValid || $orderedByValueArray !== $orderedByIndex->toArray()) {
             $this->context->addViolationAt($constraint->getType(), $constraint->message, ['%order%' => $criteria]);
         }
     }

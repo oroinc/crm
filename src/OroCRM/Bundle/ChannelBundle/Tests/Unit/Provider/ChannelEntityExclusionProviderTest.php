@@ -35,16 +35,12 @@ class ChannelEntityExclusionProviderTest extends \PHPUnit_Framework_TestCase
      *
      * @param bool $expected
      * @param bool $isChannelEntity
-     * @param bool $belongsToIntegration
      */
-    public function testIsEntityExcluded($expected, $isChannelEntity, $belongsToIntegration)
+    public function testIsEntityExcluded($expected, $isChannelEntity)
     {
         $this->settingsProvider->expects($this->any())
             ->method('isChannelEntity')->with($this->equalTo(self::TEST_ENTITY_NAME))
             ->will($this->returnValue($isChannelEntity));
-        $this->settingsProvider->expects($this->any())
-            ->method('belongsToIntegration')->with($this->equalTo(self::TEST_ENTITY_NAME))
-            ->will($this->returnValue($belongsToIntegration));
 
         $this->assertSame($expected, $this->exclusionProvider->isIgnoredEntity(self::TEST_ENTITY_NAME));
     }
