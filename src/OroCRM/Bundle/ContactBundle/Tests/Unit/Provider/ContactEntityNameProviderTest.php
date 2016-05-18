@@ -4,8 +4,8 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Unit\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityNameProviderInterface;
 use Oro\Bundle\EntityConfigBundle\DependencyInjection\Utils\ServiceLink;
-
 use Oro\Bundle\LocaleBundle\DQL\DQLNameFormatter;
+
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Formatter\ContactNameFormatter;
 use OroCRM\Bundle\ContactBundle\Provider\ContactEntityNameProvider;
