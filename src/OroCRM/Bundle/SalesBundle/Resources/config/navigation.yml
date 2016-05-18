@@ -117,5 +117,5 @@ oro_titles:
 
     orocrm_sales_b2bcustomer_index: ~
     orocrm_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
-    orocrm_sales_b2bcustomer_create: 'Create B2B Customer'
+    orocrm_sales_b2bcustomer_create: 'Create Business Customer'
     orocrm_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
