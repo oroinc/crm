@@ -113,3 +113,9 @@ services:
             - @oro_security.security_facade.link
         tags:
             - { name: oro_email.mailbox_process, type: lead }
+
+    orocrm_sales.provider.sales_funnel_entity_name:
+        class: OroCRM\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
