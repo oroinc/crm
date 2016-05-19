@@ -21,6 +21,8 @@ OroCRM\Bundle\SalesBundle\Entity\Opportunity:
             - NotBlank: ~
         organization:
             - NotBlank: ~
+        status:
+            - NotBlank: ~
 
 OroCRM\Bundle\SalesBundle\Entity\Lead:
     properties:
