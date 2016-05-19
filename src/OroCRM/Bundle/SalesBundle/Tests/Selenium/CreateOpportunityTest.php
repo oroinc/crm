@@ -79,7 +79,7 @@ class CreateOpportunityTest extends Selenium2TestCase
             ->assertTitle('All - Channels - System')
             ->add()
             ->assertTitle('Create Channel - Channels - System')
-            ->setType('B2B')
+            ->setType('Sales')
             ->setName($channelName)
             ->setStatus('Active')
             ->save()
