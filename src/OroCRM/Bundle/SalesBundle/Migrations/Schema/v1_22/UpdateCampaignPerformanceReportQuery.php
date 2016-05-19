@@ -35,8 +35,8 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
         $fixFields = [
-            [4, 'Number Won'],
-            [5, 'Number Lost']
+            4 => 'Number Won',
+            5 => 'Number Lost'
         ];
 
         $sql = 'SELECT r.id, r.definition'
