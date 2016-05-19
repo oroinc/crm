@@ -122,9 +122,12 @@ oro_dashboard_config:
                 businessUnits:
                     type: oro_type_widget_business_unit_select
                     show_on_widget: true
+                    aclClass: %orocrm_sales.opportunity.class%
+                    aclPermission: VIEW
                     options:
                         label: orocrm.sales.dashboard.forecast_of_opportunities.business_unit
                         required: false
+                        autocomplete_alias: forecast_widget_business_units
                 owners:
                     type: oro_type_widget_user_multiselect
                     show_on_widget: true

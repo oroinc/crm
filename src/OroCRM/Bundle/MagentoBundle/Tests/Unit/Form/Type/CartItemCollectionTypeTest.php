@@ -26,12 +26,13 @@ class CartItemCollectionTypeTest extends \PHPUnit_Framework_TestCase
             ->method('setNormalizers')
             ->with(
                 [
-                    'options' => function (Options $options, $options) {
-                        if (!$options) {
-                            $options = [];
+                    'options' => function (Options $options, $values) {
+                        if (!$values) {
+                            $values = [];
                         }
-                        $options['single_form'] = false;
-                        return $options;
+                        $values['single_form'] = false;
+
+                        return $values;
                     }
                 ]
             );

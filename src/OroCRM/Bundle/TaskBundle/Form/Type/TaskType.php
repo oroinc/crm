@@ -46,7 +46,8 @@ class TaskType extends AbstractType
                 [
                     'label' => 'orocrm.task.status.label',
                     'enum_code' => 'task_status',
-                    'required' => true
+                    'required' => true,
+                    'constraints' => [new Assert\NotNull()]
                 ]
             )
             ->add(
