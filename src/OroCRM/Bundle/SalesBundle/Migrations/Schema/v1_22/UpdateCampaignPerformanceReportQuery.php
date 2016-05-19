@@ -34,6 +34,11 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
+        $fixFields = [
+            [4, 'Number Won'],
+            [5, 'Number Lost']
+        ];
+
         $sql = 'SELECT r.id, r.definition'
             . ' FROM oro_report r'
             . ' WHERE r.name = :name';
@@ -45,21 +50,13 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
 
-            if (isset($def['columns'][4])) {
-                $field = $def['columns'][4];
-                if ($field['label'] === 'Number Won' && isset($field['label'], $field['name'])) {
-                    $def['columns'][4]['name']
-                        = str_replace('Opportunity::status_label', 'Opportunity::status', $field['name']);
-                    $this->executeQuery($logger, $dryRun, $def, $row);
-                }
-            }
-
-            if (isset($def['columns'][5])) {
-                $field = $def['columns'][5];
-                if ($field['label'] === 'Number Lost' && isset($field['label'], $field['name'])) {
-                    $def['columns'][5]['name']
-                        = str_replace('Opportunity::status_label', 'Opportunity::status', $field['name']);
-                    $this->executeQuery($logger, $dryRun, $def, $row);
+            foreach ($fixFields as $number => $checkLabel) {
+                if (isset($def['columns'][$number])) {
+                    $field = $def['columns'][$number];
+                    if ($field['label'] === $checkLabel && isset($field['label'], $field['name'])) {
+                        $def = $this->fixDef($field, $number, $def);
+                        $this->executeQuery($logger, $dryRun, $def, $row);
+                    }
                 }
             }
         }
@@ -81,5 +78,19 @@ class UpdateCampaignPerformanceReportQuery extends ParametrizedMigrationQuery
         if (!$dryRun) {
             $this->connection->executeUpdate($query, $params, $types);
         }
+    }
+
+    /**
+     * @param $field
+     * @param $number
+     * @param $def
+     * @return mixed
+     */
+    protected function fixDef($field, $number, $def)
+    {
+        $def['columns'][$number]['name']
+            = str_replace('Opportunity::status_label', 'Opportunity::status', $field['name']);
+
+        return $def;
     }
 }
