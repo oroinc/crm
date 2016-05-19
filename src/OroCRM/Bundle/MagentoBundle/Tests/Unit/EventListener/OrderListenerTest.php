@@ -214,9 +214,6 @@ class OrderListenerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getScheduledCollectionUpdates')
             ->will($this->returnValue([]));
-        $unitOfWork
-            ->expects($this->any())
-            ->method('commit');
 
         $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()

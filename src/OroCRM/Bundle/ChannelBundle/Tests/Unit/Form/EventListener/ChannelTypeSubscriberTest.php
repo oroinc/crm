@@ -83,7 +83,7 @@ class ChannelTypeSubscriberTest extends FormIntegrationTestCase
                 ->method('getConfig')
                 ->will($this->returnValue($configMock));
 
-            $formData->expects($this->exactly(5))
+            $formData->expects($this->exactly(4))
                 ->method('getChannelType')
                 ->will($this->returnValue($channelType));
 
