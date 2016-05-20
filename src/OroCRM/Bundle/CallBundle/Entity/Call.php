@@ -120,18 +120,10 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="duration", type="time", nullable=true)
+     * @ORM\Column(name="duration", type="duration", nullable=true)
      * @Soap\ComplexType("dateTime", nillable=true)
      */
     protected $duration;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="duration_string", type="string", nullable=true)
-     * @Soap\ComplexType("string", nillable=true)
-     */
-    protected $durationString;
 
     /**
      * @var CallDirection
@@ -458,22 +450,6 @@ class Call extends ExtendCall implements DatesAwareInterface
     public function getOrganization()
     {
         return $this->organization;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDurationString()
-    {
-        return $this->durationString;
-    }
-
-    /**
-     * @param string $durationString
-     */
-    public function setDurationString($durationString)
-    {
-        $this->durationString = $durationString;
     }
 
     /**
