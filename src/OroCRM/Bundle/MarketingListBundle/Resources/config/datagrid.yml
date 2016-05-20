@@ -157,7 +157,7 @@ datagrid:
                 frontend_type: datetime
         filters:
             columns:
-                contactedTimes:  { type: number,   data_name: mli.contactedTimes }
+                contactedTimes:  { type: number-range,   data_name: mli.contactedTimes }
                 lastContactedAt: { type: datetime, data_name: mli.lastContactedAt }
         sorters:
             columns:
@@ -333,7 +333,7 @@ datagrid:
                 frontend_type: datetime
         filters:
             columns:
-                contactedTimes:  { type: number,   data_name: mli.contactedTimes }
+                contactedTimes:  { type: number-range,   data_name: mli.contactedTimes }
                 lastContactedAt: { type: datetime, data_name: mli.lastContactedAt }
         sorters:
             columns:

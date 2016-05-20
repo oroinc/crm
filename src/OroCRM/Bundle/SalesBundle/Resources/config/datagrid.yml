@@ -512,7 +512,7 @@ datagrid:
                     data_name: l.website
                     enabled: false
                 numberOfEmployees:
-                    type: number
+                    type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
                 sourceName:
@@ -690,7 +690,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: salesFunnel.id
                 channelName:
                     type:      entity
@@ -851,7 +851,7 @@ datagrid:
         filters:
             columns:
                  id:
-                     type: number
+                     type: number-range
                      data_name: lead.id
                      enabled: false
                  name:
@@ -941,7 +941,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: opportunity.id
                     enabled: false
                 name:
@@ -1012,7 +1012,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
                  createdAt:
                     type: datetime
@@ -1703,7 +1703,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
         options:
             entity_pagination: true
