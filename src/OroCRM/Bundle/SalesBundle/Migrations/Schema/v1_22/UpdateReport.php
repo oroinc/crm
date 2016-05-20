@@ -8,7 +8,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class UpdateCampaignPerformanceReport implements Migration, OrderedMigrationInterface
+class UpdateReport implements Migration, OrderedMigrationInterface
 {
     /**
      * {@inheritdoc}
@@ -17,12 +17,12 @@ class UpdateCampaignPerformanceReport implements Migration, OrderedMigrationInte
     {
         return 5;
     }
-    
+
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery(new UpdateCampaignPerformanceReportQuery());
+        $queries->addQuery(new UpdateReportQuery());
     }
 }
