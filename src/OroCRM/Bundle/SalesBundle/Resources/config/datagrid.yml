@@ -143,7 +143,7 @@ datagrid:
                 probability:
                     data_name: o.probability
                 status:
-                    data_name: status.id
+                    data_name: status
                 primaryEmail:
                     data_name: email.email
                 ownerName:

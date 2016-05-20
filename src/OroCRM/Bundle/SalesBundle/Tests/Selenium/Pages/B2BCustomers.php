@@ -15,7 +15,7 @@ use Oro\Bundle\TestFrameworkBundle\Pages\AbstractPageFilteredGrid;
  */
 class B2BCustomers extends AbstractPageFilteredGrid
 {
-    const NEW_ENTITY_BUTTON = "//a[@title='Create B2B customer']";
+    const NEW_ENTITY_BUTTON = "//a[@title='Create Business Customer']";
     const URL = 'b2bcustomer';
 
     public function entityNew()
