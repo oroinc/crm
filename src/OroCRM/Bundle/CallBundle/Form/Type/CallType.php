@@ -78,8 +78,7 @@ class CallType extends AbstractType
                 'oro_time_interval',
                 [
                     'required' => false,
-                    'label'    => 'orocrm.call.duration.label',
-                    'input_property_path' => 'durationString'
+                    'label'    => 'orocrm.call.duration.label'
                 ]
             )
             ->add(
@@ -137,9 +136,6 @@ class CallType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'error_mapping' => [
-                    'durationString' => 'duration',
-                ],
                 'data_class'        => 'OroCRM\Bundle\CallBundle\Entity\Call',
                 'phone_suggestions' => []
             ]
