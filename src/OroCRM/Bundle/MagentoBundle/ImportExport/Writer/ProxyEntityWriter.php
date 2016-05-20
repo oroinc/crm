@@ -61,7 +61,8 @@ class ProxyEntityWriter implements
                 //GuestCustomerStrategy checks both email and channel
                 if ($item->isGuest()) {
                     $channel = $item->getChannel();
-                    $identifier = $item->getEmail();
+//                    $identifier = $item->getEmail();
+                    $identifier = strtolower($item->getEmail());
                     //set unique identifier: email and channel id
                     if ($channel) {
                         $identifier.=$channel->getId();
