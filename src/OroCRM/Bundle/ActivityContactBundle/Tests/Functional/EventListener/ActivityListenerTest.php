@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Integration\EventListener;
+namespace OroCRM\Bundle\ActivityContactBundle\Tests\Functional\EventListener;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\ORM\EntityManager;
