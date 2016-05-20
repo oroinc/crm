@@ -383,11 +383,6 @@ class EmailCampaignSenderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getId'])
             ->getMock();
 
-        $entity
-            ->expects($this->atLeastOnce())
-            ->method('getId')
-            ->will($this->returnValue(self::ENTITY_ID));
-
         $manualType = new MarketingListType(MarketingListType::TYPE_MANUAL);
         $segmentBasedType = new MarketingListType(MarketingListType::TYPE_DYNAMIC);
 
