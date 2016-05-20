@@ -207,6 +207,10 @@ class ProxyEntityWriterTest extends \PHPUnit_Framework_TestCase
                 [$this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1)]
             ],
             [ //guest mode. customers will be merged
+                [$this->getCustomer('TEST@test.com', 1), $this->getCustomer('test@test.com', 1)],
+                [$this->getUniqueHash('test@test.com', 1) => $this->getCustomer('test@test.com', 1)]
+            ],
+            [ //guest mode. customers will be merged
                 [$this->getCustomer('example!user@e.com', 1), $this->getCustomer('example!user@e.com', 1)],
                 [$this->getUniqueHash('example!user@e.com', 1) => $this->getCustomer('example!user@e.com', 1)]
             ],
