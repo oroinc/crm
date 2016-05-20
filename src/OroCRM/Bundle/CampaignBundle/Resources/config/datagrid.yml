@@ -124,7 +124,7 @@ datagrid:
                     type:      string
                     data_name: e.name
                 visitsCount:
-                    type:      number
+                    type:      number-range
                     data_name: visitsCount
                     filter_by_having: true
                     options:
@@ -489,19 +489,19 @@ datagrid:
         filters:
             columns:
                 openCount:
-                    type:        number
+                    type:        number-range
                     data_name:   cs.openCount
                 clickCount:
-                    type:        number
+                    type:        number-range
                     data_name:   cs.clickCount
                 bounceCount:
-                    type:        number
+                    type:        number-range
                     data_name:   cs.bounceCount
                 abuseCount:
-                    type:        number
+                    type:        number-range
                     data_name:   cs.abuseCount
                 unsubscribeCount:
-                    type:        number
+                    type:        number-range
                     data_name:   cs.unsubscribeCount
         sorters:
             columns:

@@ -57,7 +57,20 @@ class ProxyEntityWriter implements
         $uniqueItems = [];
         $uniqueKeys = [];
         foreach ($items as $item) {
-            if ($item instanceof Customer || $item instanceof Cart) {
+            if ($item instanceof Customer) {
+                //GuestCustomerStrategy checks both email and channel
+                if ($item->isGuest()) {
+                    $channel = $item->getChannel();
+                    $identifier = preg_replace('/[^a-zA-Z0-9\.]/', '', $item->getEmail());
+                    //set unique identifier: email and channel id
+                    if ($channel) {
+                        $identifier.=$channel->getId();
+                    }
+                } else {
+                    $identifier = $item->getOriginId();
+                }
+                $this->handleIdentifier($uniqueItems, $item, $identifier);
+            } elseif ($item instanceof Cart) {
                 $this->handleIdentifier($uniqueItems, $item, $item->getOriginId());
             } elseif ($item instanceof Order) {
                 $this->handleIdentifier($uniqueItems, $item, $item->getIncrementId());

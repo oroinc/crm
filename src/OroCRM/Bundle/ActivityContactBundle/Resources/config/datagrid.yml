@@ -51,15 +51,15 @@ datagrid:
         filters:
             columns:
                 timesContacted:
-                    type: number
+                    type: number-range
                     data_name: timesContacted
                     enabled: false
                 timesContactedIn:
-                    type: number
+                    type: number-range
                     data_name: timesContactedIn
                     enabled: false
                 timesContactedOut:
-                    type: number
+                    type: number-range
                     data_name: timesContactedOut
                     enabled: false
                 lastContactedDate:
@@ -92,6 +92,6 @@ datagrid:
         filters:
             columns:
                 daysSinceLastContact:
-                    type: number
+                    type: number-range
                     data_name: daysSinceLastContact
                     enabled: false
