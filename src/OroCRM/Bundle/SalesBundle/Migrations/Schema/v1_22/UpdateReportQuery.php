@@ -48,12 +48,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     protected function updateReport(LoggerInterface $logger, $dryRun, $def, $row)
     {
         $query = 'UPDATE oro_report SET definition = :definition WHERE id = :id';
-        $params = ['definition' => json_encode($def), 'id' => $row['id']];
-        $types = ['definition' => 'text', 'id' => 'integer'];
-        $this->logQuery($logger, $query, $params, $types);
-        if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params, $types);
-        }
+        $this->executeQuery($logger, $dryRun, $def, $row, $query);
     }
 
     /**
@@ -66,12 +61,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
     protected function updateSegment(LoggerInterface $logger, $dryRun, $def, $row)
     {
         $query = 'UPDATE oro_segment SET definition = :definition WHERE id = :id';
-        $params = ['definition' => json_encode($def), 'id' => $row['id']];
-        $types = ['definition' => 'text', 'id' => 'integer'];
-        $this->logQuery($logger, $query, $params, $types);
-        if (!$dryRun) {
-            $this->connection->executeUpdate($query, $params, $types);
-        }
+        $this->executeQuery($logger, $dryRun, $def, $row, $query);
     }
 
     /**
@@ -80,18 +70,17 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
      */
     protected function migrateReport(LoggerInterface $logger, $dryRun)
     {
+        $sql = 'SELECT r.id, r.definition, r.entity FROM oro_report r';
+
         $className = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
         $oldField = 'status_label';
         $newField = 'status';
-
-        $sql = 'SELECT r.id, r.definition, r.entity FROM oro_report r';
         $this->logQuery($logger, $sql);
 
         $rows = $this->connection->fetchAll($sql);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
-
-            $this->fixReportDef($logger, $dryRun, $def, $row, $className, $oldField, $newField);
+            $this->fixReportDefs($logger, $dryRun, $def, $row, $className, $oldField, $newField);
         }
     }
 
@@ -101,18 +90,17 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
      */
     protected function migrateSegment(LoggerInterface $logger, $dryRun)
     {
+        $sql = 'SELECT s.id, s.definition, s.entity FROM oro_segment s';
+
         $className = 'OroCRM\Bundle\SalesBundle\Entity\Opportunity';
         $oldField = 'status_label';
         $newField = 'status';
-
-        $sql = 'SELECT s.id, s.definition, s.entity FROM oro_segment s';
         $this->logQuery($logger, $sql);
 
         $rows = $this->connection->fetchAll($sql);
         foreach ($rows as $row) {
             $def = json_decode($row['definition'], true);
-
-            $this->fixSegmentDef($logger, $dryRun, $def, $row, $className, $oldField, $newField);
+            $this->fixSegmentDefs($logger, $dryRun, $def, $row, $className, $oldField, $newField);
         }
     }
 
@@ -125,14 +113,11 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
      * @param $oldField
      * @param $newField
      */
-    protected function fixSegmentDef(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
+    protected function fixSegmentDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
         if (isset($def['columns'])) {
             foreach ($def['columns'] as $key => $field) {
-                if (isset($field['name'])
-                    && $row['entity'] === $className
-                    && $field['name'] === $oldField
-                ) {
+                if (isset($field['name']) && $row['entity'] === $className && $field['name'] === $oldField) {
                     $def['columns'][$key]['name'] = $newField;
                     $this->updateSegment($logger, $dryRun, $def, $row);
                 }
@@ -141,15 +126,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         if (isset($def['filters'])) {
             foreach ($def['filters'] as $key => $field) {
                 if (isset($field['columnName'])) {
-                    if (
-                        $row['entity'] === $className
-                        && $field['columnName'] === $oldField
-                    ) {
-                        $def['filters'][$key]['columnName'] = $newField;
-                    } else {
-                        $def['filters'][$key]['columnName']
-                            = str_replace('Opportunity::status_label', 'Opportunity::status', $field['columnName']);
-                    }
+                    $def = $this->processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key);
                     $this->updateSegment($logger, $dryRun, $def, $row);
                 }
             }
@@ -165,15 +142,12 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
      * @param $oldField
      * @param $newField
      */
-    protected function fixReportDef(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
+    protected function fixReportDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
         if (isset($def['columns'])) {
             foreach ($def['columns'] as $key => $field) {
                 if (isset($field['name'])) {
-                    if (
-                        $row['entity'] === $className
-                        && $field['name'] === $oldField
-                    ) {
+                    if ($row['entity'] === $className && $field['name'] === $oldField) {
                         $def['columns'][$key]['name'] = $newField;
                     } else {
                         $def['columns'][$key]['name']
@@ -186,18 +160,50 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         if (isset($def['filters'])) {
             foreach ($def['filters'] as $key => $field) {
                 if (isset($field['columnName'])) {
-                    if (
-                        $row['entity'] === $className
-                        && $field['columnName'] === $oldField
-                    ) {
-                        $def['filters'][$key]['columnName'] = $newField;
-                    } else {
-                        $def['filters'][$key]['columnName']
-                            = str_replace('Opportunity::status_label', 'Opportunity::status', $field['columnName']);
-                    }
+                    $def = $this->processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key);
                     $this->updateReport($logger, $dryRun, $def, $row);
                 }
             }
         }
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     * @param $dryRun
+     * @param $def
+     * @param $row
+     * @param $query
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    protected function executeQuery(LoggerInterface $logger, $dryRun, $def, $row, $query)
+    {
+        $params = ['definition' => json_encode($def), 'id' => $row['id']];
+        $types = ['definition' => 'text', 'id' => 'integer'];
+        $this->logQuery($logger, $query, $params, $types);
+        if (!$dryRun) {
+            $this->connection->executeUpdate($query, $params, $types);
+        }
+    }
+
+    /**
+     * @param $def
+     * @param $row
+     * @param $className
+     * @param $oldField
+     * @param $newField
+     * @param $field
+     * @param $key
+     * @return mixed
+     */
+    protected function processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key)
+    {
+        if ($row['entity'] === $className && $field['columnName'] === $oldField) {
+            $def['filters'][$key]['columnName'] = $newField;
+        } else {
+            $def['filters'][$key]['columnName']
+                = str_replace('Opportunity::status_label', 'Opportunity::status', $field['columnName']);
+        }
+
+        return $def;
     }
 }
