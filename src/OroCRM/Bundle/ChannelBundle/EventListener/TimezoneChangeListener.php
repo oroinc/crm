@@ -2,26 +2,25 @@
 
 namespace OroCRM\Bundle\ChannelBundle\EventListener;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\Common\Persistence\ManagerRegistry;
-
-use JMS\JobQueueBundle\Entity\Job;
-
-use OroCRM\Bundle\ChannelBundle\Command\LifetimeAverageAggregateCommand;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use OroCRM\Bundle\ChannelBundle\Async\Topics;
 
 use Oro\Bundle\ConfigBundle\Event\ConfigUpdateEvent;
 
 class TimezoneChangeListener
 {
-    /** @var ManagerRegistry */
-    protected $registry;
+    /**
+     * @var MessageProducerInterface
+     */
+    private $messageProducer;
 
     /**
-     * @param ManagerRegistry $registry
+     * @param MessageProducerInterface $messageProducer
      */
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(MessageProducerInterface $messageProducer)
     {
-        $this->registry = $registry;
+        $this->messageProducer = $messageProducer;
     }
 
     /**
@@ -33,24 +32,8 @@ class TimezoneChangeListener
             return;
         }
 
-        if (!$this->isAlreadyScheduled()) {
-            /** @var EntityManager $em */
-            $em = $this->registry->getManager();
-
-            $job = new Job(LifetimeAverageAggregateCommand::COMMAND_NAME, ['-f']);
-            $em->persist($job);
-            $em->flush($job);
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function isAlreadyScheduled()
-    {
-        $schedule = $this->registry->getRepository('JMSJobQueueBundle:Job')
-            ->findOneBy(['command' => LifetimeAverageAggregateCommand::COMMAND_NAME, 'state' => Job::STATE_PENDING]);
-
-        return (bool) $schedule;
+        $this->messageProducer->send(Topics::AGGREGATE_LIFETIME_AVERAGE, [
+            'force' => true,
+        ], MessagePriority::VERY_LOW);
     }
 }

@@ -2,16 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use JMS\JobQueueBundle\Entity\Job;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Oro\Bundle\IntegrationBundle\Manager\GenuineSyncScheduler;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-use Oro\Bundle\IntegrationBundle\Command\SyncCommand;
-
-class UpdateCustomerAddresses extends AbstractFixture
+class UpdateCustomerAddresses extends AbstractFixture implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * {@inheritDoc}
      */
@@ -33,21 +34,19 @@ class UpdateCustomerAddresses extends AbstractFixture
          * Find all invalid addresses and schedule force sync for them
          */
         foreach ($invalidEntriesAwareChannelIds as $channel) {
-            $channelId = $channel['id'];
-            $job       = new Job(
-                SyncCommand::COMMAND_NAME,
-                [
-                    sprintf('--channel-id=%d', $channelId),
-                    '--connector=customer',
-                    '-v',
-                    '--env=prod',
-                    '--force'
-                ]
-            );
-
-            $manager->persist($job);
+            $this->getSyncScheduler()->schedule($channel['id'], 'customer', [
+                'force' => true
+            ]);
         }
 
         $manager->flush();
+    }
+
+    /**
+     * @return GenuineSyncScheduler
+     */
+    private function getSyncScheduler()
+    {
+        return $this->container->get('oro_integration.genuine_sync_scheduler');
     }
 }

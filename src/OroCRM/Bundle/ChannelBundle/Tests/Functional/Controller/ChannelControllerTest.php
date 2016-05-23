@@ -2,11 +2,16 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Tests\Functional\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\TraceableMessageProducer;
+use Oro\Component\Testing\ResponseExtension;
+use OroCRM\Bundle\ChannelBundle\Async\Topics;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity;
 use Symfony\Component\Form\Form;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusinessUnitData;
 
 /**
  * @outputBuffering enabled
@@ -14,17 +19,47 @@ use Oro\Bundle\OrganizationBundle\Migrations\Data\ORM\LoadOrganizationAndBusines
  */
 class ChannelControllerTest extends WebTestCase
 {
+    use ResponseExtension;
+
     const CHANNEL_NAME = 'some name';
     const GRID_NAME    = 'orocrm-channels-grid';
 
     public function setUp()
     {
-        $this->initClient(
-            ['debug' => false],
-            array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1])
-        );
+        $this->initClient([], array_merge($this->generateBasicAuthHeader(), ['HTTP_X-CSRF-Header' => 1]));
+        $this->client->enableReboot();
         $this->client->useHashNavigation(true);
     }
+
+    public function testShouldSendChannelStatusChangedMessage()
+    {
+        $this->client->disableReboot();
+        $em = $this->getEntityManager();
+        $this->getMessageProducer()->clearTraces();
+
+        $channel = new Channel();
+        $channel->setName('aName');
+        $channel->setEntities([CustomerIdentity::class]);
+        $channel->setChannelType('custom');
+        $channel->setCustomerIdentity(CustomerIdentity::class);
+        $em->persist($channel);
+
+        $em->flush();
+
+        $this->client->request(
+            'GET',
+            $this->getUrl('orocrm_channel_change_status', ['id' => $channel->getId()])
+        );
+
+        $this->assertLastResponseStatus(302);
+
+        $traces = $this->getMessageProducer()->getTopicTraces(Topics::CHANNEL_STATUS_CHANGED);
+
+        $this->assertCount(1, $traces);
+        $this->assertEquals(['channelId' => $channel->getId()], $traces[0]['message']);
+        $this->assertEquals(MessagePriority::HIGH, $traces[0]['priority']);
+    }
+
 
     public function testCreateChannel()
     {
@@ -225,5 +260,21 @@ class ChannelControllerTest extends WebTestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * @return EntityManagerInterface
+     */
+    protected function getEntityManager()
+    {
+        return $this->getContainer()->get('doctrine.orm.entity_manager');
+    }
+
+    /**
+     * @return TraceableMessageProducer
+     */
+    protected function getMessageProducer()
+    {
+        return $this->getContainer()->get('oro_message_queue.message_producer');
     }
 }

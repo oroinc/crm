@@ -6,7 +6,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 use Oro\Bundle\UserBundle\Entity\User;
@@ -17,11 +17,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\LifetimeValueHistory;
 
 class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareInterface
 {
-    /** @var ObjectManager */
-    protected $em;
-
-    /** @var BuilderFactory */
-    protected $factory;
+    use ContainerAwareTrait;
 
     /** @var array */
     protected $channels = [];
@@ -29,31 +25,31 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
     /** @var array */
     protected $accounts = [];
 
-    /** @var User */
-    protected $user;
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
-    }
-
     /**
      * {@inheritdoc}
+     *
+     * @param EntityManager $manager
      */
     public function load(ObjectManager $manager)
     {
         $handle  = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'history_data.csv', 'r');
         $headers = fgetcsv($handle, 1000, ',');
 
+        $user = $manager->getRepository(User::class)->createQueryBuilder('u')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleResult();
+
+        if (!$user) {
+            throw new \LogicException("User was not found");
+        }
+
         while (($data = fgetcsv($handle, 1000, ',')) !== false) {
             $combined = array_combine($headers, $data);
             $logDate  = new \DateTime($combined['Created Date UTC'], new \DateTimeZone('UTC'));
 
             $historyEntry = new LifetimeValueHistory();
-            $historyEntry->setAccount($this->ensureAccountCreated($manager, $combined['Account name']));
+            $historyEntry->setAccount($this->ensureAccountCreated($manager, $user, $combined['Account name']));
             $historyEntry->setDataChannel($this->ensureChannelCreated($manager, $combined['Channel name'], $logDate));
             $historyEntry->setCreatedAt($logDate);
             $historyEntry->setStatus($combined['Status']);
@@ -76,7 +72,7 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
     protected function ensureChannelCreated(EntityManager $em, $name, \DateTime $created)
     {
         if (!isset($this->channels[$name])) {
-            $builder = $this->factory->createBuilder();
+            $builder = $this->getBuilderFactory()->createBuilder();
             $builder->setChannelType('custom');
             $builder->setName($name);
             $builder->setCreatedAt($created);
@@ -92,39 +88,31 @@ class LoadLifetimeHistoryData extends AbstractFixture implements ContainerAwareI
 
     /**
      * @param EntityManager $em
-     * @param string        $name
+     * @param User $user
+     * @param string $accountName
      *
      * @return Account
      */
-    protected function ensureAccountCreated(EntityManager $em, $name)
+    protected function ensureAccountCreated(EntityManager $em, User $user, $accountName)
     {
-        if (!isset($this->accounts[$name])) {
+        if (!isset($this->accounts[$accountName])) {
             $account = new Account();
-            $account->setName($name);
-            $account->setOwner($this->getUser($em));
+            $account->setName($accountName);
+            $account->setOwner($user);
 
             $em->persist($account);
             $em->flush($account);
-            $this->accounts[$name] = $account;
+            $this->accounts[$accountName] = $account;
         }
 
-        return $this->accounts[$name];
+        return $this->accounts[$accountName];
     }
 
     /**
-     * @param EntityManager $em
-     *
-     * @return User
+     * @return BuilderFactory
      */
-    protected function getUser(EntityManager $em)
+    private function getBuilderFactory()
     {
-        if (!$this->user) {
-            $this->user = $em->getRepository('OroUserBundle:User')->createQueryBuilder('u')
-                ->setMaxResults(1)
-                ->getQuery()
-                ->getSingleResult();
-        }
-
-        return $this->user;
+        return $this->container->get('orocrm_channel.builder.factory');
     }
 }

@@ -49,11 +49,9 @@ parameters:
     orocrm_channel.event_listener.navigation.class:                    OroCRM\Bundle\ChannelBundle\EventListener\NavigationListener
     orocrm_channel.form.subscriber.channel_subscriber.class:           OroCRM\Bundle\ChannelBundle\Form\EventListener\ChannelTypeSubscriber
     orocrm_channel.event_listener.update_integration_connectors.class: OroCRM\Bundle\ChannelBundle\EventListener\UpdateIntegrationConnectorsListener
-    orocrm_channel.event_listener.change_integration_status.class:     OroCRM\Bundle\ChannelBundle\EventListener\ChangeIntegrationStatusListener
     orocrm_channel.event_listener.channel_before_deleted.class:        OroCRM\Bundle\ChannelBundle\EventListener\ChannelBeforeDeleteListener
     orocrm_channel.event_listener.embedded_form.class:                 OroCRM\Bundle\ChannelBundle\EventListener\EmbeddedFormListener
     orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
-    orocrm_channel.event_listener.timezone_change.class:               OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
     orocrm_channel.event_listener.job_execution.class:                 OroCRM\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
     orocrm_channel.event_listener.transitions_attribute.class:         OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
 
@@ -228,7 +226,6 @@ services:
         tags:
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.save_succeed', method: processChannelChange}
             - { name: kernel.event_listener, event: 'orocrm_channel.channel.delete_succeed', method: processChannelChange}
-            - { name: kernel.event_listener, event: 'orocrm_channel.channel.status_change', method: processChannelChange}
 
     orocrm_channel.provider.utils.entity_state_provider:
         class: %orocrm_channel.provider.utils.entity_state_provider.class%
@@ -274,13 +271,6 @@ services:
         arguments:
             - "@orocrm_channel.provider.settings_provider"
 
-    orocrm_channel.event_listener.change_integration_status:
-        class: %orocrm_channel.event_listener.change_integration_status.class%
-        arguments:
-            - "@doctrine"
-        tags:
-            - { name: kernel.event_listener, event: orocrm_channel.channel.status_change, method: onChannelStatusChange }
-
     orocrm_channel.event_listener.update_integration_connectors:
         class: %orocrm_channel.event_listener.update_integration_connectors.class%
         arguments:
@@ -313,9 +303,9 @@ services:
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
 
     orocrm_channel.event_listener.timezone_change:
-      class: %orocrm_channel.event_listener.timezone_change.class%
+      class: 'OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener'
       arguments:
-          - "@doctrine"
+          - "@oro_message_queue.message_producer"
       tags:
         - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -396,3 +386,21 @@ services:
             - '@oro_action.context_accessor'
         tags:
             - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }
+
+    orocrm_channel.async.change_integration_status_processor:
+        class: 'OroCRM\Bundle\ChannelBundle\Async\ChangeIntegrationStatusProcessor'
+        arguments: ['@doctrine']
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    orocrm_channel.async.process_channel_state_processor:
+        class: 'OroCRM\Bundle\ChannelBundle\Async\ProcessChannelStateProcessor'
+        arguments: ["@orocrm_channel.provider.state_provider"]
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }
+
+    orocrm_channel.async.aggregate_lifetime_average_processor:
+        class: 'OroCRM\Bundle\ChannelBundle\Async\AggregateLifetimeAverageProcessor'
+        arguments: ['@doctrine', '@oro_locale.settings']
+        tags:
+            - { name: 'oro_message_queue.client.message_processor' }

@@ -2,18 +2,20 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Command;
 
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducerInterface;
+use Oro\Bundle\CronBundle\Command\CronCommandInterface;
+use OroCRM\Bundle\ChannelBundle\Async\Topics;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-use Oro\Bundle\CronBundle\Command\CronCommandInterface;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Repository\LifetimeValueAverageAggregationRepository;
-
-class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements CronCommandInterface
+class LifetimeAverageAggregateCommand extends Command implements CronCommandInterface, ContainerAwareInterface
 {
-    const COMMAND_NAME = 'oro:cron:lifetime-average:aggregate';
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -28,7 +30,7 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      */
     public function configure()
     {
-        $this->setName(self::COMMAND_NAME);
+        $this->setName('oro:cron:lifetime-average:aggregate');
         $this->setDescription('Run daily aggregation of average lifetime value per channel');
         $this->addOption(
             'force',
@@ -49,27 +51,19 @@ class LifetimeAverageAggregateCommand extends ContainerAwareCommand implements C
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        /** @var LifetimeValueAverageAggregationRepository $repo */
-        $repo  = $this->getService('doctrine')->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation');
-        $force = $input->getOption('force');
-        if ($force) {
-            $output->writeln('<comment>Removing existing data...</comment>');
-            $repo->clearTableData($input->getOption('use-delete'));
-        }
-
-        $localeSettings = $this->getService('oro_locale.settings');
-        $repo->aggregate($localeSettings->getTimeZone(), $force);
+        $this->getMessageProducer()->send(Topics::AGGREGATE_LIFETIME_AVERAGE, [
+            'force' => (bool) $input->getOption('force'),
+            'clear_table_use_delete' => (bool) $input->getOption('use-delete'),
+        ], MessagePriority::VERY_LOW);
 
         $output->writeln('<info>Completed!</info>');
     }
 
     /**
-     * @param string $id
-     *
-     * @return object
+     * @return MessageProducerInterface
      */
-    protected function getService($id)
+    private function getMessageProducer()
     {
-        return $this->getContainer()->get($id);
+        return $this->container->get('oro_message_queue.message_producer');
     }
 }

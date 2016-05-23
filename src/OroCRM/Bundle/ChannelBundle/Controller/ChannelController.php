@@ -2,6 +2,10 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Controller;
 
+use Oro\Component\MessageQueue\Client\MessagePriority;
+use Oro\Component\MessageQueue\Client\MessageProducer;
+use OroCRM\Bundle\ChannelBundle\Async\Topics;
+use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,9 +13,6 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\SecurityBundle\Annotation\Acl;
 use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
-
-use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\ChannelBundle\Event\ChannelChangeStatusEvent;
 
 class ChannelController extends Controller
 {
@@ -111,9 +112,12 @@ class ChannelController extends Controller
             ->getManager()
             ->flush();
 
-        $event = new ChannelChangeStatusEvent($channel);
+        $this->getMessageProducer()->send(
+            Topics::CHANNEL_STATUS_CHANGED,
+            ['channelId' => $channel->getId()],
+            MessagePriority::HIGH
+        );
 
-        $this->get('event_dispatcher')->dispatch(ChannelChangeStatusEvent::EVENT_NAME, $event);
         $this->get('session')->getFlashBag()->add('success', $this->get('translator')->trans($message));
 
         return $this->redirect(
@@ -149,5 +153,13 @@ class ChannelController extends Controller
         return [
             'channel' => $channel
         ];
+    }
+
+    /**
+     * @return MessageProducer
+     */
+    protected function getMessageProducer()
+    {
+        return $this->get('oro_message_queue.message_producer');
     }
 }
