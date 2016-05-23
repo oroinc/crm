@@ -25,7 +25,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'description',
-                'textarea',
+                'oro_resizeable_rich_text',
                 [
                     'label'        => 'orocrm.case.caseentity.description.label',
                     'required'     => false
@@ -33,7 +33,7 @@ class CaseEntityType extends AbstractType
             )
             ->add(
                 'resolution',
-                'textarea',
+                'oro_resizeable_rich_text',
                 [
                     'label'        => 'orocrm.case.caseentity.resolution.label',
                     'required'     => false

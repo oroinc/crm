@@ -70,43 +70,43 @@ services:
         class: %orocrm_case.form.handler.entity.class%
         scope: request
         arguments:
-            - @orocrm_case.form.entity
-            - @request
-            - @doctrine.orm.entity_manager
-            - @event_dispatcher
+            - "@orocrm_case.form.entity"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     orocrm_case.form.handler.entity.api:
         class: %orocrm_case.form.handler.entity.class%
         scope: request
         arguments:
-            - @orocrm_case.form.entity.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @event_dispatcher
+            - "@orocrm_case.form.entity.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     orocrm_case.form.handler.comment:
         class: %orocrm_case.form.handler.entity.class%
         scope: request
         arguments:
-            - @orocrm_case.form.comment
-            - @request
-            - @doctrine.orm.entity_manager
-            - @event_dispatcher
+            - "@orocrm_case.form.comment"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     orocrm_case.form.handler.comment.api:
         class: %orocrm_case.form.handler.entity.class%
         scope: request
         arguments:
-            - @orocrm_case.form.comment.api
-            - @request
-            - @doctrine.orm.entity_manager
-            - @event_dispatcher
+            - "@orocrm_case.form.comment.api"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@event_dispatcher"
 
     orocrm_case.form.type.case_mailbox_process_settings_tag:
         class: %orocrm_case.form.type.case_mailbox_process_settings_tag.class%
         arguments:
-            - @oro_tag.form.subscriber.tag_select
-            - @orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber
+            - "@oro_tag.form.subscriber.tag_select"
+            - "@orocrm_case.form.subscriber.case_mailbox_process_settings_tag_subscriber"
         tags:
             - { name: form.type, alias: case_mailbox_process_settings_tag }
 

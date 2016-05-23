@@ -21,9 +21,9 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - o.closeRevenue
+                    - s.id as status
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
-                    - status.label as statusLabel
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
@@ -35,7 +35,7 @@ datagrid:
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.status, alias: status }
+                        - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
@@ -85,8 +85,10 @@ datagrid:
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         orocrm.contact.email.label
             ownerName:
@@ -140,8 +142,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                statusLabel:
-                    data_name: status.label
+                status:
+                    data_name: status
                 primaryEmail:
                     data_name: email.email
                 ownerName:
@@ -197,15 +199,10 @@ datagrid:
                 probability:
                     type: percent
                     data_name: o.probability
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:OpportunityStatus
-                            property: label
-                            translatable_options: false
-                            multiple: true
+                status:
+                    type:      enum
+                    data_name: status.id
+                    enum_code: opportunity_status
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -214,15 +211,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: o.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
         actions:
             view:
                 type:          navigate
@@ -515,7 +512,7 @@ datagrid:
                     data_name: l.website
                     enabled: false
                 numberOfEmployees:
-                    type: number
+                    type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
                 sourceName:
@@ -542,7 +539,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionLabel:
                     type: string
@@ -565,8 +562,8 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: l.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 contactName:
                     type: string
                     data_name: contactName
@@ -576,8 +573,8 @@ datagrid:
                     type: choice-business-unit
                     data_name: l.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -693,7 +690,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: salesFunnel.id
                 channelName:
                     type:      entity
@@ -734,15 +731,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
@@ -854,7 +851,7 @@ datagrid:
         filters:
             columns:
                  id:
-                     type: number
+                     type: number-range
                      data_name: lead.id
                      enabled: false
                  name:
@@ -881,7 +878,7 @@ datagrid:
                          field_options:
                              class: OroAddressBundle:Country
                              property: name
-                             query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                             query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                              translatable_options: false
                  regionLabel:
                      type: string
@@ -944,7 +941,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: opportunity.id
                     enabled: false
                 name:
@@ -1015,7 +1012,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
                  createdAt:
                     type: datetime
@@ -1121,8 +1118,8 @@ datagrid:
                     data_name: c.owner
                     enabled: false                    
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 accountName:
                     type: string
                     data_name: accountName
@@ -1140,7 +1137,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 baRegionLabel:
                     type: string
@@ -1167,7 +1164,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 saRegionLabel:
                     type: string
@@ -1348,7 +1345,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder: "@orocrm_sales.lead.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                  regionLabel:
                     type: string
@@ -1373,7 +1370,7 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -1583,7 +1580,7 @@ datagrid:
                     - o.id
                     - o.name
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
@@ -1706,7 +1703,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
         options:
             entity_pagination: true

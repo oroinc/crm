@@ -31,6 +31,12 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $doctrineHelper;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $configManager;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $configProvider;
+
     public function setUp()
     {
         $this->provider    = new ActivityContactProvider();
@@ -40,7 +46,26 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
         $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\EntityBundle\ORM\DoctrineHelper')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->listener       = new ActivityListener($this->provider, $this->doctrineHelper);
+
+        $this->configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
+            ->setMethods(['getProvider'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->configProvider = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider')
+            ->setMethods(['getConfig', 'is'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->configManager
+            ->method('getProvider')
+            ->will($this->returnValue($this->configProvider));
+
+        $this->configProvider
+            ->method('getConfig')
+            ->will($this->returnValue($this->configProvider));
+
+        $this->listener = new ActivityListener($this->provider, $this->doctrineHelper, $this->configManager);
     }
 
     /**
@@ -52,6 +77,12 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
     {
         $this->testTarget = new TestTarget();
         $event            = new ActivityEvent($object, $this->testTarget);
+
+        $this->configProvider
+            ->method('is')
+            ->with('is_extend')
+            ->will($this->returnValue(true));
+
         $this->listener->onAddActivity($event);
 
         $accessor = PropertyAccess::createPropertyAccessor();
@@ -92,6 +123,23 @@ class ActivityListenerTest extends \PHPUnit_Framework_TestCase
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE_OUT));
                 $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::LAST_CONTACT_DATE));
         }
+    }
+
+    public function testOnAddActivityWithNonExtendedEntity()
+    {
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $this->testTarget = new TestTarget();
+        $this->testDate = new \DateTime();
+        $object = new TestActivity(DirectionProviderInterface::DIRECTION_INCOMING, $this->testDate);
+        $event = new ActivityEvent($object, $this->testTarget);
+
+        $this->configProvider
+            ->method('is')
+            ->with('is_extend')
+            ->will($this->returnValue(false));
+
+        $this->listener->onAddActivity($event);
+        $this->assertNull($accessor->getValue($this->testTarget, ActivityScope::CONTACT_COUNT));
     }
 
     public function onAddActivityProvider()

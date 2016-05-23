@@ -7,4 +7,4 @@ placeholders:
 items:
     orocrm_activity_contact:
         template: OroCRMActivityContactBundle:ActivityContact:metrics.html.twig
-        applicable: @orocrm_activity_contact.placeholder.filter->isApplicable($entity$, Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope::VIEW_PAGE)
+        applicable: "@orocrm_activity_contact.placeholder.filter->isApplicable($entity$, Oro\Bundle\ActivityBundle\EntityConfig\ActivityScope::VIEW_PAGE)"

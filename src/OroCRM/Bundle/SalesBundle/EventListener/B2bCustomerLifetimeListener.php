@@ -8,9 +8,10 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\Event\OnFlushEventArgs;
 use Doctrine\ORM\Event\PostFlushEventArgs;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository;
 
 class B2bCustomerLifetimeListener
@@ -146,7 +147,7 @@ class B2bCustomerLifetimeListener
         return
             $opportunity->getCustomer()
             && $opportunity->getStatus()
-            && $opportunity->getStatus()->getName() === B2bCustomerRepository::VALUABLE_STATUS
+            && $opportunity->getStatus()->getId() === B2bCustomerRepository::VALUABLE_STATUS
             && ($takeZeroRevenue || $opportunity->getCloseRevenue() > 0);
     }
 
@@ -161,8 +162,8 @@ class B2bCustomerLifetimeListener
 
         if (!empty($changeSet['status'])) {
             $statusChangeSet = array_map(
-                function (OpportunityStatus $status = null) {
-                    return $status ? $status->getName() : null;
+                function ($status = null) {
+                    return $status ? $status->getId() : null;
                 },
                 $changeSet['status']
             );
@@ -182,9 +183,10 @@ class B2bCustomerLifetimeListener
      */
     protected function getOldStatus(Opportunity $opportunity, array $changeSet)
     {
-        return isset($changeSet['status']) && $changeSet['status'][0] instanceof OpportunityStatus
-            ? $changeSet['status'][0]->getName()
-            : ($opportunity->getStatus() ? $opportunity->getStatus()->getName() : false);
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        return isset($changeSet['status']) && ClassUtils::getClass($changeSet['status'][0]) === $enumClass
+            ? $changeSet['status'][0]->getId()
+            : ($opportunity->getStatus() ? $opportunity->getStatus()->getId() : false);
     }
 
     /**

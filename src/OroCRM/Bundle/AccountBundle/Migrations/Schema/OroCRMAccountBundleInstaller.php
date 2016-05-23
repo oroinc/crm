@@ -8,6 +8,7 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
 use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
@@ -15,8 +16,9 @@ use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -78,7 +80,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_10';
+        return 'v1_11';
     }
 
     /**
@@ -87,7 +89,7 @@ class OroCRMAccountBundleInstaller implements
     public function up(Schema $schema, QueryBag $queries)
     {
         /** Tables generation **/
-        $this->createOrocrmAccountTable($schema);
+        $this->createOrocrmAccountTable($schema, $queries);
         $this->createOrocrmAccountToContactTable($schema);
 
         /** Foreign keys generation **/
@@ -125,8 +127,9 @@ class OroCRMAccountBundleInstaller implements
      * Create orocrm_account table
      *
      * @param Schema $schema
+     * @param QueryBag $queries
      */
-    protected function createOrocrmAccountTable(Schema $schema)
+    protected function createOrocrmAccountTable(Schema $schema, QueryBag $queries)
     {
         $table = $schema->createTable('orocrm_account');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
@@ -142,9 +145,11 @@ class OroCRMAccountBundleInstaller implements
             [
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
-                    'datagrid'  => ['is_visible' => false],
+                    'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
                     'merge'     => ['display' => true],
-                    'dataaudit' => ['auditable' => true]
+                    'dataaudit' => ['auditable' => true],
+                    'form'      => ['type' => 'oro_resizeable_rich_text'],
+                    'view'      => ['type' => 'html'],
                 ]
             ]
         );
@@ -153,6 +158,8 @@ class OroCRMAccountBundleInstaller implements
         $table->addIndex(['organization_id'], 'IDX_7166D37132C8A3DE', []);
         $table->addIndex(['default_contact_id'], 'IDX_7166D371AF827129', []);
         $table->addIndex(['name'], 'account_name_idx', []);
+
+        $queries->addPostQuery(new AccountNameExprIndexQuery());
     }
 
     /**

@@ -8,10 +8,10 @@ placeholders:
 items:
     orocrm_user_cases_grid:
         template: OroCRMCaseBundle:Case:userCases.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %oro_user.entity.class%)"
     orocrm_account_cases_grid:
         template: OroCRMCaseBundle:Case:accountCases.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_account.account.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_account.account.entity.class%)"
     orocrm_contact_cases_grid:
         template: OroCRMCaseBundle:Case:contactCases.html.twig
-        applicable: @oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)
+        applicable: "@oro_ui.placeholder.filter->isInstanceOf($entity$, %orocrm_contact.entity.class%)"

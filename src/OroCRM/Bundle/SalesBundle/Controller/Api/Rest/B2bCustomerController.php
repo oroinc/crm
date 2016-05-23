@@ -38,7 +38,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      *      description="Number of items per page. defaults to 10."
      * )
      * @ApiDoc(
-     *      description="Get B2B customers",
+     *      description="Get business customers",
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_b2bcustomer_view")
@@ -58,7 +58,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * @param string $id
      *
      * @ApiDoc(
-     *      description="Get B2B customer",
+     *      description="Get business customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_b2bcustomer_view")
@@ -75,7 +75,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Update B2B customer",
+     *      description="Update business customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_b2bcustomer_update")
@@ -90,7 +90,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * Create new B2B customer.
      *
      * @ApiDoc(
-     *      description="Create new B2B customer",
+     *      description="Create new business customer",
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_b2bcustomer_create")
@@ -106,7 +106,7 @@ class B2bCustomerController extends RestController implements ClassResourceInter
      * @param int $id
      *
      * @ApiDoc(
-     *      description="Delete B2B customer",
+     *      description="Delete business customer",
      *      resource=true
      * )
      * @Acl(

@@ -30,12 +30,6 @@
     margin-top: -1px;
 }
 
-#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a,
-#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a:hover,
-#magento-without-border-tabs.responsive-cell .oro-tabs .nav-tabs > li:first-child > a:focus {
-    border-left: none;
-}
-
 #magento-without-border-tabs .oro-tabs {
     padding-left: 1px;
 }

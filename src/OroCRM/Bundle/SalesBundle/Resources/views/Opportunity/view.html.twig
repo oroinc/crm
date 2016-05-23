@@ -38,15 +38,17 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status.name != 'lost' %}
-            <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
-        {% endif %}
-    </div>
+    {% if entity.status %}
+        <div class="pull-left">
+            {% if entity.status.id != 'lost' %}
+                <div class="badge badge-enabled status-enabled">
+                    <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
+            {% else %}
+                <div class="badge badge-disabled status-disabled">
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
 {% endblock breadcrumbs %}
 
 {% block content_data %}

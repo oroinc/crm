@@ -13,33 +13,33 @@ services:
     orocrm_case.manager:
         class: %orocrm_case.manager.class%
         arguments:
-            - @doctrine
-            - @oro_security.acl_helper
+            - "@doctrine"
+            - "@oro_security.acl_helper"
 
     orocrm_case.manager.api:
         class: %orocrm_case.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_case.entity.class%
-            - @doctrine.orm.entity_manager
-            - @orocrm_case.manager
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_case.manager"
 
     orocrm_case.manager.comment.api:
         class: %orocrm_case.manager.comment.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_case.comment.class%
-            - @doctrine.orm.entity_manager
-            - @orocrm_case.manager
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_case.manager"
 
     orocrm_case.view_factory:
         class: %orocrm_case.view_factory.class%
         arguments:
-            - @oro_security.security_facade
-            - @router
-            - @oro_entity.entity_name_resolver
-            - @oro_locale.formatter.date_time
-            - @oro_attachment.manager
+            - "@oro_security.security_facade"
+            - "@router"
+            - "@oro_entity.entity_name_resolver"
+            - "@oro_locale.formatter.date_time"
+            - "@oro_attachment.manager"
 
     orocrm_case.provider.phone.case:
         class: %orocrm_case.provider.phone.case.class%
@@ -54,6 +54,6 @@ services:
     orocrm_case.event_listener.mailbox_saved_listener.class:
         class: %orocrm_case.event_listener.mailbox_saved_listener.class%
         arguments:
-            - @oro_tag.tag.manager
+            - "@oro_tag.tag.manager"
         tags:
             - { name: kernel.event_listener, event: oro_email.mailbox_saved, method: onMailboxSave }

@@ -128,13 +128,13 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type: string
                     data_name: regionName
                 lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
                 guest:
                     label: orocrm.magento.datagrid.columns.customer_is_guest.label
@@ -189,7 +189,7 @@ datagrid:
                     success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
                     error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
 
-        action_configuration: [@orocrm_magento.datagrid.customer_actions_provider, "getCustomerActionsPermissions"]
+        action_configuration: [ "@orocrm_magento.datagrid.customer_actions_provider", "getCustomerActionsPermissions"]
         options:
             entityHint: customer
             export: true
@@ -309,7 +309,7 @@ datagrid:
                             property: name
                     enabled:   false
                 originId:
-                    type: number
+                    type: number-range
                     data_name: c.originId
                 firstName:
                     type: string
@@ -331,7 +331,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
@@ -1177,7 +1177,7 @@ datagrid:
                     type:        string
                     data_name:   o.incrementId
                 itemsCount:
-                    type:        number
+                    type:        number-range
                     data_name:   itemsCount
                     filter_by_having: true
                 createdAt:
@@ -1317,10 +1317,10 @@ datagrid:
         filters:
             columns:
                 originId:
-                    type:            number
+                    type:            number-range
                     data_name:       c.originId
                 itemsCount:
-                    type:             number
+                    type:             number-range
                     data_name:        itemsCount
                     filter_by_having: true
                 createdAt:
@@ -1570,7 +1570,7 @@ datagrid:
                     confirm_content: orocrm.magento.newslettersubscriber.action.content.unsubscribe
                     success:         orocrm.magento.newslettersubscriber.action.success.unsubscribe
                     error:           orocrm.magento.newslettersubscriber.action.error.unsubscribe
-        action_configuration: [@orocrm_magento.datagrid.newsletter_subscriber_provider, "getActionsPermissions"]
+        action_configuration: [ "@orocrm_magento.datagrid.newsletter_subscriber_provider", "getActionsPermissions"]
         options:
             entityHint: newsletter subscriber
             export: true
@@ -1792,7 +1792,7 @@ datagrid:
                         field_options:
                             class: OroAddressBundle:Country
                             property: name
-                            query_builder: @orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder
+                            query_builder:  "@orocrm_magento.country.datagrid_helper->getCountryFilterQueryBuilder"
                             translatable_options: false
                 regionName:
                     type:      string
