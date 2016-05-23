@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Psr\Log\LoggerInterface;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
@@ -127,6 +128,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
             foreach ($def['filters'] as $key => $field) {
                 if (isset($field['columnName'])) {
                     $def = $this->processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key);
+                    $def = $this->fixFilterCriterion($def, $field, $key);
                     $this->updateSegment($logger, $dryRun, $def, $row);
                 }
             }
@@ -161,6 +163,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
             foreach ($def['filters'] as $key => $field) {
                 if (isset($field['columnName'])) {
                     $def = $this->processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key);
+                    $def = $this->fixFilterCriterion($def, $field, $key);
                     $this->updateReport($logger, $dryRun, $def, $row);
                 }
             }
@@ -202,6 +205,27 @@ class UpdateReportQuery extends ParametrizedMigrationQuery
         } else {
             $def['filters'][$key]['columnName']
                 = str_replace('Opportunity::status_label', 'Opportunity::status', $field['columnName']);
+        }
+
+        return $def;
+    }
+
+    /**
+     * @param $def
+     * @param $field
+     * @param $key
+     * @return array
+     */
+    protected function fixFilterCriterion($def, $field, $key)
+    {
+        $paramOldClassName = 'OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus';
+        $paramNewClassName = ExtendHelper::buildEnumValueClassName('opportunity_status');
+        if (isset($field['criterion']['data']['params']['class'])
+            && $field['criterion']['data']['params']['class'] === $paramOldClassName
+            && $field['criterion']['filter'] === 'dictionary'
+        ) {
+            $def['filters'][$key]['criterion']['data']['params']['class'] = $paramNewClassName;
+            $def['filters'][$key]['criterion']['filter'] = 'enum';
         }
 
         return $def;
