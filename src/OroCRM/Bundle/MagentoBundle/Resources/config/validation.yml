@@ -35,8 +35,9 @@ OroCRM\Bundle\MagentoBundle\Entity\Store:
         name:
             - NotBlank: ~
             - Length: { max: 255 }
-# TODO check why fails during cart import
+# TODO: Disabled due to problem in TranslatableEntityType (BAP-10546)
 #        website:
+#            - NotBlank: ~
 #            - Valid: ~
 
 OroCRM\Bundle\MagentoBundle\Entity\Region:
