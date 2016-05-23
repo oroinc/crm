@@ -47,7 +47,7 @@
 {% block breadcrumbs %}
     {{ parent() }}
     <div class="pull-left">
-        {% if entity.status %}
+        {% if entity.status is not null %}
             {% if entity.status.id == 'closed' %}
                 <div class="badge badge-enabled status-enabled"><i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
             {% elseif entity.status.id == 'in_progress' %}
@@ -66,9 +66,7 @@
                 {{ UI.renderProperty('orocrm.task.subject.label'|trans, entity.subject) }}
                 {{ UI.renderHtmlProperty('orocrm.task.description.label'|trans, entity.description) }}
                 {{ UI.renderProperty('orocrm.task.due_date.label'|trans, entity.dueDate|oro_format_datetime) }}
-                {% if entity.status %}
-                    {{ UI.renderProperty('orocrm.task.status.label'|trans, entity.status.name) }}
-                {% endif %}
+                {{ UI.renderProperty('orocrm.task.status.label'|trans, entity.status.name|default('N/A')) }}
                 {{ UI.renderProperty('orocrm.task.task_priority.label'|trans, entity.taskPriority) }}
 
                 {%- set ownerData -%}
