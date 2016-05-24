@@ -46,6 +46,9 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     /** @var SecurityContext */
     protected $securityContext;
 
+    /** @var \DateTimeZone */
+    protected $timeZone;
+
     /**
      * {@inheritdoc}
      */
@@ -329,7 +332,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     {
         $recurringEvents = [];
 
-        $day = new \DateTime('+2 day');
+        $day = new \DateTime('+2 day', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('Gym Visiting');
         $day->setTime(19, 0, 0);
@@ -345,7 +348,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setRecurrence($recurrence);
         $recurringEvents[] = $event;
 
-        $day = new \DateTime('+1 day');
+        $day = new \DateTime('+1 day', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('Standup meeting');
         $day->setTime(10, 15, 0);
@@ -367,7 +370,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setRecurrence($recurrence);
         $recurringEvents[] = $event;
 
-        $day = new \DateTime('-3 day');
+        $day = new \DateTime('-3 day', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('Monthly Team Meeting');
         $day->setTime(18, 0, 0);
@@ -380,11 +383,11 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence->setInterval(2)
             ->setDayOfMonth(1)
             ->setStartTime($day)
-            ->setEndTime(new \DateTime('Dec 31'));
+            ->setEndTime(new \DateTime('Dec 31', $this->getTimeZone()));
         $event->setRecurrence($recurrence);
         $recurringEvents[] = $event;
 
-        $day = new \DateTime('+5 day');
+        $day = new \DateTime('+5 day', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('Update News');
         $day->setTime(14, 0, 0);
@@ -402,7 +405,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setRecurrence($recurrence);
         $recurringEvents[] = $event;
 
-        $day = new \DateTime('now');
+        $day = new \DateTime('now', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('Yearly Conference');
         $day->setTime(19, 0, 0);
@@ -419,7 +422,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $event->setRecurrence($recurrence);
         $recurringEvents[] = $event;
 
-        $day = new \DateTime('-2 day');
+        $day = new \DateTime('-2 day', $this->getTimeZone());
         $event = new CalendarEvent();
         $event->setTitle('New Year Party');
         $day->setTime(23, 0, 0);
@@ -446,7 +449,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
     protected function addRecurringEventExceptions()
     {
         $event = $this->em->getRepository('OroCalendarBundle:CalendarEvent')->findOneBy(['title' => 'Standup meeting']);
-        $day = new \DateTime('next friday');
+        $day = new \DateTime('next friday', $this->getTimeZone());
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Changed Standup meeting');
@@ -459,7 +462,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             ->setAllDay(true);
         $event->addRecurringEventException($exception);
 
-        $day = new \DateTime('next monday');
+        $day = new \DateTime('next monday', $this->getTimeZone());
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Evening Standup meeting');
@@ -472,7 +475,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
             ->setAllDay(false);
         $event->addRecurringEventException($exception);
 
-        $day = new \DateTime('first wednesday of next month');
+        $day = new \DateTime('first wednesday of next month', $this->getTimeZone());
         $day->setTime(10, 0, 0);
         $exception = new CalendarEvent();
         $exception->setTitle('Late meeting');
@@ -488,5 +491,17 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $this->em->persist($event);
 
         $this->em->flush();
+    }
+
+    /**
+     * @return \DateTimeZone
+     */
+    protected function getTimeZone()
+    {
+        if ($this->timeZone === null) {
+            $this->timeZone = new \DateTimeZone('UTC');
+        }
+
+        return $this->timeZone;
     }
 }
