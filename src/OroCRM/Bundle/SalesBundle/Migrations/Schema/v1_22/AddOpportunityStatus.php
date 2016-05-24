@@ -30,6 +30,7 @@ class AddOpportunityStatus implements
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**
@@ -64,24 +65,7 @@ class AddOpportunityStatus implements
         /** @var ExtendOptionsManager $extendOptionsManager */
         $extendOptionsManager = $this->container->get('oro_entity_extend.migration.options_manager');
         $extendOptionsManager->removeColumnOptions('orocrm_sales_opportunity', 'status');
-
         self::addStatusField($schema, $this->extendExtension, $queries);
-
-        $statusMapping = [
-            'in_progress' => 'in_progress',
-            'won' => 'won',
-            'lost' => 'lost'
-        ];
-        $query = 'UPDATE orocrm_sales_opportunity SET status_id = :status_id WHERE status_name = :status_name';
-        foreach ($statusMapping as $oldStatus => $newStatus) {
-            $migrationQuery = new ParametrizedSqlMigrationQuery();
-            $migrationQuery->addSql(
-                $query,
-                ['status_id' => $newStatus, 'status_name' => $oldStatus],
-                ['status_id' => Type::STRING, 'status_name' => Type::STRING]
-            );
-            $queries->addPostQuery($migrationQuery);
-        }
     }
 
     /**
