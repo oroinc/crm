@@ -121,7 +121,7 @@ class Call extends ExtendCall implements DatesAwareInterface
      * @var integer
      *
      * @ORM\Column(name="duration", type="duration", nullable=true)
-     * @Soap\ComplexType("integer", nillable=true)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $duration;
 
@@ -180,7 +180,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     {
         parent::__construct();
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
+        $this->duration = 0;
     }
 
     /**
