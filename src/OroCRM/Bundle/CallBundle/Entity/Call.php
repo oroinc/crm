@@ -288,7 +288,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Set duration
      *
-     * @param \DateTime $duration
+     * @param integer $duration
      * @return Call
      */
     public function setDuration($duration)
@@ -301,7 +301,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Get duration
      *
-     * @return \DateTime
+     * @return integer
      */
     public function getDuration()
     {

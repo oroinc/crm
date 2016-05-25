@@ -32,17 +32,15 @@ class UpdateCallDurationToIntegerQuery extends ParametrizedMigrationQuery
      */
     public function doExecute(LoggerInterface $logger, $dryRun = false)
     {
-        $sql = 'ALTER TABLE orocrm_call CHANGE duration duration INT DEFAULT NULL';
         $platform = $this->connection->getDatabasePlatform();
 
         if ($platform instanceof PostgreSqlPlatform) {
-            $sql = 'ALTER TABLE orocrm_call ALTER duration TYPE integer USING duration::integer';
-        }
+            $sql = 'ALTER TABLE orocrm_call ALTER duration TYPE INT USING duration::integer';
+            $this->logQuery($logger, $sql);
 
-        $this->logQuery($logger, $sql);
-
-        if (!$dryRun) {
-            $this->connection->executeUpdate($sql);
+            if (!$dryRun) {
+                $this->connection->executeUpdate($sql);
+            }
         }
     }
 }

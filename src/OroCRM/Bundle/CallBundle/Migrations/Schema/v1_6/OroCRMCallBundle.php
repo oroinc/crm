@@ -13,6 +13,8 @@ class OroCRMCallBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addPostQuery(new UpdateCallDurationToIntegerQuery());
+        $queries->addPreQuery(new UpdateCallDurationToIntegerQuery());
+        $table = $schema->getTable('orocrm_call');
+        $table->changeColumn('duration', ['type' => 'duration', 'default' => null]);
     }
 }
