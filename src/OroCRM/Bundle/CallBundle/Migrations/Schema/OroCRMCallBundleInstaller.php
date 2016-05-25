@@ -8,6 +8,7 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
+use Oro\Bundle\LocaleBundle\DoctrineExtensions\DBAL\Types\DurationType;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -32,7 +33,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
      */
     public function getMigrationVersion()
     {
-        return 'v1_5';
+        return 'v1_6';
     }
 
     /**
@@ -76,7 +77,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('call_date_time', 'datetime', []);
-        $table->addColumn('duration', 'time', ['notnull' => false]);
+        $table->addColumn('duration', DurationType::getType('duration'), ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
