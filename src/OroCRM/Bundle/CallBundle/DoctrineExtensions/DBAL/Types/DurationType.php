@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\Bundle\CallBundle\DoctrineExtensions\DBAL\Types;
+namespace OroCRM\Bundle\CallBundle\DoctrineExtensions\DBAL\Types;
 
 use Doctrine\DBAL\Types\IntegerType;
 

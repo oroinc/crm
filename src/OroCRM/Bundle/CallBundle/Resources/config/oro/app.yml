@@ -1,4 +1,4 @@
 doctrine:
     dbal:
         types:
-            duration: Oro\Bundle\CallBundle\DoctrineExtensions\DBAL\Types\DurationType
+            duration: OroCRM\Bundle\CallBundle\DoctrineExtensions\DBAL\Types\DurationType
