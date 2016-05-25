@@ -77,7 +77,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('call_date_time', 'datetime', []);
-        $table->addColumn('duration', DurationType::getType('duration'), ['notnull' => false]);
+        $table->addColumn('duration', 'integer', ['notnull' => false]);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
