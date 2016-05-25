@@ -1,0 +1,4 @@
+doctrine:
+    dbal:
+        types:
+            duration: Oro\Bundle\CallBundle\DoctrineExtensions\DBAL\Types\DurationType

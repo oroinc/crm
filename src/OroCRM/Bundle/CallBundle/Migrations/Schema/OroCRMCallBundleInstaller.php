@@ -8,7 +8,7 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
-use Oro\Bundle\LocaleBundle\DoctrineExtensions\DBAL\Types\DurationType;
+use Oro\Bundle\CallBundle\DoctrineExtensions\DBAL\Types\DurationType;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
