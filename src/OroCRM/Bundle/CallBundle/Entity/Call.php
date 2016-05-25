@@ -118,10 +118,10 @@ class Call extends ExtendCall implements DatesAwareInterface
     protected $callStatus;
 
     /**
-     * @var \DateTime
+     * @var integer
      *
      * @ORM\Column(name="duration", type="duration", nullable=true)
-     * @Soap\ComplexType("dateTime", nillable=true)
+     * @Soap\ComplexType("integer", nillable=true)
      */
     protected $duration;
 
