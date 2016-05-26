@@ -31,7 +31,7 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
         if ($this->platform instanceof PostgreSQL92Platform) {
             $queries->addPreQuery(
                 'ALTER TABLE orocrm_call ALTER duration TYPE integer' .
-                ' USING (duration::timestamp)::integer'
+                ' USING (EXTRACT(EPOCH FROM duration))::integer'
             );
         } else {
             $column->setType(Type::getType('duration'));
