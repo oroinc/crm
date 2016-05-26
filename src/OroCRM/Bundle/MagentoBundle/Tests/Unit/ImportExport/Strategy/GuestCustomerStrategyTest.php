@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: vladyslav
- * Date: 5/25/16
- * Time: 6:46 PM
- */
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
