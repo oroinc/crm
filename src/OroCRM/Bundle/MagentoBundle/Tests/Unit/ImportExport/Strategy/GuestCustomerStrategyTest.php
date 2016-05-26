@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
-
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 use OroCRM\Bundle\MagentoBundle\Entity\Store;
