@@ -1,0 +1,57 @@
+workflows:
+    opportunity_flow:
+        transition_definitions:
+            create_definition:
+                post_actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+            develop_definition: ~
+            close_won_definition:
+                conditions:
+                    '@not_empty':
+                        message: 'Close date must be set'
+                        parameters: $close_date
+                post_actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'won'
+                        attribute: $opportunity.status
+                    - '@find_entity':
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: 'won'
+                        attribute: $close_reason
+                    - '@assign_value':
+                        - [$probability, 1]
+                        - [$close_reason_name, 'won']
+            close_lost_definition:
+                conditions:
+                    '@and':
+                        - '@not_empty':
+                            message: 'Close date must be set'
+                            parameters: $close_date
+                        - '@not_empty':
+                            message: 'Close reason must be set'
+                            parameters: $close_reason_name
+                post_actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'lost'
+                        attribute: $opportunity.status
+                    - '@find_entity':
+                        class: OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason
+                        identifier: $close_reason_name
+                        attribute: $close_reason
+                    - '@assign_value':
+                        - [$probability, 0]
+                        - [$close_revenue, 0]
+            reopen_definition:
+                post_actions:
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
+                        identifier: 'in_progress'
+                        attribute: $opportunity.status
+                    - '@assign_value':
+                        - [$close_revenue, null]
+                        - [$close_reason, null]

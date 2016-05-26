@@ -1,0 +1,116 @@
+workflows:
+    opportunity_flow:
+        transitions:
+            __start__:
+                label: Create Opportunity
+                step_to: open
+                is_start: true
+                is_hidden: true
+                is_unavailable_hidden: true
+                transition_definition: create_definition
+            develop:
+                label: Develop
+                step_to: open
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: icon-play
+                    class: btn-primary
+                transition_definition: develop_definition
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                new_item_property_name: firstName
+                                configs:
+                                    allowCreateNew: true
+                                    renderedPropertyName: fullName
+                                    placeholder: orocrm.contact.form.choose_contact
+                                    result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
+                                    selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                        budget_amount: ~
+                        probability: ~
+                        close_date: ~
+                        customer_need:
+                            form_type: oro_resizeable_rich_text
+                        proposed_solution:
+                            form_type: oro_resizeable_rich_text
+            close_won:
+                label: 'Close as Won'
+                step_to: won
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-ok-circle'
+                    class: 'btn-success'
+                transition_definition: close_won_definition
+                form_options:
+                    attribute_fields:
+                        close_revenue: ~
+                        close_date:
+                            options:
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - '@create_date':
+                            parameters:
+                                attribute: $close_date
+                        - '@assign_value': [$close_revenue, $budget_amount]
+            close_lost:
+                label: 'Close as Lost'
+                step_to: lost
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-remove-circle'
+                    class: 'btn-danger'
+                transition_definition: close_lost_definition
+                form_options:
+                    attribute_fields:
+                        close_reason_name:
+                            form_type: choice
+                            options:
+                                required: true
+                                empty_value: false
+                                choices:
+                                    outsold: 'Outsold'
+                                    cancelled: 'Cancelled'
+                                constraints:
+                                    - NotBlank: ~
+                        close_date:
+                            options:
+                                constraints:
+                                    - NotBlank: ~
+                    init_actions:
+                        - '@create_date':
+                            parameters:
+                                attribute: $close_date
+            reopen:
+                label: 'Reopen'
+                step_to: open
+                is_unavailable_hidden: true
+                frontend_options:
+                    icon: 'icon-backward'
+                    class: 'btn-primary'
+                transition_definition: reopen_definition
+                form_options:
+                    attribute_fields:
+                        contact:
+                            form_type: orocrm_contact_select
+                            options:
+                                new_item_property_name: firstName
+                                configs:
+                                    allowCreateNew: true
+                                    renderedPropertyName: fullName
+                                    placeholder: orocrm.contact.form.choose_contact
+                                    result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
+                                    selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
+                        budget_amount: ~
+                        probability: ~
+                        close_date: ~
+                        customer_need:
+                            form_type: oro_resizeable_rich_text
+                        proposed_solution:
+                            form_type: oro_resizeable_rich_text
+                        notes:
+                            form_type: oro_resizeable_rich_text
+                    init_actions:
+                        - '@assign_value': [$probability, null]

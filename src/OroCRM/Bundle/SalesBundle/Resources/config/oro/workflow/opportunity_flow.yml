@@ -1,0 +1,13 @@
+imports:
+    - { resource: 'opportunity_flow/steps.yml' }
+    - { resource: 'opportunity_flow/attributes.yml' }
+    - { resource: 'opportunity_flow/transitions.yml' }
+    - { resource: 'opportunity_flow/transition_definitions.yml' }
+
+workflows:
+    opportunity_flow:
+        label: 'Opportunity Management Flow'
+        entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
+        entity_attribute: opportunity
+        start_step: open
+        steps_display_ordered: true
