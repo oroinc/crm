@@ -11,6 +11,8 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\ImportExport\Strategy;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Store;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
 use OroCRM\Bundle\MagentoBundle\ImportExport\Strategy\GuestCustomerStrategy;
 
 class GuestCustomerStrategyTest extends AbstractStrategyTest
@@ -47,10 +49,30 @@ class GuestCustomerStrategyTest extends AbstractStrategyTest
 
     public function testProcessEmptyEntity()
     {
-        $customer = new Customer();
-        $customer->setChannel(new Channel());
+        $customer = $this->getCustomer();
 
         $this->assertNotEmpty($this->getStrategy()->process($customer));
     }
 
+    public function testProcessEntityWithStore()
+    {
+        $store = new Store();
+        $store->setWebsite(new Website());
+
+        $customer = $this->getCustomer();
+        $customer->setStore($store);
+
+        $this->assertNotEmpty($this->getStrategy()->process($customer));
+    }
+
+    /**
+     * @return Customer
+     */
+    private function getCustomer()
+    {
+        $customer = new Customer();
+        $customer->setChannel(new Channel());
+
+        return $customer;
+    }
 }

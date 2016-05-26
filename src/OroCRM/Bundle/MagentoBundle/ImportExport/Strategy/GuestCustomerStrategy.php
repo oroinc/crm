@@ -79,7 +79,6 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             $entity->setWebsite($website);
             $this->setDefaultGroup($entity, $website);
         }
-
     }
 
     /**
@@ -88,7 +87,7 @@ class GuestCustomerStrategy extends AbstractImportStrategy
      */
     protected function setDefaultGroup(Customer $entity, Website $customerWebsite)
     {
-        if (!$entity->getGroup() && $customerWebsite && $customerWebsite->getDefaultGroupId()) {
+        if (!$entity->getGroup() && $customerWebsite->getDefaultGroupId()) {
             $em = $this->strategyHelper->getEntityManager('OroCRMMagentoBundle:CustomerGroup');
             $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
                 ->findOneBy(
