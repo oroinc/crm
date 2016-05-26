@@ -37,24 +37,16 @@ class OroCRMSalesBundleInstaller implements
     AttachmentExtensionAwareInterface,
     ActivityListExtensionAwareInterface
 {
-    /**
-     * @var ExtendExtension
-     */
+    /** @var ExtendExtension */
     protected $extendExtension;
 
-    /**
-     * @var NoteExtension
-     */
+    /** @var NoteExtension */
     protected $noteExtension;
 
-    /**
-     * @var ActivityExtension
-     */
+    /** @var ActivityExtension */
     protected $activityExtension;
 
-    /**
-     * @var AttachmentExtension
-     */
+    /** @var AttachmentExtension */
     protected $attachmentExtension;
 
     /** @var ActivityListExtension */

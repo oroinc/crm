@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 use OroCRM\Bundle\CaseBundle\Entity\CaseComment;
 use OroCRM\Bundle\CaseBundle\Entity\CaseEntity;
@@ -16,6 +17,8 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     const CASES_COUNT = 20;
     const MIN_COMMENTS_PER_CASE = 0;
     const MAX_COMMENTS_PER_CASE = 20;
@@ -86,11 +89,6 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected $entityManager;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * @var array
      */
     protected $entitiesCount;
@@ -122,7 +120,6 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
 
         for ($i = 0; $i < self::CASES_COUNT; ++$i) {
             $subject = self::$fixtureSubjects[$i];
-            $description = self::$fixtureText[$i];
 
             if ($manager->getRepository('OroCRMCaseBundle:CaseEntity')->findOneBySubject($subject)) {
                 // Case with this title is already exist
@@ -266,13 +263,5 @@ class LoadCaseEntityData extends AbstractFixture implements DependentFixtureInte
     protected function getRandomText()
     {
         return self::$fixtureText[rand(0, count(self::$fixtureText) - 1)];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 }

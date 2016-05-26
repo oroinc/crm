@@ -21,8 +21,6 @@ class UpdateOpportunityStatus implements
     /** @var ContainerInterface */
     protected $container;
 
-    protected $extendExtension;
-
     /**
      * {@inheritdoc}
      */
