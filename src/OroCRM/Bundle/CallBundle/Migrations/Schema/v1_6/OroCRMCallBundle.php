@@ -2,19 +2,40 @@
 
 namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_6;
 
+use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
+
+use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class OroCRMCallBundle implements Migration
+class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    /** @var AbstractPlatform */
+    protected $platform;
+
+    /** {@inheritdoc} */
+    public function setDatabasePlatform(AbstractPlatform $platform)
+    {
+        $this->platform = $platform;
+    }
+
+    /** {@inheritdoc} */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addPreQuery(new UpdateCallDurationToIntegerQuery());
         $table = $schema->getTable('orocrm_call');
-        $table->changeColumn('duration', ['type' => 'duration', 'default' => null]);
+        $column = $table->getColumn('duration');
+
+        if ($this->platform instanceof PostgreSQL92Platform) {
+            $queries->addPreQuery(
+                'ALTER TABLE orocrm_call ALTER duration TYPE integer' .
+                ' USING (duration::timestamp)::integer'
+            );
+        } else {
+            $column->setType(Type::getType('duration'));
+        }
+        $column->setOptions(['comment' => '(DC2Type:duration)']);
     }
 }

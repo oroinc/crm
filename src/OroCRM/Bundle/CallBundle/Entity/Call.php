@@ -59,7 +59,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 class Call extends ExtendCall implements DatesAwareInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -118,7 +118,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     protected $callStatus;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="duration", type="duration", nullable=true)
      * @Soap\ComplexType("int", nillable=true)
@@ -186,7 +186,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -288,7 +288,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Set duration
      *
-     * @param integer $duration
+     * @param int $duration
      * @return Call
      */
     public function setDuration($duration)
@@ -301,7 +301,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Get duration
      *
-     * @return integer
+     * @return int
      */
     public function getDuration()
     {
