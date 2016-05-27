@@ -11,8 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class AddNewDuration
-    implements Migration, DatabasePlatformAwareInterface, OrderedMigrationInterface
+class AddNewDuration implements Migration, DatabasePlatformAwareInterface, OrderedMigrationInterface
 {
     /** @var AbstractPlatform */
     protected $platform;
