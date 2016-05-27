@@ -36,7 +36,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
             'oro_jqueryselect2_hidden' => new TestForm('oro_jqueryselect2_hidden')
         ];
         $this->contextAccessor = $this
-            ->getMockBuilder('Oro\Component\Action\Model\ContextAccessor')
+            ->getMockBuilder('Oro\Bundle\WorkflowBundle\Model\ContextAccessor')
             ->setMethods(['getValue'])
             ->getMock();
 
