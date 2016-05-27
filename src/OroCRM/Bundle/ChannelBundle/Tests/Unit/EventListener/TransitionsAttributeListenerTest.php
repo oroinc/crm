@@ -9,6 +9,7 @@ use Symfony\Component\PropertyAccess\PropertyPath;
 use Oro\Bundle\WorkflowBundle\Model\Attribute;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
@@ -23,7 +24,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     /** @var TransitionsAttributeListener */
     protected $listener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ContextAccessor */
     protected $contextAccessor;
 
     protected function setUp()
