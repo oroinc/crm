@@ -118,7 +118,7 @@ class WorkflowTest extends Selenium2TestCase
         /** @var SalesFunnels $login */
         $login = $this->login();
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Sales', $funnelId)
+            ->filterBy('Sales', $funnelId, 'equals')
             ->open(array($funnelId))
             ->assertTitle('Sales Process #' . $funnelId . ' - Sales Processes - Sales')
             ->reopen()
@@ -224,7 +224,7 @@ class WorkflowTest extends Selenium2TestCase
         $login = $this->login();
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Sales', $funnelId)
+            ->filterBy('Sales', $funnelId, 'equals')
             ->open(array($funnelId))
             ->assertTitle('Sales Process #' . $funnelId . ' - Sales Processes - Sales')
             ->reopen()
