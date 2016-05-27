@@ -6,7 +6,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
-use Oro\Component\Action\Model\ContextAccessor;
+use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\AbstractChannelAwareType;
 

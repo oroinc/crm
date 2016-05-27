@@ -6,9 +6,10 @@ use Symfony\Component\Form\Forms;
 use Symfony\Component\Form\PreloadedExtension;
 use Symfony\Component\PropertyAccess\PropertyPath;
 
-use Oro\Bundle\ActionBundle\Model\Attribute;
+use Oro\Bundle\WorkflowBundle\Model\Attribute;
 use Oro\Bundle\WorkflowBundle\Event\TransitionsAttributeEvent;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Model\ContextAccessor;
 
 use OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener;
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelEntityType;
@@ -23,7 +24,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
     /** @var TransitionsAttributeListener */
     protected $listener;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|ContextAccessor */
     protected $contextAccessor;
 
     protected function setUp()
@@ -36,7 +37,7 @@ class TransitionsAttributeListenerTest extends \PHPUnit_Framework_TestCase
             'oro_jqueryselect2_hidden' => new TestForm('oro_jqueryselect2_hidden')
         ];
         $this->contextAccessor = $this
-            ->getMockBuilder('Oro\Component\Action\Model\ContextAccessor')
+            ->getMockBuilder('Oro\Bundle\WorkflowBundle\Model\ContextAccessor')
             ->setMethods(['getValue'])
             ->getMock();
 
