@@ -29,6 +29,18 @@ workflows:
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
+                        status:
+                            form_type: oro_enum_select
+                            options:
+                                enum_code: opportunity_status
+                                required: true
+                                empty_value: false
+                                constraints:
+                                    - NotBlank: ~
+                                choice_label: name
+                                disabled_choices:
+                                    - won
+                                    - lost
                         probability: ~
                         close_date: ~
                         customer_need:
@@ -104,6 +116,18 @@ workflows:
                                     result_template_twig: 'OroFormBundle:Autocomplete:fullName/result.html.twig'
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
+                        status:
+                            form_type: oro_enum_select
+                            options:
+                                enum_code: opportunity_status
+                                required: true
+                                empty_value: false
+                                constraints:
+                                    - NotBlank: ~
+                                choice_label: name
+                                disabled_choices:
+                                    - won
+                                    - lost
                         probability: ~
                         close_date: ~
                         customer_need:
@@ -114,3 +138,8 @@ workflows:
                             form_type: oro_resizeable_rich_text
                     init_actions:
                         - '@assign_value': [$probability, null]
+                        - '@request_enum_entity':
+                            enum_code: opportunity_status
+                            order_by:
+                                priority: ASC
+                            attribute: $opportunity.status
