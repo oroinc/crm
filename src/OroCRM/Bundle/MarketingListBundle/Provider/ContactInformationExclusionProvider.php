@@ -4,15 +4,14 @@ namespace OroCRM\Bundle\MarketingListBundle\Provider;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
-use Oro\Bundle\EntityBundle\Provider\ExclusionProviderInterface;
+use Oro\Bundle\EntityBundle\Provider\AbstractExclusionProvider;
 use Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider;
 
 /**
  * Provide exclude logic to filter entities with "contact_information" data
  */
-class ContactInformationExclusionProvider implements ExclusionProviderInterface
+class ContactInformationExclusionProvider extends AbstractExclusionProvider
 {
     /**
      * @var ConfigProvider
@@ -48,7 +47,7 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
             return false;
         }
 
-        /** @var ClassMetadataInfo $metadata */
+        /** @var ClassMetadata $metadata */
         $metadata = $this->managerRegistry->getManagerForClass($className)->getClassMetadata($className);
         foreach ($metadata->getFieldNames() as $fieldName) {
             if ($this->entityConfigProvider->hasConfig($className, $fieldName)) {
@@ -60,21 +59,5 @@ class ContactInformationExclusionProvider implements ExclusionProviderInterface
         }
 
         return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isIgnoredField(ClassMetadata $metadata, $fieldName)
-    {
-        return false;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isIgnoredRelation(ClassMetadata $metadata, $associationName)
-    {
-        return false;
     }
 }
