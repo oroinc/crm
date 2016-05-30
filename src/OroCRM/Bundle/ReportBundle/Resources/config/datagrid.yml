@@ -171,7 +171,7 @@ datagrid:
         filters:
             columns:
                 createdDate:   { type: date, data_name: createdDate, filter_by_having: true }
-                leadsCount:    { type: number, data_name: leadsCount, filter_by_having: true }
+                leadsCount:    { type: number-range, data_name: leadsCount, filter_by_having: true }
         options:
             entityHint: report data
             export: true
@@ -243,7 +243,7 @@ datagrid:
                     data_name: status.id
                     enum_code: opportunity_status
                 numberOfOpportunities:
-                    type: number
+                    type: number-range
                     data_name: numberOfOpportunities
                     filter_by_having: true
                 closeRevenue:
@@ -346,7 +346,7 @@ datagrid:
                                 quarterPeriod:  Quarterly
                                 yearPeriod:     Yearly
                 cnt:
-                    type: number
+                    type: number-range
                     data_name: cnt
                     filter_by_having: true
                 value:
@@ -434,7 +434,7 @@ datagrid:
                         lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
                         data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 inProgressCount:
-                    type:      number
+                    type:      number-range
                     data_name: inProgressCount
                     filter_by_having: true
                     options:

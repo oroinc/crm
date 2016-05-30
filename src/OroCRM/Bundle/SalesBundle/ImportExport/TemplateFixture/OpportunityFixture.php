@@ -51,7 +51,7 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
             case 'Jerry Coleman':
                 $entity->setName('Oro Inc. Opportunity Name');
                 $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
-                $entity->setDataChannel($channelRepo->getEntity('B2b channel|b2b'));
+                $entity->setDataChannel($channelRepo->getEntity('Sales channel|b2b'));
                 $entity->setCreatedAt(new \DateTime());
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setOwner($userRepo->getEntity('John Doo'));

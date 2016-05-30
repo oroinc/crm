@@ -4,19 +4,18 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
 
 use Doctrine\DBAL\Schema\Schema;
 
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class RemoveOpportunityStatusFK implements Migration, OrderedMigrationInterface
+class UpdateReport implements Migration, OrderedMigrationInterface
 {
     /**
      * {@inheritdoc}
      */
     public function getOrder()
     {
-        return 3;
+        return 5;
     }
 
     /**
@@ -24,9 +23,6 @@ class RemoveOpportunityStatusFK implements Migration, OrderedMigrationInterface
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $table = $schema->getTable('orocrm_sales_opportunity');
-        if ($table->hasForeignKey('FK_C0FE4AAC6625D392')) {
-            $table->removeForeignKey('FK_C0FE4AAC6625D392');
-        }
+        $queries->addQuery(new UpdateReportQuery());
     }
 }
