@@ -25,7 +25,6 @@ class AddNewDuration implements Migration, DatabasePlatformAwareInterface
     /** {@inheritdoc} */
     public function up(Schema $schema, QueryBag $queries)
     {
-        // backup old column for migration
         $queries->addPreQuery($this->getPlatformSQL());
     }
 
