@@ -10,4 +10,3 @@ workflows:
         entity: OroCRM\Bundle\SalesBundle\Entity\Opportunity
         entity_attribute: opportunity
         start_step: open
-        steps_display_ordered: false

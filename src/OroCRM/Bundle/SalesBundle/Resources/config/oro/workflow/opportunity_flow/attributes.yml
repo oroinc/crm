@@ -25,3 +25,6 @@ workflows:
             close_date:
                 label: orocrm.sales.opportunity.close_date.label
                 property_path: opportunity.closeDate
+            status:
+                label: orocrm.sales.opportunity.status.label
+                property_path: opportunity.status
