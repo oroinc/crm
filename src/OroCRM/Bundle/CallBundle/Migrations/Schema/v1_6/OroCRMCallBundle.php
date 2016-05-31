@@ -11,7 +11,7 @@ use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
-class AddNewDuration implements Migration, DatabasePlatformAwareInterface
+class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
 {
     /** @var AbstractPlatform */
     protected $platform;
@@ -40,6 +40,10 @@ class AddNewDuration implements Migration, DatabasePlatformAwareInterface
                           ' EXTRACT(MINUTE FROM duration_old) * 60 +' .
                           ' EXTRACT(SECOND FROM duration_old) * 1';
 
+        $migrateEntityConfigFieldSQL = 'UPDATE oro_entity_config_field' .
+                                       ' SET type = \'duration\'' .
+                                       ' WHERE type = \'time\'';
+
         if ($this->platform instanceof PostgreSQL92Platform) {
             return new SqlMigrationQuery(
                 [
@@ -47,6 +51,7 @@ class AddNewDuration implements Migration, DatabasePlatformAwareInterface
                     'ALTER TABLE orocrm_call ADD COLUMN duration int NULL DEFAULT NULL',
                     'COMMENT ON COLUMN orocrm_call.duration IS \'(DC2Type:duration)\'',
                     $migrateDataSQL,
+                    $migrateEntityConfigFieldSQL,
                     'ALTER TABLE orocrm_call DROP COLUMN duration_old',
                 ]
             );
@@ -59,6 +64,7 @@ class AddNewDuration implements Migration, DatabasePlatformAwareInterface
                 'ALTER TABLE orocrm_call ADD COLUMN' .
                 ' duration int NULL DEFAULT NULL COMMENT \'(DC2Type:duration)\'',
                 $migrateDataSQL,
+                $migrateEntityConfigFieldSQL,
                 'ALTER TABLE orocrm_call DROP COLUMN duration_old',
             ]
         );
