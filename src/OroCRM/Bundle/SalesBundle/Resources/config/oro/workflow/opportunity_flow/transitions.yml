@@ -38,7 +38,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_choices:
+                                disabled_values:
                                     - won
                                     - lost
                         probability: ~
@@ -125,7 +125,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_choices:
+                                disabled_values:
                                     - won
                                     - lost
                         probability: ~
