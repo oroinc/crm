@@ -40,10 +40,6 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
                           ' EXTRACT(MINUTE FROM duration_old) * 60 +' .
                           ' EXTRACT(SECOND FROM duration_old) * 1';
 
-        $migrateEntityConfigFieldSQL = 'UPDATE oro_entity_config_field' .
-                                       ' SET type = \'duration\'' .
-                                       ' WHERE type = \'time\'';
-
         if ($this->platform instanceof PostgreSQL92Platform) {
             return new SqlMigrationQuery(
                 [
@@ -51,7 +47,7 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
                     'ALTER TABLE orocrm_call ADD COLUMN duration int NULL DEFAULT NULL',
                     'COMMENT ON COLUMN orocrm_call.duration IS \'(DC2Type:duration)\'',
                     $migrateDataSQL,
-                    $migrateEntityConfigFieldSQL,
+                    $this->getPlatformUpdateEntityConfigTypeSQL(),
                     'ALTER TABLE orocrm_call DROP COLUMN duration_old',
                 ]
             );
@@ -59,14 +55,33 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
 
         return new SqlMigrationQuery(
             [
-                'ALTER TABLE orocrm_call CHANGE COLUMN' .
-                ' duration duration_old TIME NULL DEFAULT NULL',
-                'ALTER TABLE orocrm_call ADD COLUMN' .
-                ' duration int NULL DEFAULT NULL COMMENT \'(DC2Type:duration)\'',
+                'ALTER TABLE orocrm_call CHANGE duration duration_old TIME NULL DEFAULT NULL',
+                'ALTER TABLE orocrm_call ADD COLUMN duration int NULL DEFAULT NULL' .
+                ' COMMENT \'(DC2Type:duration)\'',
                 $migrateDataSQL,
-                $migrateEntityConfigFieldSQL,
+                $this->getPlatformUpdateEntityConfigTypeSQL(),
                 'ALTER TABLE orocrm_call DROP COLUMN duration_old',
             ]
         );
+    }
+
+    private function getPlatformUpdateEntityConfigTypeSQL()
+    {
+        $callEntityClass = addslashes('OroCRM\\Bundle\\CallBundle\\Entity\\Call');
+
+        if ($this->platform instanceof PostgreSQL92Platform) {
+            return 'UPDATE oro_entity_config_field AS f' .
+                   ' SET f.type=\'duration\'' .
+                   ' FROM oro_entity_config AS c' .
+                   ' WHERE f.entity_id = c.id' .
+                   ' AND c.class_name = \'' . $callEntityClass . '\'' .
+                   ' AND f.field_name = \'duration\'';
+        }
+
+        return 'UPDATE oro_entity_config_field AS f' .
+               ' INNER JOIN oro_entity_config c ON f.entity_id = c.id' .
+               ' SET f.type = \'duration\'' .
+               ' WHERE c.class_name = \'' . $callEntityClass . '\'' .
+               ' AND f.field_name = \'duration\'';
     }
 }
