@@ -6,7 +6,7 @@
     "homepage": "https://github.com/orocrm/CallBundle",
     "license": "MIT",
     "require": {
-        "php": ">=5.4",
+        "php": ">=5.5.9",
         "symfony/symfony": "2.7.*",
         "friendsofsymfony/rest-bundle": "1.5.0-RC2",
         "nelmio/api-doc-bundle": "dev-master",
