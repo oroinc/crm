@@ -53,11 +53,12 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', 'orocrm_magento_order');
-        if (!$schema->hasTable($associationTableName)) {
+        if ($schema->hasTable('orocrm_task') && !$schema->hasTable($associationTableName)) {
             $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_order');
         }
 
-        $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', 'orocrm_magento_order');
+        $associationTableName = $activityExtension
+            ->getAssociationTableName('oro_calendar_event', 'orocrm_magento_order');
         if (!$schema->hasTable($associationTableName)) {
             $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_order');
         }
