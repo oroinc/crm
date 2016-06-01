@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
@@ -34,14 +35,13 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
 
 class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
+    use ContainerAwareTrait;
+
     const TAX              = 0.0838;
     const INTEGRATION_NAME = 'Demo Web store';
 
     /** @var array */
     protected $users;
-
-    /** @var BuilderFactory */
-    protected $factory;
 
     /** @var  Channel */
     protected $dataChannel;
@@ -57,14 +57,6 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         return [
             'OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM\LoadContactData'
         ];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->factory = $container->get('orocrm_channel.builder.factory');
     }
 
     /**
@@ -105,7 +97,9 @@ class LoadMagentoData extends AbstractFixture implements ContainerAwareInterface
         $integration->setOrganization($this->organization);
         $om->persist($integration);
 
-        $builder = $this->factory->createBuilderForIntegration($integration);
+        /** @var $factory BuilderFactory */
+        $factory = $this->container->get('orocrm_channel.builder.factory');
+        $builder = $factory->createBuilderForIntegration($integration);
         $builder->setOwner($integration->getOrganization());
         $builder->setDataSource($integration);
         $builder->setStatus($integration->isEnabled() ? Channel::STATUS_ACTIVE : Channel::STATUS_INACTIVE);
