@@ -5,9 +5,11 @@ namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_6;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Platforms\PostgreSQL92Platform;
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\Extension\DatabasePlatformAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 
@@ -25,7 +27,24 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
     /** {@inheritdoc} */
     public function up(Schema $schema, QueryBag $queries)
     {
+        // migrate column to new type
         $queries->addPreQuery($this->getPlatformSQL());
+
+        // migrate oro_entity_config_field
+        $entityClass = 'OroCRM\\Bundle\\CallBundle\\Entity\\Call';
+
+        $migrateFieldSql = 'UPDATE oro_entity_config_field SET type = :field_type' .
+                           ' WHERE field_name = :field_name' .
+                           ' AND entity_id IN' .
+                           ' (SELECT id FROM oro_entity_config WHERE class_name = :class_name)';
+        $migrateEntityFieldQuery = new ParametrizedSqlMigrationQuery();
+        $migrateEntityFieldQuery->addSql(
+            $migrateFieldSql,
+            ['field_type' => 'duration', 'field_name' => 'duration', 'class_name' => $entityClass],
+            ['field_type' => Type::STRING, 'field_name' => Type::STRING, 'class_name' => Type::STRING]
+        );
+
+        $queries->addPostQuery($migrateEntityFieldQuery);
     }
 
     /**
@@ -47,7 +66,6 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
                     'ALTER TABLE orocrm_call ADD COLUMN duration int NULL DEFAULT NULL',
                     'COMMENT ON COLUMN orocrm_call.duration IS \'(DC2Type:duration)\'',
                     $migrateDataSQL,
-                    $this->getPlatformUpdateEntityConfigTypeSQL(),
                     'ALTER TABLE orocrm_call DROP COLUMN duration_old',
                 ]
             );
@@ -59,29 +77,8 @@ class OroCRMCallBundle implements Migration, DatabasePlatformAwareInterface
                 'ALTER TABLE orocrm_call ADD COLUMN duration int NULL DEFAULT NULL' .
                 ' COMMENT \'(DC2Type:duration)\'',
                 $migrateDataSQL,
-                $this->getPlatformUpdateEntityConfigTypeSQL(),
                 'ALTER TABLE orocrm_call DROP COLUMN duration_old',
             ]
         );
-    }
-
-    private function getPlatformUpdateEntityConfigTypeSQL()
-    {
-        $callEntityClass = addslashes('OroCRM\\Bundle\\CallBundle\\Entity\\Call');
-
-        if ($this->platform instanceof PostgreSQL92Platform) {
-            return 'UPDATE oro_entity_config_field AS f' .
-                   ' SET f.type=\'duration\'' .
-                   ' FROM oro_entity_config AS c' .
-                   ' WHERE f.entity_id = c.id' .
-                   ' AND c.class_name = \'' . $callEntityClass . '\'' .
-                   ' AND f.field_name = \'duration\'';
-        }
-
-        return 'UPDATE oro_entity_config_field AS f' .
-               ' INNER JOIN oro_entity_config c ON f.entity_id = c.id' .
-               ' SET f.type = \'duration\'' .
-               ' WHERE c.class_name = \'' . $callEntityClass . '\'' .
-               ' AND f.field_name = \'duration\'';
     }
 }
