@@ -4,7 +4,6 @@ parameters:
     orocrm_activity_contact.provider.class:                           OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider
     orocrm_activity_contact.listener.activity_listener.class:         OroCRM\Bundle\ActivityContactBundle\EventListener\ActivityListener
     orocrm_activity_contact.email_activity_direction.provider.class:  OroCRM\Bundle\ActivityContactBundle\Provider\EmailDirectionProvider
-    orocrm_activity_contact.call_activity_direction.provider.class:   OroCRM\Bundle\ActivityContactBundle\Provider\CallDirectionProvider
     orocrm_activity_contact.entity_activity_contact_data_provider.class: OroCRM\Bundle\ActivityContactBundle\Provider\EntityActivityContactDataProvider
     orocrm_activity_contact.placeholder.filter.class: OroCRM\Bundle\ActivityContactBundle\Placeholder\PlaceholderFilter
 
@@ -49,12 +48,6 @@ services:
         tags:
             - {name: orocrm_activity_direction.provider}
 
-    orocrm_activity_contact.call_activity_direction.provider:
-        class: %orocrm_activity_contact.call_activity_direction.provider.class%
-        arguments:
-            - "@oro_activity.manager"
-        tags:
-           - {name: orocrm_activity_direction.provider}
 
     orocrm_activity_contact.entity_activity_contact_data_provider:
         class: %orocrm_activity_contact.entity_activity_contact_data_provider.class%
