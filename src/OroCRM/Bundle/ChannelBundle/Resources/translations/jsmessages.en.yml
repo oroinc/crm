@@ -14,7 +14,7 @@ orocrm:
         form:
             entity: Please select entity
         confirmation:
-            delete_confirmation: Attention: removing the integration from the channel will completely delete it from the system. Proceed?
+            delete_confirmation: 'Attention: removing the integration from the channel will completely delete it from the system. Proceed?'
             text:                Are you sure you want to change channel type?
             title:               Change Channel Type
             agree:               Yes

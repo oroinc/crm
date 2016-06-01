@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\ActivityContactBundle\Tests\Integration\Command;
+namespace OroCRM\Bundle\ActivityContactBundle\Tests\Functional\Command;
 
 use Doctrine\ORM\EntityManager;
 

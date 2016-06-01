@@ -81,7 +81,7 @@ class B2BCustomer extends AbstractPageEntity
 
     public function edit()
     {
-        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit B2B customer']")
+        $this->test->byXpath("//div[@class='pull-left btn-group icons-holder']/a[@title = 'Edit Business Customer']")
             ->click();
         $this->waitPageToLoad();
         $this->waitForAjax();

@@ -41,7 +41,16 @@ class ContextCustomerReaderTest extends MagentoConnectorTestCase
     {
         $connector = $this->getConnector($this->transportMock, $this->stepExecutionMock);
 
-        $iterator = $this->getMock('\Iterator');
+        $iterator = $this
+            ->getMockForAbstractClass(
+                '\Iterator',
+                [],
+                '',
+                true,
+                true,
+                true,
+                ['setEntitiesIdsBuffer']
+            );
         $iterator->expects($this->never())->method('setEntitiesIdsBuffer');
 
         $this->transportMock->expects($this->at(0))->method($this->getIteratorGetterMethodName())

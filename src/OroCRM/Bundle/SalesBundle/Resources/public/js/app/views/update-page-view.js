@@ -19,17 +19,17 @@ define(function(require) {
             this.initLayout().then(_.bind(this.afterLayoutInit, this));
         },
 
-        afterLayoutInit: function () {
+        afterLayoutInit: function() {
             var customer = this.pageComponent('orocrm_sales_opportunity_form_customer').$sourceElement;
             var channel = this.pageComponent('orocrm_sales_opportunity_form_dataChannel').view.$el;
 
-            customer.on('change', function (e) {
+            customer.on('change', function(e) {
                 if (e.added && e.added['dataChannel.id']) {
                     channel.val(e.added['dataChannel.id']).trigger('change.select2');
                 }
             });
 
-            channel.on('change', function (e) {
+            channel.on('change', function(e) {
                 var value = customer.val();
                 if (value) {
                     value = JSON.parse(value);

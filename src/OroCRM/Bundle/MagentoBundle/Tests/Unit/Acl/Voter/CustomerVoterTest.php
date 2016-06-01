@@ -76,18 +76,49 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
     {
         $className = 'OroCRM\Bundle\MagentoBundle\Entity\Customer';
         $objectIdentityClass = 'Symfony\Component\Security\Acl\Model\ObjectIdentityInterface';
-        $objectIdentity = $this->getMock($objectIdentityClass);
-        $objectIdentity->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue($className));
+
 
         return [
             // has not applicable channels
-            [$objectIdentity, $objectIdentityClass, ['VIEW'], false, false, CustomerVoter::ACCESS_ABSTAIN],
-            [$objectIdentity, $objectIdentityClass, ['CREATE'], false, false, CustomerVoter::ACCESS_DENIED],
-            [$objectIdentity, $objectIdentityClass, ['EDIT'], false, false, CustomerVoter::ACCESS_DENIED],
-            [$objectIdentity, $objectIdentityClass, ['DELETE'], false, false, CustomerVoter::ACCESS_ABSTAIN],
-            [$objectIdentity, $objectIdentityClass, ['ASSIGN'], false, false, CustomerVoter::ACCESS_ABSTAIN],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass, ['VIEW'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['CREATE'],
+                false,
+                false,
+                CustomerVoter::ACCESS_DENIED
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['EDIT'],
+                false,
+                false,
+                CustomerVoter::ACCESS_DENIED
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['DELETE'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['ASSIGN'],
+                false,
+                false,
+                CustomerVoter::ACCESS_ABSTAIN
+            ],
             // channel not applicable
             [$this->getCustomer(), $className, ['VIEW'], true, false, CustomerVoter::ACCESS_ABSTAIN],
             [$this->getCustomer(), $className, ['CREATE'], true, false, CustomerVoter::ACCESS_DENIED],
@@ -116,6 +147,22 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
     }
 
     /**
+     * @param string $objectIdentityClass
+     * @param string $className
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|Customer
+     */
+    public function getObjectIdentity($objectIdentityClass, $className)
+    {
+        $objectIdentity = $this->getMock($objectIdentityClass);
+        $objectIdentity->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue($className));
+
+        return $objectIdentity;
+    }
+
+    /**
      * @param int $originId
      *
      * @return \PHPUnit_Framework_MockObject_MockObject|Customer
@@ -129,7 +176,7 @@ class CustomerVoterTest extends AbstractTwoWaySyncVoterTest
             ->will($this->returnValue($channel));
 
         if ($originId) {
-            $customer->expects($this->once())
+            $customer->expects($this->any())
                 ->method('getOriginId')
                 ->will($this->returnValue($originId));
         }

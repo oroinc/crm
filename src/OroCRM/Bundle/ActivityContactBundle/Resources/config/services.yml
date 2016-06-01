@@ -64,3 +64,12 @@ services:
     orocrm_activity_contact.placeholder.filter:
         class: %orocrm_activity_contact.placeholder.filter.class%
         parent: oro_activity_list.placeholder.filter
+
+    orocrm_activity_contact.api.get_config.update_activity_contact_fields:
+        class: OroCRM\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields
+        arguments:
+            - '@oro_entity_config.config_manager'
+            - '@orocrm_activity_contact.provider'
+            - ['create', 'update']
+        tags:
+            - { name: oro.api.processor, action: get_config, extra: definition, priority: -45 }

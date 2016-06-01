@@ -15,12 +15,13 @@ class CartItemCollectionType extends AbstractType
     {
         $resolver->setNormalizers(
             [
-                'options' => function (Options $options, $options) {
-                    if (!$options) {
-                        $options = [];
+                'options' => function (Options $options, $values) {
+                    if (!$values) {
+                        $values = [];
                     }
-                    $options['single_form'] = false;
-                    return $options;
+                    $values['single_form'] = false;
+
+                    return $values;
                 }
             ]
         );
