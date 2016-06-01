@@ -76,18 +76,36 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
     {
         $className = 'OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber';
         $objectIdentityClass = 'Symfony\Component\Security\Acl\Model\ObjectIdentityInterface';
-        $objectIdentity = $this->getMock($objectIdentityClass);
-        $objectIdentity->expects($this->any())
-            ->method('getType')
-            ->will($this->returnValue($className));
+
 
         return [
             // has not applicable channels
-            [$objectIdentity, $objectIdentityClass, ['VIEW'], false, false, NewsletterSubscriberVoter::ACCESS_ABSTAIN],
-            [$objectIdentity, $objectIdentityClass, ['CREATE'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
-            [$objectIdentity, $objectIdentityClass, ['EDIT'], false, false, NewsletterSubscriberVoter::ACCESS_DENIED],
             [
-                $objectIdentity,
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['VIEW'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_ABSTAIN,
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['CREATE'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_DENIED,
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
+                $objectIdentityClass,
+                ['EDIT'],
+                false,
+                false,
+                NewsletterSubscriberVoter::ACCESS_DENIED,
+            ],
+            [
+                $this->getObjectIdentity($objectIdentityClass, $className),
                 $objectIdentityClass,
                 ['DELETE'],
                 false,
@@ -95,7 +113,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
                 NewsletterSubscriberVoter::ACCESS_ABSTAIN
             ],
             [
-                $objectIdentity,
+                $this->getObjectIdentity($objectIdentityClass, $className),
                 $objectIdentityClass,
                 ['ASSIGN'],
                 false,
@@ -171,6 +189,22 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
     }
 
     /**
+     * @param string $objectIdentityClass
+     * @param string $className
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject|NewsletterSubscriber
+     */
+    public function getObjectIdentity($objectIdentityClass, $className)
+    {
+        $objectIdentity = $this->getMock($objectIdentityClass);
+        $objectIdentity->expects($this->any())
+            ->method('getType')
+            ->will($this->returnValue($className));
+
+        return $objectIdentity;
+    }
+
+    /**
      * @param bool $hasCustomer
      * @param int $customerOriginId
      *
@@ -188,7 +222,7 @@ class NewsletterSubscriberVoterTest extends AbstractTwoWaySyncVoterTest
         if ($hasCustomer) {
             $customer = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\Customer');
 
-            $newsletterSubscriber->expects($this->atLeastOnce())
+            $newsletterSubscriber->expects($this->any())
                 ->method('getCustomer')
                 ->will($this->returnValue($customer));
 

@@ -9,6 +9,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
@@ -71,7 +72,7 @@ class Opportunity extends ExtendOpportunity implements
 {
     use ChannelEntityTrait;
 
-    const INTERNAL_STATE_CODE = 'opportunity_state';
+    const INTERNAL_STATUS_CODE = 'opportunity_status';
 
     /**
      * @var int
@@ -88,25 +89,6 @@ class Opportunity extends ExtendOpportunity implements
      * )
      */
     protected $id;
-
-    /**
-     * @var OpportunityStatus
-     * @deprecated 1.12.0:1.14.0 Will be renamed to state
-     *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus")
-     * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=90,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     **/
-    protected $status;
 
     /**
      * @var OpportunityCloseReason
@@ -129,7 +111,7 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var Contact
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
+     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -398,7 +380,11 @@ class Opportunity extends ExtendOpportunity implements
     /**
      * @var B2bCustomer
      *
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="opportunities")
+     * @ORM\ManyToOne(
+     *     targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer",
+     *     inversedBy="opportunities",
+     *     cascade={"persist"}
+     * )
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
      * @Oro\Versioned
      * @ConfigField(
@@ -596,27 +582,6 @@ class Opportunity extends ExtendOpportunity implements
     }
 
     /**
-     * @param  OpportunityStatus $status
-     * @return Opportunity
-     * @deprecated 1.12.0:1.14.0 Use $this->setState() instead
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * @return OpportunityStatus
-     * @deprecated 1.12.0:1.14.0 Use $this->getState() instead
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * @param  string      $name
      * @return Opportunity
      */
@@ -797,19 +762,6 @@ class Opportunity extends ExtendOpportunity implements
     public function getCustomer()
     {
         return $this->customer;
-    }
-
-    /**
-     * @ORM\PrePersist
-     */
-    public function prePersist(LifecycleEventArgs $eventArgs)
-    {
-        if (!$this->status) {
-            $em = $eventArgs->getEntityManager();
-            /** @var LeadStatus $defaultStatus */
-            $defaultStatus = $em->getReference('OroCRMSalesBundle:OpportunityStatus', 'in_progress');
-            $this->setStatus($defaultStatus);
-        }
     }
 
     /**

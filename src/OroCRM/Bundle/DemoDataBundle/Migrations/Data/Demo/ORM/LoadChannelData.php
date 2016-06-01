@@ -45,7 +45,7 @@ class LoadChannelData extends AbstractFixture implements ContainerAwareInterface
             ->setStatus(Channel::STATUS_ACTIVE)
             ->setEntities()
             ->setChannelType(DefaultChannelData::B2B_CHANNEL_TYPE)
-            ->setName('B2B channel')
+            ->setName('Sales channel')
             ->getChannel();
 
         $om->persist($channel);

@@ -4,7 +4,10 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Functional;
 
 use Symfony\Component\DomCrawler\Form;
 
+use Oro\Bundle\UserBundle\DataFixtures\UserUtilityTrait;
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
+
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @outputBuffering enabled
@@ -12,12 +15,15 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
  */
 class ControllersTest extends WebTestCase
 {
+    use UserUtilityTrait;
+
     protected function setUp()
     {
         $this->initClient(
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
+        $this->client->useHashNavigation(true);
     }
 
     public function testIndex()
@@ -43,7 +49,6 @@ class ControllersTest extends WebTestCase
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
         $this->assertContains("Contact saved", $crawler->html());
     }
-
 
     /**
      * @depend testCreate
@@ -125,21 +130,17 @@ class ControllersTest extends WebTestCase
      */
     public function testMassAction()
     {
+        $entityManager = $this->getContainer()->get('doctrine')->getManagerForClass('OroCRMContactBundle:Contact');
+        $owner = $this->getFirstUser($entityManager);
+
         for ($i = 1; $i <= 5; $i++) {
-            $crawler = $this->client->request('GET', $this->getUrl('orocrm_contact_create'));
-            /** @var Form $form */
-            $form = $crawler->selectButton('Save and Close')->form();
-            $form['orocrm_contact_form[firstName]'] = 'Contact_fname' . $this->generateRandomString(5);
-            $form['orocrm_contact_form[lastName]'] = 'Contact_lname' . $this->generateRandomString(5);
-            $form['orocrm_contact_form[owner]'] = '1';
-
-            $this->client->followRedirects(true);
-            $crawler = $this->client->submit($form);
-
-            $result = $this->client->getResponse();
-            $this->assertHtmlResponseStatusCodeEquals($result, 200);
-            $this->assertContains("Contact saved", $crawler->html());
+            $contact = new Contact();
+            $contact->setFirstName('Contact_fname' . $this->generateRandomString(5))
+                ->setLastName('Contact_lname' . $this->generateRandomString(5))
+                ->setOwner($owner);
+            $entityManager->persist($contact);
         }
+        $entityManager->flush();
 
         $response = $this->client->requestGrid(
             'contacts-grid',

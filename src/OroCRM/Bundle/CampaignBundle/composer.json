@@ -6,7 +6,7 @@
     "homepage": "https://github.com/orocrm/CampaignBundle",
     "license": "MIT",
     "require": {
-        "php": ">=5.4.9",
+        "php": ">=5.5.9",
         "symfony/symfony": "2.7.*",
         "oro/user-bundle": "dev-master",
         "oro/ui-bundle": "dev-master",

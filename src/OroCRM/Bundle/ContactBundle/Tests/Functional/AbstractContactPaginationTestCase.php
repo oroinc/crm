@@ -35,15 +35,13 @@ class AbstractContactPaginationTestCase extends WebTestCase
     {
         LoadContactEntitiesData::$owner = LoadUserData::USER_NAME;
         $this->initClient([], $this->generateBasicAuthHeader());
+        $this->client->useHashNavigation(true);
         $this->loadFixtures(['OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadUserData']);
         $this->loadFixtures(['OroCRM\Bundle\ContactBundle\Tests\Functional\DataFixtures\LoadContactEntitiesData']);
-        $this->initClient(
-            [],
-            $this->generateBasicAuthHeader(
-                LoadUserData::USER_NAME,
-                LoadUserData::USER_PASSWORD
-            )
-        );
+        $this->client->mergeServerParameters($this->generateBasicAuthHeader(
+            LoadUserData::USER_NAME,
+            LoadUserData::USER_PASSWORD
+        ));
     }
 
     /**
@@ -98,13 +96,19 @@ class AbstractContactPaginationTestCase extends WebTestCase
 
     /**
      * @param string $name
+     *
      * @return Contact
      */
     protected function getContactByName($name)
     {
-        return $this->getContainer()->get('doctrine')
+        $contact = $this->getContainer()->get('doctrine')
             ->getRepository('OroCRMContactBundle:Contact')
             ->findOneBy(['firstName' => $name]);
+
+        // guard
+        $this->assertNotNull($contact);
+
+        return $contact;
     }
 
     /**

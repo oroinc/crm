@@ -55,6 +55,7 @@ parameters:
     orocrm_channel.event_listener.doctrine.class:                      OroCRM\Bundle\ChannelBundle\EventListener\ChannelDoctrineListener
     orocrm_channel.event_listener.timezone_change.class:               OroCRM\Bundle\ChannelBundle\EventListener\TimezoneChangeListener
     orocrm_channel.event_listener.job_execution.class:                 OroCRM\Bundle\ChannelBundle\EventListener\JobExecutionSubscriber
+    orocrm_channel.event_listener.transitions_attribute.class:         OroCRM\Bundle\ChannelBundle\EventListener\TransitionsAttributeListener
 
     #twig
     orocrm_channel.twig.metadata_extension.class:                      OroCRM\Bundle\ChannelBundle\Twig\MetadataExtension
@@ -100,6 +101,8 @@ services:
 
     orocrm_channel.form.type.channel_select:
         class: %orocrm_channel.form.type.channel_select.class%
+        arguments:
+            - '@orocrm_channel.provider.channels_by_entities'
         tags:
             - { name: form.type, alias: orocrm_channel_select_type }
 
@@ -372,3 +375,23 @@ services:
             - "@orocrm_channel.provider.state_provider"
         tags:
             - { name: oro_workflow.condition, alias: channel_entity_availiable }
+
+    orocrm_channel.provider.channels_by_entities:
+        class: OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider
+        arguments:
+            - '@oro_entity.doctrine_helper'
+
+    orocrm_channel.form.extension.single_channel_mode:
+        class: OroCRM\Bundle\ChannelBundle\Form\Extension\SingleChannelModeExtension
+        arguments:
+            - '@orocrm_channel.provider.channels_by_entities'
+        tags:
+            - { name: form.type_extension, alias: orocrm_channel_select_type }
+
+    orocrm_channel.event_listener.transitions_attribute:
+        class: %orocrm_channel.event_listener.transitions_attribute.class%
+        arguments:
+            - '@form.factory'
+            - '@oro_action.context_accessor'
+        tags:
+            - { name: kernel.event_listener, event: oro_workflow.transitions.attribute.before_add, method: beforeAddAttribute }

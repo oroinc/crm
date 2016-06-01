@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\DataGridBundle\Common\Object;
+use Oro\Bundle\DataGridBundle\Common\DataObject;
 use Oro\Bundle\IntegrationBundle\Entity\Channel as Integration;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
@@ -198,7 +198,7 @@ class LoadMagentoChannel extends AbstractFixture implements ContainerAwareInterf
         $integration->setTransport($this->transport);
         $integration->setOrganization($this->organization);
 
-        $synchronizationSettings = Object::create(['isTwoWaySyncEnabled' => true]);
+        $synchronizationSettings = DataObject::create(['isTwoWaySyncEnabled' => true]);
         $integration->setSynchronizationSettings($synchronizationSettings);
 
         $this->em->persist($integration);
