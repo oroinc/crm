@@ -2,20 +2,15 @@ workflows:
     opportunity_flow:
         transition_definitions:
             create_definition:
-                post_actions:
-                    - '@request_enum_entity':
-                        enum_code: opportunity_status
-                        identifier: 'in_progress'
-                        attribute: $opportunity.status
+                conditions:
+                    '@and':
+                        - '@neq': [$status.id, 'lost']
+                        - '@neq': [$status.id, 'won']
             develop_definition:
                 conditions:
                     '@and':
-                        - '@neq':
-                            - message: 'This status is not available'
-                            - parameters: [$status.id, 'lost']
-                        - '@neq':
-                            - message: 'This status is not available'
-                            - parameters: [$status.id, 'won']
+                        - '@neq': [$status.id, 'lost']
+                        - '@neq': [$status.id, 'won']
             close_won_definition:
                 conditions:
                     '@not_empty':
@@ -57,12 +52,8 @@ workflows:
             reopen_definition:
                 conditions:
                     '@and':
-                        - '@neq':
-                            - message: 'This status is not available'
-                            - parameters: [$status.id, 'lost']
-                        - '@neq':
-                            - message: 'This status is not available'
-                            - parameters: [$status.id, 'won']
+                        - '@neq': [$status.id, 'lost']
+                        - '@neq': [$status.id, 'won']
                 post_actions:
                     - '@assign_value':
                         - [$close_revenue, null]

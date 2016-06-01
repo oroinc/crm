@@ -8,6 +8,14 @@ workflows:
                 values:
                     - 'won'
                     - 'lost'
+            opportunity_close_reason_creation:
+                entity: opportunity
+                field: closeReason
+                mode: full
+            opportunity_close_revenue_creation:
+                entity: opportunity
+                field: closeRevenue
+                mode: full
             opportunity_status_open:
                 entity: opportunity
                 field: status
@@ -16,18 +24,10 @@ workflows:
                 values:
                     - 'won'
                     - 'lost'
-            opportunity_close_reason_creation:
-                entity: opportunity
-                field: closeReason
-                mode: full
             opportunity_close_reason_open:
                 entity: opportunity
                 field: closeReason
                 step: open
-                mode: full
-            opportunity_budget_amount_creation:
-                entity: opportunity
-                field: budgetAmount
                 mode: full
             opportunity_budget_amount_open:
                 entity: opportunity
