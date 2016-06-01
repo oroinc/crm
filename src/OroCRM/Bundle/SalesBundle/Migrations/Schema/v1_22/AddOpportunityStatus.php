@@ -30,6 +30,7 @@ class AddOpportunityStatus implements
     /** @var ContainerInterface */
     protected $container;
 
+    /** @var ExtendExtension */
     protected $extendExtension;
 
     /**
