@@ -75,7 +75,6 @@ class GuestCustomerStrategy extends AbstractImportStrategy
         $customerStore = $entity->getStore();
         if ($customerStore) {
             $website = $customerStore->getWebsite();
-			
             $entity->setWebsite($website);
             $this->setDefaultGroup($entity, $website);
         }
