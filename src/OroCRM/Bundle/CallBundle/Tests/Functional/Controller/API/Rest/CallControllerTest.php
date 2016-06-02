@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\CallsBundle\Tests\Functional\API;
+namespace OroCRM\Bundle\CallBundle\Tests\Functional\API\Rest;
 
 use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 
