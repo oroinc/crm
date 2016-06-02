@@ -125,6 +125,7 @@ class CallHandler
                 // Contexts handling should be moved to common for activities form handler
                 if ($this->form->has('contexts')) {
                     $contexts = $this->form->get('contexts')->getData();
+                    $contexts = array_merge($contexts, [$entity->getOwner()]);
                     $this->activityManager->setActivityTargets($entity, $contexts);
                 } elseif ($targetEntityClass) {
                     // if we don't have "contexts" form field
