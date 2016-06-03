@@ -1,0 +1,3 @@
+oro_crm_call_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: OroCRMCallBundle:Default:index }
