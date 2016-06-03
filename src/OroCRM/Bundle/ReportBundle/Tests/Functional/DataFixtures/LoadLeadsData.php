@@ -161,9 +161,9 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             /** @var Opportunity $opportunity */
             $opportunity   = $leadWorkflowItem->getResult()->get('opportunity');
             $salesFlowItem = $this->workflowManager->startWorkflow(
-                'b2b_flow_sales',
+                'opportunity_flow',
                 $opportunity,
-                'develop',
+                '__start__',
                 [
                     'budget_amount'     => mt_rand(10, 10000),
                     'customer_need'     => mt_rand(10, 10000),
@@ -177,7 +177,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                     $this->transit(
                         $this->workflowManager,
                         $salesFlowItem,
-                        'close_as_won',
+                        'close_won',
                         [
                             'close_revenue' => mt_rand(100, 1000),
                             'close_date'    => new \DateTime('now'),
@@ -187,7 +187,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
                     $this->transit(
                         $this->workflowManager,
                         $salesFlowItem,
-                        'close_as_lost',
+                        'close_lost',
                         [
                             'close_reason_name' => 'cancelled',
                             'close_revenue'     => mt_rand(100, 1000),
