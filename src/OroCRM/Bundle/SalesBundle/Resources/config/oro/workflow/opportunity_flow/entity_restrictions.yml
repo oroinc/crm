@@ -1,0 +1,101 @@
+workflows:
+    opportunity_flow:
+        entity_restrictions:
+            opportunity_status_creation:
+                attribute: opportunity
+                field: status
+                mode: disallow
+                values:
+                    - 'won'
+                    - 'lost'
+            opportunity_close_reason_creation:
+                attribute: opportunity
+                field: closeReason
+                mode: full
+            opportunity_close_revenue_creation:
+                attribute: opportunity
+                field: closeRevenue
+                mode: full
+            opportunity_status_open:
+                attribute: opportunity
+                field: status
+                step: open
+                mode: disallow
+                values:
+                    - 'won'
+                    - 'lost'
+            opportunity_close_reason_open:
+                attribute: opportunity
+                field: closeReason
+                step: open
+                mode: full
+            opportunity_budget_amount_open:
+                attribute: opportunity
+                step: open
+                field: budgetAmount
+                mode: full
+            opportunity_customer_won:
+                attribute: opportunity
+                step: won
+                field: customer
+                mode: full
+            opportunity_status_won:
+                attribute: opportunity
+                step: won
+                field: status
+                mode: full
+            opportunity_probability_won:
+                attribute: opportunity
+                step: won
+                field: probability
+                mode: full
+            opportunity_budget_amount_won:
+                attribute: opportunity
+                step: won
+                field: budgetAmount
+                mode: full
+            opportunity_close_revenue_won:
+                attribute: opportunity
+                step: won
+                field: closeRevenue
+                mode: full
+            opportunity_close_date_won:
+                attribute: opportunity
+                step: won
+                field: closeDate
+                mode: full
+            opportunity_close_reason_won:
+                attribute: opportunity
+                step: won
+                field: closeReason
+                mode: full
+            opportunity_customer_lost:
+                attribute: opportunity
+                step: lost
+                field: customer
+                mode: full
+            opportunity_status_lost:
+                attribute: opportunity
+                step: lost
+                field: status
+                mode: full
+            opportunity_probability_lost:
+                attribute: opportunity
+                step: lost
+                field: probability
+                mode: full
+            opportunity_budget_amount_lost:
+                attribute: opportunity
+                step: lost
+                field: budgetAmount
+                mode: full
+            opportunity_close_revenue_lost:
+                attribute: opportunity
+                step: lost
+                field: closeRevenue
+                mode: full
+            opportunity_close_date_lost:
+                attribute: opportunity
+                step: lost
+                field: closeDate
+                mode: full

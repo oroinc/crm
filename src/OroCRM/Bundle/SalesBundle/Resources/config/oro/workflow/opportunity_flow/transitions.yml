@@ -2,14 +2,14 @@ workflows:
     opportunity_flow:
         transitions:
             __start__:
-                label: Create Opportunity
+                label: 'Create Opportunity'
                 step_to: open
                 is_start: true
                 is_hidden: true
                 is_unavailable_hidden: true
                 transition_definition: create_definition
             develop:
-                label: Develop
+                label: 'Develop'
                 step_to: open
                 is_unavailable_hidden: true
                 frontend_options:
@@ -38,7 +38,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_choices:
+                                disabled_values:
                                     - won
                                     - lost
                         probability: ~
@@ -125,7 +125,7 @@ workflows:
                                 constraints:
                                     - NotBlank: ~
                                 choice_label: name
-                                disabled_choices:
+                                disabled_values:
                                     - won
                                     - lost
                         probability: ~
