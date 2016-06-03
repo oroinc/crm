@@ -17,6 +17,9 @@ use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
 use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestTarget;
 
+use Oro\Bundle\UserBundle\Entity\User;
+use Oro\Bundle\CalendarBundle\Tests\Unit\ReflectionUtil;
+
 class CallHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|FormInterface */
@@ -88,6 +91,60 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             $this->entityRoutingHelper,
             $this->formFactory
         );
+    }
+
+    public function testProcessWithContexts()
+    {
+        $context = new User();
+        ReflectionUtil::setId($context, 123);
+
+        $owner = new User();
+        ReflectionUtil::setId($owner, 321);
+
+        $this->request->setMethod('POST');
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->with('orocrm_call_form', 'orocrm_call_form', $this->entity, [])
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->entity->expects($this->once())
+            ->method('getOwner')
+            ->will($this->returnValue($owner));
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
+
+        $this->form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue([$context]));
+
+        $this->activityManager->expects($this->never())
+            ->method('removeActivityTarget');
+
+        $this->activityManager->expects($this->once())
+            ->method('setActivityTargets')
+            ->with(
+                $this->identicalTo($this->entity),
+                $this->identicalTo([$context, $owner])
+            );
+
+        $this->activityManager->expects($this->never())
+            ->method('removeActivityTarget');
+        $this->assertTrue(
+            $this->handler->process($this->entity)
+        );
+
+        $this->handler->process($this->entity);
     }
 
     public function testProcessGetRequestWithoutTargetEntity()
