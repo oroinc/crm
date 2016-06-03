@@ -24,7 +24,7 @@
 {% endblock pageHeader %}
 
 {% block navButtons %}
-    {% if resource_granted('EDIT', entity) %}
+    {% if entity.id and resource_granted('EDIT', entity) %}
         {% if entity.status %}
             {{ UI.button({
                 'aCss':  'btn-danger',
