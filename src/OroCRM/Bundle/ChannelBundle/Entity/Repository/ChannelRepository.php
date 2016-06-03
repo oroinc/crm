@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\ChannelBundle\Entity\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\EntityRepository;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -67,5 +68,41 @@ class ChannelRepository extends EntityRepository
             ->setParameter('status', Channel::STATUS_ACTIVE);
 
         return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+    }
+
+    /**
+     * @param array $entities
+     * @param bool  $status
+     *
+     * @return array
+     */
+    public function getChannelsByEntities(array $entities = [], $status = Channel::STATUS_ACTIVE)
+    {
+        return $this->getChannelsByEntitiesQB($entities, $status)->getQuery()->getResult();
+    }
+
+    /**
+     * @param array $entities
+     * @param bool  $status
+     *
+     * @return QueryBuilder
+     */
+    public function getChannelsByEntitiesQB(array $entities = [], $status = Channel::STATUS_ACTIVE)
+    {
+        $query = $this->createQueryBuilder('c');
+        if (!empty($entities)) {
+            $countDistinctName = $query->expr()->eq($query->expr()->countDistinct('e.name'), ':count');
+
+            $query->innerJoin('c.entities', 'e');
+            $query->andWhere($query->expr()->in('e.name', $entities));
+            $query->groupBy('c.name', 'c.id');
+            $query->having($countDistinctName);
+            $query->setParameter('count', count($entities));
+        }
+        $query->andWhere('c.status = :status');
+        $query->orderBy('c.name', 'ASC');
+        $query->setParameter('status', $status);
+
+        return $query;
     }
 }

@@ -5,7 +5,7 @@
     "keywords": ["OroCRM"],
     "license": "MIT",
     "require": {
-        "php": ">=5.4.9",
+        "php": ">=5.5.9",
         "symfony/symfony": "2.7.*",
         "oro/entity-extend-bundle": "dev-master",
         "oro/activity-bundle": "dev-master",

@@ -6,7 +6,7 @@
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
             {{ ui.renderProperty('orocrm.sales.opportunity.name.label'|trans, entity.name) }}
-            {{ ui.renderProperty('orocrm.sales.opportunity.state.label'|trans, entity.state) }}
+            {{ ui.renderProperty('orocrm.sales.opportunity.status.label'|trans, entity.status) }}
 
             {{ channel.renderChannelProperty(entity, 'orocrm.sales.lead.data_channel.label') }}
 
@@ -31,8 +31,8 @@
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed|escape|nl2br) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution|escape|nl2br) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.customer_need.label'|trans, entity.customerNeed) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.proposed_solution.label'|trans, entity.proposedSolution) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.close_reason.label'|trans, entity.closeReason) }}
             {{ ui.renderProperty('orocrm.sales.opportunity.close_revenue.label'|trans, entity.closeRevenue|length ? entity.closeRevenue|oro_format_currency, '') }}
             {{ ui.renderProperty('orocrm.sales.opportunity.close_date.label'|trans, entity.closeDate ? entity.closeDate|oro_format_date : '') }}

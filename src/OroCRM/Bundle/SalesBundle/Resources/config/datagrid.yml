@@ -21,7 +21,7 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - o.closeRevenue
-                    - status.id as state
+                    - s.id as status
                     - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
@@ -35,7 +35,7 @@ datagrid:
                 join:
                     left:
                         - { join: o.contact, alias: contactAlias }
-                        - { join: o.state, alias: status }
+                        - { join: o.status, alias: s }
                         - { join: o.closeReason, alias: closeReason }
                         - { join: contactAlias.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: o.dataChannel, alias: channel }
@@ -85,10 +85,10 @@ datagrid:
             probability:
                 label:         orocrm.sales.opportunity.probability.label
                 frontend_type: percent
-            state:
+            status:
                 frontend_type: select
                 label:         orocrm.sales.opportunity.status.label
-                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_state')"
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
             primaryEmail:
                 label:         orocrm.contact.email.label
             ownerName:
@@ -142,8 +142,8 @@ datagrid:
                     data_name: o.budgetAmount
                 probability:
                     data_name: o.probability
-                state:
-                    data_name: status.id
+                status:
+                    data_name: status
                 primaryEmail:
                     data_name: email.email
                 ownerName:
@@ -199,10 +199,10 @@ datagrid:
                 probability:
                     type: percent
                     data_name: o.probability
-                state:
+                status:
                     type:      enum
-                    data_name: status.id
-                    enum_code: opportunity_state
+                    data_name: status
+                    enum_code: opportunity_status
                 primaryEmail:
                     type: string
                     data_name: email.email
@@ -512,7 +512,7 @@ datagrid:
                     data_name: l.website
                     enabled: false
                 numberOfEmployees:
-                    type: number
+                    type: number-range
                     data_name: l.numberOfEmployees
                     enabled: false
                 sourceName:
@@ -690,7 +690,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: salesFunnel.id
                 channelName:
                     type:      entity
@@ -851,7 +851,7 @@ datagrid:
         filters:
             columns:
                  id:
-                     type: number
+                     type: number-range
                      data_name: lead.id
                      enabled: false
                  name:
@@ -941,7 +941,7 @@ datagrid:
         filters:
             columns:
                 id:
-                    type: number
+                    type: number-range
                     data_name: opportunity.id
                     enabled: false
                 name:
@@ -1012,7 +1012,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
                  createdAt:
                     type: datetime
@@ -1370,7 +1370,7 @@ datagrid:
                     - o.probability
                     - o.budgetAmount
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -1580,7 +1580,7 @@ datagrid:
                     - o.id
                     - o.name
                     - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
@@ -1703,7 +1703,7 @@ datagrid:
                     type:      string
                     data_name: c.name
                  lifetime:
-                    type: number
+                    type: number-range
                     data_name: c.lifetime
         options:
             entity_pagination: true

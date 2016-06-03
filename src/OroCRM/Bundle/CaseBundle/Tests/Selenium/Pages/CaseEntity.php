@@ -25,7 +25,6 @@ class CaseEntity extends AbstractPageEntity
     public function init()
     {
         $this->subject = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_subject']");
-        $this->description = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_description']");
         $this->resolution = $this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_resolution']");
         $this->status = $this->test
             ->select($this->test->byXpath("//*[@data-ftid='orocrm_case_entity_form_status']"));
@@ -47,9 +46,7 @@ class CaseEntity extends AbstractPageEntity
 
     public function setDescription($description)
     {
-        $this->description->clear();
-        $this->description->value($description);
-        return $this;
+        return $this->setContentToTinymceElement('orocrm_case_entity_form_description', $description);
     }
 
     public function getDescription()

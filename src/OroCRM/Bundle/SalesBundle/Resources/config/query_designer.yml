@@ -1,11 +1,11 @@
 query_designer:
     aggregates:
         opportunity_status:
-            applicable: [{entity: OroCRMSalesBundle:Opportunity, field: status_label }]
+            applicable: [{entity: OroCRMSalesBundle:Opportunity, field: status }]
             functions:
-                - { name: WonCount,        return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
-                - { name: LostCount,       return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
-                - { name: InProgressCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\InProgressOpportunityStatusCountFunction' }
+                - { name: WonCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\WonOpportunityStatusCountFunction' }
+                - { name: LostCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\LostOpportunityStatusCountFunction' }
+                - { name: SolutionDevelopmentCount, return_type: integer, expr: '@OroCRM\Bundle\SalesBundle\QueryDesigner\SolutionDevelopmentOpportunityStatusCountFunction' }
             query_type: [report]
         opportunity:
             applicable: [{entity: OroCRMSalesBundle:Opportunity, field: closeRevenue}]

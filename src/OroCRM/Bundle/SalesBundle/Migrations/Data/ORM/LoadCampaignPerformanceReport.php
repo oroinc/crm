@@ -81,7 +81,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status_label',
+                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
                     'label'   => 'Number Won',
                     'func'    => [
                         'name'       => 'WonCount',
@@ -91,7 +91,7 @@ class LoadCampaignPerformanceReport extends AbstractFixture implements
                     'sorting' => ''
                 ],
                 [
-                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status_label',
+                    'name'    => 'OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::campaign+OroCRM\\Bundle\\SalesBundle\\Entity\\Lead::opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::status',
                     'label'   => 'Number Lost',
                     'func'    => [
                         'name'       => 'LostCount',

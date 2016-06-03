@@ -19,7 +19,7 @@ class RecalculateLifetimeCommand extends AbstractRecalculateLifetimeCommand
 
         $this
             ->setName('oro:b2b:lifetime:recalculate')
-            ->setDescription('Perform re-calculation of lifetime values for B2B channel.');
+            ->setDescription('Perform re-calculation of lifetime values for sales channel.');
     }
 
     /**

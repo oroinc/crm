@@ -16,6 +16,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
+    const OPPORTUNITY_STATE_IN_PROGRESS = 'In Progress';
+    const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
+    
     /**
      * @var WorkflowStep[]
      */
@@ -26,38 +29,34 @@ class OpportunityRepository extends EntityRepository
      *
      * @param $aclHelper AclHelper
      * @param  array     $dateRange
+     * @param  array     $states
      * @return array
      */
-    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange)
+    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states)
     {
         $dateEnd = $dateRange['end'];
         $dateStart = $dateRange['start'];
 
-        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd);
+        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states);
     }
 
     /**
      * @param  AclHelper $aclHelper
      * @param $dateStart
      * @param $dateEnd
+     * @param array $states
      * @return array
      */
-    protected function getOpportunitiesDataByStatus(AclHelper $aclHelper, $dateStart = null, $dateEnd = null)
-    {
-        // select statuses
-        $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('status.name, status.label')
-            ->from('OroCRMSalesBundle:OpportunityStatus', 'status')
-            ->orderBy('status.name', 'ASC');
-
-        $resultData = array();
-        $data = $qb->getQuery()->getArrayResult();
-        foreach ($data as $status) {
-            $name = $status['name'];
-            $label = $status['label'];
-            $resultData[$name] = array(
-                'name' => $name,
-                'label' => $label,
+    protected function getOpportunitiesDataByStatus(
+        AclHelper $aclHelper,
+        $dateStart = null,
+        $dateEnd = null,
+        $states = []
+    ) {
+        foreach ($states as $key => $name) {
+            $resultData[$key] = array(
+                'name' => $key,
+                'label' => $name,
                 'budget' => 0,
             );
         }
@@ -219,9 +218,9 @@ class OpportunityRepository extends EntityRepository
     protected function isStatusOk($opportunityHistory, $opportunity)
     {
         if ($oldStatus = $this->getHistoryOldValue($opportunityHistory, 'status')) {
-            $isStatusOk = $oldStatus === 'In Progress';
+            $isStatusOk = $oldStatus === self::OPPORTUNITY_STATE_IN_PROGRESS;
         } else {
-            $isStatusOk = $opportunity->getStatus()->getName() === 'in_progress';
+            $isStatusOk = $opportunity->getStatus()->getName() === self::OPPORTUNITY_STATE_IN_PROGRESS_CODE;
         }
 
         return $isStatusOk;
@@ -334,7 +333,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -361,7 +360,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -405,7 +404,7 @@ class OpportunityRepository extends EntityRepository
             ->andWhere('o.probability != 1')
             ->setParameter('start', $start)
             ->setParameter('end', $end)
-            ->setParameter('status', 'in_progress');
+            ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }

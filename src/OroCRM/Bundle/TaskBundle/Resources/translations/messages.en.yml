@@ -19,6 +19,7 @@ orocrm:
         id.label:                   Id
         workflow_item.label:        Workflow item
         organization.label:         Organization
+        status.label:               Status
 
         user_tasks: User Tasks
         info_widget_title: Task Information

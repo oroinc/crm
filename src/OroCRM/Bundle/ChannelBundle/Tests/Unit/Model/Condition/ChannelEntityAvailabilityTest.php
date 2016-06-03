@@ -25,13 +25,23 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      * @dataProvider evaluateProvider
      *
      * @param array  $options
-     * @param string $context
      * @param string $expectedResult
      */
-    public function testEvaluate(array $options, $context, $expectedResult)
+    public function testEvaluate(array $options, $expectedResult)
     {
+        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
+        $channel
+            ->expects($this->once())
+            ->method('getEntities')
+            ->willReturn(
+                [
+                    'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                    'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                ]
+            );
+
         $this->condition->initialize($options);
-        $this->assertEquals($expectedResult, $this->condition->evaluate($context));
+        $this->assertEquals($expectedResult, $this->condition->evaluate(['channel' => $channel]));
     }
 
     /**
@@ -39,19 +49,6 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
      */
     public function evaluateProvider()
     {
-        $channel = $this->getMock('OroCRM\Bundle\ChannelBundle\Entity\Channel');
-        $channel
-            ->expects($this->exactly(2))
-            ->method('getEntities')
-            ->will(
-                $this->returnValue(
-                    [
-                        'OroCRM\Bundle\SalesBundle\Entity\Lead',
-                        'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
-                    ]
-                )
-            );
-
         return [
             'full occurrence'     => [
                 'options'        => [
@@ -61,7 +58,6 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
                     ]
                 ],
-                'context'        => ['channel' => $channel],
                 'expectedResult' => true
             ],
             'not full occurrence' => [
@@ -72,7 +68,6 @@ class ChannelEntityAvailabilityTest extends \PHPUnit_Framework_TestCase
                         'OroCRM\Bundle\SalesBundle\Entity\SalesFunnel'
                     ]
                 ],
-                'context'        => ['channel' => $channel],
                 'expectedResult' => false
             ]
         ];

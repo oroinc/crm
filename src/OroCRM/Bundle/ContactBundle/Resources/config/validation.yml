@@ -1,11 +1,11 @@
 OroCRM\Bundle\ContactBundle\Entity\Contact:
+    constraints:
+        - OroCRM\Bundle\ContactBundle\Validator\Constraints\HasContactInformation: ~
     properties:
         firstName:
-            - NotBlank: ~
             - Length:
                 max: 100
         lastName:
-            - NotBlank: ~
             - Length:
                 max: 100
         gender:

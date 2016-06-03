@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\PreloadedExtension;
 
 use OroCRM\Bundle\ChannelBundle\Form\Type\ChannelSelectType;
+use OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Doctrine\ORM\OrmTestCase;
 
@@ -23,6 +24,11 @@ class ChannelSelectTypeTest extends OrmTestCase
 
     /** @var FormFactory */
     protected $factory;
+
+    /**
+     * @var ChannelsByEntitiesProvider|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $channelsProvider;
 
     public function setUp()
     {
@@ -43,7 +49,13 @@ class ChannelSelectTypeTest extends OrmTestCase
 
         $entityType = new EntityType($registry);
         $genemuType = new Select2Type('entity');
-        $this->type = new ChannelSelectType();
+
+        $channelsProvider = $this
+            ->getMockBuilder('OroCRM\Bundle\ChannelBundle\Provider\ChannelsByEntitiesProvider')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->type = new ChannelSelectType($channelsProvider);
 
         $this->factory = Forms::createFormFactoryBuilder()
             ->addExtensions(
@@ -80,46 +92,5 @@ class ChannelSelectTypeTest extends OrmTestCase
             'genemu_jqueryselect2_entity',
             $this->type->getParent()
         );
-    }
-
-    /**
-     * @dataProvider dataProvider
-     *
-     * @param array  $config
-     * @param string $query
-     */
-    public function testSetDefaultOptions($config, $query)
-    {
-        $field = $this->factory->create($this->type, null, $config);
-
-        $this->assertSame($query, $field->getConfig()->getOption('query_builder')->getDQL());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProvider()
-    {
-        return [
-            'without entities' => [
-                'config' => [
-                    'entities' => []
-                ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel c' .
-                    ' WHERE c.status = :status ORDER BY c.name ASC'
-            ],
-            'with entities'    => [
-                'config' => [
-                    'entities' => [
-                        'entity1',
-                        'entity2'
-                    ]
-                ],
-                'query'  => 'SELECT c FROM OroCRM\Bundle\ChannelBundle\Tests\Unit\Stubs\Entity\Channel c ' .
-                    'INNER JOIN c.entities e ' .
-                    'WHERE e.name IN(\'entity1\', \'entity2\') AND c.status = :status GROUP BY c.name, c.id ' .
-                    'HAVING COUNT(DISTINCT e.name) = :count ORDER BY c.name ASC'
-            ]
-        ];
     }
 }

@@ -32,7 +32,7 @@ class TaskType extends AbstractType
             )
             ->add(
                 'description',
-                'textarea',
+                'oro_resizeable_rich_text',
                 [
                     'required' => false,
                     'label' => 'orocrm.task.description.label'
@@ -40,6 +40,16 @@ class TaskType extends AbstractType
             );
         $this->addDueDateField($builder);
         $builder
+            ->add(
+                'status',
+                'oro_enum_select',
+                [
+                    'label' => 'orocrm.task.status.label',
+                    'enum_code' => 'task_status',
+                    'required' => true,
+                    'constraints' => [new Assert\NotNull()]
+                ]
+            )
             ->add(
                 'taskPriority',
                 'translatable_entity',
