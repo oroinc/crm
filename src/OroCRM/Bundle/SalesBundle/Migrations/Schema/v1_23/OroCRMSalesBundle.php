@@ -15,5 +15,16 @@ class OroCRMSalesBundle implements Migration
     public function up(Schema $schema, QueryBag $queries)
     {
         $queries->addQuery(new UpdateWorkflowItemStepData());
+
+        // applies only if config has old active workflow
+        $queries->addQuery(
+            new UpdateEntityConfigEntityValueQuery(
+                'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
+                'workflow',
+                'active_workflow',
+                'opportunity_flow',
+                'b2b_flow_sales'
+            )
+        );
     }
 }
