@@ -46,12 +46,12 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
         $this->createOrocrmContactusContactRsnTable($schema);
         $this->createOrocrmContactusReqEmailsTable($schema);
         $this->createOrocrmContactusRequestTable($schema);
-        $this->createOrocrmContactusRequestCallsTable($schema);
+        
 
         /** Foreign keys generation **/
         $this->addOrocrmContactusReqEmailsForeignKeys($schema);
         $this->addOrocrmContactusRequestForeignKeys($schema);
-        $this->addOrocrmContactusRequestCallsForeignKeys($schema);
+        
         OroCRMContactUsBundle::addOwner($schema);
 
         CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
@@ -120,20 +120,7 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
         $table->addIndex(['created_at'], 'request_create_idx', []);
     }
 
-    /**
-     * Create orocrm_contactus_request_calls table
-     *
-     * @param Schema $schema
-     */
-    protected function createOrocrmContactusRequestCallsTable(Schema $schema)
-    {
-        $table = $schema->createTable('orocrm_contactus_request_calls');
-        $table->addColumn('request_id', 'integer', []);
-        $table->addColumn('call_id', 'integer', []);
-        $table->setPrimaryKey(['request_id', 'call_id']);
-        $table->addIndex(['request_id'], 'IDX_6F7A50CE427EB8A5', []);
-        $table->addIndex(['call_id'], 'IDX_6F7A50CE50A89B2C', []);
-    }
+    
 
     /**
      * Add orocrm_contactus_req_emails foreign keys.
@@ -203,26 +190,5 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
             'FK_342872E8BDC09B73'
         );
     }
-
-    /**
-     * Add orocrm_contactus_request_calls foreign keys.
-     *
-     * @param Schema $schema
-     */
-    protected function addOrocrmContactusRequestCallsForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_contactus_request_calls');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
-            ['call_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_contactus_request'),
-            ['request_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE', 'onUpdate' => null]
-        );
-    }
+    
 }
