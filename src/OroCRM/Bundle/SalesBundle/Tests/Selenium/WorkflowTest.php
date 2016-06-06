@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
 use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
+use OroCRM\Bundle\ChannelBundle\Tests\Selenium\Pages\Channels;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
@@ -259,6 +260,28 @@ class WorkflowTest extends Selenium2TestCase
     }
 
     /**
+     * @param Login $login
+     * @return string
+     */
+    public function createChannel(Login $login)
+    {
+        $name = 'Channel_' . mt_rand();
+        /** @var Channels $login */
+        $login->openChannels('OroCRM\Bundle\ChannelBundle')
+            ->assertTitle('All - Channels - System')
+            ->add()
+            ->assertTitle('Create Channel - Channels - System')
+            ->setType('Sales')
+            ->setName($name)
+            ->setStatus('Active')
+            ->save()
+            ->assertMessage('Channel saved');
+
+        return $name;
+    }
+
+
+    /**
      * @param  Login  $login
      * @return string
      */
@@ -266,11 +289,13 @@ class WorkflowTest extends Selenium2TestCase
     {
         $opportunityName = 'Opportunity_'.mt_rand();
         $accountName = $this->createAccount($login);
+        $channelName = $this->createChannel($login);
         $customer = $this->createB2BCustomer($login, $accountName);
         /** @var Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
             ->add()
             ->setName($opportunityName)
+            ->setChannel($channelName)
             ->setB2BCustomer($customer)
             ->setProbability('50')
             ->seBudget('100')
