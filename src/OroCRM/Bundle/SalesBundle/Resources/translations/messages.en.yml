@@ -67,7 +67,7 @@ orocrm:
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
-            b2bcustomer_list.description: List of B2B customers
+            b2bcustomer_list.description: List of business customers
             opportunity_list.description: List of opportunities
             sales_salesfunnel_list.description: List of sales funnels
             shortcut_list_leads.label: Show leads list
@@ -78,8 +78,8 @@ orocrm:
             shortcut_new_lead.description: Create new lead
             shortcut_new_opportunity.label: Create new opportunity
             shortcut_new_opportunity.description: Create new opportunity
-            shortcut_list_b2bcustomers.label: Show B2B customers list
-            shortcut_list_b2bcustomers.description: List of B2B customers
+            shortcut_list_b2bcustomers.label: Show business customers list
+            shortcut_list_b2bcustomers.description: List of business customers
         controller:
             lead.saved.message: Lead saved
             opportunity.saved.message: Opportunity saved
@@ -134,7 +134,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       Customer
+            customer.label:       Business Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
             created_at.label:     Created At
@@ -190,7 +190,7 @@ orocrm:
             information:          Lead Information
             campaign.label:       Campaign
             organization.label:   Organization
-            customer.label:       B2B Customer
+            customer.label:       Business Customer
             data_channel.label:   Channel
             assigned.label:       Assigned
             source:
@@ -233,9 +233,9 @@ orocrm:
         # OroCRM/Bundle/SalesBundle/Entity/B2bCustomer.php
         #
         b2bcustomer:
-            entity_label:               B2B customer
-            entity_plural_label:        B2B customers
-            entity_description:         Represent B2B customer
+            entity_label:               Business Customer
+            entity_plural_label:        Business Customers
+            entity_description:         Represent business customer
             id.label:                   Id
             name.label:                 Name
             lifetime.label:             Lifetime sales value
@@ -275,11 +275,11 @@ orocrm:
                     shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
         widgets:
-            b2bcustomer_information: B2B Customer Information
+            b2bcustomer_information: Business Customer Information
             leads:                   Leads
             opportunities:           Opportunities
         channel_type:
-            b2b.label: B2B
+            b2b.label: Sales
         mailbox.process:
             lead.label:              Convert To Lead
         leadmailboxprocesssettings:
