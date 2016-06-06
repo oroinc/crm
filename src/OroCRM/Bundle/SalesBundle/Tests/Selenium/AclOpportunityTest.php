@@ -85,7 +85,7 @@ class AclOpportunityTest extends Selenium2TestCase
             ->add()
             ->setName($opportunityName)
             ->setB2BCustomer($customer)
-            ->setChannel($channelName)
+            //->setChannel($channelName)
             ->setProbability('50')
             ->seBudget('100')
             ->setCustomerNeed('50')
