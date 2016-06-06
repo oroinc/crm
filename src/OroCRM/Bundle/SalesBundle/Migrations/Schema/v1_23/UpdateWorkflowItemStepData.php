@@ -215,7 +215,6 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
             $this->connection->executeUpdate($sql, $params, $types);
         }
 
-
         // Update old lost transition
         $params = [
             'new_transition' => 'close_lost',
