@@ -26,10 +26,6 @@ workflows:
                 attribute: opportunity
                 field: closeReason
                 step: open
-            opportunity_budget_amount_open:
-                attribute: opportunity
-                step: open
-                field: budgetAmount
             opportunity_customer_won:
                 attribute: opportunity
                 step: won
@@ -82,3 +78,7 @@ workflows:
                 attribute: opportunity
                 step: lost
                 field: closeDate
+            opportunity_close_reason_lost:
+                attribute: opportunity
+                step: lost
+                field: closeReason

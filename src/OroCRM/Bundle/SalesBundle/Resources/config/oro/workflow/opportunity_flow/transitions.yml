@@ -2,7 +2,7 @@ workflows:
     opportunity_flow:
         transitions:
             __start__:
-                label: 'Create Opportunity'
+                label: 'Start Opportunity Management Flow'
                 step_to: open
                 is_start: true
                 is_hidden: true
