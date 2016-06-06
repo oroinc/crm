@@ -80,13 +80,12 @@ class CreateActivityAssociation implements
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
         $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contactus_request');
     }
 
     /**
      * Manually create activitylist association table for further filling.
      *
-     * @param Schema                $schema
+     * @param Schema                $schemaN
      * @param ActivityListExtension $activityListExtension
      */
     public static function addActivityListAssociationTable(
