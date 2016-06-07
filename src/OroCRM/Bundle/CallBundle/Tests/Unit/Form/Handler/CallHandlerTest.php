@@ -11,14 +11,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
 use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestTarget;
-
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\CalendarBundle\Tests\Unit\ReflectionUtil;
 
 class CallHandlerTest extends \PHPUnit_Framework_TestCase
 {
