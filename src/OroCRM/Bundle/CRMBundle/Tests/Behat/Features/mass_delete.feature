@@ -61,7 +61,8 @@ Scenario: Uncheck few records
 	And press "Yes, Delete"
 	Then the number of records decreased by 8
 
-#@ui-feature
+#@skip
+# ToDo: uncomment when BAP-10673 will completed
 #Scenario Outline: Delete different number of records
 #	Given I have 6000 of Accounts in the system
 #	And I am on the Accounts page
