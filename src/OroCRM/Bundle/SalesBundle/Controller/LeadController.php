@@ -172,7 +172,7 @@ class LeadController extends Controller
      */
     protected function update(Lead $entity)
     {
-        return $this->get('oro_form.model.update_handler')->handleEntityUpdateRequest(
+        return $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_sales.lead.form'),
             $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message'),

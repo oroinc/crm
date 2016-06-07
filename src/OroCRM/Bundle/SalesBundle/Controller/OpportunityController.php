@@ -148,7 +148,7 @@ class OpportunityController extends Controller
      */
     protected function update(Opportunity $entity)
     {
-        return $this->get('oro_form.model.update_handler')->handleEntityUpdateRequest(
+        return $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_sales.opportunity.form'),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),

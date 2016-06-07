@@ -25,17 +25,18 @@
     {% endif %}
     {{ UI.cancelButton(path('orocrm_account_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'action': {
-            'route': 'orocrm_account_view',
-            'params': {'id': '$.id'}
-        }
+        'route': 'orocrm_account_view',
+        'params': {'id': '$id'}
     }) %}
+    {% if resource_granted('orocrm_account_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_account_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_account_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'action': {
-                'route': 'orocrm_account_update',
-                'params': {'id': '$.id'}
-            }
+            'route': 'orocrm_account_update',
+            'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}

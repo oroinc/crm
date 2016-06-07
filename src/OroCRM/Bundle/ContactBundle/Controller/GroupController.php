@@ -88,7 +88,7 @@ class GroupController extends Controller
             );
 
             if (!$this->getRequest()->get('_widgetContainer')) {
-                return $this->get('oro_ui.router')->redirectToAfterSaveAction($entity);
+                return $this->get('oro_ui.router')->redirect($entity);
             }
         }
 

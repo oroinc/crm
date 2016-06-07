@@ -188,7 +188,7 @@ class TaskController extends Controller
                     $this->get('translator')->trans('orocrm.task.saved_message')
                 );
 
-                return $this->get('oro_ui.router')->redirectToAfterSaveAction($task);
+                return $this->get('oro_ui.router')->redirect($task);
             }
             $saved = true;
         }

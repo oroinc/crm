@@ -31,17 +31,13 @@
     {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_salesfunnel_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'action': {
-            'route': 'orocrm_sales_salesfunnel_view',
-            'params': {'id': '$.id'}
-        }
+        'route': 'orocrm_sales_salesfunnel_view',
+        'params': {'id': '$id'}
     }) %}
     {% if form.vars.value.id or resource_granted('orocrm_sales_salesfunnel_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'action': {
-                'route': 'orocrm_sales_salesfunnel_update',
-                'params': {'id': '$.id'}
-            }
+            'route': 'orocrm_sales_salesfunnel_update',
+            'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}

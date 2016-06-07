@@ -27,17 +27,18 @@
     {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_lead_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'action': {
-            'route': 'orocrm_sales_lead_view',
-            'params': {'id': '$.id'}
-        }
+        'route': 'orocrm_sales_lead_view',
+        'params': {'id': '$id'}
     }) %}
+    {% if resource_granted('orocrm_sales_lead_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_sales_lead_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_sales_lead_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'action': {
-                'route': 'orocrm_sales_lead_update',
-                'params': {'id': '$.id'}
-            }
+            'route': 'orocrm_sales_lead_update',
+            'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
