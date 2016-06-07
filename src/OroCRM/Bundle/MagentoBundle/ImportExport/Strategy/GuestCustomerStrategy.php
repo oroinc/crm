@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\ImportExport\Strategy;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
+use OroCRM\Bundle\MagentoBundle\Entity\Website;
 
 class GuestCustomerStrategy extends AbstractImportStrategy
 {
@@ -71,21 +72,27 @@ class GuestCustomerStrategy extends AbstractImportStrategy
             $address->setOriginId(null);
         }
 
-        $entity->setWebsite($entity->getStore()->getWebsite());
-        $this->setDefaultGroup($entity);
+        $customerStore = $entity->getStore();
+        if ($customerStore) {
+            $website = $customerStore->getWebsite();
+
+            $entity->setWebsite($website);
+            $this->setDefaultGroup($entity, $website);
+        }
     }
 
     /**
      * @param Customer $entity
+     * @param Website $customerWebsite
      */
-    protected function setDefaultGroup(Customer $entity)
+    protected function setDefaultGroup(Customer $entity, Website $customerWebsite)
     {
-        if (!$entity->getGroup() && $entity->getWebsite()->getDefaultGroupId()) {
+        if (!$entity->getGroup() && $customerWebsite->getDefaultGroupId()) {
             $em = $this->strategyHelper->getEntityManager('OroCRMMagentoBundle:CustomerGroup');
             $group = $em->getRepository('OroCRMMagentoBundle:CustomerGroup')
                 ->findOneBy(
                     [
-                        'originId' => $entity->getWebsite()->getDefaultGroupId(),
+                        'originId' => $customerWebsite->getDefaultGroupId(),
                         'channel' => $entity->getChannel()
                     ]
                 );

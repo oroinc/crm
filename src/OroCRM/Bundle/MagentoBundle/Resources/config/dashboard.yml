@@ -6,7 +6,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_cart_view
             description: orocrm.magento.dashboard.my_sales_flow_b2c_chart.description
             icon:        bundles/orocrmmagento/img/my_sales_flow_b2c.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityCartEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -19,7 +19,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.average_order_amount_chart.description
             icon:        bundles/orocrmmagento/img/average-amount-order.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -32,7 +32,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_cart_view
             description: orocrm.magento.dashboard.new_magento_customers_chart.description
             icon:        bundles/orocrmmagento/img/number-magento-customers.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityCustomerEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityCustomerEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -46,65 +46,65 @@ oro_dashboard_config:
             acl:         orocrm_magento_cart_view
             description: orocrm.magento.dashboard.e_commerce_statistic.description
             icon:        bundles/orocrmmagento/img/icon-big_numbers.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityCartEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityCartEnabled()"
             data_items:
                 revenue:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getRevenueValues, currency)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getRevenueValues, currency)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.revenue.label
                     acl:           orocrm_magento_order_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 orders_number:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOrdersNumberValues, integer)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOrdersNumberValues, integer)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.orders_number.label
                     acl:           orocrm_magento_order_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 discounted_orders_percent:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getDiscountedOrdersPercentValues, percent)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getDiscountedOrdersPercentValues, percent)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.discounted_orders_percent.label
                     acl:           orocrm_magento_order_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 new_customers_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getNewCustomersCountValues, integer)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getNewCustomersCountValues, integer)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.new_customers_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 returning_customers_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getReturningCustomersCountValues, integer)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getReturningCustomersCountValues, integer)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.returning_customers_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 average_order_value:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAOVValues, currency)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAOVValues, currency)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.average_order_value.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandoned_revenue:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonedRevenueValues, currency, true)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonedRevenueValues, currency, true)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_revenue.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandoned_count:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonedCountValues, integer, true)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonedCountValues, integer, true)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandoned_count.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 abandon_rate:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonRateValues, percent, true)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getAbandonRateValues, percent, true)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.abandon_rate.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 site_visits:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getSiteVisitsValues, integer)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getSiteVisitsValues, integer)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.site_visits.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 order_conversion:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOrderConversionValues, percent)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getOrderConversionValues, percent)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.order_conversion.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
                 customer_conversion:
-                    data_provider: @oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getCustomerConversionValues, percent)
+                    data_provider: "@oro_dashboard.provider.big_number.processor->getBigNumberValues($widgetOptions$, magento, getCustomerConversionValues, percent)"
                     label:         orocrm.magento.dashboard.e_commerce_statistic.customer_conversion.label
                     acl:           orocrm_magento_customer_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
@@ -137,7 +137,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.revenue_over_time_chart.description
             icon:        bundles/orocrmmagento/img/revenue.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -150,7 +150,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.orders_over_time_chart.description
             icon:        bundles/orocrmmagento/img/number-magento-customers.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range
@@ -163,7 +163,7 @@ oro_dashboard_config:
             acl:         orocrm_magento_order_view
             description: orocrm.magento.dashboard.purchase_chart.description
             icon:        bundles/orocrmmagento/img/purchased.png
-            applicable:  @orocrm_magento.provider.enitity_state->isEntityOrderEnabled()
+            applicable:  "@orocrm_magento.provider.enitity_state->isEntityOrderEnabled()"
             configuration:
                 dateRange:
                     type: oro_type_widget_date_range

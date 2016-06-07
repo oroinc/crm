@@ -44,11 +44,11 @@ services:
     orocrm_campaign.email_campaign.form.type:
         class: %orocrm_campaign.form.type.email_campaign.class%
         calls:
-            - [addSubscriber, [@orocrm_campaign.form.subscriber.transport_settings]]
+            - [addSubscriber,  ["@orocrm_campaign.form.subscriber.transport_settings"]]
         tags:
             - { name: form.type, alias: orocrm_email_campaign }
         arguments:
-            - @orocrm_campaign.email_transport.provider
+            - "@orocrm_campaign.email_transport.provider"
 
     orocrm_campaign.email_campaign.form:
         class: Symfony\Component\Form\Form
@@ -63,14 +63,14 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_campaign.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_campaign.email_campaign.manager.api:
         class: %orocrm_campaign.email_campaign.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_campaign.email_campaign.entity.class%
-            - @doctrine.orm.entity_manager
+            - "@doctrine.orm.entity_manager"
 
     orocrm_campaign.data_transformer.multi_line:
         class: %orocrm_campaign.data_transformer.multi_line.class%
@@ -91,40 +91,40 @@ services:
     orocrm_campaign.form.type.email_transport_select:
         class: %orocrm_campaign.form.type.email_transport_select.class%
         arguments:
-            - @orocrm_campaign.email_transport.provider
+            - "@orocrm_campaign.email_transport.provider"
         tags:
             - { name: form.type, alias: "orocrm_campaign_email_transport_select" }
 
     orocrm_campaign.transport.email:
         class: %orocrm_campaign.transport.email.class%
         arguments:
-            - @oro_email.mailer.processor
-            - @oro_email.email_renderer
-            - @oro_entity.doctrine_helper
-            - @oro_email.email.address.helper
+            - "@oro_email.mailer.processor"
+            - "@oro_email.email_renderer"
+            - "@oro_entity.doctrine_helper"
+            - "@oro_email.email.address.helper"
         tags:
             - { name: "orocrm_campaign.email_transport" }
 
     orocrm_campaign.email_campaign.statistics_connector:
         class: %orocrm_campaign.email_campaign.statistics_connector.class%
         arguments:
-            - @orocrm_marketing_list.model.marketing_list_item_connector
-            - @oro_entity.doctrine_helper
+            - "@orocrm_marketing_list.model.marketing_list_item_connector"
+            - "@oro_entity.doctrine_helper"
         calls:
             - [setEntityName, [%orocrm_campaign.email_campaign_statistics.class%]]
 
     orocrm_campaign.email_campaign.sender:
         class: %orocrm_campaign.email_campaign.sender.class%
         arguments:
-            - @orocrm_marketing_list.provider.marketing_list
-            - @oro_config.user
-            - @orocrm_campaign.email_campaign.statistics_connector
-            - @orocrm_marketing_list.provider.contact_information_fields
-            - @doctrine
-            - @orocrm_campaign.email_transport.provider
+            - "@orocrm_marketing_list.provider.marketing_list"
+            - "@oro_config.user"
+            - "@orocrm_campaign.email_campaign.statistics_connector"
+            - "@orocrm_marketing_list.provider.contact_information_fields"
+            - "@doctrine"
+            - "@orocrm_campaign.email_transport.provider"
         calls:
-            - [setLogger, [@logger]]
-            - [setValidator, [@validator]]
+            - [setLogger,  ["@logger"]]
+            - [setValidator,  ["@validator"]]
 
     orocrm_campaign.email_transport.provider:
         class: %orocrm_campaign.email_transport.provider.class%
@@ -132,59 +132,59 @@ services:
     orocrm_campaign.email_campaign.sender.builder:
         class: %orocrm_campaign.email_campaign.sender.builder.class%
         arguments:
-            - @orocrm_campaign.email_campaign.sender
+            - "@orocrm_campaign.email_campaign.sender"
 
     orocrm_campaign.listener.email_campaign_statistic:
         class: %orocrm_campaign.listener.email_campaign_statistic.class%
         arguments:
-            - @orocrm_marketing_list.model.helper
-            - @doctrine
+            - "@orocrm_marketing_list.model.helper"
+            - "@doctrine"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: 300 }
 
     orocrm_campaign.listener.email_campaign_statistic_groupping:
         class: %orocrm_campaign.listener.email_campaign_statistic_groupping.class%
         arguments:
-            - @orocrm_marketing_list.model.helper
-            - @orocrm_campaign.group_by_helper
+            - "@orocrm_marketing_list.model.helper"
+            - "@orocrm_campaign.group_by_helper"
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.datagrid.build.pre, method: onPreBuild, priority: -10 }
 
     orocrm_campaign.listener.email_campaign_statistic_connector.cache_clear:
         class: %orocrm_campaign.listener.email_campaign_statistic_connector.cache_clear.class%
         arguments:
-            - @orocrm_campaign.email_campaign.statistics_connector
+            - "@orocrm_campaign.email_campaign.statistics_connector"
         tags:
             - { name: doctrine.event_subscriber }
 
     orocrm_campaign.form.type.internal_transport_settings:
         class: %orocrm_campaign.form.type.internal_transport_settings.class%
         arguments:
-            - @doctrine
+            - "@doctrine"
         calls:
-            - [addSubscriber, [@orocrm_campaign.form.subscriber.transport_settings_email_template]]
+            - [addSubscriber,  ["@orocrm_campaign.form.subscriber.transport_settings_email_template"]]
         tags:
             - { name: form.type, alias: "orocrm_campaign_internal_transport_settings" }
 
     orocrm_campaign.form.subscriber.transport_settings:
         class: %orocrm_campaign.form.subscriber.transport_settings.class%
         arguments:
-            - @orocrm_campaign.email_transport.provider
-            - @oro_entity.doctrine_helper
+            - "@orocrm_campaign.email_transport.provider"
+            - "@oro_entity.doctrine_helper"
 
     orocrm_campaign.form.subscriber.transport_settings_email_template:
         class: %orocrm_campaign.form.subscriber.transport_settings_email_template.class%
         arguments:
-            - @doctrine
-            - @security.context
+            - "@doctrine"
+            - "@security.context"
 
     orocrm_campaign.form.handler.email_campaign:
         class: %orocrm_campaign.form.handler.email_campaign.class%
         scope: request
         arguments:
-            - @request
-            - @orocrm_campaign.email_campaign.form
-            - @doctrine
+            - "@request"
+            - "@orocrm_campaign.email_campaign.form"
+            - "@doctrine"
 
     orocrm_campaign.group_by_helper:
         alias: oro_query_designer.group_by_helper
@@ -192,6 +192,6 @@ services:
     orocrm_campaign.provider.tracking_identificator:
         class: %orocrm_campaign.provider.tracking_identificator.class%
         arguments:
-           - @doctrine
+           - "@doctrine"
         tags:
            - {name: oro_tracking.provider.identification, priority: 10}

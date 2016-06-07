@@ -99,7 +99,7 @@ class CaseController extends Controller
                 $this->get('translator')->trans('orocrm.case.message.saved')
             );
 
-            return $this->get('oro_ui.router')->redirectToAfterSaveAction($case);
+            return $this->get('oro_ui.router')->redirect($case);
         }
 
         return array(

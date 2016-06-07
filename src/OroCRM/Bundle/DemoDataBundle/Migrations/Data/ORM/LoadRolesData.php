@@ -55,7 +55,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
             ->locateResource('@OroCRMDemoDataBundle/Migrations/Data/ORM/CrmRoles/roles.yml');
 
         $fileName  = str_replace('/', DIRECTORY_SEPARATOR, $fileName);
-        $rolesData = Yaml::parse($fileName);
+        $rolesData = Yaml::parse(file_get_contents($fileName));
 
         foreach ($rolesData as $roleName => $roleConfigData) {
             if (isset($roleConfigData['bap_role'])) {

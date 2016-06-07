@@ -20,7 +20,14 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.cancelButton(path('orocrm_contact_group_index')) }}
-    {% set html = UI.saveAndCloseButton({'action': {'route': 'orocrm_contact_group_index'}}) %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_contact_group_index'
+    }) %}
+    {% if resource_granted('orocrm_contact_group_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_contact_group_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_contact_group_update') %}
         {% set html = html ~ UI.saveAndStayButton({
             'action': {

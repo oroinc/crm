@@ -16,14 +16,15 @@ datagrid:
                     - own.id as owner
                     - task.createdAt
                     - task.updatedAt
-                    - workflowStep.label as workflowStepLabel
+                    - ts.id as status
+                    - ts.name as statusLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
                     left:
                         - { join: task.taskPriority, alias: tp }
                         - { join: task.owner, alias: own }
-                        - { join: task.workflowStep, alias: workflowStep }
+                        - { join: task.status, alias: ts }
         inline_editing:
             enable: true
         columns:
@@ -32,8 +33,11 @@ datagrid:
             dueDate:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
-            workflowStepLabel:
-                label:         orocrm.task.workflow_step.label
+            status:
+                label:         orocrm.task.status.label
+                choices: "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('task_status')"
+                inline_editing:
+                    enable: true
             taskPriority:
                 label:         orocrm.task.task_priority.label
                 frontend_type: select
@@ -60,8 +64,8 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
-                workflowStepLabel:
-                    data_name: workflowStep.stepOrder
+                status:
+                    data_name: ts.priority
                 taskPriority:
                     data_name: tp.order
                 ownerName:
@@ -80,13 +84,10 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
-                workflowStepLabel:
-                    type:      entity
-                    data_name: task.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_task.entity.class%
+                status:
+                    type:      enum
+                    data_name: task.status
+                    enum_code: task_status
                 priorityLabel:
                     label: orocrm.task.task_priority.label
                     type:      string
@@ -96,15 +97,15 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: task.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: task.owner
                     options:
-                        lazy: @oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy
-                        data: @?oro_organization.provider.filter.busines_unit_choice_tree->getList
+                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
+                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
                 createdAt:
                     type:      datetime
                     data_name: task.createdAt
@@ -161,14 +162,15 @@ datagrid:
                     - taskPriority.label as priorityLabel
                     - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
                     - owner.id as ownerId
-                    - workflowStep.label as workflowStepLabel
+                    - ts.id as taskStatus
+                    - ts.name as statusLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
                     left:
                         - { join: task.taskPriority, alias: taskPriority }
                         - { join: task.owner, alias: owner }
-                        - { join: task.workflowStep, alias: workflowStep }
+                        - { join: task.status, alias: ts }
         columns:
             subject:
                 label:         orocrm.task.subject.label
@@ -178,8 +180,8 @@ datagrid:
             dueDate:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
-            workflowStepLabel:
-                label:         orocrm.task.workflow_step.label
+            statusLabel:
+                label:         orocrm.task.status.label
             priorityLabel:
                 label:         orocrm.task.task_priority.label
             ownerName:
@@ -193,8 +195,8 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
-                workflowStepLabel:
-                    data_name: workflowStep.stepOrder
+                statusLabel:
+                    data_name: ts.priority
                 priorityLabel:
                     data_name: taskPriority.order
                 ownerName:
@@ -209,13 +211,10 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
-                workflowStepLabel:
-                    type:      entity
-                    data_name: task.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_task.entity.class%
+                statusLabel:
+                    type:      enum
+                    data_name: taskStatus
+                    enum_code: task_status
                 priorityLabel:
                     type:      string
                     data_name: priorityLabel
@@ -256,14 +255,15 @@ datagrid:
                     - tp.label as priorityLabel
                     - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
                     - own.id as owner
-                    - workflowStep.label as workflowStepLabel
+                    - ts.id as taskStatus
+                    - ts.name as statusLabel
                 from:
                     - { table: %orocrm_task.entity.class%, alias: task }
                 join:
                     left:
                         - { join: task.taskPriority, alias: tp }
                         - { join: task.owner, alias: own }
-                        - { join: task.workflowStep, alias: workflowStep }
+                        - { join: task.status, alias: ts }
             hints:
                 - HINT_TRANSLATABLE
         columns:
@@ -274,8 +274,8 @@ datagrid:
             dueDate:
                 label:         orocrm.task.due_date.label
                 frontend_type: datetime
-            workflowStepLabel:
-                label:         orocrm.task.workflow_step.label
+            statusLabel:
+                label:         orocrm.task.status.label
             taskPriority:
                 label:         orocrm.task.task_priority.label
             ownerName:
@@ -286,8 +286,8 @@ datagrid:
                     data_name: task.subject
                 dueDate:
                     data_name: task.dueDate
-                workflowStepLabel:
-                    data_name: workflowStep.stepOrder
+                statusLabel:
+                    data_name: ts.priority
                 taskPriority:
                     data_name: tp.order
                 ownerName:
@@ -302,13 +302,10 @@ datagrid:
                 dueDate:
                     type:      datetime
                     data_name: task.dueDate
-                workflowStepLabel:
-                    type:      entity
-                    data_name: task.workflowStep
-                    options:
-                        field_type: oro_workflow_step_select
-                        field_options:
-                            workflow_entity_class: %orocrm_task.entity.class%
+                statusLabel:
+                    type:      enum
+                    data_name: taskStatus
+                    enum_code: task_status
                 priorityLabel:
                     label: orocrm.task.task_priority.label
                     type:      string
@@ -318,5 +315,5 @@ datagrid:
                     label: oro.user.owner.label
                     data_name: task.owner
                     options:
-                        lazy: @oro_user.provider.filter.user_choice_tree->shouldBeLazy
-                        data: @?oro_user.provider.filter.user_choice_tree->getList
+                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
+                        data: "@?oro_user.provider.filter.user_choice_tree->getList"

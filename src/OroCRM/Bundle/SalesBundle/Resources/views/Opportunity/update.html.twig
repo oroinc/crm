@@ -2,6 +2,12 @@
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%opportunity.name%": name} }) %}
 
+{% set pageComponent = {
+    'module': 'oroui/js/app/components/view-component',
+    'options': {'view': 'orocrmsales/js/app/views/update-page-view'},
+    'layout': 'separate'
+} %}
+
 {% set formAction = form.vars.value.id
     ? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
     : path('orocrm_sales_opportunity_create')
@@ -28,17 +34,18 @@
     {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_opportunity_index')) }}
     {% set html = UI.saveAndCloseButton({
-        'action': {
-            'route': 'orocrm_sales_opportunity_view',
-            'params': {'id': '$.id'}
-        }
+        'route': 'orocrm_sales_opportunity_view',
+        'params': {'id': '$id'}
     }) %}
+    {% if resource_granted('orocrm_sales_opportunity_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_sales_opportunity_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_sales_opportunity_update') %}
         {% set html = html ~ UI.saveAndStayButton({
-            'action': {
-                'route': 'orocrm_sales_opportunity_update',
-                'params': {'id': '$.id'}
-            }
+            'route': 'orocrm_sales_opportunity_update',
+            'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
@@ -66,15 +73,18 @@
 
 {% block breadcrumbs %}
     {{ parent() }}
-    <div class="pull-left">
-        {% if entity.status.name != 'lost' %}
-            <div class="badge badge-enabled status-enabled">
-                <i class="icon-status-enabled icon-circle"></i>{{ entity.status.label }}</div>
-        {% else %}
-            <div class="badge badge-disabled status-disabled">
-                <i class="icon-status-disabled icon-circle"></i>{{ entity.status.label  }}</div>
-        {% endif %}
-    </div>
+    {% if entity.status %}
+        <div class="pull-left">
+            {% if entity.status.id != 'lost' %}
+                <div class="badge badge-enabled status-enabled">
+                    <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
+            {% else %}
+                <div class="badge badge-disabled status-disabled">
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+
 {% endblock breadcrumbs %}
 
 {% block content_data %}
@@ -86,18 +96,16 @@
     {% endif %}
 
     {% set formFields = formFields|merge([
-        form_row(form.name),
+        form_row(form.name, {attr: {autofocus: true}}),
+        form_row(form.customer),
         form_row(form.dataChannel),
         form_row(form.contact),
-        form_row(form.customer),
+        form_row(form.status),
         form_row(form.probability),
         form_row(form.budgetAmount),
-        form_row(form.customerNeed),
-        form_row(form.proposedSolution),
-        form_row(form.closeReason),
         form_row(form.closeRevenue),
         form_row(form.closeDate),
-        form_row(form.notes)
+        form_row(form.closeReason)
     ]) %}
 
     {% set dataBlocks = [{
@@ -107,6 +115,14 @@
             {
                 'title': 'Opportunity Information'|trans,
                 'data': formFields
+            },
+            {
+                'data':
+                    [
+                        form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
+                        form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
+                        form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
+                    ]
             }
         ]
     }] %}

@@ -101,7 +101,7 @@ class B2bCustomerController extends Controller
      */
     protected function update(B2bCustomer $entity = null)
     {
-        return $this->get('oro_form.model.update_handler')->handleEntityUpdateRequest(
+        return $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_sales.b2bcustomer.form'),
             $this->get('translator')->trans('orocrm.sales.controller.b2bcustomer.saved.message'),
@@ -169,7 +169,7 @@ class B2bCustomerController extends Controller
      *        requirements={"id"="\d+", "channelId"="\d+"}
      * )
      * @ParamConverter("channel", class="OroCRMChannelBundle:Channel", options={"id" = "channelId"})
-     * @AclAncestor("orocrm_magento_customer_view")
+     * @AclAncestor("orocrm_sales_b2bcustomer_view")
      * @Template
      */
     public function customerInfoAction(B2bCustomer $customer, Channel $channel)

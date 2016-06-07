@@ -107,7 +107,7 @@ class SalesFunnelController extends Controller
                 $this->get('translator')->trans('orocrm.sales.controller.sales_funnel.saved.message')
             );
 
-            return $this->get('oro_ui.router')->redirectToAfterSaveAction($entity);
+            return $this->get('oro_ui.router')->redirect($entity);
         }
 
         return array(

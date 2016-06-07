@@ -8,20 +8,27 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtension;
 use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
+use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_9\AddActivityAssociations;
+use OroCRM\Bundle\TaskBundle\Migrations\Schema\v1_10\AddTaskStatusField;
 
 class OroCRMTaskBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    CommentExtensionAwareInterface
+    CommentExtensionAwareInterface,
+    ExtendExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
 
     /** @var CommentExtension */
     protected $comment;
+
+    /** @var ExtendExtension */
+    protected $extendExtension;
 
     /**
      * @param ActivityExtension $activityExtension
@@ -40,11 +47,19 @@ class OroCRMTaskBundleInstaller implements
     }
 
     /**
+     * @param ExtendExtension $extendExtension
+     */
+    public function setExtendExtension(ExtendExtension $extendExtension)
+    {
+        $this->extendExtension = $extendExtension;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getMigrationVersion()
     {
-        return 'v1_9';
+        return 'v1_10';
     }
 
     /**
@@ -67,6 +82,8 @@ class OroCRMTaskBundleInstaller implements
         $this->comment->addCommentAssociation($schema, 'orocrm_task');
 
         AddActivityAssociations::addActivityAssociations($schema, $this->activityExtension);
+        AddTaskStatusField::addTaskStatusField($schema, $this->extendExtension);
+        AddTaskStatusField::addEnumValues($queries, $this->extendExtension);
     }
 
     /**

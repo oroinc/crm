@@ -29,7 +29,7 @@ services:
     orocrm_analytics.builder.rfm:
         class: %orocrm_analytics.builder.rfm.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - '@oro_entity.doctrine_helper'
         tags:
             - { name: orocrm_analytics.builder }
 
@@ -46,7 +46,7 @@ services:
     orocrm_analytics.form.channel_type_extension:
         class: %orocrm_analytics.form.channel_type_extension.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - '@oro_entity.doctrine_helper'
             - %orocrm_analytics.model.rfm_aware_interface%
             - %orocrm_analytics.entity.rfm_category.class%
         tags:
@@ -60,7 +60,7 @@ services:
     orocrm_analytics.event_listener.timezone_change:
         class: %orocrm_analytics.event_listener.timezone_change.class%
         arguments:
-            - @orocrm_analytics.model.rfm_state_manager
+            - '@orocrm_analytics.model.rfm_state_manager'
         tags:
             - { name: kernel.event_listener, event: oro_config.update_after, method: onConfigUpdate }
 
@@ -72,19 +72,19 @@ services:
     orocrm_analytics.model.state_manager:
         class: %orocrm_analytics.model.state_manager.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - '@oro_entity.doctrine_helper'
 
     orocrm_analytics.model.rfm_state_manager:
         class: %orocrm_analytics.model.rfm_state_manager.class%
         arguments:
-            - @oro_entity.doctrine_helper
+            - '@oro_entity.doctrine_helper'
             - %orocrm_analytics.model.rfm_aware_interface%
             - %orocrm_channel.entity.class%
 
     orocrm_analytics.event_listener.rfm_category:
         class: %orocrm_analytics.event_listener.rfm_category.class%
         arguments:
-            - @orocrm_analytics.model.rfm_state_manager
+            - '@orocrm_analytics.model.rfm_state_manager'
             - %orocrm_analytics.entity.rfm_category.class%
             - %orocrm_channel.entity.class%
         tags:

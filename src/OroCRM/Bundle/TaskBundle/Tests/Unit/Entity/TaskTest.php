@@ -121,6 +121,7 @@ class TaskTest extends \PHPUnit_Framework_TestCase
         $testTaskPriority = $this->getMockBuilder('OroCRM\Bundle\TaskBundle\Entity\TaskPriority')
             ->disableOriginalConstructor()
             ->getMock();
+        
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
         return array(
             array('id', 42),

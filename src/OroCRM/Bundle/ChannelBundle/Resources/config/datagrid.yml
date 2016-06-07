@@ -18,7 +18,7 @@ datagrid:
             channelType:
                 label: orocrm.channel.channel_type.label
                 frontend_type:  select
-                choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+                choices: '@orocrm_channel.provider.settings_provider->getChannelTypeChoiceList'
             status:
                 label: orocrm.channel.status.label
                 frontend_type: select
@@ -43,7 +43,7 @@ datagrid:
                     data_name: c.channelType
                     options:
                         field_options:
-                            choices: @orocrm_channel.provider.settings_provider->getChannelTypeChoiceList
+                            choices: '@orocrm_channel.provider.settings_provider->getChannelTypeChoiceList'
                 status:
                     data_name: c.status
                     type:      choice

@@ -16,7 +16,7 @@ class WonRevenueSumFunction implements FunctionInterface
         $opportunityStatusTableAlias = $qc->ensureChildTableJoined($tableAlias, 'status', 'left');
 
         return sprintf(
-            "SUM(CASE WHEN (%s.name='won') THEN %s ELSE 0 END)",
+            "SUM(CASE WHEN (%s.id='won') THEN %s ELSE 0 END)",
             $opportunityStatusTableAlias,
             $columnName
         );

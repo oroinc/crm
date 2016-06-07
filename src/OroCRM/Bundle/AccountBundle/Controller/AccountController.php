@@ -104,7 +104,7 @@ class AccountController extends Controller
             $entity = $this->getManager()->createEntity();
         }
 
-        return $this->get('oro_form.model.update_handler')->handleEntityUpdateRequest(
+        return $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_account.form.account'),
             $this->get('translator')->trans('orocrm.account.controller.account.saved.message'),

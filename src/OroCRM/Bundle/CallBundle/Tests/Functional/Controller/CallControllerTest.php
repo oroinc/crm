@@ -18,6 +18,7 @@ class CallControllerTest extends WebTestCase
             array(),
             array_merge($this->generateBasicAuthHeader(), array('HTTP_X-CSRF-Header' => 1))
         );
+        $this->client->useHashNavigation(true);
     }
 
     public function testIndex()
@@ -93,7 +94,7 @@ class CallControllerTest extends WebTestCase
 
         $result = $this->client->getResponse();
         $this->assertHtmlResponseStatusCodeEquals($result, 200);
-        $this->assertContains("Test Call", $crawler->html());
+        $this->assertContains("Test Update Call", $crawler->html());
     }
 
     /**

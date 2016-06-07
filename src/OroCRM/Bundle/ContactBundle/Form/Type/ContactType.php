@@ -43,13 +43,20 @@ class ContactType extends AbstractType
         // basic plain fields
         $builder
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.contact.name_prefix.label'))
-            ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.contact.first_name.label'))
+            ->add('firstName', 'text', array('required' => false, 'label' => 'orocrm.contact.first_name.label'))
             ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.contact.middle_name.label'))
-            ->add('lastName', 'text', array('required' => true, 'label' => 'orocrm.contact.last_name.label'))
+            ->add('lastName', 'text', array('required' => false, 'label' => 'orocrm.contact.last_name.label'))
             ->add('nameSuffix', 'text', array('required' => false, 'label' => 'orocrm.contact.name_suffix.label'))
             ->add('gender', 'oro_gender', array('required' => false, 'label' => 'orocrm.contact.gender.label'))
             ->add('birthday', 'oro_date', array('required' => false, 'label' => 'orocrm.contact.birthday.label'))
-            ->add('description', 'textarea', array('required' => false, 'label' => 'orocrm.contact.description.label'));
+            ->add(
+                'description',
+                'oro_resizeable_rich_text',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.contact.description.label'
+                )
+            );
 
         $builder
             ->add('jobTitle', 'text', array('required' => false, 'label' => 'orocrm.contact.job_title.label'))

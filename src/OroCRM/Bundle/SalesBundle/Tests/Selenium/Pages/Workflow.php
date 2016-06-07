@@ -47,7 +47,7 @@ class Workflow extends AbstractPageEntity
         $this->waitForAjax();
         $this->assertElementPresent(
             "//div[@id='select2-drop']//div[contains(., '{$customer}')]",
-            "B2B customer autocomplete doesn't return search value"
+            "Business customer autocomplete doesn't return search value"
         );
         $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$customer}')]")->click();
 
