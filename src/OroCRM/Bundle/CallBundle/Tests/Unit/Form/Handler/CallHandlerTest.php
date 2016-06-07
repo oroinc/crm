@@ -11,14 +11,12 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
+use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\CallBundle\Entity\Call;
 use OroCRM\Bundle\CallBundle\Entity\Manager\CallActivityManager;
 use OroCRM\Bundle\CallBundle\Form\Handler\CallHandler;
 use OroCRM\Bundle\CallBundle\Tests\Unit\Fixtures\Entity\TestTarget;
-
-use Oro\Bundle\UserBundle\Entity\User;
-use Oro\Bundle\CalendarBundle\Tests\Unit\ReflectionUtil;
 
 class CallHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,10 +94,11 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
     public function testProcessWithContexts()
     {
         $context = new User();
-        ReflectionUtil::setId($context, 123);
+        $this->setId($context, 123);
 
         $owner = new User();
-        ReflectionUtil::setId($owner, 321);
+        $this->setId($owner, 321);
+        $this->entity->setOwner($owner);
 
         $this->request->setMethod('POST');
 
@@ -112,13 +111,13 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->will($this->returnValue($this->form));
 
+        $this->form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue(true));
+
         $this->form->expects($this->once())
             ->method('isValid')
             ->will($this->returnValue(true));
-
-        $this->entity->expects($this->once())
-            ->method('getOwner')
-            ->will($this->returnValue($owner));
 
         $this->form->expects($this->once())
             ->method('setData')
@@ -138,13 +137,9 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->identicalTo([$context, $owner])
             );
 
-        $this->activityManager->expects($this->never())
-            ->method('removeActivityTarget');
         $this->assertTrue(
             $this->handler->process($this->entity)
         );
-
-        $this->handler->process($this->entity);
     }
 
     public function testProcessGetRequestWithoutTargetEntity()
