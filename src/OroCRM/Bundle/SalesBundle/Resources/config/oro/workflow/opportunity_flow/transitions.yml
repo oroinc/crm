@@ -8,6 +8,28 @@ workflows:
                 is_hidden: true
                 is_unavailable_hidden: true
                 transition_definition: create_definition
+                form_options:
+                    attribute_fields:
+                        status:
+                            form_type: oro_enum_select
+                            options:
+                                enum_code: opportunity_status
+                                required: true
+                                empty_value: false
+                                constraints:
+                                    - NotBlank: ~
+                                choice_label: name
+                                disabled_values:
+                                    - won
+                                    - lost
+                        probability: ~
+                    init_actions:
+                        - '@assign_value': [$probability, null]
+                        - '@request_enum_entity':
+                            enum_code: opportunity_status
+                            order_by:
+                                priority: ASC
+                            attribute: $opportunity.status
             develop:
                 label: 'Develop'
                 step_to: open

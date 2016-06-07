@@ -2,10 +2,10 @@ workflows:
     opportunity_flow:
         transition_definitions:
             create_definition:
-                conditions:
-                    '@and':
-                        - '@neq': [$status.id, 'lost']
-                        - '@neq': [$status.id, 'won']
+                post_actions:
+                    - '@assign_value':
+                        - [$close_revenue, null]
+                        - [$close_reason, null]
             develop_definition:
                 conditions:
                     '@and':
