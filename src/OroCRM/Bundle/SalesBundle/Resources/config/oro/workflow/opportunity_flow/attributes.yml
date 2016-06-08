@@ -1,5 +1,5 @@
 workflows:
-    b2b_flow_sales:
+    opportunity_flow:
         attributes:
             opportunity_name:
                 property_path: opportunity.name
@@ -7,10 +7,6 @@ workflows:
                 property_path: opportunity.notes
             contact:
                 property_path: opportunity.contact
-            b2bcustomer:
-                property_path: opportunity.customer
-            dataChannel:
-                property_path: opportunity.dataChannel
             probability:
                 property_path: opportunity.probability
             budget_amount:
@@ -19,7 +15,7 @@ workflows:
                 property_path: opportunity.customerNeed
             proposed_solution:
                 property_path: opportunity.proposedSolution
-            close_reason_name: # temporary attribute to find close reason by its name
+            close_reason_name:
                 label: orocrm.sales.opportunity.close_reason.label
                 type: string
             close_reason:
@@ -27,5 +23,8 @@ workflows:
             close_revenue:
                 property_path: opportunity.closeRevenue
             close_date:
-                label: orocrm.sales.opportunity.workflow.close_date.label
+                label: orocrm.sales.opportunity.close_date.label
                 property_path: opportunity.closeDate
+            status:
+                label: orocrm.sales.opportunity.status.label
+                property_path: opportunity.status
