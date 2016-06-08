@@ -23,7 +23,7 @@ Scenario: Delete few manually selected records
 	And I keep in mind number of records in list
 	When I check first 2 records in grid
 	And I click "Delete" link from mass action dropdown
-	And press "Yes, Delete"
+	And confirm deletion
 	Then I should see "2 entities were deleted" flash message
 	And the number of records decreased by 2
 
@@ -32,7 +32,7 @@ Scenario: Cancel Delete records
 	And I keep in mind number of records in list
 	And I check first 2 records in grid
 	When I click "Delete" link from mass action dropdown
-	And press "Cancel"
+	And cancel deletion
 	And the number of records remained the same
 
 Scenario: Select and delete All Visible records
@@ -41,14 +41,14 @@ Scenario: Select and delete All Visible records
 	And I select 10 from per page list dropdown
 	When I check All Visible records in grid
 	And I click "Delete" link from mass action dropdown
-	And press "Yes, Delete"
+	And confirm deletion
 	Then the number of records decreased by 10
 
 Scenario: Select and delete All records
 	Given I open the menu "Customers" and click "Contacts"
 	When I check all records in grid
 	And I click "Delete" link from mass action dropdown
-	And press "Yes, Delete"
+	And confirm deletion
 	Then there is no records in grid
 
 Scenario: Uncheck few records
@@ -58,7 +58,7 @@ Scenario: Uncheck few records
 	When I check All Visible records in grid
 	And I uncheck first 2 records in grid
 	And I click "Delete" link from mass action dropdown
-	And press "Yes, Delete"
+	And confirm deletion
 	Then the number of records decreased by 8
 
 #@skip
