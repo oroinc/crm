@@ -130,12 +130,12 @@ class OpportunityType extends AbstractType
 
                 if ($opportunity instanceof Opportunity) {
                     $b2bCustomer = $opportunity->getCustomer();
-                    if (!$b2bCustomer->getDataChannel()) {
+                    if ($b2bCustomer && !$b2bCustomer->getDataChannel()) {
                         // new customer needs a channel
                         $b2bCustomer->setDataChannel($opportunity->getDataChannel());
                     }
 
-                    if (!$b2bCustomer->getAccount()) {
+                    if ($b2bCustomer && !$b2bCustomer->getAccount()) {
                         // new Account for new B2bCustomer
                         $account = new Account();
                         $account->setName($b2bCustomer->getName());
