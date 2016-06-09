@@ -60,9 +60,20 @@
 
     {{ UI.cancelButton(path('orocrm_channel_index')) }}
 
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_channel_view',
+        'params': {'id': '$id', '_enableContentProviders': 'mainMenu'}
+    }) %}
+    {% if resource_granted('orocrm_channel_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_channel_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_channel_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_channel_update',
+            'params': {'id': '$id', '_enableContentProviders': 'mainMenu'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}

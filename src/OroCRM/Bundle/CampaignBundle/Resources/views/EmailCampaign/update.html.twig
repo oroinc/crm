@@ -16,9 +16,20 @@
         }) }}
     {% endif %}
     {{ UI.cancelButton(path('orocrm_email_campaign_index')) }}
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_email_campaign_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_email_campaign_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_email_campaign_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_email_campaign_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_email_campaign_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock navButtons %}
