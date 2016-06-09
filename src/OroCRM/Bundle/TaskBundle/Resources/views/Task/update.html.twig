@@ -4,9 +4,20 @@
 {% set entityId = entity.id %}
 
 {% block navButtons %}
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_task_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_task_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_task_create'
+        }) %}
+    {% endif %}
     {% if resource_granted('orocrm_task_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_task_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
     {{ UI.cancelButton(path('orocrm_task_index')) }}
