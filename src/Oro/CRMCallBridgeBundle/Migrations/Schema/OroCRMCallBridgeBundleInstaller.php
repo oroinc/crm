@@ -104,7 +104,7 @@ class OroCRMCallBridgeBundleInstaller implements
     {
         /** if CallBundle isn't installed  do nothing **/
         if (!$schema->hasTable('orocrm_call')) {
-           return; 
+            return;
         }
 
         /** Tables generation **/
@@ -241,5 +241,4 @@ class OroCRMCallBridgeBundleInstaller implements
             ['onDelete' => 'CASCADE']
         );
     }
-
 }
