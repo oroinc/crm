@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMCallBundle\DependencyInjection;
+namespace Oro\CRMCallBridgeBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

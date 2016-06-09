@@ -1,2 +1,2 @@
 bundles:
-    - Oro\CRMCallBundle\OroCRMCallBundle
+    - Oro\CRMCallBridgeBundle\OroCRMCallBridgeBundle
