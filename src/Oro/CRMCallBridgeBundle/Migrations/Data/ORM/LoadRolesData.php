@@ -14,7 +14,6 @@ use Symfony\Component\Yaml\Yaml;
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
 
-
 class LoadRolesData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
     /**
@@ -50,7 +49,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
 
         /**If CallBundle isn't installed do nothing**/
         if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
-           return;
+            return;
         }
 
         /** @var AclManager $aclManager */

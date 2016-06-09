@@ -190,5 +190,4 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
             'FK_342872E8BDC09B73'
         );
     }
-    
 }

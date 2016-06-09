@@ -190,5 +190,4 @@ class FillActivityAssociationTables implements
             $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_magento_order')
         );
     }
-    
 }
