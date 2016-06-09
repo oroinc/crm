@@ -45,9 +45,6 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *              "type"="ACL",
  *              "group_name"=""
  *          },
- *          "workflow"={
- *              "active_workflow"="b2b_flow_sales_funnel"
- *          },
  *          "grid"={
  *              "default"="sales-funnel-grid"
  *           },

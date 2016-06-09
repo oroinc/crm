@@ -97,7 +97,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_22';
+        return 'v1_23';
     }
 
     /**
