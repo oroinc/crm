@@ -4,7 +4,10 @@
 
 {% set pageComponent = {
     'module': 'oroui/js/app/components/view-component',
-    'options': {'view': 'orocrmsales/js/app/views/update-page-view'},
+    'options': {
+        'view': 'orocrmsales/js/app/views/update-page-view',
+        'defaultProbabilities': form.vars.defaultProbabilities
+    },
     'layout': 'separate'
 } %}
 

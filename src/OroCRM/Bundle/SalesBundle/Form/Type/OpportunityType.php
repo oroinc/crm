@@ -6,8 +6,12 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
+
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -15,6 +19,11 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
+
+    public function __construct(ConfigManager $configManager)
+    {
+        $this->configManager = $configManager;
+    }
 
     /**
      * {@inheritdoc}
@@ -143,6 +152,16 @@ class OpportunityType extends AbstractType
                     }
                 }
             }
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        $view->vars['defaultProbabilities'] = $this->configManager->get(
+            'oro_crm_sales.default_opportunity_probabilities'
         );
     }
 
