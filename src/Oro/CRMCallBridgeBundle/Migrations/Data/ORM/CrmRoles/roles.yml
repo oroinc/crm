@@ -10,18 +10,21 @@ ROLE_SALES_REP:
     permissions:
         entity|OroCRM\Bundle\CallBundle\Entity\Call: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM, ASSIGN_SYSTEM]
 
-ROLE_ONLINE_SALES_REP:
-    label: Online Sales Rep
-    permissions:
-        entity|OroCRM\Bundle\CallBundle\Entity\Call: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM, ASSIGN_SYSTEM]
+#ROLE_ONLINE_SALES_REP:
+#    bap_role: ROLE_ONLINE_SALES_REP
+#    label: Online Sales Rep
+#    permissions:
+#        entity|OroCRM\Bundle\CallBundle\Entity\Call: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM, ASSIGN_SYSTEM]
 
-ROLE_MARKETING_MANAGER:
-    label: Marketing Manager
-    permissions:
-        entity|OroCRM\Bundle\CallBundle\Entity\Call: []
-
-ROLE_LEADS_DEVELOPMENT_REP:
-    label: Leads Development Rep
-    permissions:
-        entity|OroCRM\Bundle\CallBundle\Entity\Call: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM, ASSIGN_SYSTEM]
+#ROLE_MARKETING_MANAGER:
+#    bap_role: ROLE_MARKETING_MANAGER
+#    label: Marketing Manager
+#    permissions:
+#        entity|OroCRM\Bundle\CallBundle\Entity\Call: []
+#
+#ROLE_LEADS_DEVELOPMENT_REP:
+#    bap_role: ROLE_LEADS_DEVELOPMENT_REP
+#    label: Leads Development Rep
+#    permissions:
+#        entity|OroCRM\Bundle\CallBundle\Entity\Call: [CREATE_SYSTEM, VIEW_SYSTEM, EDIT_SYSTEM, DELETE_SYSTEM, ASSIGN_SYSTEM]
 

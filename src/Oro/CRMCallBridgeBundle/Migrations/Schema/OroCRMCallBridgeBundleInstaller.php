@@ -1,6 +1,6 @@
 <?php
 
-namespace Oro\CRMCallBundle\Migrations\Schema;
+namespace Oro\CRMCallBridgeBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -29,7 +29,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  */
-class OroCRMCallBundleInstaller implements
+class OroCRMCallBridgeBundleInstaller implements
     Installation,
     ExtendExtensionAwareInterface,
     NoteExtensionAwareInterface,
