@@ -5,7 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -59,7 +59,11 @@ class OpportunityFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setBudgetAmount(1000000);
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setLead($leadRepo->getEntity('Jerry Coleman'));
-                $entity->setStatus(new OpportunityStatus('In Progress'));
+
+                $statusName = 'in_progress';
+                $className = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+                $id = ExtendHelper::buildEnumValueId($statusName);
+                $entity->setStatus(new $className($id, $statusName));
 
                 return;
         }
