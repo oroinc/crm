@@ -79,7 +79,7 @@ class AclCallTest extends Selenium2TestCase
             ->setPhoneNumber($phoneNumber)
             ->save()
             ->assertMessage('Call saved')
-            ->assertTitle('All - Calls - Activities')
+            ->assertTitle($callSubject.' - Calls - Activities')
             ->close();
 
         return $callSubject;
