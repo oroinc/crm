@@ -4,8 +4,9 @@ namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
 
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
