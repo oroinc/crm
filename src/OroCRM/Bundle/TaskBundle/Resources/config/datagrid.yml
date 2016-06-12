@@ -12,7 +12,7 @@ datagrid:
                     - task.dueDate
                     - tp.name as taskPriority
                     - tp.label as priorityLabel
-                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - own.id as owner
                     - task.createdAt
                     - task.updatedAt
@@ -160,7 +160,7 @@ datagrid:
                     - task.subject
                     - task.dueDate
                     - taskPriority.label as priorityLabel
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                     - owner.id as ownerId
                     - ts.id as taskStatus
                     - ts.name as statusLabel
@@ -253,7 +253,7 @@ datagrid:
                     - task.dueDate
                     - tp.name as taskPriority
                     - tp.label as priorityLabel
-                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - own.id as owner
                     - ts.id as taskStatus
                     - ts.name as statusLabel
