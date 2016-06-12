@@ -35,8 +35,8 @@ class OpportunityListenerTest extends \PHPUnit_Framework_TestCase
         $listener      = new OpportunityListener();
         $listener->onProcessAfter($strategyEvent);
 
-        $this->assertEquals($channel, $b2bCustomer->getDataChannel());
-        $this->assertEquals($organization, $b2bCustomer->getOrganization());
+        $this->assertSame($channel, $b2bCustomer->getDataChannel());
+        $this->assertSame($organization, $b2bCustomer->getOrganization());
         $this->assertEquals($b2bCustomerName, $b2bCustomer->getAccount()->getName());
     }
 }
