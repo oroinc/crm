@@ -42,7 +42,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
      */
     public function getManager()
     {
-        return $this->get('orocrm_contact.contact_phone.manager.api');
+        return $this->get('orocrm_contact_us.contact_request.manager.api');
     }
 
     /**
@@ -54,7 +54,7 @@ class ContactRequestController extends RestController implements ClassResourceIn
     }
 
     /**
-     *
+     * {@inheritdoc}
      */
     public function getForm()
     {
