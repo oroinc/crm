@@ -32,7 +32,6 @@ Scenario: User can delete only his records but view all
 	And click Delete mass action
 	And confirm deletion
 	Then I should see "5 entities were deleted" flash message
-	And only my records should be deleted
 
 #@skip
 # ToDo: uncomment when BAP-10673 will completed
