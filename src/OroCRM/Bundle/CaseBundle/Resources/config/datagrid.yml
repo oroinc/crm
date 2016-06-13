@@ -10,8 +10,8 @@ datagrid:
                     - caseEntity.subject
                     - caseEntity.reportedAt
                     - caseEntity.closedAt
-                    - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as relatedContactName
-                    - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedToName
+                    - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
+                    - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
                     - relatedAccount.name as relatedAccountName
                     - assignedTo.id as assignedToId
                     - status.label as statusLabel
@@ -227,8 +227,8 @@ datagrid:
                     - caseEntity.id
                     - caseEntity.id as caseNumber
                     - caseEntity.subject
-                    - CONCAT(relatedContact.firstName, CONCAT(' ', relatedContact.lastName)) as relatedContactName
-                    - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedToName
+                    - CONCAT_WS(' ', relatedContact.firstName, relatedContact.lastName) as relatedContactName
+                    - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedToName
                     - relatedAccount.name as relatedAccountName
                     - assignedTo.id as assignedToId
                     - status.label as statusLabel
