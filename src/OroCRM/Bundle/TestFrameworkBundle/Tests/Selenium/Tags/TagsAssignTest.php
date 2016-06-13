@@ -26,7 +26,7 @@ class TagsAssignTest extends Selenium2TestCase
             ->assertTitle('Create Tag - Tags - System')
             ->setTagName($tagName)
             ->setOwner('admin')
-            ->save()
+            ->save('Save and Close')
             ->assertMessage('Tag saved')
             ->assertTitle('All - Tags - System')
             ->close();
