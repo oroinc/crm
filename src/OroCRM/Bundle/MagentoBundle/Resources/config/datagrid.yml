@@ -1451,7 +1451,7 @@ datagrid:
                     - channel.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CHANNEL_KEY
                     - website.name as websiteName
                     - newsletterSubscriber.email
-                    - CONCAT(customer.firstName, CONCAT(' ', customer.lastName)) as customerName
+                    - CONCAT_WS(' ', customer.firstName, customer.lastName) as customerName
                     - customer.email as customerEmail
                     - newsletterSubscriber.createdAt
                     - newsletterSubscriber.updatedAt
