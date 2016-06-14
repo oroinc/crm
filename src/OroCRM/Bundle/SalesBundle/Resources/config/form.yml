@@ -3,6 +3,8 @@ parameters:
     orocrm_sales.opportunity.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityApiType
     orocrm_sales.opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
 
+    orocrm_sales.opportunity_probability.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType
+
     orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
@@ -33,6 +35,14 @@ services:
            - '@oro_config.user'
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity }
+
+    orocrm_sales.opportunity_probability.form.type:
+        class: %orocrm_sales.opportunity_probability.form.type.class%
+        arguments:
+            - '@oro_entity_extend.enum_type_helper'
+            - '@doctrine'
+        tags:
+            - { name: form.type, alias: orocrm_sales_opportunity_probability }
 
     orocrm_sales.opportunity.form.type.api:
         class: %orocrm_sales.opportunity.form.type.api.class%

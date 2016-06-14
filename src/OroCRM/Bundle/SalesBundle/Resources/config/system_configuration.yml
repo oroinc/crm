@@ -1,0 +1,30 @@
+oro_system_configuration:
+    groups:
+        probability_configuration:
+            icon:  icon-road
+            title: orocrm.sales.system_configuration.groups.probability_configuration.title
+
+        opportunity_status_probabilities:
+            title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
+            priority: 10
+
+    fields:
+        oro_crm_sales.default_opportunity_probabilities:
+            data_type: array
+            type: orocrm_sales_opportunity_probability
+            options:
+                tooltip: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.tooltip
+                label: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.label
+                attr:
+                    class: oro-clearfix
+    tree:
+        system_configuration:
+            platform:
+                children:
+                    general_setup:
+                        children:
+                            probability_configuration:
+                                children:
+                                    opportunity_status_probabilities:
+                                        children:
+                                            - oro_crm_sales.default_opportunity_probabilities

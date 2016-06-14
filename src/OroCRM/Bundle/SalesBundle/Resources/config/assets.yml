@@ -1,0 +1,3 @@
+css:
+  'orocrmsales':
+      - 'bundles/orocrmsales/css/less/orocrm.sales.less'

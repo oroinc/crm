@@ -290,3 +290,12 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        system_configuration:
+            groups:
+                probability_configuration.title:            Probability Configuration
+                opportunity_status_probabilities.title:     Probability per Opportunity Status
+            fields:
+                default_opportunity_probabilities:
+                    label: Default values
+                    tooltip: Configure default values for probability which will be used when Opportunity status changes
