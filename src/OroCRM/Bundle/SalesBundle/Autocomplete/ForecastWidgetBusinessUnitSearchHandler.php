@@ -52,7 +52,8 @@ class ForecastWidgetBusinessUnitSearchHandler extends SearchHandler
         $elements = $result->getElements();
 
         foreach ($elements as $element) {
-            if (in_array($element->getRecordId(), $allowedBusinessUnitIds, true)) {
+            $recordId = (int)$element->getRecordId();
+            if (in_array($recordId, $allowedBusinessUnitIds, true)) {
                 $ids[] = $element->getRecordId();
             }
         }

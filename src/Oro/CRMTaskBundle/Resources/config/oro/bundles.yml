@@ -1,0 +1,2 @@
+bundles:
+    - { name: Oro\CRMTaskBundle\OroCRMTaskBridgeBundle, priority: 200 }
