@@ -168,3 +168,11 @@ services:
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
+
+    orocrm_sales.provider.opportunity_by_status:
+        class: OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_range'
+            - '@oro_filter.utils.date_filter_modifier'

@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
-use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Translation\TranslatorInterface;
 
@@ -10,6 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
+
 use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 
 class DashboardController extends Controller
@@ -91,16 +92,17 @@ class DashboardController extends Controller
      */
     public function opportunityByStatusAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMSalesBundle:Opportunity')
-            ->getOpportunitiesByStatus(
-                $this->get('oro_security.acl_helper'),
-                $this->get('oro_dashboard.widget_configs')
-                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
-                    ->get('dateRange'),
-                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_status')
-            );
-
+        $dateRange = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->get('dateRange');
+        
+        $statusesData = $this->get('oro_entity_extend.enum_value_provider')
+            ->getEnumChoicesByCode('opportunity_status');
+        
+        $items        = $this
+            ->get('orocrm_sales.provider.opportunity_by_status')
+            ->getOpportunitiesGroupedByStatus($dateRange, $statusesData);
+        
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)

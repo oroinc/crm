@@ -41,6 +41,22 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
+     * @param $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getGroupedOpportunitiesByStatusQB($alias)
+    {
+        $qb = $this->createQueryBuilder($alias);
+        $qb->select(
+            sprintf('IDENTITY(%s.status) as name, SUM(%s.budgetAmount) as budget', $alias, $alias)
+        )
+            ->groupBy(sprintf('%s.status', $alias));
+
+        return $qb;
+    }
+
+    /**
      * @param  AclHelper $aclHelper
      * @param $dateStart
      * @param $dateEnd
