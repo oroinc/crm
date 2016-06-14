@@ -5,9 +5,20 @@
 {% set formAction = entityId ? path('orocrm_case_update', { 'id': entityId}) : path('orocrm_case_create') %}
 
 {% block navButtons %}
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_case_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_case_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_case_create'
+        }) %}
+    {% endif %}
     {% if resource_granted('orocrm_case_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_case_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
     {{ UI.cancelButton(path('orocrm_case_index')) }}
