@@ -8,12 +8,12 @@ Background:
 
 Scenario: User can't delete records
 	Given I have 5 Cases
-	Given I have "None" permissions for "Delete" "Case" entity
+	And I have "None" permissions for "Delete" "Case" entity
 	When I open the menu "Activities" and click "Cases"
 	Then I shouldn't see Delete action
 
 Scenario: User can but now can't delete records
-	And my permissions on Delete Cases is set to System
+	Given my permissions on Delete Cases is set to System
 	And I open the menu "Activities" and click "Cases"
 	And I keep in mind number of records in list
 	And select few records
