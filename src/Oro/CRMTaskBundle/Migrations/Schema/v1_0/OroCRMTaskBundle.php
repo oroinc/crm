@@ -38,6 +38,9 @@ class OroCRMTaskBundle implements
      */
     public static function addTaskActivityRelations(Schema $schema, ActivityExtension $activityExtension)
     {
+        if (!$schema->hasTable('orocrm_task')) {
+            return;
+        }
         $targetTables = [
             'orocrm_account',
             'orocrm_contact',
