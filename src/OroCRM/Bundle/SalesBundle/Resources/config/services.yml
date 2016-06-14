@@ -26,6 +26,8 @@ parameters:
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
 
+    orocrm_sales.handler.opportunity_api.class:              OroCRM\Bundle\SalesBundle\Handler\OpportunityApiHandler
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -168,3 +170,11 @@ services:
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
+
+    orocrm_sales.handler.opportunity_api:
+        class: %orocrm_sales.handler.opportunity_api.class%
+        arguments:
+            - "@doctrine.orm.entity_manager"
+            - "@oro_config.user"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
