@@ -51,13 +51,13 @@ class DefaultMagentoImportStrategy extends ConfigurableAddOrReplaceStrategy
     /**
      * {@inheritdoc}
      */
-    protected function combineIdentityValues($entity, $entityName, array $searchContext)
+    protected function combineIdentityValues($entity, $entityClass, array $searchContext)
     {
-        if (is_a($entityName, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
+        if (is_a($entityClass, 'OroCRM\Bundle\MagentoBundle\Entity\IntegrationAwareInterface', true)) {
             $searchContext['channel'] = $this->context->getOption('channel');
         }
 
-        return parent::combineIdentityValues($entity, $entityName, $searchContext);
+        return parent::combineIdentityValues($entity, $entityClass, $searchContext);
     }
 
     /**
