@@ -10,7 +10,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Oro\Bundle\EmailBundle\Model\FolderType;
-use Oro\Bundle\EmailBundle\Mailer\Processor;
+use Oro\Bundle\EmailBundle\Tools\EmailOriginHelper;
 use Oro\Bundle\EmailBundle\Builder\EmailEntityBuilder;
 use Oro\Bundle\EmailBundle\Entity\EmailOrigin;
 use Oro\Bundle\EmailBundle\Entity\EmailThread;
@@ -33,9 +33,9 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
     protected $emailEntityBuilder;
 
     /**
-     * @var Processor
+     * @var EmailOriginHelper
      */
-    protected $mailerProcessor;
+    protected $emailOriginHelper;
 
     /**
      * @var ContainerInterface
@@ -61,7 +61,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
 
         $this->container = $container;
         $this->emailEntityBuilder = $container->get('oro_email.email.entity.builder');
-        $this->mailerProcessor = $container->get('oro_email.mailer.processor');
+        $this->emailOriginHelper = $container->get('oro_email.tools.email_origin_helper');
     }
 
     /**
@@ -107,7 +107,7 @@ class LoadEmailData extends AbstractFixture implements DependentFixtureInterface
             /** @var Contact $contact */
             $contact = $contacts[$contactRandom];
             $owner = $contact->getOwner();
-            $origin = $this->mailerProcessor->getEmailOrigin($owner->getEmail());
+            $origin = $this->emailOriginHelper->getEmailOrigin($owner->getEmail());
             $randomTemplate = array_rand($this->templates);
 
             $emailUser = $this->addEmailUser($randomTemplate, $owner, $contact, $origin);
