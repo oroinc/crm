@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\AddressType;
 use Oro\Bundle\BusinessEntitiesBundle\Entity\BasePerson;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -37,7 +36,6 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *      }
  * )
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="orocrm_contact_index",
  *      routeView="orocrm_contact_view",
@@ -112,7 +110,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -134,7 +131,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -157,7 +153,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -179,7 +174,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -202,7 +196,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -224,7 +217,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="gender", type="string", length=8, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -246,7 +238,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="birthday", type="date", nullable=true)
      * @Soap\ComplexType("date", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -268,7 +259,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="description", type="text", nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -290,7 +280,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Source")
      * @ORM\JoinColumn(name="source_name", referencedColumnName="name")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -312,7 +301,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Method")
      * @ORM\JoinColumn(name="method_name", referencedColumnName="name")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -335,7 +323,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -358,7 +345,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="assigned_to_user_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -381,7 +367,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="reports_to_contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -403,7 +388,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -424,7 +408,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -491,7 +474,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="fax", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -513,7 +495,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="skype", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -535,7 +516,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -557,7 +537,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="facebook", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -579,7 +558,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="google_plus", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -601,7 +579,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *
      * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={

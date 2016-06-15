@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -23,7 +22,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      indexes={@ORM\Index(name="opportunity_created_idx",columns={"created_at"})}
  * )
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="orocrm_sales_opportunity_index",
  *      routeView="orocrm_sales_opportunity_view",
@@ -92,7 +90,6 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\OpportunityCloseReason")
      * @ORM\JoinColumn(name="close_reason_name", referencedColumnName="name")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -110,7 +107,6 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact", cascade={"persist"})
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -131,7 +127,6 @@ class Opportunity extends ExtendOpportunity implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\Lead", inversedBy="opportunities")
      * @ORM\JoinColumn(name="lead_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -148,7 +143,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var User
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -165,7 +159,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -182,7 +175,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var \DateTime
      *
      * @ORM\Column(name="close_date", type="date", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -198,7 +190,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var float
      *
      * @ORM\Column(name="probability", type="percent", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "form"={
@@ -222,7 +213,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var double
      *
      * @ORM\Column(name="budget_amount", type="money", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "form"={
@@ -246,7 +236,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var double
      *
      * @ORM\Column(name="close_revenue", type="money", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "form"={
@@ -270,7 +259,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var string
      *
      * @ORM\Column(name="customer_need", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -286,7 +274,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var string
      *
      * @ORM\Column(name="proposed_solution", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -336,7 +323,6 @@ class Opportunity extends ExtendOpportunity implements
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={
@@ -367,7 +353,6 @@ class Opportunity extends ExtendOpportunity implements
      *     cascade={"persist"}
      * )
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},

@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -34,7 +33,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  * )
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository")
  * @ORM\HasLifecycleCallbacks()
- * @Oro\Loggable
  * @Config(
  *      routeName="orocrm_sales_lead_index",
  *      routeView="orocrm_sales_lead_view",
@@ -104,7 +102,6 @@ class Lead extends ExtendLead implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\ContactBundle\Entity\Contact")
      * @ORM\JoinColumn(name="contact_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -121,7 +118,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -138,7 +134,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -154,7 +149,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -170,7 +164,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -186,7 +179,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -202,7 +194,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -218,7 +209,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="job_title", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -274,7 +264,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="company_name", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -290,7 +279,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="website", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -306,7 +294,6 @@ class Lead extends ExtendLead implements
      * @var integer
      *
      * @ORM\Column(name="number_of_employees", type="integer", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -322,7 +309,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="industry", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -408,7 +394,6 @@ class Lead extends ExtendLead implements
      *
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="user_owner_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -440,7 +425,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},
@@ -465,7 +449,6 @@ class Lead extends ExtendLead implements
      *
      * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\B2bCustomer", inversedBy="leads")
      * @ORM\JoinColumn(name="customer_id", referencedColumnName="id", onDelete="SET NULL")
-     * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
      *      "dataaudit"={"auditable"=true},

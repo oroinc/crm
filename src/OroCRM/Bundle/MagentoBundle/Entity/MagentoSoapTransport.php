@@ -6,7 +6,6 @@ use Doctrine\ORM\Mapping as ORM;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\IntegrationBundle\Entity\Transport;
 
 use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
@@ -16,7 +15,6 @@ use OroCRM\Bundle\MagentoBundle\Provider\Transport\SoapTransport;
  *
  * @package OroCRM\Bundle\MagentoBundle\Entity
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\MagentoBundle\Entity\Repository\MagentoSoapTransportRepository")
- * @Oro\Loggable()
  */
 class MagentoSoapTransport extends Transport
 {
@@ -24,7 +22,6 @@ class MagentoSoapTransport extends Transport
      * @var string
      *
      * @ORM\Column(name="wsdl_url", type="string", length=255, nullable=false)
-     * @Oro\Versioned()
      */
     protected $wsdlUrl;
 
@@ -32,7 +29,6 @@ class MagentoSoapTransport extends Transport
      * @var string
      *
      * @ORM\Column(name="api_user", type="string", length=255, nullable=false)
-     * @Oro\Versioned()
      */
     protected $apiUser;
 
@@ -47,7 +43,6 @@ class MagentoSoapTransport extends Transport
      * @var \DateTime
      *
      * @ORM\Column(name="sync_start_date", type="date")
-     * @Oro\Versioned()
      */
     protected $syncStartDate;
 
@@ -69,7 +64,6 @@ class MagentoSoapTransport extends Transport
      * @var int
      *
      * @ORM\Column(name="website_id", type="integer", nullable=true)
-     * @Oro\Versioned()
      */
     protected $websiteId = null;
 
@@ -91,7 +85,6 @@ class MagentoSoapTransport extends Transport
      * @var string
      *
      * @ORM\Column(name="extension_version", type="string", length=255, nullable=true)
-     * @Oro\Versioned()
      */
     protected $extensionVersion;
 
@@ -99,7 +92,6 @@ class MagentoSoapTransport extends Transport
      * @var string
      *
      * @ORM\Column(name="magento_version", type="string", length=255, nullable=true)
-     * @Oro\Versioned()
      */
     protected $magentoVersion;
 
@@ -121,7 +113,6 @@ class MagentoSoapTransport extends Transport
      * @var string
      *
      * @ORM\Column(name="admin_url", type="string", length=255, nullable=true)
-     * @Oro\Versioned()
      */
     protected $adminUrl;
 

@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 
 use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\Country;
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -34,7 +33,6 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendAddress;
  *      }
  * )
  * @ORM\Entity
- * @Oro\Loggable
  */
 class Address extends ExtendAddress implements OriginAwareInterface, IntegrationAwareInterface
 {
@@ -51,7 +49,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="label", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $label;
 
@@ -60,7 +57,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="street", type="string", length=500, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $street;
 
@@ -69,7 +65,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="street2", type="string", length=500, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $street2;
 
@@ -78,7 +73,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="city", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $city;
 
@@ -87,7 +81,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="postal_code", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $postalCode;
 
@@ -128,7 +121,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="region_text", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $regionText;
 
@@ -137,7 +129,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="name_prefix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $namePrefix;
 
@@ -146,7 +137,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $firstName;
 
@@ -155,7 +145,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="middle_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $middleName;
 
@@ -164,7 +153,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $lastName;
 
@@ -173,7 +161,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="name_suffix", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $nameSuffix;
 
@@ -195,7 +182,6 @@ class Address extends ExtendAddress implements OriginAwareInterface, Integration
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
      * @Soap\ComplexType("string", nillable=true)
-     * @Oro\Versioned
      */
     protected $phone;
 

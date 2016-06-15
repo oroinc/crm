@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\MagentoBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 
 use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
@@ -13,7 +12,6 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendWebsite;
  * Class Website
  *
  * @package OroCRM\Bundle\OroCRMMagentoBundle\Entity
- * @Oro\Loggable
  * @ORM\Entity
  * @ORM\Table(
  *  name="orocrm_magento_website",
@@ -53,7 +51,6 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="website_code", type="string", length=32, nullable=false)
-     * @Oro\Versioned
      */
     protected $code;
 
@@ -61,7 +58,6 @@ class Website extends ExtendWebsite implements OriginAwareInterface, Integration
      * @var string
      *
      * @ORM\Column(name="website_name", type="string", length=255, nullable=false)
-     * @Oro\Versioned
      */
     protected $name;
 
