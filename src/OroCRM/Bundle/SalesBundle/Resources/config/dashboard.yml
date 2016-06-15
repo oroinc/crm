@@ -127,7 +127,7 @@ oro_dashboard_config:
                     options:
                         label: orocrm.sales.dashboard.forecast_of_opportunities.business_unit
                         required: false
-                        autocomplete_alias: forecast_widget_business_units
+                        autocomplete_alias: business_units_search_handler
                 owners:
                     type: oro_type_widget_user_multiselect
                     show_on_widget: true
