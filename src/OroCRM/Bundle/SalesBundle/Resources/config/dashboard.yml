@@ -191,6 +191,12 @@ oro_dashboard_config:
                     acl:           orocrm_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
                 dateRange:
                     type: oro_type_widget_date_range
                     options:

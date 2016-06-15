@@ -19,11 +19,12 @@ class LeadRepository extends EntityRepository
      * @param  AclHelper $aclHelper
      * @param  int       $limit
      * @param  array     $dateRange
+     *
      * @return array     [itemCount, label]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null, $owners = [])
     {
-        $qb   = $this->createQueryBuilder('l')
+        $qb = $this->createQueryBuilder('l')
             ->select('s.id as source, count(o.id) as itemCount')
             ->leftJoin('l.opportunities', 'o')
             ->leftJoin('l.source', 's')
@@ -119,6 +120,7 @@ class LeadRepository extends EntityRepository
                 if ($a['itemCount'] === $b['itemCount']) {
                     return 0;
                 }
+
                 return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
             }
         );
@@ -126,30 +128,33 @@ class LeadRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return int
      */
-    public function getLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end);
+        $qb = $this->createLeadsCountQb($start, $end, $owners);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return int
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getNewLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end)
+        $qb = $this->createLeadsCountQb($start, $end, $owners)
             ->andWhere('l.status = :status')
             ->setParameter('status', 'new');
+
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -157,10 +162,11 @@ class LeadRepository extends EntityRepository
     /**
      * @param DateTime $start
      * @param DateTime $end
+     * @param int[]    $owners
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(DateTime $start, DateTime $end)
+    protected function createLeadsCountQb(DateTime $start, DateTime $end, $owners = [])
     {
         $qb = $this->createQueryBuilder('l');
 
@@ -170,6 +176,10 @@ class LeadRepository extends EntityRepository
             ->innerJoin('l.opportunities', 'o')
             ->setParameter('start', $start)
             ->setParameter('end', $end);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'l.owner', $owners);
+        }
 
         return $qb;
     }

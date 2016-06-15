@@ -269,28 +269,30 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return int
      */
-    public function getOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
-        $qb = $this->createOpportunitiesCountQb($start, $end);
+        $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return int
      */
-    public function getNewOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getNewOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
-        $qb = $this->createOpportunitiesCountQb($start, $end)
+        $qb = $this->createOpportunitiesCountQb($start, $end, $owners)
             ->andWhere('o.closeDate IS NULL');
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -299,10 +301,11 @@ class OpportunityRepository extends EntityRepository
     /**
      * @param DateTime $start
      * @param DateTime $end
+     * @param int[]    $owners
      *
      * @return QueryBuilder
      */
-    public function createOpportunitiesCountQb(DateTime $start, DateTime $end)
+    public function createOpportunitiesCountQb(DateTime $start, DateTime $end, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -312,17 +315,22 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end);
 
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
         return $qb;
     }
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return double
      */
-    public function getTotalServicePipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getTotalServicePipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -336,6 +344,10 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -389,12 +401,13 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
+     * @param int[]     $owners
      *
      * @return double
      */
-    public function getOpenWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getOpenWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -407,6 +420,10 @@ class OpportunityRepository extends EntityRepository
             ->setParameter('start', $start)
             ->setParameter('end', $end)
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
