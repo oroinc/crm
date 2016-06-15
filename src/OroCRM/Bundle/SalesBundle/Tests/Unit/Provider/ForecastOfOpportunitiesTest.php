@@ -59,6 +59,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
      */
     protected $securityFacade;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockBuilder
+     */
+    protected $ownerHelper;
+
     protected function setUp()
     {
         $opportunityRepository = 'OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository';
@@ -120,13 +125,17 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->ownerHelper = $this->getMockBuilder('\Oro\Bundle\UserBundle\Dashboard\OwnerHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
+        
         $this->provider = new ForecastOfOpportunities(
             $this->doctrine,
             $this->numberFormatter,
             $this->dateTimeFormatter,
             $this->aclHelper,
             $this->translator,
-            $this->securityFacade
+            $this->ownerHelper
         );
     }
 
@@ -138,7 +147,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->dateTimeFormatter,
             $this->aclHelper,
             $this->translator,
-            $this->securityFacade
+            $this->securityFacade,
+            $this->ownerHelper
         );
     }
 
@@ -146,8 +156,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options = ['owners' => [], 'businessUnits' => []];
+        $options = ['owners' => ['users' => [], 'businessUnits' => [], 'roles' => []]];
         $widgetOptions = new WidgetOptionBag($options);
+        $this->ownerHelper->expects($this->any())
+            ->method('getOwnerIds')
+            ->willReturn([]);
 
         $this->opportunityRepository->expects($this->any())
             ->method('getForecastOfOpportunitiesData')
@@ -171,8 +184,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options = ['owners' => [$user], 'businessUnits' => []];
+        $options = ['owners' => ['users' => [$user->getId()], 'businessUnits' => [], 'roles' => []]];
         $widgetOptions = new WidgetOptionBag($options);
+        $this->ownerHelper->expects($this->any())
+            ->method('getOwnerIds')
+            ->willReturn([$user->getId()]);
 
         $this->opportunityRepository->expects($this->any())
             ->method('getForecastOfOpportunitiesData')
@@ -203,11 +219,14 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $date = '2015-09-20 00:00:00.000000';
 
         $options = [
-            'owners' => [$user],
+            'owners' => ['users' => [$user->getId()]],
             'businessUnits' => [],
             'compareToDate' => ['useDate' => true, 'date' => $date]
         ];
         $widgetOptions = new WidgetOptionBag($options);
+        $this->ownerHelper->expects($this->any())
+            ->method('getOwnerIds')
+            ->willReturn([$user->getId()]);
 
         $resultValues = function ($users, $date, $aclHelper) {
             if ($date === null) {
@@ -247,43 +266,16 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $businessUnit = new BusinessUnit();
         $businessUnit->addUser($user);
 
-        $options = ['owners' => [], 'businessUnits' => [$businessUnit]];
+        $options = ['owners' => ['businessUnits' => [$businessUnit->getId()]]];
         $widgetOptions = new WidgetOptionBag($options);
+        $this->ownerHelper->expects($this->any())
+            ->method('getOwnerIds')
+            ->willReturn([$user->getId()]);
 
         $this->opportunityRepository->expects($this->any())
             ->method('getForecastOfOpportunitiesData')
             ->with([$user->getId()], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
-
-
-        $query = $this->getMockBuilder('Doctrine\ORM\AbstractQuery')
-            ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
-            ->getMockForAbstractClass();
-
-        $expr = $this->getMockBuilder('Doctrine\ORM\Query\Expr')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $qb->expects($this->once())
-            ->method('select')
-            ->will($this->returnSelf());
-        $qb->expects($this->any())
-            ->method('expr')
-            ->will($this->returnValue($expr));
-        $qb->expects($this->once())
-            ->method('getQuery')
-            ->will($this->returnValue($query));
-        $query->expects($this->once())
-            ->method('getResult')
-            ->will($this->returnValue([['id' => $user->getId()]]));
-
-        $this->userRepository->expects($this->once())
-            ->method('createQueryBuilder')
-            ->will($this->returnValue($qb));
 
         $this->businessUnitRepository->expects($this->any())
             ->method('findById')
