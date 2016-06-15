@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\ActivityBundle\Manager\ActivityManager;
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
 use Oro\Bundle\EntityBundle\Tools\EntityRoutingHelper;
@@ -87,6 +88,57 @@ class CallHandlerTest extends \PHPUnit_Framework_TestCase
             $this->callActivityManager,
             $this->entityRoutingHelper,
             $this->formFactory
+        );
+    }
+
+    public function testProcessWithContexts()
+    {
+        $context = new User();
+        $this->setId($context, 123);
+
+        $owner = new User();
+        $this->setId($owner, 321);
+        $this->entity->setOwner($owner);
+
+        $this->request->setMethod('POST');
+
+        $this->formFactory->expects($this->once())
+            ->method('createNamed')
+            ->with('orocrm_call_form', 'orocrm_call_form', $this->entity, [])
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->any())
+            ->method('get')
+            ->will($this->returnValue($this->form));
+
+        $this->form->expects($this->any())
+            ->method('has')
+            ->will($this->returnValue(true));
+
+        $this->form->expects($this->once())
+            ->method('isValid')
+            ->will($this->returnValue(true));
+
+        $this->form->expects($this->once())
+            ->method('setData')
+            ->with($this->identicalTo($this->entity));
+
+        $this->form->expects($this->any())
+            ->method('getData')
+            ->will($this->returnValue([$context]));
+
+        $this->activityManager->expects($this->never())
+            ->method('removeActivityTarget');
+
+        $this->activityManager->expects($this->once())
+            ->method('setActivityTargets')
+            ->with(
+                $this->identicalTo($this->entity),
+                $this->identicalTo([$context, $owner])
+            );
+
+        $this->assertTrue(
+            $this->handler->process($this->entity)
         );
     }
 

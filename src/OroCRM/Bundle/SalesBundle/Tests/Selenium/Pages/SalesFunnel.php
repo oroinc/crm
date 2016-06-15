@@ -78,6 +78,28 @@ class SalesFunnel extends AbstractPageEntity
         return $this;
     }
 
+    /**
+     * @param $channel
+     * @return SalesFunnel
+     */
+    public function setChannel($channel)
+    {
+        $element = $this->test->byXpath("//div[starts-with(@id,'s2id_oro_workflow_transition_dataChannel')]/a");
+        $element->click();
+        $this->waitForAjax();
+        if ($this->isElementPresent("//div[@id='select2-drop']/div/input")) {
+            $this->test->byXpath("//div[@id='select2-drop']/div/input")->value($channel);
+            $this->waitForAjax();
+            $this->assertElementPresent(
+                "//div[@id='select2-drop']//div[contains(., '{$channel}')]",
+                "Channel autocomplete doesn't return search value"
+            );
+        }
+        $this->test->byXpath("//div[@id='select2-drop']//div[contains(., '{$channel}')]")->click();
+
+        return $this;
+    }
+
     public function submit()
     {
         $this->test->byXpath("//button[@id='save-and-transit']")->click();

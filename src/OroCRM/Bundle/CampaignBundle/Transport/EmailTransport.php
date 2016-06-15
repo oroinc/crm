@@ -79,7 +79,7 @@ class EmailTransport implements TransportInterface
             ->setSubject($subjectRendered)
             ->setBody($templateRendered);
         
-        $this->processor->process($emailModel);
+        $this->processor->process($emailModel, null, false);
     }
 
     /**

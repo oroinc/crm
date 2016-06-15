@@ -101,21 +101,9 @@ class B2bCustomerController extends Controller
      */
     protected function update(B2bCustomer $entity = null)
     {
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
+        return $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_sales.b2bcustomer.form'),
-            function (B2bCustomer $entity) {
-                return [
-                    'route'      => 'orocrm_sales_b2bcustomer_update',
-                    'parameters' => ['id' => $entity->getId()]
-                ];
-            },
-            function (B2bCustomer $entity) {
-                return [
-                    'route'      => 'orocrm_sales_b2bcustomer_view',
-                    'parameters' => ['id' => $entity->getId()]
-                ];
-            },
             $this->get('translator')->trans('orocrm.sales.controller.b2bcustomer.saved.message'),
             $this->get('orocrm_sales.b2bcustomer.form.handler')
         );

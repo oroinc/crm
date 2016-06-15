@@ -18,9 +18,20 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_b2bcustomer_index')) }}
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_sales_b2bcustomer_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_sales_b2bcustomer_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_sales_b2bcustomer_create'
+        }) %}
+    {% endif %}
     {% if form.vars.value.id or resource_granted('orocrm_sales_b2bcustomer_update') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_sales_b2bcustomer_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
