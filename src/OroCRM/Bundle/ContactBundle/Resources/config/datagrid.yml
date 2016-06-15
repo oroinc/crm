@@ -6,7 +6,7 @@ datagrid:
             query:
                 select:
                     - c.id
-                    - CONCAT(c.firstName, ' ', c.lastName) as contactName
+                    - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - email.email as primaryEmail
                     - phone.phone as primaryPhone
                     - max(history.visitedAt) as visitDate
@@ -198,9 +198,9 @@ datagrid:
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
                     - address.street as addressStreet
-                    - CONCAT(o.firstName, CONCAT(' ', o.lastName)) as ownerName
-                    - CONCAT(assignedTo.firstName, CONCAT(' ', assignedTo.lastName)) as assignedName
-                    - CONCAT(reportsTo.firstName, CONCAT(' ', reportsTo.lastName)) as reportsName
+                    - CONCAT_WS(' ', o.firstName, o.lastName) as ownerName
+                    - CONCAT_WS(' ', assignedTo.firstName, assignedTo.lastName) as assignedName
+                    - CONCAT_WS(' ', reportsTo.firstName, reportsTo.lastName) as reportsName
                 from:
                     - { table: %orocrm_contact.entity.class%, alias: c }
                 join:
@@ -560,7 +560,7 @@ datagrid:
                     - defaultContact.lastName as contactLastName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                     - >
                       (CASE WHEN (:contact IS NOT NULL) THEN
                         CASE WHEN (:contact MEMBER OF a.contacts OR a.id IN (:data_in)) AND a.id NOT IN (:data_not_in)

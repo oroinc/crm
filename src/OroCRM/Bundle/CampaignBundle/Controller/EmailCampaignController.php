@@ -102,34 +102,40 @@ class EmailCampaignController extends Controller
      */
     protected function update(EmailCampaign $entity)
     {
-        return $this->get('oro_form.model.update_handler')->handleUpdate(
-            $entity,
-            $this->get('orocrm_campaign.email_campaign.form'),
-            function (EmailCampaign $entity) {
-                return array(
-                    'route' => 'orocrm_email_campaign_update',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
-            function (EmailCampaign $entity) {
-                return array(
-                    'route' => 'orocrm_email_campaign_view',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
-            $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message'),
-            $this->get('orocrm_campaign.form.handler.email_campaign'),
-            function (EmailCampaign $entity, FormInterface $form, Request $request) {
-                $isUpdateOnly = $request->get(EmailCampaignHandler::UPDATE_MARKER, false);
-                if ($isUpdateOnly) {
-                    $origData = $form->getData();
-                    $form = $this->get('form.factory')
-                        ->createNamed('orocrm_email_campaign', 'orocrm_email_campaign', $origData);
-                }
+        if ($this->get('orocrm_campaign.form.handler.email_campaign')->process($entity)) {
+            $this->get('session')->getFlashBag()->add(
+                'success',
+                $this->get('translator')->trans('orocrm.campaign.emailcampaign.controller.saved.message')
+            );
 
-                return array('form' => $form->createView());
-            }
-        );
+            return $this->get('oro_ui.router')->redirect($entity);
+        }
+        $form = $this->getForm();
+
+        return [
+            'entity' => $entity,
+            'form'   => $form->createView()
+        ];
+    }
+
+    /**
+     * Returns form instance
+     *
+     * @return FormInterface
+     */
+    protected function getForm()
+    {
+        $isUpdateOnly = $this->get('request')->get(EmailCampaignHandler::UPDATE_MARKER, false);
+
+        $form = $this->get('orocrm_campaign.email_campaign.form');
+        if ($isUpdateOnly) {
+            // substitute submitted form with new not submitted instance to ignore validation errors
+            // on form after transport field was changed
+            $form = $this->get('form.factory')
+                ->createNamed('orocrm_email_campaign', 'orocrm_email_campaign', $form->getData());
+        }
+
+        return $form;
     }
 
     /**
