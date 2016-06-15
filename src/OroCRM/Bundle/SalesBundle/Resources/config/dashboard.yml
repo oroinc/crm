@@ -24,17 +24,17 @@ oro_dashboard_config:
             icon:        bundles/orocrmsales/img/opportunities_by_lead_source.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
             configuration:
-                dateRange:
-                    type: oro_type_widget_date_range
-                    options:
-                       label: oro.dashboard.date_range.label
-                    show_on_widget: true
                 owners:
                     type: oro_type_widget_owners
                     show_on_widget: true
                     options:
                         label: oro.user.dashboard.owners
                         required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                    show_on_widget: true
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
@@ -43,6 +43,12 @@ oro_dashboard_config:
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
             configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
                 dateRange:
                     type: oro_type_widget_date_range
                     options:

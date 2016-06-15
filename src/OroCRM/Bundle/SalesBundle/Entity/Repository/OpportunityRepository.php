@@ -27,31 +27,36 @@ class OpportunityRepository extends EntityRepository
     /**
      * Get opportunities by state by current quarter
      *
-     * @param $aclHelper AclHelper
-     * @param  array     $dateRange
-     * @param  array     $states
+     * @param AclHelper $aclHelper
+     * @param array     $dateRange
+     * @param array     $states
+     * @param int[]     $owners
+     *
      * @return array
      */
-    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states)
+    public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states, $owners = [])
     {
         $dateEnd = $dateRange['end'];
         $dateStart = $dateRange['start'];
 
-        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states);
+        return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states, $owners);
     }
 
     /**
-     * @param  AclHelper $aclHelper
-     * @param $dateStart
-     * @param $dateEnd
-     * @param array $states
+     * @param AclHelper  $aclHelper
+     * @param            $dateStart
+     * @param            $dateEnd
+     * @param array      $states
+     * @param int[]      $owners
+     *
      * @return array
      */
     protected function getOpportunitiesDataByStatus(
         AclHelper $aclHelper,
         $dateStart = null,
         $dateEnd = null,
-        $states = []
+        $states = [],
+        $owners = []
     ) {
         foreach ($states as $key => $name) {
             $resultData[$key] = array(
@@ -71,6 +76,11 @@ class OpportunityRepository extends EntityRepository
                 ->setParameter('dateFrom', $dateStart)
                 ->setParameter('dateTo', $dateEnd);
         }
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'opportunity.owner', $owners);
+        }
+
         $groupedData = $aclHelper->apply($qb)->getArrayResult();
 
         foreach ($groupedData as $statusData) {

@@ -93,14 +93,15 @@ class DashboardController extends Controller
      */
     public function opportunityByStatusAction($widget)
     {
+        $options = $this->get('oro_dashboard.widget_configs')
+            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null));
         $items = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Opportunity')
             ->getOpportunitiesByStatus(
                 $this->get('oro_security.acl_helper'),
-                $this->get('oro_dashboard.widget_configs')
-                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
-                    ->get('dateRange'),
-                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_status')
+                $options->get('dateRange'),
+                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_status'),
+                $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
             );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
