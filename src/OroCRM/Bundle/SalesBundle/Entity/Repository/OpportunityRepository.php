@@ -91,21 +91,13 @@ class OpportunityRepository extends EntityRepository
      *
      * @return mixed
      */
-    public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper)
+    public function getForecastOfOpportunitiesData($ownerIds, $date, AclHelper $aclHelper)
     {
-        if (!$ownerIds) {
-            return [
-                'inProgressCount' => 0,
-                'budgetAmount' => 0,
-                'weightedForecast' => 0,
-            ];
-        }
-
         if ($date === null) {
-            return $this->getForecastOfOpporunitiesCurrentData($ownerIds, $aclHelper);
+            return $this->getForecastOfOpportunitiesCurrentData($ownerIds, $aclHelper);
         }
 
-        return $this->getForecastOfOpporunitiesOldData($ownerIds, $date, $aclHelper);
+        return $this->getForecastOfOpportunitiesOldData($ownerIds, $date, $aclHelper);
     }
 
     /**
@@ -113,7 +105,7 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return mixed
      */
-    protected function getForecastOfOpporunitiesCurrentData($ownerIds, AclHelper $aclHelper)
+    protected function getForecastOfOpportunitiesCurrentData($ownerIds, AclHelper $aclHelper)
     {
         $qb = $this->createQueryBuilder('opportunity');
 
@@ -147,7 +139,7 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @return mixed
      */
-    protected function getForecastOfOpporunitiesOldData($ownerIds, $date, AclHelper $aclHelper)
+    protected function getForecastOfOpportunitiesOldData($ownerIds, $date, AclHelper $aclHelper)
     {
         //clone date for avoiding wrong date on printing with current locale
         $newDate = clone $date;

@@ -150,7 +150,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpporunitiesData')
+            ->method('getForecastOfOpportunitiesData')
             ->with([], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 
@@ -175,7 +175,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpporunitiesData')
+            ->method('getForecastOfOpportunitiesData')
             ->with([$user->getId()], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 
@@ -218,7 +218,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpporunitiesData')
+            ->method('getForecastOfOpportunitiesData')
             ->with($this->logicalOr([$user->getId()], $this->logicalOr($date, null), $this->aclHelper))
             ->will($this->returnCallback($resultValues));
 
@@ -251,7 +251,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())
-            ->method('getForecastOfOpporunitiesData')
+            ->method('getForecastOfOpportunitiesData')
             ->with([$user->getId()], null, $this->aclHelper)
             ->will($this->returnValue(['inProgressCount' => 5, 'budgetAmount' => 1000, 'weightedForecast' => 500]));
 

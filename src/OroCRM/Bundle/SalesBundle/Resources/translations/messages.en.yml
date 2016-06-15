@@ -61,6 +61,7 @@ orocrm:
                 metrics: Metrics
                 no_changes: No Changes
                 no_available_metrics: No available metrics
+                role: Role
                 owner: Owner
                 compareToDate: Compare to Date
                 business_unit: Business Unit

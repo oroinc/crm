@@ -9,12 +9,9 @@ use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\LocaleBundle\Formatter\DateTimeFormatter;
 use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
-/**
- * Class ForecastOfOpportunities
- * @package OroCRM\Bundle\SalesBundle\Provider
- */
+use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
+
 class ForecastOfOpportunities
 {
     /** @var RegistryInterface */
@@ -32,11 +29,8 @@ class ForecastOfOpportunities
     /** @var TranslatorInterface */
     protected $translator;
 
-    /** @var  array */
-    protected $ownersValues;
-
     /** @var array */
-    protected $ownerIds = [];
+    protected $ownersValues;
 
     /**
      * @param RegistryInterface   $doctrine
@@ -44,19 +38,22 @@ class ForecastOfOpportunities
      * @param DateTimeFormatter   $dateTimeFormatter
      * @param AclHelper           $aclHelper
      * @param TranslatorInterface $translator
+     * @param OwnerHelper         $ownerHelper
      */
     public function __construct(
         RegistryInterface $doctrine,
         NumberFormatter $numberFormatter,
         DateTimeFormatter $dateTimeFormatter,
         AclHelper $aclHelper,
-        TranslatorInterface $translator
+        TranslatorInterface $translator,
+        OwnerHelper $ownerHelper
     ) {
         $this->doctrine          = $doctrine;
         $this->numberFormatter   = $numberFormatter;
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
+        $this->ownerHelper       = $ownerHelper;
     }
 
     /**
@@ -75,7 +72,7 @@ class ForecastOfOpportunities
         $lessIsBetter     = (bool)$lessIsBetter;
         $result           = [];
 
-        $ownerIds         = $this->getOwnerIds($widgetOptions);
+        $ownerIds         = $this->ownerHelper->getOwnerIds($widgetOptions);
         $value            = $this->{$getterName}($ownerIds);
         $result['value']  = $this->formatValue($value, $dataType);
         $compareToDate = $widgetOptions->get('compareToDate');
@@ -143,7 +140,7 @@ class ForecastOfOpportunities
         if (!isset($this->ownersValues[$key])) {
             $this->ownersValues[$key] = $this->doctrine
                 ->getRepository('OroCRMSalesBundle:Opportunity')
-                ->getForecastOfOpporunitiesData($ownerIds, $date, $this->aclHelper);
+                ->getForecastOfOpportunitiesData($ownerIds, $date, $this->aclHelper);
         }
 
         return $this->ownersValues[$key];
@@ -232,76 +229,5 @@ class ForecastOfOpportunities
         }
 
         return $result;
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return array
-     */
-    protected function getOwnerIds(WidgetOptionBag $widgetOptions)
-    {
-        $key = spl_object_hash($widgetOptions);
-        if (!isset($this->ownerIds[$key])) {
-            $owners = $widgetOptions->get('owners');
-            $owners = is_array($owners) ? $owners : [$owners];
-
-            $ownerIds = [];
-            foreach ($owners as $owner) {
-                if (is_object($owner)) {
-                    $ownerIds[] = $owner->getId();
-                }
-            }
-
-            $businessUnitIds = $this->getBusinessUnitsIds($widgetOptions);
-
-            $this->ownerIds[$key] = array_unique(array_merge($this->getUserOwnerIds($businessUnitIds), $ownerIds));
-        }
-
-        return $this->ownerIds[$key];
-    }
-
-    /**
-     * @param int[] $businessUnitIds
-     *
-     * @return int[]
-     */
-    protected function getUserOwnerIds(array $businessUnitIds)
-    {
-        if (!$businessUnitIds) {
-            return [];
-        }
-
-        $qb = $this->doctrine->getRepository('OroUserBundle:User')
-            ->createQueryBuilder('u');
-
-        $qb
-            ->select('DISTINCT(u.id)')
-            ->join('u.businessUnits', 'bu');
-        QueryUtils::applyOptimizedIn($qb, 'bu.id', $businessUnitIds);
-
-        return array_map('current', $qb->getQuery()->getResult());
-    }
-
-    /**
-     * @param WidgetOptionBag $widgetOptions
-     *
-     * @return array
-     */
-    protected function getBusinessUnitsIds(WidgetOptionBag $widgetOptions)
-    {
-        $businessUnits = $widgetOptions->get('businessUnits');
-
-        $businessUnits = is_array($businessUnits) ? $businessUnits : [$businessUnits];
-
-        $businessUnitIds = [];
-
-        foreach ($businessUnits as $businessUnit) {
-            if (is_object($businessUnit)) {
-                $businessUnitIds[] = $businessUnit->getId();
-            }
-        }
-
-        return $businessUnitIds;
     }
 }
