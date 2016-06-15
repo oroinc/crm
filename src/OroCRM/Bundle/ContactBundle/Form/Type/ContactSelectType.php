@@ -13,7 +13,7 @@ class ContactSelectType extends AbstractType
     {
         $resolver->setDefaults(
             [
-                'autocomplete_alias' => 'business_units_search_handler',
+                'autocomplete_alias' => 'contacts',
                 'create_form_route'  => 'orocrm_contact_create',
                 'configs'            => [
                     'placeholder'             => 'orocrm.contact.form.choose_contact',
