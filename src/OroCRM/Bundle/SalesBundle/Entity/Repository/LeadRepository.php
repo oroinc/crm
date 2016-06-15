@@ -7,6 +7,8 @@ use DateTime;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
+
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository
@@ -19,7 +21,7 @@ class LeadRepository extends EntityRepository
      * @param  array     $dateRange
      * @return array     [itemCount, label]
      */
-    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null)
+    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null, $owners = [])
     {
         $qb   = $this->createQueryBuilder('l')
             ->select('s.id as source, count(o.id) as itemCount')
@@ -32,6 +34,10 @@ class LeadRepository extends EntityRepository
                 ->setParameter('dateStart', $dateRange['start'])
                 ->setParameter('dateEnd', $dateRange['end']);
         }
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
         $rows = $aclHelper->apply($qb)->getArrayResult();
 
         return $this->processOpportunitiesByLeadSource($rows, $limit);

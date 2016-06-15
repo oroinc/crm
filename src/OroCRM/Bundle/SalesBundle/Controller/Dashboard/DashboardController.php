@@ -30,14 +30,16 @@ class DashboardController extends Controller
         /** @var EnumExtension $enumValueTranslator */
         $enumValueTranslator = $this->get('oro_entity_extend.twig.extension.enum');
 
+        $options = $this->get('oro_dashboard.widget_configs')->getWidgetOptions(
+            $this->getRequest()->query->get('_widgetId', null)
+        );
         $data = $this->getDoctrine()
             ->getRepository('OroCRMSalesBundle:Lead')
             ->getOpportunitiesByLeadSource(
                 $this->get('oro_security.acl_helper'),
                 10,
-                $this->get('oro_dashboard.widget_configs')
-                    ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
-                    ->get('dateRange')
+                $options->get('dateRange'),
+                $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
             );
 
         // prepare chart data

@@ -29,6 +29,12 @@ oro_dashboard_config:
                     options:
                        label: oro.dashboard.date_range.label
                     show_on_widget: true
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
