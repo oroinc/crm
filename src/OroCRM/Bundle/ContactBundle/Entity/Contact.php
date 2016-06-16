@@ -51,7 +51,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                  "phone"={
  *                      {"fieldName"="primaryPhone"}
  *                  }
- *              }
+ *              },
+ *              "category"="Contact"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

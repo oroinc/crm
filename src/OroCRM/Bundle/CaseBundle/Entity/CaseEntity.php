@@ -32,7 +32,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "auditable"=true
  *          },
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="icon-list-alt",
+ *              "category"="Case"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

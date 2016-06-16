@@ -18,7 +18,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-envelope-alt"
+ *              "icon"="icon-envelope-alt",
+ *              "category"="Magento"
  *          },
  *          "security"={
  *              "type"="ACL",

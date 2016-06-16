@@ -19,6 +19,9 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
  * @Oro\Loggable
  * @Config(
  *      defaultValues={
+ *          "entity"={
+ *              "category"="Contact"
+ *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",

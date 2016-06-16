@@ -20,6 +20,9 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\Table(name="orocrm_channel_cust_identity")
  * @Config(
  *  defaultValues={
+ *      "entity"={
+ *          "category"="Channel"
+ *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",

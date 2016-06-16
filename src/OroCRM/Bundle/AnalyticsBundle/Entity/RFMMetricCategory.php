@@ -14,6 +14,7 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  * @Config(
  *  defaultValues={
  *      "entity"={
+ *          "category"="Analytics"
  *      },
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",

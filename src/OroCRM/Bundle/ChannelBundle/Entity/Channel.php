@@ -22,7 +22,10 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *  routeName="orocrm_channel_index",
  *  routeView="orocrm_channel_view",
  *  defaultValues={
- *      "entity"={"icon"="icon-sitemap"},
+ *      "entity"={
+ *          "icon"="icon-sitemap",
+ *          "category"="Channel"
+ *      },
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",
  *          "owner_field_name"="owner",

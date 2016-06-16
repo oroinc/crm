@@ -27,7 +27,8 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      routeName="orocrm_call_index",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone-sign"
+ *              "icon"="icon-phone-sign",
+ *              "category"="Call"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

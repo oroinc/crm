@@ -22,7 +22,8 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-volume-up"
+ *              "icon"="icon-volume-up",
+ *              "category"="Campaign"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

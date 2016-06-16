@@ -23,7 +23,8 @@ use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
  *      routeName="orocrm_marketing_list_index",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt"
+ *              "icon"="icon-list-alt",
+ *              "category"="Marketing List"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

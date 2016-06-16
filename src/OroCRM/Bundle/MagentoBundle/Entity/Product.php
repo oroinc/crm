@@ -21,6 +21,9 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  * )
  * @Config(
  *      defaultValues={
+ *          "entity"={
+ *              "category"="Magento"
+ *          },
  *          "security"={
  *              "type"="ACL",
  *              "group_name"=""

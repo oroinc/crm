@@ -20,7 +20,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart"
+ *              "icon"="icon-shopping-cart",
+ *              "category"="Magento"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",

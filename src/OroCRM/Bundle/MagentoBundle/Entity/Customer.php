@@ -45,6 +45,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user",
+ *              "category"="Magento"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

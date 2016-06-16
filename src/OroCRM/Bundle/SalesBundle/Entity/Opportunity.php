@@ -33,7 +33,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_opportunity_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-usd"
+ *              "icon"="icon-usd",
+ *              "category"="Sales"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

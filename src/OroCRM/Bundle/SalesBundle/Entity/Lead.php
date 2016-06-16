@@ -39,7 +39,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone"
+ *              "icon"="icon-phone",
+ *              "category"="Sales"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
