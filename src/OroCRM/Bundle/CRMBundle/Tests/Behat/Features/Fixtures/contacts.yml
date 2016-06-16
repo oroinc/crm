@@ -1,0 +1,6 @@
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+  contact-{1..30}:
+    firstName: '<firstName()>'
+    lastName: '<lastName()>'
+    owner: '@admin'
+    organization: '@organization'
