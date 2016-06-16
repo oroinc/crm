@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\ChannelBundle\Provider\Lifetime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -18,16 +20,25 @@ class AverageLifetimeWidgetProvider
     /** @var AclHelper */
     protected $aclHelper;
 
+    /** @var DateFilterProcessor */
+    protected $dateFilterProcessor;
+
     /**
-     * @param ManagerRegistry $registry
-     * @param LocaleSettings  $localeSettings
-     * @param AclHelper       $aclHelper
+     * @param ManagerRegistry     $registry
+     * @param LocaleSettings      $localeSettings
+     * @param AclHelper           $aclHelper
+     * @param DateFilterProcessor $filterProcessor
      */
-    public function __construct(ManagerRegistry $registry, LocaleSettings $localeSettings, AclHelper $aclHelper)
-    {
-        $this->registry       = $registry;
-        $this->localeSettings = $localeSettings;
-        $this->aclHelper      = $aclHelper;
+    public function __construct(
+        ManagerRegistry $registry,
+        LocaleSettings $localeSettings,
+        AclHelper $aclHelper,
+        DateFilterProcessor $filterProcessor
+    ) {
+        $this->registry            = $registry;
+        $this->localeSettings      = $localeSettings;
+        $this->aclHelper           = $aclHelper;
+        $this->dateFilterProcessor = $filterProcessor;
     }
 
     /**
@@ -37,9 +48,10 @@ class AverageLifetimeWidgetProvider
      */
     public function getChartData($dateRange)
     {
-        $start = $dateRange['start'];
-        $end = $dateRange['end'];
-        $dates = $items = [];
+        $dateData = $this->dateFilterProcessor->getModifiedDateData($dateRange);
+        $start = $this->prepareDate($dateData['value']['start']);
+        $end = $this->prepareDate($dateData['value']['end'], false);
+        $dates  = $items = [];
         $period = new \DatePeriod($start, new \DateInterval('P1M'), $end);
         /** @var \DateTime $dt */
         foreach ($period as $dt) {
@@ -60,7 +72,7 @@ class AverageLifetimeWidgetProvider
 
         $channelNames = $this->registry->getRepository('OroCRMChannelBundle:Channel')
             ->getAvailableChannelNames($this->aclHelper);
-        $data = $this->registry->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')
+        $data         = $this->registry->getRepository('OroCRMChannelBundle:LifetimeValueAverageAggregation')
             ->findForPeriod($start, $end, array_keys($channelNames));
 
         foreach ($data as $row) {
@@ -79,5 +91,24 @@ class AverageLifetimeWidgetProvider
         }
 
         return $items;
+    }
+
+    /**
+     * @param mixed $date
+     * @param bool  $isStart
+     *
+     * @return \DateTime
+     */
+    protected function prepareDate($date, $isStart = true)
+    {
+        if (!$date) {
+            $date = $isStart
+                ? new \DateTime(FilterDateRangeConverter::MIN_DATE, new \DateTimeZone('UTC'))
+                : new \DateTime('now', new \DateTimeZone('UTC'));
+        }
+
+        return $date instanceof \DateTime
+            ? $date
+            : new \DateTime($date);
     }
 }

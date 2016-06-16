@@ -2,12 +2,12 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Dashboard;
 
-use DateTime;
-
-use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Symfony\Component\Translation\TranslatorInterface;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\NoResultException;
+
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
@@ -44,55 +44,88 @@ class PurchaseDataProvider
      */
     protected $aclHelper;
 
+    /** @var DateFilterProcessor */
+    protected $dateFilterProcessor;
+
     /**
-     * @param ManagerRegistry $registry
-     * @param ConfigProvider $configProvider
+     * @param ManagerRegistry       $registry
+     * @param ConfigProvider        $configProvider
      * @param TrackingVisitProvider $trackingVisitProvider
-     * @param TranslatorInterface $translator
-     * @param AclHelper $aclHelper
+     * @param TranslatorInterface   $translator
+     * @param AclHelper             $aclHelper
+     * @param DateFilterProcessor   $processor
      */
     public function __construct(
         ManagerRegistry $registry,
         ConfigProvider $configProvider,
         TrackingVisitProvider $trackingVisitProvider,
         TranslatorInterface $translator,
-        AclHelper $aclHelper
+        AclHelper $aclHelper,
+        DateFilterProcessor $processor
     ) {
         $this->registry = $registry;
         $this->configProvider = $configProvider;
         $this->trackingVisitProvider = $trackingVisitProvider;
         $this->translator = $translator;
         $this->aclHelper = $aclHelper;
+        $this->dateFilterProcessor = $processor;
     }
 
     /**
      * @param ChartViewBuilder $viewBuilder
-     * @param DateTime $from
-     * @param DateTime $to
      *
      * @return ChartView
      */
-    public function getPurchaseChartView(ChartViewBuilder $viewBuilder, DateTime $from, DateTime $to)
+    public function getPurchaseChartView(ChartViewBuilder $viewBuilder, array $dateRange)
     {
+        try {
+            $visitedCountQB = $this->trackingVisitProvider->getVisitedCountQB('t');
+            $this->dateFilterProcessor->process($visitedCountQB, $dateRange, 't.firstActionTime');
+
+            $visitCount =  (int)$this->aclHelper->apply($visitedCountQB)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            $visitCount = 0;
+        }
+        try {
+            $deeplyVisitedCountQB = $this->trackingVisitProvider->getDeeplyVisitedCountQB('t1');
+            $this->dateFilterProcessor->process($deeplyVisitedCountQB, $dateRange, 't1.firstActionTime');
+            $deeplyVisitedCount = (int)$this->aclHelper->apply($deeplyVisitedCountQB)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            $deeplyVisitedCount = 0;
+        }
+        try {
+            $customersCountQB = $this->getCartRepository()->getCustomersCountWhatMakeCartsQB('c');
+            $this->dateFilterProcessor->process($customersCountQB, $dateRange, 'c.createdAt');
+            $customersCount = (int)$this->aclHelper->apply($customersCountQB)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            $customersCount = 0;
+        }
+        try {
+            $uniqueCustomersQB = $this->getOrderRepository()->getUniqueBuyersCountQB('b');
+            $this->dateFilterProcessor->process($uniqueCustomersQB, $dateRange, 'b.createdAt');
+            $uniqueCustomersCount = (int)$this->aclHelper->apply($uniqueCustomersQB)->getSingleScalarResult();
+        } catch (NoResultException $ex) {
+            $uniqueCustomersCount = 0;
+        }
         $items = [
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.visited'),
-                'value'    => $this->trackingVisitProvider->getVisitedCount($from, $to),
+                'value'    => $visitCount,
                 'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.deeply_visited'),
-                'value'    => $this->trackingVisitProvider->getDeeplyVisitedCount($from, $to),
+                'value'    => $deeplyVisitedCount,
                 'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.added_to_cart'),
-                'value'    => $this->getCartRepository()->getCustomersCountWhatMakeCarts($this->aclHelper, $from, $to),
+                'value'    => $customersCount,
                 'isNozzle' => false
             ],
             [
                 'label'    => $this->translator->trans('orocrm.magento.dashboard.purchase_chart.purchased'),
-                'value'    => $this->getOrderRepository()->getUniqueBuyersCount($this->aclHelper, $from, $to),
+                'value'    => $uniqueCustomersCount,
                 'isNozzle' => true
             ]
         ];
@@ -101,7 +134,7 @@ class PurchaseDataProvider
             [
                 'name' => 'flow_chart',
                 'settings' => [
-                    'quarterDate' => $from
+                    'quarterDate' => $dateRange['start']
                 ]
             ],
             $this->configProvider->getChartConfig('purchase_chart')

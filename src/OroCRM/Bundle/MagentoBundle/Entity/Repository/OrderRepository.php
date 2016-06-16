@@ -2,10 +2,9 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
-use DateTime;
-
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -13,7 +12,6 @@ use Oro\Bundle\EntityBundle\Exception\InvalidEntityException;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Customer;
-use OroCRM\Bundle\MagentoBundle\Entity\Order;
 use OroCRM\Bundle\MagentoBundle\Provider\ChannelType;
 
 class OrderRepository extends ChannelAwareEntityRepository
@@ -199,16 +197,16 @@ class OrderRepository extends ChannelAwareEntityRepository
     /**
      * @param AclHelper $aclHelper,
      * @param DateHelper $dateHelper
-     * @param DateTime $from
-     * @param DateTime|null $to
+     * @param \DateTime $from
+     * @param \DateTime|null $to
      *
      * @return array
      */
     public function getOrdersOverTime(
         AclHelper $aclHelper,
         DateHelper $dateHelper,
-        DateTime $from,
-        DateTime $to = null
+        \DateTime $from,
+        \DateTime $to = null
     ) {
         $from = clone $from;
         $to = clone $to;
@@ -232,16 +230,16 @@ class OrderRepository extends ChannelAwareEntityRepository
     /**
      * @param AclHelper $aclHelper
      * @param DateHelper $dateHelper
-     * @param DateTime $from
-     * @param DateTime|null $to
+     * @param \DateTime $from
+     * @param \DateTime|null $to
      *
      * @return array
      */
     public function getRevenueOverTime(
         AclHelper $aclHelper,
         DateHelper $dateHelper,
-        DateTime $from,
-        DateTime $to = null
+        \DateTime $from,
+        \DateTime $to = null
     ) {
         $from = clone $from;
         $to = clone $to;
@@ -268,12 +266,12 @@ class OrderRepository extends ChannelAwareEntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return int
      */
-    public function getUniqueBuyersCount(AclHelper $aclHelper, DateTime $from, DateTime $to)
+    public function getUniqueBuyersCount(AclHelper $aclHelper, \DateTime $from, \DateTime $to)
     {
         $qb = $this->createQueryBuilder('o');
 
@@ -291,5 +289,24 @@ class OrderRepository extends ChannelAwareEntityRepository
         } catch (NoResultException $ex) {
             return 0;
         }
+    }
+
+    /**
+     * @param $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getUniqueBuyersCountQB($alias)
+    {
+        $qb = $this->createQueryBuilder($alias)
+            ->select(sprintf(
+                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)', 
+                    $alias, 
+                    $alias
+                )
+            );
+        $this->applyActiveChannelLimitation($qb);
+        
+        return $qb;
     }
 }

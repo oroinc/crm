@@ -2,13 +2,13 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Provider;
 
-use DateTime;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 
 class TrackingVisitProvider
@@ -34,12 +34,12 @@ class TrackingVisitProvider
     }
 
     /**
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return int
      */
-    public function getDeeplyVisitedCount(DateTime $from, DateTime $to)
+    public function getDeeplyVisitedCount(\DateTime $from, \DateTime $to)
     {
         $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
 
@@ -59,19 +59,19 @@ class TrackingVisitProvider
                 ])
                 ->andHaving('COUNT(t.userIdentifier) > 1');
 
-            return (int) $this->aclHelper->apply($qb)->getSingleScalarResult();
+            return (int)$this->aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }
     }
 
     /**
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param \DateTime $from
+     * @param \DateTime $to
      *
      * @return int
      */
-    public function getVisitedCount(DateTime $from, DateTime $to)
+    public function getVisitedCount(\DateTime $from, \DateTime $to)
     {
         $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
 
@@ -90,10 +90,55 @@ class TrackingVisitProvider
                     'status'  => Channel::STATUS_ACTIVE
                 ]);
 
-            return (int) $this->aclHelper->apply($qb)->getSingleScalarResult();
+            return (int)$this->aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getVisitedCountQB($alias)
+    {
+        $qb = $this->getTrackingVisitRepository()->createQueryBuilder($alias);
+        $qb
+            ->select(sprintf('COUNT(DISTINCT %s.userIdentifier)', $alias))
+            ->join(sprintf('%s.trackingWebsite', $alias), 'tw')
+            ->join('tw.channel', 'c')
+            ->andWhere('c.channelType = :channel')
+            ->andWhere($qb->expr()->eq('c.status', ':status'))
+            ->setParameters([
+                'channel' => ChannelType::TYPE,
+                'status'  => Channel::STATUS_ACTIVE
+            ]);
+
+        return $qb;
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getDeeplyVisitedCountQB($alias)
+    {
+        $qb = $this->getTrackingVisitRepository()->createQueryBuilder($alias);
+        $qb
+            ->select(sprintf('COUNT(DISTINCT %s.userIdentifier)', $alias))
+            ->join(sprintf('%s.trackingWebsite', $alias), 'tw')
+            ->join('tw.channel', 'c')
+            ->andWhere('c.channelType = :channel')
+            ->andWhere($qb->expr()->eq('c.status', ':status'))
+            ->setParameters([
+                'channel' => ChannelType::TYPE,
+                'status'  => Channel::STATUS_ACTIVE
+            ])
+            ->andHaving(sprintf('COUNT(%s.userIdentifier) > 1', $alias));
+
+        return $qb;
     }
 
     /**

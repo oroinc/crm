@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -246,6 +247,12 @@ class CartRepository extends ChannelAwareEntityRepository
         return $result;
     }
 
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return QueryBuilder
+     */
     protected function getAbandonedQB(\DateTime $start, \DateTime $end)
     {
         $qb = $this->createQueryBuilder('cart');
@@ -291,5 +298,49 @@ class CartRepository extends ChannelAwareEntityRepository
         } catch (NoResultException $ex) {
             return 0;
         }
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getCustomersCountWhatMakeCartsQB($alias)
+    {
+        $qb = $this->createQueryBuilder($alias)
+            ->select(sprintf(
+                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)', 
+                    $alias, 
+                    $alias
+                )
+            );
+        $this->applyActiveChannelLimitation($qb);
+        
+        return $qb;
+    }
+
+    /**
+     * @param string $alias
+     * @param array  $steps
+     * @param array  $excludedStatuses
+     *
+     * @return QueryBuilder
+     */
+    public function getStepDataQB($alias, array $steps, array $excludedStatuses = [])
+    {
+        $qb = $this->createQueryBuilder($alias)
+            ->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
+            ->leftJoin(sprintf('%s.status', $alias), 'status')
+            ->join(sprintf('%s.workflowStep', $alias), 'workflowStep')
+            ->groupBy('workflowStep.name');
+
+        $qb->where($qb->expr()->in('workflowStep.name', $steps));
+
+        if ($excludedStatuses) {
+            $qb->andWhere($qb->expr()->notIn('status.name', $excludedStatuses));
+        }
+        $this->applyActiveChannelLimitation($qb);
+
+        return $qb;
     }
 }

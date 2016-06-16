@@ -28,6 +28,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
@@ -41,6 +42,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
@@ -54,6 +56,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_leads:
             label:       orocrm.campaign.dashboard.campaigns_leads.title
@@ -67,6 +70,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_opportunity:
             label:       orocrm.campaign.dashboard.campaigns_opportunity.title
@@ -80,6 +84,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_by_close_revenue:
             label:       orocrm.campaign.dashboard.campaigns_by_close_revenue.title
@@ -93,6 +98,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         forecast_of_opportunities:
             label:       orocrm.sales.dashboard.forecast_of_opportunities.title
@@ -220,4 +226,6 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                         label: oro.dashboard.date_range.label
+                        value_types: true
+                        all_time_value: false
                     show_on_widget: true
