@@ -1,12 +1,12 @@
 <?php
 
-namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
+namespace Oro\CRMTaskBundle\Tests\Selenium;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Call;
+use OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
 use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
 
-class ContactActivityListTest extends Selenium2TestCase
+class ContactTaskActivityListTest extends Selenium2TestCase
 {
     /**
      * @return string
@@ -34,27 +34,25 @@ class ContactActivityListTest extends Selenium2TestCase
      * @depends testCreateContact
      * @param $contactName
      */
-    public function testLogCallActivity($contactName)
+    public function testAddTaskActivity($contactName)
     {
-        $callSubject = 'Call_'.mt_rand();
-        $phoneNumber = mt_rand(100, 999).'-'.mt_rand(100, 999).'-'.mt_rand(1000, 9999);
+        $subject = 'Tasks_' . mt_rand();
 
         $login = $this->login();
         /** @var Contacts $login */
-        $call = $login->openContacts('OroCRM\Bundle\ContactBundle')
+        $task = $login->openContacts('OroCRM\Bundle\ContactBundle')
             ->filterBy('Email', $contactName . '@mail.com')
             ->open([$contactName])
-            ->assertTitle($contactName . '_first ' . $contactName . '_last' . ' - Contacts - Customers')
-            ->runActionInGroup('Log call')
-            ->openCall('OroCRM\Bundle\CallBundle');
+            ->runActionInGroup('Add task')
+            ->openTask('OroCRM\Bundle\TaskBundle');
 
-        /** @var Call $call */
-        $call
-            ->setCallSubject($callSubject)
-            ->setPhoneNumber($phoneNumber)
-            ->logCall()
-            ->assertMessage('Call saved')
-            ->verifyActivity('Call', $callSubject);
+        /** @var Task $task */
+        $task
+            ->setSubject($subject)
+            ->setDescription($subject)
+            ->createTask()
+            ->assertMessage('Task created successfully')
+            ->verifyActivity('Task', $subject);
     }
 
     public function testCloseWidgetWindow()
