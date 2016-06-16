@@ -125,17 +125,7 @@ class ContactRequestController extends Controller
                 $this->get('translator')->trans('orocrm.contactus.contactrequest.entity.saved')
             );
 
-            return $this->get('oro_ui.router')->redirectAfterSave(
-                [
-                    'route'      => 'orocrm_contactus_request_update',
-                    'parameters' => ['id' => $contactRequest->getId()]
-                ],
-                [
-                    'route'      => 'orocrm_contactus_request_view',
-                    'parameters' => ['id' => $contactRequest->getId()]
-                ],
-                $contactRequest
-            );
+            return $this->get('oro_ui.router')->redirect($contactRequest);
         }
 
         return [

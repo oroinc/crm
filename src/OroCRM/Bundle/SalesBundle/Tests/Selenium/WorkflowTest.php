@@ -3,12 +3,9 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Selenium\Sales;
 
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
-use Oro\Bundle\UserBundle\Tests\Selenium\Pages\Login;
-use OroCRM\Bundle\AccountBundle\Tests\Selenium\Pages\Accounts;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\B2BCustomers;
-use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Opportunities;
 use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
+use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesHelperTrait;
 
 /**
  * Class WorkflowTest
@@ -17,6 +14,7 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\SalesFunnels;
  */
 class WorkflowTest extends Selenium2TestCase
 {
+    use SalesHelperTrait;
     protected $address = array(
         'label' => 'Address Label',
         'street' => 'Address Street',
@@ -30,9 +28,9 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
 
-        $leadName = $this->createLead($login);
-        $accountName = $this->createAccount($login);
-        $customer = $this->createB2BCustomer($login, $accountName);
+        $leadName = $this->createLead($this->address);
+        $accountName = $this->createAccount();
+        $customer = $this->createB2BCustomer($accountName);
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -73,9 +71,9 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
 
-        $leadName = $this->createLead($login);
-        $accountName = $this->createAccount($login);
-        $customer = $this->createB2BCustomer($login, $accountName);
+        $leadName = $this->createLead($this->address);
+        $accountName = $this->createAccount();
+        $customer = $this->createB2BCustomer($accountName);
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -129,7 +127,7 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
 
-        $leadName = $this->createLead($login);
+        $leadName = $this->createLead($this->address);
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
@@ -148,14 +146,15 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
 
-        $opportunityName = $this->createOpportunity($login);
+        $opportunity = $this->createOpportunity();
 
         /** @var SalesFunnels $login */
         $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
-            ->selectEntity('Opportunity', $opportunityName)
+            ->setChannel($opportunity['channel'])
+            ->selectEntity('Opportunity', $opportunity['opportunity'])
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
@@ -172,8 +171,8 @@ class WorkflowTest extends Selenium2TestCase
             ->checkStep('Won Opportunity');
         /** @var  Opportunities $login */
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Opportunity name', $opportunityName)
-            ->open(array($opportunityName))
+            ->filterBy('Opportunity name', $opportunity['opportunity'])
+            ->open(array($opportunity['opportunity']))
             ->checkStatus('Won');
     }
 
@@ -181,14 +180,15 @@ class WorkflowTest extends Selenium2TestCase
     {
         $login = $this->login();
 
-        $opportunityName = $this->createOpportunity($login);
+        $opportunity = $this->createOpportunity();
 
         /** @var SalesFunnels $login */
         $id = $login->openSalesFunnels('OroCRM\Bundle\SalesBundle')
             ->assertTitle('All - Sales Processes - Sales')
             ->startFromOpportunity()
             ->assertTitle('New Sales Process - Sales Processes')
-            ->selectEntity('Opportunity', $opportunityName)
+            ->setChannel($opportunity['channel'])
+            ->selectEntity('Opportunity', $opportunity['opportunity'])
             ->submit()
             ->openWorkflow('OroCRM\Bundle\SalesBundle')
             ->checkStep('New Opportunity')
@@ -207,8 +207,8 @@ class WorkflowTest extends Selenium2TestCase
 
         /** @var Opportunities $login*/
         $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->filterBy('Opportunity name', $opportunityName)
-            ->open(array($opportunityName))
+            ->filterBy('Opportunity name', $opportunity['opportunity'])
+            ->open(array($opportunity['opportunity']))
             ->checkStatus('Lost');
 
         return $id;
@@ -229,98 +229,5 @@ class WorkflowTest extends Selenium2TestCase
             ->assertTitle('Sales Process #' . $funnelId . ' - Sales Processes - Sales')
             ->reopen()
             ->checkStep('New Opportunity');
-    }
-
-    /**
-     * @param  Login  $login
-     * @return string
-     */
-    protected function createLead(Login $login)
-    {
-        $name = 'Lead_'.mt_rand();
-
-        /** @var Leads $login */
-        $login->openLeads('OroCRM\Bundle\SalesBundle')
-            ->add()
-            ->setName($name)
-            ->setFirstName($name . '_first_name')
-            ->setLastName($name . '_last_name')
-            ->setJobTitle('Manager')
-            ->setPhone('712-566-3002')
-            ->setEmail($name . '@mail.com')
-            ->setCompany('Some Company')
-            ->setWebsite('http://www.orocrm.com')
-            ->setEmployees('100')
-            ->setOwner('admin')
-            ->setAddress($this->address)
-            ->save();
-
-        return $name;
-    }
-
-    /**
-     * @param  Login  $login
-     * @return string
-     */
-    protected function createOpportunity(Login $login)
-    {
-        $opportunityName = 'Opportunity_'.mt_rand();
-        $accountName = $this->createAccount($login);
-        $customer = $this->createB2BCustomer($login, $accountName);
-        /** @var Opportunities $login */
-        $login->openOpportunities('OroCRM\Bundle\SalesBundle')
-            ->add()
-            ->setName($opportunityName)
-            ->setB2BCustomer($customer)
-            ->setProbability('50')
-            ->seBudget('100')
-            ->setCustomerNeed('50')
-            ->setProposedSolution('150')
-            ->setCloseRevenue('200')
-            ->setCloseDate('Sep 26, 2013')
-            ->setOwner('admin')
-            ->save()
-            ->assertMessage('Opportunity saved')
-            ->toGrid()
-            ->assertTitle('All - Opportunities - Sales');
-
-        return $opportunityName;
-    }
-
-    /**
-     * @param  Login  $login
-     * @return string
-     */
-    protected function createAccount(Login $login)
-    {
-        $accountName = 'Account_'.mt_rand();
-
-        /** @var Accounts $login */
-        $login->openAccounts('OroCRM\Bundle\AccountBundle')
-            ->add()
-            ->setName($accountName)
-            ->setOwner('admin')
-            ->save();
-
-        return $accountName;
-    }
-
-    /**
-     * @param Login  $login
-     * @param string $account
-     * @return string
-     */
-    protected function createB2BCustomer(Login $login, $account)
-    {
-        $name = 'B2BCustomer_'.mt_rand();
-        /** @var B2BCustomers $login */
-        $login->openB2BCustomers('OroCRM\Bundle\SalesBundle')
-            ->add()
-            ->setName($name)
-            ->setOwner('admin')
-            ->setAccount($account)
-            ->save();
-
-        return $name;
     }
 }

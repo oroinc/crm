@@ -96,21 +96,9 @@ class MarketingListController extends Controller
      */
     protected function update(MarketingList $entity)
     {
-        $response = $this->get('oro_form.model.update_handler')->handleUpdate(
+        $response = $this->get('oro_form.model.update_handler')->update(
             $entity,
             $this->get('orocrm_marketing_list.form.marketing_list'),
-            function (MarketingList $entity) {
-                return array(
-                    'route'      => 'orocrm_marketing_list_update',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
-            function (MarketingList $entity) {
-                return array(
-                    'route'      => 'orocrm_marketing_list_view',
-                    'parameters' => array('id' => $entity->getId())
-                );
-            },
             $this->get('translator')->trans('orocrm.marketinglist.entity.saved'),
             $this->get('orocrm_marketing_list.form.handler.marketing_list')
         );

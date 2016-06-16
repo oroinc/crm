@@ -11,8 +11,9 @@
     ],
     "autoload": {
         "psr-0": {
-            "OroCRM\\Bundle": "src/"
-         }
+            "OroCRM\\Bundle": "src/",
+            "Oro\\CRMTaskBundle": "src/"
+        }
     },
     "repositories": [
        {
