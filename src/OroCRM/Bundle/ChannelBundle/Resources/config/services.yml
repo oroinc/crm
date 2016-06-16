@@ -244,9 +244,10 @@ services:
     orocrm_channel.provider.lifetime.average_widget_provider:
         class: %orocrm_channel.provider.lifetime.average_widget_provider.class%
         arguments:
-            - "@doctrine"
-            - "@oro_locale.settings"
-            - "@oro_security.acl_helper"
+            - '@doctrine'
+            - '@oro_locale.settings'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'
 
     orocrm_channel.config_resolver:
         class: %orocrm_channel.config_resolver.class%

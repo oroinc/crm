@@ -4,10 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
-use Oro\Bundle\DashboardBundle\Filter\DateRangeFilter;
-use Oro\Bundle\FilterBundle\Datasource\Orm\OrmFilterDatasourceAdapter;
-use Oro\Bundle\FilterBundle\Filter\FilterUtility;
-use Oro\Bundle\FilterBundle\Utils\DateFilterModifier;
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
@@ -16,32 +13,26 @@ class OpportunityByStatusProvider
 {
     /** @var RegistryInterface */
     protected $registry;
-    
+
     /** @var AclHelper */
     protected $aclHelper;
 
-    /** @var DateRangeFilter */
-    protected $dateFilter;
-
-    /** @var DateFilterModifier */
-    protected $modifier;
+    /** @var DateFilterProcessor */
+    protected $dateFilterProcessor;
 
     /**
-     * @param RegistryInterface  $doctrine
-     * @param AclHelper          $aclHelper
-     * @param DateRangeFilter    $filter
-     * @param DateFilterModifier $modifier
+     * @param RegistryInterface   $doctrine
+     * @param AclHelper           $aclHelper
+     * @param DateFilterProcessor $processor
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
-        DateRangeFilter $filter,
-        DateFilterModifier $modifier
+        DateFilterProcessor $processor
     ) {
-        $this->registry   = $doctrine;
-        $this->aclHelper  = $aclHelper;
-        $this->dateFilter = $filter;
-        $this->modifier   = $modifier;
+        $this->registry            = $doctrine;
+        $this->aclHelper           = $aclHelper;
+        $this->dateFilterProcessor = $processor;
     }
 
     /**
@@ -52,6 +43,7 @@ class OpportunityByStatusProvider
      */
     public function getOpportunitiesGroupedByStatus(array $dateRange, array $statusesData)
     {
+        $resultData = [];
         foreach ($statusesData as $key => $name) {
             $resultData[$key] = [
                 'name'   => $key,
@@ -59,25 +51,10 @@ class OpportunityByStatusProvider
                 'budget' => 0,
             ];
         }
-        $qb                 = $this->getOpportunityRepository()->getGroupedOpportunitiesByStatusQB('o');
-        $adapter            = new OrmFilterDatasourceAdapter($qb);
-        $start              = $dateRange['start'] instanceof \DateTime
-            ? $dateRange['start']->format('Y-m-d H:i')
-            : $dateRange['start'];
-        $end                = $dateRange['end'] instanceof \DateTime
-            ? $dateRange['end']->format('Y-m-d H:i')
-            : $dateRange['end'];
-        $dateRange['value'] = [
-            'start' => $start,
-            'end'   => $end
-        ];
-        unset($dateRange['start'], $dateRange['end']);
-        $dateData = $this->modifier->modify($dateRange);
-        $this->dateFilter->init('datetime', [FilterUtility::DATA_NAME_KEY => 'o.createdAt']);
-        $this->dateFilter->apply($adapter, $dateData);
+        $qb = $this->getOpportunityRepository()->getGroupedOpportunitiesByStatusQB('o');
+        $this->dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
         $groupedData = $this->aclHelper->apply($qb)->getArrayResult();
 
-        $resultData = [];
         foreach ($groupedData as $statusData) {
             $status = $statusData['name'];
             $budget = (float)$statusData['budget'];

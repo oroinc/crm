@@ -23,16 +23,12 @@ class DashboardController extends Controller
      */
     public function campaignLeadsAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsLeads(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_LEAD_COUNT,
+        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignLeadsData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
             );
-
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
@@ -61,11 +57,8 @@ class DashboardController extends Controller
      */
     public function campaignOpportunityAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsOpportunities(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_OPPORTUNITY_COUNT,
+        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignOpportunitiesData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
@@ -99,11 +92,8 @@ class DashboardController extends Controller
      */
     public function campaignByCloseRevenueAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsByCloseRevenue(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_CLOSE_REVENUE_COUNT,
+        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignsByCloseRevenueData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')

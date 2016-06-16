@@ -174,5 +174,4 @@ services:
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
-            - '@oro_dashboard.filter.date_range'
-            - '@oro_filter.utils.date_filter_modifier'
+            - '@oro_dashboard.filter.date_filter_processor'

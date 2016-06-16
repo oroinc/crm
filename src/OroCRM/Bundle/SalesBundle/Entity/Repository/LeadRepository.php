@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
-use DateTime;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -27,7 +25,7 @@ class LeadRepository extends EntityRepository
             ->leftJoin('l.source', 's')
             ->groupBy('source');
 
-        if ($dateRange) {
+        if ($dateRange && $dateRange['start'] && $dateRange['end']) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
                 ->setParameter('dateStart', $dateRange['start'])
                 ->setParameter('dateEnd', $dateRange['end']);
@@ -120,12 +118,12 @@ class LeadRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
      *
      * @return int
      */
-    public function getLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start, \DateTime $end)
     {
         $qb = $this->createLeadsCountQb($start, $end);
 
@@ -134,12 +132,12 @@ class LeadRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
      *
      * @return int
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start, \DateTime $end)
     {
         $qb = $this->createLeadsCountQb($start, $end)
             ->andWhere('l.status = :status')
@@ -149,12 +147,12 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(DateTime $start, DateTime $end)
+    protected function createLeadsCountQb(\DateTime $start, \DateTime $end)
     {
         $qb = $this->createQueryBuilder('l');
 

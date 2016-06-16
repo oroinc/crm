@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -9,9 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
 
 class DashboardController extends Controller
@@ -30,32 +29,20 @@ class DashboardController extends Controller
             ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
             ->get('dateRange');
 
-        $dateTo = $dateRange['end'];
-        $dateFrom = $dateRange['start'];
+        $data = $this->get('orocrm_magento.dashboard.sales_flow_b2c_provider')
+            ->getSalesFlowB2CData($dateRange);
 
-        /** @var WorkflowManager $workflowManager */
-        $workflowManager = $this->get('oro_workflow.manager');
-        $workflow = $workflowManager->getApplicableWorkflowByEntityClass(
-            'OroCRM\Bundle\MagentoBundle\Entity\Cart'
-        );
-
-        /** @var CartRepository $shoppingCartRepository */
-        $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
-
-        $data = $shoppingCartRepository->getFunnelChartData(
-            $dateFrom,
-            $dateTo,
-            $workflow,
-            $this->get('oro_security.acl_helper')
-        );
-
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $dateData                = $this->get('oro_dashboard.filter.date_filter_processor')->getModifiedDateData($dateRange);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $start                   = $dateData['value']['start']
+            ? $dateData['value']['start']
+            : new \DateTime(FilterDateRangeConverter::MIN_DATE, new \DateTimeZone('UTC'));
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($data)
             ->setOptions(
                 array(
                     'name' => 'flow_chart',
-                    'settings' => array('quarterDate' => $dateFrom),
+                    'settings' => array('quarterDate' => $start),
                     'data_schema' => array(
                         'label' => array('field_name' => 'label'),
                         'value' => array('field_name' => 'value'),
@@ -134,11 +121,8 @@ class DashboardController extends Controller
         $chartViewBuilder     = $this->getChartViewBuilder();
 
         $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
-        $from = $dateRange['start'];
-        $to = $dateRange['end'];
-
         $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
-        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
+        $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $dateRange);
 
         return $data;
     }
