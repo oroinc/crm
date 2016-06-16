@@ -64,10 +64,10 @@ datagrid:
                     - a.name
                     - a.createdAt
                     - a.updatedAt
-                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
+                    - CONCAT_WS(' ', defaultContact.firstName, defaultContact.lastName) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                     - accountOwner.id as owner
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
@@ -346,10 +346,10 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
+                    - CONCAT_WS(' ', defaultContact.firstName, defaultContact.lastName) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
@@ -424,10 +424,10 @@ datagrid:
                 select:
                     - a.id
                     - a.name
-                    - CONCAT(defaultContact.firstName, CONCAT(' ', defaultContact.lastName)) as contactName
+                    - CONCAT_WS(' ', defaultContact.firstName, defaultContact.lastName) as contactName
                     - defaultContactEmail.email as contactEmail
                     - defaultContactPhone.phone as contactPhone
-                    - CONCAT(accountOwner.firstName, CONCAT(' ', accountOwner.lastName)) as ownerName
+                    - CONCAT_WS(' ', accountOwner.firstName, accountOwner.lastName) as ownerName
                 from:
                     - { table: %orocrm_account.account.entity.class%, alias: a }
                 join:
