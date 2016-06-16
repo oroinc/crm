@@ -160,9 +160,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
-                    options:
-                        lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
-                        data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                    autocomplete_alias: business_units_search_handler
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
