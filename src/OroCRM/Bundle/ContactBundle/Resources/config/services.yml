@@ -312,3 +312,12 @@ services:
         public: false
         tags:
             - { name: oro_entity.name_provider, priority: -50 }
+
+    orocrm_contact.event_listener.datagrid.my_contacts_activity:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-contacts-activity-grid, method: onResultBefore }
