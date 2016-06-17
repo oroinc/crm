@@ -43,8 +43,8 @@ class ChannelRepository extends EntityRepository
      * @return integer
      */
     public function getVisitsCountByPeriodForChannelType(
-        \DateTime $start,
-        \DateTime $end,
+        \DateTime $start = null,
+        \DateTime $end = null,
         AclHelper $aclHelper,
         $type
     ) {
@@ -61,11 +61,18 @@ class ChannelRepository extends EntityRepository
                     $qb->expr()->eq('channel.status', ':status')
                 )
             ))
-            ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
             ->setParameter('status', Channel::STATUS_ACTIVE);
+        if ($start) {
+            $qb
+                ->andWhere('visit.firstActionTime > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('visit.firstActionTime < :end')
+                ->setParameter('end', $end);
+        }
 
         return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }

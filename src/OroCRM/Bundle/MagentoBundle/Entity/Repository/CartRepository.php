@@ -40,8 +40,8 @@ class CartRepository extends ChannelAwareEntityRepository
      * @return array
      */
     public function getFunnelChartData(
-        \DateTime $dateFrom,
-        \DateTime $dateTo,
+        \DateTime $dateFrom = null,
+        \DateTime $dateTo = null,
         Workflow $workflow = null,
         AclHelper $aclHelper = null
     ) {
@@ -113,10 +113,15 @@ class CartRepository extends ChannelAwareEntityRepository
 
         $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', $steps));
 
-        if ($dateFrom && $dateTo) {
-            $queryBuilder->andWhere($queryBuilder->expr()->between('cart.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateFrom)
-                ->setParameter('dateTo', $dateTo);
+        if ($dateFrom) {
+            $queryBuilder
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $dateFrom);
+        }
+        if ($dateTo) {
+            $queryBuilder
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $dateTo);
         }
 
         if ($this->excludedStatuses) {
@@ -188,7 +193,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonedRevenueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonedRevenueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('SUM(cart.grandTotal) as val');
@@ -205,7 +210,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonedCountByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonedCountByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('COUNT(cart.grandTotal) as val');
@@ -222,7 +227,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @return float|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonRateByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonRateByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $result = null;
 
@@ -230,10 +235,17 @@ class CartRepository extends ChannelAwareEntityRepository
         $qb->join('cart.status', 'cstatus')
             ->select('SUM(cart.grandTotal) as val')
             ->andWhere('cstatus.name = :statusName')
-            ->setParameter('statusName', 'open')
-            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('statusName', 'open');
+        if ($start) {
+            $qb
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
         $allCards = (int)$allCards['val'];
@@ -253,15 +265,12 @@ class CartRepository extends ChannelAwareEntityRepository
      *
      * @return QueryBuilder
      */
-    protected function getAbandonedQB(\DateTime $start, \DateTime $end)
+    protected function getAbandonedQB(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('cart');
-        return $qb ->join('cart.status', 'cstatus')
+        $qb ->join('cart.status', 'cstatus')
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
-            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
             ->andWhere(
                 $qb->expr()->not(
                     $qb->expr()->exists(
@@ -271,6 +280,18 @@ class CartRepository extends ChannelAwareEntityRepository
                     )
                 )
             );
+        if ($start) {
+            $qb
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $end);
+        }
+
+        return $qb;
     }
 
     /**

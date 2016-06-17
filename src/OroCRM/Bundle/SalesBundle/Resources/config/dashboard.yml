@@ -140,6 +140,15 @@ oro_dashboard_config:
                     options:
                         label: orocrm.sales.dashboard.forecast_of_opportunities.owner
                         required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                    converter_attributes:
+                        save_open_range: true
+                        create_previous_period: true
                 compareToDate:
                     type: oro_type_widget_date
                     options:
@@ -198,6 +207,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
                 usePreviousInterval:
                     type: oro_type_widget_previous_date_range

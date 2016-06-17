@@ -131,11 +131,12 @@ services:
     orocrm_sales.provider.forecast_of_opportunities:
         class: %orocrm_sales.provider.forecast_of_opportunity.class%
         arguments:
-            - "@doctrine"
-            - "@oro_locale.formatter.number"
-            - "@oro_locale.formatter.date_time"
-            - "@oro_security.acl_helper"
-            - "@translator"
+            - '@doctrine'
+            - '@oro_locale.formatter.number'
+            - '@oro_locale.formatter.date_time'
+            - '@oro_security.acl_helper'
+            - '@translator'
+            - '@oro_dashboard.datetime.helper'
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%

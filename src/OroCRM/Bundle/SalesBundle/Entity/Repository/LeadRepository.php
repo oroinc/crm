@@ -123,7 +123,7 @@ class LeadRepository extends EntityRepository
      *
      * @return int
      */
-    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start, \DateTime $end)
+    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createLeadsCountQb($start, $end);
 
@@ -137,7 +137,7 @@ class LeadRepository extends EntityRepository
      *
      * @return int
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start, \DateTime $end)
+    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createLeadsCountQb($start, $end)
             ->andWhere('l.status = :status')
@@ -152,16 +152,23 @@ class LeadRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(\DateTime $start, \DateTime $end)
+    protected function createLeadsCountQb(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('l');
 
         $qb
             ->select('COUNT(DISTINCT l.id)')
-            ->andWhere($qb->expr()->between('l.createdAt', ':start', ':end'))
-            ->innerJoin('l.opportunities', 'o')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->innerJoin('l.opportunities', 'o');
+        if ($start) {
+            $qb
+                ->andWhere('l.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('l.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         return $qb;
     }

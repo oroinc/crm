@@ -22,17 +22,24 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param AclHelper $aclHelper
      * @return int
      */
-    public function getRevenueValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getRevenueValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $select = 'SUM(
              CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
              CASE WHEN orders.discountAmount IS NOT NULL THEN ABS(orders.discountAmount) ELSE 0 END
              ) as val';
         $qb    = $this->createQueryBuilder('orders');
-        $qb->select($select)
-            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        $qb->select($select);
+        if ($start) {
+            $qb
+                ->andWhere('orders.createdAt > :dateStart')
+                ->setParameter('dateStart', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('orders.createdAt > :dateEnd')
+                ->setParameter('dateEnd', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -46,13 +53,20 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param AclHelper $aclHelper
      * @return int
      */
-    public function getOrdersNumberValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getOrdersNumberValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb    = $this->createQueryBuilder('o');
-        $qb->select('count(o.id) as val')
-            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        $qb->select('count(o.id) as val');
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -68,7 +82,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param AclHelper $aclHelper
      * @return int
      */
-    public function getAOVValueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAOVValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $select = 'SUM(
              CASE WHEN o.subtotalAmount IS NOT NULL THEN o.subtotalAmount ELSE 0 END -
@@ -76,10 +90,17 @@ class OrderRepository extends ChannelAwareEntityRepository
              ) as revenue,
              count(o.id) as ordersCount';
         $qb    = $this->createQueryBuilder('o');
-        $qb->select($select)
-            ->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+        $qb->select($select);
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
@@ -95,8 +116,8 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function getDiscountedOrdersPercentByDatePeriod(
-        \DateTime $start,
-        \DateTime $end,
+        \DateTime $start = null,
+        \DateTime $end = null,
         AclHelper $aclHelper
     ) {
         $qb = $this->createQueryBuilder('o');
@@ -104,12 +125,20 @@ class OrderRepository extends ChannelAwareEntityRepository
             'COUNT(o.id) as allOrders',
             'SUM(CASE WHEN (o.discountAmount IS NOT NULL AND o.discountAmount <> 0) THEN 1 ELSE 0 END) as discounted'
         );
-        $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'));
-        $qb->setParameter('dateStart', $start);
-        $qb->setParameter('dateEnd', $end);
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
+
         return $value['allOrders'] ? $value['discounted'] / $value['allOrders'] : 0;
     }
 

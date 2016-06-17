@@ -46,19 +46,27 @@ class CustomerRepository extends ChannelAwareEntityRepository
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getNewCustomersNumberWhoMadeOrderByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getNewCustomersNumberWhoMadeOrderByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
             ->from('OroCRMMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
-            ->having('COUNT(orders.id) > 0')
-            ->andWhere($qb->expr()->between('customer.createdAt', ':dateStart', ':dateEnd'))
-            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
-        $this->applyActiveChannelLimitation($qb);
+            ->having('COUNT(orders.id) > 0');
+        if ($start) {
+            $qb
+                ->andWhere('orders.createdAt > :start')
+                ->andWhere('customer.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('orders.createdAt < :end')
+                ->andWhere('customer.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
+        $this->applyActiveChannelLimitation($qb);
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
         return $value['val'] ? : 0;
@@ -71,17 +79,25 @@ class CustomerRepository extends ChannelAwareEntityRepository
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getReturningCustomersWhoMadeOrderByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getReturningCustomersWhoMadeOrderByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->_em->createQueryBuilder();
         $qb->select('COUNT(customer.id) as val')
             ->from('OroCRMMagentoBundle:Order', 'orders')
             ->join('orders.customer', 'customer')
-            ->having('COUNT(orders.id) > 0')
-            ->andWhere('customer.createdAt < :dateStart')
-            ->andWhere($qb->expr()->between('orders.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->having('COUNT(orders.id) > 0');
+        if ($start) {
+            $qb
+                ->andWhere('customer.createdAt < :start')
+                ->andWhere('orders.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('orders.createdAt < :end')
+                ->setParameter('end', $end);
+        }
+
         $this->applyActiveChannelLimitation($qb);
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();

@@ -116,6 +116,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
                 usePreviousInterval:
                     type: oro_type_widget_previous_date_range
