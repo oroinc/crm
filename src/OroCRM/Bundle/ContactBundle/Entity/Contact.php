@@ -1117,6 +1117,11 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     public function addEmail(ContactEmail $email)
     {
         if (!$this->emails->contains($email)) {
+            //don't allow more than one primary email
+            if ($email->isPrimary() && $this->getPrimaryEmail()) {
+                $email->setPrimary(false);
+            }
+
             $this->emails->add($email);
             $email->setOwner($this);
         }
@@ -1239,6 +1244,11 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     public function addPhone(ContactPhone $phone)
     {
         if (!$this->phones->contains($phone)) {
+            //don't allow more than one primary phone
+            if ($phone->isPrimary() && $this->getPrimaryPhone()) {
+                $phone->setPrimary(false);
+            }
+
             $this->phones->add($phone);
             $phone->setOwner($this);
         }
@@ -1329,6 +1339,11 @@ class Contact extends ExtendContact implements EmailOwnerInterface
     {
         /** @var ContactAddress $address */
         if (!$this->addresses->contains($address)) {
+            //don't allow more than one primary address
+            if ($address->isPrimary() && $this->getPrimaryAddress()) {
+                $address->setPrimary(false);
+            }
+
             $this->addresses->add($address);
             $address->setOwner($this);
         }
