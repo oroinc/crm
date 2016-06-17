@@ -22,7 +22,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-envelope",
- *              "category"="Campaign"
+ *              "category"="campaign"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

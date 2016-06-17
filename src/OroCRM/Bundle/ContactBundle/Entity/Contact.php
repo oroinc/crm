@@ -52,7 +52,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                      {"fieldName"="primaryPhone"}
  *                  }
  *              },
- *              "category"="Contact"
+ *              "category"="contact"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

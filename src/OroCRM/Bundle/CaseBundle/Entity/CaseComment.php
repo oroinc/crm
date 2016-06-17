@@ -17,7 +17,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-comments",
- *              "category"="Case"
+ *              "category"="case"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

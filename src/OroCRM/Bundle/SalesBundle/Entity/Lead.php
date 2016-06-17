@@ -40,7 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-phone",
- *              "category"="Sales"
+ *              "category"="sales"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

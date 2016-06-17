@@ -20,7 +20,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "category"="Contact"
+ *              "category"="contact"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

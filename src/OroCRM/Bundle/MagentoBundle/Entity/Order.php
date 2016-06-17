@@ -39,7 +39,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt",
- *              "category"="Magento"
+ *              "category"="magento"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

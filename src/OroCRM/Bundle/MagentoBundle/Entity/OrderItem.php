@@ -16,7 +16,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt",
- *              "category"="Magento"
+ *              "category"="magento"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",

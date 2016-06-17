@@ -33,7 +33,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-filter",
- *              "category"="Sales"
+ *              "category"="sales"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

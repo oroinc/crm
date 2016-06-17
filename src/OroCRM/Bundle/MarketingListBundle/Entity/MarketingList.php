@@ -24,7 +24,7 @@ use OroCRM\Bundle\MarketingListBundle\Model\ExtendMarketingList;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-list-alt",
- *              "category"="Marketing List"
+ *              "category"="marketing_list"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

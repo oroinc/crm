@@ -22,7 +22,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "category"="Magento"
+ *              "category"="magento"
  *          },
  *          "security"={
  *              "type"="ACL",
