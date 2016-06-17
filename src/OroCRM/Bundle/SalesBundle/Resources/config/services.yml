@@ -170,6 +170,11 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
 
+    orocrm_sales.import_export.event_listener..opportunity:
+        class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
+        tags:
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+
     orocrm_sales.provider.opportunity_by_status:
         class: OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider
         arguments:
