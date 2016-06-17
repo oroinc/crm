@@ -9,11 +9,11 @@ use Behat\Mink\Element\NodeElement;
 class FeatureContext extends RawMinkContext
 {
     /**
-     * @Then two contacts added to form
+     * @Then /^(?P<contactsCount>(?:|one|two|\d+)) contacts added to form$/
      */
-    public function twoContactsAddedToForm()
+    public function assertCountContactsAddedToForm($contactsCount)
     {
-        expect($this->getFormContacts())->toHaveCount(2);
+        expect($this->getFormContacts())->toHaveCount($this->getCount($contactsCount));
     }
 
     /**
