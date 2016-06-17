@@ -301,18 +301,23 @@ class CartRepository extends ChannelAwareEntityRepository
      *
      * @return int
      */
-    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, \DateTime $from, \DateTime $to)
+    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, \DateTime $from = null, \DateTime $to = null)
     {
         $qb = $this->createQueryBuilder('c');
 
         try {
             $qb
-                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
-                ->andWhere($qb->expr()->between('c.createdAt', ':from', ':to'))
-                ->setParameters([
-                    'from' => $from,
-                    'to'   => $to
-                ]);
+                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)');
+            if ($from) {
+                $qb
+                    ->andWhere('c.createdAt > :from')
+                    ->setParameter('from', $from);
+            }
+            if ($to) {
+                $qb
+                    ->andWhere('c.createdAt < :to')
+                    ->setParameter('to', $to);
+            }
             $this->applyActiveChannelLimitation($qb);
 
             return (int) $aclHelper->apply($qb)->getSingleScalarResult();

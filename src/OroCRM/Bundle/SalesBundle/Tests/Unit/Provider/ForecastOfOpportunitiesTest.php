@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities;
@@ -54,10 +55,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
      */
     protected $userRepository;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockBuilder
-     */
-    protected $securityFacade;
+    /** @var DateHelper|\PHPUnit_Framework_MockObject_MockBuilder */
+    protected $dateHelper;
 
     protected function setUp()
     {
@@ -116,7 +115,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->securityFacade = $this->getMockBuilder('Oro\Bundle\SecurityBundle\SecurityFacade')
+        $this->dateHelper = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Helper\DateHelper')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -126,7 +125,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->dateTimeFormatter,
             $this->aclHelper,
             $this->translator,
-            $this->securityFacade
+            $this->dateHelper
         );
     }
 
@@ -146,7 +145,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options = ['owners' => [], 'businessUnits' => []];
+        $options = ['owners' => [], 'businessUnits' => [], 'dateRange' => ['start' => null, 'end' => null]];
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())
@@ -171,7 +170,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options = ['owners' => [$user], 'businessUnits' => []];
+        $options = ['owners' => [$user], 'businessUnits' => [], 'dateRange' => ['start' => null, 'end' => null]];
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())
@@ -197,6 +196,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
      */
     public function testForecastOfOpportunitiesValuesWithCompareDate()
     {
+        $this->markTestSkipped('Skipped until CRM-5569 and CRM-5565 will be done');
         $user = new User();
         $user->setId(1);
 
@@ -205,7 +205,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $options = [
             'owners' => [$user],
             'businessUnits' => [],
-            'compareToDate' => ['useDate' => true, 'date' => $date]
+            'compareToDate' => ['useDate' => true, 'date' => $date],
+            'dateRange' => ['start' => null, 'end' => null]
         ];
         $widgetOptions = new WidgetOptionBag($options);
 
@@ -247,7 +248,7 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $businessUnit = new BusinessUnit();
         $businessUnit->addUser($user);
 
-        $options = ['owners' => [], 'businessUnits' => [$businessUnit]];
+        $options = ['owners' => [], 'businessUnits' => [$businessUnit], 'dateRange' => ['start' => null, 'end' => null]];
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())

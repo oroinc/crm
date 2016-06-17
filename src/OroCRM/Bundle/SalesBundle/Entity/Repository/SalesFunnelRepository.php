@@ -29,8 +29,8 @@ class SalesFunnelRepository extends EntityRepository
      * @return array
      */
     public function getFunnelChartData(
-        \DateTime $dateFrom,
-        \DateTime $dateTo,
+        \DateTime $dateFrom = null,
+        \DateTime $dateTo = null,
         Workflow $workflow = null,
         array $customStepCalculations = array(),
         AclHelper $aclHelper = null

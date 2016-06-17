@@ -300,18 +300,23 @@ class OrderRepository extends ChannelAwareEntityRepository
      *
      * @return int
      */
-    public function getUniqueBuyersCount(AclHelper $aclHelper, \DateTime $from, \DateTime $to)
+    public function getUniqueBuyersCount(AclHelper $aclHelper, \DateTime $from = null, \DateTime $to = null)
     {
         $qb = $this->createQueryBuilder('o');
 
         try {
             $qb
-                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)')
-                ->andWhere($qb->expr()->between('o.createdAt', ':from', ':to'))
-                ->setParameters([
-                    'from' => $from,
-                    'to'   => $to
-                ]);
+                ->select('COUNT(DISTINCT o.customer) + SUM(CASE WHEN o.isGuest = true THEN 1 ELSE 0 END)');
+            if ($from) {
+                $qb
+                    ->andWhere('o.createdAt > :from')
+                    ->setParameter('from', $from);
+            }
+            if ($to) {
+                $qb
+                    ->andWhere('o.createdAt < :to')
+                    ->setParameter('to', $to);
+            }
             $this->applyActiveChannelLimitation($qb);
 
             return (int) $aclHelper->apply($qb)->getSingleScalarResult();

@@ -39,7 +39,7 @@ class TrackingVisitProvider
      *
      * @return int
      */
-    public function getDeeplyVisitedCount(\DateTime $from, \DateTime $to)
+    public function getDeeplyVisitedCount(\DateTime $from = null, \DateTime $to = null)
     {
         $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
 
@@ -50,14 +50,21 @@ class TrackingVisitProvider
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($qb->expr()->eq('c.status', ':status'))
-                ->andWhere($qb->expr()->between('t.firstActionTime', ':from', ':to'))
                 ->setParameters([
                     'channel' => ChannelType::TYPE,
-                    'from'    => $from,
-                    'to'      => $to,
                     'status'  => Channel::STATUS_ACTIVE
                 ])
-                ->andHaving('COUNT(t.userIdentifier) > 1');
+                ->andHaving('COUNT(t.userIdentifier) > 1');;
+            if ($from) {
+                $qb
+                    ->andWhere('t.firstActionTime > :from')
+                    ->setParameter('from', $from);
+            }
+            if ($to) {
+                $qb
+                    ->andWhere('t.firstActionTime < :to')
+                    ->setParameter('to', $to);
+            }
 
             return (int)$this->aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
@@ -71,7 +78,7 @@ class TrackingVisitProvider
      *
      * @return int
      */
-    public function getVisitedCount(\DateTime $from, \DateTime $to)
+    public function getVisitedCount(\DateTime $from = null, \DateTime $to = null)
     {
         $qb = $this->getTrackingVisitRepository()->createQueryBuilder('t');
 
@@ -82,13 +89,20 @@ class TrackingVisitProvider
                 ->join('tw.channel', 'c')
                 ->andWhere('c.channelType = :channel')
                 ->andWhere($qb->expr()->eq('c.status', ':status'))
-                ->andWhere($qb->expr()->between('t.firstActionTime', ':from', ':to'))
                 ->setParameters([
                     'channel' => ChannelType::TYPE,
-                    'from'    => $from,
-                    'to'      => $to,
                     'status'  => Channel::STATUS_ACTIVE
                 ]);
+            if ($from) {
+                $qb
+                    ->andWhere('t.firstActionTime > :from')
+                    ->setParameter('from', $from);
+            }
+            if ($to) {
+                $qb
+                    ->andWhere('t.firstActionTime < :to')
+                    ->setParameter('to', $to);
+            }
 
             return (int)$this->aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
