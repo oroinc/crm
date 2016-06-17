@@ -22,13 +22,13 @@ datagrid:
                     - o.budgetAmount
                     - o.closeRevenue
                     - s.id as status
-                    - CONCAT(contactAlias.firstName, CONCAT(' ', contactAlias.lastName)) as contactName
+                    - CONCAT_WS(' ', contactAlias.firstName, contactAlias.lastName) as contactName
                     - contactAlias.id as contact
                     - closeReason.label as closeReasonLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
                     - own.id as owner
-                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
+                    - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
                     - customer.name as customerName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
@@ -283,8 +283,8 @@ datagrid:
                             END, ''
                         ) as regionLabel
                     - channel.name as channelName
-                    - CONCAT(own.firstName, CONCAT(' ', own.lastName)) as ownerName
-                    - CONCAT(c.firstName, CONCAT(' ', c.lastName)) as contactName
+                    - CONCAT_WS(' ', own.firstName, own.lastName) as ownerName
+                    - CONCAT_WS(' ', c.firstName, c.lastName) as contactName
                     - own.id as owner
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
@@ -595,7 +595,7 @@ datagrid:
                     - opportunity.probability as opportunityProbability
                     - step.label as stepLabel
                     - channel.name as channelName
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %orocrm_sales.salesfunnel.entity.class%, alias: salesFunnel }
                 join:
@@ -902,7 +902,7 @@ datagrid:
                     - opportunity.id
                     - opportunity.name
                     - opportunity.probability
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - email.email as primaryEmail
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: opportunity }
@@ -1032,9 +1032,9 @@ datagrid:
         source:
             query:
                 select:
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                     - account.name as accountName
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - baCountry.name as baCountryName
                     - CONCAT(CASE WHEN ba.regionText IS NOT NULL THEN ba.regionText ELSE baRegion.name END, '') as baRegionLabel
                     - ba.city as baCity
@@ -1369,7 +1369,7 @@ datagrid:
                     - o.closeDate
                     - o.probability
                     - o.budgetAmount
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - status.name as statusLabel
                     - email.email as primaryEmail
                 from:
@@ -1579,11 +1579,11 @@ datagrid:
                 select:
                     - o.id
                     - o.name
-                    - CONCAT(contact.firstName, CONCAT(' ', contact.lastName)) as contactName
+                    - CONCAT_WS(' ', contact.firstName, contact.lastName) as contactName
                     - status.name as statusLabel
                     - email.email as primaryEmail
                     - channel.name as channelName
-                    - CONCAT(owner.firstName, CONCAT(' ', owner.lastName)) as ownerName
+                    - CONCAT_WS(' ', owner.firstName, owner.lastName) as ownerName
                 from:
                     - { table: %orocrm_sales.opportunity.class%, alias: o }
                 join:

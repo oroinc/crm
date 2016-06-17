@@ -102,8 +102,8 @@ class OroCRMCallBridgeBundleInstaller implements
 
     public function up(Schema $schema, QueryBag $queries)
     {
-        /** if CallBundle isn't installed  do nothing **/
-        if (!$schema->hasTable('orocrm_call')) {
+        /** if CallBundle is installed  do nothing **/
+        if ($schema->hasTable('orocrm_call')) {
             return;
         }
 
@@ -138,6 +138,11 @@ class OroCRMCallBridgeBundleInstaller implements
      */
     protected function createOrocrmContactusRequestCallsTable(Schema $schema)
     {
+        /**If table orocrm_contactus_request_calls do nothing **/
+        if ($schema->hasTable('orocrm_contactus_request_calls')) {
+            return;
+        }
+
         $table = $schema->createTable('orocrm_contactus_request_calls');
         $table->addColumn('request_id', 'integer', []);
         $table->addColumn('call_id', 'integer', []);
