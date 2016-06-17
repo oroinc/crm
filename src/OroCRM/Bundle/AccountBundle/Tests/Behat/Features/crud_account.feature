@@ -32,9 +32,9 @@ Scenario: Create new Account
   And I select Wanda contact as default
   When I save and close form
   And I should see "Account saved" flash message
-  And Account Name field should be with Good Company value
-  And Description field should be with Our new partner value
-  And there are should be two contacts
+  And Account Name field should have Good Company value
+  And Description field should have Our new partner value
+  And I should see two contacts
   And Wanda should be default contact
   And Harry Freeman should be an owner
 
@@ -50,8 +50,8 @@ Scenario: Edit Account
   And delete Wanda contact
   When I save and close form
   And I should see "Account saved" flash message
-  And Account Name field should be with Oro Inc value
-  And Description field should be with Our old partner value
-  And there is should be one contact
+  And Account Name field should have Oro Inc value
+  And Description field should have Our old partner value
+  And I should see one contact
   And Joan should be default contact
   And Todd Greene should be an owner
