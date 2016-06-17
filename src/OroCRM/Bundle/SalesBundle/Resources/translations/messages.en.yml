@@ -295,6 +295,8 @@ orocrm:
             groups:
                 opportunity_configuration.title:            Opportunity Configuration
                 opportunity_status_probabilities.title:     Probability per Opportunity Status
+                opportunity_configuration.title:            Opportunity Configuration
+                opportunity_statuses.title:                 Opportunity Statuses
             fields:
                 default_opportunity_probabilities:
                     label: Default values

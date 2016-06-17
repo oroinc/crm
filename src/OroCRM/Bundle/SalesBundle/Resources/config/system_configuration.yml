@@ -1,14 +1,28 @@
 oro_system_configuration:
     groups:
         opportunity_configuration:
-            icon:  icon-road
+            icon:  icon-usd
             title: orocrm.sales.system_configuration.groups.opportunity_configuration.title
+
+        opportunity_statuses:
+            title: orocrm.sales.system_configuration.groups.opportunity_statuses.title
+            priority: 10
 
         opportunity_status_probabilities:
             title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
             priority: 10
 
     fields:
+        oro_crm_sales.opportunity_statuses:
+            ui_only: true
+            type: orocrm_sales_opportunity_status_enum
+            options:
+                label: false
+                required: false
+                resettable: false
+                attr:
+                    class: oro-clearfix
+
         oro_crm_sales.default_opportunity_probabilities:
             data_type: array
             type: orocrm_sales_opportunity_probability
@@ -27,6 +41,9 @@ oro_system_configuration:
                         children:
                             opportunity_configuration:
                                 children:
+                                    opportunity_statuses:
+                                        children:
+                                            - oro_crm_sales.opportunity_statuses
                                     opportunity_status_probabilities:
                                         children:
                                             - oro_crm_sales.default_opportunity_probabilities
