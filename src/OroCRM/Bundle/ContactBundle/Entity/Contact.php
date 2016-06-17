@@ -431,9 +431,6 @@ class Contact extends ExtendContact implements EmailOwnerInterface
      *          },
      *          "entity"={
      *              "contact_information"="email"
-     *          },
-     *          "merge"={
-     *              "display"=true
      *          }
      *      }
      * )
