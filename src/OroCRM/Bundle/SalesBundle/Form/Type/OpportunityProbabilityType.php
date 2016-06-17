@@ -33,7 +33,7 @@ class OpportunityProbabilityType extends AbstractType
         $enumCode = $typeHelper->getEnumCode(Opportunity::class, 'status');
         $enumValueClassName = ExtendHelper::buildEnumValueClassName($enumCode);
 
-        $this->enumStatuses = $registry->getRepository($enumValueClassName)->findBy([], ['priority' => 'DESC']);
+        $this->enumStatuses = $registry->getRepository($enumValueClassName)->findBy([], ['priority' => 'ASC']);
     }
 
     /**
