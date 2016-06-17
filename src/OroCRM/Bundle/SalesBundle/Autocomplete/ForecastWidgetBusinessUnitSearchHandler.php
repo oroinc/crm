@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Autocomplete;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+
 use Oro\Bundle\OrganizationBundle\Autocomplete\BusinessUnitSearchHandler;
 use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 
