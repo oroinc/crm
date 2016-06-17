@@ -164,6 +164,7 @@ services:
         arguments:
             - %oro_organization.business_unit.entity.class%
             - ["name"]
+            - '@doctrine'
             - "@oro_organization.provider.busines_unit_acl"
             - %orocrm_sales.opportunity.class%
         tags:

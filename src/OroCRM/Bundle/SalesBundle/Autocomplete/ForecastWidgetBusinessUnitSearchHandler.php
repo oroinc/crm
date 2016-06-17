@@ -2,10 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Autocomplete;
 
-use Oro\Bundle\FormBundle\Autocomplete\SearchHandler;
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Oro\Bundle\OrganizationBundle\Autocomplete\BusinessUnitSearchHandler;
 use Oro\Bundle\OrganizationBundle\Provider\BusinessUnitAclProvider;
 
-class ForecastWidgetBusinessUnitSearchHandler extends SearchHandler
+class ForecastWidgetBusinessUnitSearchHandler extends BusinessUnitSearchHandler
 {
     /** @var BusinessUnitAclProvider */
     protected $businessUnitAclProvider;
@@ -16,16 +17,18 @@ class ForecastWidgetBusinessUnitSearchHandler extends SearchHandler
     /**
      * @param string $entityName
      * @param array $properties
+     * @param Registry $doctrine
      * @param BusinessUnitAclProvider $businessUnitAclProvider
      * @param string $opportunityClassName
      */
     public function __construct(
         $entityName,
         $properties,
+        $doctrine,
         BusinessUnitAclProvider $businessUnitAclProvider,
         $opportunityClassName
     ) {
-        parent::__construct($entityName, $properties);
+        parent::__construct($entityName, $properties, $doctrine);
         $this->businessUnitAclProvider = $businessUnitAclProvider;
         $this->opportunityClassName = $opportunityClassName;
     }
