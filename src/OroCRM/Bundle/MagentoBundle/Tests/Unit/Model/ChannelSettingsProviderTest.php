@@ -2,7 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Model;
 
-use Oro\Bundle\DataGridBundle\Common\DataObject;
+use Oro\Component\Config\Common\ConfigObject;
 use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
@@ -226,7 +226,7 @@ class ChannelSettingsProviderTest extends \PHPUnit_Framework_TestCase
         $transport = $this->getMock('OroCRM\Bundle\MagentoBundle\Entity\MagentoSoapTransport');
         $transport->expects($this->any())->method('isSupportedExtensionVersion')
             ->willReturn($isSupportedExtensionVersion);
-        $settings = DataObject::create($settings);
+        $settings = ConfigObject::create($settings);
         $channel->expects($this->any())
             ->method('getSynchronizationSettings')
             ->will($this->returnValue($settings));

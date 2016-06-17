@@ -1,4 +1,4 @@
 imports:
     - { resource: 'oro/workflow/b2b_flow_lead.yml' }          # Unqualified Sales Lead Workflow
-    - { resource: 'oro/workflow/b2b_flow_sales.yml' }         # B2B Sales Workflow
     - { resource: 'oro/workflow/b2b_flow_sales_funnel.yml' }  # B2B Sales Activity flow
+    - { resource: 'oro/workflow/opportunity_flow.yml' }       # Opportunity Management Flow

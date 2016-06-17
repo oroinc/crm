@@ -1,9 +1,0 @@
-title:     "Task list"
-iconClass: "icon-tasks"
-dialogIcon: "bundles/orocrmtask/sidebar_widgets/assigned_tasks/img/icon-task.png"
-module:    "orocrm/sidebar/widget/assigned_tasks"
-placement: "both"
-cssClass:  "sidebar-widget-assigned-tasks"
-description: orocrm.task.assigned_tasks_widget.description
-settings:
-    perPage: 5

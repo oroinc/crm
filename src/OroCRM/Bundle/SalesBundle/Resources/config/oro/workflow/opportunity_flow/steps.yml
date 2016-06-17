@@ -1,0 +1,22 @@
+workflows:
+    opportunity_flow:
+        steps:
+            open:
+                label: 'Open'
+                order: 10
+                allowed_transitions:
+                    - develop
+                    - close_won
+                    - close_lost
+            won:
+                label: 'Won'
+                order: 20
+                allowed_transitions:
+                    - reopen
+                is_final: true
+            lost:
+                label: 'Lost'
+                order: 30
+                allowed_transitions:
+                    - reopen
+                is_final: true

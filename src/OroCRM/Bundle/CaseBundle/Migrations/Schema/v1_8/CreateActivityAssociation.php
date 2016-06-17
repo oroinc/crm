@@ -57,11 +57,6 @@ class CreateActivityAssociation implements Migration, ActivityExtensionAwareInte
             $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_case');
         }
 
-        $associationTableName = $activityExtension->getAssociationTableName('orocrm_task', 'orocrm_case');
-        if (!$schema->hasTable($associationTableName)) {
-            $activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_case');
-        }
-
         $associationTableName = $activityExtension->getAssociationTableName('oro_calendar_event', 'orocrm_case');
         if (!$schema->hasTable($associationTableName)) {
             $activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_case');
