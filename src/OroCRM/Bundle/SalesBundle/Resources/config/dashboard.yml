@@ -230,3 +230,33 @@ oro_dashboard_config:
                     options:
                         label: oro.dashboard.date_range.label
                     show_on_widget: true
+        my_open_opportunities:
+            label:       orocrm.sales.dashboard.my_open_opportunities.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: myOpenOpportunities }
+            acl:         orocrm_sales_opportunity_view
+            description: orocrm.sales.dashboard.my_open_opportunities.description
+            icon:       bundles/orocrmsales/img/opportunity_by_status.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: orocrm_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - won
+                            - lost

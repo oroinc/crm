@@ -169,3 +169,19 @@ services:
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
+
+    orocrm_sales.event_listener.datagrid.my_open_opportunity_owner:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
+
+    orocrm_sales.event_listener.datagrid.my_open_opportunity_status:
+        class: OroCRM\Bundle\SalesBundle\Datagrid\WidgetOpportunityExcludedStatusListener
+        arguments:
+            - '@oro_dashboard.widget_configs'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
