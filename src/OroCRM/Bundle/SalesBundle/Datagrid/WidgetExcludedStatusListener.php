@@ -9,7 +9,7 @@ use Oro\Bundle\DataGridBundle\Datasource\Orm\OrmDatasource;
 
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 
-class WidgetOpportunityExcludedStatusListener
+class WidgetExcludedStatusListener
 {
     /** @var WidgetConfigs */
     protected $widgetConfigs;

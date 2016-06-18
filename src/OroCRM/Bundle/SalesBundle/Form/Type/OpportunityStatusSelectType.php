@@ -12,7 +12,7 @@ class OpportunityStatusSelectType extends AbstractType
     const NAME = 'orocrm_type_widget_opportunity_status_select';
 
     /** @var EnumValueProvider */
-    private $enumValueProvider;
+    protected $enumValueProvider;
 
     /**
      * @param EnumValueProvider $enumValueProvider

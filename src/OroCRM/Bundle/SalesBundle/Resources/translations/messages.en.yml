@@ -72,6 +72,13 @@ orocrm:
                 excluded_statuses:
                     label: Excluded statuses
                     placeholder: Choose excluded statuses
+            my_open_leads:
+                title: My Open Leads
+                description: This widget displays list of open leads.
+                view_all: View all
+                excluded_statuses:
+                    label: Excluded statuses
+                    placeholder: Choose excluded statuses
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads

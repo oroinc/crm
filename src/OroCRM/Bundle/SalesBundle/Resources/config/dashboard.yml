@@ -260,3 +260,34 @@ oro_dashboard_config:
                         default_selected:
                             - won
                             - lost
+
+        my_open_leads:
+            label:       orocrm.sales.dashboard.my_open_leads.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: myOpenLeads }
+            acl:         orocrm_sales_lead_view
+            description: orocrm.sales.dashboard.my_open_leads.description
+            icon:       bundles/orocrmsales/img/opportunities_by_lead_source.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: orocrm_type_widget_lead_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.my_open_leads.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.my_open_leads.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - canceled
+                            - qualified

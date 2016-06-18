@@ -1,0 +1,19 @@
+{% extends 'OroDashboardBundle:Dashboard:grid.html.twig' %}
+{% set gridName = 'dashboard-my-sales-lead-grid' %}
+
+{% block content %}
+    {{ dataGrid.renderGrid(gridName, params|default({}), {
+        'routerEnabled': false,
+        'enableFilters': false,
+    }|merge(renderParams|default({}))) }}
+{% endblock %}
+
+{% block actions %}
+    {% set actions = [{
+        'url': path('orocrm_sales_lead_index'),
+        'type': 'link',
+        'label': 'orocrm.sales.dashboard.my_open_leads.view_all'|trans
+    }] %}
+
+    {{ parent() }}
+{% endblock %}
