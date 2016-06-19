@@ -3,7 +3,7 @@ UPGRADE FROM 1.9 to 1.10
 
 ####OroCRMSalesBundle:
 - The 'status' field in `OroCRM\Bundle\SalesBundle\Entity\Opportunity` is changed to enum type
-- Constructor for `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` changed. New arguments: `OwnerHelper $ownerHelper`,`DateHelper $dateHelper`
+- Constructor for `OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities` changed. New arguments: `DateHelper $dateHelper`, `OwnerHelper $ownerHelper`
 
 ####OroCRMTaskBundle:
 - OroCRMTaskBundle moved to a separate package

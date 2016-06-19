@@ -157,7 +157,10 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options       = ['owners' => [], 'businessUnits' => [], 'roles' => [], 'dateRange' => ['start' => null, 'end' => null]];
+        $options = [
+            'owners' => ['users' => [], 'businessUnits' => [], 'roles' => []],
+            'dateRange' => ['start' => null, 'end' => null]
+        ];
         $widgetOptions = new WidgetOptionBag($options);
         $this->ownerHelper->expects($this->any())
             ->method('getOwnerIds')
@@ -185,7 +188,10 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
     {
         $user = new User();
         $user->setId(1);
-        $options       = ['owners' => [$user], 'businessUnits' => [], 'roles' => [], 'dateRange' => ['start' => null, 'end' => null]];
+        $options = [
+            'owners' => ['users' => [$user->getId()], 'businessUnits' => [], 'roles' => []],
+            'dateRange' => ['start' => null, 'end' => null]
+        ];
         $widgetOptions = new WidgetOptionBag($options);
         $this->ownerHelper->expects($this->any())
             ->method('getOwnerIds')
@@ -222,11 +228,8 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
 
         $options = [
             'owners' => ['users' => [$user->getId()]],
-        $options       = [
-            'owners'        => [$user],
             'businessUnits' => [],
-            'compareToDate' => ['useDate' => true, 'date' => $date],
-            'dateRange'     => ['start' => null, 'end' => null]
+            'compareToDate' => ['useDate' => true, 'date' => $date]
         ];
         $widgetOptions = new WidgetOptionBag($options);
         $this->ownerHelper->expects($this->any())
@@ -271,7 +274,10 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $businessUnit = new BusinessUnit();
         $businessUnit->addUser($user);
 
-        $options       = ['owners' => [], 'businessUnits' => [$businessUnit->getId()], 'dateRange' => ['start' => null, 'end' => null]];
+        $options = [
+            'owners' => ['businessUnits' => [$businessUnit->getId()]],
+            'dateRange' => ['start' => null, 'end' => null]
+        ];
         $widgetOptions = new WidgetOptionBag($options);
         $this->ownerHelper->expects($this->any())
             ->method('getOwnerIds')

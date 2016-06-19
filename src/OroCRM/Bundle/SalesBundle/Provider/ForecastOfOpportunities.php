@@ -60,8 +60,8 @@ class ForecastOfOpportunities
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
-        $this->ownerHelper       = $ownerHelper;
         $this->dateHelper        = $dateHelper;
+        $this->ownerHelper       = $ownerHelper;
     }
 
     /**
@@ -170,7 +170,7 @@ class ForecastOfOpportunities
         if (!isset($this->ownersValues[$key])) {
             $this->ownersValues[$key] = $this->doctrine
                 ->getRepository('OroCRMSalesBundle:Opportunity')
-                ->getForecastOfOpporunitiesData($ownerIds, $date, $this->aclHelper, $start, $end);
+                ->getForecastOfOpportunitiesData($ownerIds, $date, $this->aclHelper, $start, $end);
         }
 
         return $this->ownersValues[$key];
@@ -260,5 +260,49 @@ class ForecastOfOpportunities
         }
 
         return $result;
+    }
+
+    /**
+     * @param array $dateRange
+     * @param bool  $usePrevious
+     *
+     * @return array
+     */
+    protected function prepareDateRange(array $dateRange, $usePrevious)
+    {
+        /** @var \DateTime $start */
+        /** @var \DateTime $end */
+        $start = $dateRange['start'];
+        $end   = $dateRange['end'];
+        $data  = [
+            'start' => $start ? $start->format('Y-m-d') : null,
+            'end'   => $end ? $end->format('Y-m-d') : null
+        ];
+        if ($usePrevious
+            && !empty($dateRange['prev_start'])
+            && !empty($dateRange['prev_end'])
+        ) {
+            /** @var \DateTime $prevStart */
+            /** @var \DateTime $prevEnd */
+            $prevStart = $dateRange['prev_start'];
+            $prevEnd   = $dateRange['prev_end'];
+            // current moment
+            $now        = $this->dateHelper->getCurrentDateTime();
+            $diff       = $start->diff($now);
+            $prevMoment = clone $prevStart;
+            $prevMoment->add($diff);
+
+            $data = array_merge(
+                $data,
+                [
+                    'current_moment' => $now,
+                    'prev_start'     => $prevStart->format('Y-m-d'),
+                    'prev_end'       => $prevEnd->format('Y-m-d'),
+                    'prev_moment'    => $prevMoment
+                ]
+            );
+        }
+
+        return $data;
     }
 }

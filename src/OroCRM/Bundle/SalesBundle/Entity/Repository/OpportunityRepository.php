@@ -125,19 +125,10 @@ class OpportunityRepository extends EntityRepository
      *
      * @return mixed
      */
-    public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper, $start = null, $end = null)
-    public function getForecastOfOpportunitiesData($ownerIds, $date, AclHelper $aclHelper)
+    public function getForecastOfOpportunitiesData($ownerIds, $date, AclHelper $aclHelper, $start = null, $end = null)
     {
-        if (!$ownerIds) {
-            return [
-                'inProgressCount'  => 0,
-                'budgetAmount'     => 0,
-                'weightedForecast' => 0,
-            ];
-        }
-
         if ($date === null) {
-            return $this->getForecastOfOpportunitiesCurrentData($ownerIds, $aclHelper);
+            return $this->getForecastOfOpportunitiesCurrentData($ownerIds, $aclHelper, $start, $end);
         }
 
         return $this->getForecastOfOpportunitiesOldData($ownerIds, $date, $aclHelper);
@@ -151,9 +142,7 @@ class OpportunityRepository extends EntityRepository
      *
      * @return mixed
      */
-    protected function getForecastOfOpportunitiesCurrentData($ownerIds, AclHelper $aclHelper)
-    {
-    protected function getForecastOfOpporunitiesCurrentData(
+    protected function getForecastOfOpportunitiesCurrentData(
         $ownerIds,
         AclHelper $aclHelper,
         $start = null,
