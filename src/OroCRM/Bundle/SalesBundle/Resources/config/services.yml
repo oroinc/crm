@@ -171,14 +171,20 @@ services:
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
 
-    orocrm_sales.import_export.event_listener..opportunity:
-        class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
-        tags:
-            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
-
-    orocrm_sales.provider.opportunity_by_status:
-        class: OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider
+    orocrm_sales.event_listener.datagrid.owner:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
         arguments:
-            - '@doctrine'
-            - '@oro_security.acl_helper'
-            - '@oro_dashboard.filter.date_filter_processor'
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
+
+    orocrm_sales.event_listener.datagrid.my_open_opportunity_status:
+        class: OroCRM\Bundle\SalesBundle\Datagrid\WidgetExcludedStatusListener
+        arguments:
+            - '@oro_dashboard.widget_configs'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
