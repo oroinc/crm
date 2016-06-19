@@ -54,7 +54,7 @@ class TrackingVisitProvider
                     'channel' => ChannelType::TYPE,
                     'status'  => Channel::STATUS_ACTIVE
                 ])
-                ->andHaving('COUNT(t.userIdentifier) > 1');;
+                ->andHaving('COUNT(t.userIdentifier) > 1');
             if ($from) {
                 $qb
                     ->andWhere('t.firstActionTime > :from')

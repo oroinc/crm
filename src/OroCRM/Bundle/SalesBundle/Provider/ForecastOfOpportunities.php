@@ -11,9 +11,13 @@ use Oro\Bundle\LocaleBundle\Formatter\NumberFormatter;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-
 use Oro\Bundle\UserBundle\Dashboard\OwnerHelper;
 
+/**
+ * Class ForecastOfOpportunities
+ * @package OroCRM\Bundle\SalesBundle\Provider
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class ForecastOfOpportunities
 {
     /** @var RegistryInterface */
@@ -99,7 +103,13 @@ class ForecastOfOpportunities
             );
             $result['deviation']     = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
-            $result                  = $this->prepareData($dataType, $lessIsBetter, $pastResult, $value - $pastResult, $result);
+            $result                  = $this->prepareData(
+                $dataType,
+                $lessIsBetter,
+                $pastResult,
+                $value - $pastResult,
+                $result
+            );
             $result['previousRange'] = $this->dateTimeFormatter->formatDate($dateData['prev_moment']);
         }
 
@@ -162,10 +172,8 @@ class ForecastOfOpportunities
     protected function getOwnersValues(array $ownerIds, $start = null, $end = null, $date = null)
     {
         $dateKey      = $date ? $this->dateTimeFormatter->formatDate($date) : '';
-        $startDateKey = $start ? : '';
-        $endDateKey   = $end ? : '';
         $key          = sha1(
-            implode('_', $ownerIds) . 'date' . $dateKey . 'start' . $startDateKey . 'end' . $endDateKey
+            implode('_', $ownerIds) . 'date' . $dateKey . 'start' . (string)$start . 'end' . (string)$end
         );
         if (!isset($this->ownersValues[$key])) {
             $this->ownersValues[$key] = $this->doctrine
