@@ -147,7 +147,6 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
             $this->dateTimeFormatter,
             $this->aclHelper,
             $this->translator,
-            $this->securityFacade,
             $this->dateHelper,
             $this->ownerHelper
         );
