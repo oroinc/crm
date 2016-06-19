@@ -195,8 +195,10 @@ services:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 
     orocrm_sales.provider.opportunity_by_status:
-        class: OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider
+        class: OroCRM\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
         arguments:
             - '@doctrine'
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
+            - '@oro_entity_extend.enum_value_provider'
+            - '@oro_user.dashboard.owner_helper'

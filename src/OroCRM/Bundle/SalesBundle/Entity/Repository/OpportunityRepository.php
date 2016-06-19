@@ -51,18 +51,36 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param $alias
+     * @param string $alias
+     * @param array  $excludedStatuses
+     * @param string $orderBy
+     * @param string $direction
      *
      * @return QueryBuilder
+     *
      */
-    public function getGroupedOpportunitiesByStatusQB($alias)
-    {
+    public function getGroupedOpportunitiesByStatusQB(
+        $alias,
+        array $excludedStatuses = [],
+        $orderBy = 'budget',
+        $direction = 'DESC'
+    ) {
         $qb = $this->createQueryBuilder($alias);
-        $qb->select(
-            sprintf('IDENTITY(%s.status) as name, SUM(%s.budgetAmount) as budget', $alias, $alias)
-        )
-            ->groupBy(sprintf('%s.status', $alias));
+        $qb
+            ->select(
+                sprintf('IDENTITY(%s.status) as name', $alias),
+                sprintf('COUNT(%s.id) as quantity', $alias),
+                sprintf('SUM(%s.budgetAmount) as budget', $alias),
+                sprintf('SUM(%s.closeRevenue) as revenue', $alias)
+            )
+            ->groupBy(sprintf('%s.status', $alias))
+            ->orderBy($orderBy, $direction);
 
+        if ($excludedStatuses) {
+            $qb->andWhere($qb->expr()->notIn(
+                sprintf('IDENTITY(%s.status)', $alias), $excludedStatuses)
+            );
+        }
         return $qb;
     }
 

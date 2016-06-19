@@ -56,6 +56,19 @@ oro_dashboard_config:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                excluded_statuses:
+                    type: orocrm_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_by_state.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.placeholder
+                useQuantityAsData:
+                    type: checkbox
+                    options:
+                       label: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.label
+                       required: false
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart

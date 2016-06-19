@@ -46,6 +46,11 @@ orocrm:
             opportunities_by_state:
                 title:       Opportunities by Status
                 description: This widget displays a breakdown of opportunities by status in form of a bar chart.
+                quantity_as_data:
+                    label: Display Opportunities Number
+                excluded_statuses:
+                    label: Excluded statuses
+                    placeholder: Choose excluded statuses
             my_sales_flow_b2b_chart:
                 title:       My Sales Flow B2B
                 description: This widget gives you a quick overview of a B2B workflow in form of a funnel chart.

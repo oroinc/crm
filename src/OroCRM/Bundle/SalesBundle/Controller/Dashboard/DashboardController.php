@@ -96,15 +96,19 @@ class DashboardController extends Controller
     {
         $options = $this->get('oro_dashboard.widget_configs')
             ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null));
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMSalesBundle:Opportunity')
-            ->getOpportunitiesByStatus(
-                $this->get('oro_security.acl_helper'),
-                $options->get('dateRange'),
-                $this->get('oro_entity_extend.enum_value_provider')->getEnumChoicesByCode('opportunity_status'),
-                $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
-            );
-
+        if ($options->get('useQuantityAsData')) {
+            $valueOptions = [
+                'field_name' => 'quantity'
+            ];
+        } else {
+            $valueOptions = [
+                'field_name' => 'budget',
+                'type'       => 'currency',
+                'formatter'  => 'formatCurrency'
+            ];
+        }
+        $items = $this->get('orocrm_sales.provider.opportunity_by_status')
+            ->getOpportunitiesGroupedByStatus($options);
         $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
@@ -113,11 +117,7 @@ class DashboardController extends Controller
                     'name'        => 'bar_chart',
                     'data_schema' => [
                         'label' => ['field_name' => 'label'],
-                        'value' => [
-                            'field_name' => 'budget',
-                            'type'       => 'currency',
-                            'formatter'  => 'formatCurrency'
-                        ]
+                        'value' => $valueOptions 
                     ],
                     'settings'    => ['xNoTicks' => 2],
                 ]
