@@ -16,9 +16,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
-    const OPPORTUNITY_STATE_IN_PROGRESS = 'In Progress';
+    const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
     const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
-    
+
     /**
      * @var WorkflowStep[]
      */
@@ -26,6 +26,11 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * Get opportunities by state by current quarter
+     *
+     * @param        $aclHelper AclHelper
+     * @param  array $dateRange
+     * @param  array $states
+     * @param int[] $owners
      *
      * @param AclHelper $aclHelper
      * @param array     $dateRange
@@ -36,19 +41,35 @@ class OpportunityRepository extends EntityRepository
      */
     public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states, $owners = [])
     {
-        $dateEnd = $dateRange['end'];
+        $dateEnd   = $dateRange['end'];
         $dateStart = $dateRange['start'];
 
         return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states, $owners);
     }
 
     /**
-     * @param AclHelper  $aclHelper
-     * @param            $dateStart
-     * @param            $dateEnd
-     * @param array      $states
-     * @param int[]      $owners
+     * @param $alias
      *
+     * @return QueryBuilder
+     */
+    public function getGroupedOpportunitiesByStatusQB($alias)
+    {
+        $qb = $this->createQueryBuilder($alias);
+        $qb->select(
+            sprintf('IDENTITY(%s.status) as name, SUM(%s.budgetAmount) as budget', $alias, $alias)
+        )
+            ->groupBy(sprintf('%s.status', $alias));
+
+        return $qb;
+    }
+
+    /**
+     * @param  AclHelper $aclHelper
+     * @param $dateStart
+     * @param $dateEnd
+     * @param array $states
+     * @param int[] $owners
+     * 
      * @return array
      */
     protected function getOpportunitiesDataByStatus(
@@ -59,11 +80,11 @@ class OpportunityRepository extends EntityRepository
         $owners = []
     ) {
         foreach ($states as $key => $name) {
-            $resultData[$key] = array(
-                'name' => $key,
-                'label' => $name,
+            $resultData[$key] = [
+                'name'   => $key,
+                'label'  => $name,
                 'budget' => 0,
-            );
+            ];
         }
 
         // select opportunity data
@@ -95,14 +116,26 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array     $ownerIds
-     * @param DateTime  $date
-     * @param AclHelper $aclHelper
+     * @param array       $ownerIds
+     * @param DateTime    $date
+     * @param AclHelper   $aclHelper
+     *
+     * @param string|null $start
+     * @param string|null $end
      *
      * @return mixed
      */
+    public function getForecastOfOpporunitiesData($ownerIds, $date, AclHelper $aclHelper, $start = null, $end = null)
     public function getForecastOfOpportunitiesData($ownerIds, $date, AclHelper $aclHelper)
     {
+        if (!$ownerIds) {
+            return [
+                'inProgressCount'  => 0,
+                'budgetAmount'     => 0,
+                'weightedForecast' => 0,
+            ];
+        }
+
         if ($date === null) {
             return $this->getForecastOfOpportunitiesCurrentData($ownerIds, $aclHelper);
         }
@@ -111,20 +144,31 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $ownerIds
-     * @param AclHelper $aclHelper
+     * @param array       $ownerIds
+     * @param AclHelper   $aclHelper
+     * @param string|null $start
+     * @param string|null $end
+     *
      * @return mixed
      */
     protected function getForecastOfOpportunitiesCurrentData($ownerIds, AclHelper $aclHelper)
     {
+    protected function getForecastOfOpporunitiesCurrentData(
+        $ownerIds,
+        AclHelper $aclHelper,
+        $start = null,
+        $end = null
+    ) {
         $qb = $this->createQueryBuilder('opportunity');
 
         $select = "
-            SUM( (CASE WHEN (opportunity.status='in_progress') THEN 1 ELSE 0 END) ) as inProgressCount,
+            COUNT( opportunity.id ) as inProgressCount,
             SUM( opportunity.budgetAmount ) as budgetAmount,
             SUM( opportunity.budgetAmount * opportunity.probability ) as weightedForecast";
-        $qb->select($select);
-
+        $qb
+            ->select($select)
+            ->andWhere('opportunity.status NOT IN (:notCountedStatuses)')
+            ->setParameter('notCountedStatuses', ['lost', 'won']);
         if (!empty($ownerIds)) {
             $qb->join('opportunity.owner', 'owner');
             QueryUtils::applyOptimizedIn($qb, 'owner.id', $ownerIds);
@@ -139,29 +183,39 @@ class OpportunityRepository extends EntityRepository
         );
 
         $qb->andWhere($probabilityCondition);
+        if ($start) {
+            $qb
+                ->andWhere('opportunity.closeDate >= :startDate')
+                ->setParameter('startDate', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('opportunity.closeDate <= :endDate')
+                ->setParameter('endDate', $end);
+        }
 
         return $aclHelper->apply($qb)->getOneOrNullResult();
     }
 
     /**
      * @param array     $ownerIds
-     * @param \DateTime  $date
+     * @param \DateTime $date
      * @param AclHelper $aclHelper
+     *
      * @return mixed
      */
     protected function getForecastOfOpportunitiesOldData($ownerIds, $date, AclHelper $aclHelper)
     {
         //clone date for avoiding wrong date on printing with current locale
         $newDate = clone $date;
-        $newDate->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('opportunity')
             ->where('opportunity.createdAt < :date')
             ->setParameter('date', $newDate);
 
         $opportunities = $aclHelper->apply($qb)->getResult();
 
-        $result['inProgressCount'] = 0;
-        $result['budgetAmount'] = 0;
+        $result['inProgressCount']  = 0;
+        $result['budgetAmount']     = 0;
         $result['weightedForecast'] = 0;
 
         $auditRepository = $this->getEntityManager()->getRepository('OroDataAuditBundle:Audit');
@@ -172,13 +226,13 @@ class OpportunityRepository extends EntityRepository
                 ->andWhere('a.loggedAt > :date')
                 ->setParameter('action', LoggableManager::ACTION_UPDATE)
                 ->setParameter('date', $newDate);
-            $opportunityHistory =  $aclHelper->apply($auditQb)->getResult();
+            $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
             if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
                 $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
-                $probability = $oldProbability;
+                $probability     = $oldProbability;
             } else {
-                $probability = $opportunity->getProbability();
+                $probability     = $opportunity->getProbability();
                 $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
             }
 
@@ -196,6 +250,7 @@ class OpportunityRepository extends EntityRepository
     /**
      * @param mixed  $opportunityHistory
      * @param string $field
+     *
      * @return mixed
      */
     protected function getHistoryOldValue($opportunityHistory, $field)
@@ -213,8 +268,9 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $opportunityHistory
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
+     *
      * @return bool
      */
     protected function isStatusOk($opportunityHistory, $opportunity)
@@ -229,8 +285,8 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $ownerIds
-     * @param array $opportunityHistory
+     * @param array       $ownerIds
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
      *
      * @return bool
@@ -248,10 +304,10 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $result
-     * @param array $opportunityHistory
+     * @param array       $result
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
-     * @param mixed $probability
+     * @param mixed       $probability
      *
      * @return array
      */
@@ -271,11 +327,11 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @param DateTime  $start
      * @param DateTime  $end
-     * @param int[]     $owners
-     *
+     * @param int[] $owners
+     * 
      * @return int
      */
-    public function getOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
+    public function getOpportunitiesCount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
     {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
 
@@ -290,7 +346,7 @@ class OpportunityRepository extends EntityRepository
      *
      * @return int
      */
-    public function getNewOpportunitiesCount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
+    public function getNewOpportunitiesCount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
     {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners)
             ->andWhere('o.closeDate IS NULL');
@@ -305,15 +361,20 @@ class OpportunityRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function createOpportunitiesCountQb(DateTime $start, DateTime $end, $owners = [])
+    public function createOpportunitiesCountQb(DateTime $start = null, DateTime $end = null, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
-
-        $qb
-            ->select('COUNT(o.id)')
-            ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
+        $qb->select('COUNT(o.id)');
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
@@ -330,20 +391,27 @@ class OpportunityRepository extends EntityRepository
      *
      * @return double
      */
-    public function getTotalServicePipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
+    public function getTotalServicePipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
 
         $qb
             ->select('SUM(o.budgetAmount)')
-            ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
             ->andWhere('o.closeDate IS NULL')
             ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
@@ -354,47 +422,60 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */
     public function getTotalServicePipelineAmountInProgress(
         AclHelper $aclHelper,
-        DateTime $start,
-        DateTime $end
+        DateTime $start = null,
+        DateTime $end = null
     ) {
         $qb = $this->createQueryBuilder('o');
 
         $qb
             ->select('SUM(o.budgetAmount)')
-            ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
             ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */
-    public function getWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('o');
 
-        $qb
-            ->select('SUM(o.budgetAmount * o.probability)')
-            ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
+        $qb->select('SUM(o.budgetAmount * o.probability)');
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
@@ -407,19 +488,26 @@ class OpportunityRepository extends EntityRepository
      *
      * @return double
      */
-    public function getOpenWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start, DateTime $end, $owners = [])
+    public function getOpenWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
     {
         $qb = $this->createQueryBuilder('o');
 
         $qb
             ->select('SUM(o.budgetAmount * o.probability)')
-            ->andWhere($qb->expr()->between('o.createdAt', ':start', ':end'))
             ->andWhere('o.status = :status')
             ->andWhere('o.probability != 0')
             ->andWhere('o.probability != 1')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end)
             ->setParameter('status', self::OPPORTUNITY_STATE_IN_PROGRESS_CODE);
+        if ($start) {
+            $qb
+                ->andWhere('o.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('o.createdAt < :end')
+                ->setParameter('end', $end);
+        }
 
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);

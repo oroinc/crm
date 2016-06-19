@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
 use Doctrine\ORM\NoResultException;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
@@ -39,8 +40,8 @@ class CartRepository extends ChannelAwareEntityRepository
      * @return array
      */
     public function getFunnelChartData(
-        \DateTime $dateFrom,
-        \DateTime $dateTo,
+        \DateTime $dateFrom = null,
+        \DateTime $dateTo = null,
         Workflow $workflow = null,
         AclHelper $aclHelper = null
     ) {
@@ -81,6 +82,7 @@ class CartRepository extends ChannelAwareEntityRepository
                 }
             }
         }
+
         return $data;
     }
 
@@ -112,10 +114,15 @@ class CartRepository extends ChannelAwareEntityRepository
 
         $queryBuilder->where($queryBuilder->expr()->in('workflowStep.name', $steps));
 
-        if ($dateFrom && $dateTo) {
-            $queryBuilder->andWhere($queryBuilder->expr()->between('cart.createdAt', ':dateFrom', ':dateTo'))
-                ->setParameter('dateFrom', $dateFrom)
-                ->setParameter('dateTo', $dateTo);
+        if ($dateFrom) {
+            $queryBuilder
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $dateFrom);
+        }
+        if ($dateTo) {
+            $queryBuilder
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $dateTo);
         }
 
         if ($this->excludedStatuses) {
@@ -184,10 +191,11 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonedRevenueByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonedRevenueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('SUM(cart.grandTotal) as val');
@@ -201,10 +209,11 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonedCountByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonedCountByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $qb = $this->getAbandonedQB($start, $end);
         $qb->select('COUNT(cart.grandTotal) as val');
@@ -218,10 +227,11 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return float|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
-    public function getAbandonRateByPeriod(\DateTime $start, \DateTime $end, AclHelper $aclHelper)
+    public function getAbandonRateByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
         $result = null;
 
@@ -229,10 +239,17 @@ class CartRepository extends ChannelAwareEntityRepository
         $qb->join('cart.status', 'cstatus')
             ->select('SUM(cart.grandTotal) as val')
             ->andWhere('cstatus.name = :statusName')
-            ->setParameter('statusName', 'open')
-            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end);
+            ->setParameter('statusName', 'open');
+        if ($start) {
+            $qb
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $end);
+        }
         $this->applyActiveChannelLimitation($qb);
         $allCards = $aclHelper->apply($qb)->getOneOrNullResult();
         $allCards = (int)$allCards['val'];
@@ -246,15 +263,18 @@ class CartRepository extends ChannelAwareEntityRepository
         return $result;
     }
 
-    protected function getAbandonedQB(\DateTime $start, \DateTime $end)
+    /**
+     * @param \DateTime $start
+     * @param \DateTime $end
+     *
+     * @return QueryBuilder
+     */
+    protected function getAbandonedQB(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('cart');
-        return $qb ->join('cart.status', 'cstatus')
+        $qb->join('cart.status', 'cstatus')
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
-            ->andWhere($qb->expr()->between('cart.createdAt', ':dateStart', ':dateEnd'))
-            ->setParameter('dateStart', $start)
-            ->setParameter('dateEnd', $end)
             ->andWhere(
                 $qb->expr()->not(
                     $qb->expr()->exists(
@@ -264,6 +284,18 @@ class CartRepository extends ChannelAwareEntityRepository
                     )
                 )
             );
+        if ($start) {
+            $qb
+                ->andWhere('cart.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('cart.createdAt < :end')
+                ->setParameter('end', $end);
+        }
+
+        return $qb;
     }
 
     /**
@@ -273,23 +305,72 @@ class CartRepository extends ChannelAwareEntityRepository
      *
      * @return int
      */
-    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, \DateTime $from, \DateTime $to)
+    public function getCustomersCountWhatMakeCarts(AclHelper $aclHelper, \DateTime $from = null, \DateTime $to = null)
     {
         $qb = $this->createQueryBuilder('c');
 
         try {
             $qb
-                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)')
-                ->andWhere($qb->expr()->between('c.createdAt', ':from', ':to'))
-                ->setParameters([
-                    'from' => $from,
-                    'to'   => $to
-                ]);
+                ->select('COUNT(DISTINCT c.customer) + SUM(CASE WHEN c.isGuest = true THEN 1 ELSE 0 END)');
+            if ($from) {
+                $qb
+                    ->andWhere('c.createdAt > :from')
+                    ->setParameter('from', $from);
+            }
+            if ($to) {
+                $qb
+                    ->andWhere('c.createdAt < :to')
+                    ->setParameter('to', $to);
+            }
             $this->applyActiveChannelLimitation($qb);
 
-            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+            return (int)$aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }
+    }
+
+    /**
+     * @param string $alias
+     *
+     * @return QueryBuilder
+     */
+    public function getCustomersCountWhatMakeCartsQB($alias)
+    {
+        $qb = $this->createQueryBuilder($alias)
+            ->select(sprintf(
+                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)',
+                    $alias,
+                    $alias
+                )
+            );
+        $this->applyActiveChannelLimitation($qb);
+
+        return $qb;
+    }
+
+    /**
+     * @param string $alias
+     * @param array  $steps
+     * @param array  $excludedStatuses
+     *
+     * @return QueryBuilder
+     */
+    public function getStepDataQB($alias, array $steps, array $excludedStatuses = [])
+    {
+        $qb = $this->createQueryBuilder($alias)
+            ->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
+            ->leftJoin(sprintf('%s.status', $alias), 'status')
+            ->join(sprintf('%s.workflowStep', $alias), 'workflowStep')
+            ->groupBy('workflowStep.name');
+
+        $qb->where($qb->expr()->in('workflowStep.name', $steps));
+
+        if ($excludedStatuses) {
+            $qb->andWhere($qb->expr()->notIn('status.name', $excludedStatuses));
+        }
+        $this->applyActiveChannelLimitation($qb);
+
+        return $qb;
     }
 }
