@@ -95,7 +95,7 @@ class SalesFlowB2CProvider
             if (!in_array($stepName, static::$excludedSteps)) {
                 if ($step->isFinal()) {
                     $stepValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true];//'2016-06-12 21:00:00' - start of the week
+                    $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => true];
                 } else {
                     $stepValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
                     $data[]    = ['label' => $step->getLabel(), 'value' => $stepValue, 'isNozzle' => false];

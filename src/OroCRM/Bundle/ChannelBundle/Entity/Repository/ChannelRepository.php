@@ -44,8 +44,8 @@ class ChannelRepository extends EntityRepository
      * @return integer
      */
     public function getVisitsCountByPeriodForChannelType(
-        \DateTime $start = null,
-        \DateTime $end = null,
+        \DateTime $start,
+        \DateTime $end,
         AclHelper $aclHelper,
         $type
     ) {
@@ -62,20 +62,13 @@ class ChannelRepository extends EntityRepository
                     $qb->expr()->eq('channel.status', ':status')
                 )
             ))
+            ->andWhere($qb->expr()->between('visit.firstActionTime', ':dateStart', ':dateEnd'))
             ->setParameter('type', $type)
+            ->setParameter('dateStart', $start)
+            ->setParameter('dateEnd', $end)
             ->setParameter('status', Channel::STATUS_ACTIVE);
-        if ($start) {
-            $qb
-                ->andWhere('visit.firstActionTime > :start')
-                ->setParameter('start', $start);
-        }
-        if ($end) {
-            $qb
-                ->andWhere('visit.firstActionTime < :end')
-                ->setParameter('end', $end);
-        }
 
-        return (int)$aclHelper->apply($qb)->getSingleScalarResult();
+        return (int) $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
@@ -112,5 +105,30 @@ class ChannelRepository extends EntityRepository
         $query->setParameter('status', $status);
 
         return $query;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return QueryBuilder
+     */
+    public function getVisitsCountForChannelTypeQB($type) {
+        $qb = $this->_em->createQueryBuilder();
+
+        $qb->select('COUNT(visit.id)')
+            ->from('OroTrackingBundle:TrackingVisit', 'visit')
+            ->join('visit.trackingWebsite', 'site')
+            ->leftJoin('site.channel', 'channel')
+            ->where($qb->expr()->orX(
+                $qb->expr()->isNull('channel.id'),
+                $qb->expr()->andX(
+                    $qb->expr()->eq('channel.channelType', ':type'),
+                    $qb->expr()->eq('channel.status', ':status')
+                )
+            ))
+            ->setParameter('type', $type)
+            ->setParameter('status', Channel::STATUS_ACTIVE);
+
+        return $qb;
     }
 }

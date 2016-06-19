@@ -248,7 +248,11 @@ class ForecastOfOpportunitiesTest extends \PHPUnit_Framework_TestCase
         $businessUnit = new BusinessUnit();
         $businessUnit->addUser($user);
 
-        $options       = ['owners' => [], 'businessUnits' => [$businessUnit], 'dateRange' => ['start' => null, 'end' => null]];
+        $options       = [
+            'owners' => [],
+            'businessUnits' => [$businessUnit],
+            'dateRange' => ['start' => null, 'end' => null]
+        ];
         $widgetOptions = new WidgetOptionBag($options);
 
         $this->opportunityRepository->expects($this->any())

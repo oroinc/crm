@@ -101,7 +101,13 @@ class ForecastOfOpportunities
             );
             $result['deviation']     = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
-            $result                  = $this->prepareData($dataType, $lessIsBetter, $pastResult, $value - $pastResult, $result);
+            $result                  = $this->prepareData(
+                $dataType,
+                $lessIsBetter,
+                $pastResult,
+                $value - $pastResult,
+                $result
+            );
             $result['previousRange'] = $this->dateTimeFormatter->formatDate($dateData['prev_moment']);
         }
 
