@@ -15,6 +15,7 @@ use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 /**
  * Class ForecastOfOpportunities
  * @package OroCRM\Bundle\SalesBundle\Provider
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class ForecastOfOpportunities
 {
@@ -170,10 +171,8 @@ class ForecastOfOpportunities
     protected function getOwnersValues(array $ownerIds, $start = null, $end = null, $date = null)
     {
         $dateKey      = $date ? $this->dateTimeFormatter->formatDate($date) : '';
-        $startDateKey = $start ? : '';
-        $endDateKey   = $end ? : '';
         $key          = sha1(
-            implode('_', $ownerIds) . 'date' . $dateKey . 'start' . $startDateKey . 'end' . $endDateKey
+            implode('_', $ownerIds) . 'date' . $dateKey . 'start' . (string)$start . 'end' . (string)$end
         );
         if (!isset($this->ownersValues[$key])) {
             $this->ownersValues[$key] = $this->doctrine

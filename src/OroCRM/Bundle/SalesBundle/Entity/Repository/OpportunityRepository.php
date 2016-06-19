@@ -14,6 +14,9 @@ use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ */
 class OpportunityRepository extends EntityRepository
 {
     const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
