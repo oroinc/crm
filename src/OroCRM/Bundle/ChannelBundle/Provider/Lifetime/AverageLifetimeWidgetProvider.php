@@ -49,10 +49,10 @@ class AverageLifetimeWidgetProvider
     public function getChartData($dateRange)
     {
         $dateData = $this->dateFilterProcessor->getModifiedDateData($dateRange);
-        $start = $this->prepareDate($dateData['value']['start']);
-        $end = $this->prepareDate($dateData['value']['end'], false);
-        $dates  = $items = [];
-        $period = new \DatePeriod($start, new \DateInterval('P1M'), $end);
+        $start    = $this->prepareDate($dateData['value']['start']);
+        $end      = $this->prepareDate($dateData['value']['end'], false);
+        $dates    = $items = [];
+        $period   = new \DatePeriod($start, new \DateInterval('P1M'), $end);
         /** @var \DateTime $dt */
         foreach ($period as $dt) {
             $key         = $dt->format('Y-m');

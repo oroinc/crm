@@ -46,11 +46,11 @@ class PurchaseDataProvider
     protected $aclHelper;
 
     /**
-     * @param ManagerRegistry $registry
-     * @param ConfigProvider $configProvider
+     * @param ManagerRegistry       $registry
+     * @param ConfigProvider        $configProvider
      * @param TrackingVisitProvider $trackingVisitProvider
-     * @param TranslatorInterface $translator
-     * @param AclHelper $aclHelper
+     * @param TranslatorInterface   $translator
+     * @param AclHelper             $aclHelper
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -59,17 +59,17 @@ class PurchaseDataProvider
         TranslatorInterface $translator,
         AclHelper $aclHelper
     ) {
-        $this->registry = $registry;
-        $this->configProvider = $configProvider;
+        $this->registry              = $registry;
+        $this->configProvider        = $configProvider;
         $this->trackingVisitProvider = $trackingVisitProvider;
-        $this->translator = $translator;
-        $this->aclHelper = $aclHelper;
+        $this->translator            = $translator;
+        $this->aclHelper             = $aclHelper;
     }
 
     /**
      * @param ChartViewBuilder $viewBuilder
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param DateTime         $from
+     * @param DateTime         $to
      *
      * @return ChartView
      */
@@ -103,7 +103,7 @@ class PurchaseDataProvider
         }
         $chartOptions = array_merge_recursive(
             [
-                'name' => 'flow_chart',
+                'name'     => 'flow_chart',
                 'settings' => [
                     'quarterDate' => $from
                 ]

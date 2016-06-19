@@ -9,8 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DashboardController extends Controller
 {
-    const CAMPAIGN_LEAD_COUNT = 5;
-    const CAMPAIGN_OPPORTUNITY_COUNT = 5;
+    const CAMPAIGN_LEAD_COUNT          = 5;
+    const CAMPAIGN_OPPORTUNITY_COUNT   = 5;
     const CAMPAIGN_CLOSE_REVENUE_COUNT = 5;
 
     /**
@@ -23,24 +23,24 @@ class DashboardController extends Controller
      */
     public function campaignLeadsAction($widget)
     {
-        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+        $items                   = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
             ->getCampaignLeadsData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
             );
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'number')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'number']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 
@@ -64,18 +64,18 @@ class DashboardController extends Controller
                     ->get('dateRange')
             );
 
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'number')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'number']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 
@@ -99,18 +99,18 @@ class DashboardController extends Controller
                     ->get('dateRange')
             );
 
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'closeRevenue', 'formatter' => 'formatCurrency')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'closeRevenue', 'formatter' => 'formatCurrency']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 

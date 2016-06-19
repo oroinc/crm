@@ -82,6 +82,7 @@ class CartRepository extends ChannelAwareEntityRepository
                 }
             }
         }
+
         return $data;
     }
 
@@ -190,6 +191,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -207,6 +209,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -224,6 +227,7 @@ class CartRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return float|null
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -268,7 +272,7 @@ class CartRepository extends ChannelAwareEntityRepository
     protected function getAbandonedQB(\DateTime $start = null, \DateTime $end = null)
     {
         $qb = $this->createQueryBuilder('cart');
-        $qb ->join('cart.status', 'cstatus')
+        $qb->join('cart.status', 'cstatus')
             ->andWhere('cstatus.name = :statusName')
             ->setParameter('statusName', 'open')
             ->andWhere(
@@ -320,7 +324,7 @@ class CartRepository extends ChannelAwareEntityRepository
             }
             $this->applyActiveChannelLimitation($qb);
 
-            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+            return (int)$aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }
@@ -335,13 +339,13 @@ class CartRepository extends ChannelAwareEntityRepository
     {
         $qb = $this->createQueryBuilder($alias)
             ->select(sprintf(
-                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)', 
-                    $alias, 
+                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)',
+                    $alias,
                     $alias
                 )
             );
         $this->applyActiveChannelLimitation($qb);
-        
+
         return $qb;
     }
 

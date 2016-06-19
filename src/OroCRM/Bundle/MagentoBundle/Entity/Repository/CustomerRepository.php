@@ -43,6 +43,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -76,6 +77,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -102,7 +104,7 @@ class CustomerRepository extends ChannelAwareEntityRepository
 
         $value = $aclHelper->apply($qb)->getOneOrNullResult();
 
-        return $value['val'] ?  : 0;
+        return $value['val'] ? : 0;
     }
 
     /**

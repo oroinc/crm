@@ -15,11 +15,12 @@ class LeadRepository extends EntityRepository
      * @param  AclHelper $aclHelper
      * @param  int       $limit
      * @param  array     $dateRange
+     *
      * @return array     [itemCount, label]
      */
     public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null)
     {
-        $qb   = $this->createQueryBuilder('l')
+        $qb = $this->createQueryBuilder('l')
             ->select('s.id as source, count(o.id) as itemCount')
             ->leftJoin('l.opportunities', 'o')
             ->leftJoin('l.source', 's')
@@ -111,6 +112,7 @@ class LeadRepository extends EntityRepository
                 if ($a['itemCount'] === $b['itemCount']) {
                     return 0;
                 }
+
                 return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
             }
         );

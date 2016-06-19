@@ -40,6 +40,7 @@ class ChannelRepository extends EntityRepository
      * @param \DateTime $end
      * @param AclHelper $aclHelper
      * @param string    $type
+     *
      * @return integer
      */
     public function getVisitsCountByPeriodForChannelType(
@@ -74,7 +75,7 @@ class ChannelRepository extends EntityRepository
                 ->setParameter('end', $end);
         }
 
-        return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+        return (int)$aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**

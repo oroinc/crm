@@ -26,24 +26,25 @@ class SalesFunnelRepository extends EntityRepository
      * @param  Workflow  $workflow
      * @param  array     $customStepCalculations
      * @param  AclHelper $aclHelper
+     *
      * @return array
      */
     public function getFunnelChartData(
         \DateTime $dateFrom = null,
         \DateTime $dateTo = null,
         Workflow $workflow = null,
-        array $customStepCalculations = array(),
+        array $customStepCalculations = [],
         AclHelper $aclHelper = null
     ) {
         if (!$workflow) {
-            return array('items' => array(), 'nozzleSteps' => array());
+            return ['items' => [], 'nozzleSteps' => []];
         }
 
         $steps = $workflow->getStepManager()->getOrderedSteps();
 
         // regular and final steps should be calculated separately
-        $regularSteps = array();
-        $finalSteps = array();
+        $regularSteps = [];
+        $finalSteps   = [];
         foreach ($steps as $step) {
             if (!in_array($step->getName(), $this->excludedSteps)) {
                 if ($step->isFinal()) {
@@ -56,19 +57,19 @@ class SalesFunnelRepository extends EntityRepository
 
         // regular steps should be calculated for whole period, final steps - for specified period
         $regularStepsData = $this->getStepData($regularSteps, null, null, $customStepCalculations, $aclHelper);
-        $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $customStepCalculations, $aclHelper);
+        $finalStepsData   = $this->getStepData($finalSteps, $dateFrom, $dateTo, $customStepCalculations, $aclHelper);
 
-        $data = array();
+        $data = [];
         foreach ($steps as $step) {
             $stepName = $step->getName();
             if (!in_array($stepName, $this->excludedSteps)) {
                 $stepLabel = $step->getLabel();
                 if ($step->isFinal()) {
                     $dataValue = isset($finalStepsData[$stepName]) ? $finalStepsData[$stepName] : 0;
-                    $data[] = array('value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => true);
+                    $data[]    = ['value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => true];
                 } else {
                     $dataValue = isset($regularStepsData[$stepName]) ? $regularStepsData[$stepName] : 0;
-                    $data[] = array('value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => false);
+                    $data[]    = ['value' => $dataValue, 'label' => $stepLabel, 'isNozzle' => false];
                 }
             }
         }
@@ -82,16 +83,17 @@ class SalesFunnelRepository extends EntityRepository
      * @param  \DateTime $dateTo
      * @param  array     $customStepCalculations
      * @param  AclHelper $aclHelper
+     *
      * @return array
      */
     protected function getStepData(
         array $steps,
         \DateTime $dateFrom = null,
         \DateTime $dateTo = null,
-        array $customStepCalculations = array(),
+        array $customStepCalculations = [],
         AclHelper $aclHelper = null
     ) {
-        $stepData = array();
+        $stepData = [];
 
         if (!$steps) {
             return $stepData;
@@ -104,7 +106,7 @@ class SalesFunnelRepository extends EntityRepository
         $budgetAmountQuery = $this->getQuery($budgetAmountQueryBuilder, $aclHelper);
 
         foreach ($budgetAmountQuery->getArrayResult() as $record) {
-            $stepData[$record['workflowStepName']] = $record['budgetAmount'] ? (float) $record['budgetAmount'] : 0;
+            $stepData[$record['workflowStepName']] = $record['budgetAmount'] ? (float)$record['budgetAmount'] : 0;
         }
 
         foreach ($customStepCalculations as $step => $field) {
@@ -121,7 +123,7 @@ class SalesFunnelRepository extends EntityRepository
             $customStepQuery = $this->getQuery($customStepQueryBuilder, $aclHelper);
 
             foreach ($customStepQuery->getArrayResult() as $record) {
-                $stepData[$record['workflowStepName']] = $record['value'] ? (float) $record['value'] : 0;
+                $stepData[$record['workflowStepName']] = $record['value'] ? (float)$record['value'] : 0;
             }
         }
 
@@ -131,6 +133,7 @@ class SalesFunnelRepository extends EntityRepository
     /**
      * @param  QueryBuilder $queryBuilder
      * @param  AclHelper    $aclHelper
+     *
      * @return Query
      */
     protected function getQuery(QueryBuilder $queryBuilder, AclHelper $aclHelper = null)
@@ -139,8 +142,9 @@ class SalesFunnelRepository extends EntityRepository
     }
 
     /**
-     * @param  \DateTime    $dateFrom
-     * @param  \DateTime    $dataTo
+     * @param  \DateTime $dateFrom
+     * @param  \DateTime $dataTo
+     *
      * @return QueryBuilder
      */
     protected function getTemplateQueryBuilder(\DateTime $dateFrom = null, \DateTime $dataTo = null)

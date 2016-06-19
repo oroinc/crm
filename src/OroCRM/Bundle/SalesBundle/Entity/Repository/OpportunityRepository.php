@@ -16,9 +16,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityRepository extends EntityRepository
 {
-    const OPPORTUNITY_STATE_IN_PROGRESS = 'In Progress';
+    const OPPORTUNITY_STATE_IN_PROGRESS      = 'In Progress';
     const OPPORTUNITY_STATE_IN_PROGRESS_CODE = 'in_progress';
-    
+
     /**
      * @var WorkflowStep[]
      */
@@ -27,14 +27,15 @@ class OpportunityRepository extends EntityRepository
     /**
      * Get opportunities by state by current quarter
      *
-     * @param $aclHelper AclHelper
-     * @param  array     $dateRange
-     * @param  array     $states
+     * @param        $aclHelper AclHelper
+     * @param  array $dateRange
+     * @param  array $states
+     *
      * @return array
      */
     public function getOpportunitiesByStatus(AclHelper $aclHelper, $dateRange, $states)
     {
-        $dateEnd = $dateRange['end'];
+        $dateEnd   = $dateRange['end'];
         $dateStart = $dateRange['start'];
 
         return $this->getOpportunitiesDataByStatus($aclHelper, $dateStart, $dateEnd, $states);
@@ -58,9 +59,10 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param  AclHelper $aclHelper
-     * @param $dateStart
-     * @param $dateEnd
-     * @param array $states
+     * @param            $dateStart
+     * @param            $dateEnd
+     * @param array      $states
+     *
      * @return array
      */
     protected function getOpportunitiesDataByStatus(
@@ -70,11 +72,11 @@ class OpportunityRepository extends EntityRepository
         $states = []
     ) {
         foreach ($states as $key => $name) {
-            $resultData[$key] = array(
-                'name' => $key,
-                'label' => $name,
+            $resultData[$key] = [
+                'name'   => $key,
+                'label'  => $name,
                 'budget' => 0,
-            );
+            ];
         }
 
         // select opportunity data
@@ -101,12 +103,12 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array     $ownerIds
-     * @param DateTime  $date
-     * @param AclHelper $aclHelper
+     * @param array       $ownerIds
+     * @param DateTime    $date
+     * @param AclHelper   $aclHelper
      *
-     * @param string|null      $start
-     * @param string|null      $end
+     * @param string|null $start
+     * @param string|null $end
      *
      * @return mixed
      */
@@ -114,8 +116,8 @@ class OpportunityRepository extends EntityRepository
     {
         if (!$ownerIds) {
             return [
-                'inProgressCount' => 0,
-                'budgetAmount' => 0,
+                'inProgressCount'  => 0,
+                'budgetAmount'     => 0,
                 'weightedForecast' => 0,
             ];
         }
@@ -128,13 +130,12 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array     $ownerIds
-     * @param AclHelper $aclHelper
-     * @param string|null      $start
-     * @param string|null      $end
+     * @param array       $ownerIds
+     * @param AclHelper   $aclHelper
+     * @param string|null $start
+     * @param string|null $end
      *
      * @return mixed
-     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     protected function getForecastOfOpporunitiesCurrentData(
         $ownerIds,
@@ -182,23 +183,23 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param array     $ownerIds
-     * @param \DateTime  $date
+     * @param \DateTime $date
      * @param AclHelper $aclHelper
+     *
      * @return mixed
      */
     protected function getForecastOfOpporunitiesOldData($ownerIds, $date, AclHelper $aclHelper)
     {
         //clone date for avoiding wrong date on printing with current locale
         $newDate = clone $date;
-        //$newDate->setTime(23, 59, 59);
         $qb = $this->createQueryBuilder('opportunity')
             ->where('opportunity.createdAt < :date')
             ->setParameter('date', $newDate);
 
         $opportunities = $aclHelper->apply($qb)->getResult();
 
-        $result['inProgressCount'] = 0;
-        $result['budgetAmount'] = 0;
+        $result['inProgressCount']  = 0;
+        $result['budgetAmount']     = 0;
         $result['weightedForecast'] = 0;
 
         $auditRepository = $this->getEntityManager()->getRepository('OroDataAuditBundle:Audit');
@@ -209,13 +210,13 @@ class OpportunityRepository extends EntityRepository
                 ->andWhere('a.loggedAt > :date')
                 ->setParameter('action', LoggableManager::ACTION_UPDATE)
                 ->setParameter('date', $newDate);
-            $opportunityHistory =  $aclHelper->apply($auditQb)->getResult();
+            $opportunityHistory = $aclHelper->apply($auditQb)->getResult();
 
             if ($oldProbability = $this->getHistoryOldValue($opportunityHistory, 'probability')) {
                 $isProbabilityOk = $oldProbability !== 0 && $oldProbability !== 1;
-                $probability = $oldProbability;
+                $probability     = $oldProbability;
             } else {
-                $probability = $opportunity->getProbability();
+                $probability     = $opportunity->getProbability();
                 $isProbabilityOk = !is_null($probability) && $probability !== 0 && $probability !== 1;
             }
 
@@ -233,6 +234,7 @@ class OpportunityRepository extends EntityRepository
     /**
      * @param mixed  $opportunityHistory
      * @param string $field
+     *
      * @return mixed
      */
     protected function getHistoryOldValue($opportunityHistory, $field)
@@ -250,8 +252,9 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $opportunityHistory
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
+     *
      * @return bool
      */
     protected function isStatusOk($opportunityHistory, $opportunity)
@@ -266,8 +269,8 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $ownerIds
-     * @param array $opportunityHistory
+     * @param array       $ownerIds
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
      *
      * @return bool
@@ -285,10 +288,10 @@ class OpportunityRepository extends EntityRepository
     }
 
     /**
-     * @param array $result
-     * @param array $opportunityHistory
+     * @param array       $result
+     * @param array       $opportunityHistory
      * @param Opportunity $opportunity
-     * @param mixed $probability
+     * @param mixed       $probability
      *
      * @return array
      */
@@ -306,8 +309,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return int
      */
@@ -320,8 +323,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return int
      */
@@ -359,8 +362,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */
@@ -391,8 +394,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */
@@ -425,8 +428,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */
@@ -451,8 +454,8 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param DateTime  $start
+     * @param DateTime  $end
      *
      * @return double
      */

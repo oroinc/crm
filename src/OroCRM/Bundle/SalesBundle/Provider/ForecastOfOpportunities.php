@@ -63,7 +63,7 @@ class ForecastOfOpportunities
         $this->dateTimeFormatter = $dateTimeFormatter;
         $this->aclHelper         = $aclHelper;
         $this->translator        = $translator;
-        $this->dateHelper = $dateHelper;
+        $this->dateHelper        = $dateHelper;
     }
 
     /**
@@ -80,28 +80,28 @@ class ForecastOfOpportunities
         $dataType,
         $lessIsBetter = false
     ) {
-        $lessIsBetter     = (bool)$lessIsBetter;
-        $result           = [];
+        $lessIsBetter = (bool)$lessIsBetter;
+        $result       = [];
 
-        $ownerIds         = $this->getOwnerIds($widgetOptions);
-        $compareToDate = $widgetOptions->get('compareToDate');
-        $usePrevious      = !empty($compareToDate['useDate']);
-        $dateData = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
-        $value            = $this->{$getterName}($ownerIds, $dateData['start'], $dateData['end']);
-        $result['value']  = $this->formatValue($value, $dataType);
+        $ownerIds        = $this->getOwnerIds($widgetOptions);
+        $compareToDate   = $widgetOptions->get('compareToDate');
+        $usePrevious     = !empty($compareToDate['useDate']);
+        $dateData        = $this->prepareDateRange($widgetOptions->get('dateRange'), $usePrevious);
+        $value           = $this->{$getterName}($ownerIds, $dateData['start'], $dateData['end']);
+        $result['value'] = $this->formatValue($value, $dataType);
         if (!empty($dateData['prev_start'])
             && !empty($dateData['prev_end'])
             && !empty($dateData['prev_moment'])
         ) {
-            $pastResult = $this->{$getterName}(
+            $pastResult              = $this->{$getterName}(
                 $ownerIds,
                 $dateData['prev_start'],
                 $dateData['prev_end'],
                 $dateData['prev_moment']
             );
-            $result['deviation'] = $this->translator
+            $result['deviation']     = $this->translator
                 ->trans('orocrm.sales.dashboard.forecast_of_opportunities.no_changes');
-            $result = $this->prepareData($dataType, $lessIsBetter, $pastResult, $value - $pastResult, $result);
+            $result                  = $this->prepareData($dataType, $lessIsBetter, $pastResult, $value - $pastResult, $result);
             $result['previousRange'] = $this->dateTimeFormatter->formatDate($dateData['prev_moment']);
         }
 
@@ -109,9 +109,9 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param array     $ownerIds
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array                $ownerIds
+     * @param \DateTime            $start
+     * @param \DateTime            $end
      * @param \DateTime|string|int $compareToDate
      *
      * @return int
@@ -124,9 +124,9 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param array     $ownerIds
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array                $ownerIds
+     * @param \DateTime            $start
+     * @param \DateTime            $end
      * @param \DateTime|string|int $compareToDate
      *
      * @return int
@@ -139,9 +139,9 @@ class ForecastOfOpportunities
     }
 
     /**
-     * @param array     $ownerIds
-     * @param \DateTime $start
-     * @param \DateTime $end
+     * @param array                $ownerIds
+     * @param \DateTime            $start
+     * @param \DateTime            $end
      * @param \DateTime|string|int $compareToDate
      *
      * @return int
@@ -187,7 +187,7 @@ class ForecastOfOpportunities
      */
     protected function formatValue($value, $type = '', $isDeviant = false)
     {
-        $sign = null;
+        $sign      = null;
         $precision = 2;
 
         if ($isDeviant) {
@@ -201,7 +201,7 @@ class ForecastOfOpportunities
         if ($type === 'currency') {
             $formattedValue = $this->numberFormatter->formatCurrency($value);
         } elseif ($type === 'percent') {
-            $value = round(($value) * 100, $precision) / 100;
+            $value          = round(($value) * 100, $precision) / 100;
             $formattedValue = $this->numberFormatter->formatPercent($value);
         } else {
             $formattedValue = $this->numberFormatter->formatDecimal($value);
@@ -210,6 +210,7 @@ class ForecastOfOpportunities
         if ($sign) {
             $formattedValue = sprintf('%s%s', $sign, $formattedValue);
         }
+
         return $formattedValue;
     }
 
@@ -226,8 +227,8 @@ class ForecastOfOpportunities
     {
         if ($pastResult != 0 && $dataType !== 'percent') {
             if ($deviation != 0) {
-                $deviationPercent = $deviation / $pastResult;
-                $result['deviation'] = sprintf(
+                $deviationPercent     = $deviation / $pastResult;
+                $result['deviation']  = sprintf(
                     '%s (%s)',
                     $this->formatValue($deviation, $dataType, true),
                     $this->formatValue($deviationPercent, 'percent', true)
@@ -236,7 +237,7 @@ class ForecastOfOpportunities
             }
         } else {
             if (round(($deviation) * 100, 0) != 0) {
-                $result['deviation'] = $this->formatValue($deviation, $dataType, true);
+                $result['deviation']  = $this->formatValue($deviation, $dataType, true);
                 $result['isPositive'] = $this->isPositive($lessIsBetter, $deviation);
             }
         }
@@ -336,7 +337,7 @@ class ForecastOfOpportunities
 
     /**
      * @param array $dateRange
-     * @param bool $usePrevious
+     * @param bool  $usePrevious
      *
      * @return array
      */
@@ -344,9 +345,9 @@ class ForecastOfOpportunities
     {
         /** @var \DateTime $start */
         /** @var \DateTime $end */
-        $start           = $dateRange['start'];
-        $end             = $dateRange['end'];
-        $data = [
+        $start = $dateRange['start'];
+        $end   = $dateRange['end'];
+        $data  = [
             'start' => $start ? $start->format('Y-m-d') : null,
             'end'   => $end ? $end->format('Y-m-d') : null
         ];
@@ -359,8 +360,8 @@ class ForecastOfOpportunities
             $prevStart = $dateRange['prev_start'];
             $prevEnd   = $dateRange['prev_end'];
             // current moment
-            $now = $this->dateHelper->getCurrentDateTime();
-            $diff = $start->diff($now);
+            $now        = $this->dateHelper->getCurrentDateTime();
+            $diff       = $start->diff($now);
             $prevMoment = clone $prevStart;
             $prevMoment->add($diff);
 

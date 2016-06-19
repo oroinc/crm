@@ -20,6 +20,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getRevenueValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
@@ -28,7 +29,7 @@ class OrderRepository extends ChannelAwareEntityRepository
              CASE WHEN orders.subtotalAmount IS NOT NULL THEN orders.subtotalAmount ELSE 0 END -
              CASE WHEN orders.discountAmount IS NOT NULL THEN ABS(orders.discountAmount) ELSE 0 END
              ) as val';
-        $qb    = $this->createQueryBuilder('orders');
+        $qb     = $this->createQueryBuilder('orders');
         $qb->select($select);
         if ($start) {
             $qb
@@ -51,11 +52,12 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getOrdersNumberValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
     {
-        $qb    = $this->createQueryBuilder('o');
+        $qb = $this->createQueryBuilder('o');
         $qb->select('count(o.id) as val');
         if ($start) {
             $qb
@@ -80,6 +82,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return int
      */
     public function getAOVValueByPeriod(\DateTime $start = null, \DateTime $end = null, AclHelper $aclHelper)
@@ -89,7 +92,7 @@ class OrderRepository extends ChannelAwareEntityRepository
              CASE WHEN o.discountAmount IS NOT NULL THEN ABS(o.discountAmount) ELSE 0 END
              ) as revenue,
              count(o.id) as ordersCount';
-        $qb    = $this->createQueryBuilder('o');
+        $qb     = $this->createQueryBuilder('o');
         $qb->select($select);
         if ($start) {
             $qb
@@ -112,6 +115,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param AclHelper $aclHelper
+     *
      * @return float|int
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
@@ -169,6 +173,7 @@ class OrderRepository extends ChannelAwareEntityRepository
      * @param \DateTime  $dateFrom
      * @param \DateTime  $dateTo
      * @param DateHelper $dateHelper
+     *
      * @return array
      */
     public function getAverageOrderAmount(
@@ -224,9 +229,9 @@ class OrderRepository extends ChannelAwareEntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper,
-     * @param DateHelper $dateHelper
-     * @param \DateTime $from
+     * @param AclHelper      $aclHelper ,
+     * @param DateHelper     $dateHelper
+     * @param \DateTime      $from
      * @param \DateTime|null $to
      *
      * @return array
@@ -238,7 +243,7 @@ class OrderRepository extends ChannelAwareEntityRepository
         \DateTime $to = null
     ) {
         $from = clone $from;
-        $to = clone $to;
+        $to   = clone $to;
 
         $qb = $this->createQueryBuilder('o')
             ->select('COUNT(o.id) AS cnt');
@@ -257,9 +262,9 @@ class OrderRepository extends ChannelAwareEntityRepository
     }
 
     /**
-     * @param AclHelper $aclHelper
-     * @param DateHelper $dateHelper
-     * @param \DateTime $from
+     * @param AclHelper      $aclHelper
+     * @param DateHelper     $dateHelper
+     * @param \DateTime      $from
      * @param \DateTime|null $to
      *
      * @return array
@@ -271,7 +276,7 @@ class OrderRepository extends ChannelAwareEntityRepository
         \DateTime $to = null
     ) {
         $from = clone $from;
-        $to = clone $to;
+        $to   = clone $to;
 
         $qb = $this->createQueryBuilder('o')
             ->select('SUM(
@@ -319,7 +324,7 @@ class OrderRepository extends ChannelAwareEntityRepository
             }
             $this->applyActiveChannelLimitation($qb);
 
-            return (int) $aclHelper->apply($qb)->getSingleScalarResult();
+            return (int)$aclHelper->apply($qb)->getSingleScalarResult();
         } catch (NoResultException $ex) {
             return 0;
         }
@@ -330,17 +335,17 @@ class OrderRepository extends ChannelAwareEntityRepository
      *
      * @return QueryBuilder
      */
-    public function getUniqueBuyersCountQB($alias)
+    public function getUniqueCustomersCountQB($alias)
     {
         $qb = $this->createQueryBuilder($alias)
             ->select(sprintf(
-                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)', 
-                    $alias, 
+                    'COUNT(DISTINCT %s.customer) + SUM(CASE WHEN %s.isGuest = true THEN 1 ELSE 0 END)',
+                    $alias,
                     $alias
                 )
             );
         $this->applyActiveChannelLimitation($qb);
-        
+
         return $qb;
     }
 }

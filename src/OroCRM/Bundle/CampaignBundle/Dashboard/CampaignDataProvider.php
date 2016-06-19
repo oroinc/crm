@@ -48,7 +48,7 @@ class CampaignDataProvider
         $qb = $this->getCampaignRepository()->getCampaignsLeadsQB('lead');
         $qb->setMaxResults(self::CAMPAIGN_LEAD_COUNT);
         $this->dateFilterProcessor->process($qb, $dateRange, 'lead.createdAt');
-        
+
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
@@ -79,7 +79,7 @@ class CampaignDataProvider
 
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
-    
+
     /**
      * @return CampaignRepository
      */

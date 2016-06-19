@@ -13,6 +13,7 @@ class CampaignRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsLeads(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -43,7 +44,7 @@ class CampaignRepository extends EntityRepository
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(
-            'campaign.name as label', 
+            'campaign.name as label',
             sprintf('COUNT(%s.id) as number', $leadAlias),
             'MAX(campaign.createdAt) as maxCreated'
         )
@@ -59,6 +60,7 @@ class CampaignRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsOpportunities(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -95,14 +97,15 @@ class CampaignRepository extends EntityRepository
             ->join('lead.opportunities', $opportunitiesAlias)
             ->orderBy('number', 'DESC')
             ->groupBy('campaign.name');
-        
+
         return $qb;
     }
-    
+
     /**
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsByCloseRevenue(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -141,8 +144,8 @@ class CampaignRepository extends EntityRepository
             ->select(
                 'campaign.name as label',
                 sprintf(
-                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenue ELSE 0 END) as closeRevenue', 
-                    $opportunitiesAlias, 
+                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenue ELSE 0 END) as closeRevenue',
+                    $opportunitiesAlias,
                     $opportunitiesAlias
                 )
             )
@@ -151,7 +154,7 @@ class CampaignRepository extends EntityRepository
             ->join('lead.opportunities', $opportunitiesAlias)
             ->orderBy('closeRevenue', 'DESC')
             ->groupBy('campaign.name');
-        
+
         return $qb;
     }
 }

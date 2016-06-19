@@ -22,13 +22,13 @@ class SalesFlowB2CProvider
 
     /** @var DateFilterProcessor */
     protected $dateFilterProcessor;
-    
+
     /** @var array */
     protected static $excludedSteps = [
         'converted_to_opportunity',
         'abandoned'
     ];
-    
+
     /**
      * @param ManagerRegistry     $registry
      * @param WorkflowManager     $workflowManager
@@ -41,10 +41,10 @@ class SalesFlowB2CProvider
         AclHelper $aclHelper,
         DateFilterProcessor $processor
     ) {
-        $this->registry              = $registry;
-        $this->workflowManager        = $workflowManager;
-        $this->aclHelper             = $aclHelper;
-        $this->dateFilterProcessor   = $processor;
+        $this->registry            = $registry;
+        $this->workflowManager     = $workflowManager;
+        $this->aclHelper           = $aclHelper;
+        $this->dateFilterProcessor = $processor;
     }
 
     /**
@@ -54,7 +54,7 @@ class SalesFlowB2CProvider
      */
     public function getSalesFlowB2CData(array $dateRange)
     {
-        $workflow = $this->workflowManager
+        $workflow               = $this->workflowManager
             ->getApplicableWorkflowByEntityClass('OroCRM\Bundle\MagentoBundle\Entity\Cart');
         $shoppingCartRepository = $this->getCartRepository();
         if (!$workflow) {
@@ -75,13 +75,13 @@ class SalesFlowB2CProvider
         }
 
         // regular steps should be calculated for whole period, final steps - for specified period
-        $regularStepsQB = $shoppingCartRepository->getStepDataQB('cart', $regularSteps, static::$excludedSteps);
+        $regularStepsQB     = $shoppingCartRepository->getStepDataQB('cart', $regularSteps, static::$excludedSteps);
         $regularStepsResult = $regularStepsQB->getQuery()->getArrayResult();
         foreach ($regularStepsResult as $record) {
             $regularStepsData[$record['workflowStepName']] = $record['total'] ? (float)$record['total'] : 0;
         }
 
-        $finalStepsQB   = $shoppingCartRepository->getStepDataQB('cart1', $finalSteps, static::$excludedSteps);
+        $finalStepsQB = $shoppingCartRepository->getStepDataQB('cart1', $finalSteps, static::$excludedSteps);
         $this->dateFilterProcessor->process($finalStepsQB, $dateRange, 'cart1.createdAt');
         $this->aclHelper->apply($finalStepsQB);
         $finalStepsResult = $finalStepsQB->getQuery()->getArrayResult();
