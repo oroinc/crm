@@ -112,7 +112,8 @@ class ChannelRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    public function getVisitsCountForChannelTypeQB($type) {
+    public function getVisitsCountForChannelTypeQB($type)
+    {
         $qb = $this->_em->createQueryBuilder();
 
         $qb->select('COUNT(visit.id)')
