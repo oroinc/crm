@@ -77,10 +77,11 @@ class OpportunityRepository extends EntityRepository
             ->orderBy($orderBy, $direction);
 
         if ($excludedStatuses) {
-            $qb->andWhere($qb->expr()->notIn(
-                sprintf('IDENTITY(%s.status)', $alias), $excludedStatuses)
+            $qb->andWhere(
+                $qb->expr()->notIn(sprintf('IDENTITY(%s.status)', $alias), $excludedStatuses)
             );
         }
+
         return $qb;
     }
 
@@ -90,7 +91,7 @@ class OpportunityRepository extends EntityRepository
      * @param $dateEnd
      * @param array $states
      * @param int[] $owners
-     * 
+     *
      * @return array
      */
     protected function getOpportunitiesDataByStatus(
@@ -338,11 +339,15 @@ class OpportunityRepository extends EntityRepository
      * @param DateTime  $start
      * @param DateTime  $end
      * @param int[] $owners
-     * 
+     *
      * @return int
      */
-    public function getOpportunitiesCount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
-    {
+    public function getOpportunitiesCount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
@@ -356,8 +361,12 @@ class OpportunityRepository extends EntityRepository
      *
      * @return int
      */
-    public function getNewOpportunitiesCount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
-    {
+    public function getNewOpportunitiesCount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
         $qb = $this->createOpportunitiesCountQb($start, $end, $owners)
             ->andWhere('o.closeDate IS NULL');
 
@@ -401,8 +410,12 @@ class OpportunityRepository extends EntityRepository
      *
      * @return double
      */
-    public function getTotalServicePipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
-    {
+    public function getTotalServicePipelineAmount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
         $qb = $this->createQueryBuilder('o');
 
         $qb
@@ -498,8 +511,12 @@ class OpportunityRepository extends EntityRepository
      *
      * @return double
      */
-    public function getOpenWeightedPipelineAmount(AclHelper $aclHelper, DateTime $start = null, DateTime $end = null, $owners = [])
-    {
+    public function getOpenWeightedPipelineAmount(
+        AclHelper $aclHelper,
+        DateTime $start = null,
+        DateTime $end = null,
+        $owners = []
+    ) {
         $qb = $this->createQueryBuilder('o');
 
         $qb

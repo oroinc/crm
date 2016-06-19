@@ -117,7 +117,7 @@ class DashboardController extends Controller
                     'name'        => 'bar_chart',
                     'data_schema' => [
                         'label' => ['field_name' => 'label'],
-                        'value' => $valueOptions 
+                        'value' => $valueOptions
                     ],
                     'settings'    => ['xNoTicks' => 2],
                 ]

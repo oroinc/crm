@@ -144,7 +144,7 @@ class LeadRepository extends EntityRepository
      * @param \DateTime $start
      * @param \DateTime $end
      * @param int[] $owners
-     * 
+     *
      * @return int
      */
     public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
