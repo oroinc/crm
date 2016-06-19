@@ -188,3 +188,15 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
             - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
+
+    orocrm_sales.import_export.event_listener.opportunity:
+        class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
+        tags:
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+
+    orocrm_sales.provider.opportunity_by_status:
+        class: OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'
