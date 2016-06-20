@@ -28,7 +28,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-phone-sign",
- *              "category"="call"
+ *              "category"="account_management"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

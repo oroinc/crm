@@ -24,7 +24,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *  defaultValues={
  *      "entity"={
  *          "icon"="icon-sitemap",
- *          "category"="channel"
+ *          "category"="account_management"
  *      },
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",

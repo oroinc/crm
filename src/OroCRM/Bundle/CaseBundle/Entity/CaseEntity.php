@@ -33,7 +33,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *          },
  *          "entity"={
  *              "icon"="icon-list-alt",
- *              "category"="case"
+ *              "category"="account_management"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

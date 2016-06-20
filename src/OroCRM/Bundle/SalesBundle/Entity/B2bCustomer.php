@@ -29,7 +29,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-user-md",
- *              "category"="sales"
+ *              "category"="sales_data"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

@@ -21,7 +21,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @Config(
  *  defaultValues={
  *      "entity"={
- *          "category"="channel"
+ *          "category"="account_management"
  *      },
  *      "ownership"={
  *          "owner_type"="USER",

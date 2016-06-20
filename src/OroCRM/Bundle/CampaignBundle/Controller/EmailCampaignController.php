@@ -146,7 +146,7 @@ class EmailCampaignController extends Controller
      *      label="orocrm.campaign.acl.send_emails.label",
      *      description="orocrm.campaign.acl.send_emails.description",
      *      group_name="",
-     *      category="campaign"
+     *      category="application"
      * )
      *
      * @param EmailCampaign $entity

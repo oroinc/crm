@@ -21,7 +21,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-shopping-cart",
- *              "category"="magento"
+ *              "category"="sales_data"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",

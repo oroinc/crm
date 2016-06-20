@@ -30,7 +30,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      defaultValues={
  *          "entity"={
  *              "icon"="icon-suitcase",
- *              "category"="account"
+ *              "category"="account_management"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",

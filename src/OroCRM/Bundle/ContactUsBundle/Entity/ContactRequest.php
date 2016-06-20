@@ -35,7 +35,7 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *          },
  *          "entity"={
  *              "icon"="icon-envelope",
- *              "category"="contact_us"
+ *              "category"="account_management"
  *          },
  *          "security"={
  *              "type"="ACL",
