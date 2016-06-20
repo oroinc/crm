@@ -97,7 +97,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_23';
+        return 'v1_24';
     }
 
     /**
@@ -139,7 +139,20 @@ class OroCRMSalesBundleInstaller implements
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
-        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
+
+        $statuses = [
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'open' => 'Open',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost',
+        ];
+
+        $defaultValue = 'open';
+
+        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries, $statuses, $defaultValue);
     }
 
     /**
