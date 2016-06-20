@@ -140,32 +140,7 @@ class OroCRMSalesBundleInstaller implements
 
         SalesOrganizations::addOrganization($schema);
 
-        $statuses = [
-            'identification_alignment' => 'Identification & Alignment',
-            'needs_analysis' => 'Needs Analysis',
-            'solution_development' => 'Solution Development',
-            'negotiation' => 'Negotiation',
-            'open' => 'Open',
-            'won' => 'Closed Won',
-            'lost' => 'Closed Lost',
-        ];
-
-        $immutable = [
-            'open',
-            'won',
-            'lost',
-        ];
-
-        $defaultValue = 'open';
-
-        AddOpportunityStatus::addStatusField(
-            $schema,
-            $this->extendExtension,
-            $queries,
-            $statuses,
-            $immutable,
-            $defaultValue
-        );
+        $this->addOrocrmSalesOpportunityStatusField($schema, $queries);
     }
 
     /**
@@ -649,6 +624,42 @@ class OroCRMSalesBundleInstaller implements
             ['contact_id'],
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null]
+        );
+    }
+
+    /**
+     * Add opportunity status Enum field and initialize default enum values
+     *
+     * @param Schema $schema
+     * @param QueryBag $queries
+     */
+    protected function addOrocrmSalesOpportunityStatusField(Schema $schema, QueryBag $queries)
+    {
+        $statuses = [
+            'identification_alignment' => 'Identification & Alignment',
+            'needs_analysis' => 'Needs Analysis',
+            'solution_development' => 'Solution Development',
+            'negotiation' => 'Negotiation',
+            'in_progress' => 'Open',
+            'won' => 'Closed Won',
+            'lost' => 'Closed Lost',
+        ];
+
+        $immutable = [
+            'in_progress',
+            'won',
+            'lost',
+        ];
+
+        $defaultValue = 'in_progress';
+
+        AddOpportunityStatus::addStatusField(
+            $schema,
+            $this->extendExtension,
+            $queries,
+            $statuses,
+            $immutable,
+            $defaultValue
         );
     }
 
