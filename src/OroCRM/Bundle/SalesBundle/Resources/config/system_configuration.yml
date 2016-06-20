@@ -14,7 +14,7 @@ oro_system_configuration:
             type: orocrm_sales_opportunity_probability
             options:
                 required: false
-                resettable: false
+                resettable: true
                 tooltip: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.tooltip
                 label: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.label
                 attr:

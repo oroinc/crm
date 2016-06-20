@@ -57,14 +57,17 @@ class OpportunityProbabilityType extends AbstractType
     {
         // Generate a probability field for each status
         foreach ($this->enumStatuses as $status) {
+            $disabled = in_array($status->getId(), ['won', 'lost']);
+
             $builder
                 ->add(
                     $status->getId(),
                     'percent',
                     [
                         'required' => false,
+                        'disabled' => $disabled,
                         'label' => $status->getName(),
-                        'constraints' => new Range(['min' => 0, 'max' => 100,]),
+                        'constraints' => new Range(['min' => 0, 'max' => 100]),
                     ]
                 );
         }
