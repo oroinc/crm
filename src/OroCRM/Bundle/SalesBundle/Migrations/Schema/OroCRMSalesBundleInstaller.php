@@ -150,9 +150,22 @@ class OroCRMSalesBundleInstaller implements
             'lost' => 'Closed Lost',
         ];
 
+        $immutable = [
+            'open',
+            'won',
+            'lost',
+        ];
+
         $defaultValue = 'open';
 
-        AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries, $statuses, $defaultValue);
+        AddOpportunityStatus::addStatusField(
+            $schema,
+            $this->extendExtension,
+            $queries,
+            $statuses,
+            $immutable,
+            $defaultValue
+        );
     }
 
     /**

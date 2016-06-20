@@ -73,6 +73,7 @@ class AddOpportunityStatus implements
      * @param ExtendExtension $extendExtension
      * @param QueryBag $queries
      * @param array $statusList
+     * @param array $immutableList
      * @param null $defaultStatus
      */
     public static function addStatusField(
@@ -80,6 +81,7 @@ class AddOpportunityStatus implements
         ExtendExtension $extendExtension,
         QueryBag $queries,
         array $statusList = null,
+        array $immutableList = null,
         $defaultStatus = null
     )
     {
@@ -98,15 +100,21 @@ class AddOpportunityStatus implements
             ]
         );
 
+        $immutable = [
+            'in_progress',
+            'won',
+            'lost',
+        ];
+
+        if (!empty($immutableList)) {
+            $immutable = $immutableList;
+        }
+
         $options = new OroOptions();
         $options->set(
             'enum',
             'immutable_codes',
-            [
-                'in_progress',
-                'won',
-                'lost'
-            ]
+            $immutable
         );
 
         $enumTable->addOption(OroOptions::KEY, $options);
