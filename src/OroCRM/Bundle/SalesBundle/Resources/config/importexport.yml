@@ -2,6 +2,7 @@ parameters:
     orocrm_sales.importexport.template_fixture.lead.class:        OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\LeadFixture
     orocrm_sales.importexport.template_fixture.opportunity.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\OpportunityFixture
     orocrm_sales.importexport.template_fixture.b2bcustomer.class: OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture\B2bCustomerFixture
+    orocrm_sales.importexport.strategy.opportunity.add_or_replace.class: OroCRM\Bundle\SalesBundle\ImportExport\Strategy\OpportunityImportStrategy
 
 services:
     orocrm_sales.importexport.template_fixture.lead:
@@ -86,7 +87,11 @@ services:
         parent: oro_importexport.strategy.configurable_add_or_replace
 
     orocrm_sales.importexport.strategy.opportunity.add_or_replace:
+        class: %orocrm_sales.importexport.strategy.opportunity.add_or_replace.class%
         parent: oro_importexport.strategy.configurable_add_or_replace
+        public: false
+        calls:
+            - [setConfigManager, ['@oro_config.user']]
 
     orocrm_sales.importexport.strategy.b2bcustomer.add_or_replace:
         parent: oro_importexport.strategy.configurable_add_or_replace
