@@ -293,7 +293,7 @@ orocrm:
 
         system_configuration:
             groups:
-                probability_configuration.title:            Probability Configuration
+                probability_configuration.title:            Opportunity Configuration
                 opportunity_status_probabilities.title:     Probability per Opportunity Status
             fields:
                 default_opportunity_probabilities:
