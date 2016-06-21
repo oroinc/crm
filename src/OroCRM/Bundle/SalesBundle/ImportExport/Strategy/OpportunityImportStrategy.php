@@ -26,7 +26,7 @@ class OpportunityImportStrategy extends ConfigurableAddOrReplaceStrategy
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     protected function afterProcessEntity($entity)
     {
