@@ -1,2 +1,2 @@
 bundles:
-    - Oro\CRMCallBridgeBundle\OroCRMCallBridgeBundle
+    - { name: Oro\CRMCallBridgeBundle\OroCRMCallBridgeBundle, priority: 999 }
