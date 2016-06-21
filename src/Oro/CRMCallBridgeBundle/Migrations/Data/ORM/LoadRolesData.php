@@ -42,7 +42,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
     /**
      * Load roles
      *
-     * @param \Doctrine\Common\Persistence\ObjectManager $manager
+     * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
