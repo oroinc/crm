@@ -21,30 +21,29 @@ class OpportunityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add(
-            'closeReason',
-            'translatable_entity',
-            [
-                'label'       => 'orocrm.sales.opportunity.close_reason.label',
-                'class'       => 'OroCRMSalesBundle:OpportunityCloseReason',
-                'property'    => 'label',
-                'required'    => false,
-                'disabled'    => false,
-                'empty_value' => 'orocrm.sales.form.choose_close_rsn'
-            ]
-        );
-
         $builder
+            ->add(
+                'closeReason',
+                'translatable_entity',
+                [
+                    'label'       => 'orocrm.sales.opportunity.close_reason.label',
+                    'class'       => 'OroCRMSalesBundle:OpportunityCloseReason',
+                    'property'    => 'label',
+                    'required'    => false,
+                    'disabled'    => false,
+                    'empty_value' => 'orocrm.sales.form.choose_close_rsn'
+                ]
+            )
             ->add(
                 'contact',
                 'orocrm_contact_select',
                 [
-                    'required' => false,
-                    'label' => 'orocrm.sales.opportunity.contact.label',
-                    'new_item_property_name'  => 'firstName',
-                    'configs'            => [
-                        'allowCreateNew'        => true,
-                        'renderedPropertyName'  => 'fullName',
+                    'required'               => false,
+                    'label'                  => 'orocrm.sales.opportunity.contact.label',
+                    'new_item_property_name' => 'firstName',
+                    'configs'                => [
+                        'allowCreateNew'          => true,
+                        'renderedPropertyName'    => 'fullName',
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
                         'selection_template_twig' => 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
@@ -55,12 +54,10 @@ class OpportunityType extends AbstractType
                 'customer',
                 'orocrm_sales_b2bcustomer_with_channel_select',
                 [
-                    'required' => true,
-                    'label' => 'orocrm.sales.opportunity.customer.label',
-                    'new_item_property_name'  => 'name',
-                    'configs'            => [
-                        'allowCreateNew'        => true
-                    ],
+                    'required'               => true,
+                    'label'                  => 'orocrm.sales.opportunity.customer.label',
+                    'new_item_property_name' => 'name',
+                    'configs'                => ['allowCreateNew' => true],
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
@@ -70,9 +67,7 @@ class OpportunityType extends AbstractType
                 [
                     'required' => false,
                     'label'    => 'orocrm.sales.opportunity.data_channel.label',
-                    'entities' => [
-                        'OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'
-                    ],
+                    'entities' => ['OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity'],
                 ]
             )
             ->add(
@@ -114,36 +109,14 @@ class OpportunityType extends AbstractType
                 'status',
                 'oro_enum_select',
                 [
-                    'required'  => true,
-                    'label'     => 'orocrm.sales.opportunity.status.label',
-                    'enum_code' => Opportunity::INTERNAL_STATUS_CODE,
-                    'constraints' => [
-                        new NotNull()
-                    ]
+                    'required'    => true,
+                    'label'       => 'orocrm.sales.opportunity.status.label',
+                    'enum_code'   => Opportunity::INTERNAL_STATUS_CODE,
+                    'constraints' => [new NotNull()]
                 ]
             );
-
-        $builder->addEventListener(
-            FormEvents::SUBMIT,
-            function (FormEvent $event) {
-                $opportunity = $event->getData();
-
-                if ($opportunity instanceof Opportunity) {
-                    $b2bCustomer = $opportunity->getCustomer();
-                    if (!$b2bCustomer->getDataChannel()) {
-                        // new customer needs a channel
-                        $b2bCustomer->setDataChannel($opportunity->getDataChannel());
-                    }
-
-                    if (!$b2bCustomer->getAccount()) {
-                        // new Account for new B2bCustomer
-                        $account = new Account();
-                        $account->setName($b2bCustomer->getName());
-                        $b2bCustomer->setAccount($account);
-                    }
-                }
-            }
-        );
+        
+        $this->addListeners($builder);
     }
 
     /**
@@ -165,5 +138,33 @@ class OpportunityType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * @param FormBuilderInterface $builder
+     */
+    protected function addListeners(FormBuilderInterface $builder)
+    {
+        $builder->addEventListener(
+            FormEvents::SUBMIT,
+            function (FormEvent $event) {
+                $opportunity = $event->getData();
+
+                if ($opportunity instanceof Opportunity) {
+                    $b2bCustomer = $opportunity->getCustomer();
+                    if ($b2bCustomer && !$b2bCustomer->getDataChannel()) {
+                        // new customer needs a channel
+                        $b2bCustomer->setDataChannel($opportunity->getDataChannel());
+                    }
+
+                    if ($b2bCustomer && !$b2bCustomer->getAccount()) {
+                        // new Account for new B2bCustomer
+                        $account = new Account();
+                        $account->setName($b2bCustomer->getName());
+                        $b2bCustomer->setAccount($account);
+                    }
+                }
+            }
+        );
     }
 }

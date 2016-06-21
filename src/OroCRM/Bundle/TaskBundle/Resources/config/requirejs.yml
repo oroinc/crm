@@ -1,3 +1,0 @@
-config:
-    paths:
-        'orocrm/sidebar/widget/assigned_tasks': 'bundles/orocrmtask/sidebar_widgets/assigned_tasks/js/widget.js'

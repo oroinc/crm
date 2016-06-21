@@ -5,7 +5,6 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Selenium\Contacts;
 use Oro\Bundle\TestFrameworkBundle\Test\Selenium2TestCase;
 use OroCRM\Bundle\CallBundle\Tests\Selenium\Pages\Call;
 use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
-use OroCRM\Bundle\TaskBundle\Tests\Selenium\Pages\Task;
 
 class ContactActivityListTest extends Selenium2TestCase
 {
@@ -56,32 +55,6 @@ class ContactActivityListTest extends Selenium2TestCase
             ->logCall()
             ->assertMessage('Call saved')
             ->verifyActivity('Call', $callSubject);
-    }
-
-    /**
-     * @depends testCreateContact
-     * @param $contactName
-     */
-    public function testAddTaskActivity($contactName)
-    {
-        $subject = 'Tasks_' . mt_rand();
-
-        $login = $this->login();
-
-        /** @var Contacts $login */
-        $task = $login->openContacts('OroCRM\Bundle\ContactBundle')
-            ->filterBy('Email', $contactName . '@mail.com')
-            ->open([$contactName])
-            ->runActionInGroup('Add task')
-            ->openTask('OroCRM\Bundle\TaskBundle');
-
-        /** @var Task $task */
-        $task
-            ->setSubject($subject)
-            ->setDescription($subject)
-            ->createTask()
-            ->assertMessage('Task created successfully')
-            ->verifyActivity('Task', $subject);
     }
 
     public function testCloseWidgetWindow()
