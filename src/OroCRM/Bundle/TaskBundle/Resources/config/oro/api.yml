@@ -1,4 +1,0 @@
-oro_api:
-    entities:
-        OroCRM\Bundle\TaskBundle\Entity\Task: ~
-        OroCRM\Bundle\TaskBundle\Entity\TaskPriority: ~

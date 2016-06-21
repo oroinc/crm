@@ -117,7 +117,7 @@ orocrm:
             system_configuration:
                 campaign_sender_email: Sender Email
                 campaign_sender_name: Sender Name
-                title: Campaign Configuration
+                title: Campaign
             transport:
                 internal: OroCRM
             stats:

@@ -17,9 +17,20 @@
         {{ UI.buttonSeparator() }}
     {% endif %}
     {{ UI.button({'path' : path('orocrm_contactus_request_index'), 'title' : 'Cancel'|trans, 'label' : 'Cancel'|trans}) }}
-    {% set html = UI.saveAndCloseButton() %}
+    {% set html = UI.saveAndCloseButton({
+        'route': 'orocrm_contactus_request_view',
+        'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_contactus_request_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+            'route': 'orocrm_contactus_request_create'
+        }) %}
+    {% endif %}
     {% if resource_granted('orocrm_contactus_request_edit') %}
-        {% set html = html ~ UI.saveAndStayButton() %}
+        {% set html = html ~ UI.saveAndStayButton({
+            'route': 'orocrm_contactus_request_update',
+            'params': {'id': '$id'}
+        }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
