@@ -9,9 +9,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityImportStrategy extends ConfigurableAddOrReplaceStrategy
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $probabilities;
 
     /**
