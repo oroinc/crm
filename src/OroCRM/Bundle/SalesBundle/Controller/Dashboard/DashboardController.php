@@ -114,12 +114,11 @@ class DashboardController extends Controller
             ->setArrayData($items)
             ->setOptions(
                 [
-                    'name'        => 'bar_chart',
+                    'name'        => 'horizontal_bar_chart',
                     'data_schema' => [
                         'label' => ['field_name' => 'label'],
                         'value' => $valueOptions
-                    ],
-                    'settings'    => ['xNoTicks' => 2],
+                    ]
                 ]
             )
             ->getView();
