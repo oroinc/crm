@@ -87,7 +87,7 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
 
     /**
      * @param AclManager $aclManager
-     * @param mixed $sid
+     * @param SecurityIdentityInterface $sid
      * @param string $permission
      * @param array $acls
      */
