@@ -18,7 +18,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
@@ -187,7 +186,7 @@ class OroCRMCallBridgeBundleInstaller implements
 
         /**If some tables are not installed, do nothing **/
         if (!$this->checkIfTablesExists($tables, $schema)) {
-           return;
+            return;
         }
 
         $queries->addPreQuery(
