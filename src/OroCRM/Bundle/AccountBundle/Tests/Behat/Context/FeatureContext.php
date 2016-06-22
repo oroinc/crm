@@ -17,7 +17,7 @@ class FeatureContext extends RawMinkContext
     }
 
     /**
-     * @When /^I should see (?P<contactsCount>(?:|one|two|\d+)) contact(?:|s)$/
+     * @When /^(?:|I should )see (?P<contactsCount>(?:|one|two|\d+)) contact(?:|s)$/
      */
     public function assertCountOfContacts($contactsCount)
     {

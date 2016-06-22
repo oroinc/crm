@@ -21,7 +21,7 @@ Scenario: Create new Account
   And press select arrow in Owner field
   And fill "Ha" in search entity field
   And must see only one result
-  Then I press on Harry in search result
+  Then I press on "Harry" in search result
   And I fill "Account" form with:
     | Account Name | Good Company    |
     | Description  | Our new partner |

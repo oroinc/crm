@@ -6,22 +6,21 @@ Feature: Mass Delete records with acl
 Background:
 	Given I login as "admin" user with "admin" password
 
-Scenario: User can't delete records
-	Given I have 5 Cases
-	And I have "None" permissions for "Delete" "Case" entity
-	When I open the menu "Activities" and click "Cases"
-	Then I shouldn't see Delete action
-
 Scenario: User can but now can't delete records
-	Given my permissions on Delete Cases is set to System
+	Given I have 5 Cases
 	And I open the menu "Activities" and click "Cases"
 	And I keep in mind number of records in list
 	And select few records
 	And I set my permissions on Delete Cases to None
 	When click "Delete" link from mass action dropdown
+#	@todo uncomment when BAP-10919 bug will resolved
 #	And confirm deletion
 #	Then I should see "I don't have permissions" flash message
 	Then no records were deleted
+
+Scenario: User can't delete records
+	Given I open the menu "Activities" and click "Cases"
+	Then I shouldn't see Delete action
 
 Scenario: User can delete only his records but view all
 	Given my permissions on View Cases as System and on Delete as User
