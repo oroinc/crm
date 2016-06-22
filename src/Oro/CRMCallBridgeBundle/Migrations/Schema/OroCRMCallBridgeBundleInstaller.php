@@ -10,8 +10,7 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtension;
 use Oro\Bundle\EntityExtendBundle\Migration\Extension\ExtendExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
@@ -19,11 +18,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
 use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
 
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesNoteMigration;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
-use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -97,11 +91,16 @@ class OroCRMCallBridgeBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_2';
+        return 'v1_0';
     }
 
     public function up(Schema $schema, QueryBag $queries)
     {
+        /** if CallBundle isn't required  do nothing **/
+        if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
+            return;
+        }
+
         /** if CallBundle is installed  do nothing **/
         if ($schema->hasTable('orocrm_call')) {
             return;
@@ -109,13 +108,13 @@ class OroCRMCallBridgeBundleInstaller implements
 
         /** Tables generation **/
         $this->createOrocrmContactusRequestCallsTable($schema);
-        $this->createOrocrmMagentoOrderCallsTable($schema);
-        $this->createOrocrmMagentoCartCallsTable($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmContactusRequestCallsForeignKeys($schema);
-        $this->addOrocrmMagentoOrderCallsForeignKeys($schema);
-        $this->addOrocrmMagentoCartCallsForeignKeys($schema);
+
+
+        $this->fillActivityTables($queries, $schema);
+        $this->fillActivityListTables($queries, $schema);
 
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
@@ -174,76 +173,145 @@ class OroCRMCallBridgeBundleInstaller implements
     }
 
     /**
-     * Create orocrm_magento_order_calls table
-     *
-     * @param Schema $schema
+     * @param QueryBag $queries
      */
-    protected function createOrocrmMagentoOrderCallsTable(Schema $schema)
+    protected function fillActivityTables(QueryBag $queries, Schema $schema)
     {
-        $table = $schema->createTable('orocrm_magento_order_calls');
-        $table->addColumn('order_id', 'integer', []);
-        $table->addColumn('call_id', 'integer', []);
-        $table->addIndex(['order_id'], 'IDX_A885A348D9F6D38', []);
-        $table->addIndex(['call_id'], 'IDX_A885A3450A89B2C', []);
-        $table->setPrimaryKey(['order_id', 'call_id']);
-    }
+        $tables = [
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart'),
+            'orocrm_magento_cart_calls',
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order'),
+            'orocrm_magento_order_calls'
 
-    /**
-     * Create orocrm_magento_cart_calls table
-     *
-     * @param Schema $schema
-     */
-    protected function createOrocrmMagentoCartCallsTable(Schema $schema)
-    {
-        $table = $schema->createTable('orocrm_magento_cart_calls');
-        $table->addColumn('cart_id', 'integer', []);
-        $table->addColumn('call_id', 'integer', []);
-        $table->addIndex(['cart_id'], 'IDX_83A847751AD5CDBF', []);
-        $table->addIndex(['call_id'], 'IDX_83A8477550A89B2C', []);
-        $table->setPrimaryKey(['cart_id', 'call_id']);
-    }
+        ];
 
-    /**
-     * Add orocrm_magento_order_calls foreign keys.
-     *
-     * @param Schema $schema
-     */
-    protected function addOrocrmMagentoOrderCallsForeignKeys(Schema $schema)
-    {
-        $table = $schema->getTable('orocrm_magento_order_calls');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_order'),
-            ['order_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
-            ['call_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
+        /**If some tables are not installed, do nothing **/
+        if (!$this->checkIfTablesExists($tables, $schema)) {
+           return;
+        }
+
+        $queries->addPreQuery(
+            new SqlMigrationQuery(
+                [
+                    $this->getFillCartCallActivityQuery(),
+                    $this->getFillOrderCallActivityQuery()
+                ]
+            )
         );
     }
 
     /**
-     * Add orocrm_magento_cart_calls foreign keys.
-     *
-     * @param Schema $schema
+     * @param QueryBag $queries
      */
-    protected function addOrocrmMagentoCartCallsForeignKeys(Schema $schema)
+    protected function fillActivityListTables(QueryBag $queries, Schema $schema)
     {
-        $table = $schema->getTable('orocrm_magento_cart_calls');
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_magento_cart'),
-            ['cart_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
+        $tables = [
+            $this->activityListExtension->getAssociationTableName('orocrm_magento_cart'),
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart'),
+            $this->activityListExtension->getAssociationTableName('orocrm_magento_order'),
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order')
+        ];
+
+        /**If some tables are not installed, do nothing **/
+        if (!$this->checkIfTablesExists($tables, $schema)) {
+            return;
+        }
+
+        $queries->addPreQuery(
+            new ParametrizedSqlMigrationQuery(
+                $this->getFillCartCallActivityListQuery(),
+                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
+                ['class' => Type::STRING]
+            )
         );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_call'),
-            ['call_id'],
-            ['id'],
-            ['onDelete' => 'CASCADE']
+
+        $queries->addPreQuery(
+            new ParametrizedSqlMigrationQuery(
+                $this->getFillOrderCallActivityListQuery(),
+                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
+                ['class' => Type::STRING]
+            )
         );
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFillCartCallActivityQuery()
+    {
+        $sql = 'INSERT INTO %s (call_id, cart_id)' .
+            ' SELECT call_id, cart_id' .
+            ' FROM orocrm_magento_cart_calls';
+
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart'));
+    }
+
+    /**
+     * @return string
+     */
+    protected function getFillOrderCallActivityQuery()
+    {
+        $sql = 'INSERT INTO %s (call_id, order_id)' .
+            ' SELECT call_id, order_id' .
+            ' FROM orocrm_magento_order_calls';
+
+        return sprintf($sql, $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order'));
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getFillCartCallActivityListQuery()
+    {
+        $sql = 'INSERT INTO %s (activitylist_id, cart_id)' .
+            ' SELECT al.id, rel.cart_id' .
+            ' FROM oro_activity_list al' .
+            ' JOIN %s rel ON rel.call_id = al.related_activity_id' .
+            ' AND al.related_activity_class = :class';
+
+        return sprintf(
+            $sql,
+            $this->activityListExtension->getAssociationTableName('orocrm_magento_cart'),
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_cart')
+        );
+    }
+
+
+    /**
+     * @return string
+     */
+    protected function getFillOrderCallActivityListQuery()
+    {
+        $sql = 'INSERT INTO %s (activitylist_id, order_id)' .
+            ' SELECT al.id, rel.order_id' .
+            ' FROM oro_activity_list al' .
+            ' JOIN %s rel ON rel.call_id = al.related_activity_id' .
+            ' AND al.related_activity_class = :class';
+
+        return sprintf(
+            $sql,
+            $this->activityListExtension->getAssociationTableName('orocrm_magento_order'),
+            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_magento_order')
+        );
+    }
+
+    /**
+     * Check if some tables in database
+     * are exists ans return boolean value
+     *
+     * @param array $tableNames
+     * @param Schema $schema
+     * @return bool
+     */
+    private function checkIfTablesExists(array $tableNames, Schema $schema)
+    {
+        foreach ($tableNames as $tableName) {
+            if (!$schema->hasTable($tableName)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
