@@ -9,6 +9,7 @@ use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\DataAuditBundle\Loggable\LoggableManager;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
@@ -65,20 +66,36 @@ class OpportunityRepository extends EntityRepository
         $orderBy = 'budget',
         $direction = 'DESC'
     ) {
-        $qb = $this->createQueryBuilder($alias);
-        $qb
+        $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
+        $repository = $this->getEntityManager()->getRepository($statusClass);
+
+        $qb = $repository->createQueryBuilder('s')
             ->select(
-                sprintf('IDENTITY(%s.status) as name', $alias),
+                's.name as label',
                 sprintf('COUNT(%s.id) as quantity', $alias),
-                sprintf('SUM(%s.budgetAmount) as budget', $alias),
-                sprintf('SUM(%s.closeRevenue) as revenue', $alias)
+                // Use close revenue for calculating budget for opportunities with won statuses
+                sprintf(
+                    'SUM(' .
+                        "CASE WHEN s.id = 'won'" .
+                            'THEN' .
+                                '(CASE WHEN %s.closeRevenue IS NOT NULL THEN %s.closeRevenue ELSE 0 END)' .
+                            'ELSE' .
+                                '(CASE WHEN %s.budgetAmount IS NOT NULL THEN %s.budgetAmount ELSE 0 END)' .
+                        'END' .
+                    ') as budget',
+                    $alias,
+                    $alias,
+                    $alias,
+                    $alias
+                )
             )
-            ->groupBy(sprintf('%s.status', $alias))
+            ->leftJoin('OroCRMSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
+            ->groupBy('s.name')
             ->orderBy($orderBy, $direction);
 
         if ($excludedStatuses) {
             $qb->andWhere(
-                $qb->expr()->notIn(sprintf('IDENTITY(%s.status)', $alias), $excludedStatuses)
+                $qb->expr()->notIn('s.id', $excludedStatuses)
             );
         }
 
