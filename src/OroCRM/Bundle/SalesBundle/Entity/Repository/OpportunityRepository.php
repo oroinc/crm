@@ -31,10 +31,10 @@ class OpportunityRepository extends EntityRepository
     /**
      * Get opportunities by state by current quarter
      *
-     * @param        $aclHelper AclHelper
-     * @param  array $dateRange
-     * @param  array $states
-     * @param int[] $owners
+     * @param           $aclHelper AclHelper
+     * @param  array    $dateRange
+     * @param  array    $states
+     * @param int[]     $owners
      *
      * @param AclHelper $aclHelper
      * @param array     $dateRange
@@ -67,7 +67,7 @@ class OpportunityRepository extends EntityRepository
         $direction = 'DESC'
     ) {
         $statusClass = ExtendHelper::buildEnumValueClassName('opportunity_status');
-        $repository = $this->getEntityManager()->getRepository($statusClass);
+        $repository  = $this->getEntityManager()->getRepository($statusClass);
 
         $qb = $repository->createQueryBuilder('s')
             ->select(
@@ -75,14 +75,14 @@ class OpportunityRepository extends EntityRepository
                 sprintf('COUNT(%s.id) as quantity', $alias),
                 // Use close revenue for calculating budget for opportunities with won statuses
                 sprintf(
-                    'SUM(' .
-                        "CASE WHEN s.id = 'won'" .
-                            'THEN' .
-                                '(CASE WHEN %s.closeRevenue IS NOT NULL THEN %s.closeRevenue ELSE 0 END)' .
-                            'ELSE' .
-                                '(CASE WHEN %s.budgetAmount IS NOT NULL THEN %s.budgetAmount ELSE 0 END)' .
-                        'END' .
-                    ') as budget',
+                    "SUM(
+                        CASE WHEN s.id = 'won'
+                            THEN
+                                (CASE WHEN %s.closeRevenue IS NOT NULL THEN %s.closeRevenue ELSE 0 END)
+                            ELSE
+                                (CASE WHEN %s.budgetAmount IS NOT NULL THEN %s.budgetAmount ELSE 0 END)
+                        END
+                    ) as budget",
                     $alias,
                     $alias,
                     $alias,
@@ -104,10 +104,10 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param  AclHelper $aclHelper
-     * @param $dateStart
-     * @param $dateEnd
-     * @param array $states
-     * @param int[] $owners
+     * @param            $dateStart
+     * @param            $dateEnd
+     * @param array      $states
+     * @param int[]      $owners
      *
      * @return array
      */
@@ -236,7 +236,7 @@ class OpportunityRepository extends EntityRepository
     {
         //clone date for avoiding wrong date on printing with current locale
         $newDate = clone $date;
-        $qb = $this->createQueryBuilder('opportunity')
+        $qb      = $this->createQueryBuilder('opportunity')
             ->where('opportunity.createdAt < :date')
             ->setParameter('date', $newDate);
 
@@ -355,7 +355,7 @@ class OpportunityRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @param DateTime  $start
      * @param DateTime  $end
-     * @param int[] $owners
+     * @param int[]     $owners
      *
      * @return int
      */
