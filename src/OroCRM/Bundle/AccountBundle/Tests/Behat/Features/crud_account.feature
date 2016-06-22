@@ -55,3 +55,11 @@ Scenario: Edit Account
   And I should see one contact
   And Joan should be default contact
   And Todd Greene should be an owner
+
+Scenario: Delete Account
+  Given I open the menu "Customers" and click "Accounts"
+  And click view Oro Inc in grid
+  And press "Delete Account"
+  When confirm deletion
+  Then I should see "Account deleted" flash message
+  And there is no records in grid
