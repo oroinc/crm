@@ -2,21 +2,26 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-use Oro\Bundle\EntityConfigBundle\Form\Type\ConfigScopeType;
-use Oro\Bundle\EntityConfigBundle\Provider\PropertyConfigContainer;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityConfigBundle\Form\Type\ConfigScopeType;
+use Oro\Bundle\EntityConfigBundle\Provider\PropertyConfigContainer;
+
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+
 /**
  * Manage Opportunity Status Enum options from the System Config
- * FormType is extended by {@see Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension}
+ * FormType is extended by:
+ * {@link Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension} to retrieve/store the enum options
+ * and
+ * {@link OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension} to retrieve/store the probability map
  */
-class OpportunityStatusEnumType extends AbstractType
+class OpportunityStatusConfigType extends AbstractType
 {
-    const NAME = 'orocrm_sales_opportunity_status_enum';
+    const NAME = 'orocrm_sales_opportunity_status_config';
 
     /** @var ConfigManager */
     protected $configManager;
@@ -34,18 +39,18 @@ class OpportunityStatusEnumType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $configType = PropertyConfigContainer::TYPE_FIELD;
-
         $provider = $this->configManager->getProvider('enum');
-        $items = $provider->getPropertyConfig()->getFormItems($configType, 'enum');
-
         $config = $this->configManager->getConfig($options['config_id']);
+        $items = $provider->getPropertyConfig()->getFormItems(PropertyConfigContainer::TYPE_FIELD, 'enum');
 
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = array_intersect_key(
             $items['enum_options']['form']['options'],
             array_flip(['label', 'tooltip'])
         );
+
+        // replace items type with the extended form that includes 'probability'
+        $items['enum_options']['form']['options']['type'] = 'orocrm_sales_opportunity_status_enum_value';
 
         $builder->add(
             'enum',
@@ -55,11 +60,7 @@ class OpportunityStatusEnumType extends AbstractType
             ]
         );
 
-        $builder->setData(
-            [
-                'enum' => $config->all(),
-            ]
-        );
+        $builder->setData(['enum' => $config->all()]);
     }
 
     /**
@@ -76,7 +77,7 @@ class OpportunityStatusEnumType extends AbstractType
             [
                 'config_model' => $configModel,
                 'config_id' => $configId,
-                'config_is_new' => !$configModel->getId(),
+                'config_is_new' => false,
             ]
         );
     }

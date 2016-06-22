@@ -1,12 +1,13 @@
 parameters:
-    orocrm_sales.entity_config_type.extension.enum.class: Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension
-
     orocrm_sales.opportunity.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType
     orocrm_sales.opportunity.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityApiType
     orocrm_sales.opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
 
-    orocrm_sales.opportunity_status_enum.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumType
     orocrm_sales.opportunity_probability.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityProbabilityType
+    orocrm_sales.opportunity_status_config.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusConfigType
+    orocrm_sales.opportunity_status_config.form.extension.enum.class: Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension
+    orocrm_sales.opportunity_status_config.form.extension.class: OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension
+    orocrm_sales.opportunity_status_enum_value.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusEnumValueType
 
     orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
@@ -38,21 +39,28 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity }
 
-    orocrm_sales.opportunity_status_enum.form.type:
-        class: %orocrm_sales.opportunity_status_enum.form.type.class%
+    orocrm_sales.opportunity_status_config.form.type:
+        class: %orocrm_sales.opportunity_status_config.form.type.class%
         arguments:
             - '@oro_entity_config.config_manager'
         tags:
-            - { name: form.type, alias: orocrm_sales_opportunity_status_enum }
+            - { name: form.type, alias: orocrm_sales_opportunity_status_config }
 
-    orocrm_sales.entity_config_type.extension.enum:
-        class: %orocrm_sales.entity_config_type.extension.enum.class%
+    orocrm_sales.opportunity_entity_config.form.extension.enum:
+        class: %orocrm_sales.opportunity_status_config.form.extension.enum.class%
         arguments:
             - '@oro_entity_config.config_manager'
             - '@translator'
             - '@oro_entity_extend.enum_synchronizer'
         tags:
-            - { name: form.type_extension, alias: orocrm_sales_opportunity_status_enum }
+            - { name: form.type_extension, alias: orocrm_sales_opportunity_status_config }
+
+    orocrm_sales.opportunity_status_config.form.extension:
+        class: %orocrm_sales.opportunity_status_config.form.extension.class%
+        arguments:
+            - '@oro_config.global'
+        tags:
+            - { name: form.type_extension, alias: orocrm_sales_opportunity_status_config }
 
     orocrm_sales.opportunity_probability.form.type:
         class: %orocrm_sales.opportunity_probability.form.type.class%
@@ -61,6 +69,13 @@ services:
             - '@doctrine'
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_probability }
+
+    orocrm_sales.opportunity_status_enum_value.form.type:
+        class: %orocrm_sales.opportunity_status_enum_value.form.type.class%
+        arguments:
+            - '@oro_entity_config.provider.enum'
+        tags:
+            - { name: form.type, alias: orocrm_sales_opportunity_status_enum_value }
 
     orocrm_sales.opportunity.form.type.api:
         class: %orocrm_sales.opportunity.form.type.api.class%
