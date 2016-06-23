@@ -499,9 +499,8 @@ datagrid:
                 assignedName:
                     type: choice-tree
                     data_name: c.assignedTo
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
                     enabled: false
                 reportsName:
                     type: string
