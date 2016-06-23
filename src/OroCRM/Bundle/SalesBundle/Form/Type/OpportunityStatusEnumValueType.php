@@ -3,10 +3,10 @@
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\FormBuilderInterface;
-
-use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+
+use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
 
 /**
  * Extends EnumValueType to add 'probability'
@@ -14,6 +14,11 @@ use Symfony\Component\Form\FormEvents;
 class OpportunityStatusEnumValueType extends EnumValueType
 {
     const NAME = 'orocrm_sales_opportunity_status_enum_value';
+
+    /**
+     * @var array Default probability for these statuses cannot be edited
+     */
+    public static $immutableStatuses = ['won', 'lost'];
 
     /**
      * {@inheritdoc}
@@ -33,8 +38,16 @@ class OpportunityStatusEnumValueType extends EnumValueType
      */
     public function preSetData(FormEvent $event)
     {
+        $disabled = in_array($event->getData()['id'], self::$immutableStatuses);
         $form = $event->getForm();
-        $form->add('probability', 'percent', ['disabled' => in_array($event->getData()['id'], ['lost', 'won'])]);
+        $form->add(
+            'probability',
+            'oro_percent',
+            [
+                'disabled' => $disabled,
+                'attr' => ['readonly' => $disabled],
+            ]
+        );
     }
 
     /**

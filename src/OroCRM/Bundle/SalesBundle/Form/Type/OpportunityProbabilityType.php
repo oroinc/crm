@@ -18,6 +18,11 @@ class OpportunityProbabilityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity_probability';
 
+    /**
+     * @var array Default probability for these statuses cannot be edited
+     */
+    public static $immutableStatuses = ['won', 'lost'];
+
     /** @var EnumTypeHelper */
     protected $typeHelper;
 
@@ -57,16 +62,17 @@ class OpportunityProbabilityType extends AbstractType
     {
         // Generate a probability field for each status
         foreach ($this->enumStatuses as $status) {
-            $disabled = in_array($status->getId(), ['won', 'lost']);
+            $disabled = in_array($status->getId(), self::$immutableStatuses);
 
             $builder
                 ->add(
                     $status->getId(),
-                    'percent',
+                    'oro_percent',
                     [
                         'required' => false,
                         'disabled' => $disabled,
                         'label' => $status->getName(),
+                        'attr' => ['readonly' => $disabled],
                         'constraints' => new Range(['min' => 0, 'max' => 100]),
                     ]
                 );

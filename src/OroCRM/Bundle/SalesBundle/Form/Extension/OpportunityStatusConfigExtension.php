@@ -85,7 +85,7 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
 
         $value = [];
         foreach ($data['enum']['enum_options'] as $enum_option) {
-            $value[$enum_option['id']] = $enum_option['probability'];
+            $value[$enum_option['id']] = isset($enum_option['probability']) ? $enum_option['probability'] : null;
         }
 
         $this->configManager->set(self::CONFIG_KEY, $value);
