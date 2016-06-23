@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Autocomplete;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler;
 
 class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_TestCase
@@ -17,9 +16,6 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_Tes
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $handler;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|Registry */
-    protected $doctrine;
-
     public function setUp()
     {
         $this->businessAclProvider = $this
@@ -27,15 +23,9 @@ class ForecastWidgetBusinessUnitSearchHandlerTest extends \PHPUnit_Framework_Tes
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->doctrine = $this
-            ->getMockBuilder('Doctrine\Bundle\DoctrineBundle\Registry')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->handler = new ForecastWidgetBusinessUnitSearchHandler(
             self::TEST_ENTITY_NAME,
             [],
-            $this->doctrine,
             $this->businessAclProvider,
             'OroCRMSalesBundle:Opportunity'
         );
