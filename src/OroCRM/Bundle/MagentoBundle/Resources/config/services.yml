@@ -921,3 +921,9 @@ services:
             - "@request"
             - "@doctrine"
             - "@security.context"
+
+    orocrm_magento.routing.options_resolver.old_options:
+        class: OroCRM\Bundle\MagentoBundle\Routing\OldOptionsRouteOptionsResolver
+        public: false
+        tags:
+            - { name: routing.options_resolver }
