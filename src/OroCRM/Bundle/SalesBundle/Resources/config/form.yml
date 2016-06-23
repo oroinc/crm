@@ -32,8 +32,6 @@ parameters:
 services:
     orocrm_sales.opportunity.form.type:
         class: %orocrm_sales.opportunity.form.type.class%
-        arguments:
-           - '@oro_config.user'
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity }
 
