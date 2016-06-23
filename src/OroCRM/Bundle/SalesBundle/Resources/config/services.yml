@@ -14,6 +14,7 @@ parameters:
     orocrm_sales.b2bcustomer.manager.api.class:              OroCRM\Bundle\SalesBundle\Entity\Manager\B2bCustomerApiEntityManager
 
     orocrm_sales.event_listener.b2bcustomer_lifetime.class:  OroCRM\Bundle\SalesBundle\EventListener\B2bCustomerLifetimeListener
+    orocrm_sales.event_listener.default_probability.class:   OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener
 
     orocrm_sales.provider.phone.lead.class:                  OroCRM\Bundle\SalesBundle\Provider\LeadPhoneProvider
     orocrm_sales.provider.phone.opportunity.class:           OroCRM\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
@@ -106,6 +107,14 @@ services:
         tags:
         - { name: doctrine.event_listener, event: onFlush, method: onFlush }
         - { name: doctrine.event_listener, event: postFlush, method: postFlush }
+
+    orocrm_sales.event_listener.default_probability:
+        class: %orocrm_sales.event_listener.default_probability.class%
+        arguments:
+                - '@oro_config.user'
+        tags:
+        - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+        - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
 
     orocrm_sales.provider.phone.lead:
         class: %orocrm_sales.provider.phone.lead.class%
