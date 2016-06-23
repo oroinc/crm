@@ -7,6 +7,12 @@ Feature: Mass Delete records
 Background:
 	Given I login as "admin" user with "admin" password
 
+Scenario: Update Sales Channel
+	Given I open the menu "System" and click "Channels"
+	And click edit Sales Channel in grid
+	When I press "Save and Close"
+	Then I should see "Channel saved" flash message
+
 Scenario Outline: No records to delete selected
 	When I open the menu "<menu>" and click "<menu link>"
 	And I don't select any record from Grid
