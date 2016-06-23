@@ -134,7 +134,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       Accoount
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             created_at.label:     Created At
