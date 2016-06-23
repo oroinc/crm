@@ -63,7 +63,7 @@ oro_dashboard_config:
                         label:  orocrm.sales.dashboard.opportunities_by_state.excluded_statuses.label
                         required: false
                         configs:
-                            placeholder:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.placeholder
+                            placeholder:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.placeholder
                 useQuantityAsData:
                     type: checkbox
                     options:
@@ -261,12 +261,12 @@ oro_dashboard_config:
                         value_types: true
                         all_time_value: false
                     show_on_widget: true
-        my_open_opportunities:
-            label:       orocrm.sales.dashboard.my_open_opportunities.title
+        opportunities_list:
+            label:       orocrm.sales.dashboard.opportunities_list.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroCRMSalesBundle, name: myOpenOpportunities }
+            route_parameters: { bundle: OroCRMSalesBundle, name: opportunitiesList }
             acl:         orocrm_sales_opportunity_view
-            description: orocrm.sales.dashboard.my_open_opportunities.description
+            description: orocrm.sales.dashboard.opportunities_list.description
             icon:       bundles/orocrmsales/img/opportunity_by_status.png
             configuration:
                 owners:
@@ -283,21 +283,21 @@ oro_dashboard_config:
                     type: orocrm_type_widget_opportunity_status_select
                     show_on_widget: true
                     options:
-                        label:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.label
+                        label:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.label
                         required: false
                         configs:
-                            placeholder:  orocrm.sales.dashboard.my_open_opportunities.excluded_statuses.placeholder
+                            placeholder:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.placeholder
                     converter_attributes:
                         default_selected:
                             - won
                             - lost
 
-        my_open_leads:
-            label:       orocrm.sales.dashboard.my_open_leads.title
+        leads_list:
+            label:       orocrm.sales.dashboard.leads_list.title
             route:       oro_dashboard_widget
-            route_parameters: { bundle: OroCRMSalesBundle, name: myOpenLeads }
+            route_parameters: { bundle: OroCRMSalesBundle, name: leadsList }
             acl:         orocrm_sales_lead_view
-            description: orocrm.sales.dashboard.my_open_leads.description
+            description: orocrm.sales.dashboard.leads_list.description
             icon:       bundles/orocrmsales/img/opportunities_by_lead_source.png
             configuration:
                 owners:
@@ -314,10 +314,10 @@ oro_dashboard_config:
                     type: orocrm_type_widget_lead_status_select
                     show_on_widget: true
                     options:
-                        label:  orocrm.sales.dashboard.my_open_leads.excluded_statuses.label
+                        label:  orocrm.sales.dashboard.leads_list.excluded_statuses.label
                         required: false
                         configs:
-                            placeholder:  orocrm.sales.dashboard.my_open_leads.excluded_statuses.placeholder
+                            placeholder:  orocrm.sales.dashboard.leads_list.excluded_statuses.placeholder
                     converter_attributes:
                         default_selected:
                             - canceled

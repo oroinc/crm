@@ -7,13 +7,3 @@
         'enableFilters': false,
     }|merge(renderParams|default({}))) }}
 {% endblock %}
-
-{% block actions %}
-    {% set actions = [{
-        'url': path('orocrm_sales_opportunity_index'),
-        'type': 'link',
-        'label': 'orocrm.sales.dashboard.my_open_opportunities.view_all'|trans
-    }] %}
-
-    {{ parent() }}
-{% endblock %}

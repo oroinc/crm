@@ -70,17 +70,15 @@ orocrm:
                 owner: Owner
                 compareToDate: Compare to Date
                 business_unit: Business Unit
-            my_open_opportunities:
-                title: My Open Opportunities
-                description: This widget displays list of open opportunities.
-                view_all: View all
+            opportunities_list:
+                title: Opportunities List
+                description: This widget displays the list of opportunities that can be configured to show only opportunities in certain conditions, e.g. only open opportunities that are owned by the current user.
                 excluded_statuses:
                     label: Excluded statuses
                     placeholder: Choose excluded statuses
-            my_open_leads:
-                title: My Open Leads
-                description: This widget displays list of open leads.
-                view_all: View all
+            leads_list:
+                title: Leads List
+                description: This widget displays the list of leads that can be configured to show only leads in certain conditions, e.g. only open leads that are owned by the current user.
                 excluded_statuses:
                     label: Excluded statuses
                     placeholder: Choose excluded statuses
