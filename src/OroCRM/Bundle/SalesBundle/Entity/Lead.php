@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -256,6 +257,26 @@ class Lead extends ExtendLead implements
     protected $phoneNumber;
 
     /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadPhone", mappedBy="owner",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * ))
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=220
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $phones;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="email", type="string", length=255, nullable=true)
@@ -488,6 +509,7 @@ class Lead extends ExtendLead implements
         parent::__construct();
 
         $this->opportunities = new ArrayCollection();
+        $this->phones   = new ArrayCollection();
     }
 
     /**
@@ -1118,5 +1140,116 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * Set phones.
+     *
+     * This method could not be named setPhones because of bug CRM-253.
+     *
+     * @param Collection|LeadPhone[] $phones
+     *
+     * @return Lead
+     */
+    public function resetPhones($phones)
+    {
+        $this->phones->clear();
+
+        foreach ($phones as $phone) {
+            $this->addPhone($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function addPhone(LeadPhone $phone)
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones->add($phone);
+            $phone->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function removePhone(LeadPhone $phone)
+    {
+        if ($this->phones->contains($phone)) {
+            $this->phones->removeElement($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return Collection|LeadPhone[]
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return bool
+     */
+    public function hasPhone(LeadPhone $phone)
+    {
+        return $this->getPhones()->contains($phone);
+    }
+
+    /**
+     * Gets primary phone if it's available.
+     *
+     * @return LeadPhone|null
+     */
+    public function getPrimaryPhone()
+    {
+        $result = null;
+
+        foreach ($this->getPhones() as $phone) {
+            if ($phone->isPrimary()) {
+                $result = $phone;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function setPrimaryPhone(LeadPhone $phone)
+    {
+        if ($this->hasPhone($phone)) {
+            $phone->setPrimary(true);
+            foreach ($this->getPhones() as $otherPhone) {
+                if (!$phone->isEqual($otherPhone)) {
+                    $otherPhone->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
     }
 }

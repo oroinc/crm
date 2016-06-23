@@ -241,3 +241,8 @@ services:
         class: %orocrm_sales.opportunity_data_channel_aware_select.type.class%
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_data_channel_aware_select }
+
+    orocrm_sales.form.type.lead_phone.type:
+        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
+        tags:
+            - { name: form.type, alias: orocrm_sales_lead_phone }
