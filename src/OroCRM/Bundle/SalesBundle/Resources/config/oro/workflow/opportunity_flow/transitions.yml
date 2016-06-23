@@ -8,10 +8,15 @@ workflows:
                 is_hidden: true
                 is_unavailable_hidden: true
                 transition_definition: create_definition
+                frontend_options:
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 form_options:
                     attribute_fields:
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
@@ -37,6 +42,10 @@ workflows:
                 frontend_options:
                     icon: icon-play
                     class: btn-primary
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 transition_definition: develop_definition
                 form_options:
                     attribute_fields:
@@ -52,7 +61,7 @@ workflows:
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true

@@ -26,7 +26,6 @@ workflows:
                         identifier: 'won'
                         attribute: $close_reason
                     - '@assign_value':
-                        - [$probability, 1]
                         - [$close_reason_name, 'won']
             close_lost_definition:
                 conditions:
@@ -47,7 +46,6 @@ workflows:
                         identifier: $close_reason_name
                         attribute: $close_reason
                     - '@assign_value':
-                        - [$probability, 0]
                         - [$close_revenue, 0]
             reopen_definition:
                 conditions:
