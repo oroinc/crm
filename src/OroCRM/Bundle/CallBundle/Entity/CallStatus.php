@@ -4,14 +4,19 @@ namespace OroCRM\Bundle\CallBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+
+
 /**
  * CallStatus
  *
  * @ORM\Table(name="orocrm_call_status")
  * @ORM\Entity
+ * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CallBundle\Entity\CallStatusTranslation")
  */
 
-class CallStatus
+class CallStatus implements Translatable
 {
     /**
      * @var string
@@ -24,9 +29,15 @@ class CallStatus
     /**
      * @var string
      *
+     * @Gedmo\Translatable
      * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
     protected $label;
+
+    /**
+     * @Gedmo\Locale
+     */
+    protected $locale;
 
     /**
      * @param string $name
@@ -67,6 +78,29 @@ class CallStatus
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return CallStatus
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Returns locale code
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     /**
