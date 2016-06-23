@@ -9,7 +9,7 @@ Background:
 
 Scenario: Delete from System organization
   And I am logged in under System organization
-  When I open the menu "Activities" and click "Contact Requests"
+  When I go to Activities/Contact Requests
   And check all records in grid
   And click Delete mass action
   And confirm deletion

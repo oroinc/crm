@@ -8,7 +8,7 @@ Background:
 
 Scenario: User can but now can't delete records
 	Given I have 5 Cases
-	And I open the menu "Activities" and click "Cases"
+	And I go to Activities/Cases
 	And I keep in mind number of records in list
 	And select few records
 	And I set my permissions on Delete Cases to None
@@ -19,13 +19,13 @@ Scenario: User can but now can't delete records
 	Then no records were deleted
 
 Scenario: User can't delete records
-	Given I open the menu "Activities" and click "Cases"
+	Given I go to Activities/Cases
 	Then I shouldn't see Delete action
 
 Scenario: User can delete only his records but view all
 	Given my permissions on View Cases as System and on Delete as User
 	And there are two users with their own 7 Cases
-	When I open the menu "Activities" and click "Cases"
+	When I go to Activities/Cases
 	And keep in mind number of records in list
 	And check all records in grid
 	And click Delete mass action
@@ -47,7 +47,7 @@ Scenario: User can delete more records than can view
 	Given my permissions on View Accounts as User and on Delete as System
 	And I have 3 Accounts
 	And there are two users with their own 7 Accounts
-	When I open the menu "Customers" and click "Accounts"
+	When I go to Customers/Accounts
 	And I check all records in grid
 	And click Delete mass action
 	And confirm deletion
