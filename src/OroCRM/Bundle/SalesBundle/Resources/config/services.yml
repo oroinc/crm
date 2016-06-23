@@ -182,8 +182,5 @@ services:
 
     orocrm_sales.handler.opportunity_api:
         class: %orocrm_sales.handler.opportunity_api.class%
-        arguments:
-            - "@doctrine.orm.entity_manager"
-            - "@oro_config.user"
         tags:
             - { name: oro_entity.form.entity_field.handler }
