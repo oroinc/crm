@@ -12,6 +12,7 @@ parameters:
     orocrm_sales.form.type.lead_select.class:        OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
     orocrm_sales.form.type.opportunity_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType
     orocrm_sales.form.type.b2bcustomer_select.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerSelectType
+    orocrm_sales.form.type.opportunity_status_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType
 
     orocrm_sales.salesfunnel.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelType
     orocrm_sales.salesfunnel.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\SalesFunnelApiType
@@ -141,6 +142,13 @@ services:
         class: %orocrm_sales.form.type.b2bcustomer_select.class%
         tags:
             - { name: form.type, alias: orocrm_sales_b2bcustomer_select }
+
+    orocrm_sales.form.type.opportunity_status_select:
+        class: %orocrm_sales.form.type.opportunity_status_select.class%
+        arguments:
+            - '@oro_config.user'
+        tags:
+            - { name: form.type, alias: orocrm_sales_opportunity_status_select }
 
     orocrm_sales.form.type.b2bcustomer_with_channel_select:
         class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerWithChannelSelectType
