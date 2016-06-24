@@ -6,7 +6,7 @@ Feature: Contacts grid
 
 Background:
   Given I login as "admin" user with "admin" password
-  And I open the menu "Customers" and click "Contacts"
+  And I go to Customers/Contacts
 
 Scenario: Select records per page
   Given number of records should be 30
