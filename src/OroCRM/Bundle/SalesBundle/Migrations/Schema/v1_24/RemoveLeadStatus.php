@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22;
+namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
 
