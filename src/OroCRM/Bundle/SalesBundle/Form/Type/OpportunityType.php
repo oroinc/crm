@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -9,12 +11,42 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
+    const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
+
+    /** @var ConfigManager */
+    protected $configManager;
+
+    /** @var ManagerRegistry */
+    protected $doctrine;
+
+    /** @var EnumTypeHelper */
+    protected $typeHelper;
+
+    /**
+     * @param ConfigManager $configManager
+     * @param ManagerRegistry $doctrine
+     * @param EnumTypeHelper $typeHelper
+     */
+    public function __construct(
+        ConfigManager $configManager,
+        ManagerRegistry $doctrine,
+        EnumTypeHelper $typeHelper
+    ) {
+        $this->configManager = $configManager;
+        $this->doctrine = $doctrine;
+        $this->typeHelper = $typeHelper;
+    }
 
     /**
      * {@inheritdoc}
@@ -144,6 +176,41 @@ class OpportunityType extends AbstractType
                 }
             }
         );
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData']);
+    }
+
+    /**
+     * Set default probability based on default enum status value
+     *
+     * @param FormEvent $event
+     */
+    public function onPreSetData(FormEvent $event)
+    {
+        $opportunity = $event->getData();
+        if (null === $opportunity) {
+            return;
+        }
+
+        if (null !== $opportunity->getProbability()) {
+            return;
+        }
+
+        $status = $opportunity->getStatus();
+
+        if (!$status) {
+            $status = $this->getDefaultStatus();
+        }
+
+        if (!$status) {
+            return;
+        }
+
+        $probabilities = $this->configManager->get(self::PROBABILITIES_CONFIG_KEY);
+        if (isset($probabilities[$status->getId()])) {
+            $opportunity->setProbability($probabilities[$status->getId()]);
+            $event->setData($opportunity);
+        }
     }
 
     /**
@@ -165,5 +232,20 @@ class OpportunityType extends AbstractType
     public function getName()
     {
         return self::NAME;
+    }
+
+    /**
+     * Return default enum value for Opportunity Status
+     *
+     * @return AbstractEnumValue|null Return null if there is no default status
+     */
+    private function getDefaultStatus()
+    {
+        $enumCode = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
+        $className = ExtendHelper::buildEnumValueClassName($enumCode);
+        $repo = $this->doctrine->getRepository($className);
+        $defaultStatuses = $repo->getDefaultValues();
+
+        return array_shift($defaultStatuses);
     }
 }
