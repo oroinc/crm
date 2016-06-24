@@ -14,37 +14,39 @@ use Symfony\Component\Validator\Constraints\NotNull;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class OpportunityType extends AbstractType
 {
     const NAME = 'orocrm_sales_opportunity';
     const PROBABILITIES_CONFIG_KEY = 'oro_crm_sales.default_opportunity_probabilities';
 
-    /** @var ConfigManager */
-    protected $configManager;
+    /** @var ProbabilityProvider */
+    protected $probabilityProvider;
 
-    /** @var ManagerRegistry */
-    protected $doctrine;
+    /** @var EnumValueProvider */
+    protected $enumValueProvider;
 
     /** @var EnumTypeHelper */
     protected $typeHelper;
 
     /**
-     * @param ConfigManager $configManager
-     * @param ManagerRegistry $doctrine
+     * @param ProbabilityProvider $probabilityProvider
+     * @param EnumValueProvider $enumValueProvider
      * @param EnumTypeHelper $typeHelper
      */
     public function __construct(
-        ConfigManager $configManager,
-        ManagerRegistry $doctrine,
+        ProbabilityProvider $probabilityProvider,
+        EnumValueProvider $enumValueProvider,
         EnumTypeHelper $typeHelper
     ) {
-        $this->configManager = $configManager;
-        $this->doctrine = $doctrine;
+        $this->probabilityProvider = $probabilityProvider;
+        $this->enumValueProvider = $enumValueProvider;
         $this->typeHelper = $typeHelper;
     }
 
@@ -206,11 +208,8 @@ class OpportunityType extends AbstractType
             return;
         }
 
-        $probabilities = $this->configManager->get(self::PROBABILITIES_CONFIG_KEY);
-        if (isset($probabilities[$status->getId()])) {
-            $opportunity->setProbability($probabilities[$status->getId()]);
-            $event->setData($opportunity);
-        }
+        $opportunity->setProbability($this->probabilityProvider->get($status));
+        $event->setData($opportunity);
     }
 
     /**
@@ -242,9 +241,7 @@ class OpportunityType extends AbstractType
     private function getDefaultStatus()
     {
         $enumCode = $this->typeHelper->getEnumCode(Opportunity::class, 'status');
-        $className = ExtendHelper::buildEnumValueClassName($enumCode);
-        $repo = $this->doctrine->getRepository($className);
-        $defaultStatuses = $repo->getDefaultValues();
+        $defaultStatuses = $this->enumValueProvider->getDefaultEnumValuesByCode($enumCode);
 
         return array_shift($defaultStatuses);
     }

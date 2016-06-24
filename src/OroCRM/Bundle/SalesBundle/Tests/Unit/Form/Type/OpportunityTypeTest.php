@@ -2,17 +2,18 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
-
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormInterface;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\EntityBundle\ORM\DoctrineHelper;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
+use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
 use Oro\Bundle\EntityExtendBundle\Tests\Unit\Fixtures\TestEnumValue;
 
 use OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType;
+use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
@@ -102,14 +103,17 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturn($this->getDefaultProbilities());
 
+        $probabilityProvider = new ProbabilityProvider($configManager);
+
         $defaultStatuses = array_map(function ($id) {
             return $this->getOpportunityStatus($id);
         }, $defaultStatuses);
 
-        $doctrine = $this->getDoctrineRegistryMock($defaultStatuses);
+        $doctrineHelper = $this->getDoctrineHelperMock($defaultStatuses);
+        $enumProvider = new EnumValueProvider($doctrineHelper);
         $helper = $this->getEnumTypeHelperMock();
 
-        $type = new OpportunityType($configManager, $doctrine, $helper);
+        $type = new OpportunityType($probabilityProvider, $enumProvider, $helper);
 
         return $type;
     }
@@ -117,9 +121,9 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
     /**
      * @param AbstractEnumValue[] $defaultValues
      *
-     * @return Registry
+     * @return DoctrineHelper
      */
-    private function getDoctrineRegistryMock(array $defaultValues)
+    private function getDoctrineHelperMock(array $defaultValues)
     {
         $repo = $this->getMockBuilder(EnumValueRepository::class)
             ->disableOriginalConstructor()
@@ -129,12 +133,12 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultValues')
             ->willReturn($defaultValues);
 
-        $doctrine = $this->getMockBuilder(Registry::class)
+        $doctrine = $this->getMockBuilder(DoctrineHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $doctrine->expects($this->any())
-            ->method('getRepository')
+            ->method('getEntityRepository')
             ->willReturn($repo);
 
         return $doctrine;

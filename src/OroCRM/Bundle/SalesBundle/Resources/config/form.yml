@@ -33,8 +33,8 @@ services:
     orocrm_sales.opportunity.form.type:
         class: %orocrm_sales.opportunity.form.type.class%
         arguments:
-            - '@oro_config.user'
-            - '@doctrine'
+            - '@orocrm_sales.provider.probability'
+            - '@oro_entity_extend.enum_value_provider'
             - '@oro_entity_extend.enum_type_helper'
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity }
