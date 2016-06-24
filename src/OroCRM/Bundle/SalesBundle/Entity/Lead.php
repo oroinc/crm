@@ -789,26 +789,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * @return LeadStatus
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
-     * @param LeadStatus $status
-     *
-     * @return Lead
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
      * Get address
      *
      * @return Address
