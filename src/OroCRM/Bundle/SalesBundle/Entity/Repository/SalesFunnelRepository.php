@@ -35,8 +35,10 @@ class SalesFunnelRepository extends EntityRepository
         array $customStepCalculations = array(),
         AclHelper $aclHelper = null
     ) {
+        $data = array();
+
         if (!$workflow) {
-            return array('items' => array(), 'nozzleSteps' => array());
+            return $data;
         }
 
         $steps = $workflow->getStepManager()->getOrderedSteps();
@@ -58,7 +60,6 @@ class SalesFunnelRepository extends EntityRepository
         $regularStepsData = $this->getStepData($regularSteps, null, null, $customStepCalculations, $aclHelper);
         $finalStepsData = $this->getStepData($finalSteps, $dateFrom, $dateTo, $customStepCalculations, $aclHelper);
 
-        $data = array();
         foreach ($steps as $step) {
             $stepName = $step->getName();
             if (!in_array($stepName, $this->excludedSteps)) {
