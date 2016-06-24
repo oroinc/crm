@@ -66,7 +66,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setNameSuffix('Jr.');
                 $entity->setStatus(new LeadStatus('New'));
                 $entity->setJobTitle('Manager');
-                $entity->setPhoneNumber('585-255-1127');
+                $entity->addPhone('585-255-1127');
                 $entity->setWebsite('http://orocrm.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');

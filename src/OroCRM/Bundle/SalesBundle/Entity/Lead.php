@@ -239,23 +239,7 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $jobTitle;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=90
-     *      }
-     *  }
-     * )
-     */
-    protected $phoneNumber;
-
+    
     /**
      * @var Collection
      *
@@ -676,30 +660,6 @@ class Lead extends ExtendLead implements
     public function getJobTitle()
     {
         return $this->jobTitle;
-    }
-
-    /**
-     * Set phone number
-     *
-     * @param string $phoneNumber
-     *
-     * @return Lead
-     */
-    public function setPhoneNumber($phoneNumber)
-    {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get phone number
-     *
-     * @return string
-     */
-    public function getPhoneNumber()
-    {
-        return $this->phoneNumber;
     }
 
     /**
