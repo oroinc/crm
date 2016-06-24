@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints\Range;
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
 
 /**
- * Extends EnumValueType to add 'probability'
+ * Extends EnumValueType to add a 'probability' field
  */
 class OpportunityStatusEnumValueType extends EnumValueType
 {
@@ -39,7 +39,9 @@ class OpportunityStatusEnumValueType extends EnumValueType
      */
     public function preSetData(FormEvent $event)
     {
-        $disabled = in_array($event->getData()['id'], self::$immutableStatuses);
+        $data = $event->getData();
+        $disabled = isset($data['id']) && in_array($data['id'], self::$immutableStatuses);
+
         $form = $event->getForm();
         $form->add(
             'probability',
