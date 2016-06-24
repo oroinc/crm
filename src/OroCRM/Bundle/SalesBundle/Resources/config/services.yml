@@ -25,6 +25,7 @@ parameters:
 
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
+    orocrm_sales.autocomplete.account.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\AccountSearchHandler
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -79,6 +80,7 @@ services:
         lazy: true
 
     orocrm_sales.form.autocomplete.b2b_customers_with_channel.search_handler:
+        class: %orocrm_sales.autocomplete.account.search_handler.class%
         parent: orocrm_channel.autocomplete.channel_limitation_handler
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
