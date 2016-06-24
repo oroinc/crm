@@ -23,6 +23,7 @@ parameters:
     orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
+    orocrm_sales.provider.probability.class:                 OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider
 
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
@@ -147,6 +148,11 @@ services:
             - "@oro_locale.formatter.date_time"
             - "@oro_security.acl_helper"
             - "@translator"
+
+    orocrm_sales.provider.probability:
+        class: %orocrm_sales.provider.probability.class%
+        arguments:
+            - "@oro_config.user"
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%
