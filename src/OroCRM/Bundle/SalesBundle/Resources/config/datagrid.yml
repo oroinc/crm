@@ -1016,6 +1016,14 @@ datagrid:
                  name:
                     type:      string
                     data_name: c.name
+                 cAccountName:
+                    type:      entity
+                    data_name: account.id
+                    options:
+                        field_options:
+                            class: OroCRMAccountBundle:Account
+                            property: name
+                            translatable_options: false
                  lifetime:
                     type: number-range
                     data_name: c.lifetime
