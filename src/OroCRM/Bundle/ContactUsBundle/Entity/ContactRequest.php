@@ -34,13 +34,13 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *              "owner_column_name"="owner_id"
  *          },
  *          "entity"={
- *              "icon"="icon-envelope",
- *              "category"="account_management"
+ *              "icon"="icon-envelope"
  *          },
  *          "security"={
  *              "type"="ACL",
  *              "permissions"="All",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "grid"={
  *              "default"="orcrm-contact-requests-grid"

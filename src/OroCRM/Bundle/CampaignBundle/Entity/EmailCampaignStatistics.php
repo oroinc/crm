@@ -20,8 +20,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-bar-chart",
- *              "category"="marketing"
+ *              "icon"="icon-bar-chart"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -32,7 +31,8 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          }
  *      }
  * )

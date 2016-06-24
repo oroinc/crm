@@ -40,8 +40,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_cart_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart",
- *              "category"="sales_data"
+ *              "icon"="icon-shopping-cart"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -52,7 +51,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "grid_name"="magento-cart-grid",

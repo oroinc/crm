@@ -28,8 +28,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_sales_b2bcustomer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user-md",
- *              "category"="sales_data"
+ *              "icon"="icon-user-md"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -40,7 +39,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "dataaudit"={
  *              "auditable"=true

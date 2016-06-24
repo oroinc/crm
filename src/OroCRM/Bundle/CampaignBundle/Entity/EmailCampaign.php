@@ -21,8 +21,7 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-envelope",
- *              "category"="marketing"
+ *              "icon"="icon-envelope"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -33,7 +32,8 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          },
  *          "grid"={
  *              "default"="orocrm-email-campaign-grid"

@@ -32,8 +32,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "auditable"=true
  *          },
  *          "entity"={
- *              "icon"="icon-list-alt",
- *              "category"="account_management"
+ *              "icon"="icon-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -43,7 +42,8 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
  *              "organization_column_name"="organization_id"
  *          },
  *          "security"={
- *              "type"="ACL"
+ *              "type"="ACL",
+ *              "category"="account_management"
  *          },
  *          "grid"={
  *              "default"="cases-grid",

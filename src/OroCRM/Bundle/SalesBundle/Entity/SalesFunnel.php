@@ -32,8 +32,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *      routeView="orocrm_sales_salesfunnel_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-filter",
- *              "category"="sales_data"
+ *              "icon"="icon-filter"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -44,7 +43,8 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendSalesFunnel;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "grid"={
  *              "default"="sales-funnel-grid"

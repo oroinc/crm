@@ -20,8 +20,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-shopping-cart",
- *              "category"="sales_data"
+ *              "icon"="icon-shopping-cart"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",
@@ -30,7 +29,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "note"={
  *              "immutable"=true

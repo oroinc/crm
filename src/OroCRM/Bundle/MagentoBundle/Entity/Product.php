@@ -21,12 +21,10 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendProduct;
  * )
  * @Config(
  *      defaultValues={
- *          "entity"={
- *              "category"="sales_data"
- *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "note"={
  *              "immutable"=true

@@ -27,8 +27,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *      routeName="orocrm_call_index",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone-sign",
- *              "category"="account_management"
+ *              "icon"="icon-phone-sign"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -39,7 +38,8 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "grouping"={
  *              "groups"={"activity"}

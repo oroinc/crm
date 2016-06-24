@@ -29,8 +29,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *      routeView="orocrm_account_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-suitcase",
- *              "category"="account_management"
+ *              "icon"="icon-suitcase"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -41,7 +40,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "merge"={
  *              "enable"=true

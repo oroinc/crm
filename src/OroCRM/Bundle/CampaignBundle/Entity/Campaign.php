@@ -22,8 +22,7 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-volume-up",
- *              "category"="marketing"
+ *              "icon"="icon-volume-up"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -34,7 +33,8 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          },
  *          "form"={
  *              "form_type"="orocrm_campaign_select",

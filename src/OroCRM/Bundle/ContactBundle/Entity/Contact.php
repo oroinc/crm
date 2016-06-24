@@ -51,8 +51,7 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *                  "phone"={
  *                      {"fieldName"="primaryPhone"}
  *                  }
- *              },
- *              "category"="account_management"
+ *              }
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -63,7 +62,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendContact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "form"={
  *              "form_type"="orocrm_contact_select",

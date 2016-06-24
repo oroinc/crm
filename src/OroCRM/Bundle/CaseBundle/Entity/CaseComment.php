@@ -16,8 +16,7 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-comments",
- *              "category"="account_management"
+ *              "icon"="icon-comments"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -28,7 +27,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "activity"={
  *              "immutable"=true

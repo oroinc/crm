@@ -39,8 +39,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_sales_lead_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-phone",
- *              "category"="sales_data"
+ *              "icon"="icon-phone"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -51,7 +50,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",

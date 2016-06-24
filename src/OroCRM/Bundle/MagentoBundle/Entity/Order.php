@@ -38,8 +38,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *      routeView="orocrm_magento_order_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt",
- *              "category"="sales_data"
+ *              "icon"="icon-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -50,7 +49,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "workflow"={
  *              "active_workflow"="b2c_flow_order_follow_up"

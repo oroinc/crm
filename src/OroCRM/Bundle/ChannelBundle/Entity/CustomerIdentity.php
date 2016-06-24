@@ -20,9 +20,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  * @ORM\Table(name="orocrm_channel_cust_identity")
  * @Config(
  *  defaultValues={
- *      "entity"={
- *          "category"="account_management"
- *      },
  *      "ownership"={
  *          "owner_type"="USER",
  *          "owner_field_name"="owner",
@@ -30,7 +27,8 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
  *      },
  *      "security"={
  *          "type"="ACL",
- *          "group_name"=""
+ *          "group_name"="",
+ *          "category"="sales_data"
  *      }
  *  }
  * )

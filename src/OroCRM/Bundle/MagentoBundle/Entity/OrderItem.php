@@ -15,8 +15,7 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  * @Config(
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-list-alt",
- *              "category"="sales_data"
+ *              "icon"="icon-list-alt"
  *          },
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",
@@ -25,7 +24,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendOrderItem;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "note"={
  *              "immutable"=true

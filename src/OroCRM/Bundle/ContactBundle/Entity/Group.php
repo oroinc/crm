@@ -19,9 +19,6 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
  * @Oro\Loggable
  * @Config(
  *      defaultValues={
- *          "entity"={
- *              "category"="account_management"
- *          },
  *          "ownership"={
  *              "owner_type"="USER",
  *              "owner_field_name"="owner",
@@ -31,7 +28,8 @@ use OroCRM\Bundle\ContactBundle\Model\ExtendGroup;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "note"={
  *              "immutable"=true
