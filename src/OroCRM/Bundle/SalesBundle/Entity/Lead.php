@@ -77,6 +77,8 @@ class Lead extends ExtendLead implements
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
+    
+    const INTERNAL_STATUS_CODE = 'lead_status';
 
     /**
      * @var integer
@@ -93,20 +95,6 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $id;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadStatus")
-     * @ORM\JoinColumn(name="status_name", referencedColumnName="name")
-     * @ConfigField(
-     *  defaultValues={
-     *      "importexport"={
-     *          "order"=10,
-     *          "short"=true
-     *      }
-     *  }
-     * )
-     */
-    protected $status;
 
     /**
      * @var Contact

@@ -24,6 +24,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\AddLeadStatus;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -140,6 +141,7 @@ class OroCRMSalesBundleInstaller implements
 
         SalesOrganizations::addOrganization($schema);
         AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
+        AddLeadStatus::addStatusField($schema, $this->extendExtension, $queries);
     }
 
     /**
@@ -277,7 +279,6 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
-        $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
@@ -313,7 +314,6 @@ class OroCRMSalesBundleInstaller implements
             ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
 
-        $table->addIndex(['status_name'], 'idx_73db46336625d392', []);
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
         $table->addIndex(['customer_id'], 'IDX_73DB46339395C3F3', []);
         $table->addIndex(['data_channel_id'], 'IDX_73DB4633BDC09B73', []);
@@ -559,12 +559,6 @@ class OroCRMSalesBundleInstaller implements
             ['id'],
             ['onDelete' => 'SET NULL', 'onUpdate' => null],
             'FK_73DB4633BDC09B73'
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('orocrm_sales_lead_status'),
-            ['status_name'],
-            ['name'],
-            ['onUpdate' => null, 'onDelete' => null]
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_workflow_item'),
