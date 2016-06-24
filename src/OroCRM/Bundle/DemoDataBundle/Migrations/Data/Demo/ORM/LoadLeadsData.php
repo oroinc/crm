@@ -79,7 +79,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     public function load(ObjectManager $manager)
     {
         $this->initSupportingEntities($manager);
-        $this->loadLeads();
+        $this->loadLeads($manager);
         $this->loadSources($manager);
     }
 
@@ -122,7 +122,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $manager->flush();
     }
 
-    public function loadLeads()
+    public function loadLeads(ObjectManager $manager)
     {
         $dictionaryDir = $this->container
             ->get('kernel')
@@ -143,7 +143,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data, $user);
+                $lead = $this->createLead($manager, $data, $user);
                 $this->persist($this->em, $lead);
 
                 $i++;
@@ -173,11 +173,13 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      *
      * @return Lead
      */
-    protected function createLead(array $data, $user)
+    protected function createLead(ObjectManager $manager, array $data, $user)
     {
         $lead = new Lead();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
+
+        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+        $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
+        
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
