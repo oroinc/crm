@@ -2,9 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class LeadType extends AbstractType
 {
@@ -16,6 +18,16 @@ class LeadType extends AbstractType
     {
         $builder
             ->add('name', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.name.label'))
+            ->add(
+                'status',
+                'oro_enum_select',
+                [
+                    'required'    => true,
+                    'label'       => 'orocrm.sales.lead.status.label',
+                    'enum_code'   => Lead::INTERNAL_STATUS_CODE,
+                    'constraints' => [new NotNull()]
+                ]
+            )
             ->add(
                 'dataChannel',
                 'orocrm_channel_select_type',
