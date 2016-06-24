@@ -970,16 +970,20 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
+                    - account.name as cAccountName
                 from:
                     - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
+                        - { join: c.account, alias: account }
         columns:
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
             name:
                 label:          orocrm.sales.b2bcustomer.name.label
+            cAccountName:
+                label:          orocrm.account.name.label
             lifetime:
                 label:          orocrm.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
@@ -991,11 +995,12 @@ datagrid:
                 frontend_type:  datetime
         sorters:
             columns:
-                channelName: { data_name: channelName }
-                name:        { data_name: c.name }
-                lifetime:    { data_name: c.lifetime }
-                createdAt:   { data_name: c.createdAt }
-                updatedAt:   { data_name: c.updatedAt }
+                channelName:  { data_name: channelName }
+                name:         { data_name: c.name }
+                cAccountName: { data_name: cAccountName }
+                lifetime:     { data_name: c.lifetime }
+                createdAt:    { data_name: c.createdAt }
+                updatedAt:    { data_name: c.updatedAt }
             default:
                 name: ASC
         filters:

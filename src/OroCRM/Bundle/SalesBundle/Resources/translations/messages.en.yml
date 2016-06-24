@@ -237,7 +237,7 @@ orocrm:
             entity_plural_label:        Business Customers
             entity_description:         Represent business customer
             id.label:                   Id
-            name.label:                 Name
+            name.label:                 Customer name
             lifetime.label:             Lifetime sales value
             shipping_address.label:     Shipping Address
             billing_address.label:      Billing Address
