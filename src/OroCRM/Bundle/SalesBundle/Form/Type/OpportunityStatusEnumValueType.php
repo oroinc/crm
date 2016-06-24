@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
+use Symfony\Component\Validator\Constraints\Range;
 
 use Oro\Bundle\EntityExtendBundle\Form\Type\EnumValueType;
 
@@ -46,6 +47,7 @@ class OpportunityStatusEnumValueType extends EnumValueType
             [
                 'disabled' => $disabled,
                 'attr' => ['readonly' => $disabled],
+                'constraints' => new Range(['min' => 0, 'max' => 100]),
             ]
         );
     }

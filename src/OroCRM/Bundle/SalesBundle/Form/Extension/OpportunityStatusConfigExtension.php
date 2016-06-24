@@ -54,9 +54,9 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
             return;
         }
 
-        foreach ($data['enum']['enum_options'] as $key => &$enum_option) {
+        foreach ($data['enum']['enum_options'] as $key => $enum_option) {
             if (isset($probabilityConfig[$enum_option['id']])) {
-                $enum_option['probability'] = $probabilityConfig[$enum_option['id']];
+                $data['enum']['enum_options'][$key]['probability'] = $probabilityConfig[$enum_option['id']];
             }
         }
 
