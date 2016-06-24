@@ -95,3 +95,13 @@ datagrid:
                     type: number-range
                     data_name: daysSinceLastContact
                     enabled: false
+
+    activity-contact-last-contacted-date-data-mixin:
+        source:
+            query:
+                select:
+                    - __root_entity__.ac_last_contact_date as lastContactedDate
+        columns:
+            lastContactedDate:
+                label: orocrm.activity_contact.ac_last_contact_date.label
+                frontend_type: datetime

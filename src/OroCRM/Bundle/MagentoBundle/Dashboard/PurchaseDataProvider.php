@@ -12,6 +12,7 @@ use Oro\Bundle\ChartBundle\Model\ChartView;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\ChartBundle\Model\ConfigProvider;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\OrderRepository;
@@ -45,11 +46,11 @@ class PurchaseDataProvider
     protected $aclHelper;
 
     /**
-     * @param ManagerRegistry $registry
-     * @param ConfigProvider $configProvider
+     * @param ManagerRegistry       $registry
+     * @param ConfigProvider        $configProvider
      * @param TrackingVisitProvider $trackingVisitProvider
-     * @param TranslatorInterface $translator
-     * @param AclHelper $aclHelper
+     * @param TranslatorInterface   $translator
+     * @param AclHelper             $aclHelper
      */
     public function __construct(
         ManagerRegistry $registry,
@@ -58,21 +59,21 @@ class PurchaseDataProvider
         TranslatorInterface $translator,
         AclHelper $aclHelper
     ) {
-        $this->registry = $registry;
-        $this->configProvider = $configProvider;
+        $this->registry              = $registry;
+        $this->configProvider        = $configProvider;
         $this->trackingVisitProvider = $trackingVisitProvider;
-        $this->translator = $translator;
-        $this->aclHelper = $aclHelper;
+        $this->translator            = $translator;
+        $this->aclHelper             = $aclHelper;
     }
 
     /**
      * @param ChartViewBuilder $viewBuilder
-     * @param DateTime $from
-     * @param DateTime $to
+     * @param DateTime         $from
+     * @param DateTime         $to
      *
      * @return ChartView
      */
-    public function getPurchaseChartView(ChartViewBuilder $viewBuilder, DateTime $from, DateTime $to)
+    public function getPurchaseChartView(ChartViewBuilder $viewBuilder, DateTime $from = null, DateTime $to = null)
     {
         $items = [
             [
@@ -97,9 +98,12 @@ class PurchaseDataProvider
             ]
         ];
 
+        if (!$from) {
+            $from = new \DateTime(FilterDateRangeConverter::MIN_DATE, new \DateTimeZone('UTC'));
+        }
         $chartOptions = array_merge_recursive(
             [
-                'name' => 'flow_chart',
+                'name'     => 'flow_chart',
                 'settings' => [
                     'quarterDate' => $from
                 ]

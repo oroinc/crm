@@ -9,8 +9,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 class DashboardController extends Controller
 {
-    const CAMPAIGN_LEAD_COUNT = 5;
-    const CAMPAIGN_OPPORTUNITY_COUNT = 5;
+    const CAMPAIGN_LEAD_COUNT          = 5;
+    const CAMPAIGN_OPPORTUNITY_COUNT   = 5;
     const CAMPAIGN_CLOSE_REVENUE_COUNT = 5;
 
     /**
@@ -23,28 +23,24 @@ class DashboardController extends Controller
      */
     public function campaignLeadsAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsLeads(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_LEAD_COUNT,
+        $items                   = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignLeadsData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
             );
-
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'number')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'number']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 
@@ -61,28 +57,25 @@ class DashboardController extends Controller
      */
     public function campaignOpportunityAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsOpportunities(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_OPPORTUNITY_COUNT,
+        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignOpportunitiesData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
             );
 
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'number')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'number']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 
@@ -99,28 +92,25 @@ class DashboardController extends Controller
      */
     public function campaignByCloseRevenueAction($widget)
     {
-        $items = $this->getDoctrine()
-            ->getRepository('OroCRMCampaignBundle:Campaign')
-            ->getCampaignsByCloseRevenue(
-                $this->get('oro_security.acl_helper'),
-                self::CAMPAIGN_CLOSE_REVENUE_COUNT,
+        $items = $this->get('orocrm_campaign.dashboard.campaign_data_provider')
+            ->getCampaignsByCloseRevenueData(
                 $this->get('oro_dashboard.widget_configs')
                     ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
                     ->get('dateRange')
             );
 
-        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($items)
             ->setOptions(
-                array(
-                    'name' => 'bar_chart',
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'closeRevenue', 'formatter' => 'formatCurrency')
-                    ),
-                    'settings' => array('xNoTicks' => count($items)),
-                )
+                [
+                    'name'        => 'bar_chart',
+                    'data_schema' => [
+                        'label' => ['field_name' => 'label'],
+                        'value' => ['field_name' => 'closeRevenue', 'formatter' => 'formatCurrency']
+                    ],
+                    'settings'    => ['xNoTicks' => count($items)],
+                ]
             )
             ->getView();
 
