@@ -46,12 +46,17 @@ class OpportunityProbabilityType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setNormalizers(
+        $resolver->setDefaults(
             [
-                'validation_groups' => function (Options $options, $value) {
-                    return $options['disabled'] ? false : $value;
-                },
+                'validation_groups' => null,
+                'disabled' => false,
             ]
+        );
+        $resolver->setNormalizer(
+            'validation_groups',
+            function (Options $options, $value) {
+                    return $options['disabled'] ? false : $value;
+            }
         );
     }
 
