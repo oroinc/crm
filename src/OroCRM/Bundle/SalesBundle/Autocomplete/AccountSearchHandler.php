@@ -45,7 +45,7 @@ class AccountSearchHandler extends ChannelLimitationHandler
         $accountName  = $entity->getAccount()->getName();
         $customerName = $entity->getName();
 
-        if($accountName === $customerName) {
+        if ($accountName === $customerName) {
             return $this->getPropertyValue($propertyPath, $entity);
         }
 
