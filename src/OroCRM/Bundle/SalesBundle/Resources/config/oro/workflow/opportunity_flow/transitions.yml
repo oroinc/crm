@@ -29,12 +29,16 @@ workflows:
                                     - lost
                         probability: ~
                     init_actions:
-                        - '@assign_value': [$probability, null]
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:
                                 priority: ASC
                             attribute: $opportunity.status
+                        - '@call_service_method':
+                            service: orocrm_sales.provider.probability
+                            method: get
+                            method_parameters: [$opportunity.status]
+                            attribute: $opportunity.probability
             develop:
                 label: 'Develop'
                 step_to: open
@@ -168,9 +172,13 @@ workflows:
                         notes:
                             form_type: oro_resizeable_rich_text
                     init_actions:
-                        - '@assign_value': [$probability, null]
                         - '@request_enum_entity':
                             enum_code: opportunity_status
                             order_by:
                                 priority: ASC
                             attribute: $opportunity.status
+                        - '@call_service_method':
+                            service: orocrm_sales.provider.probability
+                            method: get
+                            method_parameters: [$opportunity.status]
+                            attribute: $opportunity.probability
