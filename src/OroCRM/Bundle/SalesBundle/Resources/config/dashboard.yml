@@ -65,10 +65,14 @@ oro_dashboard_config:
                         configs:
                             placeholder:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.placeholder
                 useQuantityAsData:
-                    type: checkbox
+                    type: choice
                     options:
-                       label: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.label
-                       required: false
+                        label: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.label
+                        tooltip: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.tooltip
+                        required: true
+                        choices:
+                            0: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.amount
+                            1: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.count
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart

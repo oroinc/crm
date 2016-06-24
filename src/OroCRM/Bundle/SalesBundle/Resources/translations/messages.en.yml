@@ -47,10 +47,13 @@ orocrm:
                 title:       Opportunities by Status
                 description: This widget displays a breakdown of opportunities by status in form of a bar chart.
                 quantity_as_data:
-                    label: Display Opportunities Number
+                    label: Display data
+                    tooltip: 'Choose which data to display on the chart: Count shows the number of opportunities in a particular status, and Amount displays their total budget.'
+                    amount: Amount
+                    count:  Count
                 excluded_statuses:
                     label: Excluded statuses
-                    placeholder: Choose excluded statuses
+                    placeholder: Choose statuses to exclude
             my_sales_flow_b2b_chart:
                 title:       My Sales Flow B2B
                 description: This widget gives you a quick overview of a B2B workflow in form of a funnel chart.
@@ -75,13 +78,13 @@ orocrm:
                 description: This widget displays the list of opportunities that can be configured to show only opportunities in certain conditions, e.g. only open opportunities that are owned by the current user.
                 excluded_statuses:
                     label: Excluded statuses
-                    placeholder: Choose excluded statuses
+                    placeholder: Choose statuses to exclude
             leads_list:
                 title: Leads List
                 description: This widget displays the list of leads that can be configured to show only leads in certain conditions, e.g. only open leads that are owned by the current user.
                 excluded_statuses:
                     label: Excluded statuses
-                    placeholder: Choose excluded statuses
+                    placeholder: Choose statuses to exclude
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
