@@ -355,7 +355,7 @@ datagrid:
                     editor:
                         view: oroform/js/app/views/editor/text-editor-view
                     save_api_accessor:
-                        class: orocrmcontact/js/datagrid/inline-editing/save-api-accessor
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
                         route_create_entity:
                             name: oro_api_post_lead_phone
                             http_method: POST

@@ -1,0 +1,5 @@
+orocrm:
+    lead:
+        phone:
+            error:
+                delete.more_one: Phone number was not deleted, the lead has more than one phone number, can't set the new primary.

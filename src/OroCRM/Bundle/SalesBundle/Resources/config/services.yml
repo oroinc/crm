@@ -5,6 +5,10 @@ parameters:
     orocrm_sales.lead.entity.class:                          OroCRM\Bundle\SalesBundle\Entity\Lead
     orocrm_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
+    orocrm_sales.lead_phone.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadPhone
+    orocrm_sales.lead_phone.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+
     orocrm_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
     orocrm_sales.salesfunnel.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\SalesFunnel
@@ -173,3 +177,10 @@ services:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+
+    orocrm_sales.lead_phone.manager.api:
+        class: %orocrm_sales.lead_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.lead_phone.entity.class%
+            - "@doctrine.orm.entity_manager"

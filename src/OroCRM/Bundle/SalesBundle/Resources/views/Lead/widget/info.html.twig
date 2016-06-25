@@ -3,6 +3,38 @@
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
+    {% set primaryElement = null %}
+    {% set elements = [] %}
+
+    {% for element in collection %}
+        {% if element.primary %}
+            {% set primaryElement = element %}
+        {% else %}
+            {% set elements = elements|merge([element]) %}
+        {% endif %}
+    {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
+
+    <ul class="extra-list">
+        {%- for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor -%}
+    </ul>
+{% endmacro %}
+
+
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
@@ -37,7 +69,8 @@
 
         <div class="responsive-block">
             {{ ui.renderHtmlProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.renderEmailWithActions(entity.email, entity) : null) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}
+            {#{{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}#}
+            {{ ui.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
         </div>

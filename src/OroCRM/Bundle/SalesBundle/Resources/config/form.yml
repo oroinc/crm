@@ -246,3 +246,12 @@ services:
         class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
         tags:
             - { name: form.type, alias: orocrm_sales_lead_phone }
+
+    orocrm_sales.form.type.lead_phone.handler:
+        class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
+        scope: request
+        arguments:
+            - "@form.factory"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@oro_security.security_facade"
