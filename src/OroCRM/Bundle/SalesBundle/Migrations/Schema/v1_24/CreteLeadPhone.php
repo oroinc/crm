@@ -5,10 +5,19 @@ namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
-class CreteLeadPhone implements Migration
+class CreteLeadPhone implements Migration, OrderedMigrationInterface
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 1;
+    }
+
     /**
      * {@inheritdoc}
      */

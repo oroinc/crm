@@ -290,7 +290,6 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('last_name', 'string', ['length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('job_title', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('email', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('company_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('website', 'string', ['notnull' => false, 'length' => 255]);
