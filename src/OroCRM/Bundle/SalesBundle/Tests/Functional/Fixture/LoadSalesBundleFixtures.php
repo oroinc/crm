@@ -124,10 +124,33 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setEmail('email@email.com');
         $lead->setOrganization($this->organization);
 
+        $lead2 = new Lead();
+        $lead2->setDataChannel($this->getReference('default_channel'));
+        $lead2->setName('Lead name 2');
+        $lead2->setFirstName('fname 2');
+        $lead2->setLastName('lname 2');
+        $lead2->setCustomer($this->getReference('default_b2bcustomer'));
+        $lead2->setEmail('email2@email.com');
+        $lead2->setOrganization($this->organization);
+
+        $lead3 = new Lead();
+        $lead3->setDataChannel($this->getReference('default_channel'));
+        $lead3->setName('Lead name 3');
+        $lead3->setFirstName('fname 3');
+        $lead3->setLastName('lname 3');
+        $lead3->setCustomer($this->getReference('default_b2bcustomer'));
+        $lead3->setEmail('email3@email.com');
+        $lead3->setOrganization($this->organization);
+
+
         $this->em->persist($lead);
+        $this->em->persist($lead2);
+        $this->em->persist($lead3);
         $this->em->flush();
 
         $this->setReference('default_lead', $lead);
+        $this->setReference('second_lead', $lead2);
+        $this->setReference('third_lead', $lead3);
 
         return $this;
     }

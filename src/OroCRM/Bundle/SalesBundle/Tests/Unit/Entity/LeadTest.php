@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 
 class LeadTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,6 +31,7 @@ class LeadTest extends \PHPUnit_Framework_TestCase
         $organization = $this->getMock('Oro\Bundle\OrganizationBundle\Entity\Organization');
 
         return [
+            'name'              => ['name', 'test', 'test'],
             'namePrefix'        => ['namePrefix', 'test', 'test'],
             'firstName'         => ['firstName', 'test', 'test'],
             'middleName'        => ['middleName', 'test', 'test'],
@@ -39,7 +41,6 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'website'           => ['website', 'test', 'test'],
             'companyName'       => ['companyName', 'test', 'test'],
             'email'             => ['email', 'test', 'test'],
-            'phoneNumber'       => ['phoneNumber', 'test', 'test'],
             'jobTitle'          => ['jobTitle', 'test', 'test'],
             'industry'          => ['nameSuffix', 'test', 'test'],
             'address'           => ['owner', $address, $address],
@@ -51,5 +52,59 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'dataChannel'       => ['dataChannel', $channel, $channel],
             'organization'      => array('organization', $organization, $organization)
         ];
+    }
+
+    public function testPhones()
+    {
+        $phoneOne = new LeadPhone('06001122334455');
+        $phoneTwo = new LeadPhone('07001122334455');
+        $phoneThree = new LeadPhone('08001122334455');
+        $phones = array($phoneOne, $phoneTwo);
+
+        $lead = new Lead();
+        $this->assertSame($lead, $lead->resetPhones($phones));
+        $actual = $lead->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($lead, $lead->addPhone($phoneTwo));
+        $actual = $lead->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($phones, $actual->toArray());
+
+        $this->assertSame($lead, $lead->addPhone($phoneThree));
+        $actual = $lead->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($phoneOne, $phoneTwo, $phoneThree), $actual->toArray());
+
+        $this->assertSame($lead, $lead->removePhone($phoneOne));
+        $actual = $lead->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+
+        $this->assertSame($lead, $lead->removePhone($phoneOne));
+        $actual = $lead->getPhones();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $phoneTwo, 2 => $phoneThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryPhone()
+    {
+        $Lead = new Lead();
+        $this->assertNull($Lead->getPrimaryPhone());
+
+        $phone = new LeadPhone('06001122334455');
+        $Lead->addPhone($phone);
+        $this->assertNull($Lead->getPrimaryPhone());
+
+        $Lead->setPrimaryPhone($phone);
+        $this->assertSame($phone, $Lead->getPrimaryPhone());
+
+        $phone2 = new LeadPhone('22001122334455');
+        $Lead->addPhone($phone2);
+        $Lead->setPrimaryPhone($phone2);
+
+        $this->assertSame($phone2, $Lead->getPrimaryPhone());
+        $this->assertFalse($phone->isPrimary());
     }
 }
