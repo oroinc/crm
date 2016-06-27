@@ -16,7 +16,7 @@ workflows:
                             - '@not_empty': $b2bcustomer
                         message: "Company name or customer must be selected."
                 post_actions: # set lead.status = "qualified"
-                    - '@find_entity':
+                    - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'qualified'
                         attribute: $lead.status
@@ -171,7 +171,7 @@ workflows:
                 conditions:
                     '@equal': [$lead.status.id, 'new']
                 post_actions: # set lead.status = "canceled"
-                    - '@find_entity':
+                    - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'canceled'
                         attribute: $lead.status
@@ -181,7 +181,7 @@ workflows:
                         - '@equal': [$lead.status.id, 'qualified']
                         - '@equal': [$lead.status.id, 'canceled']
                 post_actions: # set lead.status = "new"
-                    - '@find_entity':
+                    - '@request_enum_entity':
                         enum_code: lead_status
                         identifier: 'new'
                         attribute: $lead.status

@@ -27,27 +27,27 @@ workflows:
                             id: $sales_funnel.id
             disqualify_definition:
                 conditions: # if lead.status = "new"
-                    '@equal': [$lead.status.name, 'new']
+                    '@equal': [$lead.status.id, 'new']
                 post_actions: # set lead.status = "canceled"
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                    - '@request_enum_entity':
+                        enum_code: lead_status
                         identifier: 'canceled'
                         attribute: $lead.status
             follow_up_definition:
                 conditions: # if lead.status = "canceled"
-                    '@equal': [$lead.status.name, 'canceled']
+                    '@equal': [$lead.status.id, 'canceled']
             reactivate_definition:
                 conditions: # if lead.status = "canceled"
-                    '@equal': [$lead.status.name, 'canceled']
+                    '@equal': [$lead.status.id, 'canceled']
                 post_actions: # set lead.status = "new"
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                    - '@request_enum_entity':
+                        enum_code: lead_status
                         identifier: 'new'
                         attribute: $lead.status
             qualify_definition:
                 pre_conditions:  # if lead.status = "new"
                     '@and':
-                        - '@equal': [$lead.status.name, 'new']
+                        - '@equal': [$lead.status.id, 'new']
                         - '@channel_entity_availiable': [$dataChannel, ['OroCRM\Bundle\SalesBundle\Entity\Opportunity', 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer']]
                 conditions:
                     '@or':
@@ -56,8 +56,8 @@ workflows:
                             - '@not_empty': $new_b2bcustomer
                         message: "Company name or customer must be selected."
                 post_actions: # set lead.status = "qualified"
-                    - '@find_entity':
-                        class: OroCRM\Bundle\SalesBundle\Entity\LeadStatus
+                    - '@request_enum_entity':
+                        enum_code: lead_status
                         identifier: 'qualified'
                         attribute: $lead.status
                     - '@tree': # create Contact entity
