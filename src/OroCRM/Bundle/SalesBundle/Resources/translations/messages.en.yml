@@ -291,5 +291,5 @@ orocrm:
             channel.label:           Channel
             owner.label:             Owner
 
-        permission:
+        privilege:
             category.sales_data.label: Sales Data

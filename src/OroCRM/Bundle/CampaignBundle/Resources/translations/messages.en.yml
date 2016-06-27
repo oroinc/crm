@@ -154,5 +154,5 @@ orocrm:
             id.label: Id
             template.label: Template
 
-        permission:
+        privilege:
             category.marketing.label: Marketing
