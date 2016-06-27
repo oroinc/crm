@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
@@ -11,11 +9,9 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
 
-use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Form\Util\EnumTypeHelper;
 use Oro\Bundle\EntityExtendBundle\Provider\EnumValueProvider;
-use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
