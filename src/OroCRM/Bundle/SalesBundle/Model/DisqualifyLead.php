@@ -12,12 +12,9 @@ use Doctrine\Common\Persistence\ObjectManager;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
-
 class DisqualifyLead
 {
-
-    const DISQUALIFY_STATUS = 'disqualify';
-
+    const DISQUALIFY_STATUS = 'canceled';
     const LEAD_VIEW_ROUTE   = 'orocrm_sales_lead_view';
 
     /**
