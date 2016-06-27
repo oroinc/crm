@@ -24,7 +24,7 @@ define(function(require) {
             var channel = this.pageComponent('orocrm_sales_opportunity_form_dataChannel').view.$el;
             var status = this.pageComponent('orocrm_sales_opportunity_form_status').view.$el;
             var probability = this.$('input[data-name="field__probability"]');
-            var defaultProbabilities = this.options.defaultProbabilities;
+            var probabilities = status.data('probabilities');
 
             customer.on('change', function(e) {
                 if (e.added && e.added['dataChannel.id']) {
@@ -48,8 +48,8 @@ define(function(require) {
                 var val = status.val();
                 var defaultProbability;
 
-                if (defaultProbabilities.hasOwnProperty(val)) {
-                    defaultProbability = defaultProbabilities[val] * 100;                    
+                if (probabilities.hasOwnProperty(val)) {
+                    defaultProbability = probabilities[val] * 100;                    
                     probability.val(defaultProbability)
                 }
             });

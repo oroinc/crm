@@ -42,88 +42,6 @@ class OpportunityApiHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider statusDataProvider
-     *
-     * @param string $statusId
-     * @param float $expectedProbability
-     */
-    public function testStatusChangeShouldSetDefaultProbability($statusId, $expectedProbability)
-    {
-        $changeset = [
-            'status' => [
-                null, //old
-                $this->getOpportunityStatus($statusId), //new
-            ]
-        ];
-
-        $handler = $this->getOpportunityApiHndler($changeset);
-        $opportunity = $this->getOpportunity(0);
-
-        $handler->beforeProcess($opportunity);
-
-        $this->assertEquals($expectedProbability, $opportunity->getProbability());
-    }
-
-    /**
-     * @return array
-     */
-    public function statusDataProvider()
-    {
-        return [
-            [
-                'statusId' => 'solution_development',
-                'probability' => 0.5
-            ],
-            [
-                'statusId' => 'won',
-                'probability' => 1.0
-            ],
-            [
-                'statusId' => 'lost',
-                'probability' => 0.0
-            ],
-        ];
-    }
-
-    public function testStatusAndProbabilityChangeShouldNotSetDefaultProbability()
-    {
-        $changeset = [
-            'status' => [
-                null, //old
-                $this->getOpportunityStatus('won'), //new
-            ],
-            'probability' => [
-                0,
-                0,
-            ]
-        ];
-
-        $handler = $this->getOpportunityApiHndler($changeset);
-        $opportunity = $this->getOpportunity(0.7);
-
-        $handler->beforeProcess($opportunity);
-
-        $this->assertEquals(0.7, $opportunity->getProbability());
-    }
-
-    public function testStatusWithoutDefaultShouldNotSetDefaultProbability()
-    {
-        $changeset = [
-            'status' => [
-                null, //old
-                $this->getOpportunityStatus('unknown'), //new
-            ],
-        ];
-
-        $handler = $this->getOpportunityApiHndler($changeset);
-        $opportunity = $this->getOpportunity(0.3);
-
-        $handler->beforeProcess($opportunity);
-
-        $this->assertEquals(0.3, $opportunity->getProbability());
-    }
-
-    /**
      * @return array
      */
     private function getDefaultProbilities()
@@ -140,15 +58,11 @@ class OpportunityApiHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $changeset
      * @return OpportunityApiHandler
      */
-    private function getOpportunityApiHndler(array $changeset)
+    private function getOpportunityApiHndler()
     {
-        $entityManager = $this->getEntityManagerMock($changeset);
-        $configManager = $this->getConfigManagerMock();
-
-        return new OpportunityApiHandler($entityManager, $configManager);
+        return new OpportunityApiHandler();
     }
 
     /**
@@ -161,60 +75,5 @@ class OpportunityApiHandlerTest extends \PHPUnit_Framework_TestCase
         $opportunity->setProbability($probability);
 
         return $opportunity;
-    }
-
-    /**
-     * @param string $id
-     * @return AbstractEnumValue
-     */
-    private function getOpportunityStatus($id)
-    {
-        $enum = $this->getMockBuilder('Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $enum->expects($this->any())
-            ->method('getId')
-            ->will($this->returnValue($id));
-
-        return $enum;
-    }
-
-    /**
-     * @return ConfigManager
-     */
-    private function getConfigManagerMock()
-    {
-        $manager = $this->getMockBuilder('Oro\Bundle\ConfigBundle\Config\ConfigManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $manager->expects($this->any())->method('get')
-            ->will($this->returnValue($this->getDefaultProbilities()));
-
-        return $manager;
-    }
-
-    /**
-     * @param array $changeset
-     * @return EntityManager
-     */
-    private function getEntityManagerMock(array $changeset)
-    {
-        $uow = $this->getMockBuilder('Doctrine\ORM\UnitOfWork')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $uow->expects($this->any())->method('getEntityChangeSet')
-            ->will($this->returnValue($changeset));
-
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $em->expects($this->any())->method('getUnitOfWork')
-            ->will($this->returnValue($uow));
-
-        return $em;
     }
 }
