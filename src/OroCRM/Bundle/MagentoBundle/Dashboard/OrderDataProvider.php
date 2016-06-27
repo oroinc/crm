@@ -74,6 +74,10 @@ class OrderDataProvider
     public function getAverageOrderAmountChartView(ChartViewBuilder $viewBuilder, $dateRange, DateHelper $dateHelper)
     {
         list($start, $end) = $dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+        if ($start === null && $end === null) {
+            $start = new \DateTime(DateHelper::MIN_DATE, new \DateTimeZone('UTC'));
+            $end   = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
         /** @var OrderRepository $orderRepository */
         $orderRepository = $this->registry->getRepository('OroCRMMagentoBundle:Order');
         $result          = $orderRepository->getAverageOrderAmount($this->aclHelper, $start, $end, $dateHelper);
@@ -106,7 +110,10 @@ class OrderDataProvider
         /* @var $from DateTime */
         /* @var $to DateTime */
         list($from, $to) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
-
+        if ($from === null && $to === null) {
+            $from = new \DateTime(DateHelper::MIN_DATE, new \DateTimeZone('UTC'));
+            $to   = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
         $result = $this->getOrderRepository()->getOrdersOverTime($this->aclHelper, $this->dateHelper, $from, $to);
         $items  = $this->dateHelper->convertToCurrentPeriod($from, $to, $result, 'cnt', 'count');
 
@@ -145,7 +152,10 @@ class OrderDataProvider
         /* @var $from DateTime */
         /* @var $to DateTime */
         list($from, $to) = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Order', 'createdAt');
-
+        if ($from === null && $to === null) {
+            $from = new \DateTime(DateHelper::MIN_DATE, new \DateTimeZone('UTC'));
+            $to   = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
         $orderRepository = $this->getOrderRepository();
 
         $result = $orderRepository->getRevenueOverTime($this->aclHelper, $this->dateHelper, $from, $to);

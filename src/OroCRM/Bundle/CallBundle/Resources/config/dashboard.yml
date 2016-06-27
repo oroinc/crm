@@ -7,3 +7,10 @@ oro_dashboard_config:
             acl:         orocrm_call_view
             description: orocrm.dashboard.recent_calls.description
             icon:   bundles/orocrmcall/img/recent_calls.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false

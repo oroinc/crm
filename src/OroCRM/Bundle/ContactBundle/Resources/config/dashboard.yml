@@ -15,3 +15,10 @@ oro_dashboard_config:
             acl:         orocrm_contact_view
             description: orocrm.dashboard.my_contacts_activity.description
             icon:       bundles/orocrmcontact/img/recently_accessed_contacts.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false

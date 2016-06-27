@@ -15,3 +15,10 @@ oro_dashboard_config:
             acl:         orocrm_account_view
             description: orocrm.dashboard.my_accounts_activity.description
             icon:        bundles/orocrmaccount/img/recent_accessed_accounts.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
