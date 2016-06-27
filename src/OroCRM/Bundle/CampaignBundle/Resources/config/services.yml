@@ -201,3 +201,10 @@ services:
         class: %orocrm_campaign.provider.privilege_category_provider.class%
         tags:
             - { name: oro_user.privilege_category}
+
+    orocrm_campaign.dashboard.campaign_data_provider:
+        class: OroCRM\Bundle\CampaignBundle\Dashboard\CampaignDataProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'

@@ -7,19 +7,25 @@ Feature: Mass Delete records
 Background:
 	Given I login as "admin" user with "admin" password
 
+Scenario: Update Sales Channel
+	Given I go to System/Channels
+	And click edit Sales Channel in grid
+	When I press "Save and Close"
+	Then I should see "Channel saved" flash message
+
 Scenario Outline: No records to delete selected
-	When I open the menu "<menu>" and click "<menu link>"
+	When go to <menu>
 	And I don't select any record from Grid
 	And I click "Delete" link from mass action dropdown
 	Then I should see "Please select items to delete." flash message
 
 	Examples:
-	| menu       | menu link  |
-	| Customers  | Contacts   |
-	| Activities | Tasks      |
+	| menu               |
+	| Customers/Contacts |
+	| Activities/Tasks   |
 
 Scenario: Delete few manually selected records
-	Given I open the menu "Customers" and click "Accounts"
+	Given go to Customers/ Accounts
 	And I keep in mind number of records in list
 	When I check first 2 records in grid
 	And I click "Delete" link from mass action dropdown
@@ -28,7 +34,7 @@ Scenario: Delete few manually selected records
 	And the number of records decreased by 2
 
 Scenario: Cancel Delete records
-	Given I open the menu "Customers" and click "Business Customers"
+	Given I go to Customers/Business Customers
 	And I keep in mind number of records in list
 	And I check first 2 records in grid
 	When I click "Delete" link from mass action dropdown
@@ -36,7 +42,7 @@ Scenario: Cancel Delete records
 	And the number of records remained the same
 
 Scenario: Select and delete All Visible records
-	Given I open the menu "Customers" and click "Contacts"
+	Given I go to Customers/Contacts
 	And I keep in mind number of records in list
 	And I select 10 from per page list dropdown
 	When I check All Visible records in grid
@@ -45,14 +51,14 @@ Scenario: Select and delete All Visible records
 	Then the number of records decreased by 10
 
 Scenario: Select and delete All records
-	Given I open the menu "Customers" and click "Contacts"
+	Given I go to Customers/Contacts
 	When I check all records in grid
 	And I click "Delete" link from mass action dropdown
 	And confirm deletion
 	Then there is no records in grid
 
 Scenario: Uncheck few records
-	Given I open the menu "Activities" and click "Tasks"
+	Given I go to Activities/Tasks
 	And I keep in mind number of records in list
 	And I select 10 from per page list dropdown
 	When I check All Visible records in grid

@@ -94,3 +94,12 @@ services:
         class: %orocrm_account.provider.phone.account.class%
         tags:
             - { name: oro_address.phone_provider, class: %orocrm_account.account.entity.class% }
+
+    orocrm_account.event_listener.datagrid.my_accounts_activity:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-accounts-activity-grid, method: onResultBefore }

@@ -34,21 +34,21 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.opportunity.class%
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
 
     orocrm_sales.lead.manager.api:
         class: %orocrm_sales.lead.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.lead.entity.class%
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
 
     orocrm_sales.salesfunnel.manager.api:
         class: %orocrm_sales.salesfunnel.manager.api.class%
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.salesfunnel.entity.class%
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
 
     orocrm_sales.lead.datagrid_helper:
         class: %orocrm_sales.lead.datagrid_helper.class%
@@ -99,7 +99,7 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
-            - "@doctrine.orm.entity_manager"
+            - '@doctrine.orm.entity_manager'
 
     orocrm_sales.event_listener.b2bcustomer_lifetime:
         class: %orocrm_sales.event_listener.b2bcustomer_lifetime.class%
@@ -125,26 +125,28 @@ services:
     orocrm_sales.provider.mailbox_process.lead:
         class: %orocrm_sales.provider.mailbox_process.lead.class%
         arguments:
-            - "@doctrine"
-            - "@oro_security.security_facade.link"
+            - '@doctrine'
+            - '@oro_security.security_facade.link'
         tags:
             - { name: oro_email.mailbox_process, type: lead }
 
     orocrm_sales.provider.forecast_of_opportunities:
         class: %orocrm_sales.provider.forecast_of_opportunity.class%
         arguments:
-            - "@doctrine"
-            - "@oro_locale.formatter.number"
-            - "@oro_locale.formatter.date_time"
-            - "@oro_security.acl_helper"
-            - "@translator"
+            - '@doctrine'
+            - '@oro_locale.formatter.number'
+            - '@oro_locale.formatter.date_time'
+            - '@oro_security.acl_helper'
+            - '@translator'
+            - '@oro_dashboard.datetime.helper'
+            - '@oro_user.dashboard.owner_helper'
 
     orocrm_sales.provider.b2b_statistics:
         class: %orocrm_sales.provider.b2b_statistics.class%
         arguments:
-            - "@doctrine"
-            - "@oro_security.acl_helper"
-            - "@oro_dashboard.provider.big_number.date_helper"
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.provider.big_number.date_helper'
         tags:
             - { name: oro_dashboard.big_number.provider, alias: b2b }
 
@@ -166,12 +168,43 @@ services:
         arguments:
             - %oro_organization.business_unit.entity.class%
             - ["name"]
-            - "@oro_organization.provider.busines_unit_acl"
+            - '@oro_organization.provider.busines_unit_acl'
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
 
-    orocrm_sales.import_export.event_listener..opportunity:
+    orocrm_sales.event_listener.datagrid.owner:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
+
+    orocrm_sales.event_listener.datagrid.my_open_opportunity_status:
+        class: OroCRM\Bundle\SalesBundle\Datagrid\WidgetExcludedStatusListener
+        arguments:
+            - '@oro_dashboard.widget_configs'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-opportunity-grid, method: onResultBefore }
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-my-sales-lead-grid, method: onResultBefore }
+
+    orocrm_sales.import_export.event_listener.opportunity:
+        class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
+        tags:
+            - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
+
+    orocrm_sales.provider.opportunity_by_status:
+        class: OroCRM\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'
+            - '@oro_user.dashboard.owner_helper'
+
+    orocrm_sales.import_export.event_listener.opportunity:
         class: OroCRM\Bundle\SalesBundle\ImportExport\EventListener\OpportunityListener
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }

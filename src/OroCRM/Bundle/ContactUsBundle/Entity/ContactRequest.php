@@ -27,6 +27,7 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *
  * @Config(
  *      routeName="orocrm_contactus_request_index",
+ *      routeView="orocrm_contactus_request_view",
  *      defaultValues={
  *          "ownership"={
  *              "owner_type"="ORGANIZATION",
