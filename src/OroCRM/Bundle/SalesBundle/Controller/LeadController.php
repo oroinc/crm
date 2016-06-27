@@ -185,6 +185,7 @@ class LeadController extends Controller
      * Change status for lead
      *
      * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
+     * @Template
      * @Acl(
      *      id="orocrm_sales_lead_convert_to_opportunity",
      *      type="entity",
@@ -194,7 +195,9 @@ class LeadController extends Controller
      */
     public function convertToOpportunity(Lead $lead)
     {
-        return 1;
+        return [
+            'entity' => $lead
+        ];
     }
 
     /**

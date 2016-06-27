@@ -14,18 +14,20 @@
                 'title': 'Disqualify',
             }) }}
         {% endif %}
+        {% if (entity.status.name not in "canceled" and entity.status.name not in "qualified") %}
+            {{ UI.button({
+                'path':  path('orocrm_sales_lead_convert_to_opportunity', {'id': entity.id}),
+                'aCss':  'btn action-button',
+                'iCss':  'icon-usd',
+                'label': 'Convert to Opportunity',
+                'title': 'Convert to Opportunity',
+            }) }}
+        {% endif %}
         {{ UI.editButton({
             'path' : path('orocrm_sales_lead_update', { 'id': entity.id }),
             'entity_label': 'orocrm.sales.lead.entity_label'|trans
         }) }}
     {% endif %}
-    {{ UI.button({
-        'path':  path('orocrm_sales_lead_convert_to_opportunity', {'id': entity.id}),
-        'aCss':  'btn action-button',
-        'iCss':  'icon-usd',
-        'label': 'Convert to Opportunity',
-        'title': 'Convert to Opportunity',
-    }) }}
     {% if resource_granted('DELETE', entity) %}
         {{ UI.deleteButton({
             'dataUrl': path('oro_api_delete_lead', {'id': entity.id}),
