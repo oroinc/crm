@@ -2,11 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Validator\Constraints\NotNull;
+
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LeadType extends AbstractType
 {
