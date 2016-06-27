@@ -271,7 +271,7 @@ datagrid:
                     - l.numberOfEmployees
                     - source.name as sourceName
                     - customer.name as customerName
-                    - status.label as statusLabel
+                    - status.name as statusLabel
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
