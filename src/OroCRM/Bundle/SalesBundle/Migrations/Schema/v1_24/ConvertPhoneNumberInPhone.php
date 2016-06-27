@@ -24,7 +24,7 @@ class ConvertPhoneNumberInPhone implements
      */
     public function getOrder()
     {
-        return 2;
+        return 5;
     }
 
     /**

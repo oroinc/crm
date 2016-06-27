@@ -184,3 +184,11 @@ services:
         arguments:
             - %orocrm_sales.lead_phone.entity.class%
             - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.handler.lead_phone_api:
+        class: OroCRM\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
+        arguments:
+            - "@doctrine"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
