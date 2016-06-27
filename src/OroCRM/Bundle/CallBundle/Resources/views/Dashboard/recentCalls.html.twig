@@ -1,8 +1,11 @@
-{% extends 'OroDashboardBundle:Dashboard:widget.html.twig' %}
-{% import 'OroDataGridBundle::macros.html.twig' as dataGrid %}
+{% extends 'OroDashboardBundle:Dashboard:grid.html.twig' %}
+{% set gridName = 'dashboard-recent-calls-grid' %}
 
 {% block content %}
-    {{ dataGrid.renderGrid('dashboard-recent-calls-grid') }}
+    {{ dataGrid.renderGrid(gridName, params|default({}), {
+        'routerEnabled': false,
+        'enableFilters': false,
+    }|merge(renderParams|default({}))) }}
 {% endblock %}
 
 {% block actions %}

@@ -12,6 +12,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         average_order_amount_chart:
             label:       orocrm.magento.dashboard.average_order_amount_chart.title
@@ -25,6 +26,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         new_magento_customers_chart:
             label:       orocrm.magento.dashboard.new_magento_customers_chart.title
@@ -38,6 +40,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         big_numbers_widget:
             label:       orocrm.magento.dashboard.e_commerce_statistic.title
@@ -113,6 +116,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
                 usePreviousInterval:
                     type: oro_type_widget_previous_date_range
@@ -143,6 +147,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         orders_over_time_chart:
             label:       orocrm.magento.dashboard.orders_over_time_chart.title
@@ -156,6 +161,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         purchase_chart:
             label:       orocrm.magento.dashboard.purchase_chart.title
@@ -169,5 +175,6 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
 

@@ -179,11 +179,6 @@ datagrid:
                 join:
                     left:
                         - { join: call.direction, alias: directionType }
-                    inner:
-                        - { join: call.owner, alias: ownerUser }
-                where:
-                    and:
-                      - ownerUser.id = @oro_security.security_facade->getLoggedUserId
         columns:
             callDirection:
                 type: twig

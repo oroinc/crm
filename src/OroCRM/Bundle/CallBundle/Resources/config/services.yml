@@ -61,3 +61,12 @@ services:
             - "@orocrm_call.placeholder.log_call.filter"
         tags:
             - { name: twig.extension }
+
+    orocrm_call.event_listener.datagrid.my_contacts_activity:
+        class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener
+        arguments:
+            - '@oro_user.dashboard.owner_helper'
+            - '@oro_dashboard.widget_configs'
+            - 'owner'
+        tags:
+            - { name: kernel.event_listener, event: oro_datagrid.orm_datasource.result.before.dashboard-recent-calls-grid, method: onResultBefore }
