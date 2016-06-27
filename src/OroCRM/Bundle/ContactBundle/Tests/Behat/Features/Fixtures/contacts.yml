@@ -1,0 +1,54 @@
+OroCRM\Bundle\ContactBundle\Entity\ContactEmail:
+  contact-email-{1..30}:
+    email: <email()>
+    primary: true
+
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+  contact-1:
+    namePrefix: Mr
+    firstName: Aadi
+    lastName: AABERG
+    gender: male
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-1']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('now', 'now')>
+  contact-{2..15}:
+    namePrefix: <titleMale()>
+    firstName: <firstNameMale()>
+    lastName: <lastName()>
+    gender: male
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-<current()>']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('-30 days', '-10 days')>
+  contact-{16..29}:
+    namePrefix: <titleFemale()>
+    firstName: <firstNameFemale()>
+    lastName: <lastName()>
+    gender: female
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-<current()>']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('-30 days', '-10 days')>
+  contact-30:
+    namePrefix: Miss
+    firstName: Zyta
+    lastName: Zywiec
+    gender: female
+    birthday: <dateTimeBetween('-60 years', '-20 years')>
+    description: <sentences(3, true)>
+    emails: ['@contact-email-30']
+    jobTitle: <jobTitle()>
+    owner: '@admin'
+    organization: '@organization'
+    createdAt: <dateTimeBetween('2015-06-28', '2015-06-28')>
