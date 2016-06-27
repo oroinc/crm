@@ -4,15 +4,16 @@
 {% oro_title_set({params : {"%lead.name%": entity.name} }) %}
 
 {% block navButtons %}
-    {{ UI.button({
-        'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
-        'aCss':  'btn btn-danger action-button',
-        'iCss':  'icon-ban-circle',
-        'label': 'Disqualify',
-        'title': 'Disqualify',
-    }) }}
-    {{ parent() }}
     {% if resource_granted('EDIT', entity) %}
+        {% if (entity.status.name not in "canceled" and entity.status.name not in "disqualify") %}
+            {{ UI.button({
+                'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
+                'aCss':  'btn btn-danger action-button',
+                'iCss':  'icon-ban-circle',
+                'label': 'Disqualify',
+                'title': 'Disqualify',
+            }) }}
+        {% endif %}
         {{ UI.editButton({
             'path' : path('orocrm_sales_lead_update', { 'id': entity.id }),
             'entity_label': 'orocrm.sales.lead.entity_label'|trans
