@@ -36,7 +36,7 @@ class OpportunityStatusSelectTypeTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $probabilities
      */
-    public function testShoultHaveProbabilitiesAsDefaultOption(array $probabilities)
+    public function testShouldHaveProbabilitiesAsDefaultOption(array $probabilities)
     {
         $type = $this->getFormType($probabilities);
         $resolver = $this->getOptionsResolver();

@@ -9,7 +9,7 @@ use OroCRM\Bundle\SalesBundle\Provider\ProbabilityProvider;
 
 class ProbabilityProviderTest extends \PHPUnit_Framework_TestCase
 {
-    public function testShoultReturnProbabilityForExistingStatus()
+    public function testShouldReturnProbabilityForExistingStatus()
     {
         $provider = $this->getProvider();
         $status = $this->getOpportunityStatus('negotiation');
@@ -17,7 +17,7 @@ class ProbabilityProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.8, $provider->get($status));
     }
 
-    public function testShoultReturnNullForUnknownStatus()
+    public function testShouldReturnNullForUnknownStatus()
     {
         $provider = $this->getProvider();
         $status = $this->getOpportunityStatus('dummy');
@@ -25,7 +25,7 @@ class ProbabilityProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($provider->get($status));
     }
 
-    public function testShoultReturnProbabilityMap()
+    public function testShouldReturnProbabilityMap()
     {
         $provider = $this->getProvider();
 

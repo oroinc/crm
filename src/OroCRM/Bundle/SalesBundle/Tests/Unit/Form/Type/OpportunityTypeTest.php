@@ -19,7 +19,7 @@ use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
 
-    public function testShoultNotOverwriteProbability()
+    public function testShouldNotOverwriteProbability()
     {
         $opportunity = $this->getOpportunity('negotiation', 0.7);
         $event = $this->getFormEvent($opportunity);
@@ -30,7 +30,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
 
-    public function testShoultSetProbabilityBasedOnStatus()
+    public function testShouldSetProbabilityBasedOnStatus()
     {
         $opportunity = $this->getOpportunity('negotiation');
         $event = $this->getFormEvent($opportunity);
@@ -40,7 +40,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.8, $event->getData()->getProbability());
     }
 
-    public function testShoultSetProbabilityBasedOnDefaultStatus()
+    public function testShouldSetProbabilityBasedOnDefaultStatus()
     {
         $opportunity = $this->getOpportunity();
         $event = $this->getFormEvent($opportunity);
@@ -50,7 +50,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.1, $event->getData()->getProbability());
     }
 
-    public function testShoultNotChangeProbabilityWithoutDefaultStatus()
+    public function testShouldNotChangeProbabilityWithoutDefaultStatus()
     {
         $opportunity = $this->getOpportunity(null, 0.7);
         $event = $this->getFormEvent($opportunity);
@@ -61,7 +61,7 @@ class OpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.7, $opportunity->getProbability());
     }
 
-    public function testShoultNotChangeProbabilityWithUnknownStatus()
+    public function testShouldNotChangeProbabilityWithUnknownStatus()
     {
         $opportunity = $this->getOpportunity('dummy', 0.7);
         $event = $this->getFormEvent($opportunity);
