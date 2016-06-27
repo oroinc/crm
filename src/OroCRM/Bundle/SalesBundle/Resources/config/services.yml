@@ -26,6 +26,8 @@ parameters:
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
 
+    orocrm_sales.model.disqualify_lead.class: OroCRM\Bundle\SalesBundle\Model\DisqualifyLead
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -201,3 +203,12 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
+
+    orocrm_sales.model.disqualify_lead:
+        class: %orocrm_sales.model.disqualify_lead.class%
+        scope: request
+        arguments:
+             - '@request'
+             - '@session'
+             - '@router'
+             - '@doctrine.orm.entity_manager'

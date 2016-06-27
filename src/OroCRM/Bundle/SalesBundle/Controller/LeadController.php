@@ -176,7 +176,7 @@ class LeadController extends Controller
      */
     public function disqualifyAction(Lead $lead)
     {
-        return $this->redirect($this->generateUrl('orocrm_sales_lead_view', ['id' => $lead->getId()]));
+        return $this->get('orocrm_sales.model.disqualify_lead')->process($lead);
     }
 
     /**
