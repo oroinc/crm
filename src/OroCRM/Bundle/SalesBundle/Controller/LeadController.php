@@ -166,6 +166,20 @@ class LeadController extends Controller
     }
 
     /**
+     * @Route("/disqualify/{id}", name="orocrm_sales_lead_disqualify", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_sales_lead_disqualify",
+     *      type="entity",
+     *      permission="EDIT",
+     *      class="OroCRMSalesBundle:Lead"
+     * )
+     */
+    public function disqualifyAction(Lead $lead)
+    {
+        return $this->redirect($this->generateUrl('orocrm_sales_lead_view', ['id' => $lead->getId()]));
+    }
+
+    /**
      * @param Lead $entity
      *
      * @return array
