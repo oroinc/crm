@@ -1,6 +1,8 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -183,8 +185,12 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
-        $lead->setEmail($data['EmailAddress']);
         $lead->setPhoneNumber($data['TelephoneNumber']);
+
+        $email = new LeadEmail($data['EmailAddress']);
+        $email->setPrimary(true);
+        $lead->addEmail($email);
+
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setOrganization($this->organization);

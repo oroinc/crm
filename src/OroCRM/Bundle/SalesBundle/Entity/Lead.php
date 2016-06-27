@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -245,23 +246,44 @@ class Lead extends ExtendLead implements
     protected $phoneNumber;
 
     /**
-     * @var string
+     * @var Collection
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Oro\Versioned
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadEmail",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @Soap\ComplexType("OroCRM\Bundle\SalesBundle\Entity\LeadEmail[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
-     *          "dataaudit"={"auditable"=true},
      *          "importexport"={
-     *              "order"=100
+     *              "order"=210
      *          },
-     *          "entity"={
-     *              "contact_information"="email"
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
      */
-    protected $email;
+    protected $emails;
+
+//    /**
+//     * @var string
+//     *
+//     * @ORM\Column(name="email", type="string", length=255, nullable=true)
+//     * @Oro\Versioned
+//     * @ConfigField(
+//     *      defaultValues={
+//     *          "dataaudit"={"auditable"=true},
+//     *          "importexport"={
+//     *              "order"=100
+//     *          },
+//     *          "entity"={
+//     *              "contact_information"="email"
+//     *          }
+//     *      }
+//     * )
+//     */
+//    protected $email;
 
     /**
      * @var string
@@ -477,6 +499,7 @@ class Lead extends ExtendLead implements
         parent::__construct();
 
         $this->opportunities = new ArrayCollection();
+        $this->emails   = new ArrayCollection();
     }
 
     /**
@@ -669,29 +692,29 @@ class Lead extends ExtendLead implements
         return $this->phoneNumber;
     }
 
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Lead
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
+//    /**
+//     * Set email
+//     *
+//     * @param string $email
+//     *
+//     * @return Lead
+//     */
+//    public function setEmail($email)
+//    {
+//        $this->email = $email;
+//
+//        return $this;
+//    }
+//
+//    /**
+//     * Get email
+//     *
+//     * @return string
+//     */
+//    public function getEmail()
+//    {
+//        return $this->email;
+//    }
 
     /**
      * Set company name
@@ -1087,5 +1110,107 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * Set emails.
+     **
+     * @param Collection|LeadEmail[] $emails
+     *
+     * @return Contact
+     */
+    public function resetEmails($emails)
+    {
+        $this->emails->clear();
+
+        foreach ($emails as $email) {
+            $this->addEmail($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add email
+     *
+     * @param LeadEmail $email
+     *
+     * @return Contact
+     */
+    public function addEmail(LeadEmail $email)
+    {
+        if (!$this->emails->contains($email)) {
+            $this->emails->add($email);
+            $email->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove email
+     *
+     * @param LeadEmail $email
+     *
+     * @return Contact
+     */
+    public function removeEmail(LeadEmail $email)
+    {
+        if ($this->emails->contains($email)) {
+            $this->emails->removeElement($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get emails
+     *
+     * @return Collection|LeadEmail[]
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        $primaryEmail = $this->getPrimaryEmail();
+        if (!$primaryEmail) {
+            return null;
+        }
+
+        return $primaryEmail->getEmail();
+    }
+
+    /**
+     * @param LeadEmail $email
+     * @return bool
+     */
+    public function hasEmail(LeadEmail $email)
+    {
+        return $this->getEmails()->contains($email);
+    }
+
+    /**
+     * Gets primary email if it's available.
+     *
+     * @return LeadEmail|null
+     */
+    public function getPrimaryEmail()
+    {
+        $result = null;
+
+        foreach ($this->getEmails() as $email) {
+            if ($email->isPrimary()) {
+                $result = $email;
+                break;
+            }
+        }
+
+        return $result;
     }
 }
