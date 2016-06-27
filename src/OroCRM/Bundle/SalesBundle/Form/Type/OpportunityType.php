@@ -139,12 +139,10 @@ class OpportunityType extends AbstractType
                 'status',
                 'orocrm_sales_opportunity_status_select',
                 [
-                    'required'  => true,
-                    'label'     => 'orocrm.sales.opportunity.status.label',
-                    'enum_code' => Opportunity::INTERNAL_STATUS_CODE,
-                    'constraints' => [
-                        new NotNull()
-                    ]
+                    'required'    => true,
+                    'label'       => 'orocrm.sales.opportunity.status.label',
+                    'enum_code'   => Opportunity::INTERNAL_STATUS_CODE,
+                    'constraints' => [new NotNull()]
                 ]
             );
         
