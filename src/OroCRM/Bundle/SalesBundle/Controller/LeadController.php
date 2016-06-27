@@ -166,6 +166,8 @@ class LeadController extends Controller
     }
 
     /**
+     * Change status for lead
+     *
      * @Route("/disqualify/{id}", name="orocrm_sales_lead_disqualify", requirements={"id"="\d+"})
      * @Acl(
      *      id="orocrm_sales_lead_disqualify",
@@ -177,6 +179,22 @@ class LeadController extends Controller
     public function disqualifyAction(Lead $lead)
     {
         return $this->get('orocrm_sales.model.disqualify_lead')->process($lead);
+    }
+
+    /**
+     * Change status for lead
+     *
+     * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
+     * @Acl(
+     *      id="orocrm_sales_lead_convert_to_opportunity",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMSalesBundle:Lead"
+     * )
+     */
+    public function convertToOpportunity(Lead $lead)
+    {
+        return 1;
     }
 
     /**
