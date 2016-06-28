@@ -83,7 +83,7 @@
     form_row(form.customer),
     form_row(form.dataChannel) ]) %}
 
-    {% if form.contact is defined %}
+    {% if not form.vars.contact_as_subform %}
         {% set formFields = formFields|merge([form_row(form.contact)]) %}
     {% endif %}
 
@@ -128,6 +128,23 @@
         'data' : additionalData
         }]
         }] ) %}
+    {% endif %}
+
+    {% if form.vars.contact_as_subform %}
+        {% set newContactData = [] %}
+        {% for child in form.contact %}
+            {% set newContactData = newContactData|merge([form_row(child)]) %}
+        {% endfor %}
+        {% if newContactData is not empty %}
+            {% set dataBlocks = dataBlocks|merge([{
+            'title': 'New contact'|trans,
+            'subblocks': [{
+            'title': '',
+            'useSpan': false,
+            'data' : newContactData
+            }]
+            }] ) %}
+        {% endif %}
     {% endif %}
 
     {% set data = {

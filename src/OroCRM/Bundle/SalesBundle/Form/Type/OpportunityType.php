@@ -43,8 +43,9 @@ class OpportunityType extends AbstractType
                     'required'               => false,
                     'label'                  => 'orocrm.sales.opportunity.contact.label',
                     'new_item_property_name' => 'firstName',
+                    'create_enabled'         => $allowCreateNewValue,
                     'configs'                => [
-                        'allowCreateNew' => $allowCreateNewValue,
+                        'allowCreateNew' => true,
                         'renderedPropertyName'    => 'fullName',
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
@@ -59,7 +60,8 @@ class OpportunityType extends AbstractType
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',
                     'new_item_property_name' => 'name',
-                    'configs'                => ['allowCreateNew' => $allowCreateNewValue],
+                    'create_enabled'         => $allowCreateNewValue,
+                    'configs'                => ['allowCreateNew' => true],
                 ]
             )
             ->add('name', 'text', ['required' => true, 'label' => 'orocrm.sales.opportunity.name.label'])
