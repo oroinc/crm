@@ -31,11 +31,9 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             - Length:
                 max: 255
         firstName:
-            - NotBlank: ~
             - Length:
                 max: 255
         lastName:
-            - NotBlank: ~
             - Length:
                 max: 255
         dataChannel:
