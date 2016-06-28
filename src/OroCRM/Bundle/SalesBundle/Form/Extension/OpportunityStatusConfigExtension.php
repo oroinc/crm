@@ -7,6 +7,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 
 /**
@@ -34,9 +35,10 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        // bind before EnumFieldConfigExtension clears the submitted data
         $builder->addEventListener(FormEvents::SUBMIT, [$this, 'onSubmit']);
         // bind with lower priority, we need populated 'enum_options'
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'preSetData'], -1);
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, [$this, 'onPreSetData'], -1);
     }
 
     /**
@@ -45,7 +47,7 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
      *
      * @param FormEvent $event
      */
-    public function preSetData(FormEvent $event)
+    public function onPreSetData(FormEvent $event)
     {
         $data = $event->getData();
         $probabilityConfig = $this->configManager->get(self::CONFIG_KEY);
@@ -65,7 +67,6 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
 
     /**
      * Submit event handler
-     * Cleanup empty rows and
      * Store the opportunity-probability map into the System Config (scoped)
      *
      * @param FormEvent $event
@@ -73,19 +74,21 @@ class OpportunityStatusConfigExtension extends AbstractTypeExtension
     public function onSubmit(FormEvent $event)
     {
         $data = $event->getData();
-
-        // cleanup empty enum options
-        foreach ($data['enum']['enum_options'] as $key => $enum_option) {
-            if (empty($enum_option['label'])) {
-                unset($data['enum']['enum_options'][$key]);
-            }
-        }
-
-        $event->setData($data);
-
         $value = [];
+
         foreach ($data['enum']['enum_options'] as $enum_option) {
-            $value[$enum_option['id']] = isset($enum_option['probability']) ? $enum_option['probability'] : null;
+            if (empty($enum_option['label'])) {
+                continue;
+            }
+            $id = $enum_option['id'];
+
+            if (empty($id)) {
+                // enum_option is just added and still does not have a generated id
+                // we generate one, because we bind before the option is persisted
+                $id = ExtendHelper::buildEnumValueId($enum_option['label']);
+            }
+
+            $value[$id] = isset($enum_option['probability']) ? $enum_option['probability'] : null;
         }
 
         $this->configManager->set(self::CONFIG_KEY, $value);

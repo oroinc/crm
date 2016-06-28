@@ -59,8 +59,7 @@ class OpportunityStatusConfigType extends AbstractType
                 'label' => false,
             ]
         );
-
-        $builder->setData(['enum' => $config->all()]);
+        $builder->setData(['enum' => $config->all(), 'use_parent_scope_value' => false]);
     }
 
     /**

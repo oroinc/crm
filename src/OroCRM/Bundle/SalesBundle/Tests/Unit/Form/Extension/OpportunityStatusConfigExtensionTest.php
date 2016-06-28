@@ -47,23 +47,9 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
         ];
 
         $extension = $this->getFormExtension($configManager);
-        $extension->preSetData($event);
+        $extension->onPreSetData($event);
 
         $this->assertEquals($expectedData, $event->getData());
-    }
-
-    /**
-     * @dataProvider eventDataProvider
-     */
-    public function testShouldCleanupEmptyValues(array $eventData)
-    {
-        $configManager = $this->getConfigManagerMock();
-        $event = $this->getFormEvent($eventData);
-
-        $extension = $this->getFormExtension($configManager);
-        $extension->onSubmit($event);
-
-        $this->assertCount(2, $event->getData()['enum']['enum_options']);
     }
 
     /**
@@ -77,6 +63,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
         $expectedData = [
             'in_progress' => 0.2,
             'negotiation' => 0.8,
+            'empty' => null,
         ];
 
         $configManager->expects($this->any())
@@ -106,7 +93,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
                             ],
                             [
                                 'id' => 'empty',
-                                'foo' => 'bar',
+                                'label' => 'empty',
                             ],
                         ]
                     ]
@@ -116,7 +103,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $probabilities
+     * @param ConfigManager $configManager
      *
      * @return OpportunityStatusConfigExtension
      */
@@ -128,7 +115,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param array $probabilities
      *
-     * @return ConfigManager
+     * @return ConfigManager|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getConfigManagerMock(array $probabilities = [])
     {
@@ -150,6 +137,7 @@ class OpportunityStatusConfigExtensionTest extends \PHPUnit_Framework_TestCase
      */
     private function getFormEvent(array $data)
     {
+        /* @var $form FormInterface|\PHPUnit_Framework_MockObject_MockObject*/
         $form = $this->getMock(FormInterface::class);
 
         return new FormEvent($form, $data);
