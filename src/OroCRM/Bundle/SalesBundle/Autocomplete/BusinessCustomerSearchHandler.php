@@ -48,16 +48,4 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 
         return sprintf("%s (%s)", $customerName, $accountName);
     }
-
-    /**
-     * Get search results data by id
-     *
-     * @param int $query
-     *
-     * @return array
-     */
-    protected function findById($query)
-    {
-        return $this->getEntitiesByIds(explode(',', $query));
-    }
 }
