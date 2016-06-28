@@ -3,7 +3,6 @@ oro_system_configuration:
         opportunity_configuration:
             icon:  icon-usd
             title: orocrm.sales.system_configuration.groups.opportunity_configuration.title
-            page_reload: true
 
         opportunity_status_probabilities:
             title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
