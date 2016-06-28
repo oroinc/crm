@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Autocomplete;
 
 use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use Doctrine\ORM\QueryBuilder;
 
 class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {
@@ -20,7 +21,7 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 
         foreach ($this->properties as $property) {
             if ($property === 'name') {
-                $result[$property] = $this->checkCustomerName($item);
+                $result[$property] = $this->getCustomerName($item);
             } else {
                 $result[$property] = $this->getPropertyValue($property, $item);
             }
@@ -37,15 +38,30 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
      * @param B2bCustomer   $entity
      * @return string
      */
-    protected function checkCustomerName(B2bCustomer $entity)
+    protected function getCustomerName(B2bCustomer $entity)
     {
-        $accountName  = $entity->getAccount()->getName();
         $customerName = $entity->getName();
+        $accountName  = $entity->getAccount() ? $entity->getAccount()->getName() : $customerName;
 
         if ($accountName === $customerName) {
             return $customerName;
         }
+        
+        return sprintf('%s (%s)', $customerName, $accountName);
+    }
 
-        return sprintf("%s (%s)", $customerName, $accountName);
+    /**
+     * @param array $entityIds
+     * @return array
+     */
+    protected function getEntitiesByIds(array $entityIds)
+    {
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = $this->entityRepository->createQueryBuilder('c');
+        $queryBuilder->select('c', 'account');
+        $queryBuilder->leftJoin('c.account', 'account');
+        $queryBuilder->where($queryBuilder->expr()->in('c.' . $this->idFieldName, $entityIds));
+
+        return $queryBuilder->getQuery()->getResult();
     }
 }
