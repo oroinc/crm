@@ -6,6 +6,8 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
+use Symfony\Component\HttpKernel\Exception\HttpException;
+
 class LeadToOpportunityProvider
 {
     /**
@@ -14,6 +16,12 @@ class LeadToOpportunityProvider
      */
     public function convertToOpportunityEntity(Lead $lead)
     {
+        $leadStatus = $lead->getStatus()->getName();
+
+        if ( $leadStatus !== 'new' ) {
+            throw new HttpException(403, 'Not allowed action');
+        }
+
         $opportunity = new Opportunity();
         $opportunity->setLead($lead);
         $contact = $lead->getContact() instanceof Contact ? $lead->getContact() : new Contact();
