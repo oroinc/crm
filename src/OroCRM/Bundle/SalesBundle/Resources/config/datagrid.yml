@@ -980,8 +980,6 @@ datagrid:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
             name:
                 label:          orocrm.sales.b2bcustomer.name.label
-            cAccountName:
-                label:          orocrm.account.name.label
             lifetime:
                 label:          orocrm.sales.b2bcustomer.lifetime.label
                 frontend_type:  currency
@@ -1239,7 +1237,6 @@ datagrid:
         columns:
             accountName:
                 label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
-                renderable: false
         sorters:
             columns:
                 accountName: { data_name: accountName }
