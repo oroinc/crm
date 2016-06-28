@@ -5,11 +5,8 @@ namespace OroCRM\Bundle\SalesBundle\Autocomplete;
 use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class AccountSearchHandler extends ChannelLimitationHandler
+class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {
-
-    const CUSTOMER_NAME_PROPERTY = 'name';
-
     /**
      * {@inheritdoc}
      */
@@ -22,8 +19,8 @@ class AccountSearchHandler extends ChannelLimitationHandler
         }
 
         foreach ($this->properties as $property) {
-            if ($property === self::CUSTOMER_NAME_PROPERTY) {
-                $result[$property] = $this->checkCustomerName($property, $item);
+            if ($property === 'name') {
+                $result[$property] = $this->checkCustomerName($item);
             } else {
                 $result[$property] = $this->getPropertyValue($property, $item);
             }
@@ -33,22 +30,34 @@ class AccountSearchHandler extends ChannelLimitationHandler
     }
 
     /**
-     * Check if customer name is equal with account name
-     * and return customer name with account if not equal
+     * Returns customer name with account name in parentheses
+     * if their names not identical.
+     * Otherwise returns only customer name.
      *
-     * @param string        $propertyPath
      * @param B2bCustomer   $entity
      * @return string
      */
-    private function checkCustomerName($propertyPath, B2bCustomer $entity)
+    protected function checkCustomerName(B2bCustomer $entity)
     {
         $accountName  = $entity->getAccount()->getName();
         $customerName = $entity->getName();
 
         if ($accountName === $customerName) {
-            return $this->getPropertyValue($propertyPath, $entity);
+            return $customerName;
         }
 
-        return $customerName . '('.$accountName.')';
+        return sprintf("%s (%s)", $customerName, $accountName);
+    }
+
+    /**
+     * Get search results data by id
+     *
+     * @param int $query
+     *
+     * @return array
+     */
+    protected function findById($query)
+    {
+        return $this->getEntitiesByIds(explode(',', $query));
     }
 }

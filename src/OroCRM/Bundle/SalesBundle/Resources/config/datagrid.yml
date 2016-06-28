@@ -970,13 +970,11 @@ datagrid:
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
-                    - account.name as cAccountName
                 from:
                     - { table: %orocrm_sales.b2bcustomer.entity.class%, alias: c }
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
-                        - { join: c.account, alias: account }
         columns:
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
@@ -997,7 +995,6 @@ datagrid:
             columns:
                 channelName:  { data_name: channelName }
                 name:         { data_name: c.name }
-                cAccountName: { data_name: cAccountName }
                 lifetime:     { data_name: c.lifetime }
                 createdAt:    { data_name: c.createdAt }
                 updatedAt:    { data_name: c.updatedAt }
@@ -1232,6 +1229,26 @@ datagrid:
 
     orocrm-sales-b2bcustomers-select-grid:
         extends: base-sales-b2bcustomers-grid
+        source:
+            query:
+                select:
+                    - account.name as accountName
+                join:
+                    left:
+                        - { join: c.account, alias: account }
+        columns:
+            accountName:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
+                renderable: false
+        sorters:
+            columns:
+                accountName: { data_name: accountName }
+        filters:
+            columns:
+                accountName:
+                    type: string
+                    data_name: accountName
+                    enabled: false
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
