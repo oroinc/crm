@@ -150,7 +150,7 @@ class Lead extends ExtendLead implements
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
@@ -182,7 +182,7 @@ class Lead extends ExtendLead implements
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=255)
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={

@@ -283,9 +283,9 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('name', 'string', ['length' => 255]);
         $table->addColumn('name_prefix', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('first_name', 'string', ['length' => 255]);
+        $table->addColumn('first_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('middle_name', 'string', ['notnull' => false, 'length' => 255]);
-        $table->addColumn('last_name', 'string', ['length' => 255]);
+        $table->addColumn('last_name', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('name_suffix', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('job_title', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
@@ -311,7 +311,7 @@ class OroCRMSalesBundleInstaller implements
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
+            ['extend' => ['owner' => ExtendScope::OWNER_SYSTEM]]
         );
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
