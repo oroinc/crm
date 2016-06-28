@@ -557,9 +557,8 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: l.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
                 contactName:
                     type: string
                     data_name: contactName
@@ -723,9 +722,8 @@ datagrid:
                     type: choice-tree
                     label: oro.user.owner.label
                     data_name: salesFunnel.owner
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
@@ -1107,9 +1105,8 @@ datagrid:
                     type: choice-tree
                     data_name: c.owner
                     enabled: false                    
-                    options:
-                        lazy: "@oro_user.provider.filter.user_choice_tree->shouldBeLazy"
-                        data: "@?oro_user.provider.filter.user_choice_tree->getList"
+                    autocomplete_alias: users
+                    renderedPropertyName: 'fullName'
                 accountName:
                     type: string
                     data_name: accountName
