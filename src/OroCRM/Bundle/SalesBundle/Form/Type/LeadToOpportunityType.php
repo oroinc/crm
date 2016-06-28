@@ -5,6 +5,8 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -12,13 +14,16 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class LeadToOpportunityType extends OpportunityType
 {
     const NAME = 'orocrm_sales_lead_to_opportunity';
+    const CONTACT_FORM_ID = 'orocrm_contact';
+
+    protected $contactAsSubForm = false;
 
     /**
      * {@inheritdoc}
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function finishView(FormView $view, FormInterface $form, array $options)
     {
-        parent::buildForm($builder, $options);
+        $view->vars['contact_as_subform'] = $this->contactAsSubForm;
     }
 
     /**
@@ -42,12 +47,17 @@ class LeadToOpportunityType extends OpportunityType
     {
         parent::addListeners($builder);
 
+        $contactAsSubForm = &$this->contactAsSubForm;
+
         $builder->addEventListener(
-            FormEvents::POST_SET_DATA,
-            function (FormEvent $event) {
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) use (&$contactAsSubForm) {
                 $opportunity = $event->getData();
                 if ($opportunity instanceof Opportunity && !$opportunity->getContact()->getId()) {
-                    $event->getForm()->remove('contact');
+                    $event->getForm()
+                        ->remove('contact')
+                        ->add('contact', self::CONTACT_FORM_ID);
+                    $contactAsSubForm = true;
                 }
             }
         );
