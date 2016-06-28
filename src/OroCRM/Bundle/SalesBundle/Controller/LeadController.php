@@ -185,19 +185,22 @@ class LeadController extends Controller
      * Change status for lead
      *
      * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
-     * @Template
      * @Acl(
      *      id="orocrm_sales_lead_convert_to_opportunity",
      *      type="entity",
      *      permission="CREATE",
      *      class="OroCRMSalesBundle:Lead"
      * )
+     * @Template()
      */
-    public function convertToOpportunity(Lead $lead)
+    public function convertToOpportunityAction(Lead $lead)
     {
-        return [
-            'entity' => $lead
-        ];
+        return $this->get('oro_form.model.update_handler')->update(
+            $this->get('orocrm_sales.provider.lead_to_opportunity')->convertToOpportunityEntity($lead),
+            $this->get('orocrm_sales.lead_to_opportunity.form'),
+            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            $this->get('orocrm_sales.lead_to_opportunity.form.handler')
+        );
     }
 
     /**

@@ -1,0 +1,150 @@
+{% extends 'OroUIBundle:actions:update.html.twig' %}
+{% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%opportunity.name%": name} }) %}
+
+{% set pageComponent = {
+'module': 'oroui/js/app/components/view-component',
+'options': {'view': 'orocrmsales/js/app/views/update-page-view'},
+'layout': 'separate'
+} %}
+
+{% set formAction = form.vars.value.id
+? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
+: path('orocrm_sales_opportunity_create')
+%}
+
+{% block head_script %}
+    {{ parent() }}
+    {% block stylesheets %}
+        {{ form_stylesheet(form) }}
+    {% endblock %}
+{% endblock %}
+
+{% block navButtons %}
+    {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
+        {{ UI.deleteButton({
+            'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
+            'dataRedirect': path('orocrm_sales_opportunity_index'),
+            'aCss': 'no-hash remove-button',
+            'id': 'btn-remove-oppotunity',
+            'dataId': form.vars.value.id,
+            'entity_label': 'orocrm.sales.opportunity.entity_label'|trans,
+        }) }}
+        {{ UI.buttonSeparator() }}
+    {% endif %}
+    {{ UI.cancelButton(path('orocrm_sales_opportunity_index')) }}
+    {% set html = UI.saveAndCloseButton({
+    'route': 'orocrm_sales_opportunity_view',
+    'params': {'id': '$id'}
+    }) %}
+    {% if resource_granted('orocrm_sales_opportunity_create') %}
+        {% set html = html ~ UI.saveAndNewButton({
+        'route': 'orocrm_sales_opportunity_create'
+        }) %}
+    {% endif %}
+    {% if form.vars.value.id or resource_granted('orocrm_sales_opportunity_update') %}
+        {% set html = html ~ UI.saveAndStayButton({
+        'route': 'orocrm_sales_opportunity_update',
+        'params': {'id': '$id'}
+        }) %}
+    {% endif %}
+    {{ UI.dropdownSaveButton({'html': html}) }}
+{% endblock %}
+
+{% block pageHeader %}
+    {% if form.vars.value.id %}
+        {% set breadcrumbs = {
+        'entity':      form.vars.value,
+        'indexPath':   path('orocrm_sales_opportunity_index'),
+        'indexLabel': 'orocrm.sales.opportunity.entity_plural_label'|trans,
+        'entityTitle': name
+        } %}
+        {{ parent() }}
+    {% else %}
+        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.sales.opportunity.entity_label'|trans}) %}
+        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
+    {% endif %}
+{% endblock pageHeader %}
+
+{% block stats %}
+    <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
+    <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
+{% endblock stats %}
+
+{% block breadcrumbs %}
+    {{ parent() }}
+    {% if entity.status %}
+        <div class="pull-left">
+            {% if entity.status.id != 'lost' %}
+                <div class="badge badge-enabled status-enabled">
+                    <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
+            {% else %}
+                <div class="badge badge-disabled status-disabled">
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock breadcrumbs %}
+
+{% block content_data %}
+    {% set id = 'opportunity-profile' %}
+
+    {% set formFields = [] %}
+    {% if form.owner is defined %}
+        {% set formFields = formFields|merge([form_row(form.owner)]) %}
+    {% endif %}
+
+    {% set formFields = formFields|merge([
+    form_row(form.name, {attr: {autofocus: true}}),
+    form_row(form.customer),
+    form_row(form.dataChannel),
+    form_row(form.contact),
+    form_row(form.status),
+    form_row(form.probability),
+    form_row(form.budgetAmount),
+    form_row(form.closeDate),
+    form_row(form.closeRevenue),
+    form_row(form.closeReason)
+    ]) %}
+
+    {% set dataBlocks = [{
+    'title': 'General'|trans,
+    'class': 'active',
+    'subblocks': [
+    {
+    'title': 'Opportunity Information'|trans,
+    'data': formFields
+    },
+    {
+    'data':
+    [
+    form_row(form.customerNeed, { 'attr': {'class': 'expanded-text-field'} }),
+    form_row(form.proposedSolution, { 'attr': {'class': 'expanded-text-field'} }),
+    form_row(form.notes, { 'attr': {'class': 'expanded-text-field'} })
+    ]
+    }
+    ]
+    }] %}
+
+    {% set additionalData = [] %}
+    {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
+        {% set additionalData = additionalData|merge([form_row(child)]) %}
+    {% endfor %}
+    {% if additionalData is not empty %}
+        {% set dataBlocks = dataBlocks|merge([{
+        'title': 'Additional'|trans,
+        'subblocks': [{
+        'title': '',
+        'useSpan': false,
+        'data' : additionalData
+        }]
+        }] ) %}
+    {% endif %}
+
+    {% set data = {
+    'formErrors': form_errors(form) ? form_errors(form) : null,
+    'dataBlocks': dataBlocks,
+    } %}
+    {{ parent() }}
+{% endblock content_data %}
