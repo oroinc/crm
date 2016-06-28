@@ -15,9 +15,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 /**
  * Manage Opportunity Status Enum options from the System Config
  * FormType is extended by:
- * {@link Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension} to retrieve/store the enum options
+ * {@link Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension} to retrieve/store enum options
  * and
- * {@link OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension} to retrieve/store the probability map
+ * {@link OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension} to retrieve/store a probability map
  */
 class OpportunityStatusConfigType extends AbstractType
 {
