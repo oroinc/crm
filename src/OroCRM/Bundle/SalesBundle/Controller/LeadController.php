@@ -16,6 +16,7 @@ use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @Route("/lead")
@@ -215,11 +216,16 @@ class LeadController extends Controller
      *      class="OroCRMSalesBundle:Opportunity"
      * )
      */
-    public function createOpportunityFromLeadAction(Opportunity $opportunity)
+    public function createOpportunityFromLeadAction(Request $request)
     {
+        $opportunity = new Opportunity();
+        $formId = $request->query->get('contact_as_subform') ?
+            'orocrm_sales.lead_to_opportunity_with_subform.form' :
+            'orocrm_sales.opportunity.form';
+
         return $this->get('oro_form.model.update_handler')->update(
             $opportunity,
-            $this->get('orocrm_sales.lead_to_opportunity.form'),
+            $this->get($formId),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
             $this->get('orocrm_sales.lead_to_opportunity.form.handler')
         );

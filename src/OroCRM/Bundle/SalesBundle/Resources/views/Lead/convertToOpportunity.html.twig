@@ -8,7 +8,9 @@
 'layout': 'separate'
 } %}
 
-{% set formAction = path('orocrm_sales_lead_create_opportunity') %}
+{% set formAction = path('orocrm_sales_lead_create_opportunity', {
+    'contact_as_subform' : form.vars.contact_as_subform
+}) %}
 
 {% block head_script %}
     {{ parent() }}
@@ -128,20 +130,47 @@
     {% endif %}
 
     {% if form.vars.contact_as_subform %}
-        {% set newContactData = [] %}
-        {% for child in form.contact %}
-            {% set newContactData = newContactData|merge([form_row(child)]) %}
-        {% endfor %}
-        {% if newContactData is not empty %}
-            {% set dataBlocks = dataBlocks|merge([{
+        {% set dataBlocks = dataBlocks|merge([{
             'title': 'New contact'|trans,
             'subblocks': [{
-            'title': '',
-            'useSpan': false,
-            'data' : newContactData
-            }]
-            }] ) %}
-        {% endif %}
+                'title': 'Information'|trans,
+                'data': [
+                    form_row(form.contact.owner),
+                    form_row(form.contact.namePrefix),
+                    form_row(form.contact.firstName),
+                    form_row(form.contact.middleName),
+                    form_row(form.contact.lastName),
+                    form_row(form.contact.nameSuffix),
+                    form_row(form.contact.jobTitle),
+                    form_row(form.contact.description),
+                    form_row(form.contact.birthday),
+                    form_row(form.contact.gender),
+                    form_row(form.contact.picture),
+                    form_row(form.contact.assignedTo),
+                    form_row(form.contact.reportsTo),
+                    form_row(form.contact.source),
+                    form_row(form.contact.method)
+                ]
+            },
+            {
+                'title': 'Contact details'|trans,
+                'data': [
+                    form_row(form.contact.emails),
+                    form_row(form.contact.phones),
+                    form_row(form.contact.fax),
+                    form_row(form.contact.skype),
+                    form_row(form.contact.twitter),
+                    form_row(form.contact.facebook),
+                    form_row(form.contact.googlePlus),
+                    form_row(form.contact.linkedIn)
+                ]
+            },
+            {
+                'title': 'orocrm.contact.addresses.label'|trans,
+                'data': [form_widget(form.contact.addresses)]
+            }
+        ]
+        }]) %}
     {% endif %}
 
     {% set data = {
