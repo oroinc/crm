@@ -20,6 +20,9 @@ class LeadToOpportunityProvider
         $opportunity
             ->setName($lead->getName())
             ->setContact($contact);
+        if ($customer = $lead->getCustomer()) {
+            $opportunity->setCustomer($customer);
+        }
 
         return $opportunity;
     }
