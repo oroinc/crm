@@ -155,11 +155,13 @@ datagrid:
                     data_name: a.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
                     autocomplete_alias: business_units_search_handler
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
@@ -401,10 +403,12 @@ datagrid:
                     data_name: a.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         options:
             entityHint: account
 

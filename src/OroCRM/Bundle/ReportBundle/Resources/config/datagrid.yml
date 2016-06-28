@@ -432,6 +432,7 @@ datagrid:
                     data_name: o.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 inProgressCount:
                     type:      number-range
                     data_name: inProgressCount
