@@ -2,10 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
-use DateTime;
-
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+
+use Oro\Component\DoctrineUtils\ORM\QueryUtils;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -17,21 +17,26 @@ class LeadRepository extends EntityRepository
      * @param  AclHelper $aclHelper
      * @param  int       $limit
      * @param  array     $dateRange
+     *
      * @return array     [itemCount, label]
      */
-    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null)
+    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null, $owners = [])
     {
-        $qb   = $this->createQueryBuilder('l')
+        $qb = $this->createQueryBuilder('l')
             ->select('s.id as source, count(o.id) as itemCount')
             ->leftJoin('l.opportunities', 'o')
             ->leftJoin('l.source', 's')
             ->groupBy('source');
 
-        if ($dateRange) {
+        if ($dateRange && $dateRange['start'] && $dateRange['end']) {
             $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
                 ->setParameter('dateStart', $dateRange['start'])
                 ->setParameter('dateEnd', $dateRange['end']);
         }
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
         $rows = $aclHelper->apply($qb)->getArrayResult();
 
         return $this->processOpportunitiesByLeadSource($rows, $limit);
@@ -113,6 +118,7 @@ class LeadRepository extends EntityRepository
                 if ($a['itemCount'] === $b['itemCount']) {
                     return 0;
                 }
+
                 return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
             }
         );
@@ -120,28 +126,30 @@ class LeadRepository extends EntityRepository
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param int[] $owners
      *
      * @return int
      */
-    public function getLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end);
+        $qb = $this->createLeadsCountQb($start, $end, $owners);
 
         return $aclHelper->apply($qb)->getSingleScalarResult();
     }
 
     /**
      * @param AclHelper $aclHelper
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param int[] $owners
      *
      * @return int
      */
-    public function getNewLeadsCount(AclHelper $aclHelper, DateTime $start, DateTime $end)
+    public function getNewLeadsCount(AclHelper $aclHelper, \DateTime $start = null, \DateTime $end = null, $owners = [])
     {
-        $qb = $this->createLeadsCountQb($start, $end)
+        $qb = $this->createLeadsCountQb($start, $end, $owners)
             ->andWhere('l.status = :status')
             ->setParameter('status', 'new');
 
@@ -149,21 +157,33 @@ class LeadRepository extends EntityRepository
     }
 
     /**
-     * @param DateTime $start
-     * @param DateTime $end
+     * @param \DateTime $start
+     * @param \DateTime $end
+     * @param int[] $owners
      *
      * @return QueryBuilder
      */
-    protected function createLeadsCountQb(DateTime $start, DateTime $end)
+    protected function createLeadsCountQb(\DateTime $start = null, \DateTime $end = null, $owners = [])
     {
         $qb = $this->createQueryBuilder('l');
 
         $qb
             ->select('COUNT(DISTINCT l.id)')
-            ->andWhere($qb->expr()->between('l.createdAt', ':start', ':end'))
-            ->innerJoin('l.opportunities', 'o')
-            ->setParameter('start', $start)
-            ->setParameter('end', $end);
+            ->innerJoin('l.opportunities', 'o');
+        if ($start) {
+            $qb
+                ->andWhere('l.createdAt > :start')
+                ->setParameter('start', $start);
+        }
+        if ($end) {
+            $qb
+                ->andWhere('l.createdAt < :end')
+                ->setParameter('end', $end);
+        }
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'l.owner', $owners);
+        }
 
         return $qb;
     }
