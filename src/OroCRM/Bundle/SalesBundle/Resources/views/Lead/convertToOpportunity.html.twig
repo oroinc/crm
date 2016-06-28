@@ -8,10 +8,7 @@
 'layout': 'separate'
 } %}
 
-{% set formAction = form.vars.value.id
-? path('orocrm_sales_opportunity_update', { 'id': form.vars.value.id })
-: path('orocrm_sales_opportunity_create')
-%}
+{% set formAction = path('orocrm_sales_lead_create_opportunity') %}
 
 {% block head_script %}
     {{ parent() }}

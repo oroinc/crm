@@ -15,6 +15,7 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
  * @Route("/lead")
@@ -197,6 +198,27 @@ class LeadController extends Controller
     {
         return $this->get('oro_form.model.update_handler')->update(
             $this->get('orocrm_sales.provider.lead_to_opportunity')->convertToOpportunityEntity($lead),
+            $this->get('orocrm_sales.lead_to_opportunity.form'),
+            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            $this->get('orocrm_sales.lead_to_opportunity.form.handler')
+        );
+    }
+
+    /**
+     * Change status for lead
+     *
+     * @Route("/opportunity/create", name="orocrm_sales_lead_create_opportunity")
+     * @Acl(
+     *      id="orocrm_sales_lead_create_opportunity",
+     *      type="entity",
+     *      permission="CREATE",
+     *      class="OroCRMSalesBundle:Opportunity"
+     * )
+     */
+    public function createOpportunityFromLeadAction(Opportunity $opportunity)
+    {
+        return $this->get('oro_form.model.update_handler')->update(
+            $opportunity,
             $this->get('orocrm_sales.lead_to_opportunity.form'),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
             $this->get('orocrm_sales.lead_to_opportunity.form.handler')
