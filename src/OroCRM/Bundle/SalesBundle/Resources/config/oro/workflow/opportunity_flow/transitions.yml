@@ -137,6 +137,10 @@ workflows:
                 frontend_options:
                     icon: 'icon-backward'
                     class: 'btn-primary'
+                    pageComponent:
+                        module: 'oroui/js/app/components/view-component'
+                        options:
+                            view: 'orocrmsales/js/app/views/opportunity-status-select-view'
                 transition_definition: reopen_definition
                 form_options:
                     attribute_fields:
@@ -152,7 +156,7 @@ workflows:
                                     selection_template_twig: 'OroFormBundle:Autocomplete:fullName/selection.html.twig'
                         budget_amount: ~
                         status:
-                            form_type: oro_enum_select
+                            form_type: orocrm_sales_opportunity_status_select
                             options:
                                 enum_code: opportunity_status
                                 required: true
