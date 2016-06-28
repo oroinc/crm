@@ -50,7 +50,7 @@ define(function(require) {
 
                 if (probabilities.hasOwnProperty(val)) {
                     defaultProbability = probabilities[val] * 100;
-                    probability.val(defaultProbability)
+                    probability.val(defaultProbability);
                 }
             });
         }

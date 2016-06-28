@@ -30,7 +30,7 @@ define(function(require) {
 
                 if (defaultProbabilities.hasOwnProperty(val)) {
                     defaultProbability = defaultProbabilities[val] * 100;
-                    probability.val(defaultProbability)
+                    probability.val(defaultProbability);
                 }
             });
         }
