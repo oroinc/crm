@@ -21,17 +21,6 @@
 {% endblock %}
 
 {% block navButtons %}
-    {% if form.vars.value.id and resource_granted('DELETE', form.vars.value) %}
-        {{ UI.deleteButton({
-            'dataUrl': path('oro_api_delete_opportunity', {'id': form.vars.value.id}),
-            'dataRedirect': path('orocrm_sales_opportunity_index'),
-            'aCss': 'no-hash remove-button',
-            'id': 'btn-remove-oppotunity',
-            'dataId': form.vars.value.id,
-            'entity_label': 'orocrm.sales.opportunity.entity_label'|trans,
-        }) }}
-        {{ UI.buttonSeparator() }}
-    {% endif %}
     {{ UI.cancelButton(path('orocrm_sales_opportunity_index')) }}
     {% set html = UI.saveAndCloseButton({
     'route': 'orocrm_sales_opportunity_view',
@@ -40,12 +29,6 @@
     {% if resource_granted('orocrm_sales_opportunity_create') %}
         {% set html = html ~ UI.saveAndNewButton({
         'route': 'orocrm_sales_opportunity_create'
-        }) %}
-    {% endif %}
-    {% if form.vars.value.id or resource_granted('orocrm_sales_opportunity_update') %}
-        {% set html = html ~ UI.saveAndStayButton({
-        'route': 'orocrm_sales_opportunity_update',
-        'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
@@ -80,7 +63,7 @@
                     <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
             {% else %}
                 <div class="badge badge-disabled status-disabled">
-                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name  }}</div>
+                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name }}</div>
             {% endif %}
         </div>
     {% endif %}
@@ -98,8 +81,13 @@
     {% set formFields = formFields|merge([
     form_row(form.name, {attr: {autofocus: true}}),
     form_row(form.customer),
-    form_row(form.dataChannel),
-    form_row(form.contact),
+    form_row(form.dataChannel) ]) %}
+
+    {% if form.contact is defined %}
+        {% set formFields = formFields|merge([form_row(form.contact)]) %}
+    {% endif %}
+
+    {% set formFields = formFields|merge([
     form_row(form.status),
     form_row(form.probability),
     form_row(form.budgetAmount),

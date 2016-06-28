@@ -2,8 +2,12 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LeadToOpportunityType extends OpportunityType
 {
@@ -28,6 +32,24 @@ class LeadToOpportunityType extends OpportunityType
             [
                 'convert_lead_to_opportunity' => true
             ]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function addListeners(FormBuilderInterface $builder)
+    {
+        parent::addListeners($builder);
+
+        $builder->addEventListener(
+            FormEvents::POST_SET_DATA,
+            function (FormEvent $event) {
+                $opportunity = $event->getData();
+                if ($opportunity instanceof Opportunity && !$opportunity->getContact()->getId()) {
+                    $event->getForm()->remove('contact');
+                }
+            }
         );
     }
 
