@@ -25,7 +25,6 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
@@ -82,7 +81,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     {
         $this->organization = $manager->getRepository('OroOrganizationBundle:Organization')->getFirst();
         $this->initSupportingEntities($manager);
-        $this->loadLeads();
+        $this->loadLeads($manager);
     }
 
     protected function initSupportingEntities(ObjectManager $manager = null)
@@ -110,7 +109,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $manager->flush($this->channel);
     }
 
-    public function loadLeads()
+    public function loadLeads(ObjectManager $manager)
     {
         $handle = fopen(__DIR__ . DIRECTORY_SEPARATOR . 'dictionaries' . DIRECTORY_SEPARATOR . "leads.csv", "r");
         if ($handle) {
@@ -127,7 +126,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
 
                 $data = array_combine($headers, array_values($data));
 
-                $lead = $this->createLead($data, $user);
+                $lead = $this->createLead($manager, $data, $user);
                 $this->em->persist($lead);
 
                 $this->loadSalesFlows($lead);
@@ -219,16 +218,19 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
     }
 
     /**
+     * @param ObjectManager $manager
      * @param  array $data
-     * @param User   $user
-     *
+     * @param User $user
+     * 
      * @return Lead
      */
-    protected function createLead(array $data, $user)
+    protected function createLead(ObjectManager $manager, array $data, $user)
     {
         $lead = new Lead();
-        /** @var LeadStatus $defaultStatus */
-        $defaultStatus = $this->em->find('OroCRMSalesBundle:LeadStatus', 'new');
+        
+        $className = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+        $defaultStatus = $manager->getRepository($className)->find(ExtendHelper::buildEnumValueId('new'));
+        
         $lead->setStatus($defaultStatus);
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
