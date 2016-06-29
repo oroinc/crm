@@ -25,7 +25,6 @@ class OpportunityProbabilityTypeTest extends \PHPUnit_Framework_TestCase
         $options = $resolver->resolve();
 
         $this->assertArrayHasKey('validation_groups', $options);
-        $this->assertArrayHasKey('disabled', $options);
     }
 
     public function testGetName()
