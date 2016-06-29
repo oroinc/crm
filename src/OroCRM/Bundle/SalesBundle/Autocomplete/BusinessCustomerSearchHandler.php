@@ -2,9 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Autocomplete;
 
+use Doctrine\ORM\QueryBuilder;
+
 use OroCRM\Bundle\ChannelBundle\Autocomplete\ChannelLimitationHandler;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
-use Doctrine\ORM\QueryBuilder;
 
 class BusinessCustomerSearchHandler extends ChannelLimitationHandler
 {
@@ -31,11 +32,11 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
     }
 
     /**
-     * Returns customer name with account name in parentheses
-     * if their names not identical.
+     * Returns customer name with account name in parentheses if their names not identical.
      * Otherwise returns only customer name.
      *
-     * @param B2bCustomer   $entity
+     * @param B2bCustomer $entity
+     *
      * @return string
      */
     protected function getCustomerName(B2bCustomer $entity)
@@ -46,13 +47,12 @@ class BusinessCustomerSearchHandler extends ChannelLimitationHandler
         if ($accountName === $customerName) {
             return $customerName;
         }
-        
+
         return sprintf('%s (%s)', $customerName, $accountName);
     }
 
     /**
-     * @param array $entityIds
-     * @return array
+     * {@inheritdoc}
      */
     protected function getEntitiesByIds(array $entityIds)
     {

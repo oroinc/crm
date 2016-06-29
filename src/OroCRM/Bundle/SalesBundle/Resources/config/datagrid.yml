@@ -991,11 +991,11 @@ datagrid:
                 frontend_type:  datetime
         sorters:
             columns:
-                channelName:  { data_name: channelName }
-                name:         { data_name: c.name }
-                lifetime:     { data_name: c.lifetime }
-                createdAt:    { data_name: c.createdAt }
-                updatedAt:    { data_name: c.updatedAt }
+                channelName: { data_name: channelName }
+                name:        { data_name: c.name }
+                lifetime:    { data_name: c.lifetime }
+                createdAt:   { data_name: c.createdAt }
+                updatedAt:   { data_name: c.updatedAt }
             default:
                 name: ASC
         filters:
@@ -1011,14 +1011,6 @@ datagrid:
                  name:
                     type:      string
                     data_name: c.name
-                 cAccountName:
-                    type:      entity
-                    data_name: account.id
-                    options:
-                        field_options:
-                            class: OroCRMAccountBundle:Account
-                            property: name
-                            translatable_options: false
                  lifetime:
                     type: number-range
                     data_name: c.lifetime
@@ -1245,7 +1237,6 @@ datagrid:
                 accountName:
                     type: string
                     data_name: accountName
-                    enabled: false
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
