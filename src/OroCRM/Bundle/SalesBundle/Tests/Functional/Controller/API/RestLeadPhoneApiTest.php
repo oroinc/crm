@@ -22,7 +22,7 @@ class RestLeadPhoneApiTest extends WebTestCase
         ]);
     }
 
-    public function testCreateContactPhone()
+    public function testCreateLeadPhone()
     {
         $lead = $this->getReference('third_lead');
         $content = json_encode([
@@ -47,7 +47,7 @@ class RestLeadPhoneApiTest extends WebTestCase
             'primary' => true
         ]);
 
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $content);
+        $this->client->request('POST', $this->getUrl('oro_api_post_lead_phone'), [], [], [], $content);
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 
@@ -58,7 +58,7 @@ class RestLeadPhoneApiTest extends WebTestCase
             'primary' => true
         ]);
 
-        $this->client->request('POST', $this->getUrl('oro_api_post_contact_phone'), [], [], [], $lead);
+        $this->client->request('POST', $this->getUrl('oro_api_post_lead_phone'), [], [], [], $lead);
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 

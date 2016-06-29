@@ -45,7 +45,7 @@ class LeadPhone extends ExtendLeadPhone
     protected $owner;
 
     /**
-     * Set contact as owner.
+     * Set Lead as owner.
      *
      * @param Lead $owner
      */
@@ -55,7 +55,7 @@ class LeadPhone extends ExtendLeadPhone
     }
 
     /**
-     * Get owner contact.
+     * Get owner Lead.
      *
      * @return Lead
      */
