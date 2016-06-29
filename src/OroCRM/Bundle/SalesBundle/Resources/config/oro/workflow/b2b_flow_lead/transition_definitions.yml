@@ -82,13 +82,13 @@ workflows:
                                         [$.result.email]
                             - '@tree': # set Contact Phone
                                 conditions: # if lead has phone
-                                    '@not_empty': $lead.phoneNumber
+                                    '@not_empty': $lead.primaryPhone
                                 actions:
                                     - '@create_entity': # create Contact Address based on Lead address
                                         class: OroCRM\Bundle\ContactBundle\Entity\ContactPhone
                                         attribute: $.result.phone
                                         data:
-                                            phone: $lead.phoneNumber
+                                            phone: $lead.primaryPhone
                                             primary: true
                                     - '@call_method': # add Phone to Contact
                                         object: $lead.contact
