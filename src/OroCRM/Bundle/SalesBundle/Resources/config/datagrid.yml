@@ -1271,6 +1271,20 @@ datagrid:
                         - { join: l.address, alias: address }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
+        properties:
+            id: ~
+            view_link:
+                type:       url
+                route:      orocrm_sales_lead_view
+                params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_lead_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_lead
+                params:     [ id ]
         filters:
             columns:
                  name:
@@ -1296,6 +1310,26 @@ datagrid:
                  phoneNumber:
                     type: string
                     data_name: l.phoneNumber
+        actions:
+            view:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_view
+                label:         oro.grid.action.view
+                icon:          eye-open
+                link:          view_link
+                rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_lead_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_lead_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-leads-grid:
         extends: base-sales-b2bcustomer-leads-grid
@@ -1432,6 +1466,14 @@ datagrid:
                 type:       url
                 route:      orocrm_sales_opportunity_view
                 params:     [ id ]
+            update_link:
+                type:       url
+                route:      orocrm_sales_opportunity_update
+                params:     [ id ]
+            delete_link:
+                type:       url
+                route:      oro_api_delete_opportunity
+                params:     [ id ]
         actions:
             view:
                 type:          navigate
@@ -1440,6 +1482,18 @@ datagrid:
                 icon:          eye-open
                 link:          view_link
                 rowAction:     true
+            update:
+                type:          navigate
+                acl_resource:  orocrm_sales_opportunity_update
+                label:         oro.grid.action.update
+                icon:          edit
+                link:          update_link
+            delete:
+                type:          delete
+                acl_resource:  orocrm_sales_opportunity_delete
+                label:         oro.grid.action.delete
+                icon:          trash
+                link:          delete_link
 
     sales-b2bcustomer-opportunities-grid:
         extends: base-sales-b2bcustomer-opportunities-grid
