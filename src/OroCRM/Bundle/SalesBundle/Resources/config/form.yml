@@ -2,7 +2,6 @@ parameters:
     orocrm_sales.opportunity.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityType
     orocrm_sales.opportunity.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityApiType
     orocrm_sales.lead_to_opportunity.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityType
-    orocrm_sales.lead_to_opportunity_with_subform.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityWithSubformType
     orocrm_sales.opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
 
     orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
@@ -41,11 +40,15 @@ services:
 
     orocrm_sales.lead_to_opportunity.form.type:
         class: %orocrm_sales.lead_to_opportunity.form.type.class%
+        calls:
+            - [setUseFullContactForm, [false]]
         tags:
             - { name: form.type, alias: orocrm_sales_lead_to_opportunity }
 
     orocrm_sales.lead_to_opportunity_with_subform.form.type:
-        class: %orocrm_sales.lead_to_opportunity_with_subform.form.type.class%
+        class: %orocrm_sales.lead_to_opportunity.form.type.class%
+        calls:
+            - [setUseFullContactForm, [true]]
         tags:
             - { name: form.type, alias: orocrm_sales_lead_to_opportunity_with_subform }
 
@@ -95,6 +98,15 @@ services:
         scope: request
         arguments:
             - "@orocrm_sales.lead_to_opportunity.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_channel.provider.request_channel"
+
+    orocrm_sales.lead_to_opportunity_with_subform.form.handler:
+        class: %orocrm_sales.opportunity.form.handler.class%
+        scope: request
+        arguments:
+            - "@orocrm_sales.lead_to_opportunity_with_subform.form"
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@orocrm_channel.provider.request_channel"

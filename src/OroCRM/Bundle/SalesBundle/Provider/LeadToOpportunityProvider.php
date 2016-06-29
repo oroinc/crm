@@ -6,6 +6,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class LeadToOpportunityProvider
@@ -14,7 +15,7 @@ class LeadToOpportunityProvider
      * @param Lead $lead
      * @return Opportunity
      */
-    public function convertToOpportunityEntity(Lead $lead)
+    public function convertLeadToOpportunity(Lead $lead)
     {
         $leadStatus = $lead->getStatus()->getName();
 
@@ -33,5 +34,40 @@ class LeadToOpportunityProvider
         }
 
         return $opportunity;
+    }
+
+    /**
+     * @param Lead $lead
+     *
+     * @return string
+     */
+    public function getFormIdByLead(Lead $lead)
+    {
+        $contact = $lead->getContact();
+        return $this->getFormId(is_null($contact));
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string
+     */
+    public function getFormIdByRequest(Request $request)
+    {
+        return $this->getFormId($request->query->get('use_full_contact_form'));
+    }
+
+    /**
+     * Get convertation form id
+     *
+     * @param bool $withFullContactForm
+     *
+     * @return string
+     */
+    protected function getFormId($withFullContactForm)
+    {
+        return $withFullContactForm ?
+            'orocrm_sales.lead_to_opportunity_with_subform.form':
+            'orocrm_sales.lead_to_opportunity.form' ;
     }
 }

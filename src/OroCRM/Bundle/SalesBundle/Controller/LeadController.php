@@ -184,8 +184,6 @@ class LeadController extends Controller
     }
 
     /**
-     * Change status for lead
-     *
      * @Route("/convert/{id}", name="orocrm_sales_lead_convert_to_opportunity", requirements={"id"="\d+"})
      * @Acl(
      *      id="orocrm_sales_lead_convert_to_opportunity",
@@ -197,17 +195,13 @@ class LeadController extends Controller
      */
     public function convertToOpportunityAction(Lead $lead)
     {
-        return $this->get('oro_form.model.update_handler')->update(
-            $this->get('orocrm_sales.provider.lead_to_opportunity')->convertToOpportunityEntity($lead),
-            $this->get('orocrm_sales.lead_to_opportunity.form'),
-            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
-            $this->get('orocrm_sales.lead_to_opportunity.form.handler')
-        );
+        $opportunity = $this->get('orocrm_sales.provider.lead_to_opportunity')->convertLeadToOpportunity($lead);
+        $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormIdByLead($lead);
+
+        return $this->createOpportunityFromLead($opportunity, $formId);
     }
 
     /**
-     * Change status for lead
-     *
      * @Route("/opportunity/create", name="orocrm_sales_lead_create_opportunity")
      * @Acl(
      *      id="orocrm_sales_lead_create_opportunity",
@@ -215,19 +209,29 @@ class LeadController extends Controller
      *      permission="CREATE",
      *      class="OroCRMSalesBundle:Opportunity"
      * )
+     * @Template("OroCRMSalesBundle:Lead:convertToOpportunity.html.twig")
      */
     public function createOpportunityFromLeadAction(Request $request)
     {
         $opportunity = new Opportunity();
-        $formId = $request->query->get('contact_as_subform') ?
-            'orocrm_sales.lead_to_opportunity_with_subform.form' :
-            'orocrm_sales.opportunity.form';
+        $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormIdByRequest($request);
 
+        return $this->createOpportunityFromLead($opportunity, $formId);
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     * @param string  $formId
+     *
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    protected function createOpportunityFromLead(Opportunity $opportunity, $formId)
+    {
         return $this->get('oro_form.model.update_handler')->update(
             $opportunity,
             $this->get($formId),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
-            $this->get('orocrm_sales.lead_to_opportunity.form.handler')
+            $this->get($formId . '.handler')
         );
     }
 

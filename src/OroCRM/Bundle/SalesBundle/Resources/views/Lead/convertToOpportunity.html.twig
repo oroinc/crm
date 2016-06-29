@@ -9,7 +9,7 @@
 } %}
 
 {% set formAction = path('orocrm_sales_lead_create_opportunity', {
-    'contact_as_subform' : form.vars.contact_as_subform
+    'use_full_contact_form' : form.vars.use_full_contact_form
 }) %}
 
 {% block head_script %}
@@ -82,7 +82,7 @@
     form_row(form.customer),
     form_row(form.dataChannel) ]) %}
 
-    {% if not form.vars.contact_as_subform %}
+    {% if not form.vars.use_full_contact_form %}
         {% set formFields = formFields|merge([form_row(form.contact)]) %}
     {% endif %}
 
@@ -129,7 +129,7 @@
         }] ) %}
     {% endif %}
 
-    {% if form.vars.contact_as_subform %}
+    {% if form.vars.use_full_contact_form %}
         {% set dataBlocks = dataBlocks|merge([{
             'title': 'New contact'|trans,
             'subblocks': [{
@@ -153,7 +153,7 @@
                 ]
             },
             {
-                'title': 'Contact details'|trans,
+                'title': 'Contact Details'|trans,
                 'data': [
                     form_row(form.contact.emails),
                     form_row(form.contact.phones),
