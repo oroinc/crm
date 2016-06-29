@@ -1,12 +1,9 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% set name = entity.name|default('N/A') %}
-{% oro_title_set({params : {"%opportunity.name%": name} }) %}
-
-{% set pageComponent = {
-'module': 'oroui/js/app/components/view-component',
-'options': {'view': 'orocrmsales/js/app/views/update-page-view'},
-'layout': 'separate'
-} %}
+{% set title = 'oro.ui.convert_entity'|trans({
+    '%name%': name,
+    '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans
+}) %}
 
 {% set formAction = path('orocrm_sales_lead_create_opportunity', {
     'use_full_contact_form' : form.vars.use_full_contact_form
@@ -20,54 +17,27 @@
 {% endblock %}
 
 {% block navButtons %}
-    {{ UI.cancelButton(path('orocrm_sales_opportunity_index')) }}
+    {{ UI.cancelButton(path('orocrm_sales_lead_view', { 'id': entity.lead.id })) }}
     {% set html = UI.saveAndCloseButton({
-    'route': 'orocrm_sales_opportunity_view',
-    'params': {'id': '$id'}
+        'route': 'orocrm_sales_lead_view',
+        'params': {'id': entity.lead.id}
     }) %}
-    {% if resource_granted('orocrm_sales_opportunity_create') %}
+    {% if resource_granted('orocrm_sales_lead_create_opportunity') %}
         {% set html = html ~ UI.saveAndNewButton({
-        'route': 'orocrm_sales_opportunity_create'
+            'route': 'orocrm_sales_lead_create_opportunity'
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
 {% block pageHeader %}
-    {% if form.vars.value.id %}
-        {% set breadcrumbs = {
-        'entity':      form.vars.value,
-        'indexPath':   path('orocrm_sales_opportunity_index'),
-        'indexLabel': 'orocrm.sales.opportunity.entity_plural_label'|trans,
-        'entityTitle': name
-        } %}
-        {{ parent() }}
-    {% else %}
-        {% set title = 'oro.ui.create_entity'|trans({'%entityName%': 'orocrm.sales.opportunity.entity_label'|trans}) %}
-        {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
-    {% endif %}
+    {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
 {% endblock pageHeader %}
 
 {% block stats %}
     <li>{{ 'oro.ui.created_at'|trans }}: {{ entity.createdAt ? entity.createdAt|oro_format_datetime : 'N/A' }}</li>
     <li>{{ 'oro.ui.updated_at'|trans }}: {{ entity.updatedAt ? entity.updatedAt|oro_format_datetime : 'N/A' }}</li>
 {% endblock stats %}
-
-{% block breadcrumbs %}
-    {{ parent() }}
-    {% if entity.status %}
-        <div class="pull-left">
-            {% if entity.status.id != 'lost' %}
-                <div class="badge badge-enabled status-enabled">
-                    <i class="icon-status-enabled icon-circle"></i>{{ entity.status.name }}</div>
-            {% else %}
-                <div class="badge badge-disabled status-disabled">
-                    <i class="icon-status-disabled icon-circle"></i>{{ entity.status.name }}</div>
-            {% endif %}
-        </div>
-    {% endif %}
-
-{% endblock breadcrumbs %}
 
 {% block content_data %}
     {% set id = 'opportunity-profile' %}

@@ -42,7 +42,6 @@ class LeadToOpportunityType extends OpportunityType
 
         $resolver->setDefaults(
             [
-                'convert_lead_to_opportunity' => true,
                 'cascade_validation' => true
             ]
         );

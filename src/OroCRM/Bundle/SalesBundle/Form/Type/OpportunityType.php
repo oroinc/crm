@@ -21,8 +21,6 @@ class OpportunityType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $allowCreateNewValue = empty($options['convert_lead_to_opportunity']);
-
         $builder
             ->add(
                 'closeReason',
@@ -43,7 +41,6 @@ class OpportunityType extends AbstractType
                     'required'               => false,
                     'label'                  => 'orocrm.sales.opportunity.contact.label',
                     'new_item_property_name' => 'firstName',
-                    'create_enabled'         => $allowCreateNewValue,
                     'configs'                => [
                         'allowCreateNew' => true,
                         'renderedPropertyName'    => 'fullName',
@@ -60,7 +57,6 @@ class OpportunityType extends AbstractType
                     'required'               => true,
                     'label'                  => 'orocrm.sales.opportunity.customer.label',
                     'new_item_property_name' => 'name',
-                    'create_enabled'         => $allowCreateNewValue,
                     'configs'                => ['allowCreateNew' => true],
                 ]
             )

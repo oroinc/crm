@@ -74,7 +74,7 @@ services:
         factory_method:  createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_opportunity_form"
+            - "orocrm_sales_lead_to_opportunity_form"
             - "orocrm_sales_lead_to_opportunity"
 
     orocrm_sales.lead_to_opportunity_with_subform.form:
@@ -82,7 +82,7 @@ services:
         factory_method:  createNamed
         factory_service: form.factory
         arguments:
-            - "orocrm_sales_opportunity_form"
+            - "orocrm_sales_lead_to_opportunity_with_subform_form"
             - "orocrm_sales_lead_to_opportunity_with_subform"
 
     orocrm_sales.opportunity.form.handler:
