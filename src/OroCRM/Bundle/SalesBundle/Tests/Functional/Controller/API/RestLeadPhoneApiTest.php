@@ -51,7 +51,7 @@ class RestLeadPhoneApiTest extends WebTestCase
         $this->getJsonResponseContent($this->client->getResponse(), Codes::HTTP_BAD_REQUEST);
     }
 
-    public function testEmptyContactId()
+    public function testEmptyLeadId()
     {
         $lead = json_encode([
             'phone' =>'test@test.test',
