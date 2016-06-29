@@ -93,7 +93,10 @@
             {{ form_widget(form.label, {disabled: disabled}) }}
             {{ form_widget(form.probability, {
                 disabled: disabled or form.probability.vars.disabled,
-                attr: {class: 'add-on-input'}
+                attr: {
+                    class: 'add-on-input',
+                    title: 'orocrm.sales.system_configuration.fields.opportunity_status_probabilities.probability.tooltip'
+                }
             }) }}
             <label class="add-on{% if disabled %} disabled{% endif %}" title="{{ 'oro.entity_extend.enum_options.default.tooltip'|trans }}">
                 {{ form_widget(form.is_default, {disabled: disabled}) }}
