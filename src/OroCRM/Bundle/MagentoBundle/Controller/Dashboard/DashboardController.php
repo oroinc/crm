@@ -10,6 +10,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
+
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
@@ -30,13 +32,13 @@ class DashboardController extends Controller
             ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
             ->get('dateRange');
 
-        $dateTo = $dateRange['end'];
+        $dateTo   = $dateRange['end'];
         $dateFrom = $dateRange['start'];
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');
         //todo fix in scope of BAP-10514
-        $workflow = $workflowManager->getApplicableWorkflowByEntityClass(
+        $workflow        = $workflowManager->getApplicableWorkflowByEntityClass(
             'OroCRM\Bundle\MagentoBundle\Entity\Cart'
         );
 
@@ -51,18 +53,21 @@ class DashboardController extends Controller
         );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        if (!$dateFrom) {
+            $dateFrom = new \DateTime(FilterDateRangeConverter::MIN_DATE, new \DateTimeZone('UTC'));
+        }
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($data)
             ->setOptions(
-                array(
-                    'name' => 'flow_chart',
-                    'settings' => array('quarterDate' => $dateFrom),
-                    'data_schema' => array(
-                        'label' => array('field_name' => 'label'),
-                        'value' => array('field_name' => 'value'),
-                        'isNozzle' => array('field_name' => 'isNozzle'),
-                    )
-                )
+                [
+                    'name'        => 'flow_chart',
+                    'settings'    => ['quarterDate' => $dateFrom],
+                    'data_schema' => [
+                        'label'    => ['field_name' => 'label'],
+                        'value'    => ['field_name' => 'value'],
+                        'isNozzle' => ['field_name' => 'isNozzle'],
+                    ]
+                ]
             )
             ->getView();
 
@@ -79,11 +84,11 @@ class DashboardController extends Controller
      */
     public function averageOrderAmountAction()
     {
-        $widgetAttributes = $this->get('oro_dashboard.widget_configs');
+        $widgetAttributes  = $this->get('oro_dashboard.widget_configs');
         $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
-        $chartViewBuilder = $this->get('oro_chart.view_builder');
+        $chartViewBuilder  = $this->get('oro_chart.view_builder');
 
-        $data = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
+        $data              = $widgetAttributes->getWidgetAttributesForTwig('average_order_amount_chart');
         $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
@@ -109,7 +114,7 @@ class DashboardController extends Controller
         $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
         $chartViewBuilder     = $this->get('oro_chart.view_builder');
 
-        $data = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
+        $data              = $widgetAttributes->getWidgetAttributesForTwig('new_magento_customers_chart');
         $data['chartView'] = $customerDataProvider->getNewCustomerChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
@@ -135,10 +140,10 @@ class DashboardController extends Controller
         $chartViewBuilder     = $this->getChartViewBuilder();
 
         $dateRange = $widgetAttributes->getWidgetOptions()->get('dateRange');
-        $from = $dateRange['start'];
-        $to = $dateRange['end'];
+        $from      = $dateRange['start'];
+        $to        = $dateRange['end'];
 
-        $data = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
+        $data              = $widgetAttributes->getWidgetAttributesForTwig('purchase_chart');
         $data['chartView'] = $purchaseDataProvider->getPurchaseChartView($chartViewBuilder, $from, $to);
 
         return $data;
@@ -158,7 +163,7 @@ class DashboardController extends Controller
         $orderDataProvider = $this->getOrderDataProvider();
         $chartViewBuilder  = $this->getChartViewBuilder();
 
-        $data = $widgetAttributes->getWidgetAttributesForTwig('revenue_over_time_chart');
+        $data              = $widgetAttributes->getWidgetAttributesForTwig('revenue_over_time_chart');
         $data['chartView'] = $orderDataProvider->getRevenueOverTimeChartView(
             $chartViewBuilder,
             $widgetAttributes
@@ -183,7 +188,7 @@ class DashboardController extends Controller
         $orderDataProvider = $this->getOrderDataProvider();
         $chartViewBuilder  = $this->getChartViewBuilder();
 
-        $data = $widgetAttributes->getWidgetAttributesForTwig('orders_over_time_chart');
+        $data              = $widgetAttributes->getWidgetAttributesForTwig('orders_over_time_chart');
         $data['chartView'] = $orderDataProvider->getOrdersOverTimeChartView(
             $chartViewBuilder,
             $widgetAttributes

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\ChannelBundle\Tests\Unit\Provider\Lifetime;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
+use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\LocaleBundle\Model\LocaleSettings;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -22,18 +23,28 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
     /** @var LocaleSettings|\PHPUnit_Framework_MockObject_MockObject */
     protected $localeSettings;
 
+    /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    protected $dateFilterProcessor;
+
     /** @var AverageLifetimeWidgetProvider */
     protected $provider;
 
     protected function setUp()
     {
-        $this->registry       = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
-        $this->localeSettings = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
+        $this->registry            = $this->getMock('Doctrine\Common\Persistence\ManagerRegistry');
+        $this->localeSettings      = $this->getMockBuilder('Oro\Bundle\LocaleBundle\Model\LocaleSettings')
             ->disableOriginalConstructor()->getMock();
-        $this->aclHelper      = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+        $this->aclHelper           = $this->getMockBuilder('Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper')
+            ->disableOriginalConstructor()->getMock();
+        $this->dateFilterProcessor = $this->getMockBuilder('Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor')
             ->disableOriginalConstructor()->getMock();
 
-        $this->provider = new AverageLifetimeWidgetProvider($this->registry, $this->localeSettings, $this->aclHelper);
+        $this->provider = new AverageLifetimeWidgetProvider(
+            $this->registry,
+            $this->localeSettings,
+            $this->aclHelper,
+            $this->dateFilterProcessor
+        );
     }
 
     protected function tearDown()
@@ -73,6 +84,12 @@ class AverageLifetimeWidgetProviderTest extends \PHPUnit_Framework_TestCase
                     ]
                 )
             );
+
+        $this->dateFilterProcessor
+            ->expects($this->once())
+            ->method('getModifiedDateData')
+            ->with($dates)
+            ->willReturn(['value' => $dates]);
 
         $this->assertEquals($expectedResult, $this->provider->getChartData($dates));
     }
