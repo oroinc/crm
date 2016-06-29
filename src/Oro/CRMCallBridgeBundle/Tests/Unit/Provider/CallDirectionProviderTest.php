@@ -30,13 +30,6 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDirection()
     {
-        /**If CallBundle isn't installed mark test is skipped**/
-        if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
-            $this->markTestSkipped(
-                'The OroCRMCallBundle isn\'t  installed'
-            );
-        }
-
         $directionName = 'incoming';
 
         $direction = new CallDirection($directionName);
@@ -47,13 +40,6 @@ class CallDirectionProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetDate()
     {
-        /**If CallBundle isn't installed mark test is skipped**/
-        if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
-            $this->markTestSkipped(
-                'The OroCRMCallBundle isn\'t  installed'
-            );
-        }
-
         $date = new \DateTime('now', new \DateTimeZone('UTC'));
         $this->assertEquals($date->format('Y'), $this->provider->getDate(new Call())->format('Y'));
     }

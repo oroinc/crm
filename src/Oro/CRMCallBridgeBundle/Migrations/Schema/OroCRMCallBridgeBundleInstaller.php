@@ -95,11 +95,6 @@ class OroCRMCallBridgeBundleInstaller implements
 
     public function up(Schema $schema, QueryBag $queries)
     {
-        /** if CallBundle isn't required  do nothing **/
-        if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
-            return;
-        }
-
         /** if CallBundle is installed  do nothing **/
         if ($schema->hasTable('orocrm_call')) {
             return;

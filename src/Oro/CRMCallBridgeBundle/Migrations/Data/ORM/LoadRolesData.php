@@ -13,13 +13,12 @@ use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
 class LoadRolesData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
+
+    use ContainerAwareTrait;
 
     /**
      * {@inheritdoc}
@@ -32,26 +31,12 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
     }
 
     /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
-    }
-
-    /**
      * Load roles
      *
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
-
-        /**If CallBundle isn't installed do nothing**/
-        if (!class_exists('OroCRM\Bundle\CallBundle\OroCRMCallBundle')) {
-            return;
-        }
-
         /** @var AclManager $aclManager */
         $aclManager = $this->container->get('oro_security.acl.manager');
 
