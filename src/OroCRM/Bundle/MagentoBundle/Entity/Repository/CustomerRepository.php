@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 
+use Doctrine\ORM\QueryBuilder;
 use Oro\Bundle\DashboardBundle\Helper\DateHelper;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -147,5 +148,35 @@ class CustomerRepository extends ChannelAwareEntityRepository
             ->setParameter('id', $customer->getId());
 
         $qb->getQuery()->execute();
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getNewCustomersNumberWhoMadeOrderQB()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('COUNT(customer.id) as val')
+            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->join('orders.customer', 'customer')
+            ->having('COUNT(orders.id) > 0');
+        $this->applyActiveChannelLimitation($qb);
+
+        return $qb;
+    }
+
+    /**
+     * @return QueryBuilder
+     */
+    public function getReturningCustomersWhoMadeOrderQB()
+    {
+        $qb = $this->_em->createQueryBuilder();
+        $qb->select('COUNT(customer.id) as val')
+            ->from('OroCRMMagentoBundle:Order', 'orders')
+            ->join('orders.customer', 'customer')
+            ->having('COUNT(orders.id) > 0');
+        $this->applyActiveChannelLimitation($qb);
+
+        return $qb;
     }
 }

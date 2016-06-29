@@ -195,3 +195,10 @@ services:
            - "@doctrine"
         tags:
            - {name: oro_tracking.provider.identification, priority: 10}
+
+    orocrm_campaign.dashboard.campaign_data_provider:
+        class: OroCRM\Bundle\CampaignBundle\Dashboard\CampaignDataProvider
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'

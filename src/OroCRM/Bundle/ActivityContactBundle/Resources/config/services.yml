@@ -68,8 +68,9 @@ services:
     orocrm_activity_contact.api.get_config.update_activity_contact_fields:
         class: OroCRM\Bundle\ActivityContactBundle\Api\Processor\Config\UpdateActivityContactFields
         arguments:
+            - '@oro_api.doctrine_helper'
             - '@oro_entity_config.config_manager'
             - '@orocrm_activity_contact.provider'
             - ['create', 'update']
         tags:
-            - { name: oro.api.processor, action: get_config, extra: definition&!identifier_fields_only, priority: -45 }
+            - { name: oro.api.processor, action: get_config, extra: !identifier_fields_only&definition, priority: -45 }
