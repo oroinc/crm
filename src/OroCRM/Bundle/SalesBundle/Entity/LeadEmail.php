@@ -12,7 +12,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendLeadEmail;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_lead_email", indexes={
+ * @ORM\Table("orocrm_sales_lead_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  * @Config(

@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
+use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
+
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -265,25 +267,6 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $emails;
-
-//    /**
-//     * @var string
-//     *
-//     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-//     * @Oro\Versioned
-//     * @ConfigField(
-//     *      defaultValues={
-//     *          "dataaudit"={"auditable"=true},
-//     *          "importexport"={
-//     *              "order"=100
-//     *          },
-//     *          "entity"={
-//     *              "contact_information"="email"
-//     *          }
-//     *      }
-//     * )
-//     */
-//    protected $email;
 
     /**
      * @var string
