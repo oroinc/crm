@@ -12,9 +12,10 @@ use Doctrine\Common\Persistence\ObjectManager;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
-class DisqualifyLead
+class ChangeLeadStatus
 {
-    const DISQUALIFY_STATUS = 'canceled';
+    const STATUS_QUALIFY    = 'qualified';
+    const STATUS_DISQUALIFY = 'canceled';
     const LEAD_VIEW_ROUTE   = 'orocrm_sales_lead_view';
 
     /**
@@ -38,8 +39,6 @@ class DisqualifyLead
     protected $manager;
 
     /**
-     * DisqualifyLead constructor.
-     *
      * @param Request $request
      * @param Session $session
      * @param Router $router
@@ -50,8 +49,7 @@ class DisqualifyLead
         Session $session,
         Router $router,
         ObjectManager $manager
-    )
-    {
+    ) {
         $this->request = $request;
         $this->session = $session;
         $this->router = $router;
@@ -63,16 +61,41 @@ class DisqualifyLead
      *
      * @return RedirectResponse
      */
-    public function process(Lead $lead)
+    public function disqualify(Lead $lead)
+    {
+        $this->changeStatus($lead, self::STATUS_DISQUALIFY);
+
+        return new RedirectResponse($this->router->generate(self::LEAD_VIEW_ROUTE, ['id' => $lead->getId()]));
+    }
+
+    /**
+     * @param Lead $lead
+     *
+     * @return bool
+     */
+    public function qualify(Lead $lead)
+    {
+        return $this->changeStatus($lead, self::STATUS_QUALIFY);
+    }
+
+    /**
+     * @param Lead   $lead
+     * @param string $statusCode
+     *
+     * @return bool
+     */
+    protected function changeStatus($lead, $statusCode)
     {
         try {
-            $this->save($lead->setStatus($this->getDisqualifyStatus()));
+            $status = $this->getStatusEntityByName($statusCode);
+            $this->save($lead->setStatus($status));
             $this->session->getFlashBag()->add('success', 'Saved');
         } catch (\Exception $e) {
             $this->session->getFlashBag()->add('error', 'Not saved');
+            return false;
         }
 
-        return new RedirectResponse($this->router->generate(self::LEAD_VIEW_ROUTE, ['id' => $lead->getId()]));
+        return true;
     }
 
     /**
@@ -85,15 +108,17 @@ class DisqualifyLead
     }
 
     /**
+     * @param string $leadStatusName
+     *
      * @return LeadStatus
      */
-    protected function getDisqualifyStatus()
+    protected function getStatusEntityByName($leadStatusName)
     {
         $repository = $this->manager->getRepository('OroCRMSalesBundle:LeadStatus');
 
         $result = $repository->createQueryBuilder('ls')
                              ->where('ls.name = :lead_status_name')
-                             ->setParameter(':lead_status_name', self::DISQUALIFY_STATUS)
+                             ->setParameter(':lead_status_name', $leadStatusName)
                              ->getQuery()
                              ->getSingleResult();
 

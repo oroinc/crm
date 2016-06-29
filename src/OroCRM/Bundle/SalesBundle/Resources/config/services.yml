@@ -27,7 +27,7 @@ parameters:
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
 
-    orocrm_sales.model.disqualify_lead.class: OroCRM\Bundle\SalesBundle\Model\DisqualifyLead
+    orocrm_sales.model.change_lead_status.class: OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -210,8 +210,8 @@ services:
         tags:
             - { name: kernel.event_listener, event: oro_importexport.strategy.process_after, method: onProcessAfter }
 
-    orocrm_sales.model.disqualify_lead:
-        class: %orocrm_sales.model.disqualify_lead.class%
+    orocrm_sales.model.change_lead_status:
+        class: %orocrm_sales.model.change_lead_status.class%
         scope: request
         arguments:
              - '@request'
