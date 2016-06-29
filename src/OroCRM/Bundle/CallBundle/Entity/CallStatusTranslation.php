@@ -18,7 +18,7 @@ class CallStatusTranslation extends AbstractTranslation
     /**
      * @var string $foreignKey
      *
-     * @ORM\Column(name="foreign_key", type="string", length=16)
+     * @ORM\Column(name="foreign_key", type="string", length=32)
      */
     protected $foreignKey;
 

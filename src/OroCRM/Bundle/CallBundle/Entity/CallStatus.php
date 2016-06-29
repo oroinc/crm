@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Translatable\Translatable;
 
-
 /**
  * CallStatus
  *
@@ -15,7 +14,6 @@ use Gedmo\Translatable\Translatable;
  * @ORM\Entity
  * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CallBundle\Entity\CallStatusTranslation")
  */
-
 class CallStatus implements Translatable
 {
     /**

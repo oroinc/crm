@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CallBundle\Migrations\Schema\v1_6;
 
 use Doctrine\DBAL\Schema\Schema;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -13,8 +14,8 @@ class OroCRMCallBundle implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $this->createCallDirectionTranslationTable($schema);
-        $this->createCallStatusTranslationTable($schema);
+        self::createCallDirectionTranslationTable($schema);
+        self::createCallStatusTranslationTable($schema);
     }
 
     /**
@@ -27,7 +28,7 @@ class OroCRMCallBundle implements Migration
         /** Generate table orocrm_call_direction_trans **/
         $table = $schema->createTable('orocrm_call_direction_trans');
         $table->addColumn('id', 'integer', array('autoincrement' => true));
-        $table->addColumn('foreign_key', 'string', array('length' => 16));
+        $table->addColumn('foreign_key', 'string', array('length' => 32));
         $table->addColumn('content', 'string', array('length' => 255));
         $table->addColumn('locale', 'string', array('length' => 8));
         $table->addColumn('object_class', 'string', array('length' => 255));
@@ -51,7 +52,7 @@ class OroCRMCallBundle implements Migration
         /** Generate table orocrm_call_status_trans **/
         $table = $schema->createTable('orocrm_call_status_trans');
         $table->addColumn('id', 'integer', array('autoincrement' => true));
-        $table->addColumn('foreign_key', 'string', array('length' => 16));
+        $table->addColumn('foreign_key', 'string', array('length' => 32));
         $table->addColumn('content', 'string', array('length' => 255));
         $table->addColumn('locale', 'string', array('length' => 8));
         $table->addColumn('object_class', 'string', array('length' => 255));
