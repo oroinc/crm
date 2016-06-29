@@ -167,7 +167,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     alias:                          orocrm_sales_b2bcustomer
-    title_fields:                   [name]
+    title_fields:                   [name, account]
     route:
         name:                       orocrm_sales_b2bcustomer_view
         parameters:
