@@ -3,11 +3,12 @@
 namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24;
 
 use Doctrine\DBAL\Schema\Schema;
+
+use Psr\Log\LoggerInterface;
+
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Psr\Log\LoggerInterface;
-
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\MigrationBundle\Migration\ArrayLogger;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
@@ -63,9 +64,9 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
+     * @param bool $dryRun
+     * @param array $def
+     * @param array $row
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateReport(LoggerInterface $logger, $dryRun, $def, $row)
@@ -76,9 +77,9 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
+     * @param bool $dryRun
+     * @param array $def
+     * @param array $row
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function updateSegment(LoggerInterface $logger, $dryRun, $def, $row)
@@ -89,7 +90,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
+     * @param bool $dryRun
      */
     protected function migrateReport(LoggerInterface $logger, $dryRun)
     {
@@ -109,7 +110,7 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
+     * @param bool $dryRun
      */
     protected function migrateSegment(LoggerInterface $logger, $dryRun)
     {
@@ -129,12 +130,12 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $className
-     * @param $oldField
-     * @param $newField
+     * @param bool $dryRun
+     * @param array $def
+     * @param array $row
+     * @param string $className
+     * @param string $oldField
+     * @param string $newField
      */
     protected function fixSegmentDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
@@ -159,12 +160,12 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $className
-     * @param $oldField
-     * @param $newField
+     * @param bool $dryRun
+     * @param array $def
+     * @param array $row
+     * @param string $className
+     * @param string $oldField
+     * @param string $newField
      */
     protected function fixReportDefs(LoggerInterface $logger, $dryRun, $def, $row, $className, $oldField, $newField)
     {
@@ -194,10 +195,10 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
 
     /**
      * @param LoggerInterface $logger
-     * @param $dryRun
-     * @param $def
-     * @param $row
-     * @param $query
+     * @param bool $dryRun
+     * @param array $def
+     * @param array $row
+     * @param string $query
      * @throws \Doctrine\DBAL\DBALException
      */
     protected function executeQuery(LoggerInterface $logger, $dryRun, $def, $row, $query)
@@ -211,13 +212,13 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
     }
 
     /**
-     * @param $def
-     * @param $row
-     * @param $className
-     * @param $oldField
-     * @param $newField
-     * @param $field
-     * @param $key
+     * @param array $def
+     * @param array $row
+     * @param string $className
+     * @param string $oldField
+     * @param string $newField
+     * @param array $field
+     * @param string $key
      * @return mixed
      */
     protected function processFilterDefinition($def, $row, $className, $oldField, $newField, $field, $key)
@@ -233,9 +234,9 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
     }
 
     /**
-     * @param $def
-     * @param $field
-     * @param $key
+     * @param array $def
+     * @param array $field
+     * @param string $key
      * @return array
      */
     protected function fixFilterCriterion($def, $field, $key)
