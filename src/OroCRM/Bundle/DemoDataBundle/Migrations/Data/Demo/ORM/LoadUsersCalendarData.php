@@ -343,6 +343,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_DAILY);
         $recurrence->setInterval(3)
+            ->setTimeZone('America/Los_Angeles')
             ->setStartTime($day)
             ->setOccurrences(12);
         $event->setRecurrence($recurrence);
@@ -359,6 +360,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_WEEKLY);
         $recurrence->setInterval(1)
+            ->setTimeZone('America/Los_Angeles')
             ->setDayOfWeek([
                 Model\Recurrence::DAY_MONDAY,
                 Model\Recurrence::DAY_TUESDAY,
@@ -381,6 +383,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTHLY);
         $recurrence->setInterval(2)
+            ->setTimeZone('America/Los_Angeles')
             ->setDayOfMonth(1)
             ->setStartTime($day)
             ->setEndTime(new \DateTime('Dec 31', $this->getTimeZone()));
@@ -398,6 +401,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_MONTH_N_TH);
         $recurrence->setInterval(2)
+            ->setTimeZone('America/Los_Angeles')
             ->setInstance(Model\Recurrence::INSTANCE_THIRD)
             ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY, Model\Recurrence::DAY_SUNDAY])
             ->setStartTime($day)
@@ -416,6 +420,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEARLY);
         $recurrence->setInterval(12)
+            ->setTimeZone('America/Los_Angeles')
             ->setDayOfMonth(1)
             ->setMonthOfYear(4)
             ->setStartTime($day);
@@ -433,6 +438,7 @@ class LoadUsersCalendarData extends AbstractFixture implements ContainerAwareInt
         $recurrence = new Recurrence();
         $recurrence->setRecurrenceType(Model\Recurrence::TYPE_YEAR_N_TH);
         $recurrence->setInterval(12)
+            ->setTimeZone('America/Los_Angeles')
             ->setInstance(Model\Recurrence::INSTANCE_LAST)
             ->setDayOfWeek([Model\Recurrence::DAY_SATURDAY])
             ->setMonthOfYear(12)
