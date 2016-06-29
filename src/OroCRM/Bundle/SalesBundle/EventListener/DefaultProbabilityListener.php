@@ -6,6 +6,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
+use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
@@ -14,12 +15,17 @@ class DefaultProbabilityListener
     /** @var ConfigManager $configManager */
     private $configManager;
 
+    /** @var RestrictionManager $restrictionManager */
+    private $restrictionManager;
+
     /**
-     * @param ConfigManager $configManager
+     * @param ConfigManager      $configManager
+     * @param RestrictionManager $restrictionManager
      */
-    public function __construct(ConfigManager $configManager)
+    public function __construct(ConfigManager $configManager, RestrictionManager $restrictionManager)
     {
         $this->configManager = $configManager;
+        $this->restrictionManager = $restrictionManager;
     }
 
     /**
@@ -28,7 +34,15 @@ class DefaultProbabilityListener
     public function prePersist(LifecycleEventArgs $args)
     {
         $entity = $args->getEntity();
-        if ($entity instanceof Opportunity && $entity->getProbability() === null) {
+        if (!$entity instanceof Opportunity) {
+            return;
+        }
+
+        if ($this->hasWorkflowRestriction($entity)) {
+            return;
+        }
+
+        if ($entity->getProbability() === null) {
             $entity->setProbability($this->getDefaultProbability($entity));
         }
     }
@@ -40,6 +54,10 @@ class DefaultProbabilityListener
     {
         $entity = $args->getEntity();
         if (!$entity instanceof Opportunity) {
+            return;
+        }
+
+        if ($this->hasWorkflowRestriction($entity)) {
             return;
         }
 
@@ -62,6 +80,28 @@ class DefaultProbabilityListener
 
         $entity->setProbability($probability);
         $this->recomputeChangeSet($args);
+    }
+
+    /**
+     * Checks if opportunity has an restriction of probability field
+     *
+     * @param  Opportunity $opportunity
+     * @return boolean
+     */
+    private function hasWorkflowRestriction(Opportunity $opportunity)
+    {
+        if (!$this->restrictionManager->hasEntityClassRestrictions(Opportunity::class)) {
+            return false;
+        }
+
+        $restrictions = $this->restrictionManager->getEntityRestrictions($opportunity);
+        foreach ($restrictions as $restriction) {
+            if ('probability' === $restriction['field']) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

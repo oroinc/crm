@@ -112,10 +112,11 @@ services:
     orocrm_sales.event_listener.default_probability:
         class: %orocrm_sales.event_listener.default_probability.class%
         arguments:
-                - '@oro_config.user'
+            - '@oro_config.user'
+            - '@oro_workflow.restriction.manager'
         tags:
-        - { name: doctrine.event_listener, event: prePersist, method: prePersist }
-        - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
+            - { name: doctrine.event_listener, event: prePersist, method: prePersist }
+            - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
 
     orocrm_sales.provider.phone.lead:
         class: %orocrm_sales.provider.phone.lead.class%

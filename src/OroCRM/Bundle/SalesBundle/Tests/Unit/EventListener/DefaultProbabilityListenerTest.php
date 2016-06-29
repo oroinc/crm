@@ -8,6 +8,7 @@ use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 use Oro\Bundle\ConfigBundle\Config\ConfigManager;
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
+use Oro\Bundle\WorkflowBundle\Restriction\RestrictionManager;
 
 use OroCRM\Bundle\SalesBundle\Tests\Unit\Stub\Opportunity;
 use OroCRM\Bundle\SalesBundle\EventListener\DefaultProbabilityListener;
@@ -148,6 +149,36 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @dataProvider statusDataProvider
+     *
+     * @param string $statusId
+     */
+    public function testShouldNotModifyRestrictedFieldsOnPersist($statusId)
+    {
+        $opportunity = $this->getOpportunity($statusId);
+        $eventArguments = $this->getPrePersistEventArguments($opportunity);
+        $listener = $this->getListener($restricted = true);
+        $listener->prePersist($eventArguments);
+
+        $this->assertNull($opportunity->getProbability());
+    }
+
+    public function testShouldNotModifyRestrictedFieldsOnUpdate()
+    {
+        $opportunity = $this->getOpportunity('solution_development', 0.25);
+        $eventArguments = $this->getPreUpdateEventArguments($opportunity, [
+            'status' => [
+                $this->getOpportunityStatus('negotiation'),
+                $this->getOpportunityStatus('won')
+            ]
+        ]);
+        $listener = $this->getListener($restricted = true);
+        $listener->preUpdate($eventArguments);
+
+        $this->assertEquals(0.25, $opportunity->getProbability());
+    }
+
+    /**
      * @return array
      */
     public function statusDataProvider()
@@ -185,12 +216,14 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param  bool $hasRestriction
      * @return DefaultProbabilityListener
      */
-    private function getListener()
+    private function getListener($hasRestriction = false)
     {
         $configManager = $this->getConfigManagerMock();
-        $listener = new DefaultProbabilityListener($configManager);
+        $restrictionManager = $this->getRestrictionManagerMock($hasRestriction);
+        $listener = new DefaultProbabilityListener($configManager, $restrictionManager);
 
         return $listener;
     }
@@ -268,6 +301,27 @@ class DefaultProbabilityListenerTest extends \PHPUnit_Framework_TestCase
 
         $manager->expects($this->any())->method('get')
             ->will($this->returnValue($this->getDefaultProbilities()));
+
+        return $manager;
+    }
+
+    /**
+     * @param  bool $hasRestriction
+     * @return RestrictionManager
+     */
+    private function getRestrictionManagerMock($hasRestriction = false)
+    {
+        $manager = $this->getMockBuilder(RestrictionManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $manager->expects($this->any())
+            ->method('getEntityRestrictions')
+            ->will($this->returnValue([['field' => 'probability']]));
+
+        $manager->expects($this->any())
+            ->method('hasEntityClassRestrictions')
+            ->will($this->returnValue($hasRestriction));
 
         return $manager;
     }
