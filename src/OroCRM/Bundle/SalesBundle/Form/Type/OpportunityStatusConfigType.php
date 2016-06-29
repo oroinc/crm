@@ -44,10 +44,9 @@ class OpportunityStatusConfigType extends AbstractType
         $items = $provider->getPropertyConfig()->getFormItems(PropertyConfigContainer::TYPE_FIELD, 'enum');
 
         // clean form options and leave only those needed by System Config layout
-        $items['enum_options']['form']['options'] = array_intersect_key(
-            $items['enum_options']['form']['options'],
-            array_flip(['label', 'tooltip'])
-        );
+        $items['enum_options']['form']['options'] = [
+            'label' => false,
+        ];
 
         // replace items type with the extended form that includes 'probability'
         $items['enum_options']['form']['options']['type'] = 'orocrm_sales_opportunity_status_enum_value';

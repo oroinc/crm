@@ -316,10 +316,4 @@ orocrm:
             groups:
                 opportunity_configuration.title:            Opportunity Configuration
                 opportunity_status_probabilities.title:     Probability per Opportunity Status
-            fields:
-                opportunity_statuses:
-                    label: System values
-                    tooltip: Configure Opportunity statuses and System-wide values for default Probability (%) of each status.
-                default_opportunity_probabilities:
-                    label: Organization values
-                    tooltip: Configure Organization-wide values for default Probability (%) of each status
+                opportunity_status_probabilities.tooltip:   Configure Opportunity statuses and System-wide values for default Probability (%) of each status.

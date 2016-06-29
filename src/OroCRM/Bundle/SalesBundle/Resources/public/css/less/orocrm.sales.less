@@ -1,3 +1,6 @@
+/**
+* Fix form style in system configuration
+*/
 form[name=opportunity_configuration] {
   .form-horizontal-large,
   .form-horizontal {
@@ -5,9 +8,11 @@ form[name=opportunity_configuration] {
     .control-group-orocrm_sales_opportunity_status_config,
     .control-group-oro_config_form_field_type,
     .control-group-oro_entity_config_scope_type {
-      > .controls {
-        margin-left: 0;
+      .controls {
+          margin-left: 0;
+        }
 
+      > .controls {
         .control-label.wrap {
           text-align: right;
           width: 230px;

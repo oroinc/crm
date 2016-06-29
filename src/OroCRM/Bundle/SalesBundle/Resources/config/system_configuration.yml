@@ -6,6 +6,7 @@ oro_system_configuration:
 
         opportunity_status_probabilities:
             title: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.title
+            tooltip: orocrm.sales.system_configuration.groups.opportunity_status_probabilities.tooltip
             priority: 10
 
     fields:
@@ -13,8 +14,7 @@ oro_system_configuration:
             ui_only: true
             type: orocrm_sales_opportunity_status_config
             options:
-                label: orocrm.sales.system_configuration.fields.opportunity_statuses.label
-                tooltip: orocrm.sales.system_configuration.fields.opportunity_statuses.tooltip
+                label: false
                 required: false
                 resettable: false
                 attr:
@@ -26,8 +26,7 @@ oro_system_configuration:
             options:
                 required: false
                 resettable: true
-                tooltip: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.tooltip
-                label: orocrm.sales.system_configuration.fields.default_opportunity_probabilities.label
+                label: false
                 attr:
                     class: oro-clearfix
     tree:
