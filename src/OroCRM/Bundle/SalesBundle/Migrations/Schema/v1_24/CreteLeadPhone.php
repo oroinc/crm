@@ -37,13 +37,13 @@ class CreteLeadPhone implements Migration, OrderedMigrationInterface
      */
     protected function createOrocrmLeadPhoneTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_lead_phone');
+        $table = $schema->createTable('orocrm_sales_lead_phone');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('phone', 'string', ['length' => 255]);
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'IDX_9087C36A7E3C61F9', []);
+        $table->addIndex(['owner_id'], 'IDX_8475907F7E3C61F9', []);
         $table->addIndex(['phone', 'is_primary'], 'primary_phone_idx', []);
         $table->addIndex(['phone'], 'phone_idx');
     }
@@ -55,7 +55,7 @@ class CreteLeadPhone implements Migration, OrderedMigrationInterface
      */
     protected function addOrocrmLeadPhoneForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_lead_phone');
+        $table = $schema->getTable('orocrm_sales_lead_phone');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_lead'),
             ['owner_id'],
