@@ -191,6 +191,19 @@ class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration,
                 }
             }
         }
+        if (isset($def['grouping_columns'])) {
+            foreach ($def['grouping_columns'] as $key => $field) {
+                if (isset($field['name'])) {
+                    if ($field['name'] === $oldField) {
+                        $def['grouping_columns'][$key]['name'] = $newField;
+                    } else {
+                        $def['grouping_columns'][$key]['name']
+                            = str_replace('Lead::status_label', 'Lead::status', $field['name']);
+                    }
+                    $this->updateReport($logger, $dryRun, $def, $row);
+                }
+            }
+        }
     }
 
     /**
