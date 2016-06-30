@@ -7,7 +7,6 @@ use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\RawMinkContext;
 use Doctrine\Common\Inflector\Inflector;
-use Oro\Bundle\DataGridBundle\Tests\Behat\Element\Grid;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 
@@ -114,7 +113,7 @@ class FeatureContext extends RawMinkContext implements OroElementFactoryAware
     }
 
     /**
-     * Assert that entity view page hase default avatar (info-user.png)
+     * Assert that entity view page has default avatar (info-user.png)
      *
      * @Then avatar should be default avatar
      */
@@ -131,7 +130,7 @@ class FeatureContext extends RawMinkContext implements OroElementFactoryAware
     }
 
     /**
-     * Assert that avatar image, e.g. charlie-sheen.jpg
+     * Assert avatar image src, e.g. charlie-sheen.jpg
      * Example: And avatar should be "charlie-sheen.jpg"
      *
      * @Then avatar should be :arg1
@@ -149,7 +148,7 @@ class FeatureContext extends RawMinkContext implements OroElementFactoryAware
     }
 
     /**
-     * Assert that two accounts set as account at view entity page
+     * Assert that two accounts sets at view entity page
      * Example: And Warner Brothers and Columbia Pictures should be set as accounts
      *
      * @Then /^(?P<acc1>[^"]+) and (?P<acc2>[^"]+) should be set as accounts$/
@@ -223,6 +222,7 @@ class FeatureContext extends RawMinkContext implements OroElementFactoryAware
      * Assert count of addresses in entity view page
      * Example: And contact has 2 addresses
      * Example: Then contact has one address
+     * Example: And two addresses should be in page
      *
      * @Then :count addresses should be in page
      * @Then /^(.*) has (?P<count>(one|two|[\d]+)) address(?:|es)$/
@@ -272,7 +272,7 @@ class FeatureContext extends RawMinkContext implements OroElementFactoryAware
     }
 
     /**
-     * Delete all elemets in collection field
+     * Delete all elements in collection field
      * Example: And I delete all addresses
      *
      * @Given /^(?:|I )delete all (?P<field>[^"]+)$/
