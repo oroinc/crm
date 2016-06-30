@@ -18,12 +18,13 @@ class OpportunityRelationsBuilder
         $this->opportunity = $opportunity;
     }
     
-    public function build()
+    public function buildAll()
     {
         $this->buildCustomer();
+        $this->buildAccount();
     }
 
-    private function buildCustomer()
+    public function buildCustomer()
     {
         $customer = $this->opportunity->getCustomer();
         if (!$customer) {
@@ -44,6 +45,25 @@ class OpportunityRelationsBuilder
 
         if (!$customer->getOrganization()) {
             $customer->setOrganization($this->opportunity->getOrganization());
+        }
+    }
+
+    public function buildAccount()
+    {
+        $customer = $this->opportunity->getCustomer();
+        if (!$customer) {
+            return;
+        }
+
+        $contact = $this->opportunity->getContact();
+        $account = $customer->getAccount();
+
+        if (!$contact || !$account) {
+            return;
+        }
+
+        if (!$contact->getId() || !$account->getId()) {
+            $account->addContact($contact);
         }
     }
 }

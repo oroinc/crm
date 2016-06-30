@@ -149,7 +149,7 @@ class OpportunityType extends AbstractType
             FormEvents::SUBMIT,
             function (FormEvent $event) {
                 $relationsBuilder = new OpportunityRelationsBuilder($event->getData());
-                $relationsBuilder->build();
+                $relationsBuilder->buildAll();
             }
         );
     }

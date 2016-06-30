@@ -18,7 +18,7 @@ class OpportunityListener
         $entity = $event->getEntity();
         if ($entity instanceof Opportunity) {
             $relationsBuilder = new OpportunityRelationsBuilder($entity);
-            $relationsBuilder->build();
+            $relationsBuilder->buildAll();
         }
     }
 }
