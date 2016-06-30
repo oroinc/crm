@@ -11,6 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
@@ -78,6 +79,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
+    EmailOwnerInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
@@ -675,30 +677,6 @@ class Lead extends ExtendLead implements
         return $this->phoneNumber;
     }
 
-//    /**
-//     * Set email
-//     *
-//     * @param string $email
-//     *
-//     * @return Lead
-//     */
-//    public function setEmail($email)
-//    {
-//        $this->email = $email;
-//
-//        return $this;
-//    }
-//
-//    /**
-//     * Get email
-//     *
-//     * @return string
-//     */
-//    public function getEmail()
-//    {
-//        return $this->email;
-//    }
-
     /**
      * Set company name
      *
@@ -1195,5 +1173,15 @@ class Lead extends ExtendLead implements
         }
 
         return $result;
+    }
+
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+    }
+
+    public function getEmailFields()
+    {
+        return null;
     }
 }
