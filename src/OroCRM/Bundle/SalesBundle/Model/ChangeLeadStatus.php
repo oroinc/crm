@@ -67,9 +67,8 @@ class ChangeLeadStatus
         try {
             $status = $this->getStatusEntityByName($statusCode);
             $this->save($lead->setStatus($status));
-            $this->session->getFlashBag()->add('success', 'Saved');
         } catch (\Exception $e) {
-            $this->session->getFlashBag()->add('error', 'Not saved');
+            $this->session->getFlashBag()->add('error', $e->getMessage());
             return false;
         }
 
