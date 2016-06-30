@@ -39,10 +39,40 @@ class UpdateDependencySchema implements
         $this->activityExtension = $activityExtension;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
+        if (!$this->container->hasParameter('installed')
+            && !$this->container->getParameter('installed')) {
+                $this->addActivityAssociationsForCallBundle($schema, $queries);
+        }
+
+    }
+
+    /**
+     * @param Schema $schema
+     * @param QueryBag $queries
+     */
+    protected function addActivityAssociationsForCallBundle(Schema $schema, QueryBag $queries)
+    {
+
         $this->fillActivityListTables($queries, $schema);
         $this->fillActivityTables($queries, $schema);
+
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_b2bcustomer');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contactus_request');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_customer');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_order');
+        $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_cart');
+
+        $associationTableName = $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_case');
+        if (!$schema->hasTable($associationTableName)) {
+            $this->activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_case');
+        }
     }
 
     /**

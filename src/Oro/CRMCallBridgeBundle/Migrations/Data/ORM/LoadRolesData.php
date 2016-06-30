@@ -53,10 +53,9 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
                     ->findOneBy(['role' => $roleConfigData['bap_role']]);
             } else {
                 $role = new Role($roleName);
+                $role->setLabel($roleConfigData['label']);
+                $manager->persist($role);
             }
-
-            $role->setLabel($roleConfigData['label']);
-            $manager->persist($role);
 
             if ($aclManager->isAclEnabled()) {
                 $sid = $aclManager->getSid($role);
