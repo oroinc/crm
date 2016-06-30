@@ -1,5 +1,6 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% set name = entity.name|default('N/A') %}
+{% oro_title_set({params : {"%lead.name%": name} }) %}
 {% set title = 'oro.ui.convert_entity'|trans({
     '%name%': name,
     '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans

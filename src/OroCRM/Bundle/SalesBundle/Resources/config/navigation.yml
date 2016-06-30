@@ -109,6 +109,8 @@ oro_titles:
     orocrm_sales_lead_view: '%%lead.name%%'
     orocrm_sales_lead_create: 'Create Lead'
     orocrm_sales_lead_update: '%%lead.name%% - Edit'
+    orocrm_sales_lead_convert_to_opportunity: '%%lead.name%% - Convert To Opportunity'
+    orocrm_sales_lead_create_opportunity: '%%lead.name%% - Convert To Opportunity'
 
     orocrm_sales_salesfunnel_index: ~
     orocrm_sales_salesfunnel_view: '%%sales_funnel%%'
