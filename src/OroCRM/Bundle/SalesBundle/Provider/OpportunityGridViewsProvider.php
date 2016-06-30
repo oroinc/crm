@@ -8,7 +8,6 @@ use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 
 class OpportunityGridViewsProvider
 {
-
     /**
      * @var array
      */
