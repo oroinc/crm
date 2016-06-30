@@ -72,8 +72,18 @@ class AddOpportunityStatus implements
      * @param Schema $schema
      * @param ExtendExtension $extendExtension
      * @param QueryBag $queries
+     * @param array $statusList
+     * @param array $immutableList
+     * @param null $defaultStatus
      */
-    public static function addStatusField(Schema $schema, ExtendExtension $extendExtension, QueryBag $queries)
+    public static function addStatusField(
+        Schema $schema,
+        ExtendExtension $extendExtension,
+        QueryBag $queries,
+        array $statusList = null,
+        array $immutableList = null,
+        $defaultStatus = null
+    )
     {
         $enumTable = $extendExtension->addEnumField(
             $schema,
@@ -90,15 +100,21 @@ class AddOpportunityStatus implements
             ]
         );
 
+        $immutable = [
+            'in_progress',
+            'won',
+            'lost',
+        ];
+
+        if (!empty($immutableList)) {
+            $immutable = $immutableList;
+        }
+
         $options = new OroOptions();
         $options->set(
             'enum',
             'immutable_codes',
-            [
-                'in_progress',
-                'won',
-                'lost'
-            ]
+            $immutable
         );
 
         $enumTable->addOption(OroOptions::KEY, $options);
@@ -111,7 +127,17 @@ class AddOpportunityStatus implements
             'won' => 'Closed Won',
             'lost' => 'Closed Lost'
         ];
+
+        if (!empty($statusList)) {
+            $statuses = $statusList;
+        }
+
         $defaultValue = 'in_progress';
+
+        if ($defaultStatus) {
+            $defaultValue = $defaultStatus;
+        }
+
         $query = 'INSERT INTO oro_enum_opportunity_status (id, name, priority, is_default)
                   VALUES (:id, :name, :priority, :is_default)';
         $i = 1;
