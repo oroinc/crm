@@ -56,17 +56,29 @@ class OpportunityByStatusProvider
         $excludedStatuses = $widgetOptions->get('excluded_statuses', []);
         $orderBy          = $widgetOptions->get('useQuantityAsData') ? 'quantity' : 'budget';
         $qb               = $this->getOpportunityRepository()
-            ->getGroupedOpportunitiesByStatusQB('o', $excludedStatuses, $orderBy);
+            ->getGroupedOpportunitiesByStatusQB('o', $orderBy);
         $this->dateFilterProcessor->process($qb, $dateRange, 'o.createdAt');
+
+        // Ignore filters by opportunities, if filters by date exists.
+        $where = $qb->getDQLPart('where');
+        if ($where) {
+            $qb->where(
+                $qb->expr()->orX(
+                    $where,
+                    $qb->expr()->isNull('o.id')
+                )
+            );
+        }
+
+        if ($excludedStatuses) {
+            $qb->andWhere(
+                $qb->expr()->notIn('s.id', $excludedStatuses)
+            );
+        }
+
         if ($owners) {
             QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
         }
-
-        // Ignore filters by opportunities
-        $qb->orWhere(
-            $qb->expr()->isNull('o.id')
-        );
-
         return $this->aclHelper->apply($qb)->getArrayResult();
     }
 
