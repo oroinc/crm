@@ -4,6 +4,6 @@ services:
      oro_crm_call_bridge.call_activity_direction.provider:
             class: %oro_crm_call_bridge.call_activity_direction.provider.class%
             arguments:
-                - "@oro_activity.manager"
+                - '@oro_activity.manager'
             tags:
                - {name: orocrm_activity_direction.provider}
