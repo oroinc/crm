@@ -2,10 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
-use Symfony\Component\Routing\Router;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -16,12 +13,6 @@ class ChangeLeadStatus
 {
     const STATUS_QUALIFY    = 'qualified';
     const STATUS_DISQUALIFY = 'canceled';
-    const LEAD_VIEW_ROUTE   = 'orocrm_sales_lead_view';
-
-    /**
-     * @var Request
-     */
-    protected $request;
 
     /**
      * @var Session
@@ -29,43 +20,30 @@ class ChangeLeadStatus
     protected $session;
 
     /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @var DoctrineHelper
+     * @var ObjectManager
      */
     protected $manager;
 
     /**
-     * @param Request $request
      * @param Session $session
-     * @param Router $router
      * @param ObjectManager $manager
      */
     public function __construct(
-        Request $request,
         Session $session,
-        Router $router,
         ObjectManager $manager
     ) {
-        $this->request = $request;
         $this->session = $session;
-        $this->router = $router;
         $this->manager = $manager;
     }
 
     /**
      * @param Lead $lead
      *
-     * @return RedirectResponse
+     * @return bool
      */
     public function disqualify(Lead $lead)
     {
-        $this->changeStatus($lead, self::STATUS_DISQUALIFY);
-
-        return new RedirectResponse($this->router->generate(self::LEAD_VIEW_ROUTE, ['id' => $lead->getId()]));
+        return $this->changeStatus($lead, self::STATUS_DISQUALIFY);
     }
 
     /**

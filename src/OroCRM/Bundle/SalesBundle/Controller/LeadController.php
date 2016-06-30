@@ -180,7 +180,10 @@ class LeadController extends Controller
      */
     public function disqualifyAction(Lead $lead)
     {
-        return $this->get('orocrm_sales.model.change_lead_status')->disqualify($lead);
+        $this->get('orocrm_sales.model.change_lead_status')->disqualify($lead);
+
+        return $this->redirectToRoute('orocrm_sales_lead_view', ['id' => $lead->getId()]);
+
     }
 
     /**
