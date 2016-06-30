@@ -42,7 +42,7 @@ class OpportunityType extends AbstractType
                     'label'                  => 'orocrm.sales.opportunity.contact.label',
                     'new_item_property_name' => 'firstName',
                     'configs'                => [
-                        'allowCreateNew' => true,
+                        'allowCreateNew'          => true,
                         'renderedPropertyName'    => 'fullName',
                         'placeholder'             => 'orocrm.contact.form.choose_contact',
                         'result_template_twig'    => 'OroFormBundle:Autocomplete:fullName/result.html.twig',
