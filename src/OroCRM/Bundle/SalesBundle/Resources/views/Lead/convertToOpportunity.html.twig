@@ -1,13 +1,9 @@
 {% extends 'OroUIBundle:actions:update.html.twig' %}
 {% set name = entity.name|default('N/A') %}
 {% oro_title_set({params : {"%lead.name%": name} }) %}
-{% set title = 'oro.ui.convert_entity'|trans({
-    '%name%': name,
-    '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans
-}) %}
 
-{% set formAction = path('orocrm_sales_lead_create_opportunity', {
-    'use_full_contact_form' : form.vars.use_full_contact_form
+{% set formAction = path('orocrm_sales_lead_convert_to_opportunity', {
+    'id': entity.lead.id
 }) %}
 
 {% block head_script %}
@@ -23,15 +19,20 @@
         'route': 'orocrm_sales_lead_view',
         'params': {'id': entity.lead.id}
     }) %}
-    {% if resource_granted('orocrm_sales_lead_create_opportunity') %}
+    {% if resource_granted('orocrm_sales_lead_convert_to_opportunity') %}
         {% set html = html ~ UI.saveAndNewButton({
-            'route': 'orocrm_sales_lead_create_opportunity'
+            'route': 'orocrm_sales_lead_convert_to_opportunity',
+            'params': {'id': entity.lead.id}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}
 {% endblock %}
 
 {% block pageHeader %}
+    {% set title = 'oro.ui.convert_entity'|trans({
+        '%name%': name,
+        '%entityName%': 'orocrm.sales.opportunity.entity_label'|trans
+    }) %}
     {% include 'OroUIBundle::page_title_block.html.twig' with { title: title } %}
 {% endblock pageHeader %}
 
