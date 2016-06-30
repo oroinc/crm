@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');
-        //todo fix in scope of BAP-10514
+        //todo fix in scope of BAP-10979
         $workflow        = $workflowManager->getApplicableWorkflowByEntityClass(
             'OroCRM\Bundle\MagentoBundle\Entity\Cart'
         );
