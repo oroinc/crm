@@ -1,0 +1,42 @@
+Oro\Bundle\OrganizationBundle\Entity\Organization:
+  organization-system:
+    name: 'System Organization'
+    enabled: true
+    businessUnits: ['@business_unit']
+    users: ['@admin']
+
+OroCRM\Bundle\ChannelBundle\Entity\Channel:
+  custom-channel:
+    name: Custom Channel
+    owner: '@organization-system'
+    channelType: 'custom'
+    status: true
+    customerIdentity: OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity
+
+OroCRM\Bundle\ChannelBundle\Entity\EntityName:
+  entity-name-1:
+    channel: '@custom-channel'
+    __construct: [OroCRM\Bundle\ChannelBundle\Entity\CustomerIdentity]
+  entity-name-2:
+    channel: '@custom-channel'
+    __construct: [OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest]
+
+OroPro\Bundle\OrganizationBundle\Entity\UserOrganization:
+  user-org:
+    __construct: ['@admin', '@organization-system']
+
+OroCRM\Bundle\ContactUsBundle\Entity\ContactRequest:
+  contact-{1..5}:
+    firstName: <firstName()>
+    lastName: <lastName()>
+    emailAddress: <email()>
+    phone: <e164PhoneNumber()>
+    owner: '@organization-system'
+    comment: <sentences(3, true)>
+  contact-{6..10}:
+    firstName: <firstName()>
+    lastName: <lastName()>
+    emailAddress: <email()>
+    phone: <e164PhoneNumber()>
+    owner: '@organization-system'
+    comment: <sentences(3, true)>
