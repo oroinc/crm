@@ -83,8 +83,7 @@ class AddOpportunityStatus implements
         array $statusList = null,
         array $immutableList = null,
         $defaultStatus = null
-    )
-    {
+    ) {
         $enumTable = $extendExtension->addEnumField(
             $schema,
             'orocrm_sales_opportunity',
