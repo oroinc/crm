@@ -59,11 +59,12 @@ class WidgetOpportunityByLeadSourceProvider
      *
      * @param array $dateRange ['start' => $dateString, 'end' => $dateString]
      * @param array $ownerIds
+     * @param array $excluded
      * @param bool $byAmount
      *
      * @return array
      */
-    public function getOpportunityByLeadSourceData(array $dateRange, array $ownerIds, $byAmount = false)
+    public function getOpportunityByLeadSourceData(array $dateRange, array $ownerIds, array $excluded = [], $byAmount = false)
     {
         $repo = $this->getLeadRepository();
         if ($byAmount) {
@@ -76,20 +77,93 @@ class WidgetOpportunityByLeadSourceProvider
             return [];
         }
 
+        $data = $this->processOpportunitiesByLeadSource($data, $excluded);
+
         // translate sources
         foreach ($data as $key => $item) {
             $data[$key]['source'] = $this->translateSource($item['source']);
         }
 
-        // sort alphabetically by label
+        return $data;
+    }
+
+    /**
+     * Process the data to create filtered list of sources that contains:
+     * - Unclassified group that contains the data from unnamed sources
+     * - $limit number of named groups sorted by value
+     * - Others group that contains the data from the rest of the groups plus the excluded ones
+     *
+     * @param array $rows
+     * @param array $excluded List of the sources to merge into Others
+     * @param int $limit      Limit named groups, excess goes into Others
+     *
+     * @return array
+     */
+    protected function processOpportunitiesByLeadSource(array $rows, $excluded = [], $limit = 10)
+    {
+        $result = [];
+
+        // sort by count to make sure biggest numbers are not merged to others
         usort(
-            $data,
+            $rows,
             function ($a, $b) {
-                return strcasecmp($a['source'], $b['source']);
+                if ($a['itemCount'] === $b['itemCount']) {
+                    return 0;
+                }
+
+                return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
+            }
+        );
+        // get excluded sources (to be merged with others)
+        $others = array_filter(
+            $rows,
+            function ($row) use ($excluded) {
+                return in_array($row['source'], $excluded);
             }
         );
 
-        return $data;
+        // remove the excluded sources
+        $rows = array_diff_key($rows, $others);
+
+        // get a sum of itemCount for unclassified sources
+        $unclassifiedCount = array_reduce(
+            $rows,
+            function ($count, $row) {
+                return '' === $row['source'] ? $count + $row['itemCount'] : $count;
+            }
+        );
+
+        // add Unclassified on top
+        if ($unclassifiedCount > 0) {
+            $result[] = [
+                'itemCount' => $unclassifiedCount,
+                'source' => null,
+            ];
+        }
+
+        // get all named sources with non-zero values
+        $named = array_filter(
+            $rows,
+            function ($row) {
+                return !empty($row['source']) && $row['itemCount'] > 0;
+            }
+        );
+
+        // add a slice consisting of the first $limit classified sources
+        $result = array_merge($result, array_slice($named, 0, $limit));
+
+        // merge the data from sources that left with the excluded sources
+        $others = array_merge($others, array_slice($named, $limit));
+        $othersCount = array_sum(array_column($others, 'itemCount'));
+        // add Others as last group
+        if ($othersCount > 0) {
+            $result[] = [
+                'itemCount' => $othersCount,
+                'source' => '',
+            ];
+        }
+
+        return $result;
     }
 
     /**

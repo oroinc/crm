@@ -36,6 +36,14 @@ oro_dashboard_config:
                        label: oro.dashboard.date_range.label
                        value_types: true
                     show_on_widget: true
+                excludedSources:
+                    type: orocrm_type_widget_lead_source_select
+                    options:
+                        label:  Lead Sources in Others
+                        tooltip:  Pick Lead sources that will merge into Others group
+                        required: false
+                        configs:
+                            placeholder: Pick Lead sources
                 byAmount:
                    type: choice
                    options:

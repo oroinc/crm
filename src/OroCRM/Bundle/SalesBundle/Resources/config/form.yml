@@ -23,7 +23,6 @@ parameters:
     orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
     orocrm_sales.lead_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadDataChannelAwareSelectType
-    orocrm_sales.entity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\EntityDataChannelAwareSelectType
     orocrm_sales.opportunity_data_channel_aware_select.type.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityDataChannelAwareSelectType
 
 services:
@@ -248,6 +247,13 @@ services:
             - '@oro_entity_extend.enum_value_provider'
         tags:
             - { name: form.type, alias: orocrm_type_widget_opportunity_status_select }
+
+    orocrm_sales.type.lead_source_select:
+        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadSourceSelectType
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+        tags:
+            - { name: form.type, alias: orocrm_type_widget_lead_source_select }
 
     orocrm_sales.type.lead_status_select:
         class: OroCRM\Bundle\SalesBundle\Form\Type\LeadStatusSelectType

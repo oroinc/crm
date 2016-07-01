@@ -33,6 +33,7 @@ class DashboardController extends Controller
         $data = $dataProvider->getOpportunityByLeadSourceData(
             $options->get('dateRange', []),
             $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options),
+            $options->get('excludedSources'),
             (bool) $options->get('byAmount', false)
         );
 
