@@ -60,6 +60,11 @@ orocrm:
             opportunities_by_lead_source_chart:
                 title:       Opportunities By Lead Source
                 description: This widget displays a breakdown of opportunities by Lead source in form of a pie chart.
+                by_ammount:
+                    label: Display data
+                    tooltip: 'Choose which data to display on the chart: Count shows the number of opportunities with a particular lead source, and Amount displays their total budget.'
+                    count: Count
+                    ammount: Ammount
             forecast_of_opportunities:
                 title:       Forecast
                 description: This widget displays forecast of opportunities

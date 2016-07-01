@@ -12,7 +12,7 @@ use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 class LeadRepository extends EntityRepository
 {
     /**
-     * Returns top $limit opportunities grouped by lead source
+     * Returns count of top $limit opportunities grouped by lead source
      *
      * @param  AclHelper $aclHelper
      * @param  int       $limit
@@ -20,26 +20,77 @@ class LeadRepository extends EntityRepository
      *
      * @return array     [itemCount, label]
      */
-    public function getOpportunitiesByLeadSource(AclHelper $aclHelper, $limit = 10, $dateRange = null, $owners = [])
-    {
-        $qb = $this->createQueryBuilder('l')
-            ->select('s.id as source, count(o.id) as itemCount')
-            ->leftJoin('l.opportunities', 'o')
-            ->leftJoin('l.source', 's')
-            ->groupBy('source');
-
-        if ($dateRange && $dateRange['start'] && $dateRange['end']) {
-            $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
-                ->setParameter('dateStart', $dateRange['start'])
-                ->setParameter('dateEnd', $dateRange['end']);
-        }
-        if ($owners) {
-            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
-        }
+    public function getOpportunitiesCountByLeadSource(
+        AclHelper $aclHelper,
+        $limit = 10,
+        array $dateRange = [],
+        array $owners = []
+    ) {
+        $qb = $this->getOpportunitiesByLeadSourceQueryBuilder($dateRange, $owners);
+        $qb->addSelect('count(o.id) as itemCount');
 
         $rows = $aclHelper->apply($qb)->getArrayResult();
 
         return $this->processOpportunitiesByLeadSource($rows, $limit);
+    }
+
+    /**
+     * Returns budget ammount of top $limit opportunities grouped by lead source
+     *
+     * @param  AclHelper $aclHelper
+     * @param  int       $limit
+     * @param  array     $dateRange
+     *
+     * @return array     [itemCount, label]
+     */
+    public function getOpportunitiesAmountByLeadSource(
+        AclHelper $aclHelper,
+        $limit = 10,
+        array $dateRange = [],
+        array $owners = []
+    ) {
+        $qb = $this->getOpportunitiesByLeadSourceQueryBuilder($dateRange, $owners);
+        $qb->addSelect(
+            "SUM(
+                CASE WHEN o.status = 'won' 
+                    THEN o.closeRevenue 
+                    ELSE o.budgetAmount
+                END
+            ) as itemCount"
+        );
+
+        $rows = $aclHelper->apply($qb)->getArrayResult();
+
+        return $this->processOpportunitiesByLeadSource($rows, $limit);
+    }
+
+    /**
+     * Returns opportunities QB grouped by lead source filtered by $dateRange and $ownders
+     *
+     * @param  array     $dateRange
+     * @param  array     $owners
+     *
+     * @return QueryBuilder
+     */
+    protected function getOpportunitiesByLeadSourceQueryBuilder(array $dateRange, array $owners = [])
+    {
+        $qb = $this->createQueryBuilder('l')
+            ->select('s.id as source')
+            ->leftJoin('l.opportunities', 'o')
+            ->leftJoin('l.source', 's')
+            ->groupBy('source');
+
+        if (isset($dateRange['start']) && isset($dateRange['end'])) {
+            $qb->andWhere($qb->expr()->between('o.createdAt', ':dateStart', ':dateEnd'))
+                ->setParameter('dateStart', $dateRange['start'])
+                ->setParameter('dateEnd', $dateRange['end']);
+        }
+
+        if ($owners) {
+            QueryUtils::applyOptimizedIn($qb, 'o.owner', $owners);
+        }
+
+        return $qb;
     }
 
     /**

@@ -31,8 +31,9 @@ class DashboardController extends Controller
         $dataProvider = $this->get('orocrm_sales.provider.opportunity_by_lead_source');
 
         $data = $dataProvider->getOpportunityByLeadSourceData(
-            $options->get('dateRange'),
-            $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
+            $options->get('dateRange', []),
+            $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options),
+            (bool) $options->get('byAmount', false)
         );
 
         $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);

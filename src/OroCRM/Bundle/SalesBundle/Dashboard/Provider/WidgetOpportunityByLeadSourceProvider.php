@@ -59,13 +59,18 @@ class WidgetOpportunityByLeadSourceProvider
      *
      * @param array $dateRange ['start' => $dateString, 'end' => $dateString]
      * @param array $ownerIds
+     * @param bool $byAmount
      *
      * @return array
      */
-    public function getOpportunityByLeadSourceData(array $dateRange, array $ownerIds)
+    public function getOpportunityByLeadSourceData(array $dateRange, array $ownerIds, $byAmount = false)
     {
-
-        $data = $this->getLeadRepository()->getOpportunitiesByLeadSource($this->aclHelper, 10, $dateRange, $ownerIds);
+        $repo = $this->getLeadRepository();
+        if ($byAmount) {
+            $data = $repo->getOpportunitiesAmountByLeadSource($this->aclHelper, 10, $dateRange, $ownerIds);
+        } else {
+            $data = $repo->getOpportunitiesCountByLeadSource($this->aclHelper, 10, $dateRange, $ownerIds);
+        }
 
         if (empty($data)) {
             return [];
