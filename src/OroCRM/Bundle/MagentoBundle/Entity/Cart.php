@@ -57,7 +57,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *              "grid_name"="magento-cart-grid",
  *          },
  *          "workflow"={
- *              "active_workflow"="b2c_flow_abandoned_shopping_cart"
+ *              "active_workflows"={"b2c_flow_abandoned_shopping_cart"}
  *          },
  *          "grid"={
  *              "default"="magento-cart-grid",
@@ -263,22 +263,6 @@ class Cart extends ExtendCart implements
      * @ORM\Column(name="notes", type="text", nullable=true)
      */
     protected $notes;
-
-    /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
 
     /**
      * @var string
