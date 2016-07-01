@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
@@ -59,7 +60,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
                 $entity->setAddress($addressRepo->getEntity('Jerry Coleman'));
-                $entity->setEmail('JerryAColeman@armyspy.com');
+                $entity->addEmail(new LeadEmail('JerryAColeman@armyspy.com'));
                 $entity->setNamePrefix('Mr.');
                 $entity->setFirstName('Jerry');
                 $entity->setLastName('Coleman');

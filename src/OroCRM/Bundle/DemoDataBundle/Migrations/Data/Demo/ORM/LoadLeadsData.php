@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
@@ -23,6 +22,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;

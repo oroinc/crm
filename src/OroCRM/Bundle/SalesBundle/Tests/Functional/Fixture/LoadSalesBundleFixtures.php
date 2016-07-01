@@ -14,6 +14,7 @@ use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 
@@ -121,7 +122,7 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setFirstName('fname');
         $lead->setLastName('lname');
         $lead->setCustomer($this->getReference('default_b2bcustomer'));
-        $lead->setEmail('email@email.com');
+        $lead->addEmail(new LeadEmail('email@email.com'));
         $lead->setOrganization($this->organization);
 
         $this->em->persist($lead);
