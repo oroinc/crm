@@ -155,8 +155,6 @@ parameters:
     orocrm_magento.form.api.handler.customer.class:                         OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerApiHandler
     orocrm_magento.form.handler.customer_address.class:                     OroCRM\Bundle\MagentoBundle\Form\Handler\CustomerAddressApiHandler
 
-    # definitions
-    orocrm_magento.cart.workflow_name: 'b2c_flow_abandoned_shopping_cart'
 services:
     orocrm_magento.transport.soap_transport:
         class: %orocrm_magento.transport.soap_transport.class%
