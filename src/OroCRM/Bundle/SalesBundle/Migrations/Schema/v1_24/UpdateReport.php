@@ -15,7 +15,7 @@ use Oro\Bundle\MigrationBundle\Migration\ParametrizedMigrationQuery;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
-class UpdateReportQuery extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
+class UpdateReport extends ParametrizedMigrationQuery implements Migration, OrderedMigrationInterface
 {
     /**
      * {@inheritdoc}
