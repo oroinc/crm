@@ -12,6 +12,11 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 class LeadType extends AbstractType
 {
     /**
+     * @var string
+     */
+    protected $dataClass = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+
+    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      */
@@ -92,6 +97,15 @@ class LeadType extends AbstractType
             );
     }
 
+
+    /**
+     * @param string $dataClass
+     */
+    public function setDataClass($dataClass)
+    {
+        $this->dataClass = $dataClass;
+    }
+
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -99,7 +113,7 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
+                'data_class'         => $this->dataClass,
                 'cascade_validation' => true,
             )
         );
