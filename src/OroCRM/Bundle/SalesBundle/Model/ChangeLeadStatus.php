@@ -9,6 +9,8 @@ use Doctrine\Common\Persistence\ObjectManager;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
+use Doctrine\DBAL\Query\QueryBuilder;
+
 class ChangeLeadStatus
 {
     const STATUS_QUALIFY    = 'qualified';
