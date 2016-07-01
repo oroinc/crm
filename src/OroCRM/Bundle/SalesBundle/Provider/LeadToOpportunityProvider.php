@@ -101,7 +101,10 @@ class LeadToOpportunityProvider
     public function prepareOpportunity(Lead $lead, Request $request)
     {
         $opportunity = new Opportunity();
-        $opportunity->setLead($lead);
+        $opportunity
+            ->setLead($lead)
+            // set predefined contact entity to have proper validation
+            ->setContact(new Contact());
 
         if ($request->getMethod() === 'GET' && $this->validateLeadStatus($lead)) {
             $contact = $this->prepareContactToOpportunity($lead);
