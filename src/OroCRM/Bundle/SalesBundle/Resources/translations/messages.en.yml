@@ -173,6 +173,7 @@ orocrm:
             job_title.label:      Job title
             phone_number.label:   Phone number
             email.label:          Email
+            emails.label:         Emails
             company_name.label:   Company name
             website.label:        Website
             number_of_employees.label: Number of employees
@@ -208,6 +209,18 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+
+        #
+        # Entity OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+        #
+        leademail:
+            email.label:         Email
+            entity_description:  Represent lead's email
+            entity_label:        Lead Email
+            entity_plural_label: Lead Emails
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
 
         salesfunnel:
             entity_label:         Sales Process

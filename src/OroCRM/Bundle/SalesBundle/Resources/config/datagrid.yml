@@ -261,7 +261,7 @@ datagrid:
                     - l.lastName
                     - l.createdAt
                     - l.updatedAt
-                    - l.email
+                    - email.email
                     - l.phoneNumber
                     - l.jobTitle
                     - l.companyName
@@ -292,6 +292,7 @@ datagrid:
                     left:
                         - { join: l.status, alias: status }
                         - { join: l.address, alias: address }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
@@ -420,7 +421,7 @@ datagrid:
                 customerName:
                     data_name: customerName
                 email:
-                    data_name: l.email
+                    data_name: email.email
                 phoneNumber:
                     data_name: l.phoneNumber
                 countryName:
@@ -526,7 +527,7 @@ datagrid:
                     enabled: false
                 email:
                     type: string
-                    data_name: l.email
+                    data_name: email.email
                 phoneNumber:
                     type: string
                     data_name: l.phoneNumber
@@ -785,7 +786,7 @@ datagrid:
                     - lead.name
                     - lead.firstName
                     - lead.lastName
-                    - lead.email
+                    - email.email
                     - lead.phoneNumber
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
@@ -801,6 +802,7 @@ datagrid:
                 join:
                     left:
                         - { join: lead.address, alias: address }
+                        - { join: lead.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                 where:
@@ -836,7 +838,7 @@ datagrid:
                 lastName:
                     data_name: lead.lastName
                 email:
-                    data_name: lead.email
+                    data_name: email.email
                 phoneNumber:
                     data_name: lead.phoneNumber
                 countryName:
@@ -865,7 +867,7 @@ datagrid:
                      data_name: lead.lastName
                  email:
                      type: string
-                     data_name: lead.email
+                     data_name: email.email
                  phoneNumber:
                      type: string
                      data_name: lead.phoneNumber
@@ -1232,7 +1234,7 @@ datagrid:
                     - l.firstName
                     - l.lastName
                     - l.createdAt
-                    - l.email
+                    - email.email
                     - l.phoneNumber
                     - status.label as statusLabel
                     - country.name as countryName
@@ -1251,6 +1253,7 @@ datagrid:
                     left:
                         - { join: l.status, alias: status }
                         - { join: l.address, alias: address }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
         filters:
@@ -1274,7 +1277,7 @@ datagrid:
                     data_name: l.lastName
                  email:
                     type: string
-                    data_name: l.email
+                    data_name: email.email
                  phoneNumber:
                     type: string
                     data_name: l.phoneNumber
@@ -1323,7 +1326,7 @@ datagrid:
                 createdAt:
                     data_name: l.createdAt
                 email:
-                    data_name: l.email
+                    data_name: email.email
                 phoneNumber:
                     data_name: l.phoneNumber
                 countryName:
@@ -1488,7 +1491,7 @@ datagrid:
                     - l.name
                     - l.firstName
                     - l.lastName
-                    - l.email
+                    - email.email
                     - l.phoneNumber
                     - status.label as statusLabel
                     - channel.name as channelName
@@ -1498,6 +1501,7 @@ datagrid:
                     left:
                         - { join: l.status, alias: status }
                         - { join: l.dataChannel, alias: channel }
+                        - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
                 - HINT_TRANSLATABLE
         columns:
@@ -1528,7 +1532,7 @@ datagrid:
                 lastName:
                     data_name: l.lastName
                 email:
-                    data_name: l.email
+                    data_name: email.email
             default:
                 createdAt:  DESC
         filters:
@@ -1561,7 +1565,7 @@ datagrid:
                     data_name: l.lastName
                  email:
                     type: string
-                    data_name: l.email
+                    data_name: email.email
 
     sales-opportunity-for-context-grid:
         extended_entity_name: %orocrm_sales.opportunity.class%
