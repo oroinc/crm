@@ -270,7 +270,7 @@ datagrid:
                     - l.numberOfEmployees
                     - source.name as sourceName
                     - customer.name as customerName
-                    - status.name as statusLabel
+                    - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - address.city as addressCity
@@ -290,7 +290,7 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
                         - { join: l.address, alias: address }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: address.country, alias: country }
@@ -309,8 +309,10 @@ datagrid:
                 label:         orocrm.sales.lead.data_channel.label
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -396,8 +398,8 @@ datagrid:
                     data_name: channelName
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
@@ -473,15 +475,10 @@ datagrid:
                             class: OroCRMChannelBundle:Channel
                             property: name
                             translatable_options: false
-                statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:LeadStatus
-                            property: label
-                            translatable_options: false
+                status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                 firstName:
                     type: string
                     data_name: l.firstName
@@ -1236,7 +1233,7 @@ datagrid:
                     - l.createdAt
                     - email.email
                     - l.phoneNumber
-                    - status.label as statusLabel
+                    - s.id as status
                     - country.name as countryName
                     - address.postalCode as addressPostalCode
                     - >
@@ -1251,7 +1248,7 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
                         - { join: l.address, alias: address }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
                         - { join: address.country, alias: country }
@@ -1261,14 +1258,10 @@ datagrid:
                  name:
                     type: string
                     data_name: l.name
-                 statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: false
-                    options:
-                        field_options:
-                          class: OroCRMSalesBundle:LeadStatus
-                          property: label
+                 status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                  firstName:
                     type: string
                     data_name: l.firstName
@@ -1294,8 +1287,10 @@ datagrid:
         columns:
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -1317,8 +1312,8 @@ datagrid:
             columns:
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
@@ -1493,13 +1488,13 @@ datagrid:
                     - l.lastName
                     - email.email
                     - l.phoneNumber
-                    - status.label as statusLabel
+                    - s.id as status
                     - channel.name as channelName
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
                         - { join: l.dataChannel, alias: channel }
                         - { join: l.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
             hints:
@@ -1511,8 +1506,10 @@ datagrid:
                 label:         orocrm.sales.lead.data_channel.label
             name:
                 label:         orocrm.sales.lead.name.label
-            statusLabel:
+            status:
+                frontend_type: select
                 label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
             firstName:
                 label:         orocrm.sales.lead.first_name.label
             lastName:
@@ -1525,8 +1522,8 @@ datagrid:
                     data_name: channelName
                 name:
                     data_name: l.name
-                statusLabel:
-                    data_name: statusLabel
+                status:
+                    data_name: status
                 firstName:
                     data_name: l.firstName
                 lastName:
@@ -1548,15 +1545,10 @@ datagrid:
                  name:
                     type: string
                     data_name: l.name
-                 statusLabel:
-                    type: entity
-                    data_name: status.name
-                    enabled: false
-                    options:
-                        field_options:
-                            class: OroCRMSalesBundle:LeadStatus
-                            property: label
-                            translatable_options: false
+                 status:
+                    type: enum
+                    data_name: status
+                    enum_code: lead_status
                  firstName:
                     type: string
                     data_name: l.firstName
