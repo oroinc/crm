@@ -23,7 +23,7 @@ class LeadToOpportunityProvider
     {
         $leadStatus = $lead->getStatus()->getName();
 
-        if ( $leadStatus !== 'new' ) {
+        if ($leadStatus !== 'new') {
             throw new HttpException(403, 'Not allowed action');
         }
 
