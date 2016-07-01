@@ -27,6 +27,8 @@ parameters:
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
 
+    orocrm_sales.provider.opportunity_by_lead_source.class: OroCRM\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider
+
 services:
     orocrm_sales.opportunity.manager.api:
         class: %orocrm_sales.opportunity.manager.api.class%
@@ -203,3 +205,12 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
+
+    orocrm_sales.provider.opportunity_by_lead_source:
+        class: %orocrm_sales.provider.opportunity_by_lead_source.class%
+        arguments:
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'
+            - '@translator'
+            - '@oro_entity_extend.twig.extension.enum'

@@ -3,13 +3,11 @@
 namespace OroCRM\Bundle\SalesBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Translation\TranslatorInterface;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
-use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 
 use OroCRM\Bundle\SalesBundle\Entity\Repository\SalesFunnelRepository;
 
@@ -25,58 +23,28 @@ class DashboardController extends Controller
      */
     public function opportunitiesByLeadSourceAction($widget)
     {
-        /** @var TranslatorInterface $translator */
-        $translator = $this->get('translator');
-
-        /** @var EnumExtension $enumValueTranslator */
-        $enumValueTranslator = $this->get('oro_entity_extend.twig.extension.enum');
-
         $options = $this->get('oro_dashboard.widget_configs')->getWidgetOptions(
             $this->getRequest()->query->get('_widgetId', null)
         );
-        $data = $this->getDoctrine()
-            ->getRepository('OroCRMSalesBundle:Lead')
-            ->getOpportunitiesByLeadSource(
-                $this->get('oro_security.acl_helper'),
-                10,
-                $options->get('dateRange'),
-                $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
-            );
 
         // prepare chart data
-        if (empty($data)) {
-            $data[] = ['label' => $translator->trans('orocrm.sales.lead.source.none')];
-        } else {
-            // translate sources
-            foreach ($data as &$item) {
-                if ($item['source'] === null) {
-                    $item['label'] = $translator->trans('orocrm.sales.lead.source.unclassified');
-                } elseif (empty($item['source'])) {
-                    $item['label'] = $translator->trans('orocrm.sales.lead.source.others');
-                } else {
-                    $item['label'] = $enumValueTranslator->transEnum($item['source'], 'lead_source');
-                }
-                unset($item['source']);
-            }
-            // sort alphabetically by label
-            usort(
-                $data,
-                function ($a, $b) {
-                    return strcasecmp($a['label'], $b['label']);
-                }
-            );
-        }
+        $dataProvider = $this->get('orocrm_sales.provider.opportunity_by_lead_source');
 
-        $widgetAttr              = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
+        $data = $dataProvider->getOpportunityByLeadSourceData(
+            $options->get('dateRange'),
+            $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options)
+        );
+
+        $widgetAttr = $this->get('oro_dashboard.widget_configs')->getWidgetAttributesForTwig($widget);
         $widgetAttr['chartView'] = $this->get('oro_chart.view_builder')
             ->setArrayData($data)
             ->setOptions(
                 [
-                    'name'        => 'pie_chart',
+                    'name' => 'pie_chart',
                     'data_schema' => [
-                        'label' => ['field_name' => 'label'],
-                        'value' => ['field_name' => 'itemCount']
-                    ]
+                        'label' => ['field_name' => 'source'],
+                        'value' => ['field_name' => 'itemCount'],
+                    ],
                 ]
             )
             ->getView();
