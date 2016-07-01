@@ -932,7 +932,6 @@ datagrid:
                 pagination:
                     hide: true
 
-    #FIXME: check group by
     magento-customer-order-grid:
         acl_resource: orocrm_magento_order_view
         source:
@@ -997,7 +996,6 @@ datagrid:
                 acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
-    #FIXME: check group by
     magento-customer-cart-grid:
         acl_resource: orocrm_magento_cart_view
         source:
@@ -1073,7 +1071,6 @@ datagrid:
                 acl_resource: orocrm_magento_cart_view
                 rowAction:    true
 
-    #FIXME: check group by
     magento-customer-orders-widget-grid:
         acl_resource: orocrm_magento_order_view
         source:
@@ -1205,7 +1202,6 @@ datagrid:
                 acl_resource: orocrm_magento_order_view
                 rowAction:    true
 
-    #FIXME: check group by
     magento-customer-cart-widget-grid:
         acl_resource: orocrm_magento_cart_view
         source:
