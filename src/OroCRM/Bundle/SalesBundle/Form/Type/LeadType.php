@@ -39,9 +39,9 @@ class LeadType extends AbstractType
                 )
             )
             ->add('namePrefix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_prefix.label'))
-            ->add('firstName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.first_name.label'))
+            ->add('firstName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.first_name.label'))
             ->add('middleName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.middle_name.label'))
-            ->add('lastName', 'text', array('required' => true, 'label' => 'orocrm.sales.lead.last_name.label'))
+            ->add('lastName', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.last_name.label'))
             ->add('nameSuffix', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.name_suffix.label'))
             ->add(
                 'contact',
@@ -86,6 +86,14 @@ class LeadType extends AbstractType
                 array(
                     'required' => false,
                     'label' => 'orocrm.sales.lead.notes.label'
+                )
+            )
+            ->add(
+                'campaign',
+                'orocrm_campaign_select',
+                array(
+                    'required' => false,
+                    'label' => 'orocrm.sales.lead.campaign.label'
                 )
             );
     }
