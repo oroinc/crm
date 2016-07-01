@@ -5,7 +5,7 @@
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
-        {% if (entity.status.name not in "canceled") %}
+        {% if (entity.status.name not in "canceled")  %}
             {{ UI.button({
                 'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
                 'aCss':  'btn btn-danger action-button',

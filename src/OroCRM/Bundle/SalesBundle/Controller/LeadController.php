@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -195,17 +196,24 @@ class LeadController extends Controller
      * @Acl(
      *      id="orocrm_sales_lead_convert_to_opportunity",
      *      type="entity",
-     *      permission="CREATE",
+     *      permission="EDIT",
      *      class="OroCRMSalesBundle:Lead"
      * )
      * @Template()
      */
     public function convertToOpportunityAction(Lead $lead, Request $request)
     {
+
+        $securityFacade = $this->get('oro_security.security_facade');
+
         $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormId($lead);
         $opportunity = $this
             ->get('orocrm_sales.provider.lead_to_opportunity')
             ->prepareOpportunity($lead, $request);
+
+        if (!$securityFacade->isGranted('orocrm_sales_opportunity_create')) {
+            throw new AccessDeniedException();
+        }
 
         if ($this->get($formId . '.handler')->process($opportunity)) {
             $this->get('session')->getFlashBag()->add(
