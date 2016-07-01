@@ -932,8 +932,6 @@ services:
             - { name: routing.options_resolver }
 
     orocrm_magento.manager.abandoned_shopping_cart_flow:
-        class: Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager
-        arguments:
-            - '@oro_workflow.manager'
+        parent: oro_workflow.abstract.workflow_aware_manager
         calls:
-            - ['setWorkflowName', '%orocrm_magento.cart.workflow_name%']
+            - ['setWorkflowName', ['b2c_flow_abandoned_shopping_cart']]
