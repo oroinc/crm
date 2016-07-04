@@ -86,8 +86,12 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMMagentoBundle:Dashboard:ordersByCustomers.html.twig")
+     *
+     * @param Request $request
+     *
+     * @return array
      */
-    public function averageOrderAmountAction()
+    public function averageOrderAmountAction(Request $request)
     {
         $widgetAttributes  = $this->get('oro_dashboard.widget_configs');
         $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
@@ -97,7 +101,7 @@ class DashboardController extends Controller
         $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
-                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->getWidgetOptions($request->query->get('_widgetId', null))
                 ->get('dateRange'),
             $this->get('oro_dashboard.datetime.helper')
         );
@@ -112,8 +116,12 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMMagentoBundle:Dashboard:newCustomersChart.html.twig")
+     *
+     * @param Request $request
+     *
+     * @return array
      */
-    public function newCustomersAction()
+    public function newCustomersAction(Request $request)
     {
         $widgetAttributes     = $this->get('oro_dashboard.widget_configs');
         $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
@@ -123,7 +131,7 @@ class DashboardController extends Controller
         $data['chartView'] = $customerDataProvider->getNewCustomerChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
-                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->getWidgetOptions($request->query->get('_widgetId', null))
                 ->get('dateRange')
         );
 
