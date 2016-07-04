@@ -496,11 +496,13 @@ datagrid:
                     data_name: c.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 assignedName:
                     type: choice-tree
                     data_name: c.assignedTo
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                     enabled: false
                 reportsName:
                     type: string
@@ -510,6 +512,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: c.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         actions:
             view:
                 type: navigate
@@ -639,6 +642,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
