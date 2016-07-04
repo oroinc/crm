@@ -33,7 +33,7 @@ class DashboardController extends Controller
         $data = $dataProvider->getChartData(
             $options->get('dateRange', []),
             $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options),
-            $options->get('excludedSources'),
+            (array) $options->get('excludedSources'),
             (bool) $options->get('byAmount', false)
         );
 
