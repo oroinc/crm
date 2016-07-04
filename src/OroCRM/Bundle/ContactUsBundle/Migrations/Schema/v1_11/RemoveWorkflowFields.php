@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_11;
 
-use Doctrine\DBAL\Schema\ForeignKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
@@ -23,7 +22,7 @@ class RemoveWorkflowFields implements Migration
         ];
 
         foreach ($table->getForeignKeys() as $foreignKey) {
-            if (in_array($foreignKey->getForeignTableName(), $workflowTables)) {
+            if (in_array($foreignKey->getForeignTableName(), $workflowTables, true)) {
                 $table->removeForeignKey($foreignKey->getName());
                 foreach ($foreignKey->getLocalColumns() as $column) {
                     $table->dropColumn($column);
