@@ -14,6 +14,6 @@ class UpdateEmailTemplates implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        $queries->addQuery(new FixReminderEmailTemplates());
+        $queries->addQuery(new UpdateReminderEmailTemplates());
     }
 }
