@@ -212,10 +212,12 @@ datagrid:
                     data_name: o.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: o.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
         actions:
             view:
                 type:          navigate
@@ -559,6 +561,7 @@ datagrid:
                     data_name: l.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 contactName:
                     type: string
                     data_name: contactName
@@ -567,6 +570,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: l.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -724,10 +728,12 @@ datagrid:
                     data_name: salesFunnel.owner
                     autocomplete_alias: users
                     renderedPropertyName: 'fullName'
+                    className: 'Oro\Bundle\UserBundle\Entity\User'
                 businessUnitId:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: salesFunnel.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
 
     sales-funnel-lead-with-data-channel-grid:
         extends: sales-funnel-lead-grid
