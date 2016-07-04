@@ -26,8 +26,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $updatedAt              = new \DateTime();
         $lead                   = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Lead');
         $opportunity            = $this->getMock('OroCRM\Bundle\SalesBundle\Entity\Opportunity');
-        $workflowStep           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowStep');
-        $workflowItem           = $this->getMock('Oro\Bundle\WorkflowBundle\Entity\WorkflowItem');
         $contactReason          = $this->getMock(
             'OroCRM\Bundle\ContactUsBundle\Entity\ContactReason',
             [],
@@ -47,8 +45,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $request->setCreatedAt($createdAt);
         $request->setUpdatedAt($updatedAt);
 
-        $this->assertNull($request->getWorkflowStep());
-        $this->assertNull($request->getWorkflowStep());
         $this->assertNull($request->getContactReason());
         $this->assertNull($request->getLead());
         $this->assertNull($request->getOpportunity());
@@ -56,8 +52,6 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $request->setLead($lead);
         $request->setOpportunity($opportunity);
         $request->setContactReason($contactReason);
-        $request->setWorkflowItem($workflowItem);
-        $request->setWorkflowStep($workflowStep);
 
         $this->assertNull($request->getId());
         $this->assertSame($contactReason, $request->getContactReason());
@@ -75,8 +69,7 @@ class ContactRequestTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($updatedAt, $request->getUpdatedAt());
         $this->assertSame($lead, $request->getLead());
         $this->assertSame($opportunity, $request->getOpportunity());
-        $this->assertSame($workflowStep, $request->getWorkflowStep());
-        $this->assertSame($workflowItem, $request->getWorkflowItem());
+
         // should not provoke fatal error, because it's not mandatory field
         $request->setContactReason(null);
     }

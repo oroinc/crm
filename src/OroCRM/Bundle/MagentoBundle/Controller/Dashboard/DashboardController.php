@@ -10,12 +10,13 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 
 class DashboardController extends Controller
 {
@@ -46,7 +47,7 @@ class DashboardController extends Controller
         $data = $shoppingCartRepository->getFunnelChartData(
             $dateFrom,
             $dateTo,
-            $workflow,
+            $workflows ? reset($workflows) : null,
             $this->get('oro_security.acl_helper')
         );
 
