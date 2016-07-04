@@ -13,7 +13,7 @@ class FeatureContext extends RawMinkContext
      */
     public function assertCountContactsAddedToForm($contactsCount)
     {
-        expect($this->getFormContacts())->toHaveCount($this->getCount($contactsCount));
+        \PHPUnit_Framework_Assert::assertCount($this->getCount($contactsCount), $this->getFormContacts());
     }
 
     /**
@@ -21,8 +21,10 @@ class FeatureContext extends RawMinkContext
      */
     public function assertCountOfContacts($contactsCount)
     {
-        expect($this->getSession()->getPage()->findAll('css', '.contact-box'))
-            ->toHaveCount($this->getCount($contactsCount));
+        \PHPUnit_Framework_Assert::assertCount(
+            $this->getCount($contactsCount),
+            $this->getSession()->getPage()->findAll('css', '.contact-box')
+        );
     }
 
     /**
@@ -35,8 +37,7 @@ class FeatureContext extends RawMinkContext
         /** @var NodeElement $box */
         foreach ($contactBoxes as $box) {
             if (false !== strpos($box->getText(), $name)) {
-                expect($box->getText())
-                    ->toMatch('/Default Contact/i');
+                \PHPUnit_Framework_Assert::assertRegExp('/Default Contact/i', $box->getText());
                 return;
             }
         }
