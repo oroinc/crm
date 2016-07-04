@@ -39,20 +39,20 @@ oro_dashboard_config:
                 excludedSources:
                     type: orocrm_type_widget_lead_source_select
                     options:
-                        label:  Lead Sources in Others
-                        tooltip:  Pick Lead sources that will merge into Others group
+                        label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.label
+                        tooltip:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.tooltip
                         required: false
                         configs:
-                            placeholder: Pick Lead sources
+                            placeholder: orocrm.sales.dashboard.opportunities_by_lead_source_chart.excluded_sources.placeholder
                 byAmount:
-                   type: choice
-                   options:
-                       label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_ammount.label
-                       tooltip: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_ammount.tooltip
-                       required: true
-                       choices:
-                           0: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_ammount.count
-                           1: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_ammount.ammount
+                    type: choice
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.label
+                        tooltip: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.tooltip
+                        required: true
+                        choices:
+                            0: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.count
+                            1: orocrm.sales.dashboard.opportunities_by_lead_source_chart.by_amount.amount
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
             route:       orocrm_sales_dashboard_opportunity_by_state_chart
