@@ -2,16 +2,17 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Migrations\Data\ORM;
 
-use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
-use OroB2B\Bundle\CMSBundle\Tests\Unit\Form\Type\PageTypeTest;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwareInterface
 {
@@ -36,15 +37,15 @@ class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwar
         $workflowAwareManager = new WorkflowAwareManager($this->container->get('oro_workflow.manager'));
 
         $workflowAwareManager->setWorkflowName('b2c_flow_abandoned_shopping_cart');
-        $shoppingCarts = $manager->getRepository('OroCRMMagentoBundle:Cart')->findAll();
+        $shoppingCarts = $manager->getRepository(Cart::class)->findAll();
         foreach ($shoppingCarts as $shoppingCart) {
             if (!$workflowAwareManager->getWorkflowItem($shoppingCart)) {
                 $workflowAwareManager->startWorkflow($shoppingCart);
             }
         }
-        
+
         $workflowAwareManager->setWorkflowName('b2c_flow_order_follow_up');
-        $orders = $manager->getRepository('OroCRMMagentoBundle:Order')->findAll();
+        $orders = $manager->getRepository(Order::class)->findAll();
         foreach ($orders as $order) {
             if (!$workflowAwareManager->getWorkflowItem($order)) {
                 $workflowAwareManager->startWorkflow($order);
