@@ -30,7 +30,7 @@ class DashboardController extends Controller
         // prepare chart data
         $dataProvider = $this->get('orocrm_sales.provider.opportunity_by_lead_source');
 
-        $data = $dataProvider->getOpportunityByLeadSourceData(
+        $data = $dataProvider->getChartData(
             $options->get('dateRange', []),
             $this->get('oro_user.dashboard.owner_helper')->getOwnerIds($options),
             $options->get('excludedSources'),
@@ -45,7 +45,7 @@ class DashboardController extends Controller
                     'name' => 'pie_chart',
                     'data_schema' => [
                         'label' => ['field_name' => 'source'],
-                        'value' => ['field_name' => 'itemCount'],
+                        'value' => ['field_name' => 'value'],
                     ],
                 ]
             )

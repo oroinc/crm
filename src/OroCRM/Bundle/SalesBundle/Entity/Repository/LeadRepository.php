@@ -3,66 +3,58 @@
 namespace OroCRM\Bundle\SalesBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Component\DoctrineUtils\ORM\QueryUtils;
-
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
 class LeadRepository extends EntityRepository
 {
     /**
-     * Returns count of top $limit opportunities grouped by lead source
+     * Returns count of opportunities grouped by lead source
      *
-     * @param  AclHelper $aclHelper
-     * @param  int       $limit
-     * @param  array     $dateRange
+     * @param AclHelper $aclHelper
+     * @param array $dateRange
+     * @param array $owners
      *
-     * @return array     [itemCount, label]
+     * @return array [value, source]
      */
-    public function getOpportunitiesCountByLeadSource(
+    public function getOpportunitiesCountGroupByLeadSource(
         AclHelper $aclHelper,
-        $limit = 10,
         array $dateRange = [],
         array $owners = []
     ) {
-        $qb = $this->getOpportunitiesByLeadSourceQueryBuilder($dateRange, $owners);
-        $qb->addSelect('count(o.id) as itemCount');
+        $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateRange, $owners);
+        $qb->addSelect('count(o.id) as value');
 
-        $rows = $aclHelper->apply($qb)->getArrayResult();
-
-        return $this->processOpportunitiesByLeadSource($rows, $limit);
+        return $aclHelper->apply($qb)->getArrayResult();
     }
 
     /**
-     * Returns budget ammount of top $limit opportunities grouped by lead source
+     * Returns budget amount of opportunities grouped by lead source
      *
-     * @param  AclHelper $aclHelper
-     * @param  int       $limit
-     * @param  array     $dateRange
+     * @param AclHelper $aclHelper
+     * @param array $dateRange
+     * @param array $owners
      *
-     * @return array     [itemCount, label]
+     * @return array [value, source]
      */
-    public function getOpportunitiesAmountByLeadSource(
+    public function getOpportunitiesAmountGroupByLeadSource(
         AclHelper $aclHelper,
-        $limit = 10,
         array $dateRange = [],
         array $owners = []
     ) {
-        $qb = $this->getOpportunitiesByLeadSourceQueryBuilder($dateRange, $owners);
+        $qb = $this->getOpportunitiesGroupByLeadSourceQueryBuilder($dateRange, $owners);
         $qb->addSelect(
             "SUM(
                 CASE WHEN o.status = 'won' 
                     THEN o.closeRevenue 
                     ELSE o.budgetAmount
                 END
-            ) as itemCount"
+            ) as value"
         );
 
-        $rows = $aclHelper->apply($qb)->getArrayResult();
-
-        return $this->processOpportunitiesByLeadSource($rows, $limit);
+        return $aclHelper->apply($qb)->getArrayResult();
     }
 
     /**
@@ -73,7 +65,7 @@ class LeadRepository extends EntityRepository
      *
      * @return QueryBuilder
      */
-    protected function getOpportunitiesByLeadSourceQueryBuilder(array $dateRange, array $owners = [])
+    protected function getOpportunitiesGroupByLeadSourceQueryBuilder(array $dateRange, array $owners = [])
     {
         $qb = $this->createQueryBuilder('l')
             ->select('s.id as source')
@@ -92,88 +84,6 @@ class LeadRepository extends EntityRepository
         }
 
         return $qb;
-    }
-
-    /**
-     * @param array $rows
-     * @param int   $limit
-     *
-     * @return array
-     */
-    protected function processOpportunitiesByLeadSource(array $rows, $limit)
-    {
-        $result       = [];
-        $unclassified = null;
-        $others       = [];
-
-        $this->sortByCountReverse($rows);
-        foreach ($rows as $row) {
-            if ($row['itemCount']) {
-                if ($row['source'] === null) {
-                    $unclassified = $row;
-                } else {
-                    if (count($result) < $limit) {
-                        $result[] = $row;
-                    } else {
-                        $others[] = $row;
-                    }
-                }
-            }
-        }
-
-        if ($unclassified) {
-            if (count($result) === $limit) {
-                // allocate space for 'unclassified' item
-                array_unshift($others, array_pop($result));
-            }
-            // add 'unclassified' item to the top to avoid moving it to $others
-            array_unshift($result, $unclassified);
-        }
-        if (!empty($others)) {
-            if (count($result) === $limit) {
-                // allocate space for 'others' item
-                array_unshift($others, array_pop($result));
-            }
-            // add 'others' item
-            $result[] = [
-                'source'    => '',
-                'itemCount' => $this->sumCount($others)
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $rows
-     *
-     * @return int
-     */
-    protected function sumCount(array $rows)
-    {
-        $result = 0;
-        foreach ($rows as $row) {
-            $result += $row['itemCount'];
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param array $rows
-     */
-    protected function sortByCountReverse(array &$rows)
-    {
-        usort(
-            $rows,
-            function ($a, $b) {
-                if ($a['itemCount'] === $b['itemCount']) {
-                    return 0;
-                }
-
-                return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
-            }
-        );
     }
 
     /**

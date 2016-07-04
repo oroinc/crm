@@ -13,8 +13,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository;
 
 /**
  * Provides chart data for 'Opportunity By Lead Source' dashboard widget
- *
- * @package OroCRM\Bundle\SalesBundle\Dashboard\Provider
  */
 class WidgetOpportunityByLeadSourceProvider
 {
@@ -64,20 +62,15 @@ class WidgetOpportunityByLeadSourceProvider
      *
      * @return array
      */
-    public function getOpportunityByLeadSourceData(array $dateRange, array $ownerIds, array $excluded = [], $byAmount = false)
+    public function getChartData(array $dateRange, array $ownerIds, array $excluded = [], $byAmount = false)
     {
-        $repo = $this->getLeadRepository();
-        if ($byAmount) {
-            $data = $repo->getOpportunitiesAmountByLeadSource($this->aclHelper, 10, $dateRange, $ownerIds);
-        } else {
-            $data = $repo->getOpportunitiesCountByLeadSource($this->aclHelper, 10, $dateRange, $ownerIds);
-        }
+        $rows = $this->getDataByType($dateRange, $ownerIds, $byAmount);
 
-        if (empty($data)) {
+        if (empty($rows)) {
             return [];
         }
 
-        $data = $this->processOpportunitiesByLeadSource($data, $excluded);
+        $data = $this->processData($rows, $excluded);
 
         // translate sources
         foreach ($data as $key => $item) {
@@ -85,6 +78,24 @@ class WidgetOpportunityByLeadSourceProvider
         }
 
         return $data;
+    }
+
+    /**
+     * Get raw data from repository
+     * @param array $dateRange
+     * @param array $ownerIds
+     * @param bool $byAmount Whether DataType is by Amount or by Count
+     *
+     * @return array
+     */
+    protected function getDataByType(array $dateRange, array $ownerIds, $byAmount = false)
+    {
+        $repo = $this->getLeadRepository();
+        if ($byAmount) {
+            return $repo->getOpportunitiesAmountGroupByLeadSource($this->aclHelper, $dateRange, $ownerIds);
+        }
+
+        return $repo->getOpportunitiesCountGroupByLeadSource($this->aclHelper, $dateRange, $ownerIds);
     }
 
     /**
@@ -99,22 +110,22 @@ class WidgetOpportunityByLeadSourceProvider
      *
      * @return array
      */
-    protected function processOpportunitiesByLeadSource(array $rows, $excluded = [], $limit = 10)
+    protected function processData(array $rows, $excluded = [], $limit = 10)
     {
         $result = [];
 
-        // sort by count to make sure biggest numbers are not merged to others
+        // first sort by value to make sure biggest numbers are not merged to Others (when limit is applied)
         usort(
             $rows,
             function ($a, $b) {
-                if ($a['itemCount'] === $b['itemCount']) {
+                if ($a['value'] === $b['value']) {
                     return 0;
                 }
 
-                return $a['itemCount'] < $b['itemCount'] ? 1 : -1;
+                return $a['value'] < $b['value'] ? 1 : -1;
             }
         );
-        // get excluded sources (to be merged with others)
+        // get excluded sources (to be merged with Others)
         $others = array_filter(
             $rows,
             function ($row) use ($excluded) {
@@ -125,18 +136,18 @@ class WidgetOpportunityByLeadSourceProvider
         // remove the excluded sources
         $rows = array_diff_key($rows, $others);
 
-        // get a sum of itemCount for unclassified sources
+        // get the sum of value column for unclassified sources (i.e. source is empty string)
         $unclassifiedCount = array_reduce(
             $rows,
             function ($count, $row) {
-                return '' === $row['source'] ? $count + $row['itemCount'] : $count;
+                return '' === $row['source'] ? $count + $row['value'] : $count;
             }
         );
 
-        // add Unclassified on top
+        // add the Unclassified group on top
         if ($unclassifiedCount > 0) {
             $result[] = [
-                'itemCount' => $unclassifiedCount,
+                'value' => $unclassifiedCount,
                 'source' => null,
             ];
         }
@@ -145,7 +156,7 @@ class WidgetOpportunityByLeadSourceProvider
         $named = array_filter(
             $rows,
             function ($row) {
-                return !empty($row['source']) && $row['itemCount'] > 0;
+                return !empty($row['source']) && $row['value'] > 0;
             }
         );
 
@@ -154,11 +165,11 @@ class WidgetOpportunityByLeadSourceProvider
 
         // merge the data from sources that left with the excluded sources
         $others = array_merge($others, array_slice($named, $limit));
-        $othersCount = array_sum(array_column($others, 'itemCount'));
+        $othersCount = array_sum(array_column($others, 'value'));
         // add Others as last group
         if ($othersCount > 0) {
             $result[] = [
-                'itemCount' => $othersCount,
+                'value' => $othersCount,
                 'source' => '',
             ];
         }
@@ -174,7 +185,7 @@ class WidgetOpportunityByLeadSourceProvider
      *
      * @return string
      */
-    private function translateSource($source)
+    protected function translateSource($source)
     {
         if (!empty($source)) {
             return $this->enumValueTranslator->transEnum($source, 'lead_source');
@@ -190,7 +201,7 @@ class WidgetOpportunityByLeadSourceProvider
     /**
      * @return LeadRepository
      */
-    private function getLeadRepository()
+    protected function getLeadRepository()
     {
         return $this->registry->getRepository('OroCRMSalesBundle:Lead');
     }
