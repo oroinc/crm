@@ -2,17 +2,14 @@
 
 namespace OroCRM\Bundle\SalesBundle\Datagrid;
 
-use Symfony\Component\Translation\TranslatorInterface;
-
 use Oro\Bundle\DataGridBundle\Entity\GridView;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\AbstractDateFilterType;
 use Oro\Bundle\FilterBundle\Form\Type\Filter\EnumFilterType;
 use Oro\Bundle\DataGridBundle\Extension\GridViews\AbstractViewsList;
-use Oro\Bundle\DataGridBundle\Extension\GridViews\View;
 
 class OpportunityViewList extends AbstractViewsList
 {
-    protected $viewLists =  [
+    protected $systemViews =  [
         [
             'name'         => 'opportunity.open',
             'label'         => 'orocrm.sales.opportunity.datagrid.views.open',
@@ -95,34 +92,10 @@ class OpportunityViewList extends AbstractViewsList
     ];
 
     /**
-     * @param TranslatorInterface $translator
-     */
-    public function __construct(TranslatorInterface $translator)
-    {
-        parent::__construct($translator);
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function getViewsList()
     {
-        $views = [];
-        foreach ($this->viewLists as $view) {
-            $opportunityView = new View(
-                $view['name'],
-                $view['filters'],
-                $view['sorters'],
-                'system',
-                $view['columns']
-            );
-            if ($view['is_default']) {
-                $opportunityView->setDefault(true);
-            }
-            $opportunityView->setLabel($this->translator->trans($view['label']));
-            $views[] = $opportunityView;
-        }
-        
-        return $views;
+        return $this->getSystemViewsList();
     }
 }

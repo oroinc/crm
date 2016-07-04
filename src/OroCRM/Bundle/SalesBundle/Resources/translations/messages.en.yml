@@ -235,6 +235,8 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+                views:
+                    open:            Open Leads
 
         salesfunnel:
             entity_label:         Sales Process
