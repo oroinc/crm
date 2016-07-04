@@ -7,27 +7,20 @@ use Doctrine\DBAL\Schema\Schema;
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
+use Oro\Bundle\WorkflowBundle\Migrations\Schema\RemoveWorkflowFieldsTrait;
+
 class RemoveWorkflowFields implements Migration
 {
+    use RemoveWorkflowFieldsTrait;
+
     /**
      * {@inheritdoc}
      */
     public function up(Schema $schema, QueryBag $queries)
     {
         //workflow now has no direct relations
-        $leadTable = $schema->getTable('orocrm_sales_lead');
-        $leadTable
-            ->dropColumn('workflow_step_id')
-            ->dropColumn('workflow_item_id');
-
-        $opportunityTable = $schema->getTable('orocrm_sales_opportunity');
-        $opportunityTable
-            ->dropColumn('workflow_step_id')
-            ->dropColumn('workflow_item_id');
-
-        $salesFunnelTable = $schema->getTable('orocrm_sales_funnel');
-        $salesFunnelTable
-            ->dropColumn('workflow_step_id')
-            ->dropColumn('workflow_item_id');
+        $this->removeWorkflowFields($schema->getTable('orocrm_sales_lead'));
+        $this->removeWorkflowFields($schema->getTable('orocrm_sales_opportunity'));
+        $this->removeWorkflowFields($schema->getTable('orocrm_sales_funnel'));
     }
 }
