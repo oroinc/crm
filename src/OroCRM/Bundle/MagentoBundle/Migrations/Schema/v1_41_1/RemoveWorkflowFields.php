@@ -12,12 +12,31 @@ class RemoveWorkflowFields implements Migration
     {
         //workflow now has no direct relations
 
-        $orderTable = $schema->getTable('orocrm_magento_order');
-        $orderTable->dropColumn('workflow_step_id');
-        $orderTable->dropColumn('workflow_item_id');
+        $magentoTables = [
+            'orocrm_magento_order',
+            'orocrm_magento_cart',
+        ];
+        $workflowTables = [
+            'oro_workflow_item',
+            'oro_workflow_step',
+        ];
 
-        $cartTable = $schema->getTable('orocrm_magento_cart');
-        $cartTable->dropColumn('workflow_step_id');
-        $cartTable->dropColumn('workflow_item_id');
+        foreach ($magentoTables as $magentoTable) {
+            if ($schema->hasTable($magentoTable)) {
+
+                $table = $schema->getTable($magentoTable);
+
+                foreach ($table->getForeignKeys() as $foreignKey) {
+                    if (in_array($foreignKey->getForeignTableName(), $workflowTables, true)) {
+
+                        $table->removeForeignKey($foreignKey->getName());
+                        
+                        foreach ($foreignKey->getLocalColumns() as $column) {
+                            $table->dropColumn($column);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
