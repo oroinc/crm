@@ -2,20 +2,22 @@
 
 namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
-use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+
+use Symfony\Component\HttpFoundation\Request;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
-use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Repository\CartRepository;
 
 class DashboardController extends Controller
 {
@@ -26,11 +28,16 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     *
+     * @param Request $request
+     * @param $widget
+     *
+     * @return array
      */
-    public function mySalesFlowB2CAction($widget)
+    public function mySalesFlowB2CAction(Request $request, $widget)
     {
         $dateRange = $this->get('oro_dashboard.widget_configs')
-            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
 
         $dateTo   = $dateRange['end'];
