@@ -23,6 +23,8 @@ parameters:
 
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
 
+    orocrm_sales.opportunity.datagrid_view_list.class:       OroCRM\Bundle\SalesBundle\Datagrid\OpportunityViewList
+
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
@@ -172,6 +174,11 @@ services:
             - %orocrm_sales.opportunity.class%
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: forecast_widget_business_units }
+
+    orocrm_sales.opportunity.datagrid_view_list:
+        class: %orocrm_sales.opportunity.datagrid_view_list.class%
+        arguments:
+            - '@translator'
 
     orocrm_sales.event_listener.datagrid.owner:
         class: Oro\Bundle\UserBundle\Datagrid\WidgetOwnerListener

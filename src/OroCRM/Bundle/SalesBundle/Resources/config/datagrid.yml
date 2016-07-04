@@ -240,6 +240,7 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        views_list: "@orocrm_sales.opportunity.datagrid_view_list"
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
