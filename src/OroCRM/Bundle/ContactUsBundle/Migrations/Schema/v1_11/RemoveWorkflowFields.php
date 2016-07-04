@@ -1,6 +1,6 @@
 <?php
 
-namespace OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_23;
+namespace OroCRM\Bundle\ContactUsBundle\Migrations\Schema\v1_11;
 
 use Doctrine\DBAL\Schema\Schema;
 
@@ -18,9 +18,6 @@ class RemoveWorkflowFields implements Migration
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        //workflow now has no direct relations
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_lead'));
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_opportunity'));
-        $this->removeWorkflowFields($schema->getTable('orocrm_sales_funnel'));
+        $this->removeWorkflowFields($schema->getTable('orocrm_contactus_request'));
     }
 }
