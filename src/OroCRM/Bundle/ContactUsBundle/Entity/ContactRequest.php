@@ -3,11 +3,10 @@
 namespace OroCRM\Bundle\ContactUsBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\EmailBundle\Entity\Email;
-use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
+use Oro\Bundle\OrganizationBundle\Entity\Organization;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
@@ -41,9 +40,6 @@ use OroCRM\Bundle\ContactUsBundle\Model\ExtendContactRequest;
  *          },
  *          "grid"={
  *              "default"="orcrm-contact-requests-grid"
- *          },
- *          "workflow"={
- *              "active_workflows"={"orocrm_contact_us_contact_request"}
  *          }
  *      }
  * )
