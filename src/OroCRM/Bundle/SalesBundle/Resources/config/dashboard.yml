@@ -73,6 +73,12 @@ oro_dashboard_config:
                         choices:
                             0: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.amount
                             1: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.count
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        widgetType: opportunities_by_state
+                        entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart
