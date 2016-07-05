@@ -54,9 +54,8 @@ class LeadToOpportunityType extends OpportunityType
     {
         parent::buildForm($builder, $options);
         if ($this->useFullContactForm) {
-            $builder
-                ->remove('contact')
-                ->add('contact', 'orocrm_contact');
+            $builder->remove('contact');
+            $builder->add('contact', 'orocrm_contact');
         }
     }
 
