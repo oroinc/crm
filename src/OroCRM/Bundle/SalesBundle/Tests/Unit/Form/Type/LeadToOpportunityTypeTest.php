@@ -49,9 +49,9 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
      * @dataProvider contactFieldTypeDataProvider
      *
      * @param bool $useFullContactForm
-     * @param int $addMethodCallCount
+     * @param array $fields
      */
-    public function testBuildForm($useFullContactForm, $addMethodCallCount)
+    public function testBuildForm($useFullContactForm, array $fields)
     {
         /**
          * @var FormBuilder $builder
@@ -62,7 +62,16 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->type->setUseFullContactForm($useFullContactForm);
         $builder->expects($this->once())->method('addEventListener')->will($this->returnSelf());
-        $builder->expects($this->exactly($addMethodCallCount))->method('add')->will($this->returnSelf());
+
+        $counter = 0;
+        foreach ($fields as $fieldName => $formType) {
+            $builder
+                ->expects($this->at($counter))
+                ->method('add')
+                ->with($fieldName, $formType)
+                ->will($this->returnSelf());
+            $counter++;
+        }
 
         if ($useFullContactForm) {
             $builder
@@ -84,11 +93,39 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
         return [
           [
               'use_full_contact_form' => true,
-              'add_call_count' => 14
+              'fields' => [
+                  'closeReason'  => 'translatable_entity',
+                  'contact'  => 'orocrm_contact_select',
+                  'customer' => 'orocrm_sales_b2bcustomer_with_channel_select',
+                  'name'  => 'text',
+                  'dataChannel'  => 'orocrm_channel_select_type',
+                  'closeDate'  => 'oro_date',
+                  'probability'  => 'oro_percent',
+                  'budgetAmount' => 'oro_money',
+                  'closeRevenue'  => 'oro_money',
+                  'customerNeed'  => 'oro_resizeable_rich_text',
+                  'proposedSolution'  => 'oro_resizeable_rich_text',
+                  'notes'  => 'oro_resizeable_rich_text',
+                  'status'  => 'oro_enum_select',
+              ]
           ],
           [
               'use_full_contact_form' => false,
-              'add_call_count' => 13
+              'fields' => [
+                  'closeReason'  => 'translatable_entity',
+                  'contact'  => 'orocrm_contact_select',
+                  'customer' => 'orocrm_sales_b2bcustomer_with_channel_select',
+                  'name'  => 'text',
+                  'dataChannel'  => 'orocrm_channel_select_type',
+                  'closeDate'  => 'oro_date',
+                  'probability'  => 'oro_percent',
+                  'budgetAmount' => 'oro_money',
+                  'closeRevenue'  => 'oro_money',
+                  'customerNeed'  => 'oro_resizeable_rich_text',
+                  'proposedSolution'  => 'oro_resizeable_rich_text',
+                  'notes'  => 'oro_resizeable_rich_text',
+                  'status'  => 'oro_enum_select',
+              ]
           ]
         ];
     }
