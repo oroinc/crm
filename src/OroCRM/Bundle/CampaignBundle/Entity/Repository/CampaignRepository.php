@@ -3,6 +3,7 @@
 namespace OroCRM\Bundle\CampaignBundle\Entity\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
@@ -12,6 +13,7 @@ class CampaignRepository extends EntityRepository
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsLeads(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -34,9 +36,31 @@ class CampaignRepository extends EntityRepository
     }
 
     /**
+     * @param string $leadAlias
+     *
+     * @return QueryBuilder
+     */
+    public function getCampaignsLeadsQB($leadAlias)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(
+            'campaign.name as label',
+            sprintf('COUNT(%s.id) as number', $leadAlias),
+            'MAX(campaign.createdAt) as maxCreated'
+        )
+            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
+            ->leftJoin('OroCRMSalesBundle:Lead', $leadAlias, 'WITH', sprintf('%s.campaign = campaign', $leadAlias))
+            ->orderBy('maxCreated', 'DESC')
+            ->groupBy('campaign.name');
+
+        return $qb;
+    }
+
+    /**
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsOpportunities(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -60,9 +84,28 @@ class CampaignRepository extends EntityRepository
     }
 
     /**
+     * @param string $opportunitiesAlias
+     *
+     * @return QueryBuilder
+     */
+    public function getCampaignsOpportunitiesQB($opportunitiesAlias)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('campaign.name as label', sprintf('COUNT(%s.id) as number', $opportunitiesAlias))
+            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
+            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->join('lead.opportunities', $opportunitiesAlias)
+            ->orderBy('number', 'DESC')
+            ->groupBy('campaign.name');
+
+        return $qb;
+    }
+
+    /**
      * @param AclHelper $aclHelper
      * @param int       $recordsCount
      * @param array     $dateRange
+     *
      * @return array
      */
     public function getCampaignsByCloseRevenue(AclHelper $aclHelper, $recordsCount, $dateRange = null)
@@ -87,5 +130,31 @@ class CampaignRepository extends EntityRepository
         }
 
         return $aclHelper->apply($qb)->getArrayResult();
+    }
+
+    /**
+     * @param string $opportunitiesAlias
+     *
+     * @return QueryBuilder
+     */
+    public function getCampaignsByCloseRevenueQB($opportunitiesAlias)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb
+            ->select(
+                'campaign.name as label',
+                sprintf(
+                    'SUM(CASE WHEN (%s.status=\'won\') THEN %s.closeRevenue ELSE 0 END) as closeRevenue',
+                    $opportunitiesAlias,
+                    $opportunitiesAlias
+                )
+            )
+            ->from('OroCRMCampaignBundle:Campaign', 'campaign')
+            ->join('OroCRMSalesBundle:Lead', 'lead', 'WITH', 'lead.campaign = campaign')
+            ->join('lead.opportunities', $opportunitiesAlias)
+            ->orderBy('closeRevenue', 'DESC')
+            ->groupBy('campaign.name');
+
+        return $qb;
     }
 }

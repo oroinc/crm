@@ -22,7 +22,8 @@ class B2bCustomerWithChannelSelectType extends AbstractType
                 'autocomplete_alias' => 'b2b_customers_with_channel',
                 'grid_name'          => 'orocrm-sales-b2bcustomers-select-grid',
                 'create_form_route'  => 'orocrm_sales_b2bcustomer_create',
-                'create_enabled'     => true
+                'create_enabled'     => true,
+                'tooltip'            => 'orocrm.sales.form.tooltip.account',
             ]
         );
     }
