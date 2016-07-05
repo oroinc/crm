@@ -24,8 +24,8 @@ class UpdateReminderEmailTemplates extends ParametrizedMigrationQuery
     public function execute(LoggerInterface $logger)
     {
         $dateFilterPattern = "|date('F j, Y, g:i A')";
-        $patternCalendarRange[] = 'calendar_date_range(entity.start, entity.end, entity.allDay, 1)';
-        $patternCalendarRange[] = "calendar_date_range(entity.start, entity.end, entity.allDay, 'F j, Y', 1)";
+        $calendarRangePattern[] = 'calendar_date_range(entity.start, entity.end, entity.allDay, 1)';
+        $calendarRangePattern[] = "calendar_date_range(entity.start, entity.end, entity.allDay, 'F j, Y', 1)";
         $dateFilterReplacement = "|oro_format_datetime_organization({'organization': entity.organization})";
         $calendarRangeReplacement = 'calendar_date_range_organization(entity.start,' .
             ' entity.end, entity.allDay, 1, null, null, null, entity.organization)';
@@ -34,7 +34,7 @@ class UpdateReminderEmailTemplates extends ParametrizedMigrationQuery
             'task_reminder',
             $dateFilterPattern,
             $dateFilterReplacement,
-            $patternCalendarRange,
+            $calendarRangePattern,
             $calendarRangeReplacement
         );
     }
@@ -44,7 +44,7 @@ class UpdateReminderEmailTemplates extends ParametrizedMigrationQuery
      * @param string          $templateName
      * @param string|array    $dateFilterPattern
      * @param string          $dateFilterReplacement
-     * @param string|array    $patternCalendarRange
+     * @param string|array    $calendarRangePattern
      * @param string          $calendarRangeReplacement
      *
      * @throws ConnectionException
@@ -55,7 +55,7 @@ class UpdateReminderEmailTemplates extends ParametrizedMigrationQuery
         $templateName,
         $dateFilterPattern,
         $dateFilterReplacement,
-        $patternCalendarRange,
+        $calendarRangePattern,
         $calendarRangeReplacement
     ) {
         $sql = 'SELECT * FROM oro_email_template WHERE name = :name ORDER BY id';
@@ -70,7 +70,7 @@ class UpdateReminderEmailTemplates extends ParametrizedMigrationQuery
             foreach ($templates as $template) {
                 $subject = str_replace($dateFilterPattern, $dateFilterReplacement, $template['subject']);
                 $content = str_replace($dateFilterPattern, $dateFilterReplacement, $template['content']);
-                $content = str_replace($patternCalendarRange, $calendarRangeReplacement, $content);
+                $content = str_replace($calendarRangePattern, $calendarRangeReplacement, $content);
                 $this->connection->update(
                     'oro_email_template',
                     ['subject' => $subject, 'content' => $content],
