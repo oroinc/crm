@@ -226,7 +226,7 @@ orocrm:
             data_channel.label:   Channel
             assigned.label:       Assigned
             source:
-                unclassified:     Unclassified
+                unclassified:     No source
                 others:           Others
                 none:             None
 
