@@ -24,9 +24,16 @@ class LeadSourceSelectType extends AbstractType
 
     public function configureOptions(OptionsResolver $resolver)
     {
+        $choices = array_merge(
+            [
+                '' => 'orocrm.sales.lead.source.unclassified',
+            ],
+            $this->enumValueProvider->getEnumChoicesByCode('lead_source')
+        );
+
         $resolver->setDefaults(
             [
-                'choices'  => $this->enumValueProvider->getEnumChoicesByCode('lead_source'),
+                'choices' => $choices,
                 'multiple' => true,
                 'configs'  => [
                     'width'      => '400px',

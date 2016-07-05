@@ -9,7 +9,7 @@ use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
 
-use OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository;
+use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 /**
  * Provides chart data for 'Opportunity By Lead Source' dashboard widget
@@ -34,20 +34,20 @@ class WidgetOpportunityByLeadSourceProvider
     /**
      * @param RegistryInterface $doctrine
      * @param AclHelper $aclHelper
-     * @param DateFilterProcessor $processor
+     * @param DateFilterProcessor $dateFilterProcessor
      * @param TranslatorInterface $translator
      * @param EnumExtension $enumValueTranslator
      */
     public function __construct(
         RegistryInterface $doctrine,
         AclHelper $aclHelper,
-        DateFilterProcessor $processor,
+        DateFilterProcessor $dateFilterProcessor,
         TranslatorInterface $translator,
         EnumExtension $enumValueTranslator
     ) {
         $this->registry = $doctrine;
         $this->aclHelper = $aclHelper;
-        $this->dateFilterProcessor = $processor;
+        $this->dateFilterProcessor = $dateFilterProcessor;
         $this->translator = $translator;
         $this->enumValueTranslator = $enumValueTranslator;
     }
@@ -90,12 +90,22 @@ class WidgetOpportunityByLeadSourceProvider
      */
     protected function getDataByType(array $dateRange, array $ownerIds, $byAmount = false)
     {
-        $repo = $this->getLeadRepository();
+        $repo = $this->getOpportunityRepository();
         if ($byAmount) {
-            return $repo->getOpportunitiesAmountGroupByLeadSource($this->aclHelper, $dateRange, $ownerIds);
+            return $repo->getOpportunitiesAmountGroupByLeadSource(
+                $this->aclHelper,
+                $this->dateFilterProcessor,
+                $dateRange,
+                $ownerIds
+            );
         }
 
-        return $repo->getOpportunitiesCountGroupByLeadSource($this->aclHelper, $dateRange, $ownerIds);
+        return $repo->getOpportunitiesCountGroupByLeadSource(
+            $this->aclHelper,
+            $this->dateFilterProcessor,
+            $dateRange,
+            $ownerIds
+        );
     }
 
     /**
@@ -136,27 +146,11 @@ class WidgetOpportunityByLeadSourceProvider
         // remove the excluded sources
         $rows = array_diff_key($rows, $others);
 
-        // get the sum of value column for unclassified sources (i.e. source is empty string)
-        $unclassifiedCount = array_reduce(
-            $rows,
-            function ($count, $row) {
-                return '' === $row['source'] ? $count + $row['value'] : $count;
-            }
-        );
-
-        // add the Unclassified group on top
-        if ($unclassifiedCount > 0) {
-            $result[] = [
-                'value' => $unclassifiedCount,
-                'source' => null,
-            ];
-        }
-
         // get all named sources with non-zero values
         $named = array_filter(
             $rows,
             function ($row) {
-                return !empty($row['source']) && $row['value'] > 0;
+                return $row['value'] > 0;
             }
         );
 
@@ -187,22 +181,22 @@ class WidgetOpportunityByLeadSourceProvider
      */
     protected function translateSource($source)
     {
-        if (!empty($source)) {
-            return $this->enumValueTranslator->transEnum($source, 'lead_source');
-        }
-
         if (null === $source) {
             return $this->translator->trans('orocrm.sales.lead.source.unclassified');
         }
 
-        return $this->translator->trans('orocrm.sales.lead.source.others');
+        if ('' === $source) {
+            return $this->translator->trans('orocrm.sales.lead.source.others');
+        }
+
+        return $this->enumValueTranslator->transEnum($source, 'lead_source');
     }
 
     /**
-     * @return LeadRepository
+     * @return OpportunityRepository
      */
-    protected function getLeadRepository()
+    protected function getOpportunityRepository()
     {
-        return $this->registry->getRepository('OroCRMSalesBundle:Lead');
+        return $this->registry->getRepository('OroCRMSalesBundle:Opportunity');
     }
 }
