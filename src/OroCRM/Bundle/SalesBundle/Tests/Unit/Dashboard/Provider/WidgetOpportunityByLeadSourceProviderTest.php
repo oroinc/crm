@@ -7,15 +7,11 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 use Symfony\Component\Translation\TranslatorInterface;
 
 use Oro\Bundle\DashboardBundle\Filter\DateFilterProcessor;
-use Oro\Bundle\DashboardBundle\Helper\DateHelper;
-use Oro\Bundle\DashboardBundle\Model\WidgetOptionBag;
 use Oro\Bundle\EntityExtendBundle\Twig\EnumExtension;
-use Oro\Bundle\OrganizationBundle\Entity\BusinessUnit;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\UserBundle\Entity\User;
 
 use OroCRM\Bundle\SalesBundle\Dashboard\Provider\WidgetOpportunityByLeadSourceProvider;
-use OroCRM\Bundle\SalesBundle\Entity\Repository\LeadRepository;
+use OroCRM\Bundle\SalesBundle\Entity\Repository\OpportunityRepository;
 
 class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -61,26 +57,27 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
      */
     public function testAddSmallSourceValuesOverLimitToOthersCategory(array $inputData)
     {
-        $provider = $this->getProvider(array_merge(
+        $data = array_merge(
             [
-                //hardcoded limit of 10
+                // fill up to hardcoded limit of 10
                 ['source' => 'source6', 'value' => 10],
                 ['source' => 'source7', 'value' => 10],
                 ['source' => 'source8', 'value' => 10],
                 ['source' => 'source9', 'value' => 10],
-                ['source' => 'source10', 'value' => 10],
                 // below sources should be summarized into others category
+                ['source' => 'source10', 'value' => 1],
                 ['source' => 'source11', 'value' => 2],
                 ['source' => 'source12', 'value' => 3],
                 ['source' => 'source13', 'value' => 5],
             ],
             $inputData
-        ));
+        );
+        $provider = $this->getProvider($data);
 
         $data = $provider->getChartData([], []);
         $others = array_pop($data);
 
-        $this->assertEquals(10, $others['value']);
+        $this->assertEquals(11, $others['value']);
         $this->assertContains('others', $others['source']);
     }
 
@@ -95,7 +92,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
         $data = $provider->getChartData([], []);
         $unclassified = array_shift($data);
 
-        $this->assertEquals(42, $unclassified['value']);
+        $this->assertEquals(27, $unclassified['value']);
         $this->assertContains('unclassified', $unclassified['source']);
     }
 
@@ -118,12 +115,11 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ['data' => [
                 ['source' => 'direct_mail', 'value' => 15],
                 ['source' => 'affiliate', 'value' => 19],
-                ['source' => '', 'value' => 27],
+                ['source' => null, 'value' => 27],
                 ['source' => 'partner', 'value' => 6],
                 ['source' => 'calls', 'value' => 0],
                 ['source' => 'website', 'value' => 12],
                 ['source' => 'email_marketing', 'value' => 10],
-                ['source' => '', 'value' => 15],
             ]]
         ];
     }
@@ -136,14 +132,17 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
     {
         $doctrine = $this->getDoctrineMock($data);
 
+        /** @var AclHelper|\PHPUnit_Framework_MockObject_MockObject $aclHelper */
         $aclHelper = $this->getMockBuilder(AclHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var DateFilterProcessor|\PHPUnit_Framework_MockObject_MockObject $processor */
         $processor = $this->getMockBuilder(DateFilterProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var TranslatorInterface|\PHPUnit_Framework_MockObject_MockObject $translator */
         $translator = $this->getMockBuilder(TranslatorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -152,6 +151,7 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
             ->method('trans')
             ->will($this->returnArgument(0));
 
+        /** @var EnumExtension|\PHPUnit_Framework_MockObject_MockObject $enumTranslator */
         $enumTranslator = $this->getMockBuilder(EnumExtension::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -171,11 +171,11 @@ class WidgetOpportunityByLeadSourceProviderTest extends \PHPUnit_Framework_TestC
 
     /**
      * @param array $data
-     * @return Registry
+     * @return Registry|\PHPUnit_Framework_MockObject_MockObject
      */
     private function getDoctrineMock(array $data)
     {
-        $repo = $this->getMockBuilder(LeadRepository::class)
+        $repo = $this->getMockBuilder(OpportunityRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
