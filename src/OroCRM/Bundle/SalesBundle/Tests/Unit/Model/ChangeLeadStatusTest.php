@@ -51,7 +51,14 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
                               ->getMock();
         
         $this->objectRepository = $this->getMockBuilder('Doctrine\Common\Persistence\ObjectRepository')
-                                 ->setMethods(['find', 'findAll', 'findBy', 'findOneBy', 'getClassName', 'findDefaultCalendar', 'createQueryBuilder'])
+                                 ->setMethods([
+                                     'find',
+                                     'findAll',
+                                     'findBy',
+                                     'findOneBy',
+                                     'getClassName',
+                                     'findDefaultCalendar',
+                                     'createQueryBuilder'])
                                  ->disableOriginalConstructor()
                                  ->getMock();
 
@@ -131,6 +138,4 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
 
         return $leadStatus;
     }
-
 }
-

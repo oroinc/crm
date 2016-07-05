@@ -125,7 +125,6 @@ class LeadToOpportunityProvider
         $contact = $lead->getContact();
 
         if (!$contact instanceof Contact) {
-
             $contact = new $this->contactFields['entity']();
 
             $this->fillEntityProperties(
@@ -149,8 +148,7 @@ class LeadToOpportunityProvider
 
                         $leadFields = array_intersect_key(
                             $this->contactFields['properties'],
-                            array_flip($value['merge_fields']
-                            )
+                            array_flip($value['merge_fields'])
                         );
                         $this->fillEntityProperties(
                             $propertyValue,
