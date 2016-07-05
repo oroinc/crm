@@ -47,6 +47,9 @@ class LeadToOpportunityType extends OpportunityType
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
