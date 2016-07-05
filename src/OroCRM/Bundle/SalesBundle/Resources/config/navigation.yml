@@ -120,3 +120,11 @@ oro_titles:
     orocrm_sales_b2bcustomer_view:   '%%b2bcustomer.name%%'
     orocrm_sales_b2bcustomer_create: 'Create Business Customer'
     orocrm_sales_b2bcustomer_update: '%%b2bcustomer.name%% - Edit'
+
+oro_navigation_elements:
+    pinButton:
+        routes:
+            orocrm_sales_lead_convert_to_opportunity: false
+    favoriteButton:
+        routes:
+            orocrm_sales_lead_convert_to_opportunity: false
