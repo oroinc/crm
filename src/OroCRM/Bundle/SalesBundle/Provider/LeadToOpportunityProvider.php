@@ -11,9 +11,59 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class LeadToOpportunityProvider
 {
+    protected $accessor;
+
+    protected $addressFields = [
+        'properties' => [
+            'city' => 'city',
+            'country' => 'country',
+            'label' => 'label',
+            'organization' => 'organization',
+            'postalCode' => 'postalCode',
+            'region' => 'region',
+            'regionText' => 'regionText',
+            'street' => 'street',
+            'street2' => 'street2',
+            'primary' => array(
+                'value' => true
+            )
+        ],
+        'entity' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
+    ];
+
+    protected $contactFields = [
+        'properties' => [
+            'firstName' => 'firstName',
+            'jobTitle' => 'jobTitle',
+            'lastName' => 'lastName',
+            'middleName' => 'middleName',
+            'namePrefix' => 'namePrefix',
+            'nameSuffix' => 'nameSuffix',
+            'owner' => 'owner',
+            'source' => 'source'
+        ],
+        'methods' => [
+            'addEmail' => 'email',
+            'addPhone' => 'phoneNumber',
+            'addAddress' => [
+                'entity' => 'address',
+                'merge_fields' => [
+                    'firstName', 'lastName', 'middleName', 'namePrefix', 'nameSuffix'
+                ]
+            ]
+        ],
+        'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
+    ];
+
+    public function __construct()
+    {
+        $this->accessor = PropertyAccess::createPropertyAccessor();
+    }
+
     /**
      * @param Lead $lead
      *
@@ -31,6 +81,41 @@ class LeadToOpportunityProvider
     }
 
     /**
+     * @param object $filledEntity
+     * @param array $properties
+     * @param Lead $sourceEntity
+     */
+    protected function fillEntityProperties($filledEntity, array $properties, $sourceEntity)
+    {
+        foreach ($properties as $key => $value) {
+            $propertyValue = is_array($value) ? $value['value'] : $this->accessor->getValue($sourceEntity, $value);
+            if ($propertyValue) {
+                $this->accessor->setValue($filledEntity, $key, $propertyValue);
+            }
+        }
+    }
+
+    /**
+     * @param $entity
+     * @param $methodName
+     * @param $value
+     */
+    protected function resolveMethod($entity, $methodName, $value)
+    {
+        switch ($methodName) {
+            case 'addEmail':
+                $entity->$methodName(new ContactEmail($value));
+                break;
+            case 'addPhone':
+                $entity->$methodName(new ContactPhone($value));
+                break;
+            case 'addAddress':
+                $entity->$methodName($value);
+                break;
+        }
+    }
+
+    /**
      * @param Lead $lead
      *
      * @return Contact
@@ -40,54 +125,46 @@ class LeadToOpportunityProvider
         $contact = $lead->getContact();
 
         if (!$contact instanceof Contact) {
-            $contact = new Contact();
-            $leadFields = [
-                'source',
-                'owner',
-                'namePrefix',
-                'firstName',
-                'middleName',
-                'lastName',
-                'nameSuffix',
-                'jobTitle'
-            ];
 
-            foreach ($leadFields as $field) {
-                $contact->{'set' . ucfirst($field)}($lead->{'get' . ucfirst($field)}());
-            }
+            $contact = new $this->contactFields['entity']();
 
-            if ($lead->getEmail()) {
-                $contact->addEmail(new ContactEmail($lead->getEmail()));
-            }
+            $this->fillEntityProperties(
+                $contact,
+                $this->contactFields['properties'],
+                $lead
+            );
 
-            if ($lead->getPhoneNumber()) {
-                $contact->addPhone(new ContactPhone($lead->getPhoneNumber()));
-            }
+            foreach ($this->contactFields['methods'] as $method => $value) {
+                $propertyValue = null;
+                if (is_array($value)) {
+                    $subEntity = $this->accessor->getValue($lead, $value['entity']);
+                    if (is_object($subEntity) && $value['entity'] === 'address') {
+                        $propertyValue = new $this->addressFields['entity']();
 
-            if ($lead->getAddress()) {
-                $addressFields = [
-                    'label',
-                    'street2',
-                    'region',
-                    'country',
-                    'street',
-                    'postalCode',
-                    'city',
-                    'firstName',
-                    'middleName',
-                    'lastName',
-                    'nameSuffix',
-                    'organization',
-                    'namePrefix'
-                ];
+                        $this->fillEntityProperties(
+                            $propertyValue,
+                            $this->addressFields['properties'],
+                            $subEntity
+                        );
 
-                $contactAddress = new ContactAddress();
-                $leadAddress = $lead->getAddress();
-                foreach ($addressFields as $field) {
-                    $contactAddress->{'set' . ucfirst($field)}($leadAddress->{'get' . ucfirst($field)}());
+                        $leadFields = array_intersect_key(
+                            $this->contactFields['properties'],
+                            array_flip($value['merge_fields']
+                            )
+                        );
+                        $this->fillEntityProperties(
+                            $propertyValue,
+                            $leadFields,
+                            $lead
+                        );
+                    }
+                } else {
+                    $propertyValue = $this->accessor->getValue($lead, $value);
                 }
-                $contactAddress->setPrimary(true);
-                $contact->addAddress($contactAddress);
+
+                if ($propertyValue) {
+                    $this->resolveMethod($contact, $method, $propertyValue);
+                }
             }
         }
 
@@ -101,6 +178,7 @@ class LeadToOpportunityProvider
     public function prepareOpportunity(Lead $lead, Request $request)
     {
         $opportunity = new Opportunity();
+        $opportunity->setLead($lead);
 
         if ($request->getMethod() === 'GET' && $this->validateLeadStatus($lead)) {
             $contact = $this->prepareContactToOpportunity($lead);
@@ -113,7 +191,6 @@ class LeadToOpportunityProvider
             }
         } else {
             $opportunity
-                ->setLead($lead)
                 // set predefined contact entity to have proper validation
                 ->setContact(new Contact());
         }
