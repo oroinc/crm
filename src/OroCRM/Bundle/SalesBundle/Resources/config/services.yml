@@ -29,6 +29,7 @@ parameters:
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
 
     orocrm_sales.model.change_lead_status.class: OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus
+    orocrm_sales.model.b2b_guesser.class: OroCRM\Bundle\SalesBundle\Model\B2bGuesser
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -214,5 +215,12 @@ services:
             - '@session'
             - '@doctrine.orm.entity_manager'
 
+    orocrm_sales.model.b2b_guesser:
+        class: %orocrm_sales.model.b2b_guesser.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
     orocrm_sales.provider.lead_to_opportunity:
         class: %orocrm_sales.provider.lead_to_opportunity.class%
+        arguments:
+            - '@orocrm_sales.model.b2b_guesser'

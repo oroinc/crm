@@ -70,7 +70,7 @@ class ChangeLeadStatus
             $status = $this->getStatusEntityByName($statusCode);
             $this->save($lead->setStatus($status));
         } catch (\Exception $e) {
-            $this->session->getFlashBag()->add('error', $e->getMessage());
+            $this->session->getFlashBag()->add('error', 'sales.lead.status.change_error_message');
             return false;
         }
 

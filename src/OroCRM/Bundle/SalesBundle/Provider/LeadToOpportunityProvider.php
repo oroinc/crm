@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
 use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
@@ -16,6 +17,8 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 class LeadToOpportunityProvider
 {
     protected $accessor;
+
+    protected $b2bGuesser;
 
     protected $addressFields = [
         'properties' => [
@@ -59,8 +62,9 @@ class LeadToOpportunityProvider
         'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
     ];
 
-    public function __construct()
+    public function __construct(B2bGuesser $b2bGuesser)
     {
+        $this->b2bGuesser = $b2bGuesser;
         $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
@@ -183,10 +187,9 @@ class LeadToOpportunityProvider
             $opportunity
                 ->setContact($contact)
                 ->setName($lead->getName());
-            
-            if ($customer = $lead->getCustomer()) {
-                $opportunity->setCustomer($customer);
-            }
+
+            $opportunity->setCustomer($this->b2bGuesser->getCustomer($lead));
+
         } else {
             $opportunity
                 // set predefined contact entity to have proper validation
