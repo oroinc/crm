@@ -11,6 +11,9 @@ use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $doctrineHelper;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $configManager;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -23,6 +26,9 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
     {
         parent::setUp();
 
+        $this->doctrineHelper = $this->getMockBuilder('Oro\Bundle\ApiBundle\Util\DoctrineHelper')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->configManager = $this->getMockBuilder('Oro\Bundle\EntityConfigBundle\Config\ConfigManager')
             ->disableOriginalConstructor()
             ->getMock();
@@ -32,6 +38,7 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
             ->getMock();
 
         $this->processor = new UpdateActivityContactFields(
+            $this->doctrineHelper,
             $this->configManager,
             $this->activityContactProvider,
             ['create', 'update']
@@ -74,6 +81,45 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         );
     }
 
+    public function testProcessForNotManageableEntity()
+    {
+        $config = [
+            'exclusion_policy' => 'all',
+            'fields'           => [
+                ActivityScope::LAST_CONTACT_DATE     => null,
+                ActivityScope::LAST_CONTACT_DATE_IN  => null,
+                ActivityScope::LAST_CONTACT_DATE_OUT => null,
+                ActivityScope::CONTACT_COUNT         => null,
+                ActivityScope::CONTACT_COUNT_IN      => null,
+                ActivityScope::CONTACT_COUNT_OUT     => null,
+            ]
+        ];
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(false);
+
+        $configObject = $this->createConfigObject($config);
+        $this->context->setResult($configObject);
+        $this->processor->process($this->context);
+
+        $this->assertConfig(
+            [
+                'exclusion_policy' => 'all',
+                'fields'           => [
+                    ActivityScope::LAST_CONTACT_DATE     => null,
+                    ActivityScope::LAST_CONTACT_DATE_IN  => null,
+                    ActivityScope::LAST_CONTACT_DATE_OUT => null,
+                    ActivityScope::CONTACT_COUNT         => null,
+                    ActivityScope::CONTACT_COUNT_IN      => null,
+                    ActivityScope::CONTACT_COUNT_OUT     => null,
+                ]
+            ],
+            $configObject
+        );
+    }
+
     public function testProcessForNotConfigurableEntity()
     {
         $config = [
@@ -87,6 +133,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
                 ActivityScope::CONTACT_COUNT_OUT     => null,
             ]
         ];
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')
@@ -129,6 +180,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         ];
 
         $expendConfig = new Config(new EntityConfigId('extend', self::TEST_CLASS_NAME));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')
@@ -176,6 +232,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         $expendConfig = new Config(new EntityConfigId('extend', self::TEST_CLASS_NAME));
         $expendConfig->set('is_extend', true);
         $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')
@@ -232,6 +293,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
         $activityConfig->set('activities', ['Test\Activity1']);
 
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
+
         $this->configManager->expects($this->once())
             ->method('hasConfig')
             ->with(self::TEST_CLASS_NAME)
@@ -287,6 +353,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         $expendConfig->set('is_extend', true);
         $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
         $activityConfig->set('activities', ['Test\Activity1', 'Test\Activity2']);
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')
@@ -347,6 +418,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         $expendConfig->set('is_extend', true);
         $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
         $activityConfig->set('activities', ['Test\Activity1', 'Test\Activity2']);
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')
@@ -418,6 +494,11 @@ class UpdateActivityContactFieldsTest extends ConfigProcessorTestCase
         $expendConfig->set('is_extend', true);
         $activityConfig = new Config(new EntityConfigId('activity', self::TEST_CLASS_NAME));
         $activityConfig->set('activities', ['Test\Activity1', 'Test\Activity2']);
+
+        $this->doctrineHelper->expects($this->once())
+            ->method('isManageableEntityClass')
+            ->with(self::TEST_CLASS_NAME)
+            ->willReturn(true);
 
         $this->configManager->expects($this->once())
             ->method('hasConfig')

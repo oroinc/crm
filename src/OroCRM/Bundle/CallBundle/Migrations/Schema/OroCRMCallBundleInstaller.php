@@ -11,6 +11,8 @@ use Oro\Bundle\CommentBundle\Migration\Extension\CommentExtensionAwareInterface;
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
+use OroCRM\Bundle\CallBundle\Migrations\Schema\v1_6\OroCRMCallBundle as TranslationTable;
+
 class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareInterface, CommentExtensionAwareInterface
 {
     /** @var CommentExtension */
@@ -32,7 +34,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7';
     }
 
     /**
@@ -52,6 +54,9 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $this->createOrocrmCallTable($schema);
         $this->createOrocrmCallDirectionTable($schema);
         $this->createOrocrmCallStatusTable($schema);
+
+        TranslationTable::createCallDirectionTranslationTable($schema);
+        TranslationTable::createCallStatusTranslationTable($schema);
 
         /** Foreign keys generation **/
         $this->addOrocrmCallForeignKeys($schema);

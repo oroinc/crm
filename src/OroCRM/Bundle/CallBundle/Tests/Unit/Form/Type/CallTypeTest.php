@@ -45,7 +45,7 @@ class CallTypeTest extends FormIntegrationTestCase
             'phoneNumber' => 'orocrm_call_phone',
             'notes' => 'oro_resizeable_rich_text',
             'callDateTime' => 'oro_datetime',
-            'callStatus' => 'entity',
+            'callStatus' => 'translatable_entity',
             'duration' => 'oro_duration',
             'direction' => 'translatable_entity'
         ];

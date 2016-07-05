@@ -66,7 +66,7 @@ class CallType extends AbstractType
             )
             ->add(
                 'callStatus',
-                'entity',
+                'translatable_entity',
                 [
                     'required' => true,
                     'label'    => 'orocrm.call.call_status.label',
