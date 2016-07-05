@@ -81,6 +81,7 @@ class CallControllerTest extends WebTestCase
         $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
 
         $this->assertEquals($request['call']['subject'], $result['subject']);
+        $this->assertEquals(5, $result['duration']);
     }
 
     /**
@@ -131,5 +132,58 @@ class CallControllerTest extends WebTestCase
         );
         $result = $this->client->getResponse();
         $this->assertJsonResponseStatusCodeEquals($result, 404);
+    }
+
+    public function testCreateWithSecondsDuration()
+    {
+        $request = [
+            "call" => [
+                "subject"      => 'Test Call ' . mt_rand(),
+                "owner"        => '1',
+                "duration"     => '23.5h 13.5s',
+                "direction"    => 'outgoing',
+                "callDateTime" => date('c'),
+                "phoneNumber"  => '123-123=123',
+                "callStatus"   => 'completed',
+                "associations" => [
+                    [
+                        "entityName" => 'Oro\Bundle\UserBundle\Entity\User',
+                        "entityId"   => 1,
+                        "type"       => 'activity'
+                    ],
+                ]
+            ]
+        ];
+        $this->client->request(
+            'POST',
+            $this->getUrl('oro_api_post_call'),
+            $request
+        );
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 201);
+
+        $this->assertArrayHasKey('id', $result);
+
+        $request['id'] = $result['id'];
+
+        return $request;
+    }
+
+    /**
+     * @param array $request
+     *
+     * @depends testCreateWithSecondsDuration
+     */
+    public function testGetWithSeconds(array $request)
+    {
+        $this->client->request(
+            'GET',
+            $this->getUrl('oro_api_get_call', ['id' => $request['id']])
+        );
+
+        $result = $this->getJsonResponseContent($this->client->getResponse(), 200);
+
+        $duration = (23 * 60 * 60) + (30 * 60) + 14; //23.5h 13.5s
+        $this->assertEquals($duration, $result['duration']);
     }
 }
