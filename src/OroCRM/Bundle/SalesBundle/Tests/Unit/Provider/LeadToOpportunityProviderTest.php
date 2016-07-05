@@ -2,6 +2,7 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Provider;
 
+use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
 use OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
 
 class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
@@ -13,48 +14,25 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->provider = new LeadToOpportunityProvider();
+        $b2bGuesser = $this
+            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Model\B2bGuesser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->provider = new LeadToOpportunityProvider($b2bGuesser);
     }
-
-    public function testValidateLeadStatus()
+    
+    public function testInvalidLeadStatus()
+    {
+        
+    }
+    
+    public function testGetFormId()
     {
 
-
     }
 
-    /**
-     * @param string $status
-     * @return PHPUnit_Framework_MockObject_MockObject|Lead
-     */
-    protected function getLeadWithStatus($status)
+    public function testPrepareOpportunity()
     {
-        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
-                     ->setMethods(['getStatus', 'getContact'])
-                     ->disableOriginalConstruct()
-                     ->getMock();
 
-        $leadStatus = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
-                           ->setMethods(['getStatus'])
-                           ->disableOriginalConstruct()
-                           ->getMock();
-
-        $contact = $this->getMockBuilder('OroCRM\Bundle\ContactBundle\Entity\Contact')
-                    ->setMethods(['getStatus'])
-                    ->disableOriginalConstruct()
-                    ->getMock();
-
-        $leadStatus->exactly($this->once())
-                   ->method('getName')
-                   ->will($this->returnValue($status));
-
-        $lead->exactly($this->once())
-             ->method('getStatus')
-             ->will($this->returnValue($leadStatus));
-
-        $lead->exactly($this->once())
-            ->method('getContact')
-            ->will($this->returnValue($contact));
-
-        return $lead;
     }
 }

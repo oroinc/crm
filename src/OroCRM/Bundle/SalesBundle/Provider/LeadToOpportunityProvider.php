@@ -207,7 +207,7 @@ class LeadToOpportunityProvider
     public function getFormId(Lead $lead)
     {
         $contact = $lead->getContact();
-        return is_null($contact) ?
+        return (!$contact instanceof Contact) ?
             'orocrm_sales.lead_to_opportunity_with_subform.form':
             'orocrm_sales.lead_to_opportunity.form';
     }

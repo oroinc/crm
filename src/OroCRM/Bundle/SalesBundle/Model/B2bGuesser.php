@@ -31,11 +31,10 @@ class B2bGuesser
     public function getCustomer(Lead $lead)
     {
         $customer = $lead->getCustomer();
-
         $customer = (null === $customer) ? $this->findCustomerByCompanyName($lead->getCompanyName()) : $customer;
 
         if ($customer) {
-           return $customer;
+            return $customer;
         }
 
         return $this->createCustomer($lead);
@@ -43,7 +42,7 @@ class B2bGuesser
 
     /**
      * @param Lead $lead
-     * 
+     *
      * @return B2bCustomer
      */
     protected function createCustomer(Lead $lead)
@@ -68,18 +67,19 @@ class B2bGuesser
     protected function findCustomerByCompanyName($companyName)
     {
         $repository = $this->manager->getRepository('OroCRMSalesBundle:B2bCustomer');
-        
-        $qb = $repository->createQueryBuilder('c');
 
-        $result = $qb->leftJoin('OroCRMAccountBundle:Account', 'a', 'WITH', 'a = c.account')
-                     ->groupBy('c.id')
-                     ->where($qb->expr()->orX(
-                        $qb->expr()->eq('c.name', ':company_name'),
-                        $qb->expr()->eq('a.name', ':company_name')
-                     ))
-                     ->setParameter('company_name', $companyName)
-                     ->getQuery()
-                     ->getArrayResult();
+        $queryBuilder = $repository->createQueryBuilder('c');
+        $result = $queryBuilder->leftJoin('OroCRMAccountBundle:Account', 'a', 'WITH', 'a = c.account')
+            ->groupBy('c.id')
+            ->where(
+                $queryBuilder->expr()->orX(
+                    $queryBuilder->expr()->eq('c.name', ':company_name'),
+                    $queryBuilder->expr()->eq('a.name', ':company_name')
+                )
+            )
+            ->setParameter('company_name', $companyName)
+            ->getQuery()
+            ->getArrayResult();
 
         $resultCount = count($result);
 

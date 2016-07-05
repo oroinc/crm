@@ -203,17 +203,14 @@ class LeadController extends Controller
      */
     public function convertToOpportunityAction(Lead $lead, Request $request)
     {
-
-        $securityFacade = $this->get('oro_security.security_facade');
+        if (!$this->get('oro_security.security_facade')->isGranted('orocrm_sales_opportunity_create')) {
+            throw new AccessDeniedException();
+        }
 
         $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormId($lead);
         $opportunity = $this
             ->get('orocrm_sales.provider.lead_to_opportunity')
             ->prepareOpportunity($lead, $request);
-
-        if (!$securityFacade->isGranted('orocrm_sales_opportunity_create')) {
-            throw new AccessDeniedException();
-        }
 
         if ($this->get($formId . '.handler')->process($opportunity)) {
             $this->get('session')->getFlashBag()->add(
