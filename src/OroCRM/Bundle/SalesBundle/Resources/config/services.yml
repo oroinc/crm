@@ -225,3 +225,4 @@ services:
         class: %orocrm_sales.provider.lead_to_opportunity.class%
         arguments:
             - '@orocrm_sales.model.b2b_guesser'
+            - '@oro_entity.entity_field_provider'

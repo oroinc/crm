@@ -2,6 +2,8 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
+use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
@@ -13,12 +15,24 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class LeadToOpportunityProvider
 {
+    /**
+     * @var PropertyAccessor
+     */
     protected $accessor;
 
+    /**
+     * @var B2bGuesser
+     */
     protected $b2bGuesser;
+
+    /**
+     * @var EntityFieldProvider
+     */
+    protected $entityFieldProvider;
 
     protected $addressFields = [
         'properties' => [
@@ -49,6 +63,9 @@ class LeadToOpportunityProvider
             'owner' => 'owner',
             'source' => 'source'
         ],
+        'extended_properties' => [
+            'source' => 'enum'
+        ],
         'methods' => [
             'addEmail' => 'email',
             'addPhone' => 'phoneNumber',
@@ -62,10 +79,48 @@ class LeadToOpportunityProvider
         'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
     ];
 
-    public function __construct(B2bGuesser $b2bGuesser)
+    public function __construct(B2bGuesser $b2bGuesser, EntityFieldProvider $entityFieldProvider)
     {
         $this->b2bGuesser = $b2bGuesser;
         $this->accessor = PropertyAccess::createPropertyAccessor();
+        $this->entityFieldProvider = $entityFieldProvider;
+        $this->validateContactFields();
+    }
+
+    /**
+     * @return array
+     */
+    protected function prepareEntityFields()
+    {
+        $rawFields = $this->entityFieldProvider->getFields(
+            'OroCRMSalesBundle:Lead',
+            true,
+            true,
+            false,
+            false,
+            true,
+            true
+        );
+        $fields = [];
+        foreach ($rawFields as $field) {
+            $fields[$field['name']] = $field['type'];
+        }
+        return $fields;
+    }
+
+    protected function validateContactFields()
+    {
+        $fields = $this->prepareEntityFields();
+        foreach ($this->contactFields['extended_properties'] as $propertyName => $type) {
+            $fieldValid = false;
+            if (key_exists($propertyName, $fields) && $fields[$propertyName] !== $type) {
+                $fieldValid = true;
+            }
+
+            if (!$fieldValid) {
+                unset($this->contactFields['properties'][$propertyName]);
+            }
+        }
     }
 
     /**
@@ -87,7 +142,7 @@ class LeadToOpportunityProvider
     /**
      * @param object $filledEntity
      * @param array $properties
-     * @param Lead $sourceEntity
+     * @param object $sourceEntity
      */
     protected function fillEntityProperties($filledEntity, array $properties, $sourceEntity)
     {
