@@ -105,21 +105,25 @@ workflows:
                                         [$.result.address]
                             - '@tree': # set Contact Email
                                 conditions: # if lead has email
-                                    '@not_empty': $lead.email
+                                    '@not_empty': $lead.emails
                                 actions:
-                                    - '@create_entity': # create Contact Address based on Lead address
-                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
-                                        attribute: $.result.email
-                                        data:
-                                            email: $lead.email
-                                            owner: $lead.contact
-                                            primary: true
-                                    - '@call_method': # add Email to Contact
-                                        object: $lead.contact
-                                        method: addEmail
-                                        method_parameters: [$.result.email]
-                                    - '@unset_value': # unset temporary property
-                                        [$.result.email]
+                                    - '@foreach':
+                                        array: $lead.emails
+                                        value: $.result.leadEmail
+                                        actions:
+                                            - '@create_entity': # create Contact Address based on Lead address
+                                                class: OroCRM\Bundle\ContactBundle\Entity\ContactEmail
+                                                attribute: $.result.email
+                                                data:
+                                                    email: $.result.leadEmail.email
+                                                    owner: $lead.contact
+                                                    primary: $.result.leadEmail.primary
+                                            - '@call_method': # add Email to Contact
+                                                object: $lead.contact
+                                                method: addEmail
+                                                method_parameters: [$.result.email]
+                                            - '@unset_value': # unset temporary property
+                                                [$.result.email, $.result.leadEmail]
                             - '@tree': # set Contact Phone
                                 conditions: # if lead has phone
                                     '@not_empty': $lead.phoneNumber
