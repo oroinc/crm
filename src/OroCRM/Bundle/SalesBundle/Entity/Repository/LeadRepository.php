@@ -17,8 +17,8 @@ class LeadRepository extends EntityRepository
      * @see        OpportunityRepository::getOpportunitiesCountGroupByLeadSource
      *
      * @param  AclHelper $aclHelper
-     * @param  int $limit
-     * @param  array $dateRange
+     * @param  int       $limit
+     * @param  array     $dateRange
      *
      * @return array     [itemCount, label]
      */
@@ -49,7 +49,7 @@ class LeadRepository extends EntityRepository
      * @see        LeadRepository::getOpportunitiesByLeadSource
      *
      * @param array $rows
-     * @param int $limit
+     * @param int   $limit
      *
      * @return array
      */
