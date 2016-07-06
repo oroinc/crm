@@ -31,9 +31,11 @@ class UpdateEntityConfigEntityValueQuery extends BaseQuery
      */
     public function execute(LoggerInterface $logger)
     {
-        if ($this->isEqualOldValue($logger)) {
-            parent::execute($logger);
+        if (!$this->isEqualOldValue($logger)) {
+            return;
         }
+
+        $this->updateEntityConfig($logger);
     }
 
     /**
