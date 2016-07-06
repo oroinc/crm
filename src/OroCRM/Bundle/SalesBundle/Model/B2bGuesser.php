@@ -4,6 +4,8 @@ namespace OroCRM\Bundle\SalesBundle\Model;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
+use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -14,13 +16,25 @@ class B2bGuesser
      * @var ObjectManager
      */
     protected $manager;
+    
+    /**
+     * @var EntityFieldProvider
+     */
+    protected $entityFieldProvider;
 
     /**
+     * B2bGuesser constructor.
+     * 
      * @param ObjectManager $manager
+     * @param EntityFieldProvider $entityFieldProvider
      */
-    public function __construct(ObjectManager $manager)
+    public function __construct(
+        ObjectManager $manager,
+        EntityFieldProvider $entityFieldProvider
+    )
     {
         $this->manager = $manager;
+        $this->entityFieldProvider = $entityFieldProvider;
     }
 
     /**
@@ -55,6 +69,18 @@ class B2bGuesser
         $b2bCustomer->setDataChannel($lead->getDataChannel());
         $b2bCustomer->setAccount($account);
         $b2bCustomer->addLead($lead);
+
+        $fields = $this->entityFieldProvider->getFields('OroCRMSalesBundle:B2bCustomer');
+
+        foreach ($fields as $field) {
+            if ($field['name'] === 'employees') {
+                $b2bCustomer->setEmployees($lead->getNumberOfEmployees());
+            }
+
+            if ($field['name'] === 'website' && $lead->getWebsite()) {
+                $b2bCustomer->setWebsite($lead->getWebsite());
+            }
+        }
 
         return $b2bCustomer;
     }
@@ -99,7 +125,7 @@ class B2bGuesser
             ->where('a.name = :company_name')
             ->setParameter('company_name', $companyName)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
 
         return $result;
     }
