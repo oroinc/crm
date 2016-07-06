@@ -24,14 +24,11 @@ class B2bGuesser
 
     /**
      * B2bGuesser constructor.
-     * 
+     *
      * @param ObjectManager $manager
      * @param EntityFieldProvider $entityFieldProvider
      */
-    public function __construct(
-        ObjectManager $manager,
-        EntityFieldProvider $entityFieldProvider
-    )
+    public function __construct(ObjectManager $manager, EntityFieldProvider $entityFieldProvider)
     {
         $this->manager = $manager;
         $this->entityFieldProvider = $entityFieldProvider;
