@@ -262,7 +262,8 @@ class LeadToOpportunityProvider
      */
     public function isLeadConvertibleToOpportunity(Lead $lead)
     {
-        return $lead->getStatus() !== ChangeLeadStatus::STATUS_DISQUALIFY && $lead->getOpportunities()->count() === 0;
+        return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
+        $lead->getOpportunities()->count() === 0;
     }
 
     /**
@@ -272,7 +273,7 @@ class LeadToOpportunityProvider
      */
     public function isDisqualifyAllowed(Lead $lead)
     {
-        return $lead->getStatus() !== ChangeLeadStatus::STATUS_DISQUALIFY;
+        return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY;
     }
 
     /**

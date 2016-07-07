@@ -42,7 +42,7 @@ class B2bGuesser
     public function getCustomer(Lead $lead)
     {
         $customer = $lead->getCustomer();
-        $customer = (null === $customer) ? $this->findCustomerByCompanyName($lead->getCompanyName()) : $customer;
+        $customer = (null === $customer) ? $this->findCustomer($lead->getCompanyName()) : $customer;
 
         if ($customer) {
             return $customer;
@@ -59,16 +59,12 @@ class B2bGuesser
     protected function createCustomer(Lead $lead)
     {
         $b2bCustomer = new B2bCustomer();
-
-        $account = $this->findAccountByCompanyName($lead->getCompanyName());
-
+        $account = $this->getAccount($lead);
         $b2bCustomer->setName($lead->getCompanyName());
         $b2bCustomer->setDataChannel($lead->getDataChannel());
         $b2bCustomer->setAccount($account);
-        $b2bCustomer->addLead($lead);
 
         $fields = $this->entityFieldProvider->getFields('OroCRMSalesBundle:B2bCustomer');
-
         foreach ($fields as $field) {
             if ($field['name'] === 'employees') {
                 $b2bCustomer->setEmployees($lead->getNumberOfEmployees());
@@ -79,34 +75,78 @@ class B2bGuesser
             }
         }
 
+        $this->manager->persist($b2bCustomer);
+        $this->manager->flush();
+
         return $b2bCustomer;
+    }
+
+    protected function findCustomer($companyName)
+    {
+        $customer = $this->findCustomerByCompanyName($companyName);
+        if (null !== $customer) {
+            return $customer;
+        }
+        return $this->findCustomerByAccountName($companyName);
     }
 
     /**
      * @param string $companyName
      *
-     * @return array
+     * @return B2bCustomer|null
      */
     protected function findCustomerByCompanyName($companyName)
     {
         $repository = $this->manager->getRepository('OroCRMSalesBundle:B2bCustomer');
 
         $queryBuilder = $repository->createQueryBuilder('c');
-        $result = $queryBuilder->leftJoin('OroCRMAccountBundle:Account', 'a', 'WITH', 'a = c.account')
+        $result = $queryBuilder
             ->groupBy('c.id')
-            ->where(
-                $queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->eq('c.name', ':company_name'),
-                    $queryBuilder->expr()->eq('a.name', ':company_name')
-                )
-            )
+            ->where('c.name = :company_name')
             ->setParameter('company_name', $companyName)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
 
         $resultCount = count($result);
 
         return (!$resultCount || $resultCount > 1) ? null : reset($result);
+    }
+
+    /**
+     * @param $companyName
+     *
+     * @return B2bCustomer|null
+     */
+    protected function findCustomerByAccountName($companyName)
+    {
+        $repository = $this->manager->getRepository('OroCRMSalesBundle:B2bCustomer');
+
+        $queryBuilder = $repository->createQueryBuilder('c');
+        $result = $queryBuilder
+            ->innerJoin('OroCRMAccountBundle:Account', 'a', 'WITH', 'c.account = a')
+            ->where('a.name = :company_name')
+            ->setParameter('company_name', $companyName)
+            ->getQuery()
+            ->getResult();
+
+        $resultCount = count($result);
+
+        return (!$resultCount || $resultCount > 1) ? null : reset($result);
+    }
+
+    /**
+     * @param Lead $lead
+     *
+     * @return Account
+     */
+    protected function getAccount(Lead $lead)
+    {
+        $account = $this->findAccountByCompanyName($lead->getCompanyName());
+        if (null === $account) {
+            $account = new Account();
+            $account->setName($lead->getCompanyName());
+        }
+        return $account;
     }
 
     /**
@@ -122,8 +162,10 @@ class B2bGuesser
             ->where('a.name = :company_name')
             ->setParameter('company_name', $companyName)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getResult();
 
-        return $result;
+        $resultCount = count($result);
+
+        return (!$resultCount || $resultCount > 1) ? null : reset($result);
     }
 }
