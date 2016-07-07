@@ -35,9 +35,11 @@ class LeadToOpportunityHandler extends OpportunityHandler
     public function process(Opportunity $entity)
     {
         $processResult = parent::process($entity);
+        $lead = $entity->getLead();
         if ($processResult && in_array($this->request->getMethod(), array('POST', 'PUT'))) {
-            $this->attachContactToLead($entity->getLead(), $entity);
-            return $this->changeLeadStatusModel->qualify($entity->getLead());
+            /** Prepare lead to save */
+            $this->setContactAndAccountToLeadFromOpportunity($lead, $entity);
+            return $this->changeLeadStatusModel->qualify($lead);
         }
         return $processResult;
     }
@@ -46,11 +48,10 @@ class LeadToOpportunityHandler extends OpportunityHandler
      * @param Lead        $lead
      * @param Opportunity $opportunity
      */
-    protected function attachContactToLead(Lead $lead, Opportunity $opportunity)
+    protected function setContactAndAccountToLeadFromOpportunity(Lead $lead, Opportunity $opportunity)
     {
-        if (!$lead->getContact() instanceof Contact) {
-            $lead->setContact($opportunity->getContact());
-        }
+        $lead->setContact($opportunity->getContact());
+        $lead->setCustomer($opportunity->getCustomer());
     }
 
     /**
