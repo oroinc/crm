@@ -3,6 +3,7 @@
 namespace Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0;
 
 use Doctrine\DBAL\Schema\Schema;
+use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
@@ -11,12 +12,20 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAware
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
+use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
+
+use \Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use \Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 class UpdateDependencySchema implements
     Migration,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /** @var ActivityExtension */
     protected $activityExtension;
 
@@ -44,8 +53,8 @@ class UpdateDependencySchema implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if (!$this->container->hasParameter('installed')
-            && !$this->container->getParameter('installed')) {
+        if ($this->container->hasParameter('installed')
+            && $this->container->getParameter('installed')) {
                 $this->addActivityAssociationsForCallBundle($schema, $queries);
         }
 

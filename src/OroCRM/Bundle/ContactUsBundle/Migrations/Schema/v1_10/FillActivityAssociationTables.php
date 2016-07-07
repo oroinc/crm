@@ -93,13 +93,6 @@ class FillActivityAssociationTables implements
             $table->removeForeignKey('FK_4DEF4058A832C1C9');
         }
         $schema->dropTable('orocrm_contactus_req_emails');
-
-        // Remove orocrm_contactus_request_calls
-        $table = $schema->getTable('orocrm_contactus_request_calls');
-        $table->removeForeignKey('FK_6F7A50CE427EB8A5');
-        $table->removeForeignKey('FK_6F7A50CE50A89B2C');
-        $schema->dropTable('orocrm_contactus_request_calls');
-
     }
 
     /**
@@ -109,7 +102,7 @@ class FillActivityAssociationTables implements
     {
         $queries->addPreQuery(
             new SqlMigrationQuery(
-                [$this->getFillContactRequestEmailActivityQuery(), $this->getFillContactRequestCallActivityQuery()]
+                $this->getFillContactRequestEmailActivityQuery()
             )
         );
     }
@@ -124,13 +117,6 @@ class FillActivityAssociationTables implements
             new ParametrizedSqlMigrationQuery(
                 $this->getFillContactRequestEmailActivityListQuery(),
                 ['class' => 'Oro\Bundle\EmailBundle\Entity\Email'],
-                ['class' => Type::STRING]
-            )
-        );
-        $queries->addPreQuery(
-            new ParametrizedSqlMigrationQuery(
-                $this->getFillContactRequestCallActivityListQuery(),
-                ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
                 ['class' => Type::STRING]
             )
         );
@@ -181,24 +167,6 @@ class FillActivityAssociationTables implements
             $sql,
             $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
             $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
-        );
-    }
-
-    /**
-     * @return string
-     */
-    protected function getFillContactRequestCallActivityListQuery()
-    {
-        $sql = 'INSERT INTO %s (activitylist_id, contactrequest_id)' .
-               ' SELECT al.id, rel.contactrequest_id' .
-               ' FROM oro_activity_list al' .
-               ' JOIN %s rel ON rel.call_id = al.related_activity_id' .
-               ' AND al.related_activity_class = :class';
-
-        return sprintf(
-            $sql,
-            $this->activityListExtension->getAssociationTableName('orocrm_contactus_request'),
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
         );
     }
 }
