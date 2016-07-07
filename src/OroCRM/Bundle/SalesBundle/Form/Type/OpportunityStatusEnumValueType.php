@@ -17,7 +17,7 @@ class OpportunityStatusEnumValueType extends EnumValueType
     const NAME = 'orocrm_sales_opportunity_status_enum_value';
 
     /**
-     * @var array Default probability for these statuses cannot be edited
+     * @var array List of statuses which have non-editable probability
      */
     public static $immutableStatuses = ['won', 'lost'];
 
@@ -32,8 +32,8 @@ class OpportunityStatusEnumValueType extends EnumValueType
     }
 
     /**
-     * Pre set data event handler
-     * Populate probability fields from the System Config (scoped)
+     * PRE_SET_DATA event handler
+     * Add probability fields for each status
      *
      * @param FormEvent $event
      */

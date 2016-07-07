@@ -13,11 +13,13 @@ use Oro\Bundle\EntityConfigBundle\Provider\PropertyConfigContainer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 /**
- * Manage Opportunity Status Enum options from the System Config
+ * Manage Opportunity statuses from the System Config
  * FormType is extended by:
- * {@link Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension} to retrieve/store enum options
- * and
- * {@link OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension} to retrieve/store a probability map
+ * - EntityExtendBundle::EnumFieldConfigExtension to manage enum options
+ * - SalesBundle::OpportunityStatusConfigExtension to manage the probability map
+ *
+ * @see Oro\Bundle\EntityExtendBundle\Form\Extension\EnumFieldConfigExtension
+ * @see OroCRM\Bundle\SalesBundle\Form\Extension\OpportunityStatusConfigExtension
  */
 class OpportunityStatusConfigType extends AbstractType
 {
@@ -26,12 +28,24 @@ class OpportunityStatusConfigType extends AbstractType
     /** @var ConfigManager */
     protected $configManager;
 
+    /** @var \Oro\Bundle\EntityConfigBundle\Config\Id\ConfigIdInterface */
+    protected $configId;
+
+    /** @var \Oro\Bundle\EntityConfigBundle\Entity\FieldConfigModel */
+    protected $configModel;
+
+    /** @var \Oro\Bundle\EntityConfigBundle\Provider\ConfigProvider */
+    protected $enumProvider;
+
     /**
      * @param ConfigManager $configManager
      */
     public function __construct(ConfigManager $configManager)
     {
         $this->configManager = $configManager;
+        $this->enumProvider = $configManager->getProvider('enum');
+        $this->configId = $this->enumProvider->getId(Opportunity::class, 'status', 'enum');
+        $this->configModel = $configManager->getConfigFieldModel(Opportunity::class, 'status');
     }
 
     /**
@@ -39,9 +53,8 @@ class OpportunityStatusConfigType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $provider = $this->configManager->getProvider('enum');
-        $config = $this->configManager->getConfig($options['config_id']);
-        $items = $provider->getPropertyConfig()->getFormItems(PropertyConfigContainer::TYPE_FIELD, 'enum');
+        $config = $this->configManager->getConfig($this->configId);
+        $items = $this->enumProvider->getPropertyConfig()->getFormItems(PropertyConfigContainer::TYPE_FIELD, 'enum');
 
         // clean form options and leave only those needed by System Config layout
         $items['enum_options']['form']['options'] = [
@@ -66,15 +79,10 @@ class OpportunityStatusConfigType extends AbstractType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $className = Opportunity::class;
-        $configModel = $this->configManager->getConfigFieldModel($className, 'status');
-        $provider = $this->configManager->getProvider('enum');
-        $configId = $provider->getId($className, 'status', 'enum');
-
         $resolver->setDefaults(
             [
-                'config_model' => $configModel,
-                'config_id' => $configId,
+                'config_model' => $this->configModel,
+                'config_id' => $this->configId,
                 'config_is_new' => false,
             ]
         );

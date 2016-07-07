@@ -4,7 +4,6 @@ namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Range;
 
@@ -19,7 +18,7 @@ class OpportunityProbabilityType extends AbstractType
     const NAME = 'orocrm_sales_opportunity_probability';
 
     /**
-     * @var array Default probability for these statuses cannot be edited
+     * @var array List of statuses which have non-editable probability
      */
     public static $immutableStatuses = ['won', 'lost'];
 
