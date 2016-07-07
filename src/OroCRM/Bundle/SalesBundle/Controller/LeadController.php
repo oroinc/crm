@@ -36,8 +36,18 @@ class LeadController extends Controller
      */
     public function viewAction(Lead $lead)
     {
+        $isLeadConvertible = $this
+            ->get('orocrm_sales.provider.lead_to_opportunity')
+            ->isLeadConvertibleToOpportunity($lead);
+
+        $isDisqualifyAllowed = $this
+            ->get('orocrm_sales.provider.lead_to_opportunity')
+            ->isDisqualifyAllowed($lead);
+
         return array(
-            'entity' => $lead
+            'entity' => $lead,
+            'isLeadConvertible' => $isLeadConvertible,
+            'isDisqualifyAllowed' => $isDisqualifyAllowed
         );
     }
 
@@ -203,8 +213,8 @@ class LeadController extends Controller
      */
     public function convertToOpportunityAction(Lead $lead, Request $request)
     {
-        if (!$this->get('oro_security.security_facade')->isGranted('orocrm_sales_opportunity_create')) {
-            throw new AccessDeniedException();
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isLeadConvertibleToOpportunity($lead)) {
+            throw new AccessDeniedException('Only one conversion per lead is allowed !');
         }
 
         $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormId($lead);

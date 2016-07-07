@@ -11,6 +11,7 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -252,6 +253,26 @@ class LeadToOpportunityProvider
         }
 
         return $opportunity;
+    }
+
+    /**
+     * @param Lead $lead
+     *
+     * @return bool
+     */
+    public function isLeadConvertibleToOpportunity(Lead $lead)
+    {
+        return $lead->getStatus() !== ChangeLeadStatus::STATUS_DISQUALIFY && $lead->getOpportunities()->count() === 0;
+    }
+
+    /**
+     * @param Lead $lead
+     *
+     * @return bool
+     */
+    public function isDisqualifyAllowed(Lead $lead)
+    {
+        return $lead->getStatus() !== ChangeLeadStatus::STATUS_DISQUALIFY;
     }
 
     /**

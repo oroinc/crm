@@ -5,7 +5,7 @@
 
 {% block navButtons %}
     {% if resource_granted('EDIT', entity) %}
-        {% if (entity.status.name not in "canceled")  %}
+        {% if (isDisqualifyAllowed)  %}
             {{ UI.button({
                 'path':  path('orocrm_sales_lead_disqualify', {'id': entity.id}),
                 'aCss':  'btn btn-danger action-button',
@@ -14,7 +14,7 @@
                 'title': 'Disqualify',
             }) }}
         {% endif %}
-        {% if (entity.status.name not in "canceled" and entity.status.name not in "qualified") %}
+        {% if (isLeadConvertible) %}
             {{ UI.button({
                 'path':  path('orocrm_sales_lead_convert_to_opportunity', {'id': entity.id}),
                 'aCss':  'btn action-button',
