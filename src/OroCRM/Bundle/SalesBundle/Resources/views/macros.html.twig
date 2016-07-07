@@ -1,0 +1,30 @@
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
+    {% set primaryElement = null %}
+    {% set elements = [] %}
+
+    {% for element in collection %}
+        {% if element.primary %}
+            {% set primaryElement = element %}
+        {% else %}
+            {% set elements = elements|merge([element]) %}
+        {% endif %}
+    {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
+
+    <ul class="extra-list">
+        {%- for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor -%}
+    </ul>
+{% endmacro %}
