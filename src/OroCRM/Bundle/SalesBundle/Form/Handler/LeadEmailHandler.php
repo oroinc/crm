@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\ORM\EntityManagerInterface;
 
-use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -16,7 +16,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LeadEmailHandler
 {
-    /** @var FormInterface */
+    /** @var FormFactory */
     protected $form;
 
     /** @var Request */
@@ -29,13 +29,13 @@ class LeadEmailHandler
     protected $securityFacade;
 
     /**
-     * @param FormInterface $form
+     * @param FormFactory $form
      * @param Request $request
      * @param EntityManagerInterface $manager
      * @param SecurityFacade $securityFacade
      */
     public function __construct(
-        FormInterface $form,
+        FormFactory $form,
         Request $request,
         EntityManagerInterface $manager,
         SecurityFacade $securityFacade
@@ -57,7 +57,7 @@ class LeadEmailHandler
      */
     public function process(LeadEmail $entity)
     {
-        $this->form->setData($entity);
+        $form = $this->form->create('orocrm_sales_lead_email', $entity);
 
         $submitData = [
             'email' => $this->request->request->get('email'),
@@ -65,13 +65,13 @@ class LeadEmailHandler
         ];
 
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
-            $this->form->submit($submitData);
+            $form->submit($submitData);
 
-            if ($this->form->isValid() && $this->request->request->get('leadId')) {
+            if ($form->isValid() && $this->request->request->get('entityId')) {
                 /** @var Lead $lead */
                 $lead = $this->manager->find(
                     'OroCRMCSalesBundle:Lead',
-                    $this->request->request->get('leadId')
+                    $this->request->request->get('entityId')
                 );
                 if (!$this->securityFacade->isGranted('EDIT', $lead)) {
                     throw new AccessDeniedException();
@@ -108,7 +108,7 @@ class LeadEmailHandler
             $em->remove($leadEmail);
             $em->flush();
         } else {
-            throw new \Exception("oro.lead.email.error.delete.more_one", 500);
+            throw new \Exception("orocrm.lead.email.error.delete.more_one", 500);
         }
     }
 

@@ -262,6 +262,7 @@ datagrid:
                     - l.createdAt
                     - l.updatedAt
                     - email.email
+                    - email.id as emailId
                     - l.phoneNumber
                     - l.jobTitle
                     - l.companyName
@@ -348,6 +349,23 @@ datagrid:
                 renderable: false
             email:
                 label:         orocrm.sales.lead.email.label
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/text-editor-view
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        field_name: email
+                        route_create_entity:
+                            name: oro_api_post_leademail
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_leademail
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_LeadEmail
+                        route_parameters_rename_map:
+                            emailId: id
             phoneNumber:
                 label:         orocrm.sales.lead.phone_number.label
                 frontend_type: phone
@@ -380,6 +398,7 @@ datagrid:
         properties:
             id: ~
             owner: ~
+            emailId: ~
             view_link:
                 type:       url
                 route:      orocrm_sales_lead_view

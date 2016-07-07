@@ -17,14 +17,14 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use Oro\Bundle\SoapBundle\Controller\Api\Rest\RestController;
 
 /**
- * @RouteResource("email")
+ * @RouteResource("leademail")
  * @NamePrefix("oro_api_")
  */
 class LeadEmailController extends RestController implements ClassResourceInterface
 {
     /**
      * Create entity LeadEmail
-     * oro_api_post_lead_email
+     *  oro_api_post_leademail
      *
      * @return Response
      *
@@ -43,7 +43,7 @@ class LeadEmailController extends RestController implements ClassResourceInterfa
 
     /**
      * Delete entity LeadEmail
-     * oro_api_delete_lead_email
+     *  oro_api_delete_leademail
      *
      * @param int $id
      *

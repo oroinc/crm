@@ -17,4 +17,3 @@ orocrm_sales_b2bcustomer_api:
 orocrm_sales_lead_email_api:
     resource:     "@OroCRMSalesBundle/Controller/Api/Rest/LeadEmailController.php"
     type:         rest
-    parent:       orocrm_sales_lead_api
