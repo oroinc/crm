@@ -40,6 +40,8 @@
             {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.twitter.label'|trans, entity.twitter) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.linked_in.label'|trans, entity.linkedIn) }}
         </div>
     </div>
 </div>

@@ -97,7 +97,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_23';
+        return 'v1_24';
     }
 
     /**
@@ -296,6 +296,8 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
+        $table->addColumn('twitter', 'string', ['length' => 255]);
+        $table->addColumn('linkedin', 'string', ['length' => 255]);
 
         $this->extendExtension->addEnumField(
             $schema,

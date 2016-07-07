@@ -207,6 +207,8 @@ orocrm:
             details.label:        Lead Details
             source.label:         Source
             notes.label:          Additional comments
+            twitter.label:        Twitter
+            linked_in.label:      LinkedIn
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step

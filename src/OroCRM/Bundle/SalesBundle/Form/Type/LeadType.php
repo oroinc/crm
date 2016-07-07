@@ -76,7 +76,9 @@ class LeadType extends AbstractType
                     'required' => false,
                     'label' => 'orocrm.sales.lead.notes.label'
                 )
-            );
+            )
+            ->add('twitter', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.twitter.label'))
+            ->add('linkedIn', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.linked_in.label'));
     }
 
     /**
