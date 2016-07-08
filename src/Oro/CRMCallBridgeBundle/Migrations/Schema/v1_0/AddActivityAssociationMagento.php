@@ -49,8 +49,17 @@ class AddActivityAssociationMagento implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_customer');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_order');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_magento_cart');
+        $activityAssociationTables = [
+            'orocrm_magento_customer',
+            'orocrm_magento_order',
+            'orocrm_magento_cart'
+        ];
+
+        foreach ($activityAssociationTables as $tblName) {
+            $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tblName);
+            if (!$schema->hasTable($associationTableName)) {
+                $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tblName);
+            }
+        }
     }
 }

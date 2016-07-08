@@ -49,8 +49,17 @@ class AddActivityAssociationSales implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
-        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_b2bcustomer');
+        $activityAssociationTables = [
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer'
+        ];
+
+        foreach ($activityAssociationTables as $tblName) {
+            $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tblName);
+            if (!$schema->hasTable($associationTableName)) {
+                $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tblName);
+            }
+        }
     }
 }

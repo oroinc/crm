@@ -85,7 +85,7 @@ class CreateActivityAssociation implements
     /**
      * Manually create activitylist association table for further filling.
      *
-     * @param Schema                $schemaN
+     * @param Schema                $schema
      * @param ActivityListExtension $activityListExtension
      */
     public static function addActivityListAssociationTable(
