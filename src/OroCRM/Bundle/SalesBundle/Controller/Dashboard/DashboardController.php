@@ -146,7 +146,7 @@ class DashboardController extends Controller
 
         /** @var WorkflowManager $workflowManager */
         $workflowManager = $this->get('oro_workflow.manager');
-        $workflows       = $workflowManager->getApplicableWorkflows(SalesFunnel::class);
+        $workflows = $workflowManager->getApplicableWorkflows(SalesFunnel::class);
 
         $customStepCalculations = ['won_opportunity' => 'opportunity.closeRevenue'];
 

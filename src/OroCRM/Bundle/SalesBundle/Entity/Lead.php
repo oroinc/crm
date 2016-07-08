@@ -14,8 +14,6 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\ExtendLead;
@@ -437,22 +435,6 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $notes;
-
-    /**
-     * @var WorkflowItem
-     *
-     * @ORM\OneToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowItem")
-     * @ORM\JoinColumn(name="workflow_item_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowItem;
-
-    /**
-     * @var WorkflowStep
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\WorkflowBundle\Entity\WorkflowStep")
-     * @ORM\JoinColumn(name="workflow_step_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    protected $workflowStep;
 
     /**
      * @var Organization
@@ -1015,46 +997,6 @@ class Lead extends ExtendLead implements
         $this->notes = $notes;
 
         return $this;
-    }
-
-    /**
-     * @param WorkflowItem $workflowItem
-     *
-     * @return Lead
-     */
-    public function setWorkflowItem($workflowItem)
-    {
-        $this->workflowItem = $workflowItem;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowItem
-     */
-    public function getWorkflowItem()
-    {
-        return $this->workflowItem;
-    }
-
-    /**
-     * @param WorkflowItem $workflowStep
-     *
-     * @return Lead
-     */
-    public function setWorkflowStep($workflowStep)
-    {
-        $this->workflowStep = $workflowStep;
-
-        return $this;
-    }
-
-    /**
-     * @return WorkflowStep
-     */
-    public function getWorkflowStep()
-    {
-        return $this->workflowStep;
     }
 
     /**
