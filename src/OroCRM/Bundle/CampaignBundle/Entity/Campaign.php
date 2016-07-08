@@ -33,7 +33,8 @@ use OroCRM\Bundle\CampaignBundle\Model\ExtendCampaign;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          },
  *          "form"={
  *              "form_type"="orocrm_campaign_select",
