@@ -1219,6 +1219,24 @@ datagrid:
 
     orocrm-sales-b2bcustomers-select-grid:
         extends: base-sales-b2bcustomers-grid
+        source:
+            query:
+                select:
+                    - account.name as accountName
+                join:
+                    left:
+                        - { join: c.account, alias: account }
+        columns:
+            accountName:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
+        sorters:
+            columns:
+                accountName: { data_name: accountName }
+        filters:
+            columns:
+                accountName:
+                    type: string
+                    data_name: accountName
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%

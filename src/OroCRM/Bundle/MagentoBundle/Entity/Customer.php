@@ -44,7 +44,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *      routeView="orocrm_magento_customer_view",
  *      defaultValues={
  *          "entity"={
- *              "icon"="icon-user",
+ *              "icon"="icon-user"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
@@ -55,7 +55,8 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "grid_name"="magento-customers-grid",

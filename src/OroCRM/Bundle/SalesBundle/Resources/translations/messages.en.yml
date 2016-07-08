@@ -111,6 +111,8 @@ orocrm:
             choose_lead:        Choose a lead....
             choose_b2bcustomer: Choose a customer....
             choose_close_rsn:   Choose a close reason...
+            tooltip:
+                account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
@@ -155,7 +157,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       Business Customer
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             created_at.label:     Created At
@@ -258,7 +260,7 @@ orocrm:
             entity_plural_label:        Business Customers
             entity_description:         Represent business customer
             id.label:                   Id
-            name.label:                 Name
+            name.label:                 Customer name
             lifetime.label:             Lifetime sales value
             shipping_address.label:     Shipping Address
             billing_address.label:      Billing Address
@@ -311,3 +313,6 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        privilege:
+            category.sales_data.label: Sales Data

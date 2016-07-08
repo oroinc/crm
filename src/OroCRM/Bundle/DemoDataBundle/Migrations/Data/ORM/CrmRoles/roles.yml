@@ -49,6 +49,8 @@ ROLE_SALES_MANAGER:
         action|oro_tag_unassign_global: [EXECUTE]
         action|oro_workflow: [EXECUTE]
         action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]
 
 ROLE_SALES_REP:
     bap_role: ROLE_USER
@@ -101,6 +103,8 @@ ROLE_SALES_REP:
         action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
         action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]
 ROLE_ONLINE_SALES_REP:
     label: Online Sales Rep
     permissions:
@@ -152,6 +156,8 @@ ROLE_ONLINE_SALES_REP:
         action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
         action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]
 ROLE_MARKETING_MANAGER:
     label: Marketing Manager
     permissions:
@@ -203,6 +209,8 @@ ROLE_MARKETING_MANAGER:
         action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
         action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]
 ROLE_LEADS_DEVELOPMENT_REP:
     label: Leads Development Rep
     permissions:
@@ -254,3 +262,5 @@ ROLE_LEADS_DEVELOPMENT_REP:
         action|oro_tag_unassign_global: []
         action|oro_workflow: [EXECUTE]
         action|oro_report_view_sql: []
+        action|update_own_profile: [EXECUTE]
+        action|update_own_configuration: [EXECUTE]
