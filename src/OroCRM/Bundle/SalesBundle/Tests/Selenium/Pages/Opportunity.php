@@ -118,7 +118,7 @@ class Opportunity extends AbstractPageEntity
             "//div[@id='select2-drop']//div[contains(., '{$customer}')]",
             "Business customer autocomplete doesn't return search value"
         );
-        $this->test->byXpath("//div[@id='select2-drop']//div[normalize-space(text()) = '{$customer}']")->click();
+        $this->test->byXpath("//div[@id='select2-drop']//div[starts-with(., '{$customer}')]")->click();
 
         return $this;
     }
