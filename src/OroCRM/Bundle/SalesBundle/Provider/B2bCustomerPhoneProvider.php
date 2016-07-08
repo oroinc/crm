@@ -3,22 +3,11 @@
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\AddressBundle\Provider\PhoneProviderInterface;
-use Oro\Bundle\AddressBundle\Provider\RootPhoneProviderAwareInterface;
+
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 
-class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProviderAwareInterface
+class B2bCustomerPhoneProvider implements PhoneProviderInterface
 {
-    /** @var PhoneProviderInterface */
-    protected $rootProvider;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRootProvider(PhoneProviderInterface $rootProvider)
-    {
-        $this->rootProvider = $rootProvider;
-    }
-
     /**
      * Gets a phone number of the given B2bCustomer object
      *
@@ -28,12 +17,9 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      */
     public function getPhoneNumber($object)
     {
-        $contact = $object->getContact();
-        if (!$contact) {
-            return null;
-        }
+        $primaryPhone = $object->getPrimaryPhone();
 
-        return $this->rootProvider->getPhoneNumber($contact);
+        return $primaryPhone ? $primaryPhone->getPhone() : null;
     }
 
     /**
@@ -45,11 +31,10 @@ class B2bCustomerPhoneProvider implements PhoneProviderInterface, RootPhoneProvi
      */
     public function getPhoneNumbers($object)
     {
-        $contact = $object->getContact();
-        if (!$contact) {
-            return [];
+        $result = [];
+        foreach ($object->getPhones() as $phone) {
+            $result[] = [$phone->getPhone(), $object];
         }
-
-        return $this->rootProvider->getPhoneNumbers($contact);
+        return $result;
     }
 }
