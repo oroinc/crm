@@ -358,7 +358,6 @@ class CartRepository extends ChannelAwareEntityRepository
         WorkflowQueryHelper::addQuery($qb, 'workflowStep');
         $qb->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
             ->leftJoin(sprintf('%s.status', $alias), 'status')
-            ->join(sprintf('%s.workflowStep', $alias), 'workflowStep')
             ->groupBy('workflowStep.name');
 
         $qb->where($qb->expr()->in('workflowStep.name', $steps));
