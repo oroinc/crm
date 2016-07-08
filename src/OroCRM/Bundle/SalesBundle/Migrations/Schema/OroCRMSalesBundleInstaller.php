@@ -118,6 +118,7 @@ class OroCRMSalesBundleInstaller implements
         $this->createOrocrmSalesB2bCustomerTable($schema);
         $this->createOrocrmLeadPhoneTable($schema);
         $this->createOrocrmSalesLeadEmailTable($schema);
+        $this->createOrocrmB2bCustomerPhoneTable($schema);
         $this->createOrocrmB2bCustomerEmailTable($schema);
 
         /** Tables update */
