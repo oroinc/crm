@@ -2,6 +2,9 @@
 
 namespace OroCRM\Bundle\CallBundle\Entity;
 
+use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Translatable\Translatable;
+
 use Doctrine\ORM\Mapping as ORM;
 
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
@@ -11,6 +14,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *
  * @ORM\Table(name="orocrm_call_direction")
  * @ORM\Entity
+ * @Gedmo\TranslationEntity(class="OroCRM\Bundle\CallBundle\Entity\CallDirectionTranslation")
  * @Config(
  *      defaultValues={
  *          "grouping"={
@@ -24,7 +28,7 @@ use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
  *      }
  * )
  */
-class CallDirection
+class CallDirection implements Translatable
 {
     /**
      * @var string
@@ -37,9 +41,15 @@ class CallDirection
     /**
      * @var string
      *
+     * @Gedmo\Translatable
      * @ORM\Column(name="label", type="string", length=255, unique=true)
      */
     protected $label;
+
+    /**
+     * @Gedmo\Locale
+     */
+    protected $locale;
 
     /**
      * @param string $name
@@ -80,6 +90,29 @@ class CallDirection
     public function getLabel()
     {
         return $this->label;
+    }
+
+    /**
+     * Set locale
+     *
+     * @param string $locale
+     * @return CallDirection
+     */
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * Returns locale code
+     *
+     * @return string
+     */
+    public function getLocale()
+    {
+        return $this->locale;
     }
 
     /**

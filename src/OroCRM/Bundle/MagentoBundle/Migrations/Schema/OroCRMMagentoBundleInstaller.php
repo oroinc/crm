@@ -253,8 +253,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('customer_id', 'integer', ['notnull' => false]);
         $table->addColumn('store_id', 'integer', ['notnull' => false]);
         $table->addColumn('cart_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -329,8 +327,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['customer_id'], 'IDX_4D09F3059395C3F3', []);
         $table->addIndex(['store_id'], 'IDX_4D09F305B092A811', []);
         $table->addIndex(['cart_id'], 'IDX_4D09F3051AD5CDBF', []);
-        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_4D09F3051023C4EE');
-        $table->addIndex(['workflow_step_id'], 'IDX_4D09F30571FE882C', []);
         $table->addIndex(['user_owner_id'], 'IDX_4D09F3059EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_4D09F30572F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_4D09F305BDC09B73', []);
@@ -677,8 +673,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addColumn('billing_address_id', 'integer', ['notnull' => false]);
         $table->addColumn('status_name', 'string', ['notnull' => false, 'length' => 32]);
         $table->addColumn('opportunity_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_item_id', 'integer', ['notnull' => false]);
-        $table->addColumn('workflow_step_id', 'integer', ['notnull' => false]);
         $table->addColumn('user_owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('channel_id', 'integer', ['notnull' => false]);
         $table->addColumn('data_channel_id', 'integer', ['notnull' => false]);
@@ -720,8 +714,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addIndex(['billing_address_id'], 'IDX_96661A8079D0C0E4', []);
         $table->addIndex(['status_name'], 'IDX_96661A806625D392', []);
         $table->addIndex(['opportunity_id'], 'IDX_96661A809A34590F', []);
-        $table->addUniqueIndex(['workflow_item_id'], 'UNIQ_96661A801023C4EE');
-        $table->addIndex(['workflow_step_id'], 'IDX_96661A8071FE882C', []);
         $table->addIndex(['user_owner_id'], 'IDX_96661A809EB185F9', []);
         $table->addIndex(['channel_id'], 'IDX_96661A8072F5A1AA', []);
         $table->addIndex(['data_channel_id'], 'IDX_96661A80BDC09B73', []);
@@ -937,18 +929,6 @@ class OroCRMMagentoBundleInstaller implements
             ['cart_id'],
             ['id'],
             []
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_item'),
-            ['workflow_item_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_step'),
-            ['workflow_step_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
         );
         $table->addForeignKeyConstraint(
             $schema->getTable('oro_user'),
@@ -1353,18 +1333,6 @@ class OroCRMMagentoBundleInstaller implements
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_opportunity'),
             ['opportunity_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_item'),
-            ['workflow_item_id'],
-            ['id'],
-            ['onDelete' => 'SET NULL']
-        );
-        $table->addForeignKeyConstraint(
-            $schema->getTable('oro_workflow_step'),
-            ['workflow_step_id'],
             ['id'],
             ['onDelete' => 'SET NULL']
         );

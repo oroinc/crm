@@ -4,13 +4,15 @@ namespace OroCRM\Bundle\MagentoBundle\Controller\Dashboard;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use Symfony\Component\HttpFoundation\Request;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 
 use Oro\Bundle\ChartBundle\Model\ChartViewBuilder;
 use Oro\Bundle\DashboardBundle\Model\WidgetConfigs;
 use Oro\Bundle\DashboardBundle\Provider\Converters\FilterDateRangeConverter;
-use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 
 use OroCRM\Bundle\MagentoBundle\Dashboard\OrderDataProvider;
 use OroCRM\Bundle\MagentoBundle\Dashboard\PurchaseDataProvider;
@@ -26,19 +28,24 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMSalesBundle:Dashboard:salesFlowChart.html.twig")
+     *
+     * @param Request $request
+     * @param $widget
+     *
+     * @return array
      */
-    public function mySalesFlowB2CAction($widget)
+    public function mySalesFlowB2CAction(Request $request, $widget)
     {
         $dateRange = $this->get('oro_dashboard.widget_configs')
-            ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+            ->getWidgetOptions($request->query->get('_widgetId', null))
             ->get('dateRange');
 
         $dateTo   = $dateRange['end'];
         $dateFrom = $dateRange['start'];
 
-        /** @var WorkflowManager $workflowManager */
-        $workflowManager = $this->get('oro_workflow.manager');
-        $workflows       = $workflowManager->getApplicableWorkflows(Cart::class);
+        /** @var WorkflowAwareManager $workflowManager */
+        $workflowManager = $this->get('orocrm_magento.manager.abandoned_shopping_cart_flow');
+        $workflow        = $workflowManager->getWorkflow();
 
         /** @var CartRepository $shoppingCartRepository */
         $shoppingCartRepository = $this->getDoctrine()->getRepository('OroCRMMagentoBundle:Cart');
@@ -46,7 +53,7 @@ class DashboardController extends Controller
         $data = $shoppingCartRepository->getFunnelChartData(
             $dateFrom,
             $dateTo,
-            $workflows ? reset($workflows) : null,
+            $workflow,
             $this->get('oro_security.acl_helper')
         );
 
@@ -79,8 +86,12 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMMagentoBundle:Dashboard:ordersByCustomers.html.twig")
+     *
+     * @param Request $request
+     *
+     * @return array
      */
-    public function averageOrderAmountAction()
+    public function averageOrderAmountAction(Request $request)
     {
         $widgetAttributes  = $this->get('oro_dashboard.widget_configs');
         $orderDataProvider = $this->get('orocrm_magento.dashboard.data_provider.order');
@@ -90,7 +101,7 @@ class DashboardController extends Controller
         $data['chartView'] = $orderDataProvider->getAverageOrderAmountChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
-                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->getWidgetOptions($request->query->get('_widgetId', null))
                 ->get('dateRange'),
             $this->get('oro_dashboard.datetime.helper')
         );
@@ -105,8 +116,12 @@ class DashboardController extends Controller
      *      requirements={"widget"="[\w_-]+"}
      * )
      * @Template("OroCRMMagentoBundle:Dashboard:newCustomersChart.html.twig")
+     *
+     * @param Request $request
+     *
+     * @return array
      */
-    public function newCustomersAction()
+    public function newCustomersAction(Request $request)
     {
         $widgetAttributes     = $this->get('oro_dashboard.widget_configs');
         $customerDataProvider = $this->get('orocrm_magento.dashboard.data_provider.customer');
@@ -116,7 +131,7 @@ class DashboardController extends Controller
         $data['chartView'] = $customerDataProvider->getNewCustomerChartView(
             $chartViewBuilder,
             $this->get('oro_dashboard.widget_configs')
-                ->getWidgetOptions($this->getRequest()->query->get('_widgetId', null))
+                ->getWidgetOptions($request->query->get('_widgetId', null))
                 ->get('dateRange')
         );
 

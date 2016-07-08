@@ -5,8 +5,6 @@ namespace OroCRM\Bundle\MagentoBundle\Tests\Unit\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Entity\WorkflowStep;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\Order;
@@ -37,8 +35,6 @@ class OrderTest extends AbstractEntityTestCase
         $cart     = new Cart();
         $items    = new ArrayCollection();
         $items->add(new OrderItem());
-        $workFlowItem = new WorkflowItem();
-        $workflowStep = new WorkflowStep();
         $createdAt    = new \DateTime('now');
         $updatedAt    = new \DateTime('now');
         $channel      = new Channel();
@@ -62,8 +58,6 @@ class OrderTest extends AbstractEntityTestCase
             'items'               => ['items', $items, $items],
             'notes'               => ['notes', 'notes', 'notes'],
             'feedback'            => ['feedback', 'positive', 'positive'],
-            'workflowItem'        => ['workflowItem', $workFlowItem, $workFlowItem],
-            'workflowStep'        => ['workflowStep', $workflowStep, $workflowStep],
             'customerEmail'       => ['customerEmail', 'email@email.com', 'email@email.com'],
             'currency'            => ['currency', 'uah', 'uah'],
             'paymentMethod'       => ['paymentMethod', 'payment method', 'payment method'],

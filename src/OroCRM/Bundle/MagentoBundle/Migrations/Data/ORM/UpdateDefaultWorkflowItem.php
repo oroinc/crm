@@ -7,9 +7,12 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\ORM\EntityRepository;
 
+use Oro\Bundle\WorkflowBundle\Model\WorkflowAwareManager;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+
+use OroCRM\Bundle\MagentoBundle\Entity\Cart;
+use OroCRM\Bundle\MagentoBundle\Entity\Order;
 
 class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwareInterface
 {
@@ -31,27 +34,22 @@ class UpdateDefaultWorkflowItem extends AbstractFixture implements ContainerAwar
      */
     public function load(ObjectManager $manager)
     {
-        /** @var WorkflowManager $workflowManager */
-        $workflowManager = $this->container->get('oro_workflow.manager');
+        $workflowAwareManager = new WorkflowAwareManager($this->container->get('oro_workflow.manager'));
 
-        /** @var EntityRepository $shoppingCartRepository */
-        $shoppingCartRepository = $manager->getRepository('OroCRMMagentoBundle:Cart');
-        $shoppingCarts = $shoppingCartRepository->createQueryBuilder('cart')
-            ->where('cart.workflowItem IS NULL')
-            ->getQuery()
-            ->execute();
+        $workflowAwareManager->setWorkflowName('b2c_flow_abandoned_shopping_cart');
+        $shoppingCarts = $manager->getRepository(Cart::class)->findAll();
         foreach ($shoppingCarts as $shoppingCart) {
-            $workflowManager->startWorkflow('b2c_flow_abandoned_shopping_cart', $shoppingCart);
+            if (!$workflowAwareManager->getWorkflowItem($shoppingCart)) {
+                $workflowAwareManager->startWorkflow($shoppingCart);
+            }
         }
 
-        /** @var EntityRepository $orderRepository */
-        $orderRepository = $manager->getRepository('OroCRMMagentoBundle:Order');
-        $orders = $orderRepository->createQueryBuilder('orderEntity')
-            ->where('orderEntity.workflowItem IS NULL')
-            ->getQuery()
-            ->execute();
+        $workflowAwareManager->setWorkflowName('b2c_flow_order_follow_up');
+        $orders = $manager->getRepository(Order::class)->findAll();
         foreach ($orders as $order) {
-            $workflowManager->startWorkflow('b2c_flow_order_follow_up', $order);
+            if (!$workflowAwareManager->getWorkflowItem($order)) {
+                $workflowAwareManager->startWorkflow($order);
+            }
         }
     }
 }
