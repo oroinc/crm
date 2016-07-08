@@ -23,6 +23,7 @@ use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_5\OroCRMSalesBundle as SalesN
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_7\OpportunityAttachment;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_11\OroCRMSalesBundle as SalesOrganizations;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_21\InheritanceActivityTargets;
+use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_24\InheritanceActivityTargets as OpportunityLeadIngeritance;
 use OroCRM\Bundle\SalesBundle\Migrations\Schema\v1_22\AddOpportunityStatus;
 
 /**
@@ -97,7 +98,7 @@ class OroCRMSalesBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_23';
+        return 'v1_24';
     }
 
     /**
@@ -137,6 +138,7 @@ class OroCRMSalesBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_sales_b2bcustomer');
         OpportunityAttachment::addOpportunityAttachment($schema, $this->attachmentExtension);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
+        OpportunityLeadIngeritance::addInheritanceTargets($schema, $this->activityListExtension);
 
         SalesOrganizations::addOrganization($schema);
         AddOpportunityStatus::addStatusField($schema, $this->extendExtension, $queries);
