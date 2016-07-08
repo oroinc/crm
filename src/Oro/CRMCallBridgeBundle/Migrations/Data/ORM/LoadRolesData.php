@@ -51,10 +51,10 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
             if (isset($roleConfigData['bap_role'])) {
                 $role = $manager->getRepository('OroUserBundle:Role')
                     ->findOneBy(['role' => $roleConfigData['bap_role']]);
-            } else {
-                $role = new Role($roleName);
-                $role->setLabel($roleConfigData['label']);
-                $manager->persist($role);
+            }
+
+            if (!$role) {
+                continue;
             }
 
             if ($aclManager->isAclEnabled()) {
@@ -89,11 +89,9 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
         foreach ($maskBuilders as $maskBuilder) {
             $mask = $maskBuilder->reset()->get();
 
-            if (!empty($acls)) {
-                foreach ($acls as $acl) {
-                    if ($maskBuilder->hasMask('MASK_' . $acl)) {
-                        $mask = $maskBuilder->add($acl)->get();
-                    }
+            foreach ($acls as $acl) {
+                if ($maskBuilder->hasMask('MASK_' . $acl)) {
+                    $mask = $maskBuilder->add($acl)->get();
                 }
             }
 
