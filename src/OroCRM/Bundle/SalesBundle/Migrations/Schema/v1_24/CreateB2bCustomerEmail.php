@@ -33,7 +33,7 @@ class CreateB2bCustomerPhone implements Migration
         $table->addColumn('email', 'string', ['length' => 255]);
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
-        $table->addIndex(['owner_id'], 'IDX_335A28C37E3C61F9', []);
+        $table->addIndex(['owner_id'], 'IDX_D564AB17E3C61F9', []);
         $table->addIndex(['email', 'is_primary'], 'primary_email_idx', []);
     }
 
