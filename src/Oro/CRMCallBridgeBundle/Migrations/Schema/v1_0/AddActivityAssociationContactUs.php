@@ -50,6 +50,9 @@ class AddActivityAssociationContactUs implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
+        $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request');
+        if (!$schema->hasTable($associationTableName)) {
+            $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_contactus_request');
+        }
     }
 }

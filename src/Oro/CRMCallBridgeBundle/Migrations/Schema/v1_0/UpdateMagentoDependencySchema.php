@@ -131,7 +131,7 @@ class UpdateMagentoDependencySchema implements
     /**
      * @return string
      */
-    protected static function getFillCartCallActivityQuery(ActivityExtension $activityExtension)
+    public static function getFillCartCallActivityQuery(ActivityExtension $activityExtension)
     {
         $sql = 'INSERT INTO %s (call_id, cart_id)' .
             ' SELECT call_id, cart_id' .
@@ -143,7 +143,7 @@ class UpdateMagentoDependencySchema implements
     /**
      * @return string
      */
-    protected function getFillOrderCallActivityQuery(ActivityExtension $activityExtension)
+    public static function getFillOrderCallActivityQuery(ActivityExtension $activityExtension)
     {
         $sql = 'INSERT INTO %s (call_id, order_id)' .
             ' SELECT call_id, order_id' .
@@ -156,7 +156,7 @@ class UpdateMagentoDependencySchema implements
     /**
      * @return string
      */
-    protected function getFillCartCallActivityListQuery(
+    public function getFillCartCallActivityListQuery(
         ActivityExtension $activityExtension,
         ActivityListExtension $activityListExtension
     ) {
@@ -177,7 +177,7 @@ class UpdateMagentoDependencySchema implements
     /**
      * @return string
      */
-    protected function getFillOrderCallActivityListQuery(
+    public function getFillOrderCallActivityListQuery(
         ActivityExtension $activityExtension,
         ActivityListExtension $activityListExtension
     ) {
@@ -202,7 +202,7 @@ class UpdateMagentoDependencySchema implements
      * @param Schema $schema
      * @return bool
      */
-    protected static function checkIfTablesExists(array $tableNames, Schema $schema)
+    public static function checkIfTablesExists(array $tableNames, Schema $schema)
     {
         foreach ($tableNames as $tableName) {
             if (!$schema->hasTable($tableName)) {

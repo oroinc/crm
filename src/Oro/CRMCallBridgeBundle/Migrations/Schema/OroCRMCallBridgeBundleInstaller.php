@@ -69,24 +69,11 @@ class OroCRMCallBridgeBundleInstaller implements
         AddActivityAssociationSales::addActivityAssociations($schema, $this->activityExtension);
         AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
 
-        $this->updateContactUsDependencySchema($schema, $queries);
+        UpdateContactUsDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
+        UpdateContactUsDependencySchema::fillActivityListTables($queries, $schema, $this->activityListExtension, $this->activityExtension);
+        UpdateContactUsDependencySchema::deleteContactUsRequestCallsTable($schema);
+
         UpdateMagentoDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
         UpdateMagentoDependencySchema::fillActivityListTables($queries, $schema, $this->activityExtension, $this->activityListExtension);
-    }
-
-    /**
-     * @param Schema $schema
-     * @param QueryBag $queries
-     */
-    protected function updateContactUsDependencySchema(Schema $schema, QueryBag $queries)
-    {
-        UpdateContactUsDependencySchema::fillActivityTables($queries, $this->activityExtension);
-        UpdateContactUsDependencySchema::fillActivityListTables($queries, $this->activityListExtension, $this->activityExtension);
-
-        // Remove orocrm_contactus_request_calls
-        $table = $schema->getTable('orocrm_contactus_request_calls');
-        $table->removeForeignKey('FK_6F7A50CE427EB8A5');
-        $table->removeForeignKey('FK_6F7A50CE50A89B2C');
-        $schema->dropTable('orocrm_contactus_request_calls');
     }
 }

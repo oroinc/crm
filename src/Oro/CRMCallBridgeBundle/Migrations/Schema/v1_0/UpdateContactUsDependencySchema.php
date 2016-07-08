@@ -58,10 +58,20 @@ class UpdateContactUsDependencySchema implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::fillActivityTables($queries, $this->activityExtension);
-        self::fillActivityListTables($queries, $this->activityListExtension, $this->activityExtension);
+        self::fillActivityTables($queries, $schema, $this->activityExtension);
+        self::fillActivityListTables($queries, $schema, $this->activityListExtension, $this->activityExtension);
 
         // Remove orocrm_contactus_request_calls
+        self::deleteContactUsRequestCallsTable($schema);
+    }
+
+    public static function deleteContactUsRequestCallsTable(Schema $schema)
+    {
+        /**If  table orocrm_contactus_request_calls does't exists do nothing **/
+        if(!$schema->hasTable('orocrm_contactus_request_calls')) {
+            return;
+        }
+
         $table = $schema->getTable('orocrm_contactus_request_calls');
         $table->removeForeignKey('FK_6F7A50CE427EB8A5');
         $table->removeForeignKey('FK_6F7A50CE50A89B2C');
@@ -71,8 +81,13 @@ class UpdateContactUsDependencySchema implements
     /**
      * @param QueryBag $queries
      */
-    public static function fillActivityTables(QueryBag $queries, ActivityExtension $activityExtension)
+    public static function fillActivityTables(QueryBag $queries, Schema $schema, ActivityExtension $activityExtension)
     {
+        /**If  table orocrm_contactus_request_calls does't exists do nothing **/
+        if (!$schema->hasTable('orocrm_contactus_request_calls')) {
+            return;
+        }
+
         $queries->addPreQuery(
             new SqlMigrationQuery(
                 self::getFillContactRequestCallActivityQuery($activityExtension)
@@ -85,10 +100,17 @@ class UpdateContactUsDependencySchema implements
      */
     public static function fillActivityListTables(
         QueryBag $queries,
+        Schema $schema,
         ActivityListExtension $activityListExtension,
         ActivityExtension $activityExtension
     )
     {
+
+        /**If  table orocrm_contactus_request_calls does't exists do nothing **/
+        if (!$schema->hasTable('orocrm_contactus_request_calls')) {
+            return;
+        }
+
         $queries->addPreQuery(
             new ParametrizedSqlMigrationQuery(
                 self::getFillContactRequestCallActivityListQuery($activityListExtension, $activityExtension),
