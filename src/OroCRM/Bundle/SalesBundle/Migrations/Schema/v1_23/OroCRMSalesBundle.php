@@ -21,9 +21,9 @@ class OroCRMSalesBundle implements Migration
             new UpdateEntityConfigEntityValueQuery(
                 'OroCRM\Bundle\SalesBundle\Entity\Opportunity',
                 'workflow',
-                'active_workflow',
-                'opportunity_flow',
-                'b2b_flow_sales'
+                'active_workflows',
+                ['opportunity_flow'],
+                ['b2b_flow_sales']
             )
         );
     }
