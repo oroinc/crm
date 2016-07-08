@@ -550,19 +550,20 @@ services:
     orocrm_magento.dashboard.data_provider.customer:
         class: %orocrm_magento.dashboard.data_provider.customer.class%
         arguments:
-            - "@doctrine"
-            - "@oro_security.acl_helper"
-            - "@oro_chart.config_provider"
-            - "@oro_dashboard.datetime.helper"
+            - '@doctrine'
+            - '@oro_security.acl_helper'
+            - '@oro_chart.config_provider'
+            - '@oro_dashboard.datetime.helper'
 
     orocrm_magento.dashboard.data_provider.purchase:
         class: %orocrm_magento.dashboard.data_provider.purchase.class%
         arguments:
-            - "@doctrine"
-            - "@oro_chart.config_provider"
-            - "@orocrm_magento.provider.tracking_visit"
-            - "@translator"
-            - "@oro_security.acl_helper"
+            - '@doctrine'
+            - '@oro_chart.config_provider'
+            - '@orocrm_magento.provider.tracking_visit'
+            - '@translator'
+            - '@oro_security.acl_helper'
+            - '@oro_dashboard.filter.date_filter_processor'
 
     orocrm_magento.placeholder.filter:
         class: %orocrm_magento.placeholder.filter.class%

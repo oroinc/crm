@@ -60,6 +60,10 @@ class CustomerDataProvider
         /** @var ChannelRepository $channelRepository */
         $channelRepository = $this->registry->getRepository('OroCRMChannelBundle:Channel');
         list($past, $now)  = $this->dateHelper->getPeriod($dateRange, 'OroCRMMagentoBundle:Customer', 'createdAt');
+        if ($past === null && $now === null) {
+            $past = new \DateTime(DateHelper::MIN_DATE, new \DateTimeZone('UTC'));
+            $now   = new \DateTime('now', new \DateTimeZone('UTC'));
+        }
         $items             = [];
 
         // get all integration channels

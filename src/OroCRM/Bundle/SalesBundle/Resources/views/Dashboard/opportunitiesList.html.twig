@@ -1,0 +1,9 @@
+{% extends 'OroDashboardBundle:Dashboard:grid.html.twig' %}
+{% set gridName = 'dashboard-my-sales-opportunity-grid' %}
+
+{% block content %}
+    {{ dataGrid.renderGrid(gridName, params|default({}), {
+        'routerEnabled': false,
+        'enableFilters': false,
+    }|merge(renderParams|default({}))) }}
+{% endblock %}
