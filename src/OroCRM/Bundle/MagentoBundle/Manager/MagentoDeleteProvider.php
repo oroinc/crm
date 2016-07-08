@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManager;
 
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
+use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryHelper;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
@@ -71,7 +73,7 @@ class MagentoDeleteProvider implements DeleteProviderInterface
             $cartTable,
             $this->channel->getId()
         );
-        $billingAddresses  = sprintf(
+        $billingAddresses = sprintf(
             'SELECT ba.billing_address_id FROM %s ba WHERE ba.channel_id = %s',
             $cartTable,
             $this->channel->getId()
@@ -99,17 +101,16 @@ class MagentoDeleteProvider implements DeleteProviderInterface
      */
     protected function removeWorkflowDefinitions($entityClassName)
     {
-        $workflowMetadata = $this->em->getClassMetadata('OroWorkflowBundle:WorkflowItem');
-        $entityMetadata   = $this->em->getClassMetadata($entityClassName);
+        $subQuery = $this->em->createQueryBuilder()->select('workflowItem.id')->from($entityClassName, 'o');
+        WorkflowQueryHelper::addQuery($subQuery);
+        $subQuery->where('o.channel_id=:channel');
 
-        $this->em->getConnection()->executeQuery(
-            sprintf(
-                'Delete FROM %s WHERE id IN (SELECT o.workflow_item_id FROM %s o WHERE o.channel_id=%s)',
-                $workflowMetadata->getTableName(),
-                $entityMetadata->getTableName(),
-                $this->channel->getId()
-            )
-        );
+        $qbDel = $this->em->createQueryBuilder()->delete()->from(WorkflowItem::class, 'wi');
+        $qbDel->where($qbDel->expr()->notIn('wi.id', $subQuery->getDQL()));
+        
+        $qbDel->setParameter('channel', $this->channel->getId());
+        
+        $qbDel->getQuery()->execute();
 
         return $this;
     }
