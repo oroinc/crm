@@ -49,7 +49,9 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'notes'             => ['notes', 'test', 'test'],
             'customer'          => ['customer', $customer, $customer],
             'dataChannel'       => ['dataChannel', $channel, $channel],
-            'organization'      => array('organization', $organization, $organization)
+            'organization'      => array('organization', $organization, $organization),
+            'twitter'           => ['twitter', 'test', 'test'],
+            'linkedIn'          => ['linkedIn', 'test', 'test'],
         ];
     }
 }
