@@ -13,7 +13,11 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 
 use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationContactUs;
+use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationMagento;
+use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationSales;
+use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationCase;
 use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateContactUsDependencySchema;
+use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateMagentoDependencySchema;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -61,8 +65,13 @@ class OroCRMCallBridgeBundleInstaller implements
     public function up(Schema $schema, QueryBag $queries)
     {
         AddActivityAssociationContactUs::addActivityAssociations($schema, $this->activityExtension);
+        AddActivityAssociationMagento::addActivityAssociations($schema, $this->activityExtension);
+        AddActivityAssociationSales::addActivityAssociations($schema, $this->activityExtension);
+        AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
 
         $this->updateContactUsDependencySchema($schema, $queries);
+        UpdateMagentoDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
+        UpdateMagentoDependencySchema::fillActivityListTables($queries, $schema, $this->activityExtension, $this->activityListExtension);
     }
 
     /**

@@ -11,12 +11,11 @@ use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-class AddActivityAssociationContactUs implements
+class AddActivityAssociationSales implements
     Migration,
     OrderedMigrationInterface,
     ActivityExtensionAwareInterface
 {
-
     /** @var ActivityExtension */
     protected $activityExtension;
 
@@ -25,7 +24,7 @@ class AddActivityAssociationContactUs implements
      */
     public function getOrder()
     {
-        return 1;
+        return 5;
     }
 
     /**
@@ -50,6 +49,8 @@ class AddActivityAssociationContactUs implements
      */
     public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_contactus_request');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_lead');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_opportunity');
+        $activityExtension->addActivityAssociation($schema, 'orocrm_call', 'orocrm_sales_b2bcustomer');
     }
 }

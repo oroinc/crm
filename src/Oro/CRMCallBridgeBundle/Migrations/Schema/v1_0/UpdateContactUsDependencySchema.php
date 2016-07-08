@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Type;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
 use Oro\Bundle\MigrationBundle\Migration\SqlMigrationQuery;
 use Oro\Bundle\MigrationBundle\Migration\ParametrizedSqlMigrationQuery;
 
@@ -19,7 +20,8 @@ use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAware
 class UpdateContactUsDependencySchema implements
     Migration,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    OrderedMigrationInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -43,6 +45,17 @@ class UpdateContactUsDependencySchema implements
         $this->activityListExtension = $activityListExtension;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getOrder()
+    {
+        return 2;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
         self::fillActivityTables($queries, $this->activityExtension);
