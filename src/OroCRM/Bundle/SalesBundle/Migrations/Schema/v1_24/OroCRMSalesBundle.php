@@ -16,7 +16,7 @@ class OroCRMSalesBundle implements Migration
     {
         $table = $schema->getTable('orocrm_sales_lead');
 
-        $table->addColumn('twitter', 'string', ['length' => 255]);
-        $table->addColumn('linkedin', 'string', ['length' => 255]);
+        $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);
     }
 }

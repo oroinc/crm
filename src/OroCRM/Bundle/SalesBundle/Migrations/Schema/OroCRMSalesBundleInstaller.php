@@ -296,8 +296,8 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('createdat', 'datetime', []);
         $table->addColumn('updatedat', 'datetime', ['notnull' => false]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
-        $table->addColumn('twitter', 'string', ['length' => 255]);
-        $table->addColumn('linkedin', 'string', ['length' => 255]);
+        $table->addColumn('twitter', 'string', ['length' => 255, 'notnull' => false]);
+        $table->addColumn('linkedin', 'string', ['length' => 255, 'notnull' => false]);
 
         $this->extendExtension->addEnumField(
             $schema,
