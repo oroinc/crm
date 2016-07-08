@@ -11,6 +11,7 @@ use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtureInterface
 {
@@ -82,6 +83,10 @@ class LoadB2bCustomerData extends AbstractDemoFixture implements DependentFixtur
         $customer->setOwner($this->getRandomUserReference());
         $customer->setAccount($this->getAccount());
         $customer->setOrganization($organization);
+
+        $phone = new B2bCustomerPhone($data['TelephoneNumber']);
+        $phone->setPrimary(true);
+        $customer->addPhone($phone);
 
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
