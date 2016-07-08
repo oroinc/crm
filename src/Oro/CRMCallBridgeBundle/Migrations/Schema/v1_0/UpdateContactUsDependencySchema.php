@@ -111,7 +111,7 @@ class UpdateContactUsDependencySchema implements
             return;
         }
 
-        $queries->addPreQuery(
+        $queries->addPostQuery(
             new ParametrizedSqlMigrationQuery(
                 self::getFillContactRequestCallActivityListQuery($activityListExtension, $activityExtension),
                 ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],

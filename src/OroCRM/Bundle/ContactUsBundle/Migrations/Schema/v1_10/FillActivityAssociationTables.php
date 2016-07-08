@@ -136,22 +136,7 @@ class FillActivityAssociationTables implements
             $this->activityExtension->getAssociationTableName('oro_email', 'orocrm_contactus_request')
         );
     }
-
-    /**
-     * @return string
-     */
-    protected function getFillContactRequestCallActivityQuery()
-    {
-        $sql = 'INSERT INTO %s (call_id, contactrequest_id)' .
-               ' SELECT call_id, request_id' .
-               ' FROM orocrm_contactus_request_calls';
-
-        return sprintf(
-            $sql,
-            $this->activityExtension->getAssociationTableName('orocrm_call', 'orocrm_contactus_request')
-        );
-    }
-
+    
     /**
      * @return string
      */

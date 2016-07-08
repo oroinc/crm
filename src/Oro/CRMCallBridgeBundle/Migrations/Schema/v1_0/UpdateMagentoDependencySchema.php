@@ -80,7 +80,7 @@ class UpdateMagentoDependencySchema implements
             return;
         }
 
-        $queries->addPreQuery(
+        $queries->addPostQuery(
             new SqlMigrationQuery(
                 [
                     self::getFillCartCallActivityQuery($activityExtension),
@@ -111,7 +111,7 @@ class UpdateMagentoDependencySchema implements
             return;
         }
 
-        $queries->addPreQuery(
+        $queries->addPostQuery(
             new ParametrizedSqlMigrationQuery(
                 self::getFillCartCallActivityListQuery($activityExtension, $activityListExtension),
                 ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
@@ -119,7 +119,7 @@ class UpdateMagentoDependencySchema implements
             )
         );
 
-        $queries->addPreQuery(
+        $queries->addPostQuery(
             new ParametrizedSqlMigrationQuery(
                 self::getFillOrderCallActivityListQuery($activityExtension, $activityListExtension),
                 ['class' => 'OroCRM\Bundle\CallBundle\Entity\Call'],
