@@ -68,7 +68,7 @@ class UpdateContactUsDependencySchema implements
     public static function deleteContactUsRequestCallsTable(Schema $schema)
     {
         /**If  table orocrm_contactus_request_calls does't exists do nothing **/
-        if(!$schema->hasTable('orocrm_contactus_request_calls')) {
+        if (!$schema->hasTable('orocrm_contactus_request_calls')) {
             return;
         }
 
@@ -80,6 +80,8 @@ class UpdateContactUsDependencySchema implements
 
     /**
      * @param QueryBag $queries
+     * @param Schema $schema
+     * @param ActivityExtension $activityExtension
      */
     public static function fillActivityTables(QueryBag $queries, Schema $schema, ActivityExtension $activityExtension)
     {
@@ -97,14 +99,16 @@ class UpdateContactUsDependencySchema implements
 
     /**
      * @param QueryBag $queries
+     * @param Schema $schema
+     * @param ActivityListExtension $activityListExtension
+     * @param ActivityExtension $activityExtension
      */
     public static function fillActivityListTables(
         QueryBag $queries,
         Schema $schema,
         ActivityListExtension $activityListExtension,
         ActivityExtension $activityExtension
-    )
-    {
+    ) {
 
         /**If  table orocrm_contactus_request_calls does't exists do nothing **/
         if (!$schema->hasTable('orocrm_contactus_request_calls')) {
@@ -121,6 +125,7 @@ class UpdateContactUsDependencySchema implements
     }
 
     /**
+     * @param ActivityExtension $activityExtension
      * @return string
      */
     protected static function getFillContactRequestCallActivityQuery(ActivityExtension $activityExtension)
@@ -136,13 +141,14 @@ class UpdateContactUsDependencySchema implements
     }
 
     /**
+     * @param ActivityListExtension $activityListExtension
+     * @param ActivityExtension $activityExtension
      * @return string
      */
     protected static function getFillContactRequestCallActivityListQuery(
         ActivityListExtension $activityListExtension,
         ActivityExtension $activityExtension
-    )
-    {
+    ) {
         $sql = 'INSERT INTO %s (activitylist_id, contactrequest_id)' .
             ' SELECT al.id, rel.contactrequest_id' .
             ' FROM oro_activity_list al' .

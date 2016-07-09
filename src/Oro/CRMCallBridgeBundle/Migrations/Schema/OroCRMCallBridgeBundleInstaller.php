@@ -70,10 +70,20 @@ class OroCRMCallBridgeBundleInstaller implements
         AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
 
         UpdateContactUsDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
-        UpdateContactUsDependencySchema::fillActivityListTables($queries, $schema, $this->activityListExtension, $this->activityExtension);
+        UpdateContactUsDependencySchema::fillActivityListTables(
+            $queries,
+            $schema,
+            $this->activityListExtension,
+            $this->activityExtension
+        );
         UpdateContactUsDependencySchema::deleteContactUsRequestCallsTable($schema);
 
         UpdateMagentoDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
-        UpdateMagentoDependencySchema::fillActivityListTables($queries, $schema, $this->activityExtension, $this->activityListExtension);
+        UpdateMagentoDependencySchema::fillActivityListTables(
+            $queries,
+            $schema,
+            $this->activityExtension,
+            $this->activityListExtension
+        );
     }
 }
