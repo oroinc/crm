@@ -12,7 +12,7 @@ use OroCRM\Bundle\SalesBundle\Model\ExtendB2bCustomerEmail;
 
 /**
  * @ORM\Entity
- * @ORM\Table("orocrm_b2bcustomer_email", indexes={
+ * @ORM\Table("orocrm_sales_b2bcustomer_email", indexes={
  *      @ORM\Index(name="primary_email_idx", columns={"email", "is_primary"})
  * })
  * @Config(
