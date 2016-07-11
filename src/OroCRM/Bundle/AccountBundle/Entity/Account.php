@@ -40,7 +40,8 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "merge"={
  *              "enable"=true
