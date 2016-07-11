@@ -27,7 +27,7 @@ class CreateB2bCustomerEmail implements Migration
      */
     protected function createOrocrmB2bCustomerEmailTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_b2bcustomer_email');
+        $table = $schema->createTable('orocrm_sales_b2bcustomer_email');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('email', 'string', ['length' => 255]);
@@ -44,7 +44,7 @@ class CreateB2bCustomerEmail implements Migration
      */
     protected function addOrocrmB2bCustomerEmailForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_b2bcustomer_email');
+        $table = $schema->getTable('orocrm_sales_b2bcustomer_email');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_b2bcustomer'),
             ['owner_id'],
