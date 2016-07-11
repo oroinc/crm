@@ -103,12 +103,19 @@ class MagentoDeleteProvider implements DeleteProviderInterface
     {
         $subQuery = $this->em->createQueryBuilder()->select('workflowItem.id')->from($entityClassName, 'o');
         WorkflowQueryHelper::addQuery($subQuery);
-        $subQuery->where('o.channel_id=:channel');
+        $subQuery
+            ->where('o.channel=:channel')
+            ->setParameter('channel', $this->channel);
+
+        $ids = array_map(
+            function (array $record) {
+                return $record['id'];
+            },
+            $subQuery->getQuery()->getResult()
+        );
 
         $qbDel = $this->em->createQueryBuilder()->delete()->from(WorkflowItem::class, 'wi');
-        $qbDel->where($qbDel->expr()->in('wi.id', $subQuery->getDQL()));
-
-        $qbDel->setParameter('channel', $this->channel->getId());
+        $qbDel->where($qbDel->expr()->in('wi.id', $ids));
 
         $qbDel->getQuery()->execute();
 
