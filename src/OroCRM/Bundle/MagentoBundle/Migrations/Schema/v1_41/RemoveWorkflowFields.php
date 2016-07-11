@@ -12,10 +12,12 @@ class RemoveWorkflowFields implements Migration
 {
     use RemoveWorkflowFieldsTrait;
 
+    /**
+     * {@inheritdoc}
+     */
     public function up(Schema $schema, QueryBag $queries)
     {
         //workflow now has no direct relations
-
         $magentoTables = [
             'orocrm_magento_order',
             'orocrm_magento_cart',
