@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 
 use Oro\Bundle\AddressBundle\Entity\Address;
-use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
@@ -59,7 +59,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    EmailHolderInterface,
+    EmailOwnerInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -590,27 +590,6 @@ class B2bCustomer extends ExtendB2bCustomer implements
     }
 
     /**
-     * Get the primary email address of the related contact or account
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        $contact = $this->getContact();
-        if ($contact) {
-            return $contact->getEmail();
-        }
-
-        $account = $this->getAccount();
-        if ($account) {
-            return $account->getEmail();
-        }
-
-        return null;
-    }
-
-
-    /**
      * Set phones.
      *
      * This method could not be named setPhones because of bug CRM-253.
@@ -804,5 +783,37 @@ class B2bCustomer extends ExtendB2bCustomer implements
             }
         }
         return $this;
+    }
+    
+    /**
+     * Get entity class name.
+     * TODO: Remove this temporary solution for get 'view' route in twig after EntityConfigBundle is finished
+     * @return string
+     */
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
+    }
+
+    /**
+     * Get names of fields contain email addresses
+     *
+     * @return string[]|null
+     */
+    public function getEmailFields()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getLastName()
+    {
+        return null;
     }
 }
