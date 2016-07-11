@@ -26,7 +26,8 @@ parameters:
 
     orocrm_campaign.email_campaign.statistics_connector.class: OroCRM\Bundle\CampaignBundle\Model\EmailCampaignStatisticsConnector
 
-    orocrm_campaign.provider.tracking_identificator.class:  OroCRM\Bundle\CampaignBundle\Provider\TrackingVisitEventIdentification
+    orocrm_campaign.provider.tracking_identificator.class: OroCRM\Bundle\CampaignBundle\Provider\TrackingVisitEventIdentification
+    orocrm_campaign.provider.privilege_category_provider.class: OroCRM\Bundle\CampaignBundle\Provider\PrivilegeCategoryProvider
 services:
     orocrm_campaign.campaign.form.type:
         class: %orocrm_campaign.campaign.form.type.class%
@@ -195,6 +196,11 @@ services:
            - "@doctrine"
         tags:
            - {name: oro_tracking.provider.identification, priority: 10}
+
+    orocrm_campaign.provider.privilege_category_provider:
+        class: %orocrm_campaign.provider.privilege_category_provider.class%
+        tags:
+            - { name: oro_user.privilege_category}
 
     orocrm_campaign.dashboard.campaign_data_provider:
         class: OroCRM\Bundle\CampaignBundle\Dashboard\CampaignDataProvider

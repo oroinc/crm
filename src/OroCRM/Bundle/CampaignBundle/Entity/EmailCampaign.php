@@ -32,7 +32,8 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingList;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          },
  *          "grid"={
  *              "default"="orocrm-email-campaign-grid"
