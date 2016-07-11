@@ -967,6 +967,10 @@ datagrid:
                     - c.id
                     - c.name
                     - CASE WHEN c.lifetime IS NOT NULL THEN c.lifetime ELSE 0 END as lifetime
+                    - phone.phone
+                    - phone.id as phoneId
+                    - email.email
+                    - email.id as emailId
                     - c.createdAt
                     - c.updatedAt
                     - channel.name as channelName
@@ -975,6 +979,8 @@ datagrid:
                 join:
                     left:
                         - { join: c.dataChannel, alias: channel }
+                        - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
+                        - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
         columns:
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
@@ -989,6 +995,11 @@ datagrid:
             updatedAt:
                 label:          oro.ui.updated_at
                 frontend_type:  datetime
+            phone:
+                label:         orocrm.sales.lead.phone_number.label
+                frontend_type: phone
+            email:
+                label:         orocrm.sales.b2bcustomer.email.label
         sorters:
             columns:
                 channelName: { data_name: channelName }
@@ -996,6 +1007,8 @@ datagrid:
                 lifetime:    { data_name: c.lifetime }
                 createdAt:   { data_name: c.createdAt }
                 updatedAt:   { data_name: c.updatedAt }
+                phone:       { data_name: phone.phone }
+                email:       { data_name: email.email }
             default:
                 name: ASC
         filters:
@@ -1020,8 +1033,16 @@ datagrid:
                  updatedAt:
                     type: datetime
                     data_name: c.updatedAt
+                 phone:
+                    type: string
+                    data_name: phone.phone
+                 email:
+                    type: string
+                    data_name: email.email
         properties:
             id: ~
+            phoneId: ~
+            emailId: ~
         options:
             entity_pagination: true
             export: true
