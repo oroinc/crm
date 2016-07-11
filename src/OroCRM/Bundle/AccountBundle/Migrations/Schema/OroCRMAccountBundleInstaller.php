@@ -4,21 +4,27 @@ namespace OroCRM\Bundle\AccountBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
 use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
-use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\Installation;
-use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
-use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
+use Oro\Bundle\AttachmentBundle\Entity\Attachment;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtension;
-use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
-use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 use Oro\Bundle\AttachmentBundle\Migration\Extension\AttachmentExtensionAwareInterface;
-use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
+use Oro\Bundle\EntityBundle\EntityConfig\DatagridScope;
+use Oro\Bundle\EntityConfigBundle\Migration\UpdateEntityConfigFieldValueQuery;
+use Oro\Bundle\EntityExtendBundle\EntityConfig\ExtendScope;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
+use Oro\Bundle\EntityMergeBundle\Model\MergeModes;
+use Oro\Bundle\MigrationBundle\Migration\Installation;
+use Oro\Bundle\MigrationBundle\Migration\QueryBag;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtension;
+use Oro\Bundle\NoteBundle\Migration\Extension\NoteExtensionAwareInterface;
+
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_10\InheritanceActivityTargets;
 use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_11\AccountNameExprIndexQuery;
+use OroCRM\Bundle\AccountBundle\Migrations\Schema\v1_8\AddReferredBy;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -80,7 +86,7 @@ class OroCRMAccountBundleInstaller implements
      */
     public function getMigrationVersion()
     {
-        return 'v1_11';
+        return 'v1_12';
     }
 
     /**
@@ -99,23 +105,7 @@ class OroCRMAccountBundleInstaller implements
         $this->noteExtension->addNoteAssociation($schema, 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_email', 'orocrm_account');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_account');
-        $this->attachmentExtension->addAttachmentAssociation(
-            $schema,
-            'orocrm_account',
-            [
-                'image/*',
-                'application/pdf',
-                'application/zip',
-                'application/x-gzip',
-                'application/msword',
-                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                'application/vnd.ms-excel',
-                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                'application/vnd.ms-powerpoint',
-                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
-            ],
-            2
-        );
+        $this->addAttachmentAssociation($schema, $queries);
         InheritanceActivityTargets::addInheritanceTargets($schema, $this->activityListExtension);
 
         // update to 1.8
@@ -146,7 +136,7 @@ class OroCRMAccountBundleInstaller implements
                 'oro_options' => [
                     'extend'    => ['is_extend' => true, 'owner' => ExtendScope::OWNER_CUSTOM],
                     'datagrid'  => ['is_visible' => DatagridScope::IS_VISIBLE_FALSE],
-                    'merge'     => ['display' => true],
+                    'merge'     => ['display' => true, 'autoescape' => false],
                     'dataaudit' => ['auditable' => true],
                     'form'      => ['type' => 'oro_resizeable_rich_text'],
                     'view'      => ['type' => 'html'],
@@ -225,5 +215,34 @@ class OroCRMAccountBundleInstaller implements
             ['id'],
             ['onDelete' => 'CASCADE', 'onUpdate' => null]
         );
+    }
+
+    protected function addAttachmentAssociation(Schema $schema, QueryBag $queries)
+    {
+        $this->attachmentExtension->addAttachmentAssociation(
+            $schema,
+            'orocrm_account',
+            [
+                'image/*',
+                'application/pdf',
+                'application/zip',
+                'application/x-gzip',
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation'
+            ],
+            2
+        );
+
+        $queries->addQuery(new UpdateEntityConfigFieldValueQuery(
+            Attachment::class,
+            ExtendHelper::buildAssociationName(Account::class),
+            'merge',
+            'inverse_merge_modes',
+            [MergeModes::UNITE, MergeModes::REPLACE]
+        ));
     }
 }
