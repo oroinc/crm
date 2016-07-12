@@ -51,7 +51,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "grid_name"="magento-cart-grid",
