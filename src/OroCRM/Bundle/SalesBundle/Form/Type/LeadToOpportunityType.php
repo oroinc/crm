@@ -2,7 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -46,10 +45,10 @@ class LeadToOpportunityType extends OpportunityType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
     }
 
-    public function preSetData(FormEvent $event)
+    public function onPreSetData(FormEvent $event)
     {
         $form = $event->getForm();
         $entity = $event->getData();

@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
@@ -213,9 +214,11 @@ class LeadToOpportunityProvider
 
     /**
      * @param Lead $lead
+     * @param bool $isGetRequest
+     *
      * @return Opportunity
      */
-    public function prepareOpportunity(Lead $lead, $isGetRequest = true)
+    public function prepareOpportunityForForm(Lead $lead, $isGetRequest = true)
     {
         $opportunity = new Opportunity();
         $opportunity->setLead($lead);
@@ -226,15 +229,51 @@ class LeadToOpportunityProvider
                 ->setContact($contact)
                 ->setName($lead->getName());
 
-            $opportunity->setCustomer($this->b2bGuesser->getCustomer($lead));
+            $this->b2bGuesser->setCustomer($opportunity, $lead);
 
         } else {
             $opportunity
-                // set predefined contact entity to have proper validation
+                // Set predefined contact entity to have proper validation
+                // of addresses sub-form in case when user submit empty address
                 ->setContact(new Contact());
         }
 
         return $opportunity;
+    }
+
+    /**
+     * @param Opportunity $opportunity
+     */
+    public function prepareOpportunityToSave(Opportunity $opportunity)
+    {
+        $lead = $opportunity->getLead();
+        $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
+        $customer = $opportunity->getCustomer();
+        $this->prepareCustomerToSave($customer, $opportunity);
+    }
+
+    /**
+     * @param B2bCustomer $customer
+     * @param Opportunity $opportunity
+     */
+    protected function prepareCustomerToSave(B2bCustomer $customer, Opportunity $opportunity)
+    {
+        $contact = $opportunity->getContact();
+        if (!$customer->getContact() instanceof Contact) {
+            $customer->setContact($contact);
+        }
+
+        $customer->getAccount()->addContact($contact);
+    }
+
+    /**
+     * @param Lead        $lead
+     * @param Opportunity $opportunity
+     */
+    protected function setContactAndAccountToLeadFromOpportunity(Lead $lead, Opportunity $opportunity)
+    {
+        $lead->setContact($opportunity->getContact());
+        $lead->setCustomer($opportunity->getCustomer());
     }
 
     /**

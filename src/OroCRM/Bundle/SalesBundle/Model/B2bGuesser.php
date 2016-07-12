@@ -9,6 +9,7 @@ use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class B2bGuesser
 {
@@ -42,43 +43,19 @@ class B2bGuesser
     public function getCustomer(Lead $lead)
     {
         $customer = $lead->getCustomer();
-        $customer = (null === $customer) ? $this->findCustomer($lead->getCompanyName()) : $customer;
-
-        if ($customer) {
-            return $customer;
-        }
-
-        return $this->createCustomer($lead);
+        return (null === $customer) ? $this->findCustomer($lead->getCompanyName()) : $customer;
     }
 
     /**
-     * @param Lead $lead
-     *
-     * @return B2bCustomer
+     * @param Opportunity $opportunity
+     * @param Lead        $lead
      */
-    protected function createCustomer(Lead $lead)
+    public function setCustomer(Opportunity $opportunity, Lead $lead)
     {
-        $b2bCustomer = new B2bCustomer();
-        $account = $this->getAccount($lead);
-        $b2bCustomer->setName($lead->getCompanyName());
-        $b2bCustomer->setDataChannel($lead->getDataChannel());
-        $b2bCustomer->setAccount($account);
-
-        $fields = $this->entityFieldProvider->getFields('OroCRMSalesBundle:B2bCustomer');
-        foreach ($fields as $field) {
-            if ($field['name'] === 'employees') {
-                $b2bCustomer->setEmployees($lead->getNumberOfEmployees());
-            }
-
-            if ($field['name'] === 'website' && $lead->getWebsite()) {
-                $b2bCustomer->setWebsite($lead->getWebsite());
-            }
+        $customer = $this->getCustomer($lead);
+        if ($customer instanceof B2bCustomer) {
+            $opportunity->setCustomer($customer);
         }
-
-        $this->manager->persist($b2bCustomer);
-        $this->manager->flush();
-
-        return $b2bCustomer;
     }
 
     protected function findCustomer($companyName)
