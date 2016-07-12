@@ -4,6 +4,9 @@ namespace Oro\CRMCallBridgeBundle\Migrations\Schema;
 
 use Doctrine\DBAL\Schema\Schema;
 
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+
 use Oro\Bundle\MigrationBundle\Migration\Installation;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
@@ -26,8 +29,11 @@ use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateMagentoDependencySchema
 class OroCRMCallBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface
+    ActivityListExtensionAwareInterface,
+    ContainerAwareInterface
 {
+
+    use ContainerAwareTrait;
 
     /** @var ActivityExtension */
     protected $activityExtension;
@@ -64,26 +70,12 @@ class OroCRMCallBridgeBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        AddActivityAssociationContactUs::addActivityAssociations($schema, $this->activityExtension);
-        AddActivityAssociationMagento::addActivityAssociations($schema, $this->activityExtension);
-        AddActivityAssociationSales::addActivityAssociations($schema, $this->activityExtension);
-        AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
-
-        UpdateContactUsDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
-        UpdateContactUsDependencySchema::fillActivityListTables(
-            $queries,
-            $schema,
-            $this->activityListExtension,
-            $this->activityExtension
-        );
-        UpdateContactUsDependencySchema::deleteContactUsRequestCallsTable($schema);
-
-        UpdateMagentoDependencySchema::fillActivityTables($queries, $schema, $this->activityExtension);
-        UpdateMagentoDependencySchema::fillActivityListTables(
-            $queries,
-            $schema,
-            $this->activityExtension,
-            $this->activityListExtension
-        );
+        if (!$this->container->hasParameter('installed')
+            || !$this->container->getParameter('installed')) {
+            AddActivityAssociationContactUs::addActivityAssociations($schema, $this->activityExtension);
+            AddActivityAssociationMagento::addActivityAssociations($schema, $this->activityExtension);
+            AddActivityAssociationSales::addActivityAssociations($schema, $this->activityExtension);
+            AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
+        }
     }
 }
