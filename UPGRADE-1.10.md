@@ -10,5 +10,9 @@ UPGRADE FROM 1.9 to 1.10
 - OroCRMTaskBundle moved to a separate package
 - OroCRMTaskBridgeBundle was added to integrate OroCRMTaskBundle into CRM
 
+####OroCRMTaskBundle:
+- OroCRMCallBundle moved to a separate package
+- OroCRMCallBridgeBundle was added to integrate OroCRMCallBundle into CRM
+
 #### OroCRMChannelBundle:
 - Constructor for `OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider` was changed. New argument: `DateFilterProcessor $filterProcessor`
