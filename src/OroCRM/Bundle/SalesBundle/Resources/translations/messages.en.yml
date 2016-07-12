@@ -276,6 +276,7 @@ orocrm:
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
             employees.label:            Employees
+            email.label:                Email
             organization.label:         Organization
             opportunities.select:       Select opportunities
             leads.select:               Select leads
