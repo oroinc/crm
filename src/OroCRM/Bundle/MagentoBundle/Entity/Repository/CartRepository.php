@@ -5,17 +5,18 @@ namespace OroCRM\Bundle\MagentoBundle\Entity\Repository;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\QueryBuilder;
 
+use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryHelper;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
-use Oro\Bundle\BatchBundle\ORM\Query\BufferedQueryResultIterator;
 
 use OroCRM\Bundle\MagentoBundle\Entity\Cart;
 use OroCRM\Bundle\MagentoBundle\Entity\CartStatus;
 
 class CartRepository extends ChannelAwareEntityRepository
 {
+    use WorkflowQueryTrait;
     /**
      * @var array
      */
@@ -108,7 +109,8 @@ class CartRepository extends ChannelAwareEntityRepository
         }
 
         $queryBuilder = $this->createQueryBuilder('cart');
-        WorkflowQueryHelper::addQuery($queryBuilder, 'workflowStep');
+        
+        $this->joinWorkflowStep($queryBuilder, 'workflowStep');
 
         $queryBuilder->select('workflowStep.name as workflowStepName', 'SUM(cart.grandTotal) as total')
             ->leftJoin('cart.status', 'status')
@@ -355,7 +357,7 @@ class CartRepository extends ChannelAwareEntityRepository
     public function getStepDataQB($alias, array $steps, array $excludedStatuses = [])
     {
         $qb = $this->createQueryBuilder($alias);
-        WorkflowQueryHelper::addQuery($qb, 'workflowStep');
+        $this->joinWorkflowStep($qb, 'workflowStep');
         $qb->select('workflowStep.name as workflowStepName', sprintf('SUM(%s.grandTotal) as total', $alias))
             ->leftJoin(sprintf('%s.status', $alias), 'status')
             ->groupBy('workflowStep.name');

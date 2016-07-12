@@ -7,11 +7,12 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 
 use Oro\Bundle\SecurityBundle\ORM\Walker\AclHelper;
-use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryHelper;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 use Oro\Bundle\WorkflowBundle\Model\Workflow;
 
 class SalesFunnelRepository extends EntityRepository
 {
+    use WorkflowQueryTrait;
     /**
      * @var array
      */
@@ -154,7 +155,7 @@ class SalesFunnelRepository extends EntityRepository
         $queryBuilder = $this->createQueryBuilder('funnel')
             ->select('workflowStep.name as workflowStepName')
             ->join('funnel.opportunity', 'opportunity');
-        WorkflowQueryHelper::addQuery($queryBuilder);
+        $this->joinWorkflowStep($queryBuilder, 'workflowStep');
         $queryBuilder->groupBy('workflowStep.name');
 
         if ($dateFrom && $dataTo) {

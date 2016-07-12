@@ -7,10 +7,12 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\IntegrationBundle\Entity\Channel;
 use Oro\Bundle\IntegrationBundle\Manager\DeleteProviderInterface;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
-use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryHelper;
+use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
+    use WorkflowQueryTrait;
+    
     /** @var EntityManager */
     protected $em;
 
@@ -102,7 +104,7 @@ class MagentoDeleteProvider implements DeleteProviderInterface
     protected function removeWorkflowDefinitions($entityClassName)
     {
         $subQuery = $this->em->createQueryBuilder()->select('workflowItem.id')->from($entityClassName, 'o');
-        WorkflowQueryHelper::addQuery($subQuery);
+        $this->joinWorkflowItem($subQuery, 'workflowItem');
         $subQuery
             ->where('o.channel=:channel')
             ->setParameter('channel', $this->channel);
