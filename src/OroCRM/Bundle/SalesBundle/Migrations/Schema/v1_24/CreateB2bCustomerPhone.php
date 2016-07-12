@@ -26,7 +26,7 @@ class CreateB2bCustomerPhone implements Migration
      */
     protected function createOrocrmB2bCustomerPhoneTable(Schema $schema)
     {
-        $table = $schema->createTable('orocrm_b2bcustomer_phone');
+        $table = $schema->createTable('orocrm_sales_b2bcustomer_phone');
         $table->addColumn('id', 'integer', ['autoincrement' => true]);
         $table->addColumn('owner_id', 'integer', ['notnull' => false]);
         $table->addColumn('phone', 'string', ['length' => 255]);
@@ -44,7 +44,7 @@ class CreateB2bCustomerPhone implements Migration
      */
     protected function addOrocrmB2bCustomerPhoneForeignKeys(Schema $schema)
     {
-        $table = $schema->getTable('orocrm_b2bcustomer_phone');
+        $table = $schema->getTable('orocrm_sales_b2bcustomer_phone');
         $table->addForeignKeyConstraint(
             $schema->getTable('orocrm_sales_b2bcustomer'),
             ['owner_id'],
