@@ -55,6 +55,10 @@ class OpportunitiesByStatusReportListener
 
         $joinCondition = '';
         $filters = $dataGrid->getParameters()->get('_filter');
+        if (!$filters) {
+            return;
+        }
+
         $filtersConfig = $dataGrid->getConfig()->offsetGetByPath('[filters][columns]');
 
         foreach ($filtersConfig as $key => $config) {
