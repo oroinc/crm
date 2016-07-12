@@ -13,8 +13,6 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 
@@ -125,22 +123,6 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param Lead $lead
-     *
-     * @return bool
-     */
-    protected function validateLeadStatus(Lead $lead)
-    {
-        $leadStatus = $lead->getStatus()->getName();
-
-        if ($leadStatus !== 'new') {
-            throw new HttpException(403, 'Not allowed action');
-        }
-
-        return true;
-    }
-
-    /**
      * @param object $filledEntity
      * @param array $properties
      * @param object $sourceEntity
@@ -233,12 +215,12 @@ class LeadToOpportunityProvider
      * @param Lead $lead
      * @return Opportunity
      */
-    public function prepareOpportunity(Lead $lead, Request $request)
+    public function prepareOpportunity(Lead $lead, $isGetRequest = true)
     {
         $opportunity = new Opportunity();
         $opportunity->setLead($lead);
 
-        if ($request->getMethod() === 'GET' && $this->validateLeadStatus($lead)) {
+        if ($isGetRequest) {
             $contact = $this->prepareContactToOpportunity($lead);
             $opportunity
                 ->setContact($contact)

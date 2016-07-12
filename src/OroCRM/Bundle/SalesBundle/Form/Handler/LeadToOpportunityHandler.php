@@ -4,7 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Form\Handler;
 
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Oro\Bundle\UIBundle\Route\Router;
+use Oro\Bundle\FormBundle\Model\UpdateHandler;
 
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -21,13 +21,8 @@ class LeadToOpportunityHandler extends OpportunityHandler
     /** @var RequestChannelProvider */
     protected $changeLeadStatusModel;
 
-    /**
-     * @var LeadToOpportunityProvider
-     */
+    /** @var LeadToOpportunityProvider */
     protected $leadToOpportunityProvider;
-
-    /** @var RequestChannelProvider */
-    protected $router;
 
     public function __construct(
         FormInterface $form,
@@ -35,12 +30,10 @@ class LeadToOpportunityHandler extends OpportunityHandler
         ObjectManager $manager,
         RequestChannelProvider $requestChannelProvider,
         ChangeLeadStatus $changeLeadStatusModel,
-        LeadToOpportunityProvider $leadToOpportunityProvider,
-        Router $router
+        LeadToOpportunityProvider $leadToOpportunityProvider
     ) {
         $this->leadToOpportunityProvider = $leadToOpportunityProvider;
         $this->changeLeadStatusModel = $changeLeadStatusModel;
-        $this->router = $router;
         parent::__construct($form, $request, $manager, $requestChannelProvider);
     }
 
@@ -60,25 +53,17 @@ class LeadToOpportunityHandler extends OpportunityHandler
     }
 
     /**
-     * @param Lead $lead
-     * @param      $createMessage
+     * @param Lead          $lead
+     * @param UpdateHandler $handler
+     * @param string        $saveMessage
      *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function create(Lead $lead, $createMessage)
+    public function create(Lead $lead, UpdateHandler $handler, $saveMessage)
     {
-        $opportunity = $this->leadToOpportunityProvider->prepareOpportunity($lead, $this->request);
-        if (!$this->process($opportunity)) {
-            return [
-                'form'   => $this->form->createView(),
-                'entity' => $opportunity
-            ];
-        }
-        $this->get('session')->getFlashBag()->add(
-            'success',
-            $createMessage
-        );
-        return $this->router->redirect($opportunity);
+        $isGetRequest = $this->request->getMethod() === 'GET';
+        $opportunity = $this->leadToOpportunityProvider->prepareOpportunity($lead, $isGetRequest);
+        return $handler->update($opportunity, $this->form, $saveMessage, $this);
     }
 
     /**

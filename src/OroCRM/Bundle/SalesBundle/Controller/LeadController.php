@@ -211,7 +211,7 @@ class LeadController extends Controller
      * )
      * @Template()
      */
-    public function convertToOpportunityAction(Lead $lead, Request $request)
+    public function convertToOpportunityAction(Lead $lead)
     {
         if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isLeadConvertibleToOpportunity($lead)) {
             throw new AccessDeniedException('Only one conversion per lead is allowed !');
@@ -219,6 +219,7 @@ class LeadController extends Controller
 
         return $this->get('orocrm_sales.lead_to_opportunity.form.handler')->create(
             $lead,
+            $this->get('oro_form.model.update_handler'),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
         );
     }
