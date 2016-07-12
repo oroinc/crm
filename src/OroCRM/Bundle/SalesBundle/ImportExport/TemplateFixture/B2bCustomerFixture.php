@@ -6,6 +6,8 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail;
+use OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone;
 
 class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -61,6 +63,13 @@ class B2bCustomerFixture extends AbstractTemplateRepository implements TemplateF
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->addOpportunity($opportunityRepo->getEntity('Jerry Coleman'));
 
+                $phone = new B2bCustomerPhone('585-255-1127');
+                $phone->setPrimary(true);
+                $entity->addPhone($phone);
+
+                $email = new B2bCustomerEmail('JerryAColeman@armyspy.com');
+                $email->setPrimary(true);
+                $entity->addEmail($email);
                 return;
         }
 
