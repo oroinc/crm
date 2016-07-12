@@ -3,6 +3,37 @@
 {% import 'OroAddressBundle::macros.html.twig' as address %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 
+{% macro renderCollectionWithPrimaryElement(collection, isEmail, entity) %}
+    {% import 'OroUIBundle::macros.html.twig' as ui %}
+    {% import 'OroEmailBundle::macros.html.twig' as email %}
+
+    {% set primaryElement = null %}
+    {% set elements = [] %}
+
+    {% for element in collection %}
+        {% if element.primary %}
+            {% set primaryElement = element %}
+        {% else %}
+            {% set elements = elements|merge([element]) %}
+        {% endif %}
+    {% endfor %}
+    {% if primaryElement %}
+        {% set elements = [primaryElement]|merge(elements) %}
+    {% endif %}
+
+    <ul class="extra-list">
+        {%- for element in elements %}
+            <li class="contact-collection-element{% if element.primary %} primary{% endif %}">
+                {% if isEmail %}
+                    {{ email.renderEmailWithActions(element, entity) }}
+                {% else %}
+                    {{ ui.renderPhoneWithActions(element, entity) }}
+                {% endif %}
+            </li>
+        {% endfor -%}
+    </ul>
+{% endmacro %}
+
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
@@ -22,6 +53,8 @@
             {%- else -%}
                 {% set contactView = entity.contact ? entity.contact : '' %}
             {%- endif -%}
+            {{ UI.renderHtmlProperty('orocrm.contact.phones.label'|trans, entity.phones.count ? _self.renderCollectionWithPrimaryElement(entity.phones, false, entity) : null) }}
+            {{ UI.renderHtmlProperty('orocrm.contact.emails.label'|trans, entity.emails.count ? _self.renderCollectionWithPrimaryElement(entity.emails, true, entity) : null) }}
             {{ UI.renderHtmlProperty('orocrm.sales.b2bcustomer.contact.label'|trans, contactView) }}
 
             {% if entity.billingAddress is not empty %}
