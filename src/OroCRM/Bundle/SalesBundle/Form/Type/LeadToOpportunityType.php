@@ -2,7 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Form\Type;
 
+use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -11,10 +14,9 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
 class LeadToOpportunityType extends OpportunityType
 {
-    const BASE_NAME = 'orocrm_sales_lead_to_opportunity';
+    const NAME = 'orocrm_sales_lead_to_opportunity';
 
     protected $useFullContactForm = false;
-    protected $name;
 
     /**
      * {@inheritdoc}
@@ -22,15 +24,6 @@ class LeadToOpportunityType extends OpportunityType
     public function finishView(FormView $view, FormInterface $form, array $options)
     {
         $view->vars['use_full_contact_form'] = $this->useFullContactForm;
-    }
-
-    /**
-     * @param bool $useFullContactForm
-     */
-    public function setUseFullContactForm($useFullContactForm)
-    {
-        $this->useFullContactForm = $useFullContactForm;
-        $this->name = $useFullContactForm ? self::BASE_NAME . '_with_subform' : self::BASE_NAME;
     }
 
     /**
@@ -53,9 +46,17 @@ class LeadToOpportunityType extends OpportunityType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         parent::buildForm($builder, $options);
-        if ($this->useFullContactForm) {
-            $builder->remove('contact');
-            $builder->add('contact', 'orocrm_contact');
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'preSetData'));
+    }
+
+    public function preSetData(FormEvent $event)
+    {
+        $form = $event->getForm();
+        $entity = $event->getData();
+        if ($entity instanceof Opportunity && !$entity->getLead()->getContact()) {
+            $form->remove('contact');
+            $form->add('contact', 'orocrm_contact');
+            $this->useFullContactForm = true;
         }
     }
 
@@ -64,7 +65,7 @@ class LeadToOpportunityType extends OpportunityType
      */
     public function getBlockPrefix()
     {
-        return $this->name;
+        return self::NAME;
     }
 
     /**

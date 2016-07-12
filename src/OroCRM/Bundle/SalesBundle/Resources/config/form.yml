@@ -41,17 +41,8 @@ services:
 
     orocrm_sales.lead_to_opportunity.form.type:
         class: %orocrm_sales.lead_to_opportunity.form.type.class%
-        calls:
-            - [setUseFullContactForm, [false]]
         tags:
             - { name: form.type, alias: orocrm_sales_lead_to_opportunity }
-
-    orocrm_sales.lead_to_opportunity_with_subform.form.type:
-        class: %orocrm_sales.lead_to_opportunity.form.type.class%
-        calls:
-            - [setUseFullContactForm, [true]]
-        tags:
-            - { name: form.type, alias: orocrm_sales_lead_to_opportunity_with_subform }
 
     orocrm_sales.opportunity.form:
         class:           Symfony\Component\Form\Form
@@ -77,14 +68,6 @@ services:
             - "orocrm_sales_lead_to_opportunity_form"
             - "orocrm_sales_lead_to_opportunity"
 
-    orocrm_sales.lead_to_opportunity_with_subform.form:
-        class:           Symfony\Component\Form\Form
-        factory_method:  createNamed
-        factory_service: form.factory
-        arguments:
-            - "orocrm_sales_lead_to_opportunity_with_subform_form"
-            - "orocrm_sales_lead_to_opportunity_with_subform"
-
     orocrm_sales.opportunity.form.handler:
         class: %orocrm_sales.opportunity.form.handler.class%
         scope: request
@@ -103,16 +86,8 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@orocrm_channel.provider.request_channel"
             - "@orocrm_sales.model.change_lead_status"
-
-    orocrm_sales.lead_to_opportunity_with_subform.form.handler:
-        class: %orocrm_sales.lead_to_opportunity.form.handler.class%
-        scope: request
-        arguments:
-            - "@orocrm_sales.lead_to_opportunity_with_subform.form"
-            - "@request"
-            - "@doctrine.orm.entity_manager"
-            - "@orocrm_channel.provider.request_channel"
-            - "@orocrm_sales.model.change_lead_status"
+            - "@orocrm_sales.provider.lead_to_opportunity"
+            - '@oro_ui.router'
 
     orocrm_sales.opportunity.form.handler.api:
         class: %orocrm_sales.opportunity.form.handler.class%

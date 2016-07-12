@@ -275,17 +275,4 @@ class LeadToOpportunityProvider
     {
         return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY;
     }
-
-    /**
-     * @param Lead $lead
-     *
-     * @return string
-     */
-    public function getFormId(Lead $lead)
-    {
-        $contact = $lead->getContact();
-        return (!$contact instanceof Contact) ?
-            'orocrm_sales.lead_to_opportunity_with_subform.form':
-            'orocrm_sales.lead_to_opportunity.form';
-    }
 }

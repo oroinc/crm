@@ -217,24 +217,10 @@ class LeadController extends Controller
             throw new AccessDeniedException('Only one conversion per lead is allowed !');
         }
 
-        $formId = $this->get('orocrm_sales.provider.lead_to_opportunity')->getFormId($lead);
-        $opportunity = $this
-            ->get('orocrm_sales.provider.lead_to_opportunity')
-            ->prepareOpportunity($lead, $request);
-
-        if ($this->get($formId . '.handler')->process($opportunity)) {
-            $this->get('session')->getFlashBag()->add(
-                'success',
-                $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
-            );
-
-            return $this->redirectToRoute('orocrm_sales_opportunity_view', ['id' => $opportunity->getId()]);
-        }
-
-        return [
-            'entity'       => $opportunity,
-            'form'         => $this->get($formId)->createView()
-        ];
+        return $this->get('orocrm_sales.lead_to_opportunity.form.handler')->create(
+            $lead,
+            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
+        );
     }
 
     /**
