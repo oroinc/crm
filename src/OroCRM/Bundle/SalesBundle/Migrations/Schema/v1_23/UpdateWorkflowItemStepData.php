@@ -147,6 +147,8 @@ class UpdateWorkflowItemStepData extends ParametrizedMigrationQuery
     /**
      * @param LoggerInterface $logger
      * @param bool            $dryRun
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function updateWorkflowTransitionLogs(LoggerInterface $logger, $dryRun)
     {
