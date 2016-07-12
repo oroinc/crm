@@ -20,5 +20,9 @@ Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead o
 - OroCRMTaskBundle moved to a separate package
 - OroCRMTaskBridgeBundle was added to integrate OroCRMTaskBundle into CRM
 
+####OroCRMTaskBundle:
+- OroCRMCallBundle moved to a separate package
+- OroCRMCallBridgeBundle was added to integrate OroCRMCallBundle into CRM
+
 #### OroCRMChannelBundle:
 - Constructor for `OroCRM\Bundle\ChannelBundle\Provider\Lifetime\AverageLifetimeWidgetProvider` was changed. New argument: `DateFilterProcessor $filterProcessor`
