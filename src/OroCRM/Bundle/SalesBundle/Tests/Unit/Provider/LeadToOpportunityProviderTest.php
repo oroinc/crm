@@ -39,82 +39,13 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider = new LeadToOpportunityProvider($b2bGuesser, $entityFieldProvider);
     }
 
-    /**
-     * @param string $methodName
-     *
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function getRequest($methodName = 'GET')
+    public function prepareOpportunityToSaveTest()
     {
-        $request = $this
-            ->getMockBuilder('Symfony\Component\HttpFoundation\Request')
-            ->disableOriginalConstructor()
-            ->setMethods(['getMethod'])
-            ->getMock();
-
-        $request
-            ->expects($this->once())
-            ->method('getMethod')
-            ->willReturn($methodName);
-
-        return $request;
+        $this->markTestSkipped("Not implemented yet !");
     }
 
-    public function testGetFormIdWithLeadWithoutAccount()
+    public function testPrepareOpportunityForFormWithContact()
     {
-        $lead = new Lead();
-        $this->assertEquals(
-            $this->provider->getFormId($lead),
-            'orocrm_sales.lead_to_opportunity_with_subform.form'
-        );
-    }
-
-    public function testGetFormIdWithLeadWithAccount()
-    {
-        $lead = new Lead();
-        $lead->setContact(new Contact());
-        $this->assertEquals(
-            $this->provider->getFormId($lead),
-            'orocrm_sales.lead_to_opportunity.form'
-        );
-    }
-
-    /**
-     * @dataProvider leadStatusProvider
-     *
-     * @param string $statusCode
-     */
-    public function testInvalidLeadStatus($statusCode)
-    {
-        $this->setExpectedException(
-            '\Symfony\Component\HttpKernel\Exception\HttpException',
-            'Not allowed action'
-        );
-
-        $request = $this->getRequest();
-        $leadStatus = new LeadStatus($statusCode);
-        $lead = new Lead();
-        $lead->setStatus($leadStatus);
-
-        $this->provider->prepareOpportunity($lead, $request);
-    }
-
-    public function leadStatusProvider()
-    {
-        return [
-            [
-                ChangeLeadStatus::STATUS_DISQUALIFY
-            ],
-            [
-                ChangeLeadStatus::STATUS_QUALIFY
-            ],
-        ];
-    }
-
-    public function testPrepareOpportunityWithContact()
-    {
-        $request = $this->getRequest();
-        $leadStatus = new LeadStatus('new');
         $lead = $this
             ->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
             ->setMethods(['getContact', 'getName', 'getStatus'])
@@ -127,26 +58,18 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
 
         $lead
             ->expects($this->once())
-            ->method('getStatus')
-            ->willReturn($leadStatus);
-
-        $lead
-            ->expects($this->once())
             ->method('getName')
             ->willReturn('testName');
 
-        $this->provider->prepareOpportunity($lead, $request);
+        $this->provider->prepareOpportunityForForm($lead, true);
     }
 
     /**
      * @dataProvider leadProvider
      */
-    public function testPrepareOpportunityWithoutContact(Lead $lead, Opportunity $expectedOpportunity)
+    public function testPrepareOpportunityForFormWithoutContact(Lead $lead, Opportunity $expectedOpportunity)
     {
-        $request = $this->getRequest();
-        $leadStatus = new LeadStatus('new');
-        $lead->setStatus($leadStatus);
-        $preparedOpportunity = $this->provider->prepareOpportunity($lead, $request);
+        $preparedOpportunity = $this->provider->prepareOpportunityForForm($lead, true);
         $this->assertEquals($preparedOpportunity, $expectedOpportunity);
     }
 
