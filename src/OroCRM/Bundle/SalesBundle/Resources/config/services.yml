@@ -24,6 +24,8 @@ parameters:
 
     orocrm_sales.provider.forecast_of_opportunity.class:     OroCRM\Bundle\SalesBundle\Provider\ForecastOfOpportunities
 
+    orocrm_sales.provider.privilege_category_provider.class: OroCRM\Bundle\SalesBundle\Provider\PrivilegeCategoryProvider
+
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
@@ -207,6 +209,12 @@ services:
             - '@oro_security.acl_helper'
             - '@oro_dashboard.filter.date_filter_processor'
             - '@oro_user.dashboard.owner_helper'
+
+    orocrm_sales.provider.privilege_category_provider:
+        class: %orocrm_sales.provider.privilege_category_provider.class%
+        tags:
+            - { name: oro_user.privilege_category}
+
 
     orocrm_sales.model.change_lead_status:
         class: %orocrm_sales.model.change_lead_status.class%

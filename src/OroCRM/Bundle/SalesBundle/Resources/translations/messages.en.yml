@@ -315,3 +315,6 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        privilege:
+            category.sales_data.label: Sales Data
