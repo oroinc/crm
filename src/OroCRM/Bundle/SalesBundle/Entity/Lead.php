@@ -12,6 +12,7 @@ use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -151,7 +152,7 @@ class Lead extends ExtendLead implements
     /**
      * @var string
      *
-     * @ORM\Column(name="first_name", type="string", length=255)
+     * @ORM\Column(name="first_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
@@ -183,7 +184,7 @@ class Lead extends ExtendLead implements
     /**
      * @var string
      *
-     * @ORM\Column(name="last_name", type="string", length=255)
+     * @ORM\Column(name="last_name", type="string", length=255, nullable=true)
      * @Oro\Versioned
      * @ConfigField(
      *  defaultValues={
@@ -1031,8 +1032,8 @@ class Lead extends ExtendLead implements
     {
         if (!$this->status) {
             $em = $eventArgs->getEntityManager();
-            /** @var LeadStatus $defaultStatus */
-            $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
+            $defaultStatus = $em->getReference($enumStatusClass, 'new');
             $this->setStatus($defaultStatus);
         }
     }
