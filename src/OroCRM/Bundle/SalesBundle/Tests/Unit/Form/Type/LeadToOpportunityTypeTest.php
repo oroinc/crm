@@ -40,7 +40,7 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['add', 'remove', 'addEventListener'])
             ->getMock();
         $builder
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('addEventListener')
             ->will($this->returnSelf());
 

@@ -218,9 +218,7 @@ services:
 
     orocrm_sales.model.change_lead_status:
         class: %orocrm_sales.model.change_lead_status.class%
-        scope: request
         arguments:
-            - '@session'
             - '@doctrine.orm.entity_manager'
 
     orocrm_sales.model.b2b_guesser:
@@ -234,3 +232,4 @@ services:
         arguments:
             - '@orocrm_sales.model.b2b_guesser'
             - '@oro_entity.entity_field_provider'
+            - "@orocrm_sales.model.change_lead_status"

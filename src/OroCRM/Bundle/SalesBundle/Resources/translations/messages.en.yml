@@ -222,6 +222,8 @@ orocrm:
                 none:             None
             status:
                 change_error_message:  Unable to change lead status.
+            convert:
+                 error:           Unable to convert lead to opportunity
 
             datagrid:
                 number_of_employees: '# of employees'

@@ -85,7 +85,6 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@orocrm_channel.provider.request_channel"
-            - "@orocrm_sales.model.change_lead_status"
             - "@orocrm_sales.provider.lead_to_opportunity"
 
     orocrm_sales.opportunity.form.handler.api:

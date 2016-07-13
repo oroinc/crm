@@ -4,11 +4,11 @@ namespace OroCRM\Bundle\SalesBundle\Provider;
 
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
 
+use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
-use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
@@ -28,6 +28,11 @@ class LeadToOpportunityProvider
      * @var B2bGuesser
      */
     protected $b2bGuesser;
+
+    /**
+     * @var B2bGuesser
+     */
+    protected $changeLeadStatus;
 
     /**
      * @var EntityFieldProvider
@@ -79,11 +84,15 @@ class LeadToOpportunityProvider
         'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
     ];
 
-    public function __construct(B2bGuesser $b2bGuesser, EntityFieldProvider $entityFieldProvider)
-    {
+    public function __construct(
+        B2bGuesser $b2bGuesser,
+        EntityFieldProvider $entityFieldProvider,
+        ChangeLeadStatus $changeLeadStatus
+    ) {
         $this->b2bGuesser = $b2bGuesser;
         $this->accessor = PropertyAccess::createPropertyAccessor();
         $this->entityFieldProvider = $entityFieldProvider;
+        $this->changeLeadStatus = $changeLeadStatus;
         $this->validateContactFields();
     }
 
@@ -243,13 +252,25 @@ class LeadToOpportunityProvider
 
     /**
      * @param Opportunity $opportunity
+     * @param callable    $errorMessageCallback
+     *
+     * @return bool
      */
-    public function prepareOpportunityToSave(Opportunity $opportunity)
+    public function saveOpportunity(Opportunity $opportunity, callable $errorMessageCallback)
     {
         $lead = $opportunity->getLead();
-        $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
         $customer = $opportunity->getCustomer();
+
+        $this->setContactAndAccountToLeadFromOpportunity($lead, $opportunity);
         $this->prepareCustomerToSave($customer, $opportunity);
+
+        $saveResult = $this->changeLeadStatus->qualify($lead);
+
+        if (!$saveResult && is_callable($errorMessageCallback)) {
+            call_user_func($this->errorCallback);
+        }
+
+        return $saveResult;
     }
 
     /**
@@ -263,7 +284,9 @@ class LeadToOpportunityProvider
             $customer->setContact($contact);
         }
 
-        $customer->getAccount()->addContact($contact);
+        if ($customer->getAccount() instanceof Account) {
+            $customer->getAccount()->addContact($contact);
+        }
     }
 
     /**

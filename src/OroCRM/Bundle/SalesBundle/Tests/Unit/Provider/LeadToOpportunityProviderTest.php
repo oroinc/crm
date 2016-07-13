@@ -39,11 +39,6 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
         $this->provider = new LeadToOpportunityProvider($b2bGuesser, $entityFieldProvider);
     }
 
-    public function prepareOpportunityToSaveTest()
-    {
-        $this->markTestSkipped("Not implemented yet !");
-    }
-
     public function testPrepareOpportunityForFormWithContact()
     {
         $lead = $this

@@ -2,14 +2,10 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
-use Symfony\Component\HttpFoundation\Session\Session;
-
-use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\ORM\EntityManager;
 
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
-
-use Doctrine\DBAL\Query\QueryBuilder;
 
 class ChangeLeadStatus
 {
@@ -17,24 +13,16 @@ class ChangeLeadStatus
     const STATUS_DISQUALIFY = 'canceled';
 
     /**
-     * @var Session
-     */
-    protected $session;
-
-    /**
-     * @var ObjectManager
+     * @var EntityManager
      */
     protected $manager;
 
     /**
-     * @param Session $session
-     * @param ObjectManager $manager
+     * @param EntityManager $manager
      */
     public function __construct(
-        Session $session,
-        ObjectManager $manager
+        EntityManager $manager
     ) {
-        $this->session = $session;
         $this->manager = $manager;
     }
 
@@ -67,10 +55,10 @@ class ChangeLeadStatus
     protected function changeStatus($lead, $statusCode)
     {
         try {
-            $status = $this->getStatusEntityByName($statusCode);
-            $this->save($lead->setStatus($status));
+            $status = $this->manager->getReference('OroCRMSalesBundle:LeadStatus', $statusCode);
+            $lead->setStatus($status);
+            $this->save($lead);
         } catch (\Exception $e) {
-            $this->session->getFlashBag()->add('error', 'sales.lead.status.change_error_message');
             return false;
         }
 
@@ -84,23 +72,5 @@ class ChangeLeadStatus
     {
         $this->manager->persist($entity);
         $this->manager->flush();
-    }
-
-    /**
-     * @param string $leadStatusName
-     *
-     * @return LeadStatus
-     */
-    protected function getStatusEntityByName($leadStatusName)
-    {
-        $repository = $this->manager->getRepository('OroCRMSalesBundle:LeadStatus');
-
-        $result = $repository->createQueryBuilder('ls')
-                             ->where('ls.name = :lead_status_name')
-                             ->setParameter(':lead_status_name', $leadStatusName)
-                             ->getQuery()
-                             ->getSingleResult();
-
-        return $result;
     }
 }

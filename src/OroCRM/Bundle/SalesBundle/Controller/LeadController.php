@@ -191,10 +191,19 @@ class LeadController extends Controller
      */
     public function disqualifyAction(Lead $lead)
     {
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAllowed($lead)) {
+            throw new AccessDeniedException();
+        }
+        
         if ($this->get('orocrm_sales.model.change_lead_status')->disqualify($lead)) {
             $this->get('session')->getFlashBag()->add(
                 'success',
                 $this->get('translator')->trans('orocrm.sales.controller.lead.saved.message')
+            );
+        } else {
+            $this->get('session')->getFlashBag()->add(
+                'error',
+                $this->get('translator')->trans('orocrm.sales.lead.status.change_error_message')
             );
         }
 
@@ -217,10 +226,17 @@ class LeadController extends Controller
             throw new AccessDeniedException('Only one conversion per lead is allowed !');
         }
 
+        $session = $this->get('session');
         return $this->get('orocrm_sales.lead_to_opportunity.form.handler')->create(
             $lead,
             $this->get('oro_form.model.update_handler'),
-            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message')
+            $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            function () use ($session) {
+                $session->getFlashBag()->add(
+                    'error',
+                    $this->get('translator')->trans('orocrm.sales.lead.convert.error')
+                );
+            }
         );
     }
 
