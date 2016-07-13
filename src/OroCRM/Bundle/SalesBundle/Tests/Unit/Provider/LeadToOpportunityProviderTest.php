@@ -12,7 +12,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
 use OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
 use Symfony\Component\PropertyAccess\PropertyAccess;
@@ -35,8 +34,14 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getFields'])
             ->disableOriginalConstructor()
             ->getMock();
+        $changeLeadStatus = $this
+            ->getMockBuilder('OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus')
+            ->setMethods(['qualify'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $entityFieldProvider->method('getFields')->willReturn([]);
-        $this->provider = new LeadToOpportunityProvider($b2bGuesser, $entityFieldProvider);
+        $this->provider = new LeadToOpportunityProvider($b2bGuesser, $entityFieldProvider, $changeLeadStatus);
     }
 
     public function testPrepareOpportunityForFormWithContact()
