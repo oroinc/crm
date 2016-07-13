@@ -13,15 +13,15 @@ use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 class OpportunitiesByStatusReportListener
 {
     /**
-     * @var array Map of operators used by date filters
+     * @var array Map of date filters and comparison operators
      */
     public static $comparatorsMap = [
         AbstractDateFilterType::TYPE_LESS_THAN => '<',
         AbstractDateFilterType::TYPE_MORE_THAN => '>',
         AbstractDateFilterType::TYPE_EQUAL => '=',
         AbstractDateFilterType::TYPE_NOT_EQUAL => '<>',
-        AbstractDateFilterType::TYPE_BETWEEN => ['>=', '<='],
-        AbstractDateFilterType::TYPE_NOT_BETWEEN => ['<=', '>='],
+        AbstractDateFilterType::TYPE_BETWEEN => ['>=', 'AND', '<='],
+        AbstractDateFilterType::TYPE_NOT_BETWEEN => ['<=', 'OR', '>='],
     ];
 
     public static $joinFilterKeys = ['createdAt', 'updatedAt', 'closeDate'];
@@ -41,7 +41,7 @@ class OpportunitiesByStatusReportListener
     }
 
     /**
-     * Copy date filters into join clause to avoid filtering statuses from the report
+     * Move the date filters into join clause to avoid filtering statuses from the report
      *
      * @param BuildAfter $event
      */
@@ -71,17 +71,18 @@ class OpportunitiesByStatusReportListener
             }
         }
 
-        // update filter params
+        // update filter params (without removed ones)
         $dataGrid->getParameters()->set('_filter', $filters);
-        $queryBuilder = $dataSource->getQueryBuilder();
 
-        // Append $joinCondition to the join part of the query
+        // Prepare new join
+        $queryBuilder = $dataSource->getQueryBuilder();
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $joinParts = $queryBuilder->getDQLPart('join');
 
         /** @var \Doctrine\ORM\Query\Expr\Join $joinPart */
         $joinPart = $joinParts[$rootAlias][0];
 
+        // Append $joinCondition to the join part of the query
         $queryBuilder->resetDQLPart('join');
         $queryBuilder->leftJoin(
             $joinPart->getJoin(),
@@ -108,16 +109,20 @@ class OpportunitiesByStatusReportListener
             return '';
         }
 
-        if (is_array(self::$comparatorsMap[$type])) {
+        $comparator = self::$comparatorsMap[$type];
+
+        // date range comparison
+        if (is_array($comparator)) {
             return sprintf(
                 ' AND (%s %s %s)',
-                $this->formatComparison($fieldName, self::$comparatorsMap[$type][0], $options['value']['start']),
-                AbstractDateFilterType::TYPE_NOT_BETWEEN == $type ? 'OR' : 'AND',
-                $this->formatComparison($fieldName, self::$comparatorsMap[$type][1], $options['value']['end'])
+                $this->formatComparison($fieldName, $comparator[0], $options['value']['start']),
+                $comparator[1],
+                $this->formatComparison($fieldName, $comparator[2], $options['value']['end'])
             );
         }
 
-        return $this->formatComparison($fieldName, self::$comparatorsMap[$type], $options['value']['start']);
+        // simple date comparison
+        return $this->formatComparison($fieldName, $comparator, $options['value']['start']);
     }
 
     /**

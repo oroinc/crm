@@ -196,7 +196,7 @@ datagrid:
                       SUM(
                         CASE WHEN status.id IN ('won', 'lost') THEN COALESCE(opportunity.closeRevenue, 0) ELSE 0 END
                       ) as closeRevenue
-                    - SUM(COALESCE(opportunity.budgetAmount,0)) as budgetAmount
+                    - SUM(COALESCE(opportunity.budgetAmount, 0)) as budgetAmount
                 groupBy: statusLabel
         totals:
             total:
@@ -216,7 +216,7 @@ datagrid:
                         expr: SUM(CASE WHEN status.id IN ('won', 'lost') THEN opportunity.closeRevenue ELSE 0 END)
                         formatter: currency
                     budgetAmount:
-                        expr: SUM(CASE WHEN opportunity.budgetAmount IS NOT NULL THEN opportunity.budgetAmount ELSE 0 END)
+                        expr: SUM(COALESCE(opportunity.budgetAmount, 0))
                         formatter: currency
         columns:
             statusPriority:        { label: statusPriority, renderable: false, manageable: false }
