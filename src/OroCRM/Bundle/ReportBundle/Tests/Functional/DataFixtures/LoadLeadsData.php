@@ -11,7 +11,6 @@ use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
@@ -25,6 +24,7 @@ use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
 
@@ -221,7 +221,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
      * @param ObjectManager $manager
      * @param  array $data
      * @param User $user
-     * 
+     *
      * @return Lead
      */
     protected function createLead(ObjectManager $manager, array $data, $user)
@@ -240,8 +240,8 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setDataChannel($this->channel);
-        /** @var Address $address */
-        $address = new Address();
+        /** @var LeadAddress $address */
+        $address = new LeadAddress();
         $address->setLabel('Primary Address');
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
@@ -276,7 +276,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $address->setRegion($region->first());
         }
 
-        $lead->setAddress($address);
+        $lead->addAddress($address);
 
         $countSources = count($this->sources) - 1;
         $source       = $this->sources[mt_rand(0, $countSources)];
