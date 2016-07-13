@@ -275,6 +275,8 @@ orocrm:
             rating.label:               Rating
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
+            phones.label:               Phones
+            emails.label:               Emails
             employees.label:            Employees
             email.label:                Email
             organization.label:         Organization
