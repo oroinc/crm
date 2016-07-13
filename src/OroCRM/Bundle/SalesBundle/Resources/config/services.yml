@@ -8,7 +8,6 @@ parameters:
     orocrm_sales.lead_phone.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadPhone
     orocrm_sales.lead_phone.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
-
     orocrm_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
     orocrm_sales.salesfunnel.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\SalesFunnel

@@ -90,21 +90,21 @@ class LeadTest extends \PHPUnit_Framework_TestCase
 
     public function testGetPrimaryPhone()
     {
-        $Lead = new Lead();
-        $this->assertNull($Lead->getPrimaryPhone());
+        $lead = new Lead();
+        $this->assertNull($lead->getPrimaryPhone());
 
         $phone = new LeadPhone('06001122334455');
-        $Lead->addPhone($phone);
-        $this->assertNull($Lead->getPrimaryPhone());
+        $lead->addPhone($phone);
+        $this->assertNull($lead->getPrimaryPhone());
 
-        $Lead->setPrimaryPhone($phone);
-        $this->assertSame($phone, $Lead->getPrimaryPhone());
+        $lead->setPrimaryPhone($phone);
+        $this->assertSame($phone, $lead->getPrimaryPhone());
 
         $phone2 = new LeadPhone('22001122334455');
-        $Lead->addPhone($phone2);
-        $Lead->setPrimaryPhone($phone2);
+        $lead->addPhone($phone2);
+        $lead->setPrimaryPhone($phone2);
 
-        $this->assertSame($phone2, $Lead->getPrimaryPhone());
+        $this->assertSame($phone2, $lead->getPrimaryPhone());
         $this->assertFalse($phone->isPrimary());
     }
 }

@@ -31,7 +31,7 @@ class ConvertPhoneNumberInPhone implements
     public function up(Schema $schema, QueryBag $queries)
     {
         $query  = 'INSERT INTO orocrm_sales_lead_phone (owner_id, phone, is_primary)
-                       SELECT orocrm_sales_lead.id, orocrm_sales_lead.phone_number, 1 FROM orocrm_sales_lead';
+                       SELECT orocrm_sales_lead.id, orocrm_sales_lead.phone_number, \'1\' FROM orocrm_sales_lead';
 
         $queries->addPostQuery($query);
     }

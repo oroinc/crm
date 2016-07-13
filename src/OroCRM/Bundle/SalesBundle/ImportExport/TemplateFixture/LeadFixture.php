@@ -5,6 +5,7 @@ namespace OroCRM\Bundle\SalesBundle\ImportExport\TemplateFixture;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\AbstractTemplateRepository;
 use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
@@ -66,7 +67,7 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setNameSuffix('Jr.');
                 $entity->setStatus(new LeadStatus('New'));
                 $entity->setJobTitle('Manager');
-                $entity->addPhone('585-255-1127');
+                $entity->addPhone(new LeadPhone('585-255-1127'));
                 $entity->setWebsite('http://orocrm.com');
                 $entity->setNumberOfEmployees(100);
                 $entity->setIndustry('Internet');

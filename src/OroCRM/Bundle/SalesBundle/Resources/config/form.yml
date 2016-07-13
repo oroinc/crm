@@ -6,6 +6,8 @@ parameters:
     orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
+    orocrm_sales.lead_phone.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
+    orocrm_sales.lead_phone.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
 
     orocrm_sales.form.type.lead_select.class:        OroCRM\Bundle\SalesBundle\Form\Type\LeadSelectType
     orocrm_sales.form.type.opportunity_select.class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunitySelectType
@@ -243,12 +245,12 @@ services:
             - { name: form.type, alias: orocrm_sales_opportunity_data_channel_aware_select }
 
     orocrm_sales.form.type.lead_phone.type:
-        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
+        class: %orocrm_sales.lead_phone.form.type.class%
         tags:
             - { name: form.type, alias: orocrm_sales_lead_phone }
 
     orocrm_sales.form.type.lead_phone.handler:
-        class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadPhoneHandler
+        class: %orocrm_sales.lead_phone.form.handler.class%
         scope: request
         arguments:
             - "@form.factory"
