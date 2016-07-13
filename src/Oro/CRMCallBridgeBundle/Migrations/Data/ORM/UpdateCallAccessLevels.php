@@ -8,16 +8,15 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Yaml\Yaml;
 
 use Oro\Bundle\UserBundle\Entity\Role;
 use Oro\Bundle\SecurityBundle\Acl\Persistence\AclManager;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 
-class LoadRolesData extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
+class UpdateCallAccessLevels extends AbstractFixture implements DependentFixtureInterface, ContainerAwareInterface
 {
-
     use ContainerAwareTrait;
 
     /**
@@ -26,17 +25,23 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
     public function getDependencies()
     {
         return [
-            'Oro\Bundle\UserBundle\Migrations\Data\ORM\LoadRolesData'
+            'OroCRM\Bundle\DemoDataBundle\Migrations\Data\ORM\LoadRolesData'
         ];
     }
 
     /**
-     * Load roles
+     * Update call access levels
      *
      * @param ObjectManager $manager
      */
     public function load(ObjectManager $manager)
     {
+
+        /**If application is installed do nothing**/
+        if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
+            return;
+        }
+
         /** @var AclManager $aclManager */
         $aclManager = $this->container->get('oro_security.acl.manager');
 
@@ -48,14 +53,12 @@ class LoadRolesData extends AbstractFixture implements DependentFixtureInterface
         $rolesData = Yaml::parse(file_get_contents($fileName));
 
         foreach ($rolesData as $roleName => $roleConfigData) {
-            if (isset($roleConfigData['bap_role'])) {
-                $role = $manager->getRepository('OroUserBundle:Role')
-                    ->findOneBy(['role' => $roleConfigData['bap_role']]);
-            }
-
-            if (!$role) {
+            if (!array_key_exists('bap_role', $roleConfigData)) {
                 continue;
             }
+
+            $role = $manager->getRepository('OroUserBundle:Role')
+                            ->findOneBy(['role' => $roleConfigData['bap_role']]);
 
             if ($aclManager->isAclEnabled()) {
                 $sid = $aclManager->getSid($role);
