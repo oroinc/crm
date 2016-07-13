@@ -30,7 +30,7 @@ class CreteLeadEmail implements Migration, OrderedMigrationInterface
 
         $queries->addPostQuery(
             'INSERT INTO orocrm_sales_lead_email (owner_id, email, is_primary)
-                SELECT orocrm_sales_lead.id, orocrm_sales_lead.email, 1 FROM orocrm_sales_lead WHERE email IS NOT NULL'
+            SELECT orocrm_sales_lead.id, orocrm_sales_lead.email, \'1\' FROM orocrm_sales_lead WHERE email IS NOT NULL'
         );
     }
 

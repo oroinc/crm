@@ -2,5 +2,6 @@ oro_api:
     entities:
         OroCRM\Bundle\SalesBundle\Entity\B2bCustomer: ~
         OroCRM\Bundle\SalesBundle\Entity\Lead: ~
+        OroCRM\Bundle\SalesBundle\Entity\LeadEmail: ~
         OroCRM\Bundle\SalesBundle\Entity\Opportunity: ~
         OroCRM\Bundle\SalesBundle\Entity\SalesFunnel: ~

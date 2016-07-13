@@ -50,7 +50,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $form['orocrm_sales_lead_form[address][street2]']    = 'Second Street';
         $form['orocrm_sales_lead_form[address][street]']     = 'Main Street';
         $form['orocrm_sales_lead_form[companyName]']         = 'Company';
-        $form['orocrm_sales_lead_form[email]']               = 'test@example.test';
+        $form['orocrm_sales_lead_form[emails][0][email]']    = 'test@example.test';
         $form['orocrm_sales_lead_form[owner]']               = 1;
         $form['orocrm_sales_lead_form[dataChannel]']         = $this->getReference('default_channel')->getId();
 

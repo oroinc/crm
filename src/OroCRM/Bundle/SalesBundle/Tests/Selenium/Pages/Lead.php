@@ -49,7 +49,7 @@ class Lead extends AbstractPageEntity
         $this->contact = $this->test->byXpath("//div[starts-with(@id,'s2id_orocrm_sales_lead_form_contact')]/a");
         $this->jobTitle = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_jobTitle']");
         $this->phone = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_phoneNumber']");
-        $this->email = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_email']");
+        $this->email = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_emails_0_email']");
         $this->companyName = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_companyName']");
         $this->website = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_website']");
         $this->employees = $this->test->byXpath("//*[@data-ftid='orocrm_sales_lead_form_numberOfEmployees']");
