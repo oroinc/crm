@@ -21,7 +21,7 @@ use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
- * @RouteResource("phone")
+ * @RouteResource("b2bcustomer_phone")
  * @NamePrefix("oro_api_")
  */
 class B2bCustomerPhoneController extends RestController implements ClassResourceInterface
