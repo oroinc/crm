@@ -29,7 +29,11 @@ define(function(require) {
                 body.primary = true;
             }
 
-            return ContactApiAccessor.__super__.send.apply(this, arguments);
+            if (this.isActiveDeleteEntityRoute()) {
+                body = {data: [urlParameters[this.initialOptions.route_delete_entity.entityId]]};
+            }
+
+            return ContactApiAccessor.__super__.send.call(this, urlParameters, body, headers, options);
         },
 
         initRoute: function(urlParameters, body) {
@@ -87,6 +91,14 @@ define(function(require) {
         /** @returns {boolean} */
         isActiveDeleteEntityRoute: function() {
             return this.route.get('routeName') === this.initialOptions.route_delete_entity.name;
+        },
+
+        prepareUrlParameters: function(urlParameters) {
+            if (this.isActiveDeleteEntityRoute()) {
+                return urlParameters;
+            }
+
+            return ContactApiAccessor.__super__.prepareUrlParameters.apply(this, arguments);
         }
     });
 
