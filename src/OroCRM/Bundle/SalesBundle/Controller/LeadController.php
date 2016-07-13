@@ -51,18 +51,6 @@ class LeadController extends Controller
     }
 
     /**
-     * @Route("/address-book/{id}", name="orocrm_sales_lead_address_book", requirements={"id"="\d+"})
-     * @AclAncestor("orocrm_sales_lead_view")
-     * @Template()
-     */
-    public function addressBookAction(Lead $lead)
-    {
-        return array(
-            'entity' => $lead
-        );
-    }
-
-    /**
      * Create lead form
      * @Route("/create", name="orocrm_sales_lead_create")
      * @Template("OroCRMSalesBundle:Lead:update.html.twig")

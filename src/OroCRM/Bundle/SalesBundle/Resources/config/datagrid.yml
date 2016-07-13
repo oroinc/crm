@@ -291,7 +291,7 @@ datagrid:
                 join:
                     left:
                         - { join: l.status, alias: status }
-                        - { join: l.address, alias: address }
+                        - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                         - { join: l.dataChannel, alias: channel }
@@ -800,7 +800,7 @@ datagrid:
                     - { table: %orocrm_sales.lead.entity.class%, alias: lead }
                 join:
                     left:
-                        - { join: lead.address, alias: address }
+                        - { join: lead.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
                 where:
@@ -1250,7 +1250,7 @@ datagrid:
                 join:
                     left:
                         - { join: l.status, alias: status }
-                        - { join: l.address, alias: address }
+                        - { join: l.addresses, alias: address, conditionType: WITH, condition: 'address.primary = true' }
                         - { join: address.country, alias: country }
                         - { join: address.region, alias: region }
         filters:

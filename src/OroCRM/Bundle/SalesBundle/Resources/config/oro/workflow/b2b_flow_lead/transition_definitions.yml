@@ -37,32 +37,36 @@ workflows:
                                     description: $lead.name
                             - '@tree': # set Contact Address
                                 conditions: # if lead has address
-                                    '@not_empty': $lead.address
+                                    '@not_empty': $lead.addresses
                                 actions:
-                                    - '@create_entity': # create Contact Address based on Lead address
-                                        class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
-                                        attribute: $.result.address
-                                        data:
-                                            label: $lead.address.label
-                                            street: $lead.address.street
-                                            street2: $lead.address.street2
-                                            city: $lead.address.city
-                                            postalCode: $lead.address.postalCode
-                                            country: $lead.address.country
-                                            region: $lead.address.region
-                                            regionText: $lead.address.regionText
-                                            namePrefix: $lead.namePrefix
-                                            firstName: $lead.firstName
-                                            middleName: $lead.middleName
-                                            lastName: $lead.lastName
-                                            nameSuffix: $lead.nameSuffix
-                                            primary: true
-                                    - '@call_method': # add Address to Contact
-                                        object: $lead.contact
-                                        method: addAddress
-                                        method_parameters: [$.result.address]
-                                    - '@unset_value': # unset temporary property
-                                        [$.result.address]
+                                    - '@foreach':
+                                        array: $lead.addresses
+                                        value: $.result.leadAddress
+                                        actions:
+                                            - '@create_entity': # create Contact Address based on Lead address
+                                                class: OroCRM\Bundle\ContactBundle\Entity\ContactAddress
+                                                attribute: $.result.address
+                                                data:
+                                                    label: $.result.leadAddress.label
+                                                    street: $.result.leadAddress.street
+                                                    street2: $.result.leadAddress.street2
+                                                    city: $.result.leadAddress.city
+                                                    postalCode: $.result.leadAddress.postalCode
+                                                    country: $.result.leadAddress.country
+                                                    region: $.result.leadAddress.region
+                                                    regionText: $.result.leadAddress.regionText
+                                                    namePrefix: $.result.leadAddress.namePrefix
+                                                    firstName: $.result.leadAddress.firstName
+                                                    middleName: $.result.leadAddress.middleName
+                                                    lastName: $.result.leadAddress.lastName
+                                                    nameSuffix: $.result.leadAddress.nameSuffix
+                                                    primary: $.result.leadAddress.primary
+                                            - '@call_method': # add Address to Contact
+                                                object: $lead.contact
+                                                method: addAddress
+                                                method_parameters: [$.result.address]
+                                            - '@unset_value': # unset temporary property
+                                                [$.result.address, $.result.leadAddress]
                             - '@tree': # set Contact Email
                                 conditions: # if lead has email
                                     '@not_empty': $lead.email

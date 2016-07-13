@@ -2,7 +2,9 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
+use Oro\Bundle\AddressBundle\Entity\Country;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 
 class LeadTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,7 +44,6 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'phoneNumber'       => ['phoneNumber', 'test', 'test'],
             'jobTitle'          => ['jobTitle', 'test', 'test'],
             'industry'          => ['nameSuffix', 'test', 'test'],
-            'address'           => ['owner', $address, $address],
             'owner'             => ['owner', $user, $user],
             'createdAt'         => ['createdAt', $now, $now],
             'updatedAt'         => ['updatedAt', $now, $now],
@@ -51,5 +52,63 @@ class LeadTest extends \PHPUnit_Framework_TestCase
             'dataChannel'       => ['dataChannel', $channel, $channel],
             'organization'      => array('organization', $organization, $organization)
         ];
+    }
+
+    public function testAddresses()
+    {
+        $addressOne = new LeadAddress();
+        $addressOne->setCountry(new Country('US'));
+        $addressTwo = new LeadAddress();
+        $addressTwo->setCountry(new Country('UK'));
+        $addressThree = new LeadAddress();
+        $addressThree->setCountry(new Country('RU'));
+        $addresses = array($addressOne, $addressTwo);
+
+        $lead = new Lead();
+        $lead->addAddress($addressOne)->addAddress($addressTwo);
+        $actual = $lead->getAddresses();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($addresses, $actual->toArray());
+
+        $this->assertSame($lead, $lead->addAddress($addressTwo));
+        $actual = $lead->getAddresses();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals($addresses, $actual->toArray());
+
+        $this->assertSame($lead, $lead->addAddress($addressThree));
+        $actual = $lead->getAddresses();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array($addressOne, $addressTwo, $addressThree), $actual->toArray());
+
+        $this->assertSame($lead, $lead->removeAddress($addressOne));
+        $actual = $lead->getAddresses();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+
+        $this->assertSame($lead, $lead->removeAddress($addressOne));
+        $actual = $lead->getAddresses();
+        $this->assertInstanceOf('Doctrine\Common\Collections\ArrayCollection', $actual);
+        $this->assertEquals(array(1 => $addressTwo, 2 => $addressThree), $actual->toArray());
+    }
+
+    public function testGetPrimaryAddress()
+    {
+        $lead = new Lead();
+        $this->assertNull($lead->getPrimaryAddress());
+
+        $address = new LeadAddress();
+        $lead->addAddress($address);
+        $this->assertNull($lead->getPrimaryAddress());
+
+        $address->setPrimary(true);
+        $this->assertSame($address, $lead->getPrimaryAddress());
+
+        $newPrimary = new LeadAddress();
+        $lead->addAddress($newPrimary);
+
+        $lead->setPrimaryAddress($newPrimary);
+        $this->assertSame($newPrimary, $lead->getPrimaryAddress());
+
+        $this->assertFalse($address->isPrimary());
     }
 }

@@ -4,8 +4,10 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
@@ -328,21 +330,30 @@ class Lead extends ExtendLead implements
     protected $industry;
 
     /**
-     * @var Address
-     *
-     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=170,
-     *          "full"=true
-     *      }
-     *  }
-     * )
+     * @deprecated since 1.10. Use $addresses collection field instead
      */
     protected $address;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadAddress",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=170
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $addresses;
 
     /**
      * @var \DateTime
@@ -477,6 +488,7 @@ class Lead extends ExtendLead implements
         parent::__construct();
 
         $this->opportunities = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -790,25 +802,93 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * Get address
+     * Add address
      *
-     * @return Address
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Set address
-     *
-     * @param Address $address
+     * @param AbstractAddress $address
      *
      * @return Lead
      */
-    public function setAddress($address)
+    public function addAddress(AbstractAddress $address)
     {
-        $this->address = $address;
+        /** @var LeadAddress $address */
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets primary address if it's available.
+     *
+     * @return LeadAddress|null
+     */
+    public function getPrimaryAddress()
+    {
+        $result = null;
+
+        /** @var LeadAddress $address */
+        foreach ($this->getAddresses() as $address) {
+            if ($address->isPrimary()) {
+                $result = $address;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param LeadAddress $address
+     *
+     * @return Lead
+     */
+    public function setPrimaryAddress(LeadAddress $address)
+    {
+        if ($this->hasAddress($address)) {
+            $address->setPrimary(true);
+            /** @var LeadAddress $otherAddress */
+            foreach ($this->getAddresses() as $otherAddress) {
+                if (!$address->isEqual($otherAddress)) {
+                    $otherAddress->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return Collection|AbstractAddress[]
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param AbstractAddress $address
+     * @return bool
+     */
+    public function hasAddress(AbstractAddress $address)
+    {
+        return $this->getAddresses()->contains($address);
+    }
+
+    /**
+     * Remove address
+     *
+     * @param AbstractAddress $address
+     * @return Lead
+     */
+    public function removeAddress(AbstractAddress $address)
+    {
+        if ($this->addresses->contains($address)) {
+            $this->addresses->removeElement($address);
+        }
 
         return $this;
     }
@@ -856,7 +936,7 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * Get contact last update date/time
+     * Get lead last update date/time
      *
      * @return \DateTime
      */

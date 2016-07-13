@@ -86,3 +86,65 @@
         </fieldset>
     </div>
 {% endblock orocrm_sales_lead_widget %}
+
+{% block orocrm_sales_lead_address_widget %}
+    {% if form.parent is not empty %}
+        <div {{ block('widget_container_attributes') }}>
+            {{ block('orocrm_sales_lead_address_rows') }}
+        </div>
+    {% else %}
+        {{ block('orocrm_sales_lead_address_rows') }}
+    {% endif %}
+{% endblock orocrm_sales_lead_address_widget %}
+
+{% block orocrm_sales_lead_address_rows %}
+    {{ form_row(form.id) }}
+    {{ form_row(form.primary, {label: 'orocrm.sales.leadaddress.primary.label'}) }}
+    {{ form_row(form.label, {label: 'orocrm.sales.leadaddress.label.label'}) }}
+    {{ form_row(form.namePrefix, {label: 'orocrm.sales.leadaddress.name_prefix.label'}) }}
+    {{ form_row(form.firstName, {label: 'orocrm.sales.leadaddress.first_name.label'}) }}
+    {{ form_row(form.middleName, {label: 'orocrm.sales.leadaddress.middle_name.label'}) }}
+    {{ form_row(form.lastName, {label: 'orocrm.sales.leadaddress.last_name.label'}) }}
+    {{ form_row(form.nameSuffix, {label: 'orocrm.sales.leadaddress.name_suffix.label'}) }}
+    {{ form_row(form.organization, {label: 'orocrm.sales.leadaddress.organization.label'}) }}
+    {{ form_row(form.country, {label: 'orocrm.sales.leadaddress.country.label'}) }}
+    {{ form_row(form.street, {label: 'orocrm.sales.leadaddress.street.label'}) }}
+    {{ form_row(form.street2, {label: 'orocrm.sales.leadaddress.street2.label'}) }}
+    {{ form_row(form.city, {label: 'orocrm.sales.leadaddress.city.label'}) }}
+    {{ form_row(form.region_text, {label: 'orocrm.sales.leadaddress.region_text.label'}) }}
+    {{ form_row(form.region, {label: 'orocrm.sales.leadaddress.region.label'}) }}
+    {{ form_row(form.postalCode, {label: 'orocrm.sales.leadaddress.postal_code.label'}) }}
+    {{ form_rest(form) }}
+{%  endblock %}
+
+{% block _orocrm_sales_lead_form_address_collection_widget %}
+    {{ block('oro_address_collection_widget') }}
+    {% set id = id ~ '_collection' %}
+    {{ _self.oro_adddress_collection_prefill_names(_context) }}
+{% endblock %}
+
+{% macro oro_adddress_collection_prefill_names(context) %}
+    {% if context.form.parent is defined %}
+        {% set parentId = context.form.parent.vars.id %}
+        {% set parentName = context.form.parent.vars.full_name %}
+        <script type="text/javascript">
+            require(['jquery'],
+            function($){
+                $(function() {
+                    var container = $('#{{ context.id }}');
+                    var parentContainer = $('#{{ parentId }}');
+                    var nameFields = ['firstName', 'lastName', 'namePrefix', 'middleName', 'nameSuffix'];
+                    container.on('content:changed', function() {
+                        nameFields.forEach(function (field, index) {
+                            container.find('[name$="[' + field +']"]').each(function (idx, el) {
+                                if (!$(el).val()) {
+                                    $(el).val(parentContainer.find('[name$="{{ parentName }}[' + field +']"]').val());
+                                }
+                            });
+                        })
+                    })
+                });
+            });
+        </script>
+    {% endif %}
+{% endmacro %}
