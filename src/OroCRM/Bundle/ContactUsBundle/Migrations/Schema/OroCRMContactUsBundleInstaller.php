@@ -54,7 +54,7 @@ class OroCRMContactUsBundleInstaller implements Installation, ActivityExtensionA
         
         OroCRMContactUsBundle::addOwner($schema);
 
-        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
+        CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
     }
 
     /**

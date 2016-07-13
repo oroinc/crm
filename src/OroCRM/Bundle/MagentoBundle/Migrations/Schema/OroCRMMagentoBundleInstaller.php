@@ -1481,7 +1481,7 @@ class OroCRMMagentoBundleInstaller implements
         $this->activityExtension->addActivityAssociation($schema, 'orocrm_task', 'orocrm_magento_customer');
         $this->activityExtension->addActivityAssociation($schema, 'oro_calendar_event', 'orocrm_magento_customer');
 
-        CreateActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
+        CreateActivityAssociation::addEmailAssociations($schema, $this->activityExtension);
         OrderActivityAssociation::addActivityAssociations($schema, $this->activityExtension);
     }
 
