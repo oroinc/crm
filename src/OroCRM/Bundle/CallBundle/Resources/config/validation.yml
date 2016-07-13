@@ -12,6 +12,8 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - NotBlank: ~
             - Range:
                 min: 0
+                max: 2147483647
+                maxMessage: 'Duration must calculate to less than {{ limit }} seconds'
         direction:
             - NotBlank: ~
         phoneNumber:
