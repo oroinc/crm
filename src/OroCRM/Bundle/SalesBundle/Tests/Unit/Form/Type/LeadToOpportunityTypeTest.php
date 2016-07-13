@@ -2,9 +2,13 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
-
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormView;
+
+use OroCRM\Bundle\ContactBundle\Entity\Contact;
+use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
+use OroCRM\Bundle\SalesBundle\Form\Type\LeadToOpportunityType;
 
 class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,15 +23,77 @@ class LeadToOpportunityTypeTest extends \PHPUnit_Framework_TestCase
         $this->type = new LeadToOpportunityType();
     }
 
-    public function testPreSetData()
+    public function testPreSetDataWithContact()
     {
-        $this->markTestSkipped("Not implemented yet !");
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
+                ->setMethods(['remove', 'add'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+                ->setMethods(['getContact'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $lead
+            ->expects($this->once())
+            ->method('getContact')
+            ->willReturn(new Contact());
+
+        $form
+            ->expects($this->never())
+            ->method('remove')
+            ->will($this->returnSelf());
+        $form
+            ->expects($this->never())
+            ->method('add')
+            ->will($this->returnSelf());
+
+        $opportunity = new Opportunity();
+        $opportunity->setLead($lead);
+        $formEvent = new FormEvent($form, $opportunity);
+        $this->type->onPreSetData($formEvent);
+
+        $formView = new FormView();
+        $this->type->finishView($formView, $form, []);
+        $this->assertArraySubset(['use_full_contact_form' => false], $formView->vars);
+    }
+
+    public function testPreSetDataWithoutContact()
+    {
+        $form = $this->getMockBuilder('Symfony\Component\Form\Form')
+                ->setMethods(['remove', 'add'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $lead = $this->getMockBuilder('OroCRM\Bundle\SalesBundle\Entity\Lead')
+                ->setMethods(['getContact'])
+                ->disableOriginalConstructor()
+                ->getMock();
+        $lead
+            ->expects($this->once())
+            ->method('getContact')
+            ->willReturn(null);
+
+        $form
+            ->expects($this->once())
+            ->method('remove')
+            ->will($this->returnSelf());
+        $form
+            ->expects($this->once())
+            ->method('add')
+            ->will($this->returnSelf());
+
+        $opportunity = new Opportunity();
+        $opportunity->setLead($lead);
+        $formEvent = new FormEvent($form, $opportunity);
+        $this->type->onPreSetData($formEvent);
+
+        $formView = new FormView();
+        $this->type->finishView($formView, $form, []);
+        $this->assertArraySubset(['use_full_contact_form' => true], $formView->vars);
     }
 
     /**
      * @dataProvider contactFieldTypeDataProvider
      *
-     * @param bool $useFullContactForm
      * @param array $fields
      */
     public function testBuildForm(array $fields)
