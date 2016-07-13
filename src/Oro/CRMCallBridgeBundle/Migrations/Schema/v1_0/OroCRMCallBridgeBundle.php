@@ -6,26 +6,16 @@ use Doctrine\DBAL\Schema\Schema;
 
 use Oro\Bundle\MigrationBundle\Migration\Migration;
 use Oro\Bundle\MigrationBundle\Migration\QueryBag;
-use Oro\Bundle\MigrationBundle\Migration\OrderedMigrationInterface;
-
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-class AddActivityAssociationMagento implements
+
+class OroCRMCallBridgeBundle implements
     Migration,
-    OrderedMigrationInterface,
     ActivityExtensionAwareInterface
 {
     /** @var ActivityExtension */
     protected $activityExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getOrder()
-    {
-        return 3;
-    }
 
     /**
      * {@inheritdoc}
@@ -40,25 +30,26 @@ class AddActivityAssociationMagento implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        self::addActivityAssociations($schema, $this->activityExtension);
+        self::addCallActivityRelations($schema, $this->activityExtension);
     }
 
-    /**
-     * @param Schema            $schema
-     * @param ActivityExtension $activityExtension
-     */
-    public static function addActivityAssociations(Schema $schema, ActivityExtension $activityExtension)
+    public static function addCallActivityRelations(Schema $schema, ActivityExtension $activityExtension)
     {
-        $activityAssociationTables = [
+        $associationTables = [
+            'orocrm_case',
+            'orocrm_contactus_request',
             'orocrm_magento_customer',
             'orocrm_magento_order',
-            'orocrm_magento_cart'
+            'orocrm_magento_cart',
+            'orocrm_sales_lead',
+            'orocrm_sales_opportunity',
+            'orocrm_sales_b2bcustomer'
         ];
 
-        foreach ($activityAssociationTables as $tblName) {
-            $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tblName);
+        foreach ($associationTables as $tableName) {
+            $associationTableName = $activityExtension->getAssociationTableName('orocrm_call', $tableName);
             if (!$schema->hasTable($associationTableName)) {
-                $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tblName);
+                $activityExtension->addActivityAssociation($schema, 'orocrm_call', $tableName);
             }
         }
     }

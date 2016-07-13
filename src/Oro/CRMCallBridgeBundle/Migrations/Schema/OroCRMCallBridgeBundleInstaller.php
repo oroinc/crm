@@ -12,15 +12,8 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtension;
-use Oro\Bundle\ActivityListBundle\Migration\Extension\ActivityListExtensionAwareInterface;
 
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationContactUs;
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationMagento;
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationSales;
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\AddActivityAssociationCase;
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateContactUsDependencySchema;
-use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateMagentoDependencySchema;
+use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\OroCRMCallBridgeBundle;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
@@ -29,25 +22,12 @@ use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\UpdateMagentoDependencySchema
 class OroCRMCallBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,
-    ActivityListExtensionAwareInterface,
     ContainerAwareInterface
 {
-
     use ContainerAwareTrait;
 
     /** @var ActivityExtension */
     protected $activityExtension;
-
-    /** @var ActivityListExtension */
-    protected $activityListExtension;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActivityListExtension(ActivityListExtension $activityListExtension)
-    {
-        $this->activityListExtension = $activityListExtension;
-    }
 
     /**
      * {@inheritdoc}
@@ -70,12 +50,8 @@ class OroCRMCallBridgeBundleInstaller implements
      */
     public function up(Schema $schema, QueryBag $queries)
     {
-        if (!$this->container->hasParameter('installed')
-            || !$this->container->getParameter('installed')) {
-            AddActivityAssociationContactUs::addActivityAssociations($schema, $this->activityExtension);
-            AddActivityAssociationMagento::addActivityAssociations($schema, $this->activityExtension);
-            AddActivityAssociationSales::addActivityAssociations($schema, $this->activityExtension);
-            AddActivityAssociationCase::addActivityAssociations($schema, $this->activityExtension);
+        if (!$this->container->hasParameter('installed') || !$this->container->getParameter('installed')) {
+            OroCRMCallBridgeBundle::addCallActivityRelations($schema, $this->activityExtension);
         }
     }
 }
