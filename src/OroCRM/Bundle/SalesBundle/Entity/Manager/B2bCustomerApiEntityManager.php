@@ -17,6 +17,15 @@ class B2bCustomerApiEntityManager extends ApiEntityManager
                 'shippingAddress' => AddressApiUtils::getAddressConfig(),
                 'billingAddress'  => AddressApiUtils::getAddressConfig(),
                 'account'         => ['fields' => 'id'],
+                'accountName'     => [
+                    'exclusion_policy' => 'all',
+                    'collapse' => true,
+                    'fields' => [
+                        'name' => [
+                            'property_path' => 'account.name'
+                        ]
+                    ]
+                ],
                 'contact'         => ['fields' => 'id'],
                 'leads'           => ['fields' => 'id'],
                 'opportunities'   => ['fields' => 'id'],

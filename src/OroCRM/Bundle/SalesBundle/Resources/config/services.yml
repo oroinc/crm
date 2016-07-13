@@ -86,7 +86,7 @@ services:
         parent: orocrm_channel.autocomplete.channel_limitation_handler
         arguments:
             - %orocrm_sales.b2bcustomer.entity.class%
-            - ["name", "dataChannel.id"]
+            - ["name", "account.name", "dataChannel.id"]
         tags:
             - { name: oro_form.autocomplete.search_handler, alias: b2b_customers_with_channel, acl_resource: orocrm_sales_b2bcustomer_view }
         lazy: true
