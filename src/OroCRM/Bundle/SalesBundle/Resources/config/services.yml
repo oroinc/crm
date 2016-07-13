@@ -6,6 +6,7 @@ parameters:
     orocrm_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead_phone.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadPhone
+    orocrm_sales.handler.lead_phone_api.class:               OroCRM\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
     orocrm_sales.lead_phone.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
@@ -185,7 +186,7 @@ services:
             - "@doctrine.orm.entity_manager"
 
     orocrm_sales.handler.lead_phone_api:
-        class: OroCRM\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
+        class: %orocrm_sales.handler.lead_phone_api.class%
         arguments:
             - "@doctrine"
             - "@oro_security.security_facade"
