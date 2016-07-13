@@ -9,7 +9,6 @@ use Oro\Bundle\MigrationBundle\Migration\QueryBag;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtension;
 use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterface;
 
-
 class OroCRMCallBridgeBundle implements
     Migration,
     ActivityExtensionAwareInterface
