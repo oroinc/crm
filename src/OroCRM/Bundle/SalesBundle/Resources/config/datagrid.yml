@@ -981,6 +981,8 @@ datagrid:
                         - { join: c.dataChannel, alias: channel }
                         - { join: c.phones, alias: phone, conditionType: WITH, condition: 'phone.primary = true' }
                         - { join: c.emails, alias: email, conditionType: WITH, condition: 'email.primary = true' }
+        inline_editing:
+            enable: true
         columns:
             channelName:
                 label:          orocrm.sales.b2bcustomer.data_channel.label
@@ -998,8 +1000,40 @@ datagrid:
             phone:
                 label:         orocrm.sales.lead.phone_number.label
                 frontend_type: phone
+                inline_editing:
+                    enable: true
+                    editor:
+                        view: oroform/js/app/views/editor/text-editor-view
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        route_create_entity:
+                            name: oro_api_post_b2bcustomer_phone
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_b2bcustomer_phone
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerPhone
+                        route_parameters_rename_map:
+                            phoneId: id
             email:
                 label:         orocrm.sales.b2bcustomer.email.label
+                inline_editing:
+                    enable: true
+                    validation_rules:
+                        Email: true
+                    save_api_accessor:
+                        class: orocrmsales/js/datagrid/inline-editing/save-api-accessor
+                        route_create_entity:
+                            name: oro_api_post_b2bcustomer_email
+                            http_method: POST
+                        route_delete_entity:
+                            name: oro_api_delete_b2bcustomer_email
+                            http_method: DELETE
+                        default_route_parameters:
+                            className: OroCRM_Bundle_SalesBundle_Entity_B2bCustomerEmail
+                        route_parameters_rename_map:
+                            emailId: id
         sorters:
             columns:
                 channelName: { data_name: channelName }

@@ -13,3 +13,11 @@ orocrm_sales_salesfunnel_api:
 orocrm_sales_b2bcustomer_api:
     resource: "@OroCRMSalesBundle/Controller/Api/Rest/B2bCustomerController.php"
     type:     rest
+
+orocrm_sales_b2bcustomer_email_api:
+    resource: "@OroCRMSalesBundle/Controller/Api/Rest/B2bCustomerEmailController.php"
+    type:     rest
+
+orocrm_sales_b2bcustomer_phone_api:
+    resource: "@OroCRMSalesBundle/Controller/Api/Rest/B2bCustomerPhoneController.php"
+    type:     rest

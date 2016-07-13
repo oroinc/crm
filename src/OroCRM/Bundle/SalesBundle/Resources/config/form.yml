@@ -19,6 +19,12 @@ parameters:
     orocrm_sales.b2bcustomer.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerApiType
     orocrm_sales.b2bcustomer.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerHandler
 
+    orocrm_sales.form.type.b2bcustomer_phone.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerPhoneType
+    orocrm_sales.form.type.b2bcustomer_email.class: OroCRM\Bundle\SalesBundle\Form\Type\B2bCustomerEmailType
+
+    orocrm_sales.form.handler.b2bcustomer_phone.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerPhoneHandler
+    orocrm_sales.form.handler.b2bcustomer_email.class: OroCRM\Bundle\SalesBundle\Form\Handler\B2bCustomerEmailHandler
+
     orocrm_sales.mailbox_process.lead.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSettingsType
     orocrm_sales.lead_mailbox_process_source.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadMailboxProcessSourceType
 
@@ -277,3 +283,43 @@ services:
             - 'OroCRM\Bundle\SalesBundle\Entity\LeadStatus'
         tags:
             - { name: oro_dashboard.value.converter, alias: 'orocrm_type_widget_lead_status_select' }
+
+    orocrm_sales.form.type.b2bcustomer_phone:
+        class: Symfony\Component\Form\Form
+        factory: ["@form.factory", createNamed]
+        arguments: ["orocrm_b2bcustomer_phone", "orocrm_b2bcustomer_phone", null]
+
+    orocrm_sales.form.type.b2bcustomer_phone.type:
+        class: %orocrm_sales.form.type.b2bcustomer_phone.class%
+        tags:
+            - { name: form.type, alias: orocrm_b2bcustomer_phone }
+
+    orocrm_sales.form.type.b2bcustomer_phone.handler:
+        class: %orocrm_sales.form.handler.b2bcustomer_phone.class%
+        scope: request
+        arguments:
+            - "@orocrm_sales.form.type.b2bcustomer_phone"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_sales.validator.b2bcustomer_phone_delete"
+            - "@oro_security.security_facade"
+
+    orocrm_sales.form.type.b2bcustomer_email:
+        class: Symfony\Component\Form\Form
+        factory: ["@form.factory", createNamed]
+        arguments: ["orocrm_b2bcustomer_email", "orocrm_b2bcustomer_email", null]
+
+    orocrm_sales.form.type.b2bcustomer_email.type:
+        class: %orocrm_sales.form.type.b2bcustomer_email.class%
+        tags:
+            - { name: form.type, alias: orocrm_b2bcustomer_email }
+
+    orocrm_sales.form.type.b2bcustomer_email.handler:
+        class: %orocrm_sales.form.handler.b2bcustomer_email.class%
+        scope: request
+        arguments:
+            - "@orocrm_sales.form.type.b2bcustomer_email"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
+            - "@orocrm_sales.validator.b2bcustomer_email_delete"
+            - "@oro_security.security_facade"
