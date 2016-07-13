@@ -2,7 +2,11 @@
 
 namespace OroCRM\Bundle\SalesBundle\Provider;
 
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
+
 use Oro\Bundle\EntityBundle\Provider\EntityFieldProvider;
+use Oro\Bundle\WorkflowBundle\Model\WorkflowRegistry;
 
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
@@ -13,9 +17,6 @@ use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
-
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 
 class LeadToOpportunityProvider
 {
@@ -33,6 +34,9 @@ class LeadToOpportunityProvider
      * @var B2bGuesser
      */
     protected $changeLeadStatus;
+
+    /** @var bool */
+    protected $isLeadWorkflowEnabled;
 
     /**
      * @var EntityFieldProvider
@@ -87,13 +91,16 @@ class LeadToOpportunityProvider
     public function __construct(
         B2bGuesser $b2bGuesser,
         EntityFieldProvider $entityFieldProvider,
-        ChangeLeadStatus $changeLeadStatus
+        ChangeLeadStatus $changeLeadStatus,
+        WorkflowRegistry $workflowRegistry
     ) {
         $this->b2bGuesser = $b2bGuesser;
         $this->accessor = PropertyAccess::createPropertyAccessor();
         $this->entityFieldProvider = $entityFieldProvider;
         $this->changeLeadStatus = $changeLeadStatus;
         $this->validateContactFields();
+        $this->isLeadWorkflowEnabled = $workflowRegistry
+            ->hasActiveWorkflowByEntityClass('OroCRM\Bundle\SalesBundle\Entity\Lead');
     }
 
     /**
@@ -304,19 +311,10 @@ class LeadToOpportunityProvider
      *
      * @return bool
      */
-    public function isLeadConvertibleToOpportunity(Lead $lead)
+    public function isDisqualifyAndConvertAllowed(Lead $lead)
     {
         return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
+        !$this->isLeadWorkflowEnabled &&
         $lead->getOpportunities()->count() === 0;
-    }
-
-    /**
-     * @param Lead $lead
-     *
-     * @return bool
-     */
-    public function isDisqualifyAllowed(Lead $lead)
-    {
-        return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY;
     }
 }

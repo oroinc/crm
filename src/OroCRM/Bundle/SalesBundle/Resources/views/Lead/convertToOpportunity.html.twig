@@ -20,7 +20,7 @@
         'params': {'id': entity.lead.id}
     }) %}
     {% if resource_granted('orocrm_sales_lead_convert_to_opportunity') %}
-        {% set html = html ~ UI.saveAndNewButton({
+        {% set html = UI.saveAndCloseButton({
             'route': 'orocrm_sales_lead_convert_to_opportunity',
             'params': {'id': entity.lead.id}
         }) %}
@@ -63,11 +63,11 @@
     ]) %}
 
     {% set dataBlocks = [{
-    'title': 'General'|trans,
+    'title': 'Opportunity Information'|trans,
     'class': 'active',
     'subblocks': [
     {
-    'title': 'Opportunity Information'|trans,
+    'title': 'General'|trans,
     'data': formFields
     },
     {
@@ -98,9 +98,9 @@
 
     {% if form.vars.use_full_contact_form %}
         {% set dataBlocks = dataBlocks|merge([{
-            'title': 'New contact'|trans,
+            'title': 'New Contact Information'|trans,
             'subblocks': [{
-                'title': 'Information'|trans,
+                'title': 'General'|trans,
                 'data': [
                     form_row(form.contact.owner),
                     form_row(form.contact.namePrefix),

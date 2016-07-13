@@ -36,18 +36,13 @@ class LeadController extends Controller
      */
     public function viewAction(Lead $lead)
     {
-        $isLeadConvertible = $this
+        $isDisqualifyAndConvertAllowed = $this
             ->get('orocrm_sales.provider.lead_to_opportunity')
-            ->isLeadConvertibleToOpportunity($lead);
-
-        $isDisqualifyAllowed = $this
-            ->get('orocrm_sales.provider.lead_to_opportunity')
-            ->isDisqualifyAllowed($lead);
-
+            ->isDisqualifyAndConvertAllowed($lead);
+        
         return array(
             'entity' => $lead,
-            'isLeadConvertible' => $isLeadConvertible,
-            'isDisqualifyAllowed' => $isDisqualifyAllowed
+            'isDisqualifyAndConvertAllowed' => $isDisqualifyAndConvertAllowed
         );
     }
 
@@ -191,7 +186,7 @@ class LeadController extends Controller
      */
     public function disqualifyAction(Lead $lead)
     {
-        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAllowed($lead)) {
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
             throw new AccessDeniedException();
         }
         
@@ -222,7 +217,7 @@ class LeadController extends Controller
      */
     public function convertToOpportunityAction(Lead $lead)
     {
-        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isLeadConvertibleToOpportunity($lead)) {
+        if (!$this->get('orocrm_sales.provider.lead_to_opportunity')->isDisqualifyAndConvertAllowed($lead)) {
             throw new AccessDeniedException('Only one conversion per lead is allowed !');
         }
 
@@ -231,6 +226,12 @@ class LeadController extends Controller
             $lead,
             $this->get('oro_form.model.update_handler'),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
+            function (Opportunity $opportunity) {
+                return [
+                    'route' => 'orocrm_sales_opportunity_view',
+                    'parameters' => ['id' => $opportunity->getId()]
+                ];
+            },
             function () use ($session) {
                 $session->getFlashBag()->add(
                     'error',
