@@ -429,7 +429,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_F0D0BDFA7E3C61F9', []);
-        $table->addIndex(['phone', 'is_primary'], 'primary_phone_idx', []);
+        $table->addIndex(['phone', 'is_primary'], 'primary_b2bcustomer_phone_idx', []);
         $table->addIndex(['phone'], 'phone_idx');
     }
 

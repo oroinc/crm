@@ -2,16 +2,35 @@
 
 namespace OroCRM\Bundle\SalesBundle\Model;
 
-class ExtendB2bCustomer
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
+
+abstract class ExtendB2bCustomer implements EmailOwnerInterface
 {
+    /** @inheritdoc */
+    abstract public function getId();
+
+    /** @inheritdoc */
+    abstract public function getClass();
+
     /**
-     * Constructor
+     * Get names of fields contain email addresses
      *
-     * The real implementation of this method is auto generated.
-     *
-     * IMPORTANT: If the derived class has own constructor it must call parent constructor.
+     * @return string[]|null
      */
-    public function __construct()
+    public function getEmailFields()
     {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getLastName()
+    {
+        return null;
     }
 }
