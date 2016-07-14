@@ -222,10 +222,10 @@ services:
             - %orocrm_sales.b2bcustomer_phone.entity.class%
             - "@doctrine.orm.entity_manager"
 
-    orocrm_sales.handler.b2bcustomer_phone_api:
+    orocrm_sales.b2bcustomer_phone.api.handler:
         class: %orocrm_sales.b2bcustomer_phone.api.handler.class%
         arguments:
-            - "@doctrine"
+            - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"
         tags:
             - { name: oro_entity.form.entity_field.handler }
@@ -237,10 +237,10 @@ services:
             - %orocrm_sales.b2bcustomer_email.entity.class%
             - "@doctrine.orm.entity_manager"
 
-    orocrm_sales.handler.b2bcustomer_email_api:
+    orocrm_sales.b2bcustomer_email.api.handler:
         class: %orocrm_sales.b2bcustomer_email.api.handler.class%
         arguments:
-            - "@doctrine"
+            - "@doctrine.orm.entity_manager"
             - "@oro_security.security_facade"
         tags:
             - { name: oro_entity.form.entity_field.handler }

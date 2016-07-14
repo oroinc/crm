@@ -25,7 +25,7 @@ define(function(require) {
             this.initRoute(urlParameters, body);
 
             if (this.isActiveCreateEntityRoute()) {
-                body.contactId = urlParameters.id;
+                body.b2bCustomerId = urlParameters.id;
                 body.primary = true;
             }
 
