@@ -22,6 +22,8 @@ use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationT
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
+
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -236,7 +238,11 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
         $lead->setEmail($data['EmailAddress']);
-        $lead->setPhoneNumber($data['TelephoneNumber']);
+
+        $leadPhone = new LeadPhone($data['TelephoneNumber']);
+        $leadPhone->setPrimary(true);
+        $lead->addPhone($leadPhone);
+
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setDataChannel($this->channel);

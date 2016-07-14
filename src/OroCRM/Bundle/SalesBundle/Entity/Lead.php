@@ -2,8 +2,6 @@
 
 namespace OroCRM\Bundle\SalesBundle\Entity;
 
-use BeSimple\SoapBundle\ServiceDefinition\Annotation as Soap;
-
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -232,22 +230,26 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $jobTitle;
-
+    
     /**
-     * @var string
+     * @var Collection
      *
-     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
-     * @Oro\Versioned
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadPhone", mappedBy="owner",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * ))
+     * @ORM\OrderBy({"primary" = "DESC"})
      * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=90
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=220
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
      *      }
-     *  }
      * )
      */
-    protected $phoneNumber;
+    protected $phones;
 
     /**
      * @var Collection
@@ -256,7 +258,6 @@ class Lead extends ExtendLead implements
      *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
      * )
      * @ORM\OrderBy({"primary" = "DESC"})
-     * @Soap\ComplexType("OroCRM\Bundle\SalesBundle\Entity\LeadEmail[]", nillable=true)
      * @ConfigField(
      *      defaultValues={
      *          "importexport"={
@@ -484,6 +485,7 @@ class Lead extends ExtendLead implements
         parent::__construct();
 
         $this->opportunities = new ArrayCollection();
+        $this->phones   = new ArrayCollection();
         $this->emails   = new ArrayCollection();
     }
 
@@ -651,30 +653,6 @@ class Lead extends ExtendLead implements
     public function getJobTitle()
     {
         return $this->jobTitle;
-    }
-
-    /**
-     * Set phone number
-     *
-     * @param string $phoneNumber
-     *
-     * @return Lead
-     */
-    public function setPhoneNumber($phoneNumber)
-    {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get phone number
-     *
-     * @return string
-     */
-    public function getPhoneNumber()
-    {
-        return $this->phoneNumber;
     }
 
     /**
@@ -1071,6 +1049,117 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * Set phones.
+     *
+     * This method could not be named setPhones because of bug CRM-253.
+     *
+     * @param Collection|LeadPhone[] $phones
+     *
+     * @return Lead
+     */
+    public function resetPhones($phones)
+    {
+        $this->phones->clear();
+
+        foreach ($phones as $phone) {
+            $this->addPhone($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function addPhone(LeadPhone $phone)
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones->add($phone);
+            $phone->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function removePhone(LeadPhone $phone)
+    {
+        if ($this->phones->contains($phone)) {
+            $this->phones->removeElement($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return Collection|LeadPhone[]
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return bool
+     */
+    public function hasPhone(LeadPhone $phone)
+    {
+        return $this->getPhones()->contains($phone);
+    }
+
+    /**
+     * Gets primary phone if it's available.
+     *
+     * @return LeadPhone|null
+     */
+    public function getPrimaryPhone()
+    {
+        $result = null;
+
+        foreach ($this->getPhones() as $phone) {
+            if ($phone->isPrimary()) {
+                $result = $phone;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function setPrimaryPhone(LeadPhone $phone)
+    {
+        if ($this->hasPhone($phone)) {
+            $phone->setPrimary(true);
+            foreach ($this->getPhones() as $otherPhone) {
+                if (!$phone->isEqual($otherPhone)) {
+                    $otherPhone->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
     }
 
     /**

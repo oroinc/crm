@@ -205,7 +205,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
                         'lastName'    => 'lname',
                         'email'       => 'email@email.com'
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 3
                 ],
             ],
             'Lead grid with filters'   => [

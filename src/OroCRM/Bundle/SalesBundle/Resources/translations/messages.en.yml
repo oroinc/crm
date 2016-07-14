@@ -172,6 +172,7 @@ orocrm:
             name_suffix.label:    Name suffix
             job_title.label:      Job title
             phone_number.label:   Phone number
+            phones.label:         Phones
             email.label:          Email
             emails.label:         Emails
             company_name.label:   Company name
@@ -209,6 +210,18 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+
+        #
+        # Entity OroCRM/Bundle/SalesBundle/Entity/LeadPhone.php
+        #
+        leadphone:
+            entity_description:  Represent lead's phone
+            entity_label:        Lead Phone
+            entity_plural_label: Lead Phones
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
 
         #
         # Entity OroCRM\Bundle\SalesBundle\Entity\LeadEmail

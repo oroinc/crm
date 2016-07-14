@@ -14,19 +14,16 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -185,7 +182,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
-        $lead->setPhoneNumber($data['TelephoneNumber']);
+
+        $phone = new LeadPhone($data['TelephoneNumber']);
+        $phone->setPrimary(true);
+        $lead->addPhone($phone);
 
         $email = new LeadEmail($data['EmailAddress']);
         $email->setPrimary(true);
