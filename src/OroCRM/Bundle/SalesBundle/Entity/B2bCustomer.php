@@ -60,7 +60,6 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  */
 class B2bCustomer extends ExtendB2bCustomer implements
-    EmailOwnerInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -785,36 +784,10 @@ class B2bCustomer extends ExtendB2bCustomer implements
         }
         return $this;
     }
-    
-    /**
-     * Get entity class name.
-     * TODO: Remove this temporary solution for get 'view' route in twig after EntityConfigBundle is finished
-     * @return string
-     */
+
+    /** @inheritdoc  */
     public function getClass()
     {
         return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
-    }
-
-    /**
-     * Get names of fields contain email addresses
-     *
-     * @return string[]|null
-     */
-    public function getEmailFields()
-    {
-        return null;
-    }
-
-    /** Stub for EmailOwnerInterface */
-    public function getFirstName()
-    {
-        return null;
-    }
-
-    /** Stub for EmailOwnerInterface */
-    public function getLastName()
-    {
-        return null;
     }
 }
