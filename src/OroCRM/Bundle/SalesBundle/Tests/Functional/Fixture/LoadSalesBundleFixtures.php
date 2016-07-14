@@ -122,7 +122,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setFirstName('fname');
         $lead->setLastName('lname');
         $lead->setCustomer($this->getReference('default_b2bcustomer'));
-        $lead->addEmail(new LeadEmail('email@email.com'));
+        $email = new LeadEmail('email@email.com');
+        $email->setPrimary(true);
+        $lead->addEmail($email);
         $lead->setOrganization($this->organization);
 
         $lead2 = new Lead();
@@ -131,7 +133,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead2->setFirstName('fname 2');
         $lead2->setLastName('lname 2');
         $lead2->setCustomer($this->getReference('default_b2bcustomer'));
-        $lead2->setEmail('email2@email.com');
+        $email = new LeadEmail('email2@email.com');
+        $email->setPrimary(true);
+        $lead2->addEmail($email);
         $lead2->setOrganization($this->organization);
 
         $lead3 = new Lead();
@@ -140,7 +144,9 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead3->setFirstName('fname 3');
         $lead3->setLastName('lname 3');
         $lead3->setCustomer($this->getReference('default_b2bcustomer'));
-        $lead3->setEmail('email3@email.com');
+        $email = new LeadEmail('email3@email.com');
+        $email->setPrimary(true);
+        $lead3->addEmail($email);
         $lead3->setOrganization($this->organization);
 
 
