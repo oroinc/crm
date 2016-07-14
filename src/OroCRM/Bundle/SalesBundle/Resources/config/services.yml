@@ -18,6 +18,7 @@ parameters:
     orocrm_sales.provider.phone.lead.class:                  OroCRM\Bundle\SalesBundle\Provider\LeadPhoneProvider
     orocrm_sales.provider.phone.opportunity.class:           OroCRM\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
     orocrm_sales.provider.phone.b2bcustomer.class:           OroCRM\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
+    orocrm_sales.provider.lead_to_opportunity.class:          OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
 
     orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
@@ -31,6 +32,9 @@ parameters:
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
+
+    orocrm_sales.model.change_lead_status.class: OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus
+    orocrm_sales.model.b2b_guesser.class: OroCRM\Bundle\SalesBundle\Model\B2bGuesser
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -224,3 +228,22 @@ services:
         tags:
             - { name: oro_user.privilege_category}
 
+
+    orocrm_sales.model.change_lead_status:
+        class: %orocrm_sales.model.change_lead_status.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    orocrm_sales.model.b2b_guesser:
+        class: %orocrm_sales.model.b2b_guesser.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_entity.entity_field_provider'
+
+    orocrm_sales.provider.lead_to_opportunity:
+        class: %orocrm_sales.provider.lead_to_opportunity.class%
+        arguments:
+            - '@orocrm_sales.model.b2b_guesser'
+            - '@oro_entity.entity_field_provider'
+            - "@orocrm_sales.model.change_lead_status"
+            - "@oro_workflow.registry"

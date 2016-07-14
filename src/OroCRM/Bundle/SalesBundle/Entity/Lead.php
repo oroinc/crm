@@ -928,7 +928,7 @@ class Lead extends ExtendLead implements
     /**
      * Get opportunities
      *
-     * @return Opportunity[]
+     * @return ArrayCollection
      */
     public function getOpportunities()
     {

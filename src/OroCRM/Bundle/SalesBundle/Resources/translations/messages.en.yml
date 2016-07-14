@@ -1,3 +1,4 @@
+"New Contact Information": "New Contact Information"
 oro:
     dashboard:
         my_sales_flow:
@@ -224,6 +225,10 @@ orocrm:
                 unclassified:     Unclassified
                 others:           Others
                 none:             None
+            status:
+                change_error_message:  Unable to change lead status.
+            convert:
+                 error:           Unable to convert lead to opportunity
 
             datagrid:
                 number_of_employees: '# of employees'
