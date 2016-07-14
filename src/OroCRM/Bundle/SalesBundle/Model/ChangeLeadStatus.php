@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
 
@@ -55,7 +56,8 @@ class ChangeLeadStatus
     protected function changeStatus($lead, $statusCode)
     {
         try {
-            $status = $this->manager->getReference('OroCRMSalesBundle:LeadStatus', $statusCode);
+            $enumStatusClass = ExtendHelper::buildEnumValueClassName(Lead::INTERNAL_STATUS_CODE);
+            $status = $this->manager->getReference($enumStatusClass, $statusCode);
             $lead->setStatus($status);
             $this->save($lead);
         } catch (\Exception $e) {

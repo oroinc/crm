@@ -313,7 +313,7 @@ class LeadToOpportunityProvider
      */
     public function isDisqualifyAndConvertAllowed(Lead $lead)
     {
-        return $lead->getStatus()->getName() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
+        return $lead->getStatus()->getId() !== ChangeLeadStatus::STATUS_DISQUALIFY &&
         !$this->isLeadWorkflowEnabled &&
         $lead->getOpportunities()->count() === 0;
     }
