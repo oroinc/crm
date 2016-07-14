@@ -272,6 +272,8 @@ orocrm:
             owner.label:                Owner
             tags.label:                 Tags
             ownership.label:            Ownership
+            emails.label:               Emails
+            phones.label:               Phones
             rating.label:               Rating
             ticker_symbol.label:        Ticker symbol
             website.label:              Website
@@ -300,6 +302,31 @@ orocrm:
                     shipping_address_street.label:      Shipping Address Street
                     shipping_address_postal_code.label: Shipping Address Postal Code
             import: Import
+
+        #
+        # Entity OroCRM\Bundle\SalesBundle\Entity\B2bCustomerPhone
+        #
+        b2bcustomerphone:
+            entity_description:  Represent B2b Customer phone
+            entity_label:        B2bCustomer Phone
+            entity_plural_label: B2bCustomer Phones
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
+
+        #
+        # Entity oroCRM\Bundle\SalesBundle\Entity\B2bCustomerEmail
+        #
+        b2bcustomeremail:
+            email.label:         Email
+            entity_description:  Represent B2b Customer email
+            entity_label:        B2bCustomer Email
+            entity_plural_label: B2bCustomer Emails
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
+
         widgets:
             b2bcustomer_information: Business Customer Information
             leads:                   Leads
