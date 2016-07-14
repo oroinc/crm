@@ -49,7 +49,6 @@ class LeadToOpportunityHandler extends OpportunityHandler
      * @param Lead          $lead
      * @param UpdateHandler $handler
      * @param string        $saveMessage
-     * @param callable      $saveRouteCallback
      * @param callable      $errorMessageCallback
      *
      * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
@@ -58,20 +57,12 @@ class LeadToOpportunityHandler extends OpportunityHandler
         Lead $lead,
         UpdateHandler $handler,
         $saveMessage,
-        callable $saveRouteCallback,
         callable $errorMessageCallback
     ) {
         $this->errorMessageCallback = $errorMessageCallback;
         $isGetRequest = $this->request->getMethod() === 'GET';
         $opportunity = $this->leadToOpportunityProvider->prepareOpportunityForForm($lead, $isGetRequest);
-        return $handler->handleUpdate(
-            $opportunity,
-            $this->form,
-            $saveRouteCallback,
-            $saveRouteCallback,
-            $saveMessage,
-            $this
-        );
+        return $handler->update($opportunity, $this->form, $saveMessage, $this);
     }
 
     /**

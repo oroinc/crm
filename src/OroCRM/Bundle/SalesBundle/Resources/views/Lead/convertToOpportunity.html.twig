@@ -21,8 +21,8 @@
     }) %}
     {% if resource_granted('orocrm_sales_lead_convert_to_opportunity') %}
         {% set html = UI.saveAndCloseButton({
-            'route': 'orocrm_sales_lead_convert_to_opportunity',
-            'params': {'id': entity.lead.id}
+            'route': 'orocrm_sales_opportunity_view',
+            'params': {'id': '$id'}
         }) %}
     {% endif %}
     {{ UI.dropdownSaveButton({'html': html}) }}

@@ -226,12 +226,6 @@ class LeadController extends Controller
             $lead,
             $this->get('oro_form.model.update_handler'),
             $this->get('translator')->trans('orocrm.sales.controller.opportunity.saved.message'),
-            function (Opportunity $opportunity) {
-                return [
-                    'route' => 'orocrm_sales_opportunity_view',
-                    'parameters' => ['id' => $opportunity->getId()]
-                ];
-            },
             function () use ($session) {
                 $session->getFlashBag()->add(
                     'error',
