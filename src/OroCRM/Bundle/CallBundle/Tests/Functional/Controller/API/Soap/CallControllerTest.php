@@ -7,6 +7,7 @@ use Oro\Bundle\TestFrameworkBundle\Test\WebTestCase;
 /**
  * @outputBuffering enabled
  * @dbIsolation
+ * @group soap
  */
 class CallControllerTest extends WebTestCase
 {
@@ -28,7 +29,7 @@ class CallControllerTest extends WebTestCase
             "notes"         => 'notes',
             "callDateTime"  => new \DateTime('now', new \DateTimeZone('UTC')),
             "callStatus"    => 'in_progress',
-            "duration"      => new \DateTime('00:00:00', new \DateTimeZone('UTC')),
+            "duration"      => '00:00:00',
             "direction"     => 'incoming',
         );
         $result = $this->soapClient->createCall($request);

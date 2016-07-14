@@ -1,0 +1,7 @@
+Account:
+  selector: 'div#container'
+  class: 'Oro\Bundle\TestFrameworkBundle\Behat\Element\Form'
+  options:
+    mapping:
+      Account Name: orocrm_account_form[name]
+      Description: orocrm_account_form[extend_description]

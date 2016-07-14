@@ -12,7 +12,7 @@
 </div>
 {% endblock %}
 
-{% block form_widget %}
+{% block form_fields_widget %}
     {% form_theme form with ['OroCRMContactUsBundle::fields.html.twig'] %}
     {{ form_start(form, {'attr': {'id': form.vars.id, 'name': form.vars.name, 'novalidate': 'novalidate' }}) }}
     <div class="wrapper">

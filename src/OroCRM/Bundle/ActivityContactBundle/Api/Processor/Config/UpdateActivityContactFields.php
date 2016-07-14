@@ -6,6 +6,7 @@ use Oro\Component\ChainProcessor\ContextInterface;
 use Oro\Component\ChainProcessor\ProcessorInterface;
 use Oro\Bundle\ApiBundle\Config\EntityDefinitionConfig;
 use Oro\Bundle\ApiBundle\Processor\Config\ConfigContext;
+use Oro\Bundle\ApiBundle\Util\DoctrineHelper;
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
 use OroCRM\Bundle\ActivityContactBundle\EntityConfig\ActivityScope;
 use OroCRM\Bundle\ActivityContactBundle\Model\TargetExcludeList;
@@ -18,6 +19,9 @@ use OroCRM\Bundle\ActivityContactBundle\Provider\ActivityContactProvider;
  */
 class UpdateActivityContactFields implements ProcessorInterface
 {
+    /** @var DoctrineHelper */
+    protected $doctrineHelper;
+
     /** @var ConfigManager */
     protected $configManager;
 
@@ -28,15 +32,18 @@ class UpdateActivityContactFields implements ProcessorInterface
     protected $excludedActions;
 
     /**
+     * @param DoctrineHelper          $doctrineHelper
      * @param ConfigManager           $configManager
      * @param ActivityContactProvider $activityContactProvider
      * @param string                  $excludedActions
      */
     public function __construct(
+        DoctrineHelper $doctrineHelper,
         ConfigManager $configManager,
         ActivityContactProvider $activityContactProvider,
         $excludedActions
     ) {
+        $this->doctrineHelper = $doctrineHelper;
         $this->configManager = $configManager;
         $this->activityContactProvider = $activityContactProvider;
         $this->excludedActions = $excludedActions;
@@ -56,6 +63,10 @@ class UpdateActivityContactFields implements ProcessorInterface
         }
 
         $entityClass = $context->getClassName();
+        if (!$this->doctrineHelper->isManageableEntityClass($entityClass)) {
+            // only manageable entities are supported
+            return;
+        }
         if (!$this->isSupportedEntity($entityClass)) {
             // an entity is not supported
             return;

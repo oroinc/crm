@@ -240,6 +240,7 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        views_list: "@orocrm_sales.opportunity.datagrid_view_list"
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -611,6 +612,7 @@ datagrid:
                     options:
                         lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
                         data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+        views_list: "@orocrm_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%
@@ -1257,6 +1259,24 @@ datagrid:
 
     orocrm-sales-b2bcustomers-select-grid:
         extends: base-sales-b2bcustomers-grid
+        source:
+            query:
+                select:
+                    - account.name as accountName
+                join:
+                    left:
+                        - { join: c.account, alias: account }
+        columns:
+            accountName:
+                label: orocrm.sales.b2bcustomer.datagrid.columns.account_name.label
+        sorters:
+            columns:
+                accountName: { data_name: accountName }
+        filters:
+            columns:
+                accountName:
+                    type: string
+                    data_name: accountName
 
     base-sales-b2bcustomer-leads-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -1747,3 +1767,82 @@ datagrid:
                     default_per_page: 10
             routerEnabled: false
 
+    dashboard-my-sales-opportunity-grid:
+        extended_entity_name: %orocrm_sales.opportunity.class%
+        acl_resource: orocrm_sales_opportunity_view
+        source:
+            type: orm
+            query:
+                select:
+                    - o.id
+                    - o.name
+                    - o.budgetAmount
+                    - s.id as status
+                    - o.probability
+                    - o.closeDate
+                from:
+                    - { table: %orocrm_sales.opportunity.class%, alias: o }
+                join:
+                    left:
+                        - { join: o.status, alias: s }
+        columns:
+            name:
+                label: orocrm.sales.opportunity.name.label
+                frontend_type: html
+                type: link
+                route: orocrm_sales_opportunity_view
+                params: {id: id}
+            budgetAmount:
+                label:         orocrm.sales.opportunity.budget_amount.label
+                frontend_type: currency
+            status:
+                frontend_type: select
+                label:         orocrm.sales.opportunity.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('opportunity_status')"
+            probability:
+                label:         orocrm.sales.opportunity.probability.label
+                frontend_type: percent
+            closeDate:
+                label:         orocrm.sales.opportunity.close_date.label
+                frontend_type: date
+        options:
+            entityHint: opportunities
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10
+
+    dashboard-my-sales-lead-grid:
+        extended_entity_name: %orocrm_sales.lead.entity.class%
+        mixins:
+            - activity-contact-last-contacted-date-data-mixin
+        acl_resource: orocrm_sales_opportunity_view
+        source:
+            type: orm
+            query:
+                select:
+                    - l.id
+                    - l.name
+                    - status.label as statusLabel
+                from:
+                    - { table: %orocrm_sales.lead.entity.class%, alias: l }
+                join:
+                    left:
+                        - { join: l.status, alias: status }
+        columns:
+            name:
+                label: orocrm.sales.lead.name.label
+                frontend_type: html
+                type: link
+                route: orocrm_sales_lead_view
+                params: {id: id}
+            statusLabel:
+                label: orocrm.sales.opportunity.status.label
+        options:
+            entityHint: opportunities
+            toolbarOptions:
+                hide: true
+                pageSize:
+                    items: [10]
+                    default_per_page: 10

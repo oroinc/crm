@@ -271,6 +271,42 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_opportunity_data_channel_aware_select }
 
+    orocrm_sales.type.oppotunity_status_select:
+        class: OroCRM\Bundle\SalesBundle\Form\Type\OpportunityStatusSelectType
+        arguments:
+            - '@oro_entity_extend.enum_value_provider'
+        tags:
+            - { name: form.type, alias: orocrm_type_widget_opportunity_status_select }
+
+    orocrm_sales.type.lead_status_select:
+        class: OroCRM\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
+        arguments:
+           - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type, alias: orocrm_type_widget_lead_status_select }
+
+    orocrm_sales.widget_config_value.widget_opportunity_status.converter:
+        class: OroCRM\Bundle\SalesBundle\Dashboard\Converters\WidgetOpportunityStatusSelectConverter
+        arguments:
+            - '@oro_security.acl_helper'
+            - '@oro_entity.entity_name_resolver'
+            - '@oro_entity.doctrine_helper'
+            - '@doctrine.orm.entity_manager'
+            - 'opportunity_status'
+        tags:
+            - { name: oro_dashboard.value.converter, alias: 'orocrm_type_widget_opportunity_status_select' }
+
+    orocrm_sales.widget_config_value.widget_lead_status.converter:
+        class: OroCRM\Bundle\SalesBundle\Dashboard\Converters\WidgetLeadStatusSelectConverter
+        arguments:
+            - '@oro_security.acl_helper'
+            - '@oro_entity.entity_name_resolver'
+            - '@oro_entity.doctrine_helper'
+            - '@doctrine.orm.entity_manager'
+            - 'OroCRM\Bundle\SalesBundle\Entity\LeadStatus'
+        tags:
+            - { name: oro_dashboard.value.converter, alias: 'orocrm_type_widget_lead_status_select' }
+
     orocrm_sales.form.type.lead_phone.type:
         class: %orocrm_sales.lead_phone.form.type.class%
         tags:

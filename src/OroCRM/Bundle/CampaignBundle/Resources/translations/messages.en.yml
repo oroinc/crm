@@ -153,3 +153,6 @@ orocrm:
             entity_plural_label: Email Campaign Internal Transport Settings
             id.label: Id
             template.label: Template
+
+        privilege:
+            category.marketing.label: Marketing
