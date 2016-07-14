@@ -274,7 +274,7 @@ class LeadToOpportunityProvider
         $saveResult = $this->changeLeadStatus->qualify($lead);
 
         if (!$saveResult && is_callable($errorMessageCallback)) {
-            call_user_func($this->errorCallback);
+            call_user_func($errorMessageCallback);
         }
 
         return $saveResult;

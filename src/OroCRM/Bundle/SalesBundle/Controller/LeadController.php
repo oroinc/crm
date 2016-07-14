@@ -16,8 +16,6 @@ use Oro\Bundle\SecurityBundle\Annotation\AclAncestor;
 use OroCRM\Bundle\AccountBundle\Entity\Account;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
-use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
-use OroCRM\Bundle\ContactBundle\Entity\Contact;
 
 /**
  * @Route("/lead")
