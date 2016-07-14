@@ -3,7 +3,9 @@ parameters:
     orocrm_sales.opportunity.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead.entity.class:                          OroCRM\Bundle\SalesBundle\Entity\Lead
+    orocrm_sales.leadaddress.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\LeadAddress
     orocrm_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.lead_address.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead_email.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadEmail
     orocrm_sales.lead_email.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
@@ -46,6 +48,13 @@ services:
         parent: oro_soap.manager.entity_manager.abstract
         arguments:
             - %orocrm_sales.lead.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.lead_address.manager.api:
+        class: %orocrm_sales.lead_address.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.leadaddress.entity.class%
             - "@doctrine.orm.entity_manager"
 
     orocrm_sales.lead_email.manager.api:

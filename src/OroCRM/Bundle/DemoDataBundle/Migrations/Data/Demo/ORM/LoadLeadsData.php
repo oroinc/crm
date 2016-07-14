@@ -19,6 +19,7 @@ use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
@@ -196,14 +197,15 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setOrganization($this->organization);
         $lead->setDataChannel($this->getReference('default_channel'));
 
-        /** @var Address $address */
-        $address = new Address();
+        /** @var LeadAddress $address */
+        $address = new LeadAddress();
         $address->setLabel('Primary Address');
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
         $address->setPostalCode($data['ZipCode']);
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
+        $address->setPrimary(true);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -232,7 +234,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $address->setRegion($region->first());
         }
 
-        $lead->setAddress($address);
+        $lead->addAddress($address);
 
         return $lead;
     }

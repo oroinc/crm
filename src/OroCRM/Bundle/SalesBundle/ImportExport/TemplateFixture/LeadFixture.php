@@ -8,6 +8,7 @@ use Oro\Bundle\ImportExportBundle\TemplateFixture\TemplateFixtureInterface;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 
 class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureInterface
 {
@@ -41,7 +42,6 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
      */
     public function fillEntityData($key, $entity)
     {
-        $addressRepo      = $this->templateManager->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Address');
         $userRepo         = $this->templateManager->getEntityRepository('Oro\Bundle\UserBundle\Entity\User');
         $customerRepo     = $this->templateManager->getEntityRepository('OroCRM\Bundle\SalesBundle\Entity\B2bCustomer');
         $contactRepo      = $this->templateManager->getEntityRepository('OroCRM\Bundle\ContactBundle\Entity\Contact');
@@ -60,8 +60,12 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
                 $entity->setUpdatedAt(new \DateTime());
                 $entity->setCustomer($customerRepo->getEntity('Jerry Coleman'));
                 $entity->setContact($contactRepo->getEntity('Jerry Coleman'));
-                $entity->setAddress($addressRepo->getEntity('Jerry Coleman'));
                 $entity->addEmail(new LeadEmail('JerryAColeman@armyspy.com'));
+                $primaryAddress = $this->createLeadAddress(1);
+                $entity->addAddress($primaryAddress);
+                $entity->addAddress($this->createLeadAddress(2));
+                $entity->addAddress($this->createLeadAddress(3));
+                $entity->setPrimaryAddress($primaryAddress);
                 $entity->setNamePrefix('Mr.');
                 $entity->setFirstName('Jerry');
                 $entity->setLastName('Coleman');
@@ -83,5 +87,62 @@ class LeadFixture extends AbstractTemplateRepository implements TemplateFixtureI
         }
 
         parent::fillEntityData($key, $entity);
+    }
+
+    /**
+     * @param int $number
+     *
+     * @return LeadAddress
+     *
+     * @throws \LogicException
+     */
+    protected function createLeadAddress($number)
+    {
+        $countryRepo = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Country');
+        $regionRepo  = $this->templateManager
+            ->getEntityRepository('Oro\Bundle\AddressBundle\Entity\Region');
+
+        $entity = new LeadAddress();
+
+        $entity
+            ->setFirstName('Jerry')
+            ->setLastName('Coleman');
+
+        switch ($number) {
+            case 1:
+                $entity
+                    ->setCity('Rochester')
+                    ->setStreet('1215 Caldwell Road')
+                    ->setPostalCode('14608')
+                    ->setRegion($regionRepo->getEntity('NY'))
+                    ->setCountry($countryRepo->getEntity('US'));
+                break;
+            case 2:
+                $entity
+                    ->setCity('New York')
+                    ->setStreet('4677 Pallet Street')
+                    ->setPostalCode('10011')
+                    ->setRegion($regionRepo->getEntity('NY'))
+                    ->setCountry($countryRepo->getEntity('US'));
+                break;
+            case 3:
+                $entity
+                    ->setCity('New York')
+                    ->setStreet('52 Jarvisville Road')
+                    ->setPostalCode('11590')
+                    ->setRegion($regionRepo->getEntity('NY'))
+                    ->setCountry($countryRepo->getEntity('US'));
+                break;
+            default:
+                throw new \LogicException(
+                    sprintf(
+                        'Undefined lead address. Number: %d.',
+                        $number
+                    )
+                );
+        }
+
+        return $entity;
     }
 }

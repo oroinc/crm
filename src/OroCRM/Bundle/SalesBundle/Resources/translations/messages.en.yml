@@ -183,6 +183,8 @@ orocrm:
             contact.label:        Contact
             owner.label:          Owner
             address.label:        Address
+            addresses.label:      Address
+            add_address.label:    Add Address
             details.label:        Lead Details
             source.label:         Source
             notes.label:          Additional comments
@@ -210,6 +212,36 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+
+        #
+        # Entity oroCRM\Bundle\SalesBundle\Entity\LeadAddress
+        #
+        leadaddress:
+            city.label:          City
+            country.label:       Country
+            entity_description:  Represent lead's address
+            entity_label:        Lead Address
+            entity_plural_label: Lead Addresses
+            first_name.label:    First name
+            id.label:            Id
+            label.label:         Label
+            last_name.label:     Last name
+            middle_name.label:   Middle name
+            name_prefix.label:   Name prefix
+            name_suffix.label:   Name suffix
+            organization.label:  Organization
+            owner.label:         Owner
+            postal_code.label:   Zip/postal code
+            primary.label:       Primary
+            region.label:        State
+            region_text.label:   State
+            street.label:        Street
+            street2.label:       Street 2
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
 
         #
         # Entity OroCRM/Bundle/SalesBundle/Entity/LeadPhone.php

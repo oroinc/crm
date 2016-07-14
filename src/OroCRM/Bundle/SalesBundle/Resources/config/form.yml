@@ -4,6 +4,7 @@ parameters:
     orocrm_sales.opportunity.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\OpportunityHandler
 
     orocrm_sales.lead.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadType
+    orocrm_sales.lead.address.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadAddressType
     orocrm_sales.lead.form.type.api.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadApiType
     orocrm_sales.lead.form.handler.class: OroCRM\Bundle\SalesBundle\Form\Handler\LeadHandler
     orocrm_sales.lead_phone.form.type.class: OroCRM\Bundle\SalesBundle\Form\Type\LeadPhoneType
@@ -81,6 +82,11 @@ services:
         tags:
             - { name: form.type, alias: orocrm_sales_lead }
 
+    orocrm_sales.lead.address.form.type:
+        class: %orocrm_sales.lead.address.form.type.class%
+        tags:
+            - { name: form.type, alias: orocrm_sales_lead_address }
+
     orocrm_sales.lead.form.type.api:
         class: %orocrm_sales.lead.form.type.api.class%
         tags:
@@ -119,6 +125,24 @@ services:
             - "@request"
             - "@doctrine.orm.entity_manager"
             - "@orocrm_channel.provider.request_channel"
+
+    orocrm_sales.lead_address.form:
+        class: Symfony\Component\Form\Form
+        factory_method: createNamed
+        factory_service: form.factory
+        arguments:
+            - "orocrm_sales_lead_address_form"
+            - "orocrm_sales_lead_address"
+            - ~
+            - { data_class: %orocrm_sales.leadaddress.entity.class% }
+
+    orocrm_sales.lead_address.form.handler:
+        class: %oro_address.form.handler.address.class%
+        scope: request
+        arguments:
+            - "@orocrm_sales.lead_address.form"
+            - "@request"
+            - "@doctrine.orm.entity_manager"
 
     orocrm_sales.form.type.opportunity_select:
         class: %orocrm_sales.form.type.opportunity_select.class%
