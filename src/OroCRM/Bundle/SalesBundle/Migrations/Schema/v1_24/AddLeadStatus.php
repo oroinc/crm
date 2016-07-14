@@ -105,7 +105,7 @@ class AddLeadStatus implements
         $statuses = [
             'new'       => 'New',
             'qualified' => 'Qualified',
-            'canceled'  => 'Canceled'
+            'canceled'  => 'Disqualified'
         ];
         
         $i = 1;
