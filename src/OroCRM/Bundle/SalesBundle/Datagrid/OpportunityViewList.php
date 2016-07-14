@@ -32,8 +32,8 @@ class OpportunityViewList extends AbstractViewsList
             'type'          => GridView::TYPE_PUBLIC,
             'filters'       => [
                 'closeDate' => [
-                    'type'  => AbstractDateFilterType::TYPE_MORE_THAN,
-                    'value' => ['start' => '{{2}}', 'end' => '']
+                    'type'  => AbstractDateFilterType::TYPE_LESS_THAN,
+                    'value' => ['start' => '', 'end' => '{{2}}']
                 ],
                 'status' => [
                     'type'  => EnumFilterType::TYPE_NOT_IN,

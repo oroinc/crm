@@ -171,8 +171,8 @@ orocrm:
                 columns.metric_name: Metric Name
                 views:
                     open:            Open Opportunities
-                    overdue:         Overdue opportunities
-                    recently_closed: Recently Closed Opportunity
+                    overdue:         Overdue Opportunities
+                    recently_closed: Recently Closed Opportunities
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
