@@ -7,6 +7,12 @@ UPGRADE FROM 1.9 to 1.10
 - Class `OroCRM\Bundle\SalesBundle\Provider\OpportunityByStatusProvider` moved to `OroCRM\Bundle\SalesBundle\Dashboard\Provider\OpportunityByStatusProvider`. New argument: `OwnerHelper $ownerHelper`
 - B2bCustomer entity extended with 2 collection fields (emails, phones)
 
+#### OroCRMCallBundle:
+- The `duration` field in `OroCRM\Bundle\CallBundle\Entity\Call` is changed to `duration` DB type 
+from `DateTime` which accepts a (int) duration in seconds.
+Updating Call `duration` field (API POST/PUT, Forms) now accepts strings with formats '*HH*:*MM*:*SS*', '*HH*h *MM*m *SS*s' or `(int)` seconds
+Retrieving Call `duration` field (API GET) now returns `(int)` seconds instead of 'HH:MM:SS' formatted string
+
 ####OroCRMTaskBundle:
 - OroCRMTaskBundle moved to a separate package
 - OroCRMTaskBridgeBundle was added to integrate OroCRMTaskBundle into CRM

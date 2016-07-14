@@ -240,6 +240,7 @@ datagrid:
                 label:         oro.grid.action.delete
                 icon:          trash
                 link:          delete_link
+        views_list: "@orocrm_sales.opportunity.datagrid_view_list"
 
     sales-lead-grid:
         extended_entity_name: %orocrm_sales.lead.entity.class%
@@ -475,7 +476,7 @@ datagrid:
                 statusLabel:
                     type: entity
                     data_name: status.name
-                    enabled: false
+                    enabled: true
                     options:
                         field_options:
                             class: OroCRMSalesBundle:LeadStatus
@@ -575,6 +576,7 @@ datagrid:
                     options:
                         lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
                         data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+        views_list: "@orocrm_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:
         extended_entity_name: %orocrm_sales.salesfunnel.entity.class%

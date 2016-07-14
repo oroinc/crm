@@ -22,7 +22,8 @@ use OroCRM\Bundle\MagentoBundle\Model\ExtendNewsletterSubscriber;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "ownership"={
  *              "owner_type"="USER",
