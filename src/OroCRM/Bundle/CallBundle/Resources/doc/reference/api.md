@@ -31,7 +31,7 @@ $request = [
     "call" => [
         "subject"      => 'Subject',
         "owner"        => 1,
-        "duration"     => '00:00:05',
+        "duration"     => '00:01:05', // also can be "0h 1m 5s" or "65" (seconds)
         "direction"    => 'outgoing', // can be 'outgoing' or 'incoming'
         "callDateTime" => '2015-01-01T12:00:00',
         "phoneNumber"  => '123-123-123',
@@ -104,7 +104,7 @@ Content:
     "phoneNumber": "548-146-4418",
     "notes": null,
     "callDateTime": "2015-04-09T13:47:43+00:00",
-    "duration": "1970-01-01T01:26:07+00:00",
+    "duration": 265,
     "createdAt": "2015-04-09T13:47:43+00:00",
     "updatedAt": "2015-04-09T13:47:43+00:00",
     "owner": "michael.wagner_39d92",
@@ -118,7 +118,7 @@ Content:
     "phoneNumber": "307-204-8559",
     "notes": null,
     "callDateTime": "2015-04-09T13:47:43+00:00",
-    "duration": "1970-01-01T00:18:05+00:00",
+    "duration": 96,
     "createdAt": "2015-04-09T13:47:43+00:00",
     "updatedAt": "2015-04-09T13:47:43+00:00",
     "owner": "michael.hodges_97152",
@@ -161,7 +161,7 @@ Content:
    "phoneNumber": "969-943-7424",
    "notes": null,
    "callDateTime": "2015-04-09T13:47:43+00:00",
-   "duration": "1970-01-01T01:06:43+00:00",
+   "duration": 64,
    "createdAt": "2015-04-09T13:47:43+00:00",
    "updatedAt": "2015-04-09T13:47:43+00:00",
    "owner": "william.jacobs_9108d",

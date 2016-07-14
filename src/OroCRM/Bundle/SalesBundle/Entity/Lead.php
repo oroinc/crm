@@ -51,7 +51,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",
