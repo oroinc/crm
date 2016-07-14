@@ -48,7 +48,7 @@ class CreteLeadEmail implements Migration, OrderedMigrationInterface
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_9F15A0937E3C61F9', []);
-        $table->addIndex(['email', 'is_primary'], 'primary_email_idx', []);
+        $table->addIndex(['email', 'is_primary'], 'lead_primary_email_idx', []);
     }
 
     /**

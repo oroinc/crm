@@ -83,60 +83,73 @@
         {% set formFields = formFields|merge([form_row(form.owner)]) %}
     {% endif %}
 
-    {% set formFields = formFields|merge([
-        form_row(form.name),
-        form_row(form.status),
-        form_row(form.dataChannel),
-        form_row(form.namePrefix),
-        form_row(form.firstName),
-        form_row(form.middleName),
-        form_row(form.lastName),
-        form_row(form.nameSuffix),
-        form_row(form.contact),
-        form_row(form.jobTitle),
-        form_row(form.emails),
-        form_row(form.phones),
-        form_row(form.customer),
-        form_row(form.companyName),
-        form_row(form.website),
-        form_row(form.numberOfEmployees),
-        form_row(form.industry),
-        form_row(form.source),
-        form_row(form.notes),
-        form_row(form.campaign)
-    ]) %}
-
     {% set dataBlocks = [{
             'title': 'General'|trans,
             'class': 'active',
             'subblocks': [
                 {
                     'title': 'orocrm.sales.lead.information'|trans,
-                    'data': formFields
+                    'data': formFields|merge([
+                                form_row(form.name),
+                                form_row(form.status),
+                                form_row(form.companyName),
+                            ])
                 },
                 {
                     'data': [
-                        form_widget(form.addresses),
+                        form_row(form.source),
+                        form_row(form.campaign),
+                        form_row(form.notes)
                     ]
                 },
             ]
         }]
     %}
 
-    {% set additionalData = [] %}
+    {% set dataBlocks = dataBlocks|merge([{
+            'title': 'orocrm.sales.lead.contact_information'|trans,
+            'class': 'active',
+            'subblocks': [
+                {
+                    'data': [
+                        form_row(form.namePrefix),
+                        form_row(form.firstName),
+                        form_row(form.middleName),
+                        form_row(form.lastName),
+                        form_row(form.nameSuffix),
+                        form_row(form.jobTitle),
+                        form_row(form.emails),
+                        form_row(form.phones),
+                        form_row(form.contact),
+                        form_row(form.customer),
+                    ]
+                },
+                {
+                    'data': [
+                        form_widget(form.addresses)
+                    ]
+                },
+            ]
+        }] )
+    %}
+
+    {% set additionalData = [
+        form_row(form.website),
+        form_row(form.numberOfEmployees),
+        form_row(form.industry)
+    ] %}
     {% for child in form.children if child.vars.extra_field is defined and child.vars.extra_field %}
         {% set additionalData = additionalData|merge([form_row(child)]) %}
     {% endfor %}
-    {% if additionalData is not empty %}
-        {% set dataBlocks = dataBlocks|merge([{
+    {% set dataBlocks = dataBlocks|merge([{
             'title': 'Additional'|trans,
             'subblocks': [{
                 'title': '',
                 'useSpan': false,
                 'data' : additionalData
             }]
-        }] ) %}
-    {% endif %}
+        }] )
+    %}
 
     {% set data = {
         'formErrors': form_errors(form)? form_errors(form) : null,

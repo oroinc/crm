@@ -219,6 +219,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
+            contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
             customer.label:       Business Customer

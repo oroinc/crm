@@ -338,6 +338,8 @@ class Lead extends ExtendLead implements
 
     /**
      * @deprecated since 1.10. Use $addresses collection field instead
+     * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      */
     protected $address;
 

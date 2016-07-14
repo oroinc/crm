@@ -59,7 +59,8 @@ class LeadControllersTest extends AbstractDatagridTestCase
             $form->set($field);
         }
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_form[addresses][0][country]" id="orocrm_sales_lead_form_address_country" ' .
+            '<select name="orocrm_sales_lead_form[addresses][0][country]" ' .
+            'id="orocrm_sales_lead_form_address_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="US">United States</option> </select>'
