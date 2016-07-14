@@ -22,10 +22,11 @@ use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\WorkflowBundle\Entity\WorkflowItem;
 use Oro\Bundle\WorkflowBundle\Model\WorkflowManager;
 
-use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
 use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Migrations\Data\ORM\DefaultChannelData;
@@ -237,7 +238,10 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
-        $lead->setEmail($data['EmailAddress']);
+
+        $leadEmail = new LeadEmail($data['EmailAddress']);
+        $leadEmail->setPrimary(true);
+        $lead->addEmail($leadEmail);
 
         $leadPhone = new LeadPhone($data['TelephoneNumber']);
         $leadPhone->setPrimary(true);
