@@ -642,6 +642,7 @@ datagrid:
                     label: oro.business_unit.label
                     type: choice-business-unit
                     data_name: a.owner
+                    className: 'Oro\Bundle\OrganizationBundle\Entity\BusinessUnit'
                 createdAt:
                     type:      datetime
                     data_name: a.createdAt
