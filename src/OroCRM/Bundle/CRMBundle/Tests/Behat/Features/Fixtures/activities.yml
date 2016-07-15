@@ -1,0 +1,83 @@
+OroCRM\Bundle\ContactBundle\Entity\Contact:
+  contactCharlie:
+    firstName: Charlie
+    lastName: Sheen
+    email: charlie@sheen.com
+    owner: @admin
+    organization: @organization
+
+OroEntityProxy\OroEmailBundle\EmailAddressProxy:
+  charlieAddress:
+    owner: '@contactCharlie'
+    email: charlie@sheen.com
+    hasOwner: true
+
+Oro\Bundle\EmailBundle\Entity\EmailBody:
+  emailBody{1..10}:
+    bodyContent: '<sentences(3, true)>'
+    bodyIsText: true
+
+Oro\Bundle\EmailBundle\Entity\Email:
+  email{1..9}:
+    subject: '<sentence(6, true)>'
+    emailBody: @emailBody<current()>
+    sentAt: '<dateTimeBetween("-200 days", "now")>'
+    fromName: '"Charlie Sheen" <charlie@sheen.com>'
+    fromEmailAddress: '@charlieAddress'
+    internalDate: '<dateTimeBetween("-200 days", "now")>'
+    messageId: fsdfasdf
+    emailUsers: [@adminEmailUser<current()>]
+  email10:
+    subject: 'Merry Christmas'
+    emailBody: @emailBody10
+    sentAt: '<dateTimeBetween("2015-12-25", "2015-12-25")>'
+    fromName: '"Charlie Sheen" <charlie@sheen.com>'
+    fromEmailAddress: '@charlieAddress'
+    internalDate: '<dateTimeBetween("-200 days", "now")>'
+    messageId: fsdfasdf
+    emailUsers: [@adminEmailUser10]
+
+Oro\Bundle\EmailBundle\Entity\EmailUser:
+  adminEmailUser{1..10}:
+    email: @email<current()>
+    receivedAt: '<dateTimeBetween("-200 days", "now")>'
+    owner: @admin
+    organization: @organization
+
+Oro\Bundle\NoteBundle\Entity\Note:
+  note{1..10}:
+    message: '<sentences(3, true)>'
+    target: @contactCharlie
+    createdAt: '<dateTimeBetween("-200 days", "now")>'
+    updatedAt: '<dateTimeBetween($createdAt, "now")>'
+    owner: @admin
+    organization: @organization
+
+Oro\Bundle\CalendarBundle\Entity\CalendarEvent:
+  calendarEvent{1..10}:
+    title: '<sentence(6, true)>'
+    addActivityTarget: [@contactCharlie]
+    createdAt: '<dateTimeBetween("-200 days", "now")>'
+    updatedAt: '<dateTimeBetween($createdAt, "now")>'
+    start: '<dateTimeBetween($createdAt, $createdAt)>'
+    end: '<dateTimeBetween($createdAt, $createdAt)>'
+    allDay: false
+
+OroCRM\Bundle\CallBundle\Entity\Call:
+  call{1..10}:
+    subject: '<sentence(2, true)>'
+    addActivityTarget: [@contactCharlie]
+    phoneNumber: <e164PhoneNumber()>
+    notes: '<sentence(6, true)>'
+    createdAt: '<dateTimeBetween("-200 days", "now")>'
+    updatedAt: '<dateTimeBetween($createdAt, "now")>'
+    callDateTime: '<dateTimeBetween($createdAt, $createdAt)>'
+    organization: @organization
+
+OroCRM\Bundle\TaskBundle\Entity\Task:
+  task{1..10}:
+    subject: '<sentence(2, true)>'
+    addActivityTarget: [@contactCharlie]
+    createdAt: '<dateTimeBetween("-200 days", "now")>'
+    updatedAt: '<dateTimeBetween($createdAt, "now")>'
+    dueDate: '<dateTimeBetween($updatedAt, "now")>'
