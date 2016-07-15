@@ -430,7 +430,7 @@ class OroCRMSalesBundleInstaller implements
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_F0D0BDFA7E3C61F9', []);
         $table->addIndex(['phone', 'is_primary'], 'primary_b2bcustomer_phone_idx', []);
-        $table->addIndex(['phone'], 'phone_idx');
+        $table->addIndex(['phone'], 'b2bcustomer_phone_idx');
     }
 
     /**
@@ -447,7 +447,7 @@ class OroCRMSalesBundleInstaller implements
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_D564AB17E3C61F9', []);
-        $table->addIndex(['email', 'is_primary'], 'primary_email_idx', []);
+        $table->addIndex(['email', 'is_primary'], 'primary_b2bcustomer_email_idx', []);
     }
 
     /**

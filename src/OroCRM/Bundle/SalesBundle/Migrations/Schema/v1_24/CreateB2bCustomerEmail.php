@@ -34,7 +34,7 @@ class CreateB2bCustomerEmail implements Migration
         $table->addColumn('is_primary', 'boolean', ['notnull' => false]);
         $table->setPrimaryKey(['id']);
         $table->addIndex(['owner_id'], 'IDX_D564AB17E3C61F9', []);
-        $table->addIndex(['email', 'is_primary'], 'primary_email_idx', []);
+        $table->addIndex(['email', 'is_primary'], 'primary_b2bcustomer_email_idx', []);
     }
 
     /**
