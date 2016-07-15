@@ -403,7 +403,7 @@ class Lead extends AbstractPageEntity
             ->text();
     }
 
-    public function setAddress($data, $addressId = 0)
+    public function setAddress($data, $addressId = 1)
     {
         if ($this->isElementPresent("//button[@data-action-name='add_address']")) {
             // click Add address button
