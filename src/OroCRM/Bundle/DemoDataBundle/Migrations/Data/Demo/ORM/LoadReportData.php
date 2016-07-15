@@ -25,7 +25,7 @@ class LoadReportData extends AbstractFixture implements DependentFixtureInterfac
             'type' => ReportType::TYPE_TABLE,
             'owner' => 'Acme, General',
             'entity' => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
-            'definition' => '{"filters":[],"grouping_columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region_name"}],"columns":[{"name":"address+Oro\\\\Bundle\\\\AddressBundle\\\\Entity\\\\Address::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
+            'definition' => '{"filters":[],"grouping_columns":[{"name":"addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name"}],"columns":[{"name":"addresses+OroCRM\\\\Bundle\\\\SalesBundle\\\\Entity\\\\LeadAddress::region_name","label":"State","func":"","sorting":"ASC"},{"name":"id","label":"NUMBER OF LEADS","func":{"name":"Count","group_type":"aggregates","group_name":"number"},"sorting":""}]}'
         ],
     ];
     // @codingStandardsIgnoreEnd

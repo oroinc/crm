@@ -14,11 +14,24 @@ use OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages\Leads;
  */
 class CreateLeadTest extends Selenium2TestCase
 {
-    protected $address = array(
-        'label' => 'Address Label',
+    protected $addressPrimary = array(
+        'primary' => true,
+        'firstName' => 'Address First Name',
+        'lastName' => 'Address Last Name',
         'street' => 'Address Street',
         'city' => 'Address City',
-        'zipCode' => '10001',
+        'postalCode' => '10001',
+        'country' => 'United States',
+        'region' => 'New York'
+    );
+
+    protected $addressSecondary = array(
+        'primary' => false,
+        'firstName' => 'Address1 First Name',
+        'lastName' => 'Address1 Last Name',
+        'street' => 'Address1 Street',
+        'city' => 'Address1 City',
+        'postalCode' => '10001',
         'country' => 'United States',
         'region' => 'New York'
     );
@@ -29,6 +42,8 @@ class CreateLeadTest extends Selenium2TestCase
     public function testCreateLead()
     {
         $name = 'Lead_'.mt_rand();
+        $addressPrimary = array();
+        $addressSecondary = array();
         $login = $this->login();
         $channelName = $this->createChannel($login);
         /** @var Leads $login */
@@ -47,11 +62,22 @@ class CreateLeadTest extends Selenium2TestCase
             ->setWebsite('http://www.orocrm.com')
             ->setEmployees('100')
             ->setOwner('admin')
-            ->setAddress($this->address)
+            ->setAddress($this->addressPrimary, 1)
+            ->setAddress($this->addressSecondary, 2)
             ->save()
             ->assertMessage('Lead saved')
             ->toGrid()
-            ->assertTitle('All - Leads - Sales');
+            ->assertTitle('All - Leads - Sales')
+            ->close()
+            ->filterBy('Email', $name . '@mail.com')
+            ->open(array($name))
+            ->assertTitle($name . ' - Leads - Sales')
+            ->edit()
+            ->getAddress($addressPrimary)
+            ->getAddress($addressSecondary, 1);
+
+        static::assertEquals($this->addressPrimary, $addressPrimary);
+        static::assertEquals($this->addressSecondary, $addressSecondary);
 
         return $name;
     }

@@ -35,8 +35,8 @@ workflows:
                         class: OroCRM\Bundle\MagentoBundle\Entity\CartStatus
                         identifier: 'converted_to_opportunity'
                         attribute: $cart.status
-                    - '@find_entity':
-                        class:       OroCRM\Bundle\SalesBundle\Entity\OpportunityStatus
+                    - '@request_enum_entity':
+                        enum_code: opportunity_status
                         identifier:  'in_progress'
                         attribute:   $.result.opportunity_status
                     - '@create_entity': # create an opportunity
