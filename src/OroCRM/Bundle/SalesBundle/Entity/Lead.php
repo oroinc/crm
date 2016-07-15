@@ -841,7 +841,7 @@ class Lead extends ExtendLead implements
      */
     public function setPrimaryAddress(LeadAddress $address)
     {
-        if ($this->hasAddress($address)) {
+        if ($this->containsAddress($address)) {
             $address->setPrimary(true);
             /** @var LeadAddress $otherAddress */
             foreach ($this->getAddresses() as $otherAddress) {
@@ -868,7 +868,7 @@ class Lead extends ExtendLead implements
      * @param AbstractAddress $address
      * @return bool
      */
-    public function hasAddress(AbstractAddress $address)
+    public function containsAddress(AbstractAddress $address)
     {
         return $this->getAddresses()->contains($address);
     }
@@ -1280,7 +1280,7 @@ class Lead extends ExtendLead implements
      **
      * @param Collection|LeadEmail[] $emails
      *
-     * @return Contact
+     * @return Lead
      */
     public function resetEmails($emails)
     {
@@ -1298,7 +1298,7 @@ class Lead extends ExtendLead implements
      *
      * @param LeadEmail $email
      *
-     * @return Contact
+     * @return Lead
      */
     public function addEmail(LeadEmail $email)
     {
@@ -1315,7 +1315,7 @@ class Lead extends ExtendLead implements
      *
      * @param LeadEmail $email
      *
-     * @return Contact
+     * @return Lead
      */
     public function removeEmail(LeadEmail $email)
     {
@@ -1377,11 +1377,17 @@ class Lead extends ExtendLead implements
         return $result;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getClass()
     {
         return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getEmailFields()
     {
         return null;

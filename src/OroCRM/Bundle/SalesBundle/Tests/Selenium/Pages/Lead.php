@@ -9,6 +9,7 @@ use OroCRM\Bundle\ContactBundle\Tests\Selenium\Pages\Contacts;
  * Class Lead
  *
  * @package OroCRM\Bundle\SalesBundle\Tests\Selenium\Pages
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Lead extends AbstractPageEntity
 {

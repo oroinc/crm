@@ -13,6 +13,7 @@ class LeadType extends AbstractType
     /**
      * @param FormBuilderInterface $builder
      * @param array                $options
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
