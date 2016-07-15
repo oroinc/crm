@@ -1846,12 +1846,12 @@ datagrid:
                 select:
                     - l.id
                     - l.name
-                    - status.label as statusLabel
+                    - s.id as status
                 from:
                     - { table: %orocrm_sales.lead.entity.class%, alias: l }
                 join:
                     left:
-                        - { join: l.status, alias: status }
+                        - { join: l.status, alias: s }
         columns:
             name:
                 label: orocrm.sales.lead.name.label
@@ -1859,8 +1859,10 @@ datagrid:
                 type: link
                 route: orocrm_sales_lead_view
                 params: {id: id}
-            statusLabel:
-                label: orocrm.sales.opportunity.status.label
+            status:
+                frontend_type: select
+                label:         orocrm.sales.lead.status.label
+                choices:       "@oro_entity_extend.enum_value_provider->getEnumChoicesByCode('lead_status')"
         options:
             entityHint: opportunities
             toolbarOptions:

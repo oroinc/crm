@@ -306,7 +306,7 @@ services:
     orocrm_sales.type.lead_status_select:
         class: OroCRM\Bundle\SalesBundle\Form\Type\LeadStatusSelectType
         arguments:
-           - '@doctrine.orm.entity_manager'
+           - '@oro_entity_extend.enum_value_provider'
         tags:
             - { name: form.type, alias: orocrm_type_widget_lead_status_select }
 
