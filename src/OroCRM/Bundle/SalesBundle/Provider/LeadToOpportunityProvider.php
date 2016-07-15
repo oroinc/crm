@@ -78,6 +78,8 @@ class LeadToOpportunityProvider
             'middleName' => 'middleName',
             'namePrefix' => 'namePrefix',
             'nameSuffix' => 'nameSuffix',
+            'twitter' => 'twitter',
+            'linkedIn' => 'linkedIn',
             'owner' => 'owner',
             'source' => 'source'
         ],
