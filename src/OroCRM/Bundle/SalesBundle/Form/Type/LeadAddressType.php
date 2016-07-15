@@ -32,9 +32,9 @@ class LeadAddressType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(
-            array(
+            [
                 'data_class' => 'OroCRM\Bundle\SalesBundle\Entity\LeadAddress',
-            )
+            ]
         );
     }
     

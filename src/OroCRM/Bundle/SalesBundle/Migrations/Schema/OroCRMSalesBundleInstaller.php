@@ -320,7 +320,7 @@ class OroCRMSalesBundleInstaller implements
             'campaign',
             'orocrm_campaign',
             'combined_name',
-            ['extend' => ['owner' => ExtendScope::OWNER_SYSTEM]]
+            ['extend' => ['owner' => ExtendScope::OWNER_CUSTOM]]
         );
 
         $table->addIndex(['user_owner_id'], 'idx_73db46339eb185f9', []);
