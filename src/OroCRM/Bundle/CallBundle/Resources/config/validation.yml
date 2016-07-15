@@ -8,6 +8,12 @@ OroCRM\Bundle\CallBundle\Entity\Call:
             - DateTime: ~
         callStatus:
             - NotBlank: ~
+        duration:
+            - NotBlank: ~
+            - Range:
+                min: 0
+                max: 2147483647
+                maxMessage: 'Duration is too big.'
         direction:
             - NotBlank: ~
         phoneNumber:
