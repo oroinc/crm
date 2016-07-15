@@ -26,6 +26,20 @@
                 {% set customerView = entity.customer ? entity.customer|escape : '' %}
             {%- endif -%}
 
+            {%- set opportunitiesData -%}
+                {%- if entity.opportunities.count -%}
+                    {% set opportunityViewGranted = resource_granted('orocrm_sales_opportunity_view') %}
+                    {%- for opportunity in entity.opportunities -%}
+                        {%- if opportunityViewGranted -%}
+                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': opportunity.id}) }}">{{ opportunity }}</a>
+                        {%- else -%}
+                            {{ opportunity }}
+                        {%- endif -%}
+                        {% if not loop.last %}, {% endif %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endset -%}
+
             {{ ui.renderHtmlProperty('orocrm.sales.lead.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
@@ -40,6 +54,7 @@
             {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>
     </div>
 </div>
