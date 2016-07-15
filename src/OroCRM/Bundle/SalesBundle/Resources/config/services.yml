@@ -172,6 +172,12 @@ services:
         tags:
             - { name: oro_entity.name_provider, priority: 100 }
 
+    orocrm_sales.provider.b2bcustomer_entity_name:
+        class: OroCRM\Bundle\SalesBundle\Provider\B2bCustomerEntityNameProvider
+        public: false
+        tags:
+            - { name: oro_entity.name_provider, priority: 100 }
+
     orocrm_sales.provider.sales_funnel_entity_name:
         class: OroCRM\Bundle\SalesBundle\Provider\SalesFunnelEntityNameProvider
         public: false

@@ -21,8 +21,6 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
- * @SuppressWarnings(PHPMD.TooManyPublicMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
@@ -60,6 +58,9 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  *          }
  *      }
  * )
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class B2bCustomer extends ExtendB2bCustomer implements
     EmailOwnerInterface,
@@ -302,6 +303,8 @@ class B2bCustomer extends ExtendB2bCustomer implements
      * )
      */
     protected $emails;
+
+    protected $firstName;
 
     public function __construct()
     {
