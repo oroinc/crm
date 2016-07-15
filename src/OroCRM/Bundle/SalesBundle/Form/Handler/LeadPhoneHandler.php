@@ -67,7 +67,7 @@ class LeadPhoneHandler
         if (in_array($this->request->getMethod(), ['POST', 'PUT'])) {
             $form->submit($submitData);
 
-            $leadId = $this->request->request->get('leadId');
+            $leadId = $this->request->request->get('entityId');
             if ($form->isValid() && $leadId) {
                 $lead = $this->manager->find(
                     'OroCRMSalesBundle:Lead',

@@ -4,6 +4,14 @@
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
 {% import 'OroCRMSalesBundle::macros.html.twig' as sales %}
 
+{%- macro getSocialUrl(type, value) -%}
+    {% if value|slice(0, 5) == 'http:' or value|slice(0, 6) == 'https:' %}
+        {{ value }}
+    {% else %}
+        {{ oro_social_url(type, value) }}
+    {% endif %}
+{%- endmacro -%}
+
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
         <div class="responsive-block">
@@ -50,13 +58,33 @@
             {{ entityConfig.renderDynamicFields(entity) }}
         </div>
 
+        {%- set socialData -%}
+            {%- if entity.twitter or entity.linkedIn -%}
+                <ul class="list-inline">
+                    {% if entity.twitter %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('twitter', entity.twitter) }}" target="_blank" title="Twitter">
+                                <i class="icon-twitter"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                    {% if entity.linkedIn %}
+                        <li>
+                            <a class="no-hash" href="{{ _self.getSocialUrl('linked_in', entity.linkedIn) }}" target="_blank" title="LinkedIn">
+                                <i class="icon-linkedin"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            {%- endif -%}
+        {%- endset -%}
+
         <div class="responsive-block">
             {{ ui.renderHtmlProperty('orocrm.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.twitter.label'|trans, entity.twitter) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.linked_in.label'|trans, entity.linkedIn) }}
+            {{ ui.renderHtmlProperty('orocrm.contact.social.label'|trans, socialData) }}
             {{ ui.renderHtmlProperty('orocrm.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>
     </div>
