@@ -12,7 +12,7 @@ use Oro\Bundle\WorkflowBundle\Helper\WorkflowQueryTrait;
 class MagentoDeleteProvider implements DeleteProviderInterface
 {
     use WorkflowQueryTrait;
-    
+
     /** @var EntityManager */
     protected $em;
 
@@ -109,12 +109,17 @@ class MagentoDeleteProvider implements DeleteProviderInterface
             ->where('o.channel=:channel')
             ->setParameter('channel', $this->channel);
 
-        $ids = array_map(
-            function (array $record) {
-                return $record['id'];
-            },
-            $subQuery->getQuery()->getResult()
+        $ids = array_filter(
+            array_map(
+                function (array $record) {
+                    return $record['id'];
+                },
+                $subQuery->getQuery()->getResult()
+            )
         );
+        if (0 === count($ids)) {
+            return $this;
+        }
 
         $qbDel = $this->em->createQueryBuilder()->delete()->from(WorkflowItem::class, 'wi');
         $qbDel->where($qbDel->expr()->in('wi.id', $ids));
