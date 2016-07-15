@@ -87,14 +87,6 @@ class LeadType extends AbstractType
                     'required' => false,
                     'label' => 'orocrm.sales.lead.notes.label'
                 )
-            )
-            ->add(
-                'campaign',
-                'orocrm_campaign_select',
-                array(
-                    'required' => false,
-                    'label' => 'orocrm.sales.lead.campaign.label'
-                )
             );
     }
 
