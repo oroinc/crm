@@ -36,9 +36,13 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
             target_type:            text
             target_fields:          [companyName]
         -
-            name:                   email
-            target_type:            text
-            target_fields:          [email]
+            name:                   emails
+            relation_type:          one-to-many
+            relation_fields:
+                -
+                    name:           email
+                    target_type:    text
+                    target_fields:  [email]
         -
             name:                  dataChannel
             relation_type:         many-to-one
@@ -167,7 +171,7 @@ OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
 
 OroCRM\Bundle\SalesBundle\Entity\B2bCustomer:
     alias:                          orocrm_sales_b2bcustomer
-    title_fields:                   [name]
+    title_fields:                   [name, account]
     route:
         name:                       orocrm_sales_b2bcustomer_view
         parameters:

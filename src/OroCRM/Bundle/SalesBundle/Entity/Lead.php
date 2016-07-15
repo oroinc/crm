@@ -4,13 +4,16 @@ namespace OroCRM\Bundle\SalesBundle\Entity;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
 
-use Oro\Bundle\AddressBundle\Entity\Address;
+use Oro\Bundle\AddressBundle\Entity\AbstractAddress;
 use Oro\Bundle\DataAuditBundle\Metadata\Annotation as Oro;
+use Oro\Bundle\EmailBundle\Entity\EmailOwnerInterface;
 use Oro\Bundle\EmailBundle\Model\EmailHolderInterface;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\Config;
 use Oro\Bundle\EntityConfigBundle\Metadata\Annotation\ConfigField;
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use Oro\Bundle\UserBundle\Entity\User;
 use Oro\Bundle\LocaleBundle\Model\FullNameInterface;
@@ -50,7 +53,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="sales_data"
  *          },
  *          "form"={
  *              "form_type"="orocrm_sales_lead_select",
@@ -74,6 +78,7 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 class Lead extends ExtendLead implements
     FullNameInterface,
     EmailHolderInterface,
+    EmailOwnerInterface,
     ChannelAwareInterface
 {
     use ChannelEntityTrait;
@@ -226,41 +231,46 @@ class Lead extends ExtendLead implements
      * )
      */
     protected $jobTitle;
-
+    
     /**
-     * @var string
+     * @var Collection
      *
-     * @ORM\Column(name="phone_number", type="string", length=255, nullable=true)
-     * @Oro\Versioned
-     * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=90
-     *      }
-     *  }
-     * )
-     */
-    protected $phoneNumber;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=255, nullable=true)
-     * @Oro\Versioned
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadPhone", mappedBy="owner",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * ))
+     * @ORM\OrderBy({"primary" = "DESC"})
      * @ConfigField(
      *      defaultValues={
-     *          "dataaudit"={"auditable"=true},
      *          "importexport"={
-     *              "order"=100
+     *              "order"=220
      *          },
-     *          "entity"={
-     *              "contact_information"="email"
+     *          "dataaudit"={
+     *              "auditable"=true
      *          }
      *      }
      * )
      */
-    protected $email;
+    protected $phones;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadEmail",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "order"=210
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $emails;
 
     /**
      * @var string
@@ -327,21 +337,39 @@ class Lead extends ExtendLead implements
     protected $industry;
 
     /**
-     * @var Address
-     *
+     * @deprecated since 1.10. Use $addresses collection field instead
      * @ORM\ManyToOne(targetEntity="Oro\Bundle\AddressBundle\Entity\Address", cascade={"persist", "remove"})
      * @ORM\JoinColumn(name="address_id", referencedColumnName="id", onDelete="SET NULL", nullable=true)
      * @ConfigField(
-     *  defaultValues={
-     *      "dataaudit"={"auditable"=true},
-     *      "importexport"={
-     *          "order"=170,
-     *          "full"=true
+     *      defaultValues={
+     *          "importexport"={
+     *              "excluded"=true
+     *          }
      *      }
-     *  }
      * )
      */
     protected $address;
+
+    /**
+     * @var Collection
+     *
+     * @ORM\OneToMany(targetEntity="OroCRM\Bundle\SalesBundle\Entity\LeadAddress",
+     *    mappedBy="owner", cascade={"all"}, orphanRemoval=true
+     * )
+     * @ORM\OrderBy({"primary" = "DESC"})
+     * @ConfigField(
+     *      defaultValues={
+     *          "importexport"={
+     *              "full"=true,
+     *              "order"=170
+     *          },
+     *          "dataaudit"={
+     *              "auditable"=true
+     *          }
+     *      }
+     * )
+     */
+    protected $addresses;
 
     /**
      * @var \DateTime
@@ -469,6 +497,38 @@ class Lead extends ExtendLead implements
     protected $customer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=175
+     *          }
+     *      }
+     * )
+     */
+    protected $twitter;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=180
+     *          }
+     *      }
+     * )
+     */
+    protected $linkedIn;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -476,6 +536,9 @@ class Lead extends ExtendLead implements
         parent::__construct();
 
         $this->opportunities = new ArrayCollection();
+        $this->phones   = new ArrayCollection();
+        $this->emails   = new ArrayCollection();
+        $this->addresses = new ArrayCollection();
     }
 
     /**
@@ -645,54 +708,6 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * Set phone number
-     *
-     * @param string $phoneNumber
-     *
-     * @return Lead
-     */
-    public function setPhoneNumber($phoneNumber)
-    {
-        $this->phoneNumber = $phoneNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get phone number
-     *
-     * @return string
-     */
-    public function getPhoneNumber()
-    {
-        return $this->phoneNumber;
-    }
-
-    /**
-     * Set email
-     *
-     * @param string $email
-     *
-     * @return Lead
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get email
-     *
-     * @return string
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
      * Set company name
      *
      * @param string $companyName
@@ -789,26 +804,115 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * Get address
+     * Add address
      *
-     * @return Address
-     */
-    public function getAddress()
-    {
-        return $this->address;
-    }
-
-    /**
-     * Set address
-     *
-     * @param Address $address
+     * @param AbstractAddress $address
      *
      * @return Lead
      */
+    public function addAddress(AbstractAddress $address)
+    {
+        /** @var LeadAddress $address */
+        if (!$this->addresses->contains($address)) {
+            $this->addresses->add($address);
+            $address->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Gets primary address if it's available.
+     *
+     * @return LeadAddress|null
+     */
+    public function getPrimaryAddress()
+    {
+        $result = null;
+
+        /** @var LeadAddress $address */
+        foreach ($this->getAddresses() as $address) {
+            if ($address->isPrimary()) {
+                $result = $address;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param LeadAddress $address
+     *
+     * @return Lead
+     */
+    public function setPrimaryAddress(LeadAddress $address)
+    {
+        if ($this->containsAddress($address)) {
+            $address->setPrimary(true);
+            /** @var LeadAddress $otherAddress */
+            foreach ($this->getAddresses() as $otherAddress) {
+                if (!$address->isEqual($otherAddress)) {
+                    $otherAddress->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get addresses
+     *
+     * @return Collection|AbstractAddress[]
+     */
+    public function getAddresses()
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * @param AbstractAddress $address
+     * @return bool
+     */
+    public function containsAddress(AbstractAddress $address)
+    {
+        return $this->getAddresses()->contains($address);
+    }
+
+    /**
+     * Remove address
+     *
+     * @param AbstractAddress $address
+     * @return Lead
+     */
+    public function removeAddress(AbstractAddress $address)
+    {
+        if ($this->addresses->contains($address)) {
+            $this->addresses->removeElement($address);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @deprecated since 1.10
+     *
+     * @return bool
+     */
+    public function hasAddress()
+    {
+        return false;
+    }
+
+    /**
+     * @deprecated since 1.10
+     *
+     * @param $address
+     * @return $this
+     */
     public function setAddress($address)
     {
-        $this->address = $address;
-
         return $this;
     }
 
@@ -855,7 +959,7 @@ class Lead extends ExtendLead implements
     }
 
     /**
-     * Get contact last update date/time
+     * Get lead last update date/time
      *
      * @return \DateTime
      */
@@ -926,7 +1030,7 @@ class Lead extends ExtendLead implements
     /**
      * Get opportunities
      *
-     * @return Opportunity[]
+     * @return ArrayCollection
      */
     public function getOpportunities()
     {
@@ -1049,8 +1153,8 @@ class Lead extends ExtendLead implements
     {
         if (!$this->status) {
             $em = $eventArgs->getEntityManager();
-            /** @var LeadStatus $defaultStatus */
-            $defaultStatus = $em->getReference('OroCRMSalesBundle:LeadStatus', 'new');
+            $enumStatusClass = ExtendHelper::buildEnumValueClassName(static::INTERNAL_STATUS_CODE);
+            $defaultStatus = $em->getReference($enumStatusClass, 'new');
             $this->setStatus($defaultStatus);
         }
     }
@@ -1086,5 +1190,266 @@ class Lead extends ExtendLead implements
     public function removeCustomer()
     {
         $this->customer = null;
+    }
+
+    /**
+     * Set phones.
+     *
+     * This method could not be named setPhones because of bug CRM-253.
+     *
+     * @param Collection|LeadPhone[] $phones
+     *
+     * @return Lead
+     */
+    public function resetPhones($phones)
+    {
+        $this->phones->clear();
+
+        foreach ($phones as $phone) {
+            $this->addPhone($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function addPhone(LeadPhone $phone)
+    {
+        if (!$this->phones->contains($phone)) {
+            $this->phones->add($phone);
+            $phone->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove phone
+     *
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function removePhone(LeadPhone $phone)
+    {
+        if ($this->phones->contains($phone)) {
+            $this->phones->removeElement($phone);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get phones
+     *
+     * @return Collection|LeadPhone[]
+     */
+    public function getPhones()
+    {
+        return $this->phones;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return bool
+     */
+    public function hasPhone(LeadPhone $phone)
+    {
+        return $this->getPhones()->contains($phone);
+    }
+
+    /**
+     * Gets primary phone if it's available.
+     *
+     * @return LeadPhone|null
+     */
+    public function getPrimaryPhone()
+    {
+        $result = null;
+
+        foreach ($this->getPhones() as $phone) {
+            if ($phone->isPrimary()) {
+                $result = $phone;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param LeadPhone $phone
+     *
+     * @return Lead
+     */
+    public function setPrimaryPhone(LeadPhone $phone)
+    {
+        if ($this->hasPhone($phone)) {
+            $phone->setPrimary(true);
+            foreach ($this->getPhones() as $otherPhone) {
+                if (!$phone->isEqual($otherPhone)) {
+                    $otherPhone->setPrimary(false);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set emails.
+     **
+     * @param Collection|LeadEmail[] $emails
+     *
+     * @return Lead
+     */
+    public function resetEmails($emails)
+    {
+        $this->emails->clear();
+
+        foreach ($emails as $email) {
+            $this->addEmail($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add email
+     *
+     * @param LeadEmail $email
+     *
+     * @return Lead
+     */
+    public function addEmail(LeadEmail $email)
+    {
+        if (!$this->emails->contains($email)) {
+            $this->emails->add($email);
+            $email->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove email
+     *
+     * @param LeadEmail $email
+     *
+     * @return Lead
+     */
+    public function removeEmail(LeadEmail $email)
+    {
+        if ($this->emails->contains($email)) {
+            $this->emails->removeElement($email);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get emails
+     *
+     * @return Collection|LeadEmail[]
+     */
+    public function getEmails()
+    {
+        return $this->emails;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        $primaryEmail = $this->getPrimaryEmail();
+        if (!$primaryEmail) {
+            return null;
+        }
+
+        return $primaryEmail->getEmail();
+    }
+
+    /**
+     * @param LeadEmail $email
+     * @return bool
+     */
+    public function hasEmail(LeadEmail $email)
+    {
+        return $this->getEmails()->contains($email);
+    }
+
+    /**
+     * Gets primary email if it's available.
+     *
+     * @return LeadEmail|null
+     */
+    public function getPrimaryEmail()
+    {
+        $result = null;
+
+        foreach ($this->getEmails() as $email) {
+            if ($email->isPrimary()) {
+                $result = $email;
+                break;
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getClass()
+    {
+        return 'OroCRM\Bundle\SalesBundle\Entity\Lead';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmailFields()
+    {
+        return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @param string $twitter
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkedIn()
+    {
+        return $this->linkedIn;
+    }
+
+    /**
+     * @param string $linkedIn
+     */
+    public function setLinkedIn($linkedIn)
+    {
+        $this->linkedIn = $linkedIn;
     }
 }

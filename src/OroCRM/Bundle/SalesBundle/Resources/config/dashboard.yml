@@ -24,10 +24,17 @@ oro_dashboard_config:
             icon:        bundles/orocrmsales/img/opportunities_by_lead_source.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
             configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
                 dateRange:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         opportunities_by_state:
             label:       orocrm.sales.dashboard.opportunities_by_state.title
@@ -37,11 +44,35 @@ oro_dashboard_config:
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
             configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
                 dateRange:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
+                excluded_statuses:
+                    type: orocrm_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_by_state.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.placeholder
+                useQuantityAsData:
+                    type: choice
+                    options:
+                        label: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.label
+                        tooltip: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.tooltip
+                        required: true
+                        choices:
+                            0: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.amount
+                            1: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.count
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart
@@ -54,6 +85,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_leads:
             label:       orocrm.campaign.dashboard.campaigns_leads.title
@@ -67,6 +99,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_opportunity:
             label:       orocrm.campaign.dashboard.campaigns_opportunity.title
@@ -80,6 +113,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         campaigns_by_close_revenue:
             label:       orocrm.campaign.dashboard.campaigns_by_close_revenue.title
@@ -93,6 +127,7 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
         forecast_of_opportunities:
             label:       orocrm.sales.dashboard.forecast_of_opportunities.title
@@ -119,21 +154,21 @@ oro_dashboard_config:
                     acl:           orocrm_sales_opportunity_view
                     template:      OroCRMSalesBundle:Dashboard:forecastOfOpportunitiesSubwidget.html.twig
             configuration:
-                businessUnits:
-                    type: oro_type_widget_business_unit_select
-                    show_on_widget: true
-                    aclClass: %orocrm_sales.opportunity.class%
-                    aclPermission: VIEW
-                    options:
-                        label: orocrm.sales.dashboard.forecast_of_opportunities.business_unit
-                        required: false
-                        autocomplete_alias: forecast_widget_business_units
                 owners:
-                    type: oro_type_widget_user_multiselect
+                    type: oro_type_widget_owners
                     show_on_widget: true
                     options:
-                        label: orocrm.sales.dashboard.forecast_of_opportunities.owner
+                        label: oro.user.dashboard.owners
                         required: false
+                dateRange:
+                    type: oro_type_widget_date_range
+                    options:
+                       label: oro.dashboard.date_range.label
+                       value_types: true
+                    show_on_widget: true
+                    converter_attributes:
+                        save_open_range: true
+                        create_previous_period: true
                 compareToDate:
                     type: oro_type_widget_date
                     options:
@@ -188,10 +223,17 @@ oro_dashboard_config:
                     acl:           orocrm_sales_opportunity_view
                     template:      OroDashboardBundle:Dashboard:bigNumberSubwidget.html.twig
             configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
                 dateRange:
                     type: oro_type_widget_date_range
                     options:
                        label: oro.dashboard.date_range.label
+                       value_types: true
                     show_on_widget: true
                 usePreviousInterval:
                     type: oro_type_widget_previous_date_range
@@ -220,4 +262,67 @@ oro_dashboard_config:
                     type: oro_type_widget_date_range
                     options:
                         label: oro.dashboard.date_range.label
+                        value_types: true
+                        all_time_value: false
                     show_on_widget: true
+        opportunities_list:
+            label:       orocrm.sales.dashboard.opportunities_list.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: opportunitiesList }
+            acl:         orocrm_sales_opportunity_view
+            description: orocrm.sales.dashboard.opportunities_list.description
+            icon:       bundles/orocrmsales/img/opportunity_by_status.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: orocrm_type_widget_opportunity_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.opportunities_list.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - won
+                            - lost
+
+        leads_list:
+            label:       orocrm.sales.dashboard.leads_list.title
+            route:       oro_dashboard_widget
+            route_parameters: { bundle: OroCRMSalesBundle, name: leadsList }
+            acl:         orocrm_sales_lead_view
+            description: orocrm.sales.dashboard.leads_list.description
+            icon:       bundles/orocrmsales/img/opportunities_by_lead_source.png
+            configuration:
+                owners:
+                    type: oro_type_widget_owners
+                    show_on_widget: true
+                    options:
+                        label: oro.user.dashboard.owners
+                        required: false
+                    converter_attributes:
+                        default_selected:
+                            users:
+                                - current_user
+                excluded_statuses:
+                    type: orocrm_type_widget_lead_status_select
+                    show_on_widget: true
+                    options:
+                        label:  orocrm.sales.dashboard.leads_list.excluded_statuses.label
+                        required: false
+                        configs:
+                            placeholder:  orocrm.sales.dashboard.leads_list.excluded_statuses.placeholder
+                    converter_attributes:
+                        default_selected:
+                            - canceled
+                            - qualified

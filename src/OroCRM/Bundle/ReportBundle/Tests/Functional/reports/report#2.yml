@@ -8,7 +8,7 @@ request:
         oro_report_form[definition]: >
                 {"columns":[{"name":"email","label":"Email","func":null,"sorting":""},
                 {"name":"companyName","label":"Company name","func":null,"sorting":"ASC"},
-                {"name":"address+Oro\\Bundle\\AddressBundle\\Entity\\Address::city","label":"City","func":null,"sorting":""},
+                {"name":"addresses+OroCRM\\Bundle\\SalesBundle\\Entity\\LeadAddress::city","label":"City","func":null,"sorting":""},
                 {"name":"opportunities+OroCRM\\Bundle\\SalesBundle\\Entity\\Opportunity::name","label":"Opportunity name","func":null,"sorting":""},
                 {"name":"status+OroCRM\\Bundle\\SalesBundle\\Entity\\LeadStatus::label","label":"Label","func":null,"sorting":""},
                 {"name":"contact+OroCRM\\Bundle\\ContactBundle\\Entity\\Contact::emails+OroCRM\\Bundle\\ContactBundle\\Entity\\ContactEmail::email",

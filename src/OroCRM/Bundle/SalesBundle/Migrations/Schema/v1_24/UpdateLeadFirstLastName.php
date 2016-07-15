@@ -19,5 +19,4 @@ class UpdateLeadFirstLastName implements Migration
         $leadTable->getColumn('last_name')->setNotnull(false);
         $leadTable->getColumn('first_name')->setNotnull(false);
     }
-
 }

@@ -1,3 +1,4 @@
+"New Contact Information": "New Contact Information"
 oro:
     dashboard:
         my_sales_flow:
@@ -46,6 +47,14 @@ orocrm:
             opportunities_by_state:
                 title:       Opportunities by Status
                 description: This widget displays a breakdown of opportunities by status in form of a bar chart.
+                quantity_as_data:
+                    label: Display data
+                    tooltip: 'Choose which data to display on the chart: Count shows the number of opportunities in a particular status, and Amount displays their total budget.'
+                    amount: Amount
+                    count:  Count
+                excluded_statuses:
+                    label: Excluded statuses
+                    placeholder: Choose statuses to exclude
             my_sales_flow_b2b_chart:
                 title:       My Sales Flow B2B
                 description: This widget gives you a quick overview of a B2B workflow in form of a funnel chart.
@@ -61,9 +70,22 @@ orocrm:
                 metrics: Metrics
                 no_changes: No Changes
                 no_available_metrics: No available metrics
+                role: Role
                 owner: Owner
                 compareToDate: Compare to Date
                 business_unit: Business Unit
+            opportunities_list:
+                title: Opportunities List
+                description: This widget displays the list of opportunities that can be configured to show only opportunities in certain conditions, e.g. only open opportunities that are owned by the current user.
+                excluded_statuses:
+                    label: Excluded statuses
+                    placeholder: Choose statuses to exclude
+            leads_list:
+                title: Leads List
+                description: This widget displays the list of leads that can be configured to show only leads in certain conditions, e.g. only open leads that are owned by the current user.
+                excluded_statuses:
+                    label: Excluded statuses
+                    placeholder: Choose statuses to exclude
         menu:
             sales_tab.label: Sales
             lead_list.description: List of leads
@@ -90,6 +112,8 @@ orocrm:
             choose_lead:        Choose a lead....
             choose_b2bcustomer: Choose a customer....
             choose_close_rsn:   Choose a close reason...
+            tooltip:
+                account: Choose customer account the Opportunity will be related to. Account name is displayed in parentheses if it differs from the customer name. To create a new customer account, type their name into the control and choose option marked as New.
 
         #
         # OroCRM/Bundle/SalesBundle/Entity/LeadStatus.php
@@ -134,7 +158,7 @@ orocrm:
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             organization.label:   Organization
-            customer.label:       Business Customer
+            customer.label:       Account
             data_channel.label:   Channel
             assigned.label:       Assigned
             created_at.label:     Created At
@@ -146,6 +170,10 @@ orocrm:
                 update:   Update
                 delete:   Delete
                 columns.metric_name: Metric Name
+                views:
+                    open:            Open Opportunities
+                    overdue:         Overdue Opportunities
+                    recently_closed: Recently Closed Opportunities
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -172,7 +200,9 @@ orocrm:
             name_suffix.label:    Name suffix
             job_title.label:      Job title
             phone_number.label:   Phone number
+            phones.label:         Phones
             email.label:          Email
+            emails.label:         Emails
             company_name.label:   Company name
             website.label:        Website
             number_of_employees.label: Number of employees
@@ -181,13 +211,18 @@ orocrm:
             contact.label:        Contact
             owner.label:          Owner
             address.label:        Address
+            addresses.label:      Address
+            add_address.label:    Add Address
             details.label:        Lead Details
             source.label:         Source
             notes.label:          Additional comments
+            twitter.label:        Twitter
+            linked_in.label:      LinkedIn
             opportunities.label:  Opportunities
             workflow_item.label:  Workflow Item
             workflow_step.label:  Step
             information:          Lead Information
+            contact_information:  Contact Information
             campaign.label:       Campaign
             organization.label:   Organization
             customer.label:       Business Customer
@@ -197,6 +232,10 @@ orocrm:
                 unclassified:     Unclassified
                 others:           Others
                 none:             None
+            status:
+                change_error_message:  Unable to change lead status.
+            convert:
+                 error:           Unable to convert lead to opportunity
 
             datagrid:
                 number_of_employees: '# of employees'
@@ -208,6 +247,62 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+                views:
+                    open:            Open Leads
+
+        #
+        # Entity oroCRM\Bundle\SalesBundle\Entity\LeadAddress
+        #
+        leadaddress:
+            city.label:          City
+            country.label:       Country
+            entity_description:  Represent lead's address
+            entity_label:        Lead Address
+            entity_plural_label: Lead Addresses
+            first_name.label:    First name
+            id.label:            Id
+            label.label:         Label
+            last_name.label:     Last name
+            middle_name.label:   Middle name
+            name_prefix.label:   Name prefix
+            name_suffix.label:   Name suffix
+            organization.label:  Organization
+            owner.label:         Owner
+            postal_code.label:   Zip/postal code
+            primary.label:       Primary
+            region.label:        State
+            region_text.label:   State
+            street.label:        Street
+            street2.label:       Street 2
+            country_name.label:      Country name
+            country_iso2_code.label: Country ISO2 code
+            country_iso3_code.label: Country ISO3 code
+            region_name.label:       State name
+            region_code.label:       State ISO code
+
+        #
+        # Entity OroCRM/Bundle/SalesBundle/Entity/LeadPhone.php
+        #
+        leadphone:
+            entity_description:  Represent lead's phone
+            entity_label:        Lead Phone
+            entity_plural_label: Lead Phones
+            id.label:            Id
+            owner.label:         Owner
+            phone.label:         Phone
+            primary.label:       Primary
+
+        #
+        # Entity OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+        #
+        leademail:
+            email.label:         Email
+            entity_description:  Represent lead's email
+            entity_label:        Lead Email
+            entity_plural_label: Lead Emails
+            id.label:            Id
+            owner.label:         Owner
+            primary.label:       Primary
 
         salesfunnel:
             entity_label:         Sales Process
@@ -237,7 +332,7 @@ orocrm:
             entity_plural_label:        Business Customers
             entity_description:         Represent business customer
             id.label:                   Id
-            name.label:                 Name
+            name.label:                 Customer name
             lifetime.label:             Lifetime sales value
             shipping_address.label:     Shipping Address
             billing_address.label:      Billing Address
@@ -290,3 +385,6 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        privilege:
+            category.sales_data.label: Sales Data

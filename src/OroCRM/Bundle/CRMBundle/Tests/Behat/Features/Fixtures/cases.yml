@@ -1,0 +1,6 @@
+OroCRM\Bundle\CaseBundle\Entity\CaseEntity:
+  case-{1..10}:
+    subject: '<words(3, true)>'
+    description: '<sentences(3, true)>'
+    owner: '@admin'
+    organization: '@organization'

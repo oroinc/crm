@@ -16,7 +16,9 @@ class LeadPhoneProvider implements PhoneProviderInterface
      */
     public function getPhoneNumber($object)
     {
-        return $object->getPhoneNumber();
+        $primaryPhone = $object->getPrimaryPhone();
+
+        return $primaryPhone ? $primaryPhone->getPhone() : null;
     }
 
     /**
@@ -30,9 +32,8 @@ class LeadPhoneProvider implements PhoneProviderInterface
     {
         $result = [];
 
-        $phone = $object->getPhoneNumber();
-        if (!empty($phone)) {
-            $result[] = [$phone, $object];
+        foreach ($object->getPhones() as $phone) {
+            $result[] = [$phone->getPhone(), $object];
         }
 
         return $result;

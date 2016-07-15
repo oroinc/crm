@@ -2,6 +2,7 @@
 {% import 'OroEmailBundle::macros.html.twig' as email %}
 {% import 'OroEntityConfigBundle::macros.html.twig' as entityConfig %}
 {% import 'OroCRMChannelBundle::macros.html.twig' as channel %}
+{% import 'OroCRMSalesBundle::macros.html.twig' as sales %}
 
 <div class="widget-content">
     <div class="row-fluid form-horizontal">
@@ -26,6 +27,20 @@
                 {% set customerView = entity.customer ? entity.customer|escape : '' %}
             {%- endif -%}
 
+            {%- set opportunitiesData -%}
+                {%- if entity.opportunities.count -%}
+                    {% set opportunityViewGranted = resource_granted('orocrm_sales_opportunity_view') %}
+                    {%- for opportunity in entity.opportunities -%}
+                        {%- if opportunityViewGranted -%}
+                            <a href="{{ path('orocrm_sales_opportunity_view', {'id': opportunity.id}) }}">{{ opportunity }}</a>
+                        {%- else -%}
+                            {{ opportunity }}
+                        {%- endif -%}
+                        {% if not loop.last %}, {% endif %}
+                    {%- endfor -%}
+                {%- endif -%}
+            {%- endset -%}
+
             {{ ui.renderHtmlProperty('orocrm.sales.lead.customer.label'|trans, customerView) }}
             {{ ui.renderProperty('orocrm.sales.lead.company_name.label'|trans, entity.companyName) }}
             {{ ui.renderProperty('orocrm.sales.lead.industry.label'|trans, entity.industry) }}
@@ -36,10 +51,13 @@
         </div>
 
         <div class="responsive-block">
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.email.label'|trans, entity.email ? email.renderEmailWithActions(entity.email, entity) : null) }}
-            {{ ui.renderHtmlProperty('orocrm.sales.lead.phone_number.label'|trans, entity.phoneNumber ? ui.renderPhoneWithActions(entity.phoneNumber, entity) : null) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.emails.label'|trans, sales.renderCollectionWithPrimaryElement(entity.emails, true, entity)) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.phones.label'|trans, sales.renderCollectionWithPrimaryElement(entity.phones, false, entity)) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.website.label'|trans, entity.website ? ui.renderUrl(entity.website, entity.website, 'no-hash') : null) }}
             {{ ui.renderHtmlProperty('orocrm.sales.lead.notes.label'|trans, entity.notes) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.twitter.label'|trans, entity.twitter) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.lead.linked_in.label'|trans, entity.linkedIn) }}
+            {{ ui.renderHtmlProperty('orocrm.sales.opportunity.entity_label'|trans, opportunitiesData) }}
         </div>
     </div>
 </div>

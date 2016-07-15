@@ -1,4 +1,5 @@
 <?php
+
 namespace OroCRM\Bundle\DemoDataBundle\Migrations\Data\Demo\ORM;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -13,19 +14,17 @@ use Doctrine\ORM\EntityManager;
 use Oro\Bundle\AddressBundle\Entity\Address;
 use Oro\Bundle\AddressBundle\Entity\Country;
 use Oro\Bundle\AddressBundle\Entity\Region;
-
 use Oro\Bundle\EntityConfigBundle\Config\ConfigManager;
-
 use Oro\Bundle\EntityExtendBundle\Entity\AbstractEnumValue;
 use Oro\Bundle\EntityExtendBundle\Entity\Repository\EnumValueRepository;
 use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
-
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
-use Oro\Bundle\UserBundle\Entity\User;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
+use OroCRM\Bundle\SalesBundle\Entity\Lead;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
+use Oro\Bundle\UserBundle\Entity\User;
 
 class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, DependentFixtureInterface
 {
@@ -184,21 +183,30 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setName($data['Company']);
         $lead->setFirstName($data['GivenName']);
         $lead->setLastName($data['Surname']);
-        $lead->setEmail($data['EmailAddress']);
-        $lead->setPhoneNumber($data['TelephoneNumber']);
+
+        $phone = new LeadPhone($data['TelephoneNumber']);
+        $phone->setPrimary(true);
+        $lead->addPhone($phone);
+
+        $email = new LeadEmail($data['EmailAddress']);
+        $email->setPrimary(true);
+        $lead->addEmail($email);
+
         $lead->setCompanyName($data['Company']);
         $lead->setOwner($user);
         $lead->setOrganization($this->organization);
         $lead->setDataChannel($this->getReference('default_channel'));
+        $lead->setTwitter($data['Twitter']);
 
-        /** @var Address $address */
-        $address = new Address();
+        /** @var LeadAddress $address */
+        $address = new LeadAddress();
         $address->setLabel('Primary Address');
         $address->setCity($data['City']);
         $address->setStreet($data['StreetAddress']);
         $address->setPostalCode($data['ZipCode']);
         $address->setFirstName($data['GivenName']);
         $address->setLastName($data['Surname']);
+        $address->setPrimary(true);
 
         $isoCode = $data['Country'];
         $country = array_filter(
@@ -227,7 +235,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
             $address->setRegion($region->first());
         }
 
-        $lead->setAddress($address);
+        $lead->addAddress($address);
 
         return $lead;
     }

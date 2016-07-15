@@ -66,7 +66,7 @@ class CallType extends AbstractType
             )
             ->add(
                 'callStatus',
-                'entity',
+                'translatable_entity',
                 [
                     'required' => true,
                     'label'    => 'orocrm.call.call_status.label',
@@ -75,7 +75,7 @@ class CallType extends AbstractType
             )
             ->add(
                 'duration',
-                'oro_time_interval',
+                'oro_duration',
                 [
                     'required' => false,
                     'label'    => 'orocrm.call.duration.label'

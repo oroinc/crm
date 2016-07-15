@@ -1,0 +1,25 @@
+Oro\Bundle\UserBundle\Entity\User:
+  user-1:
+    firstName: Todd
+    lastName: Greene
+    username (unique): <username()>
+    organization: '@organization'
+    organizations: ['@organization']
+    roles: ['@adminRole']
+    owner: '@business_unit'
+    businessUnits: ['@business_unit']
+    email (unique): <email()>
+    password: xWDhRLrhauLm8TxT16NguuRAyFmsYf/Qxbe9B5gBcI5sC26gO/qExjVwUE0Ol/+6z8fS0Ae5X2sTP0hVgBYYIg==
+    salt: ioazi9tx61sk8c4k088c0kwk0sg00s4
+  user-2:
+    firstName: Harry
+    lastName: Freeman
+    username (unique): <username()>
+    organization: '@organization'
+    organizations: ['@organization']
+    roles: ['@adminRole']
+    owner: '@business_unit'
+    businessUnits: ['@business_unit']
+    email (unique): <email()>
+    password: xWDhRLrhauLm8TxT16NguuRAyFmsYf/Qxbe9B5gBcI5sC26gO/qExjVwUE0Ol/+6z8fS0Ae5X2sTP0hVgBYYIg==
+    salt: ioazi9tx61sk8c4k088c0kwk0sg00s4

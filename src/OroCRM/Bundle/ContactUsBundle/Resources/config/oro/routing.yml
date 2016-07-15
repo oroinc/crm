@@ -2,3 +2,13 @@ orocrm_contactus:
     resource: "@OroCRMContactUsBundle/Controller"
     type:     annotation
     prefix:   /contact-us
+
+orocrm_contactus_api:
+    resource:     "@OroCRMContactUsBundle/Resources/config/oro/routing_api.yml"
+    type:         rest
+    prefix:       api/rest/{version}
+    requirements:
+        version:  latest|v1
+        _format:  json
+    defaults:
+        version:  latest
