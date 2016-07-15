@@ -11,11 +11,6 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 class LeadType extends AbstractType
 {
     /**
-     * @var string
-     */
-    protected $dataClass = 'OroCRM\Bundle\SalesBundle\Entity\Lead';
-
-    /**
      * @param FormBuilderInterface $builder
      * @param array                $options
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -130,15 +125,6 @@ class LeadType extends AbstractType
             ->add('linkedIn', 'text', array('required' => false, 'label' => 'orocrm.sales.lead.linked_in.label'));
     }
 
-
-    /**
-     * @param string $dataClass
-     */
-    public function setDataClass($dataClass)
-    {
-        $this->dataClass = $dataClass;
-    }
-
     /**
      * @param OptionsResolverInterface $resolver
      */
@@ -146,7 +132,7 @@ class LeadType extends AbstractType
     {
         $resolver->setDefaults(
             array(
-                'data_class'         => $this->dataClass,
+                'data_class'         => 'OroCRM\Bundle\SalesBundle\Entity\Lead',
                 'cascade_validation' => true,
             )
         );

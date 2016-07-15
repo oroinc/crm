@@ -44,6 +44,17 @@ OroCRM\Bundle\SalesBundle\Entity\Lead:
         organization:
             - NotBlank: ~
 
+OroCRM\Bundle\SalesBundle\Entity\LeadAddress:
+    constraints:
+        - Oro\Bundle\AddressBundle\Validator\Constraints\ValidRegion: { groups: ['RequirePeriod'] }
+    properties:
+        street:
+            - NotBlank: ~
+        city:
+            - NotBlank: ~
+        postalCode:
+            - NotBlank: ~
+
 OroCRM\Bundle\SalesBundle\Entity\SalesFunnel:
     properties:
         startDate:
