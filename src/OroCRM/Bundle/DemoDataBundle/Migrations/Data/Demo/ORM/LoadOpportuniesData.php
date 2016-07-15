@@ -8,6 +8,7 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 
+use Oro\Bundle\EntityExtendBundle\Tools\ExtendHelper;
 use Oro\Bundle\SecurityBundle\Authentication\Token\UsernamePasswordOrganizationToken;
 
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -97,6 +98,11 @@ class LoadOpportunitiesData extends AbstractDemoFixture implements DependentFixt
         $opportunity->setCustomer($customer);
         $opportunity->setDataChannel($dataChannel);
 
+        $opportunityStatuses = ['in_progress', 'lost', 'needs_analysis', 'won'];
+        $statusName = $opportunityStatuses[array_rand($opportunityStatuses)];
+        $enumClass = ExtendHelper::buildEnumValueClassName(Opportunity::INTERNAL_STATUS_CODE);
+        $opportunity->setStatus($this->em->getReference($enumClass, $statusName));
+        
         return $opportunity;
     }
 }

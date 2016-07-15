@@ -31,7 +31,8 @@ use OroCRM\Bundle\MarketingListBundle\Entity\MarketingListItem;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="marketing"
  *          }
  *      }
  * )

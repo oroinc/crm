@@ -13,8 +13,6 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  * @ORM\Table(name="orocrm_analytics_rfm_category")
  * @Config(
  *  defaultValues={
- *      "entity"={
- *      },
  *      "ownership"={
  *          "owner_type"="ORGANIZATION",
  *          "owner_field_name"="owner",
@@ -22,7 +20,8 @@ use OroCRM\Bundle\ChannelBundle\Entity\Channel;
  *      },
  *      "security"={
  *          "type"="ACL",
- *          "group_name"=""
+ *          "group_name"="",
+ *          "category"="account_management"
  *      }
  *  }
  * )

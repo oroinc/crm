@@ -169,6 +169,10 @@ orocrm:
                 update:   Update
                 delete:   Delete
                 columns.metric_name: Metric Name
+                views:
+                    open:            Open Opportunities
+                    overdue:         Overdue Opportunities
+                    recently_closed: Recently Closed Opportunities
         #
         # OroCRM/Bundle/SalesBundle/Entity/OpportunityCloseReason.php
         #
@@ -231,6 +235,8 @@ orocrm:
                 view: View
                 update: Update
                 delete: Delete
+                views:
+                    open:            Open Leads
 
         salesfunnel:
             entity_label:         Sales Process
@@ -313,3 +319,6 @@ orocrm:
             source.label:            Source
             channel.label:           Channel
             owner.label:             Owner
+
+        privilege:
+            category.sales_data.label: Sales Data

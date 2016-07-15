@@ -38,7 +38,8 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
  *          },
  *          "security"={
  *              "type"="ACL",
- *              "group_name"=""
+ *              "group_name"="",
+ *              "category"="account_management"
  *          },
  *          "grouping"={
  *              "groups"={"activity"}
@@ -59,7 +60,7 @@ use OroCRM\Bundle\CallBundle\Model\ExtendCall;
 class Call extends ExtendCall implements DatesAwareInterface
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
@@ -118,10 +119,10 @@ class Call extends ExtendCall implements DatesAwareInterface
     protected $callStatus;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="duration", type="time", nullable=true)
-     * @Soap\ComplexType("dateTime", nillable=true)
+     * @ORM\Column(name="duration", type="duration", nullable=true)
+     * @Soap\ComplexType("int", nillable=true)
      */
     protected $duration;
 
@@ -180,13 +181,13 @@ class Call extends ExtendCall implements DatesAwareInterface
     {
         parent::__construct();
         $this->callDateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        $this->duration = new \DateTime('00:00:00', new \DateTimeZone('UTC'));
+        $this->duration = 0;
     }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -288,7 +289,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Set duration
      *
-     * @param \DateTime $duration
+     * @param int $duration
      * @return Call
      */
     public function setDuration($duration)
@@ -301,7 +302,7 @@ class Call extends ExtendCall implements DatesAwareInterface
     /**
      * Get duration
      *
-     * @return \DateTime
+     * @return int
      */
     public function getDuration()
     {
