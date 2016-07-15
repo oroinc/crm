@@ -196,6 +196,7 @@ class LoadLeadsData extends AbstractFixture implements ContainerAwareInterface, 
         $lead->setOwner($user);
         $lead->setOrganization($this->organization);
         $lead->setDataChannel($this->getReference('default_channel'));
+        $lead->setTwitter($data['Twitter']);
 
         /** @var LeadAddress $address */
         $address = new LeadAddress();

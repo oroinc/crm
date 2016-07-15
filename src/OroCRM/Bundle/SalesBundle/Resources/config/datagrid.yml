@@ -271,6 +271,8 @@ datagrid:
                     - l.industry
                     - l.website
                     - l.numberOfEmployees
+                    - l.twitter
+                    - l.linkedIn
                     - source.name as sourceName
                     - customer.name as customerName
                     - s.id as status
@@ -414,6 +416,14 @@ datagrid:
             contactName:
                 label:         orocrm.sales.lead.contact.label
                 renderable: false
+            twitter:
+                label:         orocrm.sales.lead.twitter.label
+                frontend_type: string
+                renderable:    false
+            linkedIn:
+                label:         orocrm.sales.lead.linked_in.label
+                frontend_type: string
+                renderable:    false
         properties:
             id: ~
             owner: ~
@@ -479,6 +489,10 @@ datagrid:
                     data_name: ownerName
                 contactName:
                     data_name: contactName
+                twitter:
+                    data_name: l.twitter
+                linkedIn:
+                    data_name: l.linkedIn
             default:
                 createdAt:  DESC
         actions:
@@ -612,6 +626,14 @@ datagrid:
                     options:
                         lazy: "@oro_organization.provider.filter.busines_unit_choice_tree->shouldBeLazy"
                         data: "@?oro_organization.provider.filter.busines_unit_choice_tree->getList"
+                twitter:
+                    type: string
+                    data_name: l.twitter
+                    enabled: false
+                linkedIn:
+                    type: string
+                    data_name: l.linkedIn
+                    enabled: false
         views_list: "@orocrm_sales.lead.datagrid_view_list"
 
     sales-funnel-grid:

@@ -490,6 +490,38 @@ class Lead extends ExtendLead implements
     protected $customer;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=170
+     *          }
+     *      }
+     * )
+     */
+    protected $twitter;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
+     * @Oro\Versioned
+     * @ConfigField(
+     *      defaultValues={
+     *          "dataaudit"={"auditable"=true},
+     *          "importexport"={
+     *              "order"=180
+     *          }
+     *      }
+     * )
+     */
+    protected $linkedIn;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -1353,5 +1385,37 @@ class Lead extends ExtendLead implements
     public function getEmailFields()
     {
         return null;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTwitter()
+    {
+        return $this->twitter;
+    }
+
+    /**
+     * @param string $twitter
+     */
+    public function setTwitter($twitter)
+    {
+        $this->twitter = $twitter;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLinkedIn()
+    {
+        return $this->linkedIn;
+    }
+
+    /**
+     * @param string $linkedIn
+     */
+    public function setLinkedIn($linkedIn)
+    {
+        $this->linkedIn = $linkedIn;
     }
 }
