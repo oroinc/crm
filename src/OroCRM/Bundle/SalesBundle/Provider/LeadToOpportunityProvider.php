@@ -16,6 +16,7 @@ use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
+use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
 
 class LeadToOpportunityProvider
@@ -31,7 +32,7 @@ class LeadToOpportunityProvider
     protected $b2bGuesser;
 
     /**
-     * @var B2bGuesser
+     * @var ChangeLeadStatus
      */
     protected $changeLeadStatus;
 
@@ -43,8 +44,16 @@ class LeadToOpportunityProvider
      */
     protected $entityFieldProvider;
 
+    /**
+     * @var array
+     */
     protected $addressFields = [
         'properties' => [
+            'firstName' => 'firstName',
+            'lastName' => 'lastName',
+            'middleName' => 'middleName',
+            'namePrefix' => 'namePrefix',
+            'nameSuffix' => 'nameSuffix',
             'city' => 'city',
             'country' => 'country',
             'label' => 'label',
@@ -54,13 +63,13 @@ class LeadToOpportunityProvider
             'regionText' => 'regionText',
             'street' => 'street',
             'street2' => 'street2',
-            'primary' => array(
-                'value' => true
-            )
-        ],
-        'entity' => 'OroCRM\Bundle\ContactBundle\Entity\ContactAddress'
+            'primary' => 'primary'
+        ]
     ];
 
+    /**
+     * @var array
+     */
     protected $contactFields = [
         'properties' => [
             'firstName' => 'firstName',
@@ -74,20 +83,15 @@ class LeadToOpportunityProvider
         ],
         'extended_properties' => [
             'source' => 'enum'
-        ],
-        'methods' => [
-            'addEmail' => 'email',
-            'addPhone' => 'phoneNumber',
-            'addAddress' => [
-                'entity' => 'address',
-                'merge_fields' => [
-                    'firstName', 'lastName', 'middleName', 'namePrefix', 'nameSuffix'
-                ]
-            ]
-        ],
-        'entity' => 'OroCRM\Bundle\ContactBundle\Entity\Contact'
+        ]
     ];
 
+    /**
+     * @param B2bGuesser $b2bGuesser
+     * @param EntityFieldProvider $entityFieldProvider
+     * @param ChangeLeadStatus $changeLeadStatus
+     * @param WorkflowRegistry $workflowRegistry
+     */
     public function __construct(
         B2bGuesser $b2bGuesser,
         EntityFieldProvider $entityFieldProvider,
@@ -121,6 +125,7 @@ class LeadToOpportunityProvider
         foreach ($rawFields as $field) {
             $fields[$field['name']] = $field['type'];
         }
+
         return $fields;
     }
 
@@ -155,26 +160,6 @@ class LeadToOpportunityProvider
     }
 
     /**
-     * @param $entity
-     * @param $methodName
-     * @param $value
-     */
-    protected function resolveMethod($entity, $methodName, $value)
-    {
-        switch ($methodName) {
-            case 'addEmail':
-                $entity->$methodName(new ContactEmail($value));
-                break;
-            case 'addPhone':
-                $entity->$methodName(new ContactPhone($value));
-                break;
-            case 'addAddress':
-                $entity->$methodName($value);
-                break;
-        }
-    }
-
-    /**
      * @param Lead $lead
      *
      * @return Contact
@@ -184,7 +169,7 @@ class LeadToOpportunityProvider
         $contact = $lead->getContact();
 
         if (!$contact instanceof Contact) {
-            $contact = new $this->contactFields['entity']();
+            $contact = new Contact();
 
             $this->fillEntityProperties(
                 $contact,
@@ -192,36 +177,30 @@ class LeadToOpportunityProvider
                 $lead
             );
 
-            foreach ($this->contactFields['methods'] as $method => $value) {
-                $propertyValue = null;
-                if (is_array($value)) {
-                    $subEntity = $this->accessor->getValue($lead, $value['entity']);
-                    if (is_object($subEntity) && $value['entity'] === 'address') {
-                        $propertyValue = new $this->addressFields['entity']();
+            $emails = $lead->getEmails();
+            foreach ($emails as $email) {
+                $contactEmail = new ContactEmail($email->getEmail());
+                $contactEmail->setPrimary($email->isPrimary());
+                $contact->addEmail($contactEmail);
+            }
 
-                        $this->fillEntityProperties(
-                            $propertyValue,
-                            $this->addressFields['properties'],
-                            $subEntity
-                        );
+            $phones = $lead->getPhones();
+            foreach ($phones as $phone) {
+                $contactPhone = new ContactPhone($phone->getPhone());
+                $contactPhone->setPrimary($phone->isPrimary());
+                $contact->addPhone($contactPhone);
+            }
 
-                        $leadFields = array_intersect_key(
-                            $this->contactFields['properties'],
-                            array_flip($value['merge_fields'])
-                        );
-                        $this->fillEntityProperties(
-                            $propertyValue,
-                            $leadFields,
-                            $lead
-                        );
-                    }
-                } else {
-                    $propertyValue = $this->accessor->getValue($lead, $value);
-                }
-
-                if ($propertyValue) {
-                    $this->resolveMethod($contact, $method, $propertyValue);
-                }
+            $addresses = $lead->getAddresses();
+            foreach ($addresses as $address) {
+                $contactAddress = new ContactAddress();
+                $contactAddress->setPrimary($address->isPrimary());
+                $this->fillEntityProperties(
+                    $contactAddress,
+                    $this->addressFields['properties'],
+                    $address
+                );
+                $contact->addAddress($contactAddress);
             }
         }
 

@@ -8,6 +8,9 @@ use OroCRM\Bundle\ContactBundle\Entity\ContactAddress;
 use OroCRM\Bundle\ContactBundle\Entity\ContactEmail;
 use OroCRM\Bundle\ContactBundle\Entity\ContactPhone;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
+use OroCRM\Bundle\SalesBundle\Entity\LeadPhone;
+use OroCRM\Bundle\SalesBundle\Entity\LeadAddress;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
 use OroCRM\Bundle\SalesBundle\Model\B2bGuesser;
@@ -106,6 +109,11 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
         ];
 
         $addressFields = [
+            'firstName'         => 'test_firstName',
+            'lastName'          => 'test_lastName',
+            'middleName'        => 'test_middleName',
+            'namePrefix'        => 'test_namePrefix',
+            'nameSuffix'        => 10,
             'city'         => 'test_city',
             'country'      => 'US',
             'label'        => 'test_label',
@@ -117,19 +125,11 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
             'street2'      => 'test_street2',
         ];
 
-        $opportunityToAddressFields = [
-            'firstName',
-            'lastName',
-            'middleName',
-            'namePrefix',
-            'nameSuffix'
-        ];
-
         $lead = new Lead();
         $lead
             ->setName('test_name')
-            ->setPhoneNumber('test_phone')
-            ->setEmail('test_email')
+            ->addPhone(new LeadPhone('test_phone'))
+            ->addEmail(new LeadEmail('test_email'))
         ;
         $opportunity = new Opportunity();
         $contact = new Contact();
@@ -147,17 +147,15 @@ class LeadToOpportunityProviderTest extends \PHPUnit_Framework_TestCase
         }
 
         if ($withAddress) {
-            $address = new Address();
-            $lead->setAddress($address);
+            $address = new LeadAddress();
+            $lead->addAddress($address);
+            $address->setPrimary(true);
             $contactAddress = new ContactAddress();
             $contactAddress->setPrimary(true);
             $contact->addAddress($contactAddress);
             foreach ($addressFields as $fieldName => $value) {
                 $accessor->setValue($address, $fieldName, $value);
                 $accessor->setValue($contactAddress, $fieldName, $value);
-            }
-            foreach ($opportunityToAddressFields as $fieldName) {
-                $accessor->setValue($contactAddress, $fieldName, $opportunityFields[$fieldName]);
             }
         }
 
