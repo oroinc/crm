@@ -3,17 +3,17 @@
 namespace OroCRM\Bundle\AccountBundle\Tests\Behat\Context;
 
 use Behat\Mink\Exception\ExpectationException;
-use Behat\MinkExtension\Context\RawMinkContext;
 use Behat\Mink\Element\NodeElement;
+use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 
-class FeatureContext extends RawMinkContext
+class FeatureContext extends OroFeatureContext
 {
     /**
      * @Then /^(?P<contactsCount>(?:|one|two|\d+)) contacts added to form$/
      */
     public function assertCountContactsAddedToForm($contactsCount)
     {
-        \PHPUnit_Framework_Assert::assertCount($this->getCount($contactsCount), $this->getFormContacts());
+        self::assertCount($this->getCount($contactsCount), $this->getFormContacts());
     }
 
     /**
@@ -21,7 +21,7 @@ class FeatureContext extends RawMinkContext
      */
     public function assertCountOfContacts($contactsCount)
     {
-        \PHPUnit_Framework_Assert::assertCount(
+        self::assertCount(
             $this->getCount($contactsCount),
             $this->getSession()->getPage()->findAll('css', '.contact-box')
         );
@@ -37,7 +37,7 @@ class FeatureContext extends RawMinkContext
         /** @var NodeElement $box */
         foreach ($contactBoxes as $box) {
             if (false !== strpos($box->getText(), $name)) {
-                \PHPUnit_Framework_Assert::assertRegExp('/Default Contact/i', $box->getText());
+                self::assertRegExp('/Default Contact/i', $box->getText());
                 return;
             }
         }
