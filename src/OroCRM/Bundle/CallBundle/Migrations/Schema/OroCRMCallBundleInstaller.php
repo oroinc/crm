@@ -34,7 +34,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
      */
     public function getMigrationVersion()
     {
-        return 'v1_6';
+        return 'v1_7';
     }
 
     /**
@@ -81,7 +81,7 @@ class OroCRMCallBundleInstaller implements Installation, ActivityExtensionAwareI
         $table->addColumn('phone_number', 'string', ['notnull' => false, 'length' => 255]);
         $table->addColumn('notes', 'text', ['notnull' => false]);
         $table->addColumn('call_date_time', 'datetime', []);
-        $table->addColumn('duration', 'time', ['notnull' => false]);
+        $table->addColumn('duration', 'duration', ['notnull' => false, 'default' => null]);
         $table->addColumn('created_at', 'datetime', []);
         $table->addColumn('updated_at', 'datetime', []);
         $table->setPrimaryKey(['id']);
