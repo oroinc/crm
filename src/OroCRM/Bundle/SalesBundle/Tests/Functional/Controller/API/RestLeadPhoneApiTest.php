@@ -26,7 +26,7 @@ class RestLeadPhoneApiTest extends WebTestCase
     {
         $lead = $this->getReference('third_lead');
         $content = json_encode([
-            'leadId' => $lead->getId(),
+            'entityId' => $lead->getId(),
             'phone' => '111',
             'primary' => true
         ]);
