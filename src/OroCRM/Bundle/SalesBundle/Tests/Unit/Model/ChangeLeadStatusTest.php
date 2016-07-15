@@ -2,19 +2,16 @@
 
 namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Form\Type;
 
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\Common\Persistence\ObjectRepository;
-use Doctrine\DBAL\Query\QueryBuilder;
-
-use OroCRM\Bundle\SalesBundle\Entity\Lead;
-use OroCRM\Bundle\SalesBundle\Entity\LeadStatus;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\ORMInvalidArgumentException;
 
 use OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus;
+use OroCRM\Bundle\SalesBundle\Tests\Unit\Fixture\LeadStub;
 
 class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ObjectManager
+     * @var EntityManager
      */
     protected $entityManager;
 
@@ -23,6 +20,11 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @var  LeadStub
+     */
+    private $lead;
+
     public function setUp()
     {
         $this->entityManager = $this->getMockBuilder('\Doctrine\ORM\EntityManager')
@@ -30,28 +32,37 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
                               ->disableOriginalConstructor()
                               ->getMock();
 
-        $this->entityManager->expects($this->once())->method('persist');
-        $this->entityManager->expects($this->once())->method('flush');
+        $this->entityManager->expects($this->once())->method('getReference')
+            ->will($this->returnCallback(function($statusClass, $statusCode){
+                return $statusCode;
+            }));
 
+        $this->lead = new LeadStub();
         $this->model = new ChangeLeadStatus($this->entityManager);
     }
 
-    /**
-     * @dataProvider actionDataProvider
-     */
-    public function testChangeStatus($statusCode)
+    public function testDisqualify()
     {
-        $this->entityManager->expects($this->once())
-            ->method('getReference')
-            ->will($this->returnValue(new LeadStatus($statusCode)));
-
-        $lead = new Lead();
-        $this->model->disqualify($lead);
-        $this->assertEquals($statusCode, $lead->getStatus()->getName());
+        $this->model->disqualify($this->lead);
+        $this->assertEquals('canceled', $this->lead->getStatus());
     }
 
-    public function actionDataProvider()
+    public function testQualify()
     {
-        return [['canceled'], ['qualify']];
+        $this->model->qualify($this->lead);
+        $this->assertEquals('qualified', $this->lead->getStatus());
+    }
+
+    public function testSuccessQualify()
+    {
+        $this->assertTrue($this->model->qualify($this->lead));
+    }
+
+    public function testFailQualify()
+    {
+        $this->entityManager->expects($this->once())->method('persist')
+            ->will($this->throwException(new ORMInvalidArgumentException('test exception')));
+
+        $this->assertFalse($this->model->qualify($this->lead));
     }
 }
