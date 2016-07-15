@@ -245,10 +245,13 @@ datagrid:
                             name: oro_api_post_contact_email
                             http_method: POST
                         route_delete_entity:
-                            name: oro_api_delete_contact_email
+                            name: oro_rest_api_delete_relationship
+                            entityId: emailId
                             http_method: DELETE
                         default_route_parameters:
                             className: OroCRM_Bundle_ContactBundle_Entity_ContactEmail
+                            entity: contacts
+                            association: emails
                         route_parameters_rename_map:
                             emailId: id
             phone:
@@ -264,10 +267,13 @@ datagrid:
                             name: oro_api_post_contact_phone
                             http_method: POST
                         route_delete_entity:
-                            name: oro_api_delete_contact_phone
+                            name: oro_rest_api_delete_relationship
+                            entityId: phoneId
                             http_method: DELETE
                         default_route_parameters:
                             className: OroCRM_Bundle_ContactBundle_Entity_ContactPhone
+                            entity: contacts
+                            association: phones
                         route_parameters_rename_map:
                             phoneId: id
             fax:
