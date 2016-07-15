@@ -21,6 +21,8 @@ use OroCRM\Bundle\ChannelBundle\Model\ChannelAwareInterface;
 use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
 
 /**
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @ORM\Entity(repositoryClass="OroCRM\Bundle\SalesBundle\Entity\Repository\B2bCustomerRepository")
  * @ORM\Table(name="orocrm_sales_b2bcustomer")
  * @ORM\HasLifecycleCallbacks()
@@ -60,6 +62,7 @@ use OroCRM\Bundle\ChannelBundle\Model\CustomerIdentityInterface;
  * )
  */
 class B2bCustomer extends ExtendB2bCustomer implements
+    EmailOwnerInterface,
     ChannelAwareInterface,
     CustomerIdentityInterface
 {
@@ -767,6 +770,7 @@ class B2bCustomer extends ExtendB2bCustomer implements
         }
         return $result;
     }
+
     /**
      * @param B2bCustomerEmail $email
      *
@@ -789,5 +793,27 @@ class B2bCustomer extends ExtendB2bCustomer implements
     public function getClass()
     {
         return 'OroCRM\Bundle\SalesBundle\Entity\B2bCustomer';
+    }
+
+    /**
+     * Get names of fields contain email addresses
+     *
+     * @return string[]|null
+     */
+    public function getEmailFields()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /** Stub for EmailOwnerInterface */
+    public function getLastName()
+    {
+        return null;
     }
 }
