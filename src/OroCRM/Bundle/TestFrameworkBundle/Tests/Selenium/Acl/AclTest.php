@@ -66,7 +66,7 @@ class AclTest extends Selenium2TestCase
             ->setLastName('Last_'.$username)
             ->setEmail($username.'@mail.com')
             ->setRoles(array($roleName))
-            ->setOrganizationOnForm(array('OroCRM'))
+            ->setBusinessUnitOrganization(array('OroCRM'))
             ->setBusinessUnit()
             ->uncheckInviteUser()
             ->save()
