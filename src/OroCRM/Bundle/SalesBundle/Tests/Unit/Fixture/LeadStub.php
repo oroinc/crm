@@ -6,7 +6,7 @@ use OroCRM\Bundle\SalesBundle\Entity\Lead;
 
 class LeadStub extends Lead
 {
-    private $status = null;
+    private $status;
 
     public function getStatus()
     {
