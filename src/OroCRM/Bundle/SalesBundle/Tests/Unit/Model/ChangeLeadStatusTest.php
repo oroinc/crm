@@ -33,7 +33,7 @@ class ChangeLeadStatusTest extends \PHPUnit_Framework_TestCase
                               ->getMock();
 
         $this->entityManager->expects($this->once())->method('getReference')
-            ->will($this->returnCallback(function($statusClass, $statusCode){
+            ->will($this->returnCallback(function ($statusClass, $statusCode) {
                 return $statusCode;
             }));
 
