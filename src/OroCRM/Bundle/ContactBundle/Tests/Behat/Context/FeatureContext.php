@@ -5,12 +5,12 @@ namespace OroCRM\Bundle\ContactBundle\Tests\Behat\Context;
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
-use Behat\MinkExtension\Context\RawMinkContext;
 use Doctrine\Common\Inflector\Inflector;
+use Oro\Bundle\TestFrameworkBundle\Behat\Context\OroFeatureContext;
 use Oro\Bundle\TestFrameworkBundle\Behat\Element\OroElementFactoryAware;
 use Oro\Bundle\TestFrameworkBundle\Tests\Behat\Context\ElementFactoryDictionary;
 
-class FeatureContext extends RawMinkContext implements OroElementFactoryAware
+class FeatureContext extends OroFeatureContext implements OroElementFactoryAware
 {
     use ElementFactoryDictionary;
 
