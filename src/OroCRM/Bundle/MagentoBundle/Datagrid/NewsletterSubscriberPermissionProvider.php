@@ -6,6 +6,7 @@ use Oro\Bundle\DataGridBundle\Datasource\ResultRecordInterface;
 
 use Oro\Bundle\SecurityBundle\SecurityFacade;
 use OroCRM\Bundle\MagentoBundle\Entity\NewsletterSubscriber;
+use OroCRM\Bundle\MagentoBundle\Entity\Customer;
 
 class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPermissionProvider
 {
@@ -67,6 +68,33 @@ class NewsletterSubscriberPermissionProvider extends AbstractTwoWaySyncActionPer
         $this->securityFacade = $securityFacade;
 
         return $this;
+    }
+
+    /**
+     * Check if channel integration is applicable for magento customer.
+     * Get channel integration id from customer channel if it's does not exist in grid record
+     *
+     * @param ResultRecordInterface $record
+     * @param bool $checkExtension
+     *
+     * @return bool
+     */
+    protected function isChannelApplicable(ResultRecordInterface $record, $checkExtension = true)
+    {
+        $channelId = $record->getValue(self::CHANNEL_KEY);
+        if (!$channelId) {
+            $customer = $record->getValue(self::CUSTOMER);
+            if ($customer instanceof Customer || $customer instanceof NewsletterSubscriber) {
+                $channel = $customer->getChannel();
+                if ($channel) {
+                    $channelId = $customer->getChannel()->getId();
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return $this->channelSettingsProvider->isChannelApplicable($channelId, $checkExtension);
     }
 
     /**
