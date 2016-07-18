@@ -71,6 +71,7 @@ class CustomerController extends Controller
 
     /**
      * @Route("/create", name="orocrm_magento_customer_create"))
+     * @AclAncestor("oro_integration_assign")
      * @Acl(
      *      id="orocrm_magento_customer_create",
      *      type="entity",
