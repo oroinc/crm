@@ -23,6 +23,7 @@ datagrid:
                     - c.originId as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ORIGIN_ID
                     - c.id as OroCRM\Bundle\MagentoBundle\Datagrid\AbstractTwoWaySyncActionPermissionProvider::CUSTOMER_ID
                     - c.guest
+                    - c AS customerData
                 from:
                     - { table: OroCRM\Bundle\MagentoBundle\Entity\Customer , alias: c }
                 join:
@@ -1362,6 +1363,8 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
+            acl_resource: oro_integration_assign
+            skip_acl_apply: true
             query:
                 select:
                     - g.id
@@ -1395,6 +1398,8 @@ datagrid:
         acl_resource: orocrm_magento_customer_view
         source:
             type: orm
+            acl_resource: oro_integration_assign
+            skip_acl_apply: true
             query:
                 select:
                     - s.id
@@ -1456,6 +1461,7 @@ datagrid:
                     - newsletterSubscriber.createdAt
                     - newsletterSubscriber.updatedAt
                     - newsletterSubscriberStatus.id as newsletterSubscriberStatusId
+                    - newsletterSubscriber AS customerData
                 from:
                     - { table: %orocrm_magento.entity.newsletter_subscriber.class%, alias: newsletterSubscriber }
                 join:
