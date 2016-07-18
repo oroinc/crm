@@ -36,6 +36,7 @@ class AclTest extends Selenium2TestCase
             ->setEntity('Contact Group', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Contact', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
             ->setEntity('Account', array('Create', 'Edit', 'Delete', 'View', 'Assign'), 'System')
+            ->setCapability(['Update User Profile'], 'System')
             ->save()
             ->assertMessage('Role saved');
 
