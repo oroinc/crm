@@ -14,6 +14,7 @@ use OroCRM\Bundle\ChannelBundle\Builder\BuilderFactory;
 use OroCRM\Bundle\ChannelBundle\Entity\Channel;
 use OroCRM\Bundle\SalesBundle\Entity\B2bCustomer;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 
@@ -121,13 +122,42 @@ class LoadSalesBundleFixtures extends AbstractFixture implements ContainerAwareI
         $lead->setFirstName('fname');
         $lead->setLastName('lname');
         $lead->setCustomer($this->getReference('default_b2bcustomer'));
-        $lead->setEmail('email@email.com');
+        $email = new LeadEmail('email@email.com');
+        $email->setPrimary(true);
+        $lead->addEmail($email);
         $lead->setOrganization($this->organization);
 
+        $lead2 = new Lead();
+        $lead2->setDataChannel($this->getReference('default_channel'));
+        $lead2->setName('Lead name 2');
+        $lead2->setFirstName('fname 2');
+        $lead2->setLastName('lname 2');
+        $lead2->setCustomer($this->getReference('default_b2bcustomer'));
+        $email = new LeadEmail('email2@email.com');
+        $email->setPrimary(true);
+        $lead2->addEmail($email);
+        $lead2->setOrganization($this->organization);
+
+        $lead3 = new Lead();
+        $lead3->setDataChannel($this->getReference('default_channel'));
+        $lead3->setName('Lead name 3');
+        $lead3->setFirstName('fname 3');
+        $lead3->setLastName('lname 3');
+        $lead3->setCustomer($this->getReference('default_b2bcustomer'));
+        $email = new LeadEmail('email3@email.com');
+        $email->setPrimary(true);
+        $lead3->addEmail($email);
+        $lead3->setOrganization($this->organization);
+
+
         $this->em->persist($lead);
+        $this->em->persist($lead2);
+        $this->em->persist($lead3);
         $this->em->flush();
 
         $this->setReference('default_lead', $lead);
+        $this->setReference('second_lead', $lead2);
+        $this->setReference('third_lead', $lead3);
 
         return $this;
     }

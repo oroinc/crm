@@ -36,6 +36,7 @@ class LeadController extends RestController implements ClassResourceInterface
      *      resource=true
      * )
      * @AclAncestor("orocrm_sales_lead_view")
+     * @deprecated since 1.10. Use /api/rest/{version}/leads/{leadId}/addresses.{_format} instead.
      * @return Response
      */
     public function getAddressAction($leadId)
@@ -45,7 +46,7 @@ class LeadController extends RestController implements ClassResourceInterface
 
         $address = null;
         if ($item) {
-            $addressEntity = $item->getAddress();
+            $addressEntity = $item->getPrimaryAddress();
             if ($addressEntity) {
                 $address = $this->getPreparedItem($addressEntity);
                 $address['countryIso2'] = $addressEntity->getCountryIso2();

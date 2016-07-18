@@ -1,0 +1,3 @@
+config:
+    paths:
+        orocrmsales/js/datagrid/inline-editing/save-api-accessor: 'bundles/orocrmsales/js/datagrid/inline-editing/save-api-accessor.js'

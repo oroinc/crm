@@ -53,7 +53,6 @@ class OpportunityRepository extends EntityRepository
 
     /**
      * @param string $alias
-     * @param array  $excludedStatuses
      * @param string $orderBy
      * @param string $direction
      *
@@ -62,7 +61,6 @@ class OpportunityRepository extends EntityRepository
      */
     public function getGroupedOpportunitiesByStatusQB(
         $alias,
-        array $excludedStatuses = [],
         $orderBy = 'budget',
         $direction = 'DESC'
     ) {
@@ -92,12 +90,6 @@ class OpportunityRepository extends EntityRepository
             ->leftJoin('OroCRMSalesBundle:Opportunity', $alias, 'WITH', sprintf('%s.status = s', $alias))
             ->groupBy('s.name')
             ->orderBy($orderBy, $direction);
-
-        if ($excludedStatuses) {
-            $qb->andWhere(
-                $qb->expr()->notIn('s.id', $excludedStatuses)
-            );
-        }
 
         return $qb;
     }
