@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Functional\Controller;
 
 use Symfony\Component\DomCrawler\Form;
 use Symfony\Component\DomCrawler\Field\ChoiceFormField;
+use Symfony\Component\DomCrawler\Field\InputFormField;
 
 use Oro\Bundle\DataGridBundle\Tests\Functional\AbstractDatagridTestCase;
 
@@ -44,19 +45,22 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $form['orocrm_sales_lead_form[name]']                = $name;
         $form['orocrm_sales_lead_form[firstName]']           = 'firstName';
         $form['orocrm_sales_lead_form[lastName]']            = 'lastName';
-        $form['orocrm_sales_lead_form[address][city]']       = 'City Name';
-        $form['orocrm_sales_lead_form[address][label]']      = 'Main Address';
-        $form['orocrm_sales_lead_form[address][postalCode]'] = '10000';
-        $form['orocrm_sales_lead_form[address][street2]']    = 'Second Street';
-        $form['orocrm_sales_lead_form[address][street]']     = 'Main Street';
         $form['orocrm_sales_lead_form[companyName]']         = 'Company';
-        $form['orocrm_sales_lead_form[email]']               = 'test@example.test';
+        $form['orocrm_sales_lead_form[emails][0][email]']    = 'test@example.test';
         $form['orocrm_sales_lead_form[owner]']               = 1;
         $form['orocrm_sales_lead_form[dataChannel]']         = $this->getReference('default_channel')->getId();
-
+        //Add address fields to form as they are rendered with javascript
         $doc = new \DOMDocument("1.0");
+        $addressInputs = ['city', 'label', 'postalCode', 'street', 'street2'];
+        foreach ($addressInputs as $addressInput) {
+            $input = $doc->createElement('input');
+            $input->setAttribute('name', sprintf('orocrm_sales_lead_form[addresses][0][%s]', $addressInput));
+            $field = new InputFormField($input);
+            $form->set($field);
+        }
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_form[address][country]" id="orocrm_sales_lead_form_address_country" ' .
+            '<select name="orocrm_sales_lead_form[addresses][0][country]" ' .
+            'id="orocrm_sales_lead_form_address_country" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="US">United States</option> </select>'
@@ -64,16 +68,20 @@ class LeadControllersTest extends AbstractDatagridTestCase
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
         $doc->loadHTML(
-            '<select name="orocrm_sales_lead_form[address][region]" id="orocrm_sales_lead_form_address_region" ' .
+            '<select name="orocrm_sales_lead_form[addresses][0][region]" id="orocrm_sales_lead_form_address_region" ' .
             'tabindex="-1" class="select2-offscreen"> ' .
             '<option value="" selected="selected"></option> ' .
             '<option value="US-CA">California</option> </select>'
         );
         $field = new ChoiceFormField($doc->getElementsByTagName('select')->item(0));
         $form->set($field);
-
-        $form['orocrm_sales_lead_form[address][country]'] = 'US';
-        $form['orocrm_sales_lead_form[address][region]'] = 'US-CA';
+        $form['orocrm_sales_lead_form[addresses][0][city]']       = 'City Name';
+        $form['orocrm_sales_lead_form[addresses][0][label]']      = 'Main Address';
+        $form['orocrm_sales_lead_form[addresses][0][postalCode]'] = '10000';
+        $form['orocrm_sales_lead_form[addresses][0][street2]']    = 'Second Street';
+        $form['orocrm_sales_lead_form[addresses][0][street]']     = 'Main Street';
+        $form['orocrm_sales_lead_form[addresses][0][country]'] = 'US';
+        $form['orocrm_sales_lead_form[addresses][0][region]'] = 'US-CA';
 
         $this->client->followRedirects(true);
         $crawler = $this->client->submit($form);
@@ -205,7 +213,7 @@ class LeadControllersTest extends AbstractDatagridTestCase
                         'lastName'    => 'lname',
                         'email'       => 'email@email.com'
                     ],
-                    'expectedResultCount' => 1
+                    'expectedResultCount' => 3
                 ],
             ],
             'Lead grid with filters'   => [

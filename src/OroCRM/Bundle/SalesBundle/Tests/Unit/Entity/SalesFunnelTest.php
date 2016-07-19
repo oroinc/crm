@@ -4,6 +4,7 @@ namespace OroCRM\Bundle\SalesBundle\Tests\Unit\Entity;
 
 use Oro\Bundle\OrganizationBundle\Entity\Organization;
 use OroCRM\Bundle\SalesBundle\Entity\Lead;
+use OroCRM\Bundle\SalesBundle\Entity\LeadEmail;
 use OroCRM\Bundle\SalesBundle\Entity\Opportunity;
 use OroCRM\Bundle\SalesBundle\Entity\SalesFunnel;
 use OroCRM\Bundle\ContactBundle\Entity\Contact;
@@ -75,7 +76,9 @@ class SalesFunnelTest extends \PHPUnit_Framework_TestCase
     {
         $salesFunnel = new SalesFunnel();
         $lead = new Lead();
-        $lead->setEmail('test@test.com');
+        $email = new LeadEmail('test@test.com');
+        $email->setPrimary(true);
+        $lead->addEmail($email);
         $salesFunnel->setLead($lead);
 
         $this->assertEquals('test@test.com', $salesFunnel->getEmail());
