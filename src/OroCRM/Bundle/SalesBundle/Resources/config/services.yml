@@ -3,7 +3,16 @@ parameters:
     orocrm_sales.opportunity.manager.api.class:              Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead.entity.class:                          OroCRM\Bundle\SalesBundle\Entity\Lead
+    orocrm_sales.leadaddress.entity.class:                   OroCRM\Bundle\SalesBundle\Entity\LeadAddress
     orocrm_sales.lead.manager.api.class:                     Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+    orocrm_sales.lead_address.manager.api.class:             Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    orocrm_sales.lead_email.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadEmail
+    orocrm_sales.lead_email.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
+
+    orocrm_sales.lead_phone.entity.class:                    OroCRM\Bundle\SalesBundle\Entity\LeadPhone
+    orocrm_sales.handler.lead_phone_api.class:               OroCRM\Bundle\SalesBundle\Handler\LeadPhoneApiHandler
+    orocrm_sales.lead_phone.manager.api.class:               Oro\Bundle\SoapBundle\Entity\Manager\ApiEntityManager
 
     orocrm_sales.lead.datagrid_helper.class:                 Oro\Bundle\AddressBundle\Datagrid\CountryDatagridHelper
 
@@ -18,6 +27,7 @@ parameters:
     orocrm_sales.provider.phone.lead.class:                  OroCRM\Bundle\SalesBundle\Provider\LeadPhoneProvider
     orocrm_sales.provider.phone.opportunity.class:           OroCRM\Bundle\SalesBundle\Provider\OpportunityPhoneProvider
     orocrm_sales.provider.phone.b2bcustomer.class:           OroCRM\Bundle\SalesBundle\Provider\B2bCustomerPhoneProvider
+    orocrm_sales.provider.lead_to_opportunity.class:          OroCRM\Bundle\SalesBundle\Provider\LeadToOpportunityProvider
 
     orocrm_sales.provider.mailbox_process.lead.class:        OroCRM\Bundle\SalesBundle\Provider\LeadMailboxProcessProvider
 
@@ -31,6 +41,9 @@ parameters:
     orocrm_sales.provider.b2b_statistics.class:              OroCRM\Bundle\SalesBundle\Provider\B2bBigNumberProvider
     orocrm_sales.autocomplete.forecast_widget_business_unit.search_handler.class: OroCRM\Bundle\SalesBundle\Autocomplete\ForecastWidgetBusinessUnitSearchHandler
     orocrm_sales.autocomplete.business_customer.search_handler.class:  OroCRM\Bundle\SalesBundle\Autocomplete\BusinessCustomerSearchHandler
+
+    orocrm_sales.model.change_lead_status.class: OroCRM\Bundle\SalesBundle\Model\ChangeLeadStatus
+    orocrm_sales.model.b2b_guesser.class: OroCRM\Bundle\SalesBundle\Model\B2bGuesser
 
 services:
     orocrm_sales.opportunity.manager.api:
@@ -46,6 +59,20 @@ services:
         arguments:
             - %orocrm_sales.lead.entity.class%
             - '@doctrine.orm.entity_manager'
+
+    orocrm_sales.lead_address.manager.api:
+        class: %orocrm_sales.lead_address.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.leadaddress.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.lead_email.manager.api:
+        class: %orocrm_sales.lead_email.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.lead_email.entity.class%
+            - "@doctrine.orm.entity_manager"
 
     orocrm_sales.salesfunnel.manager.api:
         class: %orocrm_sales.salesfunnel.manager.api.class%
@@ -224,3 +251,36 @@ services:
         tags:
             - { name: oro_user.privilege_category}
 
+    orocrm_sales.lead_phone.manager.api:
+        class: %orocrm_sales.lead_phone.manager.api.class%
+        parent: oro_soap.manager.entity_manager.abstract
+        arguments:
+            - %orocrm_sales.lead_phone.entity.class%
+            - "@doctrine.orm.entity_manager"
+
+    orocrm_sales.handler.lead_phone_api:
+        class: %orocrm_sales.handler.lead_phone_api.class%
+        arguments:
+            - "@doctrine"
+            - "@oro_security.security_facade"
+        tags:
+            - { name: oro_entity.form.entity_field.handler }
+
+    orocrm_sales.model.change_lead_status:
+        class: %orocrm_sales.model.change_lead_status.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+
+    orocrm_sales.model.b2b_guesser:
+        class: %orocrm_sales.model.b2b_guesser.class%
+        arguments:
+            - '@doctrine.orm.entity_manager'
+            - '@oro_entity.entity_field_provider'
+
+    orocrm_sales.provider.lead_to_opportunity:
+        class: %orocrm_sales.provider.lead_to_opportunity.class%
+        arguments:
+            - '@orocrm_sales.model.b2b_guesser'
+            - '@oro_entity.entity_field_provider'
+            - "@orocrm_sales.model.change_lead_status"
+            - "@oro_workflow.registry"
