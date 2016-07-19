@@ -20,7 +20,7 @@ Scenario: Log Call from contact view page
   And fill form with:
     | Subject             | Proposed Charlie to star in new film |
     | Additional comments | Charlie was in a good mood           |
-    | Call date & time    | 2017-08-24                           |
+    | Call date & time    | 2017-08-24 11:02:00                  |
     | Phone number        | (310) 475-0859                       |
     | Duration            | 00:05:30                             |
   When I press "Log call"
@@ -34,7 +34,7 @@ Scenario: View Call in activity list
   Then I should see call with:
     | Subject             | Proposed Charlie to star in new film |
     | Additional comments | Charlie was in a good mood           |
-    | Call date & time    | 2017-08-24                           |
+    | Call date & time    | Aug 24, 2017, 11:00 AM               |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
     | Duration            | 5:30                                 |
@@ -48,7 +48,7 @@ Scenario: View Call in view call page
   And I should see call with:
     | Subject             | Proposed Charlie to star in new film |
     | Additional comments | Charlie was in a good mood           |
-    | Call date & time    | 2017-08-24                           |
+    | Call date & time    | Aug 24, 2017, 11:00 AM               |
     | Phone number        | (310) 475-0859                       |
     | Direction           | Outgoing                             |
     | Duration            | 5:30                                 |
@@ -61,7 +61,7 @@ Scenario: Edit Call from entity view page
     | Owner               | Theresa                              |
     | Subject             | Offered Charlie a drink with me      |
     | Additional comments | Charlie was in a bad mood            |
-    | Call date & time    | 2017-09-01                           |
+    | Call date & time    | 2017-09-01 21:33:00                  |
     | Phone number        | (323) 879-6520                       |
     | Duration            | 00:03:25                             |
   When I press "Update call"
@@ -70,7 +70,7 @@ Scenario: Edit Call from entity view page
   And I should see call with:
     | Subject             | Offered Charlie a drink with me      |
     | Additional comments | Charlie was in a bad mood            |
-    | Call date & time    | 2017-09-01                           |
+    | Call date & time    | Sep 1, 2017, 09:30 PM                |
     | Phone number        | (323) 879-6520                       |
     | Direction           | Outgoing                             |
     | Duration            | 3:25
