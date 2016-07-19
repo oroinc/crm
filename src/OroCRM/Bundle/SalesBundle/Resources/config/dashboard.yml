@@ -73,12 +73,6 @@ oro_dashboard_config:
                         choices:
                             0: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.amount
                             1: orocrm.sales.dashboard.opportunities_by_state.quantity_as_data.count
-                queryFilter:
-                    type: oro_dashboard_query_filter
-                    options:
-                        required: false
-                        widgetType: opportunities_by_state
-                        entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
         my_sales_flow_b2b_chart:
             label:       orocrm.sales.dashboard.my_sales_flow_b2b_chart.title
             route:       orocrm_sales_dashboard_sales_flow_b2b_chart
@@ -143,6 +137,9 @@ oro_dashboard_config:
             description: orocrm.sales.dashboard.forecast_of_opportunities.description
             icon:        bundles/orocrmsales/img/opportunity_by_status.png
             applicable:  "@orocrm_sales.provider.enitity_state->isEntityOpportunityEnabled()"
+            configuration_dialog_options:
+                resizable: true
+                minWidth: 780
             data_items:
                 in_progress:
                     data_provider: "@orocrm_sales.provider.forecast_of_opportunities->getForecastOfOpportunitiesValues($widgetOptions$, getInProgressValues, integer)"
@@ -189,6 +186,14 @@ oro_dashboard_config:
                         item_label: orocrm.sales.opportunity.datagrid.columns.metric_name
                         required: false
                         widget_name: forecast_of_opportunities
+                queryFilter:
+                    type: oro_dashboard_query_filter
+                    options:
+                        required: false
+                        label: oro.dashboard.query_filter.label
+                        widgetType: opportunities_by_state
+                        entity: 'OroCRM\Bundle\SalesBundle\Entity\Opportunity'
+                        collapsible: true
         b2b_statistics_widget:
             label:       oro.dashboard.b2b_statistics_widget.title
             route:       oro_dashboard_itemized_data_widget
