@@ -70,7 +70,7 @@ Scenario: Edit Call from entity view page
   And I should see call with:
     | Subject             | Offered Charlie a drink with me      |
     | Additional comments | Charlie was in a bad mood            |
-    | Call date & time    | Sep 1, 2017, 09:30 PM                |
+    | Call date & time    | Sep 1, 2017, 9:30 PM                 |
     | Phone number        | (323) 879-6520                       |
     | Direction           | Outgoing                             |
     | Duration            | 3:25
