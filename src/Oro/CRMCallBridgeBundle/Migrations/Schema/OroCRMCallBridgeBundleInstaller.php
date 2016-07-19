@@ -15,10 +15,6 @@ use Oro\Bundle\ActivityBundle\Migration\Extension\ActivityExtensionAwareInterfac
 
 use Oro\CRMCallBridgeBundle\Migrations\Schema\v1_0\OroCRMCallBridgeBundle;
 
-/**
- * @SuppressWarnings(PHPMD.TooManyMethods)
- * @SuppressWarnings(PHPMD.ExcessiveClassLength)
- */
 class OroCRMCallBridgeBundleInstaller implements
     Installation,
     ActivityExtensionAwareInterface,

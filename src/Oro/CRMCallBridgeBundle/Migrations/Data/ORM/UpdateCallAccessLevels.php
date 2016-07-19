@@ -7,7 +7,6 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Security\Acl\Model\SecurityIdentityInterface;
 use Symfony\Component\Yaml\Yaml;
@@ -36,8 +35,6 @@ class UpdateCallAccessLevels extends AbstractFixture implements DependentFixture
      */
     public function load(ObjectManager $manager)
     {
-
-        /**If application is installed do nothing**/
         if ($this->container->hasParameter('installed') && $this->container->getParameter('installed')) {
             return;
         }
