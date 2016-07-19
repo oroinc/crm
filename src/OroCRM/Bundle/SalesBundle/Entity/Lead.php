@@ -465,7 +465,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="twitter", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={"auditable"=true},
@@ -481,7 +480,6 @@ class Lead extends ExtendLead implements
      * @var string
      *
      * @ORM\Column(name="linkedin", type="string", length=255, nullable=true)
-     * @Oro\Versioned
      * @ConfigField(
      *      defaultValues={
      *          "dataaudit"={"auditable"=true},
